@@ -1,0 +1,30 @@
+{
+  "name": "realquest-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "phaser": "^3.90.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "playwright": "^1.51.0",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4.1.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

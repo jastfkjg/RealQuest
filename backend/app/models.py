@@ -1,0 +1,20 @@
+from sqlalchemy import String, JSON, ForeignKey, UniqueConstraint, Float
+from sqlalchemy.orm import Mapped, mapped_column
+from .db import Base
+
+class Player(Base):
+    __tablename__ = 'players'
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    state: Mapped[dict] = mapped_column(JSON)
+
+class Receipt(Base):
+    __tablename__ = 'receipts'
+    __table_args__ = (UniqueConstraint('player_id', 'request_id'),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey('players.id', ondelete='CASCADE'), index=True)
+    request_id: Mapped[str] = mapped_column(String(80))
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    action: Mapped[str] = mapped_column(String(32))
+    changes: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[float] = mapped_column(Float)

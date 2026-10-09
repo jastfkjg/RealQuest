@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: realquest
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-realquest-local-only}
+      POSTGRES_DB: realquest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U realquest"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://realquest:${POSTGRES_PASSWORD:-realquest-local-only}@db:5432/realquest
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+  frontend:
+    build: ./frontend
+    ports: ["127.0.0.1:8080:80"]
+    depends_on:
+      backend:
+        condition: service_healthy
+volumes:
+  postgres_data:

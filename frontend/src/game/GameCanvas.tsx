@@ -1,0 +1,237 @@
+import { useEffect, useRef, useState } from "react";
+import Phaser from "phaser";
+import { WorldScene } from "./WorldScene";
+import { accessibleTarget } from "./navigation";
+import { serverNow, useGame } from "../stores/game";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Hand,
+} from "lucide-react";
+declare global {
+  interface Window {
+    render_game_to_text: () => string;
+    advanceTime: (ms: number) => Promise<void>;
+  }
+}
+export function GameCanvas() {
+  const container = useRef<HTMLDivElement>(null),
+    scene = useRef<WorldScene | null>(null);
+  const nearest = useGame((s) => s.nearest),
+    panel = useGame((s) => s.panel);
+  const state = useGame((s) => s.state)!,
+    world = useGame((s) => s.world)!,
+    navigation = useGame((s) => s.navigation);
+  const [, tick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => tick((n) => n + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const region =
+    state.location !== "overworld"
+      ? world.interiors[state.location]
+      : world.regions?.find(
+          (r) =>
+            state.position.x >= r.x &&
+            state.position.x < r.x + r.width &&
+            state.position.y >= r.y &&
+            state.position.y < r.y + r.height,
+        );
+  const target = navigation ? accessibleTarget(navigation, world, state) : null;
+  const crop = nearest ? state.plots[nearest.id] : null;
+  const action = nearest
+    ? {
+        building: "进入",
+        exit: "离开",
+        npc: "交谈 / 委托",
+        board: "查看委托",
+        station: "打开",
+        storage: "存取物品",
+        rest: "休息",
+        wood: "采集",
+        stone: "采集",
+        landmark: "发现",
+        chest: "打开补给",
+        event: "解读符文",
+        plot: crop
+          ? crop.ready_at <= serverNow()
+            ? "收获"
+            : `${Math.ceil(crop.ready_at - serverNow())} 秒后成熟`
+          : "播种",
+      }[nearest.kind] || "互动"
+    : "点击地面前往";
+  useEffect(() => {
+    const instance = new WorldScene();
+    scene.current = instance;
+    const game = new Phaser.Game({
+      type: Phaser.CANVAS,
+      parent: container.current!,
+      width: container.current!.clientWidth,
+      height: container.current!.clientHeight,
+      pixelArt: true,
+      roundPixels: true,
+      backgroundColor: "#83a751",
+      scene: instance,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      audio: { noAudio: true },
+      banner: false,
+    });
+    window.render_game_to_text = () => {
+      const s = useGame.getState();
+      return JSON.stringify({
+        coordinate_system:
+          "origin top-left; x right, y down; outdoor world 1920×1280",
+        location: s.state?.location,
+        walking: instance.path,
+        clickTarget: instance.clickTarget?.id,
+        camera: instance.cameras.main
+          ? {
+              x: instance.cameras.main.scrollX,
+              y: instance.cameras.main.scrollY,
+              zoom: instance.cameras.main.zoom,
+              viewX: instance.cameras.main.worldView.x,
+              viewY: instance.cameras.main.worldView.y,
+            }
+          : null,
+        quests: s.state?.quest_log,
+        storage: s.state?.storage,
+        mode: s.panel || "explore",
+        player: instance.player
+          ? {
+              x: Math.round(instance.player.x),
+              y: Math.round(instance.player.y),
+            }
+          : s.state?.position,
+        nearest: s.nearest,
+        inventory: s.state?.inventory,
+        xp: s.state?.xp,
+        attributes: s.state?.attributes,
+        plots: s.state?.plots,
+        buildings: s.state?.buildings,
+        events: s.state?.events,
+        timer: s.state?.timer,
+        obstacles: instance.map?.obstacles,
+        objects: instance.map?.objects,
+        notice: s.notice,
+        error: s.error,
+      });
+    };
+    window.advanceTime = async (ms: number) => {
+      for (let i = 0; i < Math.ceil(ms / (1000 / 60)); i++)
+        instance.step(1000 / 60);
+      instance.cameras.main.preRender();
+      game.scene.render(game.renderer);
+    };
+    const observer = new ResizeObserver(() => {
+      if (
+        container.current &&
+        container.current.clientWidth &&
+        container.current.clientHeight
+      ) {
+        game.scale.resize(
+          container.current.clientWidth,
+          container.current.clientHeight,
+        );
+        if (instance.sys.isActive()) instance.fitCamera();
+      }
+    });
+    observer.observe(container.current!);
+    return () => {
+      observer.disconnect();
+      game.destroy(true);
+      scene.current = null;
+      delete (window as Partial<Window>).render_game_to_text;
+      delete (window as Partial<Window>).advanceTime;
+    };
+  }, []);
+  const control = (x: number, y: number) => ({
+    onPointerDown: (event: React.PointerEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      if (scene.current) scene.current.touch = { x, y };
+    },
+    onPointerUp: () => {
+      if (scene.current) scene.current.touch = { x: 0, y: 0 };
+    },
+    onPointerCancel: () => {
+      if (scene.current) scene.current.touch = { x: 0, y: 0 };
+    },
+    onLostPointerCapture: () => {
+      if (scene.current) scene.current.touch = { x: 0, y: 0 };
+    },
+  });
+  return (
+    <div className="world-wrap">
+      <div
+        ref={container}
+        className="game-canvas"
+        aria-label="回响大陆游戏地图，使用方向键移动，E 键交互"
+        tabIndex={0}
+      />
+      <div className="region-stamp">
+        <span className="live-dot" />
+        <div>
+          <b>{region?.name || "回响大陆"}</b>
+          <small>
+            {state.location === "overworld"
+              ? "循着小路，去遇见新的风景"
+              : "室内 · 门口按 E 返回户外"}
+          </small>
+        </div>
+      </div>
+      {target && (
+        <button
+          className="navigation-hint"
+          onClick={() => useGame.getState().open("map")}
+        >
+          <span>目的地</span>
+          {target.name}
+          <small>
+            {Math.round(
+              Math.hypot(
+                target.x - state.position.x,
+                target.y - state.position.y,
+              ) / 16,
+            )}{" "}
+            步
+          </small>
+        </button>
+      )}
+      {!panel && (
+        <>
+          <div className="dpad" aria-label="触控移动">
+            <button aria-label="向上移动" className="up" {...control(0, -1)}>
+              <ChevronUp />
+            </button>
+            <button aria-label="向左移动" {...control(-1, 0)}>
+              <ChevronLeft />
+            </button>
+            <button aria-label="向下移动" {...control(0, 1)}>
+              <ChevronDown />
+            </button>
+            <button aria-label="向右移动" {...control(1, 0)}>
+              <ChevronRight />
+            </button>
+          </div>
+          <button
+            className="interact"
+            disabled={!nearest}
+            onClick={() => void scene.current?.interact()}
+          >
+            <Hand size={17} />
+            <span>
+              <small>{nearest?.name || "探索回响大陆"}</small>
+              <b>{action}</b>
+            </span>
+            <kbd>E</kbd>
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
