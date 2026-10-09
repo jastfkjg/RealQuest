@@ -62,6 +62,8 @@ docker compose up -d --build
 - 现实成长面板可记录真实活动或开始学习计时。每属性每日现实奖励最多 100 EXP。
 - 学识达到 25 EXP 后可解读图书馆东侧符文；体魄达到 50 EXP 后每次采集额外获得 1 份资源。
 
+游戏采用全视口画布和浮动 HUD；触屏设备显示方向控制器。右上角可以开启/关闭音效，设置中可减少动态效果；这些偏好保存在当前设备。
+
 游客凭证放在 HttpOnly Cookie 中。请保留浏览器 Cookie，清除后暂时无法自助恢复存档。设置面板可导出数据或永久删除当前游客全部数据。导出文件当前仅供查看与备份，不支持导入。
 
 ## 检查
@@ -74,6 +76,7 @@ docker compose up -d --build
 npm run build
 npx playwright install chromium
 REALQUEST_URL=http://127.0.0.1:5173 npm run test:smoke
+REALQUEST_URL=http://127.0.0.1:5173 npm run test:visual
 ```
 
 浏览器烟雾测试需要先运行前后端，会创建独立测试游客。推荐为测试后端设置单独的 `DATABASE_URL=sqlite:////absolute/path/to/test.db` 并先迁移，勿对正式数据库运行测试。测试截图写入被 Git 忽略的 `output/`。
@@ -84,6 +87,7 @@ REALQUEST_URL=http://127.0.0.1:5173 npm run test:smoke
 - [玩法与数值规则](docs/game-design.md)
 - [里程碑状态](docs/roadmap.md)
 - [素材来源与许可证](docs/assets.md)
+- [村庄视觉改造与验证记录](docs/visual-overhaul.md)
 - [后续 TODO](TODO.md)
 
 版本定位：M0–M3 的基础可玩切片。尚无完整目标/每日任务系统、AI Director、Demo 模式、账号恢复和多人功能；不要将此版本当作已加固的公网服务。

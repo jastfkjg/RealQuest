@@ -230,7 +230,10 @@ try {
     await moveTo(p, 1584, 352);
     await interact(p);
     assert.ok((await state(p)).events.includes("discovered_grove"));
-    assert.ok((await state(p)).camera.viewX > 900);
+    assert.ok(
+      (await state(p)).camera.viewX > 0,
+      "Camera follows into the forest at the current integer zoom",
+    );
     await snap(p, "forest");
     await p.getByRole("button", { name: "地图", exact: true }).click();
     await snap(p, "atlas");

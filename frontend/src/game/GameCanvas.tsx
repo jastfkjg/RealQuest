@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
+import { unlockSound } from "./feel";
 import { WorldScene } from "./WorldScene";
 import { accessibleTarget } from "./navigation";
 import { serverNow, useGame } from "../stores/game";
@@ -72,11 +73,14 @@ export function GameCanvas() {
       height: container.current!.clientHeight,
       pixelArt: true,
       roundPixels: true,
-      backgroundColor: "#83a751",
+      backgroundColor: "#559653",
       scene: instance,
       scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,
+        fullscreenTarget: container.current!.closest(
+          ".app-shell",
+        ) as HTMLElement,
       },
       audio: { noAudio: true },
       banner: false,
@@ -87,6 +91,14 @@ export function GameCanvas() {
         coordinate_system:
           "origin top-left; x right, y down; outdoor world 1920×1280",
         location: s.state?.location,
+        direction: instance.direction,
+        frame: instance.player?.frame.name,
+        npcs: instance.npcs.map((n) => ({
+          id: n.obj.id,
+          x: n.sprite.x,
+          y: n.sprite.y,
+          direction: n.direction,
+        })),
         walking: instance.path,
         clickTarget: instance.clickTarget?.id,
         camera: instance.cameras.main
@@ -152,6 +164,7 @@ export function GameCanvas() {
   const control = (x: number, y: number) => ({
     onPointerDown: (event: React.PointerEvent<HTMLButtonElement>) => {
       event.preventDefault();
+      unlockSound();
       event.currentTarget.setPointerCapture(event.pointerId);
       if (scene.current) scene.current.touch = { x, y };
     },
@@ -179,7 +192,7 @@ export function GameCanvas() {
           <b>{region?.name || "回响大陆"}</b>
           <small>
             {state.location === "overworld"
-              ? "循着小路，去遇见新的风景"
+              ? "REALQUEST · 回响大陆"
               : "室内 · 门口按 E 返回户外"}
           </small>
         </div>
@@ -218,18 +231,20 @@ export function GameCanvas() {
               <ChevronRight />
             </button>
           </div>
-          <button
-            className="interact"
-            disabled={!nearest}
-            onClick={() => void scene.current?.interact()}
-          >
-            <Hand size={17} />
-            <span>
-              <small>{nearest?.name || "探索回响大陆"}</small>
-              <b>{action}</b>
-            </span>
-            <kbd>E</kbd>
-          </button>
+          {nearest && (
+            <button
+              className="interact"
+              disabled={!nearest}
+              onClick={() => void scene.current?.interact()}
+            >
+              <Hand size={17} />
+              <span>
+                <small>{nearest?.name || "探索回响大陆"}</small>
+                <b>{action}</b>
+              </span>
+              <kbd>E</kbd>
+            </button>
+          )}
         </>
       )}
     </div>

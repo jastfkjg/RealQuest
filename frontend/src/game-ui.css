@@ -1,0 +1,832 @@
+/* World-first RPG shell. UI pixels stay in CSS; world pixels are never CSS scaled. */
+:root {
+  --ink: #403f31;
+  --muted: #74674f;
+  --paper: #fff0d2;
+  --line: #c0a06f;
+  --green: #52734a;
+}
+body {
+  background: #436b48;
+  background-image: none;
+}
+button {
+  transition:
+    background-color 120ms,
+    border-color 120ms,
+    box-shadow 120ms;
+}
+button:focus-visible,
+a:focus-visible,
+.game-canvas:focus-visible {
+  outline: 2px solid #f5d684;
+  outline-offset: 3px;
+}
+.playing {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+}
+.playing .app-header {
+  display: flex;
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  z-index: 30;
+  width: auto;
+}
+.playing .brand,
+.playing .header-center {
+  display: none;
+}
+.playing .header-actions {
+  gap: 8px;
+}
+.playing .header-actions > button {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  color: #f6edce;
+  border: 1px solid #baceaa55;
+  background: #304e3ce0;
+  box-shadow: 0 2px 0 #203b2ba0;
+  border-radius: 4px;
+}
+.playing .header-actions > button:hover {
+  background: #496d4e;
+}
+.playing .app-main {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.playing .game-layout {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #559653;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+.playing .game-section {
+  width: 100%;
+  height: 100%;
+  background: #559653;
+  position: relative;
+}
+.playing .world-wrap,
+.playing .game-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: #559653;
+  flex: 1;
+  touch-action: none;
+}
+.playing .game-status {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left));
+  width: auto;
+  height: 58px;
+  padding: 6px 12px 6px 6px;
+  gap: 18px;
+  z-index: 25;
+  border: 1px solid #a78a59;
+  border-radius: 4px;
+  background: #fff0d8f2;
+  box-shadow:
+    0 3px 0 #3e563b55,
+    inset 0 1px #fffae5;
+}
+.playing .level {
+  min-height: 44px;
+  padding: 0;
+  gap: 9px;
+  border: 0;
+}
+.pixel-person {
+  position: relative;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  transform: none !important;
+  margin: 0 !important;
+  background: url("/assets/ninja-adventure/character-0.png") 0 0/128px 224px
+    no-repeat;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+.pixel-person.person-1 {
+  background-image: url("/assets/ninja-adventure/character-1.png");
+}
+.pixel-person.person-2 {
+  background-image: url("/assets/ninja-adventure/character-2.png");
+}
+.playing .level > .pixel-person {
+  width: 40px !important;
+  height: 42px !important;
+  background-position: 4px 5px;
+  border: 1px solid #c2ac7e;
+  background-color: #dbdcb0;
+  border-radius: 2px;
+}
+.playing .level > div {
+  width: 112px;
+}
+.playing .level b {
+  color: #4b4431;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.playing .level b span {
+  color: #697d46;
+  font-size: 11px;
+  margin-left: 6px;
+}
+.playing .level small {
+  font-size: 9px;
+  color: #796b4c;
+}
+.playing .xp-track {
+  height: 5px;
+  margin-top: 4px;
+  border: 0;
+  background: #dacaa3;
+}
+.xp-track i {
+  background: #74944e;
+  transition: width 500ms ease-out;
+}
+.playing .currencies {
+  gap: 16px;
+}
+.playing .currencies > span {
+  font-size: 16px;
+  color: #70552f;
+  gap: 7px;
+}
+.playing .currencies small {
+  display: none;
+}
+.playing .currencies svg {
+  width: 14px;
+  color: #698744;
+}
+.playing .coin {
+  width: 14px;
+  height: 14px;
+}
+.playing .game-status .record-button {
+  width: 34px;
+  min-height: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 0;
+  background: #567849;
+  border: 1px solid #406537;
+  box-shadow: inset 0 1px #91ae70;
+}
+.playing .game-status .record-button svg {
+  width: 18px;
+  height: 18px;
+}
+.playing .tracker-toggle {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+}
+.playing .region-stamp {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #fff8db;
+  gap: 10px;
+  text-shadow: 0 2px 1px #2d5035;
+}
+.playing .region-stamp b {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff8db;
+  letter-spacing: 3px;
+}
+.playing .region-stamp small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #f0eccb;
+  margin-top: 4px;
+}
+.playing .region-stamp .live-dot {
+  display: none;
+}
+.playing .sidebar {
+  position: absolute;
+  right: 18px;
+  top: 84px;
+  width: 222px;
+  max-height: calc(100% - 214px);
+  overflow: auto;
+  border: 1px solid #b99a6b;
+  border-radius: 3px;
+  background: #fff0d3ed;
+  padding: 14px;
+  box-shadow: 0 3px 0 #304a3255;
+  z-index: 20;
+  display: block;
+}
+.playing .sidebar-title {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c9b38c;
+  margin-bottom: 12px;
+}
+.playing .sidebar-title > span:first-child {
+  font-size: 12px;
+  color: #4e6943;
+}
+.playing .sidebar-title button {
+  min-height: 24px;
+  width: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.playing .chapter-label {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #91764d;
+  margin-bottom: 8px;
+}
+.playing .tracked-quest h2 {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  color: #57492f;
+}
+.playing .quest-giver {
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+.playing .tracked-quest ol {
+  font-size: 12px;
+  gap: 8px;
+  margin: 12px 0;
+}
+.playing .tracked-quest li > span {
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+}
+.playing .next-step {
+  border-left: 2px solid #b9965b;
+  margin-top: 14px;
+  padding: 7px 9px;
+  background: #c9b78428;
+}
+.playing .next-step > span {
+  font-size: 9px;
+}
+.playing .next-step p {
+  font-size: 11px;
+  margin: 4px 0 0;
+}
+.playing .quest-guide {
+  min-height: 36px;
+  margin-top: 12px;
+  font-size: 11px;
+}
+.playing .tracked-quest .text-button {
+  margin-top: 12px;
+  font-size: 10px;
+}
+.playing .traveler-tip,
+.playing .sidebar .minimap {
+  display: none;
+}
+.playing .game-footer {
+  position: absolute;
+  left: 18px;
+  bottom: 19px;
+  width: auto;
+  padding: 0;
+  height: auto;
+  border: 0;
+  color: #fff3d0;
+  background: none;
+  z-index: 10;
+  font-size: 10px;
+  text-shadow: 0 1px #34472e;
+}
+.playing .game-footer .saved {
+  display: none;
+}
+.playing .game-footer kbd {
+  background: #304b3ad9;
+  border: 1px solid #a9c19555;
+  color: #f5edd0;
+  border-radius: 2px;
+  padding: 3px 5px;
+  font-size: 9px;
+}
+.playing .game-footer i {
+  margin: 0 5px;
+}
+.playing .bottom-nav {
+  position: absolute;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  width: auto;
+  height: 60px;
+  min-height: 0;
+  margin: 0;
+  padding: 5px;
+  gap: 12px;
+  border: 1px solid #9d7e51;
+  border-radius: 4px;
+  background: #f7e5c4f5;
+  box-shadow:
+    0 3px 0 #344c3255,
+    inset 0 1px #fff8dd;
+  display: flex;
+}
+.playing .quick-inventory {
+  gap: 4px;
+}
+.playing .quick-inventory button {
+  width: 42px;
+  height: 46px;
+  min-height: 44px;
+  padding: 4px;
+  border: 1px solid #bd9f6c;
+  background: #dac99b;
+  position: relative;
+}
+.playing .quick-inventory .item-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  box-shadow: inset 2px 2px #f2dfb466;
+}
+.playing .quick-inventory b {
+  font-size: 9px;
+  right: 4px;
+  bottom: 2px;
+}
+.playing .nav-actions {
+  gap: 3px;
+}
+.playing .nav-actions button {
+  min-width: 52px;
+  height: 46px;
+  min-height: 44px;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 4px 7px;
+  gap: 5px;
+  color: #69583c;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.playing .nav-actions button:nth-child(3) {
+  color: #4b774b;
+}
+.playing .nav-actions button:hover {
+  background: #dfcea3;
+}
+.playing .guide-link {
+  display: none;
+}
+.playing .navigation-hint {
+  top: 88px;
+  left: 18px;
+  right: auto;
+  max-width: 230px;
+  font-size: 11px;
+  padding: 6px 10px;
+  min-height: 34px;
+  background: #304c3be0;
+  border: 1px solid #a3bd9255;
+  color: #fff1cb;
+  box-shadow: 0 2px 0 #31483355;
+}
+.playing .navigation-hint small,
+.playing .navigation-hint > span {
+  color: #d8e7bc;
+}
+.playing .interact {
+  display: none;
+  position: absolute;
+  right: 20px;
+  left: auto;
+  bottom: 100px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 7px 10px;
+  gap: 9px;
+  border: 1px solid #a8ba8655;
+  background: #304c3bf0;
+  color: #fff2d1;
+  box-shadow: 0 2px 0 #213c2b66;
+}
+.playing .interact small {
+  color: #d4ddbe;
+  font-size: 10px;
+}
+.playing .interact b {
+  color: #fff2d1;
+  font-size: 12px;
+}
+.playing .interact kbd {
+  border: 1px solid #abc598;
+  background: #496549;
+  color: #fff1cb;
+  width: 23px;
+  height: 24px;
+  border-radius: 3px;
+}
+.playing .dpad {
+  display: none;
+}
+.playing .toast {
+  top: 90px;
+  bottom: auto;
+  left: 50%;
+  max-width: min(440px, calc(100% - 36px));
+  border: 1px solid #acc184;
+  background: #385b42f0;
+  font-size: 12px;
+  padding: 10px 14px;
+  color: #fff5d6;
+  pointer-events: none;
+  z-index: 50;
+}
+.playing .toast.error {
+  pointer-events: auto;
+  background: #874935f0;
+}
+.modal {
+  border: 2px solid #8a6b43;
+  border-radius: 5px;
+  background: #fff1d7;
+  box-shadow:
+    0 8px 24px #1e392950,
+    inset 0 0 0 2px #fff8e8;
+  color: #493f2f;
+  max-height: calc(100dvh - 40px);
+}
+.modal::backdrop {
+  background: #203b3080;
+  backdrop-filter: blur(2px);
+}
+.modal-head {
+  background: #eed8ad;
+  padding: 14px 20px;
+  border-bottom: 1px solid #c1a679;
+}
+.modal-head h2 {
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.modal-body {
+  padding: 20px;
+  line-height: 1.7;
+}
+.dialogue-modal {
+  width: min(640px, calc(100vw - 32px));
+}
+.dialogue-modal .character-profile {
+  border: 0;
+  padding: 0 0 14px;
+  background: none;
+}
+.dialogue-text {
+  min-height: 70px;
+  padding: 14px 18px;
+  background: #ead7b050;
+  border-left: 3px solid #b7955d;
+  margin-bottom: 8px;
+}
+.dialogue-text blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #514432;
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.dialogue-text .text-button {
+  min-height: 32px;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.dialogue-cursor {
+  color: #79905a;
+}
+.preferences {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 10px;
+}
+.preferences label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 32px;
+  cursor: pointer;
+}
+.preferences input {
+  accent-color: #567849;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+}
+@media (max-width: 1100px) {
+  .playing .game-footer {
+    display: none;
+  }
+  .playing .region-stamp {
+    top: 84px;
+    left: 20px;
+    transform: none;
+  }
+  .playing .region-stamp b {
+    font-size: 14px;
+  }
+  .playing .navigation-hint {
+    top: 138px;
+  }
+}
+@media (max-width: 900px) {
+  .playing .sidebar {
+    display: none;
+  }
+  .playing .tracker-toggle {
+    display: flex;
+  }
+  .playing .game-status {
+    gap: 10px;
+  }
+  .playing .toast {
+    top: 160px;
+  }
+}
+@media (max-width: 600px) {
+  .playing .game-status {
+    top: max(10px, env(safe-area-inset-top));
+    left: 10px;
+    height: 54px;
+    padding: 5px 7px;
+    gap: 10px;
+  }
+  .playing .level > div {
+    width: 89px;
+  }
+  .playing .level b {
+    font-size: 11px;
+  }
+  .playing .level b span {
+    font-size: 10px;
+    margin-left: 3px;
+  }
+  .playing .currencies {
+    gap: 9px;
+  }
+  .playing .currencies > span {
+    font-size: 13px;
+    gap: 5px;
+  }
+  .playing .game-status .record-button,
+  .playing .tracker-toggle {
+    display: none;
+  }
+  .playing .app-header {
+    top: max(15px, env(safe-area-inset-top));
+    right: 10px;
+  }
+  .playing .header-actions {
+    gap: 6px;
+  }
+  .playing .header-actions > button {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+  }
+  .playing .header-actions > button:nth-child(2),
+  .playing .header-actions > button:nth-child(3) {
+    display: none;
+  }
+  .playing .region-stamp {
+    top: 80px;
+    left: 14px;
+  }
+  .playing .region-stamp small {
+    font-size: 8px;
+  }
+  .playing .quick-inventory {
+    display: none;
+  }
+  .playing .bottom-nav {
+    width: calc(100% - 24px);
+    bottom: max(12px, env(safe-area-inset-bottom));
+    height: 59px;
+    justify-content: center;
+    padding: 4px;
+  }
+  .playing .nav-actions {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .playing .nav-actions button {
+    flex: 1;
+    min-width: 0;
+    font-size: 10px;
+    padding: 4px 2px;
+  }
+  .playing .nav-actions button svg {
+    width: 19px;
+    height: 19px;
+  }
+  .playing .interact {
+    right: 16px;
+    bottom: 106px;
+  }
+  .playing .interact > svg {
+    display: none;
+  }
+  .playing .navigation-hint {
+    top: 132px;
+    left: 14px;
+    font-size: 10px;
+  }
+  .modal {
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 30px);
+  }
+  .modal-head {
+    padding: 12px 16px;
+  }
+  .modal-body {
+    padding: 16px;
+  }
+}
+@media (pointer: coarse) {
+  .playing .header-actions > button {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  .playing .interact {
+    display: flex;
+  }
+  .playing .dpad {
+    transform: none;
+    display: grid;
+    position: absolute;
+    left: max(16px, env(safe-area-inset-left));
+    bottom: 101px;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(2, 44px);
+    gap: 4px;
+    z-index: 15;
+  }
+  .playing .dpad button {
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 9px;
+    border: 1px solid #b0c39d77;
+    background: #2c4b3de0;
+    color: #f7ebcb;
+    border-radius: 5px;
+    box-shadow: 0 2px #203b2b55;
+    touch-action: none;
+  }
+  .playing .dpad .up {
+    grid-column: 2;
+  }
+  .playing .dpad button:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .playing .dpad button:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .playing .dpad button:nth-child(4) {
+    grid-column: 3;
+    grid-row: 2;
+  }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .playing .game-status {
+    top: 8px;
+    left: 10px;
+    height: 50px;
+  }
+  .playing .app-header {
+    top: 10px;
+    right: 10px;
+  }
+  .playing .region-stamp,
+  .playing .sidebar,
+  .playing .game-footer {
+    display: none;
+  }
+  .playing .bottom-nav {
+    bottom: 8px;
+    height: 54px;
+  }
+  .playing .quick-inventory {
+    display: none;
+  }
+  .playing .dpad {
+    bottom: 14px;
+  }
+  .playing .interact {
+    bottom: 16px;
+    right: 16px;
+  }
+  .playing .toast {
+    top: 72px;
+  }
+  .playing .navigation-hint {
+    top: 68px;
+  }
+}
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.item-icon {
+  background: transparent url("/assets/ninja-adventure/icons/wood.png")
+    center/contain no-repeat;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none !important;
+  image-rendering: pixelated;
+}
+.item-icon.stone {
+  background-image: url("/assets/ninja-adventure/icons/stone.png");
+}
+.item-icon.seed {
+  background-image: url("/assets/ninja-adventure/icons/seed.png");
+}
+.item-icon.crop {
+  background-image: url("/assets/ninja-adventure/icons/crop.png");
+}
+.item-icon.plank {
+  background-image: url("/assets/ninja-adventure/icons/plank.png");
+}
+.playing .quick-inventory .item-icon {
+  width: 28px;
+  height: 28px;
+}
+.item-icon,
+.item-icon.gold,
+.item-icon.stone,
+.item-icon.seed,
+.item-icon.crop,
+.item-icon.plank {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  transform: none;
+  background-color: transparent;
+  background-size: 32px 32px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.item-icon.gold {
+  background-image: url("/assets/ninja-adventure/icons/gold.png");
+}
+.playing .quick-inventory .item-icon {
+  width: 32px;
+  height: 32px;
+}

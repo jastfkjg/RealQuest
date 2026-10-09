@@ -1,12 +1,20 @@
 # 素材来源与许可证
 
-| 内容 | 来源 | 许可/使用范围 |
-| --- | --- | --- |
-| 地形、树冠、瓦片建筑、室内家具、河流、桥梁、资源、农田、符文 | 本项目 `frontend/src/game/art.ts`、`WorldScene.ts` 原创程序绘制 | 本次项目生成内容，没有引入第三方游戏美术；项目整体发布许可证待仓库所有者决定 |
-| 游戏角色三种配色、四方向四帧动画 | 本项目 `art.ts` 原创程序像素素材 | 同上，不使用商业游戏 Sprite |
-| 菜单人物 | 本项目 `style.css` 的 CSS 像素绘制 | 同上 |
-| React 界面图标 | `lucide-react` 软件包 | ISC；以安装包随附 LICENSE 为准 |
-| 字体 | 系统中文字体、系统 serif / sans-serif | 不打包或分发字体文件，使用设备现有字体 |
-| 声音、音乐、外部贴图 | 未使用 | 后续加入时须记录来源、作者、许可证与署名要求 |
+2026-10-09 已核对作者公开页面与源仓库。参考图仅用于风格和构图，没有导入参考游戏的素材。
 
-技术依赖的许可证见各包 LICENSE 与锁文件，不等同于美术素材许可。没有使用《星露谷物语》《塞尔达》等作品的图像、角色、地图、音乐或剧情。
+| 内容 | 作者与来源 | 许可、修改与用途 |
+| --- | --- | --- |
+| 木屋、红瓦建筑、松树、花丛、木桶、木箱、长椅、井、舟、生活装饰 | Pixel-boy / Sparklin Labs，[Superpowers Ninja Adventure](https://github.com/sparklinlabs/superpowers-asset-packs/tree/master/ninja-adventure) | CC0-1.0，允许商用；原始 tileset 不变，客户端按帧取样，整数 2 倍显示 |
+| 栎树、木屋派生素材源 | Pixel-boy，[Ninja Adventure 官方页面](https://pixel-boy.itch.io/ninja-adventure-asset-pack)，[作者仓库](https://github.com/pixel-boy/NinjaAdventure) | 官方明确 CC0、允许商用；使用 `tileset_village_abandoned.png` 的局部，不导入废墟整图 |
+| 砖红小屋与青色图书馆 | 上述 CC0 村庄图块的派生作品 | 本项目裁切、遮罩并调整屋顶色板；可通过 `frontend/scripts/build-village-assets.py` 重建（Pillow） |
+| 三种角色外观、NPC、菜单头像 | Pixel-boy / Sparklin Labs，同一 Ninja Adventure 仓库的 `14.png`、`2.png`、`1.png` | CC0-1.0；四方向四帧，16×16 源像素、2 倍显示；不分发其他角色与动作资源 |
+| 草地与地形变化、泥土路、桥梁、围栏、资源、农田、室内家具、符文、奖励粒子 | 本项目 `village.ts`、`art.ts`、`WorldScene.ts` | 原创程序绘制，统一采用像素对齐；项目整体发布许可证待所有者决定 |
+| 交互、物品、奖励与轻脚步声 | 本项目 `feel.ts`，Web Audio oscillator 合成 | 原创程序音效，无外部录音/音乐；默认静音，用户手势开启，设置可关闭 |
+| React 界面图标 | `lucide-react` 软件包 | ISC；以安装包随附 LICENSE 为准 |
+| 字体 | 设备系统中文字体与 serif / sans-serif | 不打包或分发字体文件 |
+
+原始 CC0 许可和精确源提交见 `frontend/public/assets/ninja-adventure/LICENSE.txt`、`SOURCE.md`。技术依赖的许可证见各包 LICENSE 与锁文件，不等同于美术素材许可。
+
+当前室内家具、矿石和作物仍使用原有可维护的像素绘制。后续可替换为同像素密度的贴图，避免混入不同透视与比例的素材。
+
+背包小图标见 `icons/`：木材从同一 CC0 图块裁切，石料、金币、种子袋、萝卜和木板由项目原创像素绘制；重建脚本与房屋相同。菜单头像和背包图标使用 PNG，已替换旧 CSS 几何占位图。

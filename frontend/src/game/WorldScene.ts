@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 import { serverNow, useGame } from "../stores/game";
 import type { MapData, WorldObject } from "../types";
-import { box, building, ground, makeSprites, objectArt, room } from "./art";
+import { box, objectArt, room } from "./art";
+import { preloadVillage, village, updateVillageBuilding } from "./village";
+import { chime, personFrame, unlockSound, usePreferences } from "./feel";
 import {
   accessibleTarget,
   currentMap,
@@ -14,10 +16,8 @@ export class WorldScene extends Phaser.Scene {
   shadow!: Phaser.GameObjects.Ellipse;
   keys!: Record<string, Phaser.Input.Keyboard.Key>;
   map!: MapData;
-  objects!: Phaser.GameObjects.Graphics;
   water!: Phaser.GameObjects.Graphics;
   marker!: Phaser.GameObjects.Graphics;
-  labels: Phaser.GameObjects.Text[] = [];
   touch = { x: 0, y: 0 };
   direction = 0;
   elapsed = 0;
@@ -30,9 +30,24 @@ export class WorldScene extends Phaser.Scene {
   synced = { x: 240, y: 320 };
   path: { x: number; y: number }[] = [];
   clickTarget: WorldObject | null = null;
-  reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  npcs: {
+    obj: WorldObject;
+    sprite: Phaser.GameObjects.Sprite;
+    direction: number;
+  }[] = [];
+  objectLayers = new Map<string, Phaser.GameObjects.Graphics>();
+  smoke!: Phaser.GameObjects.Graphics;
+  prompt!: Phaser.GameObjects.Text;
+  lastXp = 0;
+  lastFootstep = 0;
+  get reduced() {
+    return usePreferences.getState().reducedMotion;
+  }
   constructor() {
     super("world");
+  }
+  preload() {
+    preloadVillage(this);
   }
   create() {
     const { world, state } = useGame.getState();
@@ -44,32 +59,42 @@ export class WorldScene extends Phaser.Scene {
     this.interacting = false;
     this.pending = false;
     this.syncTask = null;
-    this.labels = [];
-    if (!this.textures.exists("person-0-0-0")) makeSprites(this);
-    if (state.location === "overworld") ground(this, this.map);
+    this.npcs = [];
+    this.objectLayers = new Map();
+    this.lastXp = state.xp;
+    this.lastFootstep = this.elapsed;
+    if (state.location === "overworld") village(this, this.map);
     else room(this, this.map);
-    this.objects = this.add.graphics().setDepth(25);
     this.water = this.add.graphics().setDepth(-800);
+    this.smoke = this.add.graphics().setDepth(2000);
     this.marker = this.add.graphics().setDepth(9999);
+    this.prompt = this.add
+      .text(0, 0, "", {
+        fontFamily: '"PingFang SC",sans-serif',
+        fontSize: "12px",
+        color: "#fff2d4",
+        backgroundColor: "#344f3e",
+        padding: { x: 8, y: 5 },
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(11000)
+      .setVisible(false);
     for (const obj of this.map.objects) {
       if (obj.kind === "npc") {
         this.add
-          .sprite(obj.x, obj.y, `person-${obj.id === "lia" ? 2 : 1}-0-0`)
+          .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
+          .setDepth(obj.y - 1);
+        const sprite = this.add
+          .sprite(obj.x, obj.y, `villager-${obj.id === "lia" ? 0 : 2}`, 0)
           .setOrigin(0.5, 1)
+          .setScale(2)
           .setDepth(obj.y);
-      }
-      if (["building", "npc", "board", "landmark"].includes(obj.kind)) {
-        const label = this.add
-          .text(obj.x, obj.y + (obj.kind === "building" ? 17 : -48), obj.name, {
-            fontFamily: '"PingFang SC",sans-serif',
-            fontSize: "11px",
-            color: "#fff0cb",
-            backgroundColor: "#685037",
-            padding: { x: 5, y: 3 },
-          })
-          .setOrigin(0.5, 0)
-          .setDepth(obj.y + 20);
-        this.labels.push(label);
+        this.npcs.push({ obj, sprite, direction: 0 });
+      } else {
+        this.objectLayers.set(
+          obj.id,
+          this.add.graphics().setDepth(obj.kind === "plot" ? -850 : obj.y),
+        );
       }
     }
     this.shadow = this.add.ellipse(
@@ -84,9 +109,11 @@ export class WorldScene extends Phaser.Scene {
       .sprite(
         state.position.x,
         state.position.y,
-        `person-${state.character?.appearance || 0}-0-0`,
+        `villager-${state.character?.appearance || 0}`,
+        0,
       )
-      .setOrigin(0.5, 1);
+      .setOrigin(0.5, 1)
+      .setScale(2);
     this.synced = { ...state.position };
     this.keys = this.input.keyboard!.addKeys(
       "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,SHIFT",
@@ -107,14 +134,19 @@ export class WorldScene extends Phaser.Scene {
       "SHIFT",
     ]);
     this.cameras.main.setBackgroundColor(
-      state.location === "overworld" ? "#83a751" : "#3c3930",
+      state.location === "overworld" ? "#559653" : "#3c3930",
     );
     if (state.location === "overworld")
       this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
     else this.cameras.main.removeBounds();
     this.fitCamera();
     if (state.location === "overworld")
-      this.cameras.main.startFollow(this.player, true, 1, 1);
+      this.cameras.main.startFollow(
+        this.player,
+        true,
+        this.reduced ? 1 : 0.12,
+        this.reduced ? 1 : 0.12,
+      );
     else this.cameras.main.stopFollow();
     this.cameras.main.setFollowOffset(
       0,
@@ -122,7 +154,10 @@ export class WorldScene extends Phaser.Scene {
     );
     if (!this.reduced) this.cameras.main.fadeIn(220, 40, 35, 27);
     this.input.keyboard!.on("keydown-E", () => {
-      if (!this.isTyping()) void this.interact();
+      if (!this.isTyping()) {
+        unlockSound();
+        void this.interact();
+      }
     });
     this.input.keyboard!.on("keydown-M", () => {
       if (!this.isTyping()) useGame.getState().open("map");
@@ -137,7 +172,9 @@ export class WorldScene extends Phaser.Scene {
       }
     });
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      if (useGame.getState().panel || this.interacting) return;
+      if (useGame.getState().panel || this.interacting || this.transitioning)
+        return;
+      unlockSound();
       const obj = this.map.objects
         .filter(
           (o) => Math.hypot(o.x - pointer.worldX, o.y - pointer.worldY) < 38,
@@ -199,21 +236,27 @@ export class WorldScene extends Phaser.Scene {
       window.removeEventListener("blur", this.resetInput);
       document.removeEventListener("visibilitychange", this.resetInput);
       window.removeEventListener("resize", this.fitCamera);
+      this.input.keyboard?.removeAllListeners();
+      this.input.removeAllListeners();
+      this.npcs = [];
+      this.objectLayers.clear();
     });
     this.drawState();
   }
   fitCamera = () => {
     if (!this.map) return;
+    const fit = Math.min(
+      Number(this.scale.width) / 480,
+      Number(this.scale.height) / 368,
+    );
     this.cameras.main.setZoom(
       this.map.id === "overworld"
-        ? Math.min(
-            window.innerWidth < 700 ? 1.35 : 1.65,
-            Math.max(1.1, Number(this.scale.height) / 460),
-          )
-        : Math.min(
-            Number(this.scale.width) / 480,
-            Number(this.scale.height) / 368,
-          ) * 0.94,
+        ? Number(this.scale.width) >= 1800 && Number(this.scale.height) >= 1000
+          ? 2
+          : 1
+        : fit >= 1
+          ? Math.max(1, Math.floor(fit))
+          : fit,
     );
     if (this.map.id !== "overworld")
       this.cameras.main.centerOn(this.map.width / 2, this.map.height / 2);
@@ -275,7 +318,11 @@ export class WorldScene extends Phaser.Scene {
     if (before.busy || before.panel || this.interacting || this.transitioning)
       return;
     const obj = selected || before.nearest;
-    if (!obj) return;
+    if (!obj || Math.hypot(obj.x - this.player.x, obj.y - this.player.y) > 65)
+      return;
+    this.face(obj.x, obj.y);
+    unlockSound();
+    chime("interact");
     this.path = [];
     this.clickTarget = null;
     this.interacting = true;
@@ -327,11 +374,12 @@ export class WorldScene extends Phaser.Scene {
         action = "gather";
       }
       const ok = await store.command(action, { target: obj.id });
+      if (ok && !["enter", "exit"].includes(action)) chime("item");
       if (ok && !["enter", "exit"].includes(action))
         this.feedback(
           obj,
           action === "gather"
-            ? "+ 材料"
+            ? `+${(store.state!.attributes.strength >= 50 ? 1 : 0) + 3} ${obj.kind === "wood" ? "木材" : "石料"}`
             : action === "plant"
               ? "已播种"
               : action === "harvest"
@@ -342,7 +390,14 @@ export class WorldScene extends Phaser.Scene {
       this.interacting = false;
     }
   }
-  feedback(obj: WorldObject, text: string) {
+  face(x: number, y: number) {
+    const dx = x - this.player.x,
+      dy = y - this.player.y;
+    this.direction =
+      Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 2 : 1) : dy > 0 ? 0 : 3;
+    this.player.setFrame(personFrame(this.direction));
+  }
+  feedback(obj: { x: number; y: number }, text: string) {
     const label = this.add
       .text(obj.x, obj.y - 44, text, {
         fontFamily: "sans-serif",
@@ -353,6 +408,27 @@ export class WorldScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(12000);
+    if (!this.reduced) {
+      for (let i = 0; i < 6; i++) {
+        const mote = this.add
+          .rectangle(
+            obj.x + (i - 3) * 5,
+            obj.y - 14,
+            3,
+            3,
+            i % 2 ? 0xf6db87 : 0xc5e68a,
+          )
+          .setDepth(12000);
+        this.tweens.add({
+          targets: mote,
+          x: mote.x + (i - 3) * 5,
+          y: mote.y - 20 - i * 3,
+          alpha: 0,
+          duration: 500,
+          onComplete: () => mote.destroy(),
+        });
+      }
+    }
     this.tweens.add({
       targets: label,
       y: obj.y - 70,
@@ -421,13 +497,37 @@ export class WorldScene extends Phaser.Scene {
     if (Math.abs(dx) > 0.2) this.direction = dx > 0 ? 2 : 1;
     else if (Math.abs(dy) > 0.2) this.direction = dy > 0 ? 0 : 3;
     this.player
-      .setTexture(
-        `person-${useGame.getState().state?.character?.appearance || 0}-${this.direction}-${length ? Math.floor(this.elapsed / 125) % 4 : 0}`,
+      .setFrame(
+        personFrame(
+          this.direction,
+          length ? Math.floor(this.elapsed / 130) % 4 : 0,
+        ),
       )
       .setDepth(this.player.y + 1);
     this.shadow
       .setPosition(this.player.x, this.player.y - 1)
       .setDepth(this.player.y - 1);
+    if (length && !blocked && this.elapsed - this.lastFootstep > 290) {
+      this.lastFootstep = this.elapsed;
+      chime("step");
+    }
+    const selected = useGame.getState().selected;
+    for (const npc of this.npcs) {
+      const dx = this.player.x - npc.obj.x,
+        dy = this.player.y - npc.obj.y;
+      if (Math.hypot(dx, dy) < 140 || selected?.id === npc.obj.id)
+        npc.direction =
+          Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 2 : 1) : dy > 0 ? 0 : 3;
+      else npc.direction = [0, 1, 0, 2][Math.floor(this.elapsed / 3800) % 4];
+      npc.sprite
+        .setFrame(personFrame(npc.direction))
+        .setY(
+          npc.obj.y -
+            (!this.reduced && !blocked && Math.sin(this.elapsed / 480) > 0.5
+              ? 1
+              : 0),
+        );
+    }
     if (this.elapsed - this.lastSync > 120 && !this.pending) {
       this.lastSync = this.elapsed;
       void this.sync();
@@ -459,9 +559,26 @@ export class WorldScene extends Phaser.Scene {
     const store = useGame.getState(),
       state = store.state!,
       now = serverNow();
-    this.objects.clear();
-    for (const obj of this.map.objects)
-      objectArt(this.objects, obj, state, now);
+    for (const obj of this.map.objects) {
+      const layer = this.objectLayers.get(obj.id);
+      if (layer) {
+        layer.clear();
+        objectArt(layer, obj, state, now);
+      }
+    }
+    if (state.xp > this.lastXp) {
+      const leveled =
+        Math.floor(state.xp / 100) > Math.floor(this.lastXp / 100);
+      this.feedback(
+        this.player,
+        leveled
+          ? `等级提升 · Lv.${1 + Math.floor(state.xp / 100)}`
+          : `+${state.xp - this.lastXp} EXP`,
+      );
+      chime("reward");
+    }
+    this.lastXp = state.xp;
+    this.cameras.main.setLerp(this.reduced ? 1 : 0.12, this.reduced ? 1 : 0.12);
     this.water.clear();
     if (this.map.id === "overworld") {
       this.water.lineStyle(1, 0xb1d5bf, 0.6);
@@ -475,37 +592,44 @@ export class WorldScene extends Phaser.Scene {
         this.water.lineBetween(1200 + (i % 3) * 40, y, 1220 + (i % 3) * 40, y);
       }
     }
-    if (this.map.id === "overworld")
-      for (const child of this.children.list) {
-        if (
-          child instanceof Phaser.GameObjects.Graphics &&
-          child.getData("building")
-        ) {
-          const id = child.getData("building"),
-            level = state.buildings[id] || 1;
-          if (child.getData("level") !== level) {
-            child.clear();
-            building(
-              child,
-              id,
-              this.map.objects.find((o) => o.id === id)!.rect!,
-              level,
+    this.smoke.clear();
+    if (this.map.id === "overworld") {
+      for (const obj of this.map.objects.filter((o) => o.kind === "building")) {
+        updateVillageBuilding(this, obj, state.buildings[obj.id] || 1);
+        if (!this.reduced) {
+          const [x, y, w] = obj.rect!;
+          for (let i = 0; i < 3; i++) {
+            const drift = (this.elapsed / 80 + i * 13) % 42;
+            this.smoke.fillStyle(0xf2edca, 0.25 * (1 - drift / 42));
+            this.smoke.fillRect(
+              Math.round(x + w - 22 + Math.sin(drift / 10) * 4),
+              Math.round(y - 18 - drift),
+              6 + i * 2,
+              6 + i * 2,
             );
-            child.setData("level", level);
           }
         }
       }
+    }
     this.marker.clear();
     const near = store.nearest;
+    this.prompt.setVisible(!!near && !store.panel && !this.interacting);
     if (near) {
-      this.marker.lineStyle(1.5, 0xffebb0, 0.95);
+      this.prompt
+        .setPosition(this.player.x, this.player.y + 9)
+        .setText(`E  ${near.name}`);
+      this.marker.lineStyle(1, 0xffebb0, 0.85);
       this.marker.strokeEllipse(near.x, near.y + 2, 38, 14);
     }
     for (const obj of this.map.objects) {
       const q = state.quest_log.filter(
         (q) => q.giver === obj.id && ["available", "ready"].includes(q.status),
       );
-      if (!q.length) continue;
+      if (
+        !q.length ||
+        Math.hypot(obj.x - this.player.x, obj.y - this.player.y) > 190
+      )
+        continue;
       const x = obj.x,
         y = obj.y - (obj.kind === "npc" ? 66 : 48),
         ready = q.some((q) => q.status === "ready");

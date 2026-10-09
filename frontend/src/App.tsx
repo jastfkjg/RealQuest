@@ -15,6 +15,8 @@ import {
   Heart,
   Leaf,
   Map,
+  Volume2,
+  VolumeX,
   Pause,
   Play,
   Plus,
@@ -29,6 +31,7 @@ import {
 } from "lucide-react";
 import { QuestList, QuestTracker } from "./components/Quests";
 import { Atlas } from "./components/Atlas";
+import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
 import {
   activityNames,
@@ -48,20 +51,15 @@ const attrIcons = {
 };
 function PixelPerson({ variant = 0 }: { variant?: number }) {
   return (
-    <div aria-hidden="true" className={`pixel-person person-${variant}`}>
-      <i />
-      <b />
-      <span />
-      <em />
-    </div>
+    <div aria-hidden="true" className={`pixel-person person-${variant}`} />
   );
 }
 function Modal({ title, children }: { title: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null),
     open = useGame((s) => s.open);
   useEffect(() => {
-    ref.current?.showModal();
     const previous = document.activeElement;
+    ref.current?.showModal();
     return () => {
       if (previous instanceof HTMLElement) previous.focus();
     };
@@ -69,14 +67,15 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className="modal"
+      className={`modal ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
+      aria-labelledby="panel-title"
       onCancel={() => open(null)}
       onClick={(event) => {
         if (event.target === event.currentTarget) open(null);
       }}
     >
       <div className="modal-head">
-        <h2>{title}</h2>
+        <h2 id="panel-title">{title}</h2>
         <button
           className="icon-button"
           aria-label="关闭面板"
@@ -87,6 +86,37 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
       </div>
       <div className="modal-body">{children}</div>
     </dialog>
+  );
+}
+function DialogueText({ text }: { text: string }) {
+  const reduced = usePreferences((s) => s.reducedMotion);
+  const [count, setCount] = useState(reduced ? text.length : 0);
+  useEffect(() => {
+    setCount(reduced ? text.length : 0);
+    if (reduced) return;
+    const timer = setInterval(
+      () => setCount((n) => Math.min(text.length, n + 1)),
+      24,
+    );
+    return () => clearInterval(timer);
+  }, [text, reduced]);
+  const reveal = () => {
+    setCount(text.length);
+    unlockSound();
+    chime("interact");
+  };
+  return (
+    <div className="dialogue-text" role="group" aria-label={text}>
+      <blockquote aria-hidden="true">
+        {text.slice(0, count)}
+        {count < text.length && <span className="dialogue-cursor">▌</span>}
+      </blockquote>
+      {count < text.length && (
+        <button className="text-button" onClick={reveal}>
+          显示完整对话 <ChevronRight size={16} />
+        </button>
+      )}
+    </div>
   );
 }
 function Welcome() {
@@ -335,6 +365,7 @@ function Panels() {
     open,
   } = useGame();
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const preferences = usePreferences();
   if (!panel || !state) return null;
   const titles: Record<string, string> = {
     board: "委托告示板",
@@ -551,7 +582,7 @@ function Panels() {
       {panel === "npc" && selected && (
         <>
           <div className="character-profile">
-            <PixelPerson variant={selected.id === "lia" ? 2 : 1} />
+            <PixelPerson variant={selected.id === "lia" ? 0 : 2} />
             <div>
               <h3>{selected.name}</h3>
               <p>
@@ -560,7 +591,7 @@ function Panels() {
               </p>
             </div>
           </div>
-          <blockquote>{dialogue}</blockquote>
+          <DialogueText text={dialogue} />
           <small>预设剧情对话</small>
           <QuestList giver={selected.id} />
           <button className="primary" onClick={() => open(null)}>
@@ -661,8 +692,33 @@ function Panels() {
       )}
       {panel === "settings" && (
         <>
+          <div className="preferences">
+            <label>
+              <input
+                type="checkbox"
+                checked={preferences.sound}
+                onChange={(e) => {
+                  preferences.set({ sound: e.target.checked });
+                  unlockSound();
+                  chime();
+                }}
+              />{" "}
+              开启游戏音效
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={preferences.reducedMotion}
+                onChange={(e) =>
+                  preferences.set({ reducedMotion: e.target.checked })
+                }
+              />{" "}
+              减少动态效果
+            </label>
+          </div>
+          <hr />
           <p>
-            当前使用游客存档。请保留当前浏览器的
+            当前使用游客存档.请保留当前浏览器的
             Cookie；游戏进度由服务端数据库保存。
           </p>
           <button
@@ -723,7 +779,7 @@ function Panels() {
           {error}
         </p>
       )}
-      {notice && (
+      {notice && !(panel === "npc" && notice === dialogue) && (
         <p className="panel-notice" role="status">
           {notice}
         </p>
@@ -752,6 +808,7 @@ export default function App() {
     }, 15000);
     return () => clearInterval(id);
   }, [ready]);
+  const preferences = usePreferences();
   const nav: [Panel, string, typeof Compass][] = [
     ["character", "角色", User],
     ["inventory", "背包", Backpack],
@@ -760,7 +817,9 @@ export default function App() {
     ["map", "地图", Map],
   ];
   return (
-    <div className="app-shell">
+    <div
+      className={`app-shell ${state?.character ? "playing" : ""} ${preferences.reducedMotion ? "reduce-motion" : ""}`}
+    >
       <header className="app-header">
         <a href="/" className="brand">
           <div className="brand-mark">
@@ -781,6 +840,19 @@ export default function App() {
           className="header-actions"
           style={{ visibility: state?.character ? "visible" : "hidden" }}
         >
+          <button aria-label="AI 旅途伙伴" onClick={() => open("ai")}>
+            <Sparkles size={18} />
+          </button>
+          <button
+            aria-label={preferences.sound ? "关闭游戏音效" : "开启游戏音效"}
+            onClick={() => {
+              preferences.set({ sound: !preferences.sound });
+              unlockSound();
+              chime();
+            }}
+          >
+            {preferences.sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
           <button aria-label="旅人指南" onClick={() => open("guide")}>
             <CircleHelp size={19} />
           </button>
