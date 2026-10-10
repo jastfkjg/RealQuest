@@ -48,9 +48,9 @@ a:focus-visible,
   gap: 8px;
 }
 .playing .header-actions > button {
-  width: 40px;
-  height: 40px;
-  min-height: 40px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
   color: #f6edce;
   border: 1px solid #baceaa55;
   background: #304e3ce0;
@@ -406,9 +406,6 @@ a:focus-visible,
   font-size: 10px;
   white-space: nowrap;
 }
-.playing .nav-actions button:nth-child(3) {
-  color: #4b774b;
-}
 .playing .nav-actions button:hover {
   background: #dfcea3;
 }
@@ -433,11 +430,13 @@ a:focus-visible,
   color: #d8e7bc;
 }
 .playing .interact {
-  display: none;
+  display: flex;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
   position: absolute;
-  right: 20px;
-  left: auto;
-  bottom: 100px;
+  right: auto;
+  bottom: 92px;
   min-width: 0;
   min-height: 44px;
   padding: 7px 10px;
@@ -580,7 +579,7 @@ a:focus-visible,
 }
 @media (max-width: 900px) {
   .playing .sidebar {
-    display: none;
+    display: block;
   }
   .playing .tracker-toggle {
     display: flex;
@@ -633,8 +632,7 @@ a:focus-visible,
     height: 36px;
     min-height: 36px;
   }
-  .playing .header-actions > button:nth-child(2),
-  .playing .header-actions > button:nth-child(3) {
+  .playing .header-actions > .sound-toggle {
     display: none;
   }
   .playing .region-stamp {
@@ -708,7 +706,7 @@ a:focus-visible,
     bottom: 101px;
     grid-template-columns: repeat(3, 44px);
     grid-template-rows: repeat(2, 44px);
-    gap: 4px;
+    gap: 8px;
     z-index: 15;
   }
   .playing .dpad button {
@@ -829,4 +827,325 @@ a:focus-visible,
 .playing .quick-inventory .item-icon {
   width: 32px;
   height: 32px;
+}
+
+/* v0.2 A: progressive disclosure and touch-safe gameplay composition. */
+.playing .level b {
+  display: flex;
+  align-items: baseline;
+}
+.playing .level > div:not(.pixel-person) {
+  min-width: 0;
+}
+.playing .level b {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.playing .level b span {
+  flex-shrink: 0;
+}
+.playing .level b .player-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.playing .level small {
+  font-size: 10px;
+}
+.playing .quest-compass {
+  position: absolute;
+  z-index: 20;
+  right: 18px;
+  top: 80px;
+  display: flex;
+  width: 274px;
+  padding: 4px;
+  gap: 4px;
+  color: #fff4d5;
+  background: #304e3ced;
+  border: 1px solid #aec09660;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #213c2b66;
+}
+.quest-compass button {
+  border: 0;
+  background: none;
+  color: inherit;
+  box-shadow: none;
+  min-height: 44px;
+}
+.quest-compass .compass-action {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+}
+.compass-action span {
+  min-width: 0;
+}
+.compass-action small {
+  display: block;
+  font-size: 11px;
+  color: #dbdfbb;
+  margin-bottom: 3px;
+}
+.compass-action b {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.quest-compass .compass-expand {
+  width: 44px;
+  border-left: 1px solid #aec09640;
+  border-radius: 0;
+  padding: 8px;
+}
+.quest-compass button:hover {
+  background: #56764b;
+}
+.playing .sidebar {
+  width: 276px;
+  max-height: calc(100% - 190px);
+  padding: 14px;
+}
+.playing .sidebar-title button {
+  width: 44px;
+  min-height: 44px;
+}
+.playing .tracked-quest ol {
+  font-size: 14px;
+}
+.playing .tracked-quest .quest-giver,
+.playing .next-step p {
+  font-size: 12px;
+}
+.playing .quest-guide,
+.playing .tracked-quest .text-button {
+  min-height: 44px;
+  font-size: 13px;
+}
+.playing .nav-actions button {
+  min-width: 60px;
+  font-size: 12px;
+  position: relative;
+}
+.playing .nav-actions .life-entry {
+  padding: 4px 14px;
+  margin-left: 6px;
+  border-left: 1px solid #bca572;
+  color: #355c3c;
+  background: #dce4bd;
+}
+.life-entry small {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.playing .interact small {
+  font-size: 12px;
+}
+.playing .interact b {
+  font-size: 14px;
+}
+.playing .interact:hover:not(:disabled),
+.playing .navigation-hint:hover:not(:disabled) {
+  background: #46684b;
+}
+.playing .interact:active:not(:disabled),
+.playing .dpad button:active:not(:disabled) {
+  background: #5a7b51;
+  translate: none;
+}
+.modal-head .icon-button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.playing .interact:disabled {
+  opacity: 1;
+  background: #465748ed;
+  color: #e6e7d0;
+  cursor: default;
+}
+.playing .region-stamp {
+  pointer-events: none;
+}
+.playing .game-footer {
+  font-size: 12px;
+}
+.playing .game-footer kbd {
+  font-size: 10px;
+}
+.journey-menu {
+  display: grid;
+  gap: 12px;
+}
+.journey-menu > button {
+  min-height: 60px;
+  display: flex;
+  justify-content: flex-start;
+  padding: 12px;
+  gap: 12px;
+}
+.journey-menu > button span {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+.life-bridge {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #e4ebd1;
+  padding: 16px;
+  margin-bottom: 22px;
+  border-radius: 4px;
+}
+.life-bridge > svg {
+  flex-shrink: 0;
+  color: #52734a;
+}
+.life-bridge strong {
+  font-size: 15px;
+}
+.life-bridge p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+@media (max-width: 1100px) {
+  .playing .region-stamp {
+    top: 92px;
+  }
+  .playing .navigation-hint {
+    top: 145px;
+  }
+}
+@media (max-width: 600px) {
+  .playing .game-status {
+    max-width: calc(100% - 124px);
+    gap: 8px;
+    padding: 5px 6px;
+  }
+  .playing .level {
+    gap: 6px;
+  }
+  .playing .level > div {
+    width: 86px;
+  }
+  .playing .currencies {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .playing .currencies > span {
+    font-size: 12px;
+  }
+  .playing .header-actions {
+    gap: 8px;
+  }
+  .playing .header-actions > button {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  .playing .quest-compass {
+    top: 80px;
+    right: 10px;
+    width: 224px;
+  }
+  .playing .compass-action b {
+    font-size: 12px;
+  }
+  .playing .region-stamp {
+    top: 90px;
+    left: 12px;
+  }
+  .playing .region-stamp b {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .playing .region-stamp small {
+    display: none;
+  }
+  .playing .sidebar {
+    top: 80px;
+    right: 10px;
+    width: min(276px, calc(100% - 20px));
+  }
+  .playing .nav-actions button {
+    min-width: 0;
+    font-size: 12px;
+  }
+  .playing .nav-actions .life-entry {
+    padding: 4px 8px;
+    margin: 0;
+  }
+  .playing .life-entry small {
+    display: none;
+  }
+  .playing .navigation-hint {
+    top: 154px;
+    left: 12px;
+  }
+  .playing .toast {
+    top: 206px;
+  }
+  .journey-menu > button {
+    flex-wrap: wrap;
+  }
+  .journey-menu > button span {
+    flex-basis: 100%;
+    text-align: left;
+    margin-left: 30px;
+  }
+}
+@media (pointer: coarse) {
+  .playing .interact {
+    left: auto;
+    right: 16px;
+    bottom: 112px;
+    transform: none;
+    max-width: 180px;
+  }
+  .playing .interact kbd {
+    display: none;
+  }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .playing .quest-compass {
+    top: 72px;
+    width: 242px;
+  }
+  .playing .sidebar {
+    display: block;
+    top: 64px;
+    max-height: calc(100% - 136px);
+  }
+  .playing .bottom-nav {
+    width: auto;
+  }
+  .playing .nav-actions button {
+    min-width: 56px;
+  }
+  .playing .nav-actions .life-entry {
+    padding: 4px 8px;
+  }
+  .playing .interact {
+    bottom: 16px;
+    max-width: 148px;
+  }
+  .playing .toast {
+    top: 140px;
+  }
+  .playing .life-entry small {
+    display: none;
+  }
 }

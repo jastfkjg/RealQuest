@@ -68,6 +68,15 @@ function sprite(
 // Hand-placed paths and prop clusters, independent of persistent gameplay.
 // Small bends soften the village without moving any existing door or resource.
 const roads: [number[][], number][] = [
+  // Board spur and a farm entrance that skirts, rather than crosses, the plots.
+  [
+    [
+      [256, 272],
+      [264, 306],
+      [256, 338],
+    ],
+    28,
+  ],
   [
     [
       [32, 350],
@@ -114,7 +123,8 @@ const roads: [number[][], number][] = [
   [
     [
       [216, 348],
-      [216, 560],
+      [280, 392],
+      [280, 552],
       [232, 616],
       [216, 720],
       [216, 904],
@@ -164,20 +174,16 @@ const roads: [number[][], number][] = [
 const props: [string, number, number][] = [
   ["laundry", 98, 275],
   ["pot", 224, 244],
-  ["barrel", 246, 422],
+  ["barrel", 92, 454],
   ["flowers", 94, 218],
   ["flowers", 224, 224],
   ["daisies", 83, 482],
   ["crates", 400, 233],
   ["cart", 394, 282],
-  ["barrel", 277, 215],
-  ["barrel", 390, 197],
   ["bench", 568, 236],
   ["well", 564, 470],
   ["flowers", 647, 222],
   ["flowers", 752, 224],
-  ["pot", 792, 208],
-  ["bench", 810, 289],
   ["daisies", 774, 278],
   ["shrub", 550, 178],
   ["crates", 984, 543],
@@ -212,10 +218,10 @@ export function village(scene: Phaser.Scene, map: MapData) {
       ctx.fillRect(x + 8, y, w - 16, h);
       ctx.fillRect(x, y + 6, w, h - 12);
     }
-    for (let i = 0; i < 7500; i++) {
+    for (let i = 0; i < 2900; i++) {
       const x = Math.floor((random() * map.width) / 2) * 2,
         y = Math.floor((random() * map.height) / 2) * 2;
-      ctx.fillStyle = i % 4 ? "#49874d" : "#78ad5d";
+      ctx.fillStyle = i % 4 ? "#518c50" : "#6ca15b";
       ctx.fillRect(x, y, 2, 4);
       ctx.fillRect(x + 2, y + 2, 2, 2);
     }
@@ -324,7 +330,7 @@ export function village(scene: Phaser.Scene, map: MapData) {
     }
   }
   for (const [x, y, length] of [
-    [82, 405, 212],
+    [82, 405, 164],
     [82, 523, 90],
     [254, 523, 42],
     [978, 592, 82],
@@ -360,6 +366,10 @@ export function village(scene: Phaser.Scene, map: MapData) {
         .setDepth(y + 12);
     else sprite(scene, frame, x, y + 12, y + 12);
   }
+  // Low plants make the nearby gathering spot legible without introducing new
+  // colliders or hiding its authoritative anchor. The main road stays clear.
+  sprite(scene, "shrub", 382, 302);
+  sprite(scene, "flowers", 348, 398, -850);
   // A flowering tree marks the farm; its trunk uses an existing tree collider.
   const pink = map.trees.find(([x, y]) => x === 304 && y === 568);
   if (pink) sprite(scene, "treePink", pink[0], pink[1] + 12, pink[1] + 13);

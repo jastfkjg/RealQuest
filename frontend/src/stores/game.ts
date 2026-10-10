@@ -13,9 +13,15 @@ interface Store {
   world: World | null;
   panel: Panel;
   selected: WorldObject | null;
+  inventoryItem: string;
+  quickItems: string[];
+  activityKind: string;
+  selectItem: (item: string) => void;
+  pinItem: (item: string, index: number) => void;
   dialogue: string;
   nearest: WorldObject | null;
   notice: string;
+  noticePanel: Panel;
   error: string;
   busy: boolean;
   ready: boolean;
@@ -33,19 +39,57 @@ interface Store {
   open: (panel: Panel, selected?: WorldObject) => void;
   setNearest: (obj: WorldObject | null) => void;
 }
+const defaultQuickItems = ["seed", "wood", "stone", "crop"];
+function readQuickItems(): string[] {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("realquest-quick-items") || "null",
+    );
+    if (
+      Array.isArray(saved) &&
+      saved.length === 4 &&
+      new Set(saved).size === 4 &&
+      saved.every((item) =>
+        ["seed", "wood", "stone", "crop", "plank"].includes(item),
+      )
+    )
+      return saved;
+  } catch {
+    /* Browser preferences are optional. */
+  }
+  return defaultQuickItems;
+}
 export const useGame = create<Store>((set, get) => ({
   state: null,
   world: null,
   panel: null,
   selected: null,
+  inventoryItem: "seed",
+  quickItems: readQuickItems(),
+  activityKind: "study",
+  selectItem: (inventoryItem) => set({ inventoryItem }),
+  pinItem: (item, index) => {
+    if (!itemNames[item] || item === "gold" || index < 0 || index > 3) return;
+    const quickItems = [...get().quickItems];
+    const oldIndex = quickItems.indexOf(item);
+    if (oldIndex >= 0) quickItems[oldIndex] = quickItems[index];
+    quickItems[index] = item;
+    set({ quickItems });
+    try {
+      localStorage.setItem("realquest-quick-items", JSON.stringify(quickItems));
+    } catch {
+      /* Optional. */
+    }
+  },
   dialogue: "",
   nearest: null,
   notice: "",
+  noticePanel: null,
   error: "",
   busy: false,
   ready: false,
   clockOffset: 0,
-  tracking: true,
+  tracking: false,
   navigation: null,
   navigate: (navigation) => set({ navigation, panel: null }),
   accept: (reply) =>
@@ -76,6 +120,7 @@ export const useGame = create<Store>((set, get) => ({
       if (!silent)
         set({
           notice: reply.message || "",
+          noticePanel: get().panel,
           dialogue: action === "talk" ? reply.message || "" : get().dialogue,
         });
       return true;

@@ -55,6 +55,7 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
+  | "menu"
   | "map"
   | "board"
   | "storage"

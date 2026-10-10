@@ -1,0 +1,119 @@
+/* Hearthwood baseline. Scope to the RealQuest application; not a complete UI skin. */
+.rq-theme {
+  --rq-ink: #27392f;
+  --rq-ink-muted: #56614f;
+  --rq-linen: #f4efde;
+  --rq-linen-raised: #fffbf0;
+  --rq-canvas: #dee3cf;
+  --rq-slot: #d0d7bf;
+  --rq-moss: #3f6348;
+  --rq-moss-hover: #34533d;
+  --rq-pine: #233d31;
+  --rq-timber: #8f6e4d;
+  --rq-amber: #d3a450;
+  --rq-divider: #b4b89c;
+  --rq-control-border: #687455;
+  --rq-success: #376443;
+  --rq-danger: #934537;
+  --rq-water: #60989e;
+  --rq-scrim: rgb(20 35 27 / 58%);
+
+  --rq-space-1: 4px;
+  --rq-space-2: 8px;
+  --rq-space-3: 12px;
+  --rq-space-4: 16px;
+  --rq-space-5: 20px;
+  --rq-space-6: 24px;
+  --rq-space-8: 32px;
+  --rq-space-12: 48px;
+  --rq-control-min: 44px;
+  --rq-slot-size: 60px;
+  --rq-slot-gap: 8px;
+
+  --rq-text-small: 14px;
+  --rq-text-body: 16px;
+  --rq-text-section: 18px;
+  --rq-text-panel: 22px;
+  --rq-text-page: 28px;
+  --rq-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --rq-font-title: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+
+  --rq-duration-fast: 100ms;
+  --rq-duration-panel: 160ms;
+  --rq-ease-out: cubic-bezier(.2, .8, .2, 1);
+  --rq-z-hud: 20;
+  --rq-z-world-prompt: 30;
+  --rq-z-overlay: 100;
+  --rq-z-popover: 110;
+  --rq-z-feedback: 120;
+
+  font-family: var(--rq-font-body);
+  color: var(--rq-ink);
+  font-size: var(--rq-text-body);
+  line-height: 1.5;
+}
+
+/* Apply to pixel artwork only; never to text or the whole React application. */
+.rq-theme .rq-pixel-art { image-rendering: pixelated; }
+.rq-theme .rq-numeric { font-variant-numeric: tabular-nums; }
+.rq-theme .rq-reading-surface {
+  background: var(--rq-linen);
+  color: var(--rq-ink);
+}
+
+/* Example behavior, not permission to reuse one panel layout for every screen. */
+.rq-theme .rq-button {
+  min-height: var(--rq-control-min);
+  padding: 8px 16px;
+  border: 2px solid var(--rq-control-border);
+  border-radius: 2px;
+  font: inherit;
+  font-weight: 600;
+  background: var(--rq-linen-raised);
+  color: var(--rq-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--rq-duration-fast) linear;
+}
+.rq-theme .rq-button--primary {
+  background: var(--rq-moss);
+  border-color: var(--rq-pine);
+  color: var(--rq-linen-raised);
+  box-shadow: 0 2px 0 var(--rq-pine);
+}
+@media (hover: hover) {
+  .rq-theme .rq-button--primary:hover:not(:disabled) {
+    background: var(--rq-moss-hover);
+  }
+}
+.rq-theme .rq-button--primary:active:not(:disabled) {
+  box-shadow: inset 0 2px 0 var(--rq-pine);
+}
+.rq-theme .rq-button:disabled {
+  cursor: not-allowed;
+  background: var(--rq-canvas);
+  color: var(--rq-ink-muted);
+  box-shadow: none;
+}
+.rq-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--rq-pine);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--rq-linen-raised);
+}
+.rq-theme .rq-item-slot {
+  width: var(--rq-slot-size);
+  height: var(--rq-slot-size);
+  border: 1px solid var(--rq-divider);
+  background: var(--rq-slot);
+  position: relative;
+}
+.rq-theme .rq-item-slot[data-selected="true"] {
+  border: 2px solid var(--rq-pine);
+  background: var(--rq-linen-raised);
+  box-shadow: inset 0 0 0 2px var(--rq-amber);
+}
+/* Add accessible labels and a visible binding marker in the component, not CSS alone. */
+@media (prefers-reduced-motion: reduce) {
+  .rq-theme { --rq-duration-fast: 0ms; --rq-duration-panel: 0ms; }
+}

@@ -15,6 +15,7 @@ import {
   Heart,
   Leaf,
   Map,
+  Menu,
   Volume2,
   VolumeX,
   Pause,
@@ -24,22 +25,21 @@ import {
   Sparkles,
   Sprout,
   Timer,
-  Trees,
   User,
   X,
   Zap,
 } from "lucide-react";
-import { QuestList, QuestTracker } from "./components/Quests";
+import {
+  CharacterPanel,
+  CharacterStage,
+  InventoryPanel,
+  PixelPerson,
+} from "./components/RpgPanels";
+import { QuestList, QuestTracker, QuestCompass } from "./components/Quests";
 import { Atlas } from "./components/Atlas";
 import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
-import {
-  activityNames,
-  attributeNames,
-  itemNames,
-  serverNow,
-  useGame,
-} from "./stores/game";
+import { activityNames, itemNames, serverNow, useGame } from "./stores/game";
 import { api } from "./services/api";
 import type { Attribute, Panel } from "./types";
 const attrIcons = {
@@ -49,11 +49,6 @@ const attrIcons = {
   stewardship: Sprout,
   bond: Sparkles,
 };
-function PixelPerson({ variant = 0 }: { variant?: number }) {
-  return (
-    <div aria-hidden="true" className={`pixel-person person-${variant}`} />
-  );
-}
 function Modal({ title, children }: { title: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null),
     open = useGame((s) => s.open);
@@ -67,7 +62,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className={`modal ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
+      className={`modal panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
       aria-labelledby="panel-title"
       onCancel={() => open(null)}
       onClick={(event) => {
@@ -124,81 +119,87 @@ function Welcome() {
     [appearance, setAppearance] = useState(0),
     { command, busy, error } = useGame();
   return (
-    <main className="welcome">
-      <div className="welcome-art">
-        <Trees size={46} />
-        <span>YOUR LIFE, A LITTLE MORE MAGICAL.</span>
-        <h1>
-          生活的每一步，
-          <br />
-          世界的每一处回响。
-        </h1>
-        <p>
-          从一间林间小屋开始，
-          <br />
-          在现实中成长，在回响大陆展开冒险。
-        </p>
-        <div className="welcome-land">
-          <PixelPerson variant={appearance} />
-          <Sprout size={70} />
+    <main className="arrival">
+      <div className="arrival-heading">
+        <span>REALQUEST / 现实副本</span>
+        <h1>你好，唤醒者。</h1>
+        <p>森林醒来之前，你的故事先开始了。</p>
+      </div>
+      <div className="arrival-scene">
+        <CharacterStage appearance={appearance} large />
+        <div className="arrival-name">
+          <span>第一章 · 万物生长</span>
+          <strong>{name.trim() || "未命名的旅人"}</strong>
+          <small>Lv.1 · 初生的唤醒者</small>
         </div>
       </div>
       <form
-        className="welcome-form"
+        className="arrival-form"
         onSubmit={async (e) => {
           e.preventDefault();
-          await command("create", { name, appearance });
+          if (name.trim())
+            await command("create", { name: name.trim(), appearance });
         }}
       >
-        <span className="eyebrow">一段新旅程</span>
-        <h2>你好，唤醒者。</h2>
-        <p>这片沉睡的土地，正等待你的到来。</p>
-        <label>
-          你的名字
-          <input
-            value={name}
-            maxLength={16}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>选择旅行伙伴的模样</label>
-        <div className="appearances">
-          {[0, 1, 2].map((i) => (
-            <button
-              type="button"
-              key={i}
-              aria-label={`外观 ${i + 1}`}
-              aria-pressed={appearance === i}
-              className={appearance === i ? "selected" : ""}
-              onClick={() => setAppearance(i)}
-            >
-              <PixelPerson variant={i} />
-              {appearance === i && <Check size={16} />}
-            </button>
-          ))}
+        <div className="arrival-customize">
+          <label className="arrival-name-field">
+            旅人之名
+            <input
+              aria-label="你的名字"
+              value={name}
+              maxLength={16}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="off"
+            />
+          </label>
+          <fieldset>
+            <legend>选择你的模样</legend>
+            <div className="arrival-appearances">
+              {[0, 1, 2].map((i) => (
+                <button
+                  type="button"
+                  key={i}
+                  aria-label={`外观 ${i + 1}`}
+                  aria-pressed={appearance === i}
+                  onClick={() => setAppearance(i)}
+                >
+                  <PixelPerson variant={i} />
+                  {appearance === i && <Check size={12} />}
+                </button>
+              ))}
+            </div>
+          </fieldset>
         </div>
-        <button className="primary" id="start-btn" disabled={busy}>
-          进入回响大陆 <ArrowRight size={18} />
+        <button
+          className="primary arrival-start"
+          id="start-btn"
+          disabled={busy || !name.trim()}
+        >
+          {busy ? "正在开启旅程…" : "进入回响大陆"}
+          <ArrowRight size={19} />
         </button>
         {error && (
           <p className="form-error" role="alert">
             {error}
           </p>
         )}
-        <small>
-          游客存档保存在服务端，并通过当前浏览器识别。
-          <br />
-          清除浏览器 Cookie 后将无法找回此存档。
+        <small className="arrival-save-note">
+          旅程自动保存于当前浏览器的游客存档，请保留 Cookie。
         </small>
       </form>
+      <span className="arrival-footer">
+        从一间小屋开始，把日常过成一场冒险。
+      </span>
     </main>
   );
 }
 function ActivityPanel() {
   const { state, command, busy } = useGame(),
-    [kind, setKind] = useState("study"),
-    [amount, setAmount] = useState("25"),
+    [kind, setKind] = useState(useGame.getState().activityKind),
+    [amount, setAmount] = useState(
+      useGame.getState().activityKind === "steps" ? "3000" : "25",
+    ),
     [note, setNote] = useState(""),
     [topic, setTopic] = useState(""),
     [date, setDate] = useState(
@@ -233,6 +234,16 @@ function ActivityPanel() {
   }
   return (
     <>
+      <div className="life-bridge">
+        <Leaf size={22} />
+        <div>
+          <strong>现实的积累，会在世界里留下回响。</strong>
+          <p>
+            学习获得学识，累计 25 EXP
+            可解读遗迹符文；步行获得体魄经验与探索能量。关闭面板即可回到原处继续冒险。
+          </p>
+        </div>
+      </div>
       <div className="section-label">
         <Timer size={17} /> 专注学习
       </div>
@@ -362,6 +373,7 @@ function Panels() {
     busy,
     error,
     notice,
+    noticePanel,
     open,
   } = useGame();
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -378,6 +390,7 @@ function Panels() {
     guide: "旅人指南",
     settings: "存档与数据",
     ai: "AI 旅途伙伴",
+    menu: "旅途菜单",
     building: selected?.name || "建筑",
     npc: selected?.name || "对话",
   };
@@ -385,6 +398,23 @@ function Panels() {
   const level = state.buildings[buildingId] || 1;
   return (
     <Modal key={panel} title={titles[panel]}>
+      {panel === "menu" && (
+        <div className="journey-menu">
+          <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
+          <button onClick={() => open("guide")}>
+            <CircleHelp size={18} />
+            旅人指南<span>移动、交互与玩法</span>
+          </button>
+          <button onClick={() => open("settings")}>
+            <Settings size={18} />
+            存档与数据<span>音效、动态效果与备份</span>
+          </button>
+          <button onClick={() => open("ai")}>
+            <Sparkles size={18} />
+            AI 旅途伙伴<span>当前尚未接入</span>
+          </button>
+        </div>
+      )}
       {panel === "activity" && <ActivityPanel />}
       {panel === "map" && <Atlas />}
       {panel === "board" && (
@@ -438,68 +468,8 @@ function Panels() {
           ))}
         </>
       )}
-      {panel === "character" && (
-        <>
-          <div className="character-profile">
-            <PixelPerson variant={state.character!.appearance} />
-            <div>
-              <h3>{state.character!.name}</h3>
-              <p>Lv. {1 + Math.floor(state.xp / 100)} · 初生的唤醒者</p>
-            </div>
-          </div>
-          {Object.entries(state.attributes).map(([key, value]) => (
-            <div className="attribute-row" key={key}>
-              <span>{attributeNames[key]}</span>
-              <div className="meter">
-                <i style={{ width: `${((value % 50) / 50) * 100}%` }} />
-              </div>
-              <span>
-                Lv.{1 + Math.floor(value / 50)} · {value} EXP
-              </span>
-            </div>
-          ))}
-          <div className="note">
-            <b>已解锁能力</b>
-            <p>
-              {state.attributes.strength >= 50
-                ? "熟练采集：每次采集额外获得 1 份材料。"
-                : "体魄累计 50 EXP 后，采集效率提升。"}
-            </p>
-            <p>
-              {state.attributes.wisdom >= 25
-                ? "符文解读：可探索图书馆东侧的遗迹。"
-                : "学识累计 25 EXP 后，可解读沉睡符文。"}
-            </p>
-          </div>
-          <small>
-            这些属性描述游戏角色成长，不衡量你的真实能力或个人价值。
-          </small>
-        </>
-      )}
-      {panel === "inventory" && (
-        <>
-          <div className="inventory-grid">
-            {Object.entries(state.inventory).map(([key, value]) => (
-              <div key={key}>
-                <span className={`item-icon ${key}`} aria-hidden="true" />
-                <b>{itemNames[key]}</b>
-                <strong>{value}</strong>
-              </div>
-            ))}
-          </div>
-          <div className="resource-row">
-            <span>
-              <Zap size={17} /> 探索能量 {state.energy}
-            </span>
-            <span>
-              <Sparkles size={17} /> 知识碎片 {state.knowledge_shard}
-            </span>
-          </div>
-          <p className="muted">
-            采集、种植、交易与制作发生在地图上。进入工坊，在柜台出售萝卜、购买种子或制作木板。
-          </p>
-        </>
-      )}
+      {panel === "character" && <CharacterPanel />}
+      {panel === "inventory" && <InventoryPanel />}
       {panel === "building" && selected && (
         <>
           <div className="building-banner">
@@ -671,7 +641,8 @@ function Panels() {
           </ol>
           <p className="muted">
             移动端用左下方方向键移动，右下方按钮交互。<kbd>F</kbd> 切换全屏，
-            <kbd>Esc</kbd> 关闭面板或退出全屏。
+            <kbd>Esc</kbd> 关闭面板或退出全屏。<kbd>I</kbd> 背包、<kbd>C</kbd>{" "}
+            角色、<kbd>J</kbd> 任务日志、<kbd>L</kbd> 现实成长。
           </p>
         </>
       )}
@@ -779,25 +750,37 @@ function Panels() {
           {error}
         </p>
       )}
-      {notice && !(panel === "npc" && notice === dialogue) && (
-        <p className="panel-notice" role="status">
-          {notice}
-        </p>
-      )}
+      {notice &&
+        noticePanel === panel &&
+        !(panel === "npc" && notice === dialogue) && (
+          <p className="panel-notice" role="status">
+            {notice}
+          </p>
+        )}
     </Modal>
   );
 }
 export default function App() {
-  const { state, ready, boot, open, error, notice, tracking, panel } =
-    useGame();
+  const {
+    state,
+    ready,
+    boot,
+    open,
+    error,
+    notice,
+    tracking,
+    panel,
+    quickItems,
+    selectItem,
+  } = useGame();
   useEffect(() => {
     void boot();
   }, [boot]);
   useEffect(() => {
-    if (!notice) return;
+    if (!notice || panel) return;
     const id = setTimeout(() => useGame.setState({ notice: "" }), 5500);
     return () => clearTimeout(id);
-  }, [notice]);
+  }, [notice, panel]);
   useEffect(() => {
     if (!ready) return;
     const id = setInterval(() => {
@@ -810,11 +793,10 @@ export default function App() {
   }, [ready]);
   const preferences = usePreferences();
   const nav: [Panel, string, typeof Compass][] = [
-    ["character", "角色", User],
     ["inventory", "背包", Backpack],
-    ["activity", "现实成长", Leaf],
+    ["character", "角色", User],
     ["journal", "任务日志", BookOpen],
-    ["map", "地图", Map],
+    ["activity", "现实成长", Leaf],
   ];
   return (
     <div
@@ -840,10 +822,15 @@ export default function App() {
           className="header-actions"
           style={{ visibility: state?.character ? "visible" : "hidden" }}
         >
-          <button aria-label="AI 旅途伙伴" onClick={() => open("ai")}>
-            <Sparkles size={18} />
+          <button
+            aria-label="地图"
+            title="地图 · M"
+            onClick={() => open("map")}
+          >
+            <Map size={19} />
           </button>
           <button
+            className="sound-toggle"
             aria-label={preferences.sound ? "关闭游戏音效" : "开启游戏音效"}
             onClick={() => {
               preferences.set({ sound: !preferences.sound });
@@ -853,11 +840,12 @@ export default function App() {
           >
             {preferences.sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
-          <button aria-label="旅人指南" onClick={() => open("guide")}>
-            <CircleHelp size={19} />
-          </button>
-          <button aria-label="存档与数据" onClick={() => open("settings")}>
-            <Settings size={18} />
+          <button
+            aria-label="主菜单"
+            title="主菜单"
+            onClick={() => open("menu")}
+          >
+            <Menu size={20} />
           </button>
         </div>
       </header>
@@ -880,45 +868,42 @@ export default function App() {
             <div className="game-layout">
               <section className="game-section" aria-label="游戏世界">
                 <div className="game-status">
-                  <button className="level" onClick={() => open("character")}>
-                    <PixelPerson variant={state.character.appearance} />
-                    <div>
+                  <button
+                    aria-label="查看角色成长"
+                    className="level"
+                    onClick={() => open("character")}
+                  >
+                    <div className="hud-portrait">
+                      <PixelPerson variant={state.character.appearance} />
+                      <span>{1 + Math.floor(state.xp / 100)}</span>
+                    </div>
+                    <div className="hud-nameplate">
                       <b>
-                        {state.character.name}
+                        <span className="player-name">
+                          {state.character.name}
+                        </span>
                         <span> Lv.{1 + Math.floor(state.xp / 100)}</span>
                       </b>
                       <div className="xp-track">
                         <i style={{ width: `${state.xp % 100}%` }} />
                       </div>
-                      <small>{state.xp % 100} / 100 EXP</small>
+                      <small>
+                        {state.xp >= 100 ? "逐光的旅人" : "初生的唤醒者"}
+                      </small>
                     </div>
                   </button>
                   <div className="currencies">
-                    <span>
+                    <span aria-label={`金币 ${state.inventory.gold}`}>
                       <i className="coin" />
                       {state.inventory.gold}
                       <small>金币</small>
                     </span>
-                    <span>
+                    <span aria-label={`探索能量 ${state.energy}`}>
                       <Zap size={17} />
                       {state.energy}
                       <small>探索能量</small>
                     </span>
                   </div>
-                  <button
-                    className="record-button"
-                    onClick={() => open("activity")}
-                  >
-                    <Plus size={15} />
-                    记录现实成长
-                  </button>
-                  <button
-                    className="tracker-toggle"
-                    aria-label={tracking ? "收起任务追踪" : "展开任务追踪"}
-                    onClick={() => useGame.setState({ tracking: !tracking })}
-                  >
-                    <Flag size={17} />
-                  </button>
                 </div>
                 <GameCanvas />
                 <div className="game-footer">
@@ -934,7 +919,8 @@ export default function App() {
                   </span>
                 </div>
               </section>
-              {tracking && (
+              {!panel && !tracking && <QuestCompass />}
+              {!panel && tracking && (
                 <aside className="sidebar">
                   <div className="sidebar-title">
                     <span>
@@ -949,26 +935,22 @@ export default function App() {
                     </button>
                   </div>
                   <QuestTracker />
-                  <Atlas mini />
-                  <div className="traveler-tip">
-                    <Leaf size={16} />
-                    <p>
-                      不必急着赶路。
-                      <br />
-                      每一个小小的行动，都有回响。
-                    </p>
-                  </div>
                 </aside>
               )}
             </div>
             <nav className="bottom-nav" aria-label="游戏菜单">
               <div className="quick-inventory">
-                {["wood", "stone", "seed", "crop"].map((item) => (
+                {quickItems.map((item, index) => (
                   <button
                     key={item}
-                    onClick={() => open("inventory")}
+                    onClick={() => {
+                      selectItem(item);
+                      open("inventory");
+                    }}
                     aria-label={`${itemNames[item]} ${state.inventory[item]}`}
+                    title={`${index + 1} · ${itemNames[item]}`}
                   >
+                    <kbd>{index + 1}</kbd>
                     <span className={`item-icon ${item}`} />
                     <b>{state.inventory[item]}</b>
                   </button>
@@ -976,9 +958,15 @@ export default function App() {
               </div>
               <div className="nav-actions">
                 {nav.map(([target, label, Icon]) => (
-                  <button key={target} onClick={() => open(target)}>
+                  <button
+                    key={target}
+                    aria-label={label}
+                    className={target === "activity" ? "life-entry" : undefined}
+                    onClick={() => open(target)}
+                  >
                     <Icon size={19} />
                     <span>{label}</span>
+
                     {target === "journal" &&
                       state.quest_log.some((q) => q.status === "ready") && (
                         <i className="nav-dot" />

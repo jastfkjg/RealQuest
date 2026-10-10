@@ -1,8 +1,8 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-const base = process.env.REALQUEST_URL || "http://127.0.0.1:5184";
-const output = new URL("../../output/visual-overhaul/", import.meta.url);
+const base = process.env.REALQUEST_URL || "http://127.0.0.1:5185";
+const output = new URL("../../output/ux-v0.2/", import.meta.url);
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const errors = [];
@@ -70,7 +70,7 @@ try {
       assert.equal(await p.locator(".dpad").isVisible(), touch);
       if (touch) {
         const settings = await p
-          .getByRole("button", { name: "存档与数据" })
+          .getByRole("button", { name: "主菜单" })
           .boundingBox();
         assert.ok(
           settings && settings.width >= 44 && settings.height >= 44,
@@ -125,6 +125,11 @@ try {
         "Closing panel restores movement",
       );
       if (width === 1440) {
+        await p.locator(".game-canvas").focus();
+        await p.keyboard.down("d");
+        await p.waitForTimeout(1200);
+        await p.keyboard.up("d");
+        await p.waitForTimeout(250);
         const s = await read(p),
           o = s.objects.find((o) => o.id === "lia");
         await p.locator("canvas").click({
@@ -149,7 +154,8 @@ try {
         );
         await p.keyboard.press("Escape");
         await until(p, (s) => s.mode === "explore");
-        await p.getByRole("button", { name: "存档与数据" }).click();
+        await p.getByRole("button", { name: "主菜单" }).click();
+        await p.getByRole("button", { name: /存档与数据/ }).click();
         await p.getByLabel("减少动态效果").uncheck();
         await p
           .getByRole("checkbox", { name: "开启游戏音效", exact: true })
@@ -158,7 +164,8 @@ try {
         await p.reload();
         await p.waitForSelector("canvas");
         await p.waitForTimeout(500);
-        await p.getByRole("button", { name: "存档与数据" }).click();
+        await p.getByRole("button", { name: "主菜单" }).click();
+        await p.getByRole("button", { name: /存档与数据/ }).click();
         assert.equal(
           await p
             .getByRole("checkbox", { name: "开启游戏音效", exact: true })
@@ -200,7 +207,87 @@ try {
           "Save restores after refresh",
         );
       }
-      reports.push({ width, height, touch, passed: true });
+      await p.getByRole("button", { name: "展开任务追踪" }).click();
+      assert.ok(
+        await p.locator(".sidebar").isVisible(),
+        "Task detail available on every screen",
+      );
+      const sidebar = await p.locator(".sidebar").boundingBox();
+      assert.ok(
+        sidebar.y >= 0 && sidebar.y + sidebar.height <= height,
+        "Tracker within viewport",
+      );
+      await p.getByRole("button", { name: "收起任务追踪" }).click();
+      await p.getByRole("button", { name: "角色", exact: true }).click();
+      await screenshot(p, `character-${width}x${height}`);
+      await p.keyboard.press("Escape");
+      await p.evaluate(
+        () => (window.__uxCanvas = document.querySelector("canvas")),
+      );
+      for (let turn = 0; turn < 3; turn++) {
+        await p.getByRole("button", { name: "现实成长", exact: true }).click();
+        const origin = (await read(p)).player;
+        assert.equal(
+          (await read(p)).inputEnabled,
+          false,
+          "Panel releases Phaser keyboard ownership",
+        );
+        await p.getByLabel("学习主题").fill("wasd efmcijl 输入不移动");
+        await p.getByLabel("学习主题").press("ArrowRight");
+        assert.deepEqual(
+          (await read(p)).player,
+          origin,
+          "Typing doesn't move character",
+        );
+        if (!turn) await screenshot(p, `life-entry-${width}x${height}`);
+        await p.keyboard.press("Escape");
+        await p.waitForTimeout(100);
+        assert.equal((await read(p)).inputEnabled, true);
+        assert.equal(
+          await p.evaluate(
+            () => document.querySelector("canvas") === window.__uxCanvas,
+          ),
+          true,
+        );
+        assert.equal((await read(p)).keyboardListeners, 1);
+        assert.equal((await read(p)).canvasCount, 1);
+      }
+      if (touch) {
+        const from = (await read(p)).player;
+        const right = await p
+          .getByRole("button", { name: "向右移动" })
+          .boundingBox();
+        await p.mouse.move(
+          right.x + right.width / 2,
+          right.y + right.height / 2,
+        );
+        await p.mouse.down();
+        await p.waitForTimeout(220);
+        await p.mouse.up();
+        assert.ok((await read(p)).player.x > from.x + 12, "Touch moves");
+      }
+      const current = await read(p);
+      assert.ok(
+        current.camera.playerPixels >= 64,
+        "Character at least 64 CSS px",
+      );
+      assert.ok(
+        current.camera.viewX >= -1 && current.camera.viewY >= -1,
+        "No negative world view",
+      );
+      assert.ok(
+        current.camera.viewX + current.camera.width <= 1921 &&
+          current.camera.viewY + current.camera.height <= 1281,
+        "Camera bounded by map",
+      );
+      reports.push({
+        width,
+        height,
+        touch,
+        zoom: current.camera.zoom,
+        playerPixels: current.camera.playerPixels,
+        passed: true,
+      });
     } finally {
       await c.request.delete(`${base}/api/session`);
       await c.close();

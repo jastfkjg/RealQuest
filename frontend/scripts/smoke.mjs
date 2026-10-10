@@ -160,7 +160,7 @@ try {
     await moveTo(p, 232, 432);
     await interact(p);
     assert.ok((await state(p)).plots.plot_2);
-    await p.getByRole("button", { name: "记录现实成长", exact: true }).click();
+    await p.getByRole("button", { name: "现实成长", exact: true }).click();
     await p.getByLabel("主题或备注").fill("浏览器验收：学习记录");
     await p.getByRole("button", { name: "保存这次成长" }).click();
     await p.waitForTimeout(250);

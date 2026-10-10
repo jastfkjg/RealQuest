@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import { unlockSound } from "./feel";
 import { WorldScene } from "./WorldScene";
+import { interactionFor } from "./interaction";
 import { accessibleTarget } from "./navigation";
 import { serverNow, useGame } from "../stores/game";
 import {
@@ -41,28 +42,19 @@ export function GameCanvas() {
             state.position.y < r.y + r.height,
         );
   const target = navigation ? accessibleTarget(navigation, world, state) : null;
-  const crop = nearest ? state.plots[nearest.id] : null;
-  const action = nearest
-    ? {
-        building: "进入",
-        exit: "离开",
-        npc: "交谈 / 委托",
-        board: "查看委托",
-        station: "打开",
-        storage: "存取物品",
-        rest: "休息",
-        wood: "采集",
-        stone: "采集",
-        landmark: "发现",
-        chest: "打开补给",
-        event: "解读符文",
-        plot: crop
-          ? crop.ready_at <= serverNow()
-            ? "收获"
-            : `${Math.ceil(crop.ready_at - serverNow())} 秒后成熟`
-          : "播种",
-      }[nearest.kind] || "互动"
-    : "点击地面前往";
+  const bearing = target
+    ? ["东", "东南", "南", "西南", "西", "西北", "北", "东北"][
+        (Math.round(
+          Math.atan2(target.y - state.position.y, target.x - state.position.x) /
+            (Math.PI / 4),
+        ) +
+          8) %
+          8
+      ]
+    : "";
+  const interaction = nearest
+    ? interactionFor(nearest, state, serverNow())
+    : null;
   useEffect(() => {
     const instance = new WorldScene();
     scene.current = instance;
@@ -108,6 +100,9 @@ export function GameCanvas() {
               zoom: instance.cameras.main.zoom,
               viewX: instance.cameras.main.worldView.x,
               viewY: instance.cameras.main.worldView.y,
+              width: instance.cameras.main.worldView.width,
+              height: instance.cameras.main.worldView.height,
+              playerPixels: 32 * instance.cameras.main.zoom,
             }
           : null,
         quests: s.state?.quest_log,
@@ -120,8 +115,19 @@ export function GameCanvas() {
             }
           : s.state?.position,
         nearest: s.nearest,
+        interaction:
+          s.nearest && s.state
+            ? interactionFor(s.nearest, s.state, serverNow())
+            : null,
+        inputEnabled: instance.input.keyboard?.enabled,
+        keyboardListeners: instance.input.keyboard?.listenerCount("keydown-E"),
+        canvasCount: document.querySelectorAll("canvas").length,
         inventory: s.state?.inventory,
+        selectedItem: s.inventoryItem,
+        quickItems: s.quickItems,
+        navigation: s.navigation,
         xp: s.state?.xp,
+        pendingFeedbackXp: Math.max(0, (s.state?.xp || 0) - instance.lastXp),
         attributes: s.state?.attributes,
         plots: s.state?.plots,
         buildings: s.state?.buildings,
@@ -166,7 +172,8 @@ export function GameCanvas() {
       event.preventDefault();
       unlockSound();
       event.currentTarget.setPointerCapture(event.pointerId);
-      if (scene.current) scene.current.touch = { x, y };
+      if (scene.current && !useGame.getState().panel)
+        scene.current.touch = { x, y };
     },
     onPointerUp: () => {
       if (scene.current) scene.current.touch = { x: 0, y: 0 };
@@ -205,6 +212,7 @@ export function GameCanvas() {
           <span>目的地</span>
           {target.name}
           <small>
+            向{bearing} ·{" "}
             {Math.round(
               Math.hypot(
                 target.x - state.position.x,
@@ -234,15 +242,15 @@ export function GameCanvas() {
           {nearest && (
             <button
               className="interact"
-              disabled={!nearest}
+              disabled={!!interaction?.reason || useGame.getState().busy}
               onClick={() => void scene.current?.interact()}
             >
               <Hand size={17} />
               <span>
                 <small>{nearest?.name || "探索回响大陆"}</small>
-                <b>{action}</b>
+                <b>{interaction?.reason || interaction?.label}</b>
               </span>
-              <kbd>E</kbd>
+              {!interaction?.reason && <kbd>E</kbd>}
             </button>
           )}
         </>

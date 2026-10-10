@@ -197,3 +197,61 @@ export function QuestTracker() {
     </div>
   );
 }
+
+// One actionable next step, using the same authoritative quest checks.
+export function QuestCompass() {
+  const { state, navigate, open } = useGame();
+  if (!state) return null;
+  const quest =
+    state.quest_log.find(
+      (q) =>
+        q.id === state.tracked_quest && ["active", "ready"].includes(q.status),
+    ) ||
+    state.quest_log.find((q) =>
+      ["ready", "active", "available"].includes(q.status),
+    );
+  const next = !quest
+    ? "照顾家园，或随心探索"
+    : quest.status === "ready"
+      ? `回到${quest.giver_name}交付`
+      : quest.status === "available"
+        ? `向${quest.giver_name}接取委托`
+        : quest.objectives[quest.checks.findIndex((v) => !v)];
+  return (
+    <aside className="quest-compass" aria-label="下一步引导">
+      <button
+        className="compass-action"
+        aria-label="指引我的下一步"
+        onClick={() => {
+          if (!quest) return open("journal");
+          if (
+            quest.id === "rune_research" &&
+            quest.checks[0] &&
+            !quest.checks[1]
+          )
+            return open("activity");
+          const target = questTarget(quest, state);
+          if (target) navigate(target);
+        }}
+      >
+        <span>
+          <small>
+            {quest?.status === "ready"
+              ? "委托已就绪"
+              : quest?.title || "自由探索"}
+          </small>
+          <b>{next}</b>
+        </span>
+        <MapPin size={17} />
+      </button>
+      <button
+        className="compass-expand"
+        aria-label="展开任务追踪"
+        aria-expanded={false}
+        onClick={() => useGame.setState({ tracking: true })}
+      >
+        <BookOpen size={17} />
+      </button>
+    </aside>
+  );
+}

@@ -4,6 +4,7 @@ import type { MapData, WorldObject } from "../types";
 import { box, objectArt, room } from "./art";
 import { preloadVillage, village, updateVillageBuilding } from "./village";
 import { chime, personFrame, unlockSound, usePreferences } from "./feel";
+import { hitObject, interactionFor, INTERACTION_RADIUS } from "./interaction";
 import {
   accessibleTarget,
   currentMap,
@@ -37,7 +38,6 @@ export class WorldScene extends Phaser.Scene {
   }[] = [];
   objectLayers = new Map<string, Phaser.GameObjects.Graphics>();
   smoke!: Phaser.GameObjects.Graphics;
-  prompt!: Phaser.GameObjects.Text;
   lastXp = 0;
   lastFootstep = 0;
   get reduced() {
@@ -68,17 +68,6 @@ export class WorldScene extends Phaser.Scene {
     this.water = this.add.graphics().setDepth(-800);
     this.smoke = this.add.graphics().setDepth(2000);
     this.marker = this.add.graphics().setDepth(9999);
-    this.prompt = this.add
-      .text(0, 0, "", {
-        fontFamily: '"PingFang SC",sans-serif',
-        fontSize: "12px",
-        color: "#fff2d4",
-        backgroundColor: "#344f3e",
-        padding: { x: 8, y: 5 },
-      })
-      .setOrigin(0.5, 0)
-      .setDepth(11000)
-      .setVisible(false);
     for (const obj of this.map.objects) {
       if (obj.kind === "npc") {
         this.add
@@ -116,7 +105,7 @@ export class WorldScene extends Phaser.Scene {
       .setScale(2);
     this.synced = { ...state.position };
     this.keys = this.input.keyboard!.addKeys(
-      "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,SHIFT",
+      "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,I,C,L,SHIFT",
     ) as Record<string, Phaser.Input.Keyboard.Key>;
     this.input.keyboard!.removeCapture([
       "W",
@@ -131,6 +120,9 @@ export class WorldScene extends Phaser.Scene {
       "F",
       "M",
       "J",
+      "I",
+      "C",
+      "L",
       "SHIFT",
     ]);
     this.cameras.main.setBackgroundColor(
@@ -139,7 +131,6 @@ export class WorldScene extends Phaser.Scene {
     if (state.location === "overworld")
       this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
     else this.cameras.main.removeBounds();
-    this.fitCamera();
     if (state.location === "overworld")
       this.cameras.main.startFollow(
         this.player,
@@ -148,13 +139,10 @@ export class WorldScene extends Phaser.Scene {
         this.reduced ? 1 : 0.12,
       );
     else this.cameras.main.stopFollow();
-    this.cameras.main.setFollowOffset(
-      0,
-      state.location === "overworld" ? 45 : 0,
-    );
+    this.fitCamera();
     if (!this.reduced) this.cameras.main.fadeIn(220, 40, 35, 27);
-    this.input.keyboard!.on("keydown-E", () => {
-      if (!this.isTyping()) {
+    this.input.keyboard!.on("keydown-E", (event: KeyboardEvent) => {
+      if (!this.isTyping() && !event.repeat) {
         unlockSound();
         void this.interact();
       }
@@ -165,6 +153,25 @@ export class WorldScene extends Phaser.Scene {
     this.input.keyboard!.on("keydown-J", () => {
       if (!this.isTyping()) useGame.getState().open("journal");
     });
+    for (const [key, panel] of [
+      ["I", "inventory"],
+      ["C", "character"],
+      ["L", "activity"],
+    ] as const)
+      this.input.keyboard!.on(`keydown-${key}`, () => {
+        if (!this.isTyping()) useGame.getState().open(panel);
+      });
+    for (let index = 0; index < 4; index++)
+      this.input.keyboard!.on(
+        `keydown-${["ONE", "TWO", "THREE", "FOUR"][index]}`,
+        () => {
+          if (!this.isTyping()) {
+            const store = useGame.getState();
+            store.selectItem(store.quickItems[index]);
+            store.open("inventory");
+          }
+        },
+      );
     this.input.keyboard!.on("keydown-F", () => {
       if (!this.isTyping()) {
         if (this.scale.isFullscreen) this.scale.stopFullscreen();
@@ -172,13 +179,16 @@ export class WorldScene extends Phaser.Scene {
       }
     });
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      if (useGame.getState().panel || this.interacting || this.transitioning)
+      if (
+        this.isTyping() ||
+        this.interacting ||
+        this.transitioning ||
+        document.hidden
+      )
         return;
       unlockSound();
       const obj = this.map.objects
-        .filter(
-          (o) => Math.hypot(o.x - pointer.worldX, o.y - pointer.worldY) < 38,
-        )
+        .filter((o) => hitObject(o, pointer.worldX, pointer.worldY))
         .sort(
           (a, b) =>
             Math.hypot(a.x - pointer.worldX, a.y - pointer.worldY) -
@@ -186,7 +196,8 @@ export class WorldScene extends Phaser.Scene {
         )[0];
       if (
         obj &&
-        Math.hypot(obj.x - this.player.x, obj.y - this.player.y) <= 65
+        Math.hypot(obj.x - this.player.x, obj.y - this.player.y) <=
+          INTERACTION_RADIUS
       ) {
         void this.interact(obj);
         return;
@@ -231,35 +242,63 @@ export class WorldScene extends Phaser.Scene {
     window.addEventListener("blur", this.resetInput);
     document.addEventListener("visibilitychange", this.resetInput);
     window.addEventListener("resize", this.fitCamera);
+    document.addEventListener("focusin", this.focusChanged);
+    document.addEventListener("focusout", this.focusChanged);
+    const unsubscribe = useGame.subscribe((next, previous) => {
+      if (next.panel !== previous.panel) {
+        this.resetInput();
+        this.focusChanged();
+      }
+    });
     this.events.once("shutdown", () => {
       window.removeEventListener("keydown", this.preventScroll);
       window.removeEventListener("blur", this.resetInput);
       document.removeEventListener("visibilitychange", this.resetInput);
       window.removeEventListener("resize", this.fitCamera);
+      document.removeEventListener("focusin", this.focusChanged);
+      document.removeEventListener("focusout", this.focusChanged);
+      unsubscribe();
       this.input.keyboard?.removeAllListeners();
       this.input.removeAllListeners();
       this.npcs = [];
       this.objectLayers.clear();
     });
+    this.focusChanged();
     this.drawState();
   }
   fitCamera = () => {
     if (!this.map) return;
-    const fit = Math.min(
-      Number(this.scale.width) / 480,
-      Number(this.scale.height) / 368,
-    );
+    const width = Number(this.scale.width),
+      height = Number(this.scale.height);
+    const fit = Math.min(width / 480, height / 368);
+    const outdoor = this.map.id === "overworld";
+    // A closer 480×300 composition keeps the player and one neighborhood in focus.
     this.cameras.main.setZoom(
-      this.map.id === "overworld"
-        ? Number(this.scale.width) >= 1800 && Number(this.scale.height) >= 1000
-          ? 2
-          : 1
+      outdoor
+        ? Math.max(
+            2,
+            Math.ceil(width / this.map.width),
+            Math.ceil(height / this.map.height),
+            Math.floor(Math.min(width / 480, height / 300)),
+          )
         : fit >= 1
           ? Math.max(1, Math.floor(fit))
           : fit,
     );
-    if (this.map.id !== "overworld")
+    const offset = outdoor ? (height < 560 ? -15 : width < 900 ? -32 : 24) : 0;
+    this.cameras.main.setFollowOffset(0, offset);
+    if (!outdoor)
       this.cameras.main.centerOn(this.map.width / 2, this.map.height / 2);
+    else this.cameras.main.centerOn(this.player.x, this.player.y - offset);
+  };
+  focusChanged = () => {
+    // focusout runs before activeElement changes; wait for dialog focus to settle.
+    queueMicrotask(() => {
+      if (this.sys.isActive() && this.input.keyboard) {
+        if (this.isTyping()) this.resetInput();
+        this.input.keyboard.enabled = !this.isTyping();
+      }
+    });
   };
   resetInput = () => {
     this.touch = { x: 0, y: 0 };
@@ -280,7 +319,10 @@ export class WorldScene extends Phaser.Scene {
     return (
       ["INPUT", "TEXTAREA", "SELECT"].includes(
         document.activeElement?.tagName || "",
-      ) || !!useGame.getState().panel
+      ) ||
+      (document.activeElement instanceof HTMLElement &&
+        document.activeElement.isContentEditable) ||
+      !!useGame.getState().panel
     );
   }
   sync(): Promise<void> {
@@ -318,7 +360,11 @@ export class WorldScene extends Phaser.Scene {
     if (before.busy || before.panel || this.interacting || this.transitioning)
       return;
     const obj = selected || before.nearest;
-    if (!obj || Math.hypot(obj.x - this.player.x, obj.y - this.player.y) > 65)
+    if (
+      !obj ||
+      Math.hypot(obj.x - this.player.x, obj.y - this.player.y) >
+        INTERACTION_RADIUS
+    )
       return;
     this.face(obj.x, obj.y);
     unlockSound();
@@ -335,57 +381,45 @@ export class WorldScene extends Phaser.Scene {
         store.navigation.targetId === obj.id
       )
         useGame.setState({ navigation: null });
-      let action = "";
-      if (obj.kind === "building") action = "enter";
-      else if (obj.kind === "exit") action = "exit";
-      else if (obj.kind === "npc") {
-        if (await store.command("talk", { target: obj.id }))
-          store.open("npc", obj);
+      // A panel may open while the position request is in flight.
+      if (
+        store.panel ||
+        store.state?.location !== this.map.id ||
+        !this.sys.isActive() ||
+        Math.hypot(obj.x - this.player.x, obj.y - this.player.y) >
+          INTERACTION_RADIUS
+      )
         return;
-      } else if (obj.kind === "station") {
-        store.open("building", obj);
+      const interaction = interactionFor(obj, store.state!, serverNow());
+      if (interaction.reason) {
+        useGame.setState({ notice: interaction.reason });
         return;
-      } else if (obj.kind === "storage") {
-        store.open("storage", obj);
-        return;
-      } else if (obj.kind === "board") {
-        store.open("board", obj);
-        return;
-      } else if (obj.kind === "rest") action = "rest";
-      else if (obj.kind === "plot") {
-        const crop = store.state!.plots[obj.id];
-        if (crop && crop.ready_at > serverNow()) {
-          useGame.setState({
-            notice: `萝卜正在生长，还有 ${Math.ceil(crop.ready_at - serverNow())} 秒成熟。`,
-          });
-          return;
-        }
-        action = crop ? "harvest" : "plant";
-      } else if (obj.kind === "landmark") action = "discover";
-      else if (obj.kind === "chest") action = "open_chest";
-      else if (obj.kind === "event") action = "explore";
-      else {
-        if ((store.state!.gathered[obj.id] || 0) > serverNow()) {
-          useGame.setState({
-            notice: "这里的资源正在恢复，去其他地方走走吧。",
-          });
-          return;
-        }
-        action = "gather";
       }
-      const ok = await store.command(action, { target: obj.id });
-      if (ok && !["enter", "exit"].includes(action)) chime("item");
-      if (ok && !["enter", "exit"].includes(action))
+      const beforeInventory = { ...store.state!.inventory };
+      const ok =
+        !interaction.command ||
+        (await store.command(interaction.command, { target: obj.id }));
+      if (!ok) return;
+      if (interaction.panel) {
+        if (!useGame.getState().panel) store.open(interaction.panel, obj);
+        return;
+      }
+      if (!["enter", "exit"].includes(interaction.command || "")) {
+        chime("item");
+        const inventory = useGame.getState().state!.inventory;
+        // Feedback reflects the accepted server snapshot, never invented rewards.
+        const gains = Object.entries(inventory)
+          .filter(([key, value]) => value > (beforeInventory[key] || 0))
+          .map(
+            ([key, value]) =>
+              `+${value - (beforeInventory[key] || 0)} ${{ wood: "木材", stone: "石料", crop: "萝卜", seed: "种子", gold: "金币" }[key] || key}`,
+          );
         this.feedback(
           obj,
-          action === "gather"
-            ? `+${(store.state!.attributes.strength >= 50 ? 1 : 0) + 3} ${obj.kind === "wood" ? "木材" : "石料"}`
-            : action === "plant"
-              ? "已播种"
-              : action === "harvest"
-                ? "+2 萝卜"
-                : "已记录",
+          gains.join(" · ") ||
+            (interaction.command === "plant" ? "已播种" : "已记录"),
         );
+      }
     } finally {
       this.interacting = false;
     }
@@ -490,24 +524,28 @@ export class WorldScene extends Phaser.Scene {
     }
     const distance =
       ((this.keys.SHIFT.isDown ? 205 : 160) * Math.min(delta, 40)) / 1000;
+    const previousX = this.player.x,
+      previousY = this.player.y;
     if (walkable(this.map, this.player.x + dx * distance, this.player.y))
       this.player.x += dx * distance;
     if (walkable(this.map, this.player.x, this.player.y + dy * distance))
       this.player.y += dy * distance;
     if (Math.abs(dx) > 0.2) this.direction = dx > 0 ? 2 : 1;
     else if (Math.abs(dy) > 0.2) this.direction = dy > 0 ? 0 : 3;
+    const moved =
+      Math.hypot(this.player.x - previousX, this.player.y - previousY) > 0.01;
     this.player
       .setFrame(
         personFrame(
           this.direction,
-          length ? Math.floor(this.elapsed / 130) % 4 : 0,
+          moved ? Math.floor(this.elapsed / 130) % 4 : 0,
         ),
       )
       .setDepth(this.player.y + 1);
     this.shadow
       .setPosition(this.player.x, this.player.y - 1)
       .setDepth(this.player.y - 1);
-    if (length && !blocked && this.elapsed - this.lastFootstep > 290) {
+    if (moved && !blocked && this.elapsed - this.lastFootstep > 290) {
       this.lastFootstep = this.elapsed;
       chime("step");
     }
@@ -540,11 +578,16 @@ export class WorldScene extends Phaser.Scene {
       .sort((a, b) => a.d - b.d)[0];
     useGame
       .getState()
-      .setNearest(nearest && nearest.d <= 65 ? nearest.o : null);
+      .setNearest(
+        nearest && nearest.d <= INTERACTION_RADIUS ? nearest.o : null,
+      );
     if (!this.path.length && this.clickTarget && !blocked) {
       const target = this.clickTarget;
       this.clickTarget = null;
-      if (Math.hypot(target.x - this.player.x, target.y - this.player.y) <= 68)
+      if (
+        Math.hypot(target.x - this.player.x, target.y - this.player.y) <=
+        INTERACTION_RADIUS
+      )
         void this.interact(target);
     }
     if (this.elapsed - this.lastDraw > 180) {
@@ -566,7 +609,7 @@ export class WorldScene extends Phaser.Scene {
         objectArt(layer, obj, state, now);
       }
     }
-    if (state.xp > this.lastXp) {
+    if (state.xp > this.lastXp && !store.panel) {
       const leveled =
         Math.floor(state.xp / 100) > Math.floor(this.lastXp / 100);
       this.feedback(
@@ -577,7 +620,7 @@ export class WorldScene extends Phaser.Scene {
       );
       chime("reward");
     }
-    this.lastXp = state.xp;
+    if (!store.panel) this.lastXp = state.xp;
     this.cameras.main.setLerp(this.reduced ? 1 : 0.12, this.reduced ? 1 : 0.12);
     this.water.clear();
     if (this.map.id === "overworld") {
@@ -613,13 +656,17 @@ export class WorldScene extends Phaser.Scene {
     }
     this.marker.clear();
     const near = store.nearest;
-    this.prompt.setVisible(!!near && !store.panel && !this.interacting);
-    if (near) {
-      this.prompt
-        .setPosition(this.player.x, this.player.y + 9)
-        .setText(`E  ${near.name}`);
-      this.marker.lineStyle(1, 0xffebb0, 0.85);
-      this.marker.strokeEllipse(near.x, near.y + 2, 38, 14);
+    const highlighted = near && !store.panel && !this.interacting;
+    for (const npc of this.npcs) {
+      if (highlighted && npc.obj.id === near.id) npc.sprite.setTint(0xffefc1);
+      else npc.sprite.clearTint();
+    }
+    if (highlighted) {
+      const available = !interactionFor(near, state, now).reason;
+      this.marker.fillStyle(available ? 0xffe5a0 : 0xc1c7a7, 0.14);
+      this.marker.fillEllipse(near.x, near.y + 2, 44, 18);
+      this.marker.lineStyle(1, available ? 0xffebb0 : 0xc1c7a7, 0.9);
+      this.marker.strokeEllipse(near.x, near.y + 2, 44, 18);
     }
     for (const obj of this.map.objects) {
       const q = state.quest_log.filter(
@@ -644,8 +691,12 @@ export class WorldScene extends Phaser.Scene {
     const obj = target ? accessibleTarget(target, store.world!, state) : null;
     if (obj) {
       const pulse = this.reduced ? 0 : Math.sin(this.elapsed / 260) * 2;
-      this.marker.lineStyle(2, 0xffe6a0, 0.8);
-      this.marker.strokeCircle(obj.x, obj.y + 1, 22 + pulse);
+      // A small pixel chevron reads as a destination, without giant target rings.
+      const y = obj.y - (obj.kind === "building" ? 20 : 38) - Math.round(pulse);
+      box(this.marker, 0x493d2b, obj.x - 6, y - 1, 12, 5);
+      box(this.marker, 0xffe6a0, obj.x - 5, y, 10, 3);
+      box(this.marker, 0xffe6a0, obj.x - 3, y + 3, 6, 2);
+      box(this.marker, 0xffe6a0, obj.x - 1, y + 5, 2, 2);
     }
     if (this.path.length) {
       const last = this.path[this.path.length - 1];

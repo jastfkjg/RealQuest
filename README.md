@@ -8,6 +8,19 @@
 
 需要 Node.js 22+、Python 3.14。使用 SQLite，无须先安装 PostgreSQL。
 
+一键启动：在 macOS Finder 中双击根目录的 `start.command`，或在终端运行：
+
+```bash
+./start.command
+```
+
+脚本自动创建虚拟环境、按需安装依赖、执行数据库迁移，并启动前后端。
+打开它输出的网址；按 `Ctrl+C` 同时停止两个服务。首次运行需要联网安装依赖。
+可用 `./start.command --check` 只检查环境和端口。默认端口被占用时，先停止对应服务，
+或运行 `REALQUEST_BACKEND_PORT=8019 REALQUEST_FRONTEND_PORT=5175 ./start.command`。
+
+也可以手动分别启动：
+
 终端一：
 
 ```bash
