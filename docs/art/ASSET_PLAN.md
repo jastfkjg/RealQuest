@@ -124,3 +124,21 @@ One original textless material was produced with the built-in `image_gen` tool f
 `tools/build_inventory_skin.py` packages it as lossless WebP (`lossless=True`, `exact=True`, `method=6`) and asserts decoded RGBA equality. The sole new runtime file is `frontend/public/assets/hearthwood/satchel-shell-v1.webp` (1,414,574 bytes). The source is unchanged and stays outside `public`. Runtime uses measured CSS nine-slice insets of top 220 / right 180 / bottom 200 / left 180 source pixels; the pocket roll samples the same cloth through a centered CSS background. The source hash, runtime hash, dimensions, pixel equality and paths are audited in `asset-manifest.json` and `tools/audit_inventory_assets.py`.
 
 The title plaque, linen inset, slot selection brackets, pointer, floating tag and pocket seams are original DOM/CSS using Hearthwood tokens. Existing 16px item PNGs remain byte-identical, with 48px tray/detail/desktop pocket icons and 32px phone pocket icons. All original 21 PNGs and eight raw-source Git blobs still match the manifest. The new audit has 22 entries including the generated WebP. Kenney packs remain absent. No world, portrait, font or sound replacement is implied.
+
+## 10. Journal slice — inventory approved, journal candidate
+
+On 2026-10-10 the owner approved the actual satchel and requested a journal using the same materials and palette, with its own reading layout. See `docs/tasks/02-journal-slice.md` for the scoped checkpoint.
+
+One original blank journal spread was generated with built-in `image_gen`, using only the previously generated satchel as a material reference. Source `assets/generated/hearthwood/journal-spread-v1.png` is 1536×1024 RGBA; exact prompt is adjacent. No third-party sample was submitted to generation. The source has no text, tasks, numbers or controls. This is project-generated art, with runtime approval pending.
+
+`tools/build_inventory_skin.py --asset journal-spread-v1` packages the unmodified pixels as `frontend/public/assets/hearthwood/journal-spread-v1.webp` (1,326,372 bytes), asserting RGBA equality. Both hashes and measured CSS slice insets are in the manifest. Desktop renders a bound double page; phone clips one leaf of the same nine-slice. Fixed edge depths preserve paper behind long entries. Existing gold/seed icons are reused at 32 CSS pixels; all content is DOM.
+
+Audit: eight source samples and all original runtime hashes unchanged; 23 total entries including the two generated surfaces. Kenney packs remain acquisition entries only. No font, world, economy or save changes. Journal screenshots have been inspected, but owner approval is pending.
+
+## 11. Adventurer dossier — character candidate
+
+The owner authorized character UI next, with a different layout from the journal. The single field dossier contains an identity portrait/name, actual level/experience, five attribute selectors and the selected ability/actions. No character art, equipment, unsupported attributes or economic rules were invented.
+
+Built-in `image_gen` made one blank backing with the approved project-generated satchel as material/color reference only. Source `assets/generated/hearthwood/character-dossier-v1.png` is 1448×1086 RGBA (2,411,527 bytes), with an adjacent exact prompt. Runtime `frontend/public/assets/hearthwood/character-dossier-v1.webp` is 1,473,240 bytes, losslessly packaged by `tools/build_inventory_skin.py --asset character-dossier-v1` with RGBA equality asserted. It contains only cloth, blank paper, clips and leather corners. Existing 16px actor frames render at 64 CSS pixels, and all text/values/actions remain native DOM.
+
+The source/runtime hashes, alpha bounds and measured nine-slice cuts are recorded in the manifest. Audit now verifies 24 entries; original assets and raw samples remain unchanged, and Kenney packs remain absent. Actual character render is a candidate awaiting owner review. Details in `docs/tasks/03-character-slice.md`.

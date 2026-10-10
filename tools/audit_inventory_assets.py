@@ -1,11 +1,14 @@
 """Read-only source audit and nearest-neighbor contact sheet. Requires Pillow."""
 import hashlib
 import json
+import argparse
 from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / 'output/inventory-satchel'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output', default='output/inventory-satchel')
+OUTPUT = ROOT / parser.parse_args().output
 OUTPUT.mkdir(parents=True, exist_ok=True)
 manifest = json.loads((ROOT / 'docs/art/asset-manifest.json').read_text())
 rows = []

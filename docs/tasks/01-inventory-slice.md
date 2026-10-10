@@ -184,3 +184,7 @@ Reuse the isolated 5187 frontend / 8021 backend and `output/inventory-pass-a/tes
 - No new crop art, world art, font or sound. The one generated shell is original material, not an acquired pack. It is still approximately 1.4 MB lossless; no broad asset pipeline optimization was attempted.
 - Physical touch hardware/Safari and actual browser-menu zoom remain unverified; Chromium emulation and equivalent reflow are checked.
 - Retain the existing isolated services on **5187 / 8021** for owner preview (Vite PID 98454, backend PID 98418). All task automation contexts/browsers have closed; process inspection confirms no Playwright/Chromium test processes remain. Other tasks' services were left alone. Stop only these two preview services after review is finished.
+
+### Owner checkpoint — 2026-10-10
+
+The owner explicitly approved the actual inventory: “这版背包可以”. Journal implementation was authorized next, with a distinct notebook layout and its own visual review. This supersedes the pending inventory approval above; it does not authorize other screens or the deferred planting targeting flow. See `02-journal-slice.md`.

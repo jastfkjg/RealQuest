@@ -149,17 +149,5 @@ export const useGame = create<Store>((set, get) => ({
 }));
 export const serverNow = () =>
   Date.now() / 1000 + useGame.getState().clockOffset;
-export const attributeNames: Record<string, string> = {
-  strength: "体魄",
-  wisdom: "学识",
-  craft: "创造",
-  stewardship: "经营",
-  bond: "联结",
-};
-export const activityNames: Record<string, string> = {
-  steps: "步行",
-  study: "学习",
-  exercise: "运动",
-  creative: "创造与工作",
-  management: "生活管理",
-};
+export { attributeNames } from "../game/characterGrowth";
+export { activityNames } from "../game/activities";

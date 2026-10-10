@@ -133,7 +133,7 @@ try {
     await until(p, (s) => s.mode === "character");
     assert.ok(await p.getByText("探索能力 · 已掌握", { exact: true }).count());
     await snap(p, "character-unlocked");
-    await p.getByRole("button", { name: "前往遗迹使用" }).click();
+    await p.getByRole("button", { name: "标记古代遗迹" }).click();
     assert.equal((await read(p)).navigation.targetId, "ruins");
     await p.keyboard.press("c");
     await until(p, (s) => s.mode === "character");
@@ -248,7 +248,7 @@ try {
       await p.getByRole("button", { name: "角色", exact: true }).click();
       await snap(p, `character-${width}`);
       await p.getByRole("button", { name: /创造/ }).click();
-      await p.getByRole("button", { name: "前往工坊制作" }).click();
+      await p.getByRole("button", { name: "标记工坊柜台" }).click();
       assert.equal((await read(p)).navigation.targetId, "workshop_counter");
     } finally {
       try {

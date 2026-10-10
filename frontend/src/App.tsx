@@ -35,6 +35,7 @@ import {
   PixelPerson,
 } from "./components/RpgPanels";
 import { QuestList, QuestTracker, QuestCompass } from "./components/Quests";
+import { JournalPanel } from "./components/JournalPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { InventoryWallet } from "./components/InventoryView";
 import { Atlas } from "./components/Atlas";
@@ -65,10 +66,14 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className={`modal ${panel === "inventory" ? "rq-theme" : ""} panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
+      className={`modal ${["inventory", "journal", "character"].includes(panel || "") ? "rq-theme" : ""} panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
       aria-labelledby="panel-title"
       onKeyDown={(event) => {
-        if (panel !== "inventory" || event.key !== "Tab") return;
+        if (
+          !["inventory", "journal", "character"].includes(panel || "") ||
+          event.key !== "Tab"
+        )
+          return;
         const controls = Array.from(
           event.currentTarget.querySelectorAll<HTMLElement>(
             "button:not(:disabled), a[href], input:not(:disabled), summary, [tabindex='0']",
@@ -100,7 +105,13 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
         )}
         <button
           className={
-            panel === "inventory" ? "rq-button hw-close" : "icon-button"
+            panel === "inventory"
+              ? "rq-button hw-close"
+              : panel === "journal"
+                ? "rq-button hj-close"
+                : panel === "character"
+                  ? "rq-button hc-close"
+                  : "icon-button"
           }
           aria-label="关闭面板"
           onClick={() => open(null)}
@@ -412,7 +423,7 @@ function Panels() {
     board: "委托告示板",
     map: "回响大陆 · 全域地图",
     storage: "家园储物箱",
-    character: "唤醒者档案",
+    character: "冒险者档案",
     inventory: "旅行背包",
     activity: "现实中的成长",
     journal: "冒险日志",
@@ -598,42 +609,7 @@ function Panels() {
           </button>
         </>
       )}
-      {panel === "journal" && (
-        <>
-          <div className="section-label">
-            <Flag size={17} /> 大陆的回响
-          </div>
-          <QuestList />
-          <div className="section-label">
-            <Leaf size={17} /> 现实成长记录
-          </div>
-          {!state.activities.length ? (
-            <p className="muted">还没有记录。旅程不必赶路，从一件小事开始。</p>
-          ) : (
-            state.activities
-              .slice()
-              .reverse()
-              .map((a, i) => (
-                <div className="history-row" key={i}>
-                  <div>
-                    <b>
-                      {activityNames[a.kind]} ·{" "}
-                      {a.kind === "management"
-                        ? "已完成"
-                        : a.amount + (a.kind === "steps" ? " 步" : " 分钟")}
-                    </b>
-                    <small>
-                      {a.date} ·{" "}
-                      {a.source === "timer" ? "学习计时" : "手动填报"} · 未验证
-                    </small>
-                    {a.note && <p>{a.note}</p>}
-                  </div>
-                  <span>+{a.xp} EXP</span>
-                </div>
-              ))
-          )}
-        </>
-      )}
+      {panel === "journal" && <JournalPanel />}
       {panel === "guide" && (
         <>
           <p>
@@ -774,13 +750,14 @@ function Panels() {
           )}
         </>
       )}
-      {error && panel !== "inventory" && (
+      {error && panel !== "inventory" && panel !== "journal" && (
         <p className="form-error" role="alert">
           {error}
         </p>
       )}
       {notice &&
         panel !== "inventory" &&
+        panel !== "journal" &&
         noticePanel === panel &&
         !(panel === "npc" && notice === dialogue) && (
           <p className="panel-notice" role="status">

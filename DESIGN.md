@@ -2,7 +2,7 @@
 
 **Direction:** Hearthwood — a cozy pixel-life adventure with a practical life companion.  
 **Version:** 1.0, 2026-10-10.  
-**Status:** Hearthwood direction selected; the satchel inventory concept is owner-approved (2026-10-10), while its actual browser implementation remains at the visual checkpoint.
+**Status:** Hearthwood direction and actual satchel inventory owner-approved (2026-10-10). Journal reference implemented; adventurer dossier is the current visual checkpoint. See the scoped task records for approval and evidence.
 
 ## 1. Purpose and boundaries
 

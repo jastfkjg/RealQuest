@@ -10,26 +10,19 @@ import {
 import { useGame, itemNames } from "../stores/game";
 import { questTarget } from "../game/navigation";
 import type { Quest } from "../types";
-const statuses = {
-  available: "可接取",
-  locked: "尚未解锁",
-  active: "进行中",
-  ready: "可交付",
-  claimed: "已完成",
-};
+import { questStatuses } from "../game/questPresentation";
 export function QuestList({ giver }: { giver?: string }) {
-  const { state, selected, command, busy, navigate, open } = useGame();
+  const { state } = useGame();
   if (!state) return null;
   const quests = state.quest_log.filter((q) => !giver || q.giver === giver);
   return (
     <div className="quest-cards">
       {quests.map((q) => {
-        const atGiver = selected?.id === q.giver;
         return (
           <article className={`quest-entry quest-${q.status}`} key={q.id}>
             <div className="quest-entry-title">
               <h3>{q.title}</h3>
-              <span className="quest-status">{statuses[q.status]}</span>
+              <span className="quest-status">{questStatuses[q.status]}</span>
             </div>
             <small>
               <MapPin size={12} />
@@ -51,69 +44,7 @@ export function QuestList({ giver }: { giver?: string }) {
                 .join(" · ")}{" "}
               · {q.xp} EXP
             </div>
-            <div className="quest-actions">
-              {q.status === "locked" ? (
-                <small>
-                  <LockKeyhole size={12} /> 先完成「
-                  {state.quest_log.find((p) => p.id === q.requires)?.title}」
-                </small>
-              ) : q.status === "claimed" ? (
-                <span>
-                  <Check size={15} /> 已交付，奖励已领取
-                </span>
-              ) : q.status === "available" && atGiver ? (
-                <button
-                  className="primary"
-                  disabled={busy}
-                  onClick={() =>
-                    void command("quest_accept", { quest_id: q.id })
-                  }
-                >
-                  接取任务 <Flag size={15} />
-                </button>
-              ) : q.status === "ready" && atGiver ? (
-                <button
-                  className="primary"
-                  disabled={busy}
-                  onClick={() =>
-                    void command("quest_claim", { quest_id: q.id })
-                  }
-                >
-                  交付任务 · 领取奖励
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    const target = questTarget(q, state);
-                    if (target) navigate(target);
-                  }}
-                >
-                  <MapPin size={15} />
-                  {q.status === "ready"
-                    ? "前往交付"
-                    : q.status === "available"
-                      ? "找到委托人"
-                      : "标记下一步"}
-                </button>
-              )}
-              {q.status === "active" && (
-                <button
-                  disabled={busy || state.tracked_quest === q.id}
-                  onClick={() =>
-                    void command("track_quest", { quest_id: q.id })
-                  }
-                >
-                  {state.tracked_quest === q.id ? "正在追踪" : "追踪任务"}
-                </button>
-              )}
-              {q.id === "rune_research" &&
-                q.status === "active" &&
-                !q.checks[1] && (
-                  <button onClick={() => open("activity")}>
-                    记录学习 <BookOpen size={14} />
-                  </button>
-                )}
-            </div>
+            <QuestActions quest={q} />
           </article>
         );
       })}
@@ -121,6 +52,85 @@ export function QuestList({ giver }: { giver?: string }) {
     </div>
   );
 }
+export function QuestActions({
+  quest: q,
+  journal = false,
+}: {
+  quest: Quest;
+  journal?: boolean;
+}) {
+  const { state, selected, command, busy, navigate, open } = useGame();
+  if (!state) return null;
+  const atGiver = selected?.id === q.giver;
+  return (
+    <div className={`quest-actions ${journal ? "hj-actions" : ""}`}>
+      {q.status === "locked" ? (
+        <small>
+          <LockKeyhole size={12} /> 先完成「
+          {state.quest_log.find((p) => p.id === q.requires)?.title}」
+        </small>
+      ) : q.status === "claimed" ? (
+        <span>
+          <Check size={15} /> 已交付，奖励已领取
+        </span>
+      ) : q.status === "available" && atGiver ? (
+        <button
+          className={journal ? "rq-button rq-button--primary" : "primary"}
+          disabled={busy}
+          onClick={() => void command("quest_accept", { quest_id: q.id })}
+        >
+          {journal && busy ? "处理中…" : "接取任务"} <Flag size={15} />
+        </button>
+      ) : q.status === "ready" && atGiver ? (
+        <button
+          className={journal ? "rq-button rq-button--primary" : "primary"}
+          disabled={busy}
+          onClick={() => void command("quest_claim", { quest_id: q.id })}
+        >
+          {journal && busy ? "处理中…" : "交付任务 · 领取奖励"}
+        </button>
+      ) : (
+        <button
+          className={journal ? "rq-button rq-button--primary" : undefined}
+          disabled={journal && busy}
+          onClick={() => {
+            const target = questTarget(q, state);
+            if (target) navigate(target);
+          }}
+        >
+          <MapPin size={15} />
+          {q.status === "ready"
+            ? journal
+              ? "标记交付地点"
+              : "前往交付"
+            : q.status === "available"
+              ? journal
+                ? "标记委托人"
+                : "找到委托人"
+              : "标记下一步"}
+        </button>
+      )}
+      {q.status === "active" && (
+        <button
+          disabled={busy || state.tracked_quest === q.id}
+          onClick={() => void command("track_quest", { quest_id: q.id })}
+        >
+          {journal && busy
+            ? "处理中…"
+            : state.tracked_quest === q.id
+              ? "正在追踪"
+              : "追踪任务"}
+        </button>
+      )}
+      {q.id === "rune_research" && q.status === "active" && !q.checks[1] && (
+        <button onClick={() => open("activity")}>
+          记录学习 <BookOpen size={14} />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function QuestTracker() {
   const { state, open, navigate } = useGame();
   if (!state) return null;

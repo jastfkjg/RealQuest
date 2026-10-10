@@ -119,3 +119,23 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - Visual inspection caught and fixed a currency-label overlap introduced during header refinement; browser test now verifies the coin label is actually unobscured. Texture contrast softened; high-balance/earned-resource mobile fixture checked.
 - Build, 21 backend tests, inventory browser checks, rejection/idempotent retry, full RPG crafting/planting/harvest/sale + six viewports and skill frame client passed. Final evidence and remaining limits in docs/tasks/01-inventory-slice.md.
 - Stop for review of the actual satchel screenshots, not blanket approval of other screens. No Pass B targeting. Actual touch/Safari and browser-menu zoom remain unverified. Keep only isolated 5187/8021 preview services for owner review, with test browsers closed.
+
+## 2026-10-10 Journal reference — current checkpoint
+
+- Owner explicitly approved the actual satchel, authorized journal next, and requested a distinct notebook layout before further rollout.
+- Inspected six server quests, shared board/NPC actions, marker-only navigation, reward/retry behavior and actual activity provenance. New JournalPanel/JournalView presents a bound double page with cloth bookmarks; phone uses explicit index/detail and focus-returning Back. Same authoritative state, IDs, reward rules and existing actions.
+- Generated one original textless book material using the approved project-generated satchel as palette/material reference. Source + exact prompt kept outside public; lossless WebP equality and manifest hashes verified. Eight vendor samples and all original runtime PNGs unchanged; 23 audited entries, no Kenney import.
+- Added DEV-only `/dev/journal` with isolated presentation states and zero API/storage writes. Build excludes fixtures. Extracted shared quest actions without restyling NPC/board dialogs.
+- Actual screenshots inspected at 1440×900 and 390×844, plus 768/1920/short landscape. Fixed phone footer near paper edge and long-text bitmap stretch using a clipped fixed-depth nine-slice; final long-text footer remains on paper.
+- Journal layout/44px/focus/touch, real ready→claim→completed, board/NPC accept, failed tracking, pending deduplication, same-ID retry, persistence and manual growth pass. Existing inventory and play-mode suites pass; backend 21 tests pass; build, audit, game frame client and diff checks pass. Detailed evidence in docs/tasks/02-journal-slice.md.
+- STOP at journal visual checkpoint; no rollout to other dialogs. Physical-device touch/Safari/browser-menu zoom unverified; generated material 1.33 MB. Keep isolated 5187/8021 for review, close automation browsers. Do not commit or deploy without authorization.
+
+## 2026-10-10 Adventurer dossier — current checkpoint
+
+- Owner authorized character panel next, preserving real stats/progression/actions and requesting a distinct dossier rather than the journal layout. Prior uncommitted journal work retained.
+- Audited CharacterPanel, XP floors/remainders, strength50/wisdom25 gates, basic abilities, activity preselection and marker-only navigation. Pure CharacterView plus store adapter now presents identity photo, level stamp, growth marks and selected ability on a single cloth/paper dossier. PixelPerson extracted without changing creation/HUD behavior; character frame stays 4× source scale.
+- One original blank material generated with built-in image_gen from the approved project satchel as material reference only; raw source/prompt saved and lossless runtime RGBA verified. Original21 assets unchanged, total24 audited; no external pack/world/font changes.
+- Desktop/phone review fixed level-stamp/clip overlap, paper-edge footer and inherited low-contrast gold small text. Actual texture sampling now passes59 text runs, min4.63:1. Initial before capture was corrupted by concurrent HMR; unsuccessful reconstruction diagnostics excluded from evidence. Reliable final views and unchanged starter data are verified.
+- Character five-viewport/44px/focus/touch/preview tests pass. Real study24→25, exercise49→50, XP100→Lv2, attribute50→Lv2, saved125XP, four-material gather, rejection/same-ID retry and appearance persistence pass. Existing RPG full flow, journal layout, backend21 tests, build, asset audit and frame client pass.
+- DEV-only `/dev/character` has isolated starter/near/unlocked/veteran/long fixtures; no API or storage writes and no fixture strings in production JS.
+- Stop at character visual checkpoint. See docs/tasks/03-character-slice.md. Physical Safari/touch and actual browser-menu zoom remain unverified; runtime material1.47MB. Retain existing5187/8021 preview for owner, close automation browsers. No commit/push/deploy.

@@ -82,3 +82,20 @@ Only extend this visual treatment across the application after the first referen
 Detailed commands, exact files, comparison, test outcomes and gaps: [Pass A task record](../tasks/01-inventory-slice.md). All checked items are scoped to this inventory candidate, not blanket approval of the application.
 
 The current source of truth is the **Current checkpoint — satchel candidate** section of [the task report](../tasks/01-inventory-slice.md). Final visible text check: 21 samples, minimum 5.37:1 against opaque base colors. Physical Safari/touch and actual browser-menu zoom remain unverified. Concept direction approval does not authorize rollout before review of this rendered candidate.
+
+## Character dossier reference — 2026-10-10
+
+Current record: **verified implementation / owner review pending**. This is a separate character checkpoint, not a journal layout copied to another screen. Earlier inventory historical status is superseded by its recorded owner approval in `docs/tasks/01-inventory-slice.md`.
+
+- [x] Real avatar/appearance, five attributes, EXP remainders, levels, thresholds and existing abilities/actions retained.
+- [x] Single field-folder composition, live identity and growth marks, distinct from the journal spread.
+- [x] 1440×900, 390×844, 768×1024, 1920×1080 and short 720×450 layout captured; mobile scroll and 44px controls checked.
+- [x] Keyboard focus cycle/return, Escape, modal input ownership, non-teleporting markers and map action checked.
+- [x] Actual learning/strength thresholds, level transitions, pending/rejection/retry, persistence and four-material collection checked.
+- [x] 59 visible text runs checked against sampled actual texture beneath their ranges; minimum 4.63:1 after fixing legacy gold small text and faint supporting copy. This is scoped captured-state evidence.
+- [x] Source/hash/pixel audit, build, 21 backend tests, existing RPG and journal regression passed.
+- [ ] Physical-device touch/Safari and actual browser-menu zoom unverified (Chromium DPR2 touch and reflow checked).
+- [ ] Matched old/new browser comparison unavailable: initial old-view capture was contaminated by hot reload; reconstruction attempts did not yield a reliable screenshot. Invalid evidence excluded. Final real views and unmutated starter state verified independently.
+- [ ] Owner visual approval pending. No further dialog rollout.
+
+See `docs/tasks/03-character-slice.md` for files, provenance, commands, screenshots and cleanup.

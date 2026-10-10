@@ -860,12 +860,14 @@
     "origin": "Built-in image_gen UI mockup from the previous actual inventory screenshot. World/background details in the concept are illustrative only and are not adopted.",
     "owner_approved_direction_on": "2026-10-10",
     "approval": "这版方向可以，先按预览图把背包落地，尽量还原布袋、物品浮签和快捷口袋的感觉，保留真实数量和现有交互，做好后先给我看看，再实现其他弹窗。",
-    "approval_scope": "Inventory concept and implementation authorization only; actual browser candidate still requires review before any other dialog."
+    "approval_scope": "Actual satchel inventory approved; journal authorized as the next candidate slice. Other dialogs require their own checkpoint.",
+    "actual_inventory_approved_on": "2026-10-10",
+    "actual_inventory_approval": "这版背包可以，接下来先改任务日志，做成手账的感觉，沿用这套材质和配色，但不要直接套布袋布局。保留现有任务数据和交互，做好后先给我看看。"
   },
   "generated_runtime_assets": [
     {
       "id": "ui.surface.inventory.satchel",
-      "status": "candidate_runtime_render_review_pending",
+      "status": "owner_approved_runtime_2026-10-10",
       "source_path": "assets/generated/hearthwood/satchel-shell-v1.png",
       "runtime_path": "frontend/public/assets/hearthwood/satchel-shell-v1.webp",
       "creator": "OpenAI built-in image_gen, directed for RealQuest",
@@ -907,6 +909,96 @@
       "content_audit": "Textless empty moss cloth shell, leather straps and buckles. No baked items, slots, quantities, controls or world. PNG alpha and sizes checked; source and actual browser render visually inspected.",
       "source_sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
       "source_size_bytes": 2170323
+    },
+    {
+      "id": "ui.surface.journal.spread",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/journal-spread-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/journal-spread-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless journal material. Approved generated satchel shell provided as material/color reference only; no external pack or third-party artwork supplied to generation.",
+      "license": "Generated project artwork; no third-party CC0 license claimed.",
+      "generated_on": "2026-10-10",
+      "prompt_path": "assets/generated/hearthwood/journal-spread-v1.prompt.txt",
+      "sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "source_sha256": "36c3fe198916c96d4abf26a662f960c2a9a48479c43c6ca9df055123ddf99150",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        18,
+        2,
+        1518,
+        1024
+      ],
+      "size_bytes": 1326372,
+      "source_size_bytes": 2052312,
+      "runtime_processing": "tools/build_inventory_skin.py --asset journal-spread-v1: Pillow lossless WebP exact=True method=6; decoded RGBA equality asserted. No art edits, resampling or recoloring.",
+      "nine_slice_insets_source_px": {
+        "top": 220,
+        "right": 140,
+        "bottom": 260,
+        "left": 140
+      },
+      "default_border_image_width_css_px": [
+        140,
+        90,
+        166,
+        90
+      ],
+      "mobile_border_image_width_css_px": [
+        90,
+        60,
+        166,
+        60
+      ],
+      "binding": "frontend/src/journal.css: .hj-book::before. Mobile clips the left 50% of a double-width nine-slice to reveal one leaf, retaining fixed edge depth for long entries.",
+      "content_audit": "Two empty warm paper leaves, moss cloth cover, stitched spine, layered page edges and ribbon. No baked text, task icons, rewards or buttons. Real DOM contents are separate. Alpha, dimensions and source/runtime pixels verified; actual browser screenshots inspected."
+    },
+    {
+      "id": "ui.surface.character.dossier",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/character-dossier-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/character-dossier-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original blank field dossier; project-generated approved satchel used only for material/color reference. No vendor asset sent to generation.",
+      "license": "Generated project artwork; no third-party CC0 license claimed.",
+      "generated_on": "2026-10-10",
+      "prompt_path": "assets/generated/hearthwood/character-dossier-v1.prompt.txt",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        46,
+        71,
+        1404,
+        1086
+      ],
+      "sha256": "34ab23bd9d98b68657e4ff975091265ec83ac0a1334f9d6ddc37ec9e83c81c75",
+      "source_sha256": "4d809abeed5c2232641e3e5d5385d18cc47adb876553051181ad89e1610587b5",
+      "size_bytes": 1473240,
+      "source_size_bytes": 2411527,
+      "runtime_processing": "tools/build_inventory_skin.py --asset character-dossier-v1; lossless WebP exact=True method=6, RGBA equality asserted. No recoloring/resampling/art edits.",
+      "nine_slice_insets_source_px": {
+        "top": 240,
+        "right": 180,
+        "bottom": 200,
+        "left": 180
+      },
+      "default_border_image_width_css_px": [
+        130,
+        98,
+        108,
+        98
+      ],
+      "mobile_border_image_width_css_px": [
+        86,
+        42,
+        66,
+        42
+      ],
+      "binding": "frontend/src/character.css: .hc-dossier::before",
+      "content_audit": "Single flat moss cloth field folder, blank warm paper, brass clips, leather corner protectors. No typography, avatar, stats or control artwork. All content DOM; existing character sprites preserved and rendered at 4x 16px frame scale. Source and browser renders inspected."
     }
   ]
 }
