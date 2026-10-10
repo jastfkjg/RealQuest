@@ -1,5 +1,6 @@
 import { BookOpen, Hammer, Heart, Sparkles, Sprout } from "lucide-react";
 import type { Attribute } from "../types";
+import { appearances } from "./appearances";
 
 export const attributeNames: Record<Attribute, string> = {
   strength: "体魄",
@@ -8,7 +9,7 @@ export const attributeNames: Record<Attribute, string> = {
   stewardship: "经营",
   bond: "联结",
 };
-export const appearanceNames = ["林间旅行装", "轻装旅行服", "远行者装束"];
+export const appearanceNames = appearances.map(({ name }) => name);
 
 export const growth: Record<
   Attribute,

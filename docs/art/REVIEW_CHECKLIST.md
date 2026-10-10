@@ -99,3 +99,17 @@ Current record: **verified implementation / owner review pending**. This is a se
 - [ ] Owner visual approval pending. No further dialog rollout.
 
 See `docs/tasks/03-character-slice.md` for files, provenance, commands, screenshots and cleanup.
+
+## Village arrival reference — 2026-10-10
+
+Status: **verified implementation / owner review pending**. Owner approved the homepage concept and requested softer registration controls plus additional appearances; actual browser acceptance is separate.
+
+- [x] Full-screen welcome illustration, live small traveler, signature line and six portrait tags, using Hearthwood paper/cloth/wood colors. Actual text/controls remain DOM.
+- [x] Original IDs 0–2 remain byte-identical; three official CC0 walking sheets added as 3–5. All six create/reload/world/dossier flows checked; starter values unchanged.
+- [x] 1440×900 / 390×844, 768×1024, 1920×1080 and short 720×450 screenshots inspected; no horizontal overflow; phone CTA visible and short-screen scrolling reaches action.
+- [x] Keyboard, IME, reduced motion, 44px touch controls, rejection/pending/lost-response retry and duplicate-submit protection checked. Test contexts isolated from owner data.
+- [x] Actual-background text sampling passes for desktop/phone default and hover, minimum 4.97:1. Build, 32 backend tests, existing RPG suite, game frame client and 29-image audit pass.
+- [ ] Physical-device Safari/touch and native mobile keyboard/browser-menu zoom remain unverified.
+- [ ] Actual render awaits owner visual approval; no further screen rollout.
+
+See `docs/tasks/04-arrival-slice.md` for complete files, provenance, commands, captures, gaps and preview handoff.

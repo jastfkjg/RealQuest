@@ -29,11 +29,8 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import {
-  CharacterPanel,
-  CharacterStage,
-  PixelPerson,
-} from "./components/RpgPanels";
+import { CharacterPanel, PixelPerson } from "./components/RpgPanels";
+import { Welcome } from "./components/Welcome";
 import { QuestList, QuestTracker, QuestCompass } from "./components/Quests";
 import { JournalPanel } from "./components/JournalPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
@@ -152,86 +149,6 @@ function DialogueText({ text }: { text: string }) {
         </button>
       )}
     </div>
-  );
-}
-function Welcome() {
-  const [name, setName] = useState("唤醒者"),
-    [appearance, setAppearance] = useState(0),
-    { command, busy, error } = useGame();
-  return (
-    <main className="arrival">
-      <div className="arrival-heading">
-        <span>REALQUEST / 现实副本</span>
-        <h1>你好，唤醒者。</h1>
-        <p>森林醒来之前，你的故事先开始了。</p>
-      </div>
-      <div className="arrival-scene">
-        <CharacterStage appearance={appearance} large />
-        <div className="arrival-name">
-          <span>第一章 · 万物生长</span>
-          <strong>{name.trim() || "未命名的旅人"}</strong>
-          <small>Lv.1 · 初生的唤醒者</small>
-        </div>
-      </div>
-      <form
-        className="arrival-form"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (name.trim())
-            await command("create", { name: name.trim(), appearance });
-        }}
-      >
-        <div className="arrival-customize">
-          <label className="arrival-name-field">
-            旅人之名
-            <input
-              aria-label="你的名字"
-              value={name}
-              maxLength={16}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="off"
-            />
-          </label>
-          <fieldset>
-            <legend>选择你的模样</legend>
-            <div className="arrival-appearances">
-              {[0, 1, 2].map((i) => (
-                <button
-                  type="button"
-                  key={i}
-                  aria-label={`外观 ${i + 1}`}
-                  aria-pressed={appearance === i}
-                  onClick={() => setAppearance(i)}
-                >
-                  <PixelPerson variant={i} />
-                  {appearance === i && <Check size={12} />}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-        </div>
-        <button
-          className="primary arrival-start"
-          id="start-btn"
-          disabled={busy || !name.trim()}
-        >
-          {busy ? "正在开启旅程…" : "进入回响大陆"}
-          <ArrowRight size={19} />
-        </button>
-        {error && (
-          <p className="form-error" role="alert">
-            {error}
-          </p>
-        )}
-        <small className="arrival-save-note">
-          旅程自动保存于当前浏览器的游客存档，请保留 Cookie。
-        </small>
-      </form>
-      <span className="arrival-footer">
-        从一间小屋开始，把日常过成一场冒险。
-      </span>
-    </main>
   );
 }
 function ActivityPanel() {

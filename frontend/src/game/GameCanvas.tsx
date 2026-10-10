@@ -85,6 +85,8 @@ export function GameCanvas() {
         location: s.state?.location,
         direction: instance.direction,
         frame: instance.player?.frame.name,
+        appearance: s.state?.character?.appearance,
+        playerTexture: instance.player?.texture.key,
         npcs: instance.npcs.map((n) => ({
           id: n.obj.id,
           x: n.sprite.x,

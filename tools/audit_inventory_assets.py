@@ -21,6 +21,18 @@ for entry in manifest['source_files']:
         assert source.size == (entry['width'], entry['height']), path
 for entry in manifest['existing_runtime_files']:
     assert hashlib.sha256((ROOT / entry['path']).read_bytes()).hexdigest() == entry['sha256'], entry['path']
+for entry in manifest.get('additional_character_assets', []):
+    source = ROOT / entry['source_path']
+    runtime = ROOT / entry['runtime_path']
+    data = source.read_bytes()
+    assert runtime.read_bytes() == data, runtime
+    assert hashlib.sha256(data).hexdigest() == entry['sha256'], source
+    assert hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest() == entry['git_blob_sha1'], source
+    with Image.open(source) as image:
+        assert image.size == (64, 112), source
+        for row in range(4):
+            for column in range(4):
+                assert image.convert('RGBA').crop((column*16, row*16, column*16+16, row*16+16)).getbbox(), source
 for entry in manifest.get('generated_runtime_assets', []):
     source = ROOT / entry['source_path']
     runtime = ROOT / entry['runtime_path']

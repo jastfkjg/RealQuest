@@ -44,6 +44,25 @@ def test_create_restore_and_isolate(client):
     cookies=client.cookies.get('realquest_session')
     assert cookies and len(cookies)>30
 
+@pytest.mark.parametrize('appearance', range(6))
+def test_appearance_create_restore_keeps_starter_balance(client, appearance):
+    before = client.get('/api/state').json()['state']
+    key = str(uuid.uuid4())
+    payload = {'name': '新旅人', 'appearance': appearance}
+    assert cmd(client, 'create', payload, key).status_code == 200
+    # Replaying the accepted create cannot grant another quest or mutate balances.
+    assert cmd(client, 'create', payload, key).status_code == 200
+    saved = client.post('/api/session').json()['state']
+    assert saved['character'] == payload
+    for field in ['inventory', 'xp', 'attributes', 'energy', 'position']:
+        assert saved[field] == before[field]
+    assert saved['quests']['settle_in']['status'] == 'active'
+
+@pytest.mark.parametrize('appearance', [-1, 6, True, '3', 3.5])
+def test_invalid_appearance_does_not_create_player(client, appearance):
+    assert cmd(client, 'create', {'name': '旅人', 'appearance': appearance}).status_code == 422
+    assert client.get('/api/state').json()['state']['character'] is None
+
 def test_idempotency_and_conflict(client):
     create(client)
     key=str(uuid.uuid4())

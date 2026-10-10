@@ -4,12 +4,15 @@ Run frontend/scripts/character-contrast.mjs first. Pillow reads pixels only;
 this does not edit artwork. Evidence is limited to the captured starter view.
 """
 import json
+import argparse
 import math
 import re
 from pathlib import Path
 from PIL import Image
 
-root = Path(__file__).resolve().parents[1] / 'output/character-reference'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output', default='output/character-reference')
+root = Path(__file__).resolve().parents[1] / parser.parse_args().output
 image = Image.open(root / 'contrast-background.png').convert('RGB')
 
 

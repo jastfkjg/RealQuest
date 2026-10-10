@@ -7,7 +7,7 @@
 | 木屋、红瓦建筑、松树、花丛、木桶、木箱、长椅、井、舟、生活装饰 | Pixel-boy / Sparklin Labs，[Superpowers Ninja Adventure](https://github.com/sparklinlabs/superpowers-asset-packs/tree/master/ninja-adventure) | CC0-1.0，允许商用；原始 tileset 不变，客户端按帧取样，整数 2 倍显示 |
 | 栎树、木屋派生素材源 | Pixel-boy，[Ninja Adventure 官方页面](https://pixel-boy.itch.io/ninja-adventure-asset-pack)，[作者仓库](https://github.com/pixel-boy/NinjaAdventure) | 官方明确 CC0、允许商用；使用 `tileset_village_abandoned.png` 的局部，不导入废墟整图 |
 | 砖红小屋与青色图书馆 | 上述 CC0 村庄图块的派生作品 | 本项目裁切、遮罩并调整屋顶色板；可通过 `frontend/scripts/build-village-assets.py` 重建（Pillow） |
-| 三种角色外观、NPC、菜单头像 | Pixel-boy / Sparklin Labs，同一 Ninja Adventure 仓库的 `14.png`、`2.png`、`1.png` | CC0-1.0；四方向四帧，16×16 源像素、2 倍显示；不分发其他角色与动作资源 |
+| 六种角色外观、NPC、菜单头像 | Pixel-boy / Sparklin Labs，同一 Ninja Adventure 仓库的 `14.png`、`2.png`、`1.png`，新增 `6.png`、`9.png`、`5.png` | CC0-1.0；四方向四帧，16×16 源像素、2 倍显示；只打包这六张人物表；其余角色不进入运行包 |
 | 草地与地形变化、泥土路、桥梁、围栏、资源、农田、室内家具、符文、奖励粒子 | 本项目 `village.ts`、`art.ts`、`WorldScene.ts` | 原创程序绘制，统一采用像素对齐；项目整体发布许可证待所有者决定 |
 | 交互、物品、奖励与轻脚步声 | 本项目 `feel.ts`，Web Audio oscillator 合成 | 原创程序音效，无外部录音/音乐；默认静音，用户手势开启，设置可关闭 |
 | React 界面图标 | `lucide-react` 软件包 | ISC；以安装包随附 LICENSE 为准 |

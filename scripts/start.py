@@ -83,8 +83,8 @@ def main():
     version = subprocess.check_output(["node", "--version"], text=True).strip()
     if int(version.lstrip("v").split(".")[0]) < 22:
         raise RuntimeError(f"需要 Node.js 22+，当前版本为 {version}。")
-    backend_port = int(os.environ.get("REALQUEST_BACKEND_PORT", "8017"))
-    frontend_port = int(os.environ.get("REALQUEST_FRONTEND_PORT", "5173"))
+    backend_port = int(os.environ.get("REALQUEST_BACKEND_PORT", "8027"))
+    frontend_port = int(os.environ.get("REALQUEST_FRONTEND_PORT", "5175"))
     if backend_port == frontend_port or not all(1 <= p <= 65535 for p in (backend_port, frontend_port)):
         raise RuntimeError("前后端端口必须不同，且位于 1–65535。")
     for port in (backend_port, frontend_port):

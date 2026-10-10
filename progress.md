@@ -139,3 +139,12 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - Character five-viewport/44px/focus/touch/preview tests pass. Real study24→25, exercise49→50, XP100→Lv2, attribute50→Lv2, saved125XP, four-material gather, rejection/same-ID retry and appearance persistence pass. Existing RPG full flow, journal layout, backend21 tests, build, asset audit and frame client pass.
 - DEV-only `/dev/character` has isolated starter/near/unlocked/veteran/long fixtures; no API or storage writes and no fixture strings in production JS.
 - Stop at character visual checkpoint. See docs/tasks/03-character-slice.md. Physical Safari/touch and actual browser-menu zoom remain unverified; runtime material1.47MB. Retain existing5187/8021 preview for owner, close automation browsers. No commit/push/deploy.
+
+## 2026-10-10 Village arrival — current checkpoint
+
+- Owner approved the generated village-registration concept, asked for softer name/appearance controls and more actual characters. Implemented only the welcome flow, not other screens.
+- WelcomeView/Welcome adapter now compose a full-screen static village illustration, live small traveler, blank clipped paper material, signature line, six offset portrait tags and one wooden entry button. DEV-only `/dev/welcome` is explicitly labeled and makes no API/storage writes. All actual controls/text remain DOM.
+- Added three byte-identical CC0 sheets from the same fixed Superpowers/Ninja Adventure source: upstream 6, 9, 5 → IDs 3, 4, 5. Full first four animation rows audited; old IDs 0–2 untouched. Shared registry feeds DOM/HUD/dossier and Phaser textures; server create bounds expand to 0–5, no save migration or balance changes.
+- Two generated blank welcome materials packaged losslessly with source/prompt provenance. Assets audit verifies 29 images; Kenney still absent; playable world unchanged.
+- Browser checks cover all six create/reload/portrait/walk flows, blank name, keyboard/IME, rejection/pending/retry/idempotency, DPR2 touch and isolated preview. 32 backend tests and original RPG regression pass. Frame client capture inspected. Five viewport screenshots inspected. Mobile contrast findings fixed; default/hover text sampling passes, minimum 4.97:1.
+- User databases and pre-existing `scripts/start.py` edits left untouched; all mutations ran against output/arrival-reference/test.db. Stop at actual homepage visual checkpoint. Further details/commands/limits in docs/tasks/04-arrival-slice.md.

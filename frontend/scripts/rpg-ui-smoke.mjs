@@ -49,7 +49,11 @@ try {
     await p.goto(base);
     await p.waitForSelector("#start-btn");
     await p.getByRole("button", { name: "外观 2" }).click();
-    assert.ok(await p.locator(".stage-person .person-1").count());
+    assert.ok(
+      await p
+        .locator('.welcome-traveler[data-appearance="1"] .person-1')
+        .count(),
+    );
     await p.getByLabel("你的名字").fill("林间旅人");
     await snap(p, "create-selected");
     await p.click("#start-btn");

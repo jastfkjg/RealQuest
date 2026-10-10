@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import type { MapData, WorldObject } from "../types";
 import { box, furniture } from "./art";
+import { appearances } from "./appearances";
 
 // All source pixels render at 2 world pixels. These frame rectangles are the
 // unmodified CC0 sheet; collision and interactive anchors still come from /world.
@@ -37,12 +38,11 @@ export function preloadVillage(scene: Phaser.Scene) {
   );
   scene.load.image("nature-sheet", "/assets/ninja-adventure/village.png");
   scene.load.image("village-sheet", "/assets/ninja-adventure/tileset.png");
-  for (let i = 0; i < 3; i++)
-    scene.load.spritesheet(
-      `villager-${i}`,
-      `/assets/ninja-adventure/character-${i}.png`,
-      { frameWidth: 16, frameHeight: 16 },
-    );
+  for (const { id, source } of appearances)
+    scene.load.spritesheet(`villager-${id}`, source, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
 }
 function registerFrames(scene: Phaser.Scene) {
   const nature = scene.textures.get("nature-sheet");

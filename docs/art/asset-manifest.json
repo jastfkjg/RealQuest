@@ -999,6 +999,158 @@
       ],
       "binding": "frontend/src/character.css: .hc-dossier::before",
       "content_audit": "Single flat moss cloth field folder, blank warm paper, brass clips, leather corner protectors. No typography, avatar, stats or control artwork. All content DOM; existing character sprites preserved and rendered at 4x 16px frame scale. Source and browser renders inspected."
+    },
+    {
+      "id": "ui.welcome.illustration",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/arrival-village-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/arrival-village-v1.webp",
+      "prompt_path": "assets/generated/hearthwood/arrival-village-v1.prompt.txt",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Derived from the owner-approved generated arrival concept; isolated welcome artwork, never the playable tileset.",
+      "license": "Generated project artwork; no third-party CC0 license claimed.",
+      "generated_on": "2026-10-10",
+      "source_sha256": "6a02b9691748d67ebf2adecd7210d1d4a8fb2264e36993bf7203ec5e1ce98cc2",
+      "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "source_size_bytes": 1957324,
+      "size_bytes": 1565666,
+      "width": 1586,
+      "height": 992,
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        1586,
+        992
+      ],
+      "runtime_processing": "tools/build_inventory_skin.py --asset arrival-village-v1; lossless WebP exact=True method=6, decoded RGBA equality asserted; no resampling/recoloring/art edits.",
+      "binding": "frontend/src/welcome.css",
+      "content_audit": "Viewed at source and in browser: no baked text, controls or characters."
+    },
+    {
+      "id": "ui.surface.welcome.registration",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/arrival-register-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/arrival-register-v1.webp",
+      "prompt_path": "assets/generated/hearthwood/arrival-register-v1.prompt.txt",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Derived from the owner-approved generated arrival concept; isolated welcome artwork, never the playable tileset.",
+      "license": "Generated project artwork; no third-party CC0 license claimed.",
+      "generated_on": "2026-10-10",
+      "source_sha256": "d60fd30a4399c6da3c3d6812287f099a5b76f1ae29f8557e5be87967ed9bb846",
+      "sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "source_size_bytes": 2003555,
+      "size_bytes": 1203260,
+      "width": 1122,
+      "height": 1402,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        32,
+        1106,
+        1402
+      ],
+      "runtime_processing": "tools/build_inventory_skin.py --asset arrival-register-v1; lossless WebP exact=True method=6, decoded RGBA equality asserted; no resampling/recoloring/art edits.",
+      "binding": "frontend/src/welcome.css",
+      "content_audit": "Viewed at source and in browser: no baked text, controls or characters.",
+      "nine_slice_insets_source_px": {
+        "top": 270,
+        "right": 165,
+        "bottom": 190,
+        "left": 155
+      },
+      "default_border_image_width_css_px": [
+        116,
+        71,
+        82,
+        67
+      ],
+      "mobile_border_image_width_css_px": [
+        85,
+        48,
+        62,
+        46
+      ]
     }
-  ]
+  ],
+  "additional_character_assets": [
+    {
+      "id": 3,
+      "upstream_file": "ninja-adventure/characters/6.png",
+      "upstream_url": "https://raw.githubusercontent.com/sparklinlabs/superpowers-asset-packs/e8674a03ab4456802f71f848c4df79eccca23f7a/ninja-adventure/characters/6.png",
+      "source_path": "assets/vendor/ninja-adventure/characters/6.png",
+      "runtime_path": "frontend/public/assets/ninja-adventure/character-3.png",
+      "sha256": "173655715e319cf2383c189673d3c198bb5c840155120015ce4501ab5d2fdc77",
+      "git_blob_sha1": "cb325998ecaa08c59dab8b412cd9882abecc45a0",
+      "width": 64,
+      "height": 112,
+      "frame_width": 16,
+      "frame_height": 16,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        1,
+        64,
+        112
+      ],
+      "size_bytes": 4999,
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs",
+      "processing": "Byte-identical copy, no art edits. Four direction columns and four walking rows; remaining action rows not used."
+    },
+    {
+      "id": 4,
+      "upstream_file": "ninja-adventure/characters/9.png",
+      "upstream_url": "https://raw.githubusercontent.com/sparklinlabs/superpowers-asset-packs/e8674a03ab4456802f71f848c4df79eccca23f7a/ninja-adventure/characters/9.png",
+      "source_path": "assets/vendor/ninja-adventure/characters/9.png",
+      "runtime_path": "frontend/public/assets/ninja-adventure/character-4.png",
+      "sha256": "79ee75f1cf2e11f96b94d4bf102013b86ac46b5fd9ec4243e408954ade4aa2c3",
+      "git_blob_sha1": "ec832660a453c2b5a11e58fb762adc6189607014",
+      "width": 64,
+      "height": 112,
+      "frame_width": 16,
+      "frame_height": 16,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        64,
+        112
+      ],
+      "size_bytes": 5681,
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs",
+      "processing": "Byte-identical copy, no art edits. Four direction columns and four walking rows; remaining action rows not used."
+    },
+    {
+      "id": 5,
+      "upstream_file": "ninja-adventure/characters/5.png",
+      "upstream_url": "https://raw.githubusercontent.com/sparklinlabs/superpowers-asset-packs/e8674a03ab4456802f71f848c4df79eccca23f7a/ninja-adventure/characters/5.png",
+      "source_path": "assets/vendor/ninja-adventure/characters/5.png",
+      "runtime_path": "frontend/public/assets/ninja-adventure/character-5.png",
+      "sha256": "d2d4257e5d54618efe1bc1be32d480ca8356d7981de59af4e216e20de2b61c4e",
+      "git_blob_sha1": "9209fabb1f5d64ff64f91477ff55e965a4453758",
+      "width": 64,
+      "height": 112,
+      "frame_width": 16,
+      "frame_height": 16,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        1,
+        64,
+        112
+      ],
+      "size_bytes": 5263,
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs",
+      "processing": "Byte-identical copy, no art edits. Four direction columns and four walking rows; remaining action rows not used."
+    }
+  ],
+  "arrival_concept": {
+    "path": "docs/art/references/arrival-concept-v1.png",
+    "status": "owner_approved_direction_2026-10-10",
+    "approval": "可以，按此调整，同时登录名和人物形象选择那块还是有点死板（不知道是不是太方方正正的原因？）同时适当添加更多可选人物形象",
+    "runtime_status": "candidate_pending_actual_visual_review"
+  }
 }

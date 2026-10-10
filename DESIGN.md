@@ -2,7 +2,7 @@
 
 **Direction:** Hearthwood — a cozy pixel-life adventure with a practical life companion.  
 **Version:** 1.0, 2026-10-10.  
-**Status:** Hearthwood direction and actual satchel inventory owner-approved (2026-10-10). Journal reference implemented; adventurer dossier is the current visual checkpoint. See the scoped task records for approval and evidence.
+**Status:** Hearthwood direction and actual satchel inventory owner-approved (2026-10-10). Journal and adventurer dossier implemented. Village arrival concept approved; welcome implementation is the current visual checkpoint. See the scoped task records for individual approval and evidence.
 
 ## 1. Purpose and boundaries
 
@@ -193,6 +193,8 @@ Do not add fake equipment slots, unsupported stats, or a decorative radar chart 
 One composed scene with a character preview, name field, small appearance selection, and one primary entry action. Keep the preview proportionate to the surrounding environment. Do not upscale a tiny walking sprite into a giant substitute for a portrait. Use a licensed matching faceset only when the selected actor actually has one.
 
 Offer a quick start; life-goal planning is optional after entry. Explain guest-save behavior according to actual storage architecture. Do not promise local-only storage if the server stores the save.
+
+Current welcome reference: full-bleed village illustration with a live, modestly scaled traveler; one linen registration sheet, signature-line name input, six slightly offset portrait tags and a moss-painted wooden entry button. The selected character updates immediately and remains the same in gameplay and the dossier. IDs 0–2 are preserved, IDs 3–5 are audited additions; appearances do not change attributes. Use an opaque-enough canopy shade behind mobile brand text. The illustrated arrival is separate from the playable tilemap. Source and evidence: `docs/tasks/04-arrival-slice.md`.
 
 ### 7.7 Life Mode
 

@@ -13,7 +13,8 @@
     "test:rpg-ui": "node scripts/rpg-ui-smoke.mjs",
     "test:inventory": "node scripts/inventory-smoke.mjs && node scripts/inventory-mutations.mjs",
     "test:journal": "node scripts/journal-smoke.mjs && node scripts/journal-mutations.mjs && node scripts/journal-preview.mjs",
-    "test:character": "node scripts/character-smoke.mjs && node scripts/character-growth.mjs"
+    "test:character": "node scripts/character-smoke.mjs && node scripts/character-growth.mjs",
+    "test:arrival": "node scripts/arrival-smoke.mjs && node scripts/arrival-capture.mjs && node scripts/arrival-contrast.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

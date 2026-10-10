@@ -102,7 +102,8 @@ def apply(state, action, data, now):
         require(state['character'] is None, '角色已创建')
         name = str(data.get('name', '')).strip()
         require(1 <= len(name) <= 16, '角色名称需为 1–16 字')
-        appearance = integer(data.get('appearance', 0), 0, 2)
+        # Append-only appearance IDs; 0–2 retain their original sprite bindings.
+        appearance = integer(data.get('appearance', 0), 0, 5)
         state['character'] = {'name': name, 'appearance': appearance}
         state['quests']['settle_in']={'status':'active','accepted_at':now}
         return '新任务：给新生活一个落脚点。走近小屋门口按 E 进入，再收集 3 份木材。'
