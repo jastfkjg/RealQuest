@@ -10,7 +10,8 @@
     "test:smoke": "node scripts/smoke.mjs",
     "test:visual": "node scripts/visual-smoke.mjs",
     "test:play-mode": "node scripts/play-mode-smoke.mjs",
-    "test:rpg-ui": "node scripts/rpg-ui-smoke.mjs"
+    "test:rpg-ui": "node scripts/rpg-ui-smoke.mjs",
+    "test:inventory": "node scripts/inventory-smoke.mjs && node scripts/inventory-mutations.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

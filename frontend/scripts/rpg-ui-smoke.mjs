@@ -61,11 +61,11 @@ try {
     await p.keyboard.press("1");
     await until(p, (s) => s.mode === "inventory");
     assert.equal((await read(p)).selectedItem, "seed");
-    assert.equal(await p.locator(".bag-slot").count(), 24);
-    assert.equal(await p.locator("button.bag-slot").count(), 1);
-    assert.equal(await p.locator(".bag-slot.gold").count(), 0);
+    assert.equal(await p.locator(".hw-tray .hw-slot").count(), 24);
+    assert.equal(await p.locator(".hw-tray button.hw-slot").count(), 1);
+    assert.equal(await p.locator(".hw-tray .hw-slot.gold").count(), 0);
     await p.getByRole("button", { name: "材料", exact: true }).click();
-    assert.equal(await p.locator("button.bag-slot").count(), 0);
+    assert.equal(await p.locator(".hw-tray button.hw-slot").count(), 0);
     await p.getByRole("button", { name: "全部", exact: true }).click();
     await p.getByRole("button", { name: "将种子放入快捷栏 2" }).click();
     assert.deepEqual((await read(p)).quickItems, [
@@ -87,7 +87,7 @@ try {
     await p.keyboard.press("2");
     await until(p, (s) => s.mode === "inventory");
     assert.equal((await read(p)).selectedItem, "seed");
-    await p.getByRole("button", { name: "前往家园播种" }).click();
+    await p.getByRole("button", { name: "标记家园农田" }).click();
     assert.equal((await read(p)).navigation.targetId, "plot_2");
     assert.equal((await read(p)).mode, "explore");
     await go(p, 280, 360);
@@ -103,7 +103,7 @@ try {
     await until(p, (s) => s.inventory.wood === 3);
     await p.keyboard.press("1");
     await until(p, (s) => s.mode === "inventory");
-    await p.getByRole("button", { name: "前往工坊制作" }).click();
+    await p.getByRole("button", { name: "标记工坊柜台" }).click();
     assert.equal((await read(p)).navigation.targetId, "workshop_counter");
     await go(p, 352, 248);
     await p.keyboard.press("e");
@@ -222,8 +222,12 @@ try {
       assert.ok(hud.x + hud.width <= menu.x, `HUD collision at ${width}`);
       await p.getByRole("button", { name: "背包", exact: true }).click();
       await snap(p, `bag-${width}`);
+      if (width <= 700)
+        await p
+          .getByRole("button", { name: "查看所选物品", exact: true })
+          .click();
       const action = await p
-        .getByRole("button", { name: "前往家园播种" })
+        .getByRole("button", { name: "标记家园农田" })
         .boundingBox();
       assert.ok(
         action.y >= 0 && action.y + action.height <= height,
@@ -236,7 +240,8 @@ try {
         false,
       );
       if (width < 600) {
-        await p.locator(".item-use").scrollIntoViewIfNeeded();
+        await p.locator(".hw-item-notes summary").click();
+        await p.locator(".hw-item-use").scrollIntoViewIfNeeded();
         await snap(p, `bag-detail-${width}`);
       }
       await p.keyboard.press("Escape");

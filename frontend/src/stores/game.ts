@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { itemNames } from "../game/items";
+export { itemNames } from "../game/items";
 import { api, sendCommand } from "../services/api";
 import type {
   GameState,
@@ -69,7 +71,15 @@ export const useGame = create<Store>((set, get) => ({
   activityKind: "study",
   selectItem: (inventoryItem) => set({ inventoryItem }),
   pinItem: (item, index) => {
-    if (!itemNames[item] || item === "gold" || index < 0 || index > 3) return;
+    if (
+      !itemNames[item] ||
+      item === "gold" ||
+      index < 0 ||
+      index > 3 ||
+      !Number.isInteger(index) ||
+      (get().state?.inventory[item] ?? 0) <= 0
+    )
+      return;
     const quickItems = [...get().quickItems];
     const oldIndex = quickItems.indexOf(item);
     if (oldIndex >= 0) quickItems[oldIndex] = quickItems[index];
@@ -139,14 +149,6 @@ export const useGame = create<Store>((set, get) => ({
 }));
 export const serverNow = () =>
   Date.now() / 1000 + useGame.getState().clockOffset;
-export const itemNames: Record<string, string> = {
-  gold: "金币",
-  wood: "木材",
-  stone: "石料",
-  seed: "种子",
-  crop: "萝卜",
-  plank: "木板",
-};
 export const attributeNames: Record<string, string> = {
   strength: "体魄",
   wisdom: "学识",

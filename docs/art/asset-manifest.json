@@ -2,7 +2,7 @@
   "schema_version": 1,
   "direction": "Hearthwood",
   "prepared_on": "2026-10-10",
-  "repository_audited": false,
+  "repository_audited": true,
   "runtime_integration_complete": false,
   "font_binaries_included": false,
   "source_files": [
@@ -27,7 +27,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          8
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.button_hover",
@@ -50,7 +61,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          8
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.button_pressed",
@@ -73,7 +95,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          1,
+          16,
+          8
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.button_disabled",
@@ -96,7 +129,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          8
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.nine_path_2",
@@ -119,7 +163,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          16
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.nine_path_10",
@@ -142,7 +197,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          16
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.nine_path_11",
@@ -165,7 +231,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          16
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     },
     {
       "id": "source.ninja.ui.nine_path_12",
@@ -188,7 +265,18 @@
       "modified": false,
       "nine_slice_insets": null,
       "runtime_binding": null,
-      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use."
+      "note": "Unmodified source sample; measure slice insets and approve styling before runtime use.",
+      "audit": {
+        "checked_on": "2026-10-10",
+        "sha256_and_git_blob_match": true,
+        "visible_bounds": [
+          0,
+          0,
+          16,
+          16
+        ],
+        "decision": "Reference only. CSS token geometry chosen; no source skin imported. Nine-slice insets intentionally unassigned."
+      }
     }
   ],
   "selected_external_packs": [
@@ -228,30 +316,30 @@
   "proposed_bindings": [
     {
       "semantic_id": "ui.button.primary",
-      "status": "unmapped",
-      "local_path": null,
+      "status": "candidate_css_implemented",
+      "local_path": "frontend/src/inventory.css",
       "frame_rect": null,
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Original DOM/CSS with Hearthwood tokens and existing item icons; selected corner brackets, pointer and pocket stitches. Concept direction approved; actual implementation review pending."
     },
     {
       "semantic_id": "ui.surface.inventory",
-      "status": "unmapped",
-      "local_path": null,
+      "status": "candidate_generated_shell_and_dom_implemented",
+      "local_path": "frontend/src/inventory.css",
       "frame_rect": null,
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Generated satchel-shell-v1.webp supplies decoration only; linen slots, item tag, pockets, title and Chinese copy remain live DOM/CSS using existing tokens. See generated_runtime_assets for exact source, hash and slices. Render approval pending."
     },
     {
       "semantic_id": "ui.slot",
-      "status": "unmapped",
-      "local_path": null,
+      "status": "candidate_css_implemented",
+      "local_path": "frontend/src/inventory.css",
       "frame_rect": null,
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Original DOM/CSS with Hearthwood tokens and existing item icons; selected corner brackets, pointer and pocket stitches. Concept direction approved; actual implementation review pending."
     },
     {
       "semantic_id": "ui.prompt.interact",
@@ -291,30 +379,45 @@
     },
     {
       "semantic_id": "item.seed",
-      "status": "unmapped",
-      "local_path": null,
-      "frame_rect": null,
+      "status": "candidate_existing_icon_reused",
+      "local_path": "frontend/public/assets/ninja-adventure/icons/seed.png",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Existing source bytes unchanged; semantic binding in frontend/src/game/items.ts. Inventory uses 2x / 3x integer sizes. No world asset replacement."
     },
     {
       "semantic_id": "item.wood",
-      "status": "unmapped",
-      "local_path": null,
-      "frame_rect": null,
+      "status": "candidate_existing_icon_reused",
+      "local_path": "frontend/public/assets/ninja-adventure/icons/wood.png",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Existing source bytes unchanged; semantic binding in frontend/src/game/items.ts. Inventory uses 2x / 3x integer sizes. No world asset replacement."
     },
     {
       "semantic_id": "item.stone",
-      "status": "unmapped",
-      "local_path": null,
-      "frame_rect": null,
+      "status": "candidate_existing_icon_reused",
+      "local_path": "frontend/public/assets/ninja-adventure/icons/stone.png",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Existing source bytes unchanged; semantic binding in frontend/src/game/items.ts. Inventory uses 2x / 3x integer sizes. No world asset replacement."
     },
     {
       "semantic_id": "farm.plot",
@@ -396,6 +499,414 @@
       "pivot": null,
       "animation": null,
       "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+    }
+  ],
+  "audit_scope": "2026-10-10 inventory Pass A: 21 original PNGs remain unchanged; one generated satchel shell added (22 runtime/source audit entries). Concept direction approved, rendered implementation review pending. No world remapping.",
+  "inventory_reference_status": "approved_concept_implemented_candidate_awaiting_render_review",
+  "existing_runtime_files": [
+    {
+      "path": "frontend/public/assets/ninja-adventure/character-0.png",
+      "sha256": "10136e78185754a94b404d7d68d05af37217f0edf7a96627a361bdc27bcb0128",
+      "width": 64,
+      "height": 112,
+      "visible_bounds": [
+        0,
+        1,
+        64,
+        112
+      ],
+      "size_bytes": 5890,
+      "colors": 18,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/character-1.png",
+      "sha256": "89f9406aedac56686f52c1d1e910a0259864f39b9338a37509282996830edf7c",
+      "width": 64,
+      "height": 112,
+      "visible_bounds": [
+        0,
+        2,
+        64,
+        112
+      ],
+      "size_bytes": 4908,
+      "colors": 10,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/character-2.png",
+      "sha256": "b94d2fd6c4262c67478cf9bc8d696909b7a7c133c25dcd6309972a7ad101f1d5",
+      "width": 64,
+      "height": 112,
+      "visible_bounds": [
+        0,
+        1,
+        64,
+        112
+      ],
+      "size_bytes": 4980,
+      "colors": 8,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/house-home.png",
+      "sha256": "a4ea06ef12eca697fe46e75eeddce8a309aa297f09d3c3b1b3e917660693b8f1",
+      "width": 80,
+      "height": 80,
+      "visible_bounds": [
+        0,
+        1,
+        79,
+        80
+      ],
+      "size_bytes": 2328,
+      "colors": 11,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/house-library.png",
+      "sha256": "3e206904f4b66862c8715e0c4787d1f041550c14e8f6ebc95332e73816f8c6f1",
+      "width": 80,
+      "height": 80,
+      "visible_bounds": [
+        0,
+        1,
+        79,
+        80
+      ],
+      "size_bytes": 2339,
+      "colors": 11,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/crop.png",
+      "sha256": "58714347331f339fc1fcdb2142d9d9d9f8ba5dadfab250b051df4ba67e6caab9",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        3,
+        1,
+        13,
+        15
+      ],
+      "size_bytes": 180,
+      "colors": 7,
+      "status": "existing_runtime_preserved",
+      "license": "project_license_undecided",
+      "creator": "RealQuest project",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.crop",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": null
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/gold.png",
+      "sha256": "1f887bd880fa8b5db82979123742e4268c8a7432036ef7893e30bb39426369ef",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        2,
+        1,
+        14,
+        15
+      ],
+      "size_bytes": 199,
+      "colors": 6,
+      "status": "existing_runtime_preserved",
+      "license": "project_license_undecided",
+      "creator": "RealQuest project",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.gold",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": null
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/plank.png",
+      "sha256": "fea0f294fa078ca66f456e993b370c36353f2704c249a0f3b1f810b4eb557c30",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        2,
+        4,
+        14,
+        14
+      ],
+      "size_bytes": 153,
+      "colors": 6,
+      "status": "existing_runtime_preserved",
+      "license": "project_license_undecided",
+      "creator": "RealQuest project",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.plank",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": null
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/seed.png",
+      "sha256": "6a235b650b7890444afdf9bc87dbf4e6b6a6bc46c30d674f205a813f52b5a46f",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        3,
+        4,
+        13,
+        15
+      ],
+      "size_bytes": 165,
+      "colors": 6,
+      "status": "existing_runtime_preserved",
+      "license": "project_license_undecided",
+      "creator": "RealQuest project",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.seed",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": null
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/stone.png",
+      "sha256": "538d4b0eccf55fade7812dce872779dd937b920d31b7092ceb09138e99af9db4",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        1,
+        2,
+        15,
+        15
+      ],
+      "size_bytes": 221,
+      "colors": 6,
+      "status": "existing_runtime_preserved",
+      "license": "project_license_undecided",
+      "creator": "RealQuest project",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.stone",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": null
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/icons/wood.png",
+      "sha256": "bf6c3ec36a5e278219ae0a955052f9aef53ced33ecc56189677c6a0bd1181216",
+      "width": 16,
+      "height": 16,
+      "visible_bounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "size_bytes": 2875,
+      "colors": 6,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false,
+      "semantic_id": "item.wood",
+      "frame_rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source_pixel_size": [
+        16,
+        16
+      ],
+      "inventory_css_sizes": [
+        32,
+        48
+      ],
+      "processing_script": "frontend/scripts/build-village-assets.py",
+      "upstream_path": "background-elements/tileset.png; crop [16,144,32,160]"
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/tileset.png",
+      "sha256": "aa2708aa07cabda86f02d65bf2095a6b53b96fdfd43cf191931689f517f284a4",
+      "width": 448,
+      "height": 640,
+      "visible_bounds": [
+        0,
+        0,
+        448,
+        640
+      ],
+      "size_bytes": 88026,
+      "colors": 391,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    },
+    {
+      "path": "frontend/public/assets/ninja-adventure/village.png",
+      "sha256": "6787c6e22a4d44ceee4f158309b2519707bdb70c59aca00b3d49006cadcca06e",
+      "width": 320,
+      "height": 192,
+      "visible_bounds": [
+        0,
+        0,
+        320,
+        192
+      ],
+      "size_bytes": 31779,
+      "colors": 35,
+      "status": "existing_runtime_preserved",
+      "license": "CC0-1.0",
+      "creator": "Pixel-boy / Sparklin Labs or Pixel-Boy; see exact per-file SOURCE.md",
+      "provenance": "frontend/public/assets/ninja-adventure/SOURCE.md",
+      "modified_in_pass_a": false
+    }
+  ],
+  "inventory_concept": {
+    "path": "docs/art/references/inventory-satchel-concept.png",
+    "sha256": "40e931a6f7080c754ff99ed581bfa5f4039a745f869e3761d1329fe0227bd593",
+    "origin": "Built-in image_gen UI mockup from the previous actual inventory screenshot. World/background details in the concept are illustrative only and are not adopted.",
+    "owner_approved_direction_on": "2026-10-10",
+    "approval": "这版方向可以，先按预览图把背包落地，尽量还原布袋、物品浮签和快捷口袋的感觉，保留真实数量和现有交互，做好后先给我看看，再实现其他弹窗。",
+    "approval_scope": "Inventory concept and implementation authorization only; actual browser candidate still requires review before any other dialog."
+  },
+  "generated_runtime_assets": [
+    {
+      "id": "ui.surface.inventory.satchel",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/satchel-shell-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/satchel-shell-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original generated project UI material derived from the owner-approved generated concept; no external pack downloaded.",
+      "license": "Generated project artwork; no third-party CC0 license claimed.",
+      "generated_on": "2026-10-10",
+      "prompt_path": "assets/generated/hearthwood/satchel-shell-v1.prompt.txt",
+      "sha256": "8cabb6c35f0189d763a75d5c2ce7b8ae8f9651e992f2f9fab9e331c2f176e23e",
+      "width": 1254,
+      "height": 1254,
+      "size_bytes": 1414574,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        1251,
+        1222
+      ],
+      "runtime_processing": "tools/build_inventory_skin.py: Pillow lossless WebP, exact=True, method=6; decoded RGBA equality asserted. No art edits, resampling or recoloring. CSS nine-slice and centered background clipping.",
+      "nine_slice_insets_source_px": {
+        "top": 220,
+        "right": 180,
+        "bottom": 200,
+        "left": 180
+      },
+      "default_border_image_width_css_px": [
+        103,
+        84,
+        94,
+        84
+      ],
+      "mobile_border_image_width_css_px": [
+        76,
+        40,
+        64,
+        40
+      ],
+      "binding": "frontend/src/inventory.css: .hw-inventory-layout::before and .hw-belt",
+      "content_audit": "Textless empty moss cloth shell, leather straps and buckles. No baked items, slots, quantities, controls or world. PNG alpha and sizes checked; source and actual browser render visually inspected.",
+      "source_sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
+      "source_size_bytes": 2170323
     }
   ]
 }

@@ -1,5 +1,19 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-10 Hearthwood inventory reference — Pass A
+
+- Scope: audit, isolated component preview, real inventory only, matched starter screenshots; stop for owner visual approval before Pass B or other screens.
+- Existing dirty tree preserved. Test services: frontend 5187 / backend 8021, isolated `output/inventory-pass-a/test.db`; original databases untouched.
+- Audit: 24 is an existing UI tray size, not a server capacity. Only five non-currency item IDs exist. Numeric quick slots open details; navigation marks a destination. Preserve these behaviors and label them accurately.
+- Composition: linen header/details, quiet moss-tinted tray, existing 16px item icons at 2x/3x, controlled button/selection transitions; mobile four-column tray and separate details view.
+- Baseline starter session and before images captured at 1440×900 and 390×844. Final candidate evidence is recorded below.
+- Completed candidate: scoped token CSS, shared inventory primitives, four-column mobile tray/detail subview, true quantities, depleted shortcuts, exact marker labels, and development-only isolated fixtures. No source PNGs, world tiles, rules, saves or engine versions changed.
+- Eight supplied PNG hashes/blobs and all 21 existing PNG dimensions/bounds recorded; selected Kenney packs remain absent. Source samples were visually reviewed, retained as references, and not shipped as a skin.
+- TypeScript/Vite build, 21 backend tests, inventory selection/input/persistence/preview checks, actual planting rejection/pending/idempotent retry, existing play-mode and full RPG flow regressions pass. Rendered text contrast: 44 samples, minimum 4.97:1. Full results and commands are in `docs/tasks/01-inventory-slice.md`.
+- Desktop 1440×900 and phone 390×844 before/after use the same isolated starter guest. Additional 1920×1080, 768×1024, DPR2 emulated touch and effective 200% reflow checked. Screenshots inspected; recording saved. Real touch/Safari and actual browser-menu zoom remain unverified.
+- Owner explicitly authorized restoration after concurrent deletion of design-kit sources; restored exact committed bytes. Work remains uncommitted over owner commit `f1f9fe5`.
+- Stop at Pass A visual checkpoint. No rollout or Pass B targeting implementation. Retain isolated 5187/8021 services for owner review, with no automation browser retained; clean up these services after review.
+
 ## 2026-10-10 v0.2 Milestone A（当前请求）
 
 - 用户提供双模式重构需求，但本轮仅授权 A，完成后等待视觉和操作方向验收，再继续 B–E。
@@ -95,3 +109,13 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - 最终扩展 RPG 回归通过：背包直接播种扣除 1 种子 → 真实等待成熟 → 收获 2 萝卜 → 柜台从背包出售 1 萝卜得到 8 金币；截图 inventory-sold.png。六视口布局检查再次通过。
 - 最终生产构建与 git diff --check 通过。预览页面已通过 Codex 排队打开；仅保留用于验收的 5185/8019 服务，未改原数据库或启动脚本。
 - 后续：真实设备 Safari 尚未验证；独立装备/技能升级经济、Life Dashboard 与 AI 保持原后续范围。此次所请求的 UI 与现有规则交互均完成。
+
+## 2026-10-10 Satchel inventory implementation — current checkpoint
+
+- Owner rejected the plain linen candidate as too much like a presentation/dashboard, then approved the generated satchel concept and requested inventory implementation first. Other dialogs remain outside this delivery.
+- Visual thesis: a worn moss cloth organizer with linen slots, a detached item tag and sewn quick pockets. Interaction: short bag reveal, selected pointer/corner brackets, tactile presses; reduced-motion settings honored. Keep source world and real item counts.
+- Implemented in the shared InventoryView / inventory.css: 6×4 desktop tray, four-column phone tray/detail subview, compact object tag, optional uses/source disclosure, four quick pockets, responsive real-resource labels. All semantic actions, localStorage keys and server transitions retained.
+- Generated one textless shell with built-in image_gen from the approved concept; PNG source and exact prompt retained. Lossless WebP packaging checks pixel equality. Existing 21 PNGs unchanged, no Kenney files imported. Audit now verifies 22 entries.
+- Visual inspection caught and fixed a currency-label overlap introduced during header refinement; browser test now verifies the coin label is actually unobscured. Texture contrast softened; high-balance/earned-resource mobile fixture checked.
+- Build, 21 backend tests, inventory browser checks, rejection/idempotent retry, full RPG crafting/planting/harvest/sale + six viewports and skill frame client passed. Final evidence and remaining limits in docs/tasks/01-inventory-slice.md.
+- Stop for review of the actual satchel screenshots, not blanket approval of other screens. No Pass B targeting. Actual touch/Safari and browser-menu zoom remain unverified. Keep only isolated 5187/8021 preview services for owner review, with test browsers closed.

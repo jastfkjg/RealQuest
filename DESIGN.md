@@ -2,7 +2,7 @@
 
 **Direction:** Hearthwood — a cozy pixel-life adventure with a practical life companion.  
 **Version:** 1.0, 2026-10-10.  
-**Status:** Selected direction for the next implementation pass; the first in-engine reference screen still requires owner approval.
+**Status:** Hearthwood direction selected; the satchel inventory concept is owner-approved (2026-10-10), while its actual browser implementation remains at the visual checkpoint.
 
 ## 1. Purpose and boundaries
 
@@ -156,11 +156,11 @@ Desktop controls: movement, interact, inventory, journal, map, and Escape must b
 
 Intent: inspect an object, assign it, and use it in the world.
 
-Desktop target: width up to 940 CSS pixels, height up to the viewport minus 48; use responsive sizing. A compact top line contains title and currencies. Below it, the inventory tray and item details use approximately a 60/40 split. Do not reserve a tall dark title slab and a separate full-width currency banner.
+Desktop target: width up to 940 CSS pixels with responsive sizing. The owner-approved [satchel concept](docs/art/references/inventory-satchel-concept.png) refines this inventory contract: a moss cloth bag with stitched edges and leather buckles, a small timber nameplate, a linen tray, a detached item tag, and four sewn quick pockets. At 1440×900 the candidate uses a 600px bag and a 280px tag separated by world space. Keep the tag as tall as its content, not a full-height report sidebar. The decorative shell is an original generated asset; title, tabs, items, quantities and actions remain real DOM controls. Do not propagate this treatment to other screens until the actual inventory render is approved.
 
-Keep the current authoritative capacity; if it is 24 slots, use a 6 x 4 arrangement on desktop. Start with 56-64 CSS pixel cells and 6-8 pixel gaps. Icons use integer scaling and clear counts. The apparent empty tray should be lighter and quieter than the occupied item. Quantity is bottom-right; the quick-slot marker, when present, is top-left. Do not show an item as possessed merely because a stale shortcut references its type.
+Respect the authoritative inventory model. The audited server has no capacity limit; the existing 24 display cells are a presentation tray, arranged 6 × 4 on desktop, not an asserted capacity. Start with 56-64 CSS pixel cells and 6-8 pixel gaps. Icons use integer scaling and clear counts. The apparent empty tray should be lighter and quieter than the occupied item. Quantity is bottom-right; the quick-slot marker, when present, is top-left. Do not show an item as possessed merely because a stale shortcut references its type.
 
-The selected details begin with icon, name, quantity, and the most relevant action. Description is secondary. Do not copy the same selected-item identity into a large footer unless that footer has a necessary action.
+The selected tag begins with icon, name, actual quantity, a short purpose and the most relevant action. Longer description, recipe, growth time and source are available under “用途与来源”. Gold stays visible in the compact header; earned energy and shards use a separate label row when needed. Empty quick pockets retain their stored references without depicting absent possessions. Their contents and assignment behavior remain accessible through labels and the help control. Do not copy selected-item identity into a large footer.
 
 On narrow screens, use four columns with 52-60 pixel cells and a selected-details section below or in a deliberate subview. Keep actions reachable without introducing nested horizontal scrolling. Do not simply shrink the desktop layout.
 

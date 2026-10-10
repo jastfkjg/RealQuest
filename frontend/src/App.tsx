@@ -32,10 +32,11 @@ import {
 import {
   CharacterPanel,
   CharacterStage,
-  InventoryPanel,
   PixelPerson,
 } from "./components/RpgPanels";
 import { QuestList, QuestTracker, QuestCompass } from "./components/Quests";
+import { InventoryPanel } from "./components/InventoryPanel";
+import { InventoryWallet } from "./components/InventoryView";
 import { Atlas } from "./components/Atlas";
 import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
@@ -52,6 +53,8 @@ const attrIcons = {
 function Modal({ title, children }: { title: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null),
     open = useGame((s) => s.open);
+  const panel = useGame((s) => s.panel);
+  const state = useGame((s) => s.state);
   useEffect(() => {
     const previous = document.activeElement;
     ref.current?.showModal();
@@ -62,8 +65,25 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className={`modal panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
+      className={`modal ${panel === "inventory" ? "rq-theme" : ""} panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
       aria-labelledby="panel-title"
+      onKeyDown={(event) => {
+        if (panel !== "inventory" || event.key !== "Tab") return;
+        const controls = Array.from(
+          event.currentTarget.querySelectorAll<HTMLElement>(
+            "button:not(:disabled), a[href], input:not(:disabled), summary, [tabindex='0']",
+          ),
+        ).filter((el) => el.getClientRects().length > 0);
+        const first = controls[0],
+          last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }}
       onCancel={() => open(null)}
       onClick={(event) => {
         if (event.target === event.currentTarget) open(null);
@@ -71,8 +91,17 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     >
       <div className="modal-head">
         <h2 id="panel-title">{title}</h2>
+        {panel === "inventory" && state && (
+          <InventoryWallet
+            gold={state.inventory.gold}
+            energy={state.energy}
+            shards={state.knowledge_shard}
+          />
+        )}
         <button
-          className="icon-button"
+          className={
+            panel === "inventory" ? "rq-button hw-close" : "icon-button"
+          }
           aria-label="关闭面板"
           onClick={() => open(null)}
         >
@@ -745,12 +774,13 @@ function Panels() {
           )}
         </>
       )}
-      {error && (
+      {error && panel !== "inventory" && (
         <p className="form-error" role="alert">
           {error}
         </p>
       )}
       {notice &&
+        panel !== "inventory" &&
         noticePanel === panel &&
         !(panel === "npc" && notice === dialogue) && (
           <p className="panel-notice" role="status">
@@ -947,12 +977,15 @@ export default function App() {
                       selectItem(item);
                       open("inventory");
                     }}
-                    aria-label={`${itemNames[item]} ${state.inventory[item]}`}
-                    title={`${index + 1} · ${itemNames[item]}`}
+                    aria-label={`在背包中查看${itemNames[item]}，数量 ${state.inventory[item] || 0}`}
+                    title={`${index + 1} · 在背包中查看${itemNames[item]}${state.inventory[item] > 0 ? "" : " · 暂未持有"}`}
                   >
                     <kbd>{index + 1}</kbd>
-                    <span className={`item-icon ${item}`} />
-                    <b>{state.inventory[item]}</b>
+                    <span
+                      className={`item-icon ${item}`}
+                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.35 }}
+                    />
+                    <b>{state.inventory[item] || 0}</b>
                   </button>
                 ))}
               </div>

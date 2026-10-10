@@ -3,4 +3,13 @@ import App from "./App";
 import "./style.css";
 import "./game-ui.css";
 import "./rpg-ui.css";
-ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+import "../../styles/realquest-tokens.css";
+import "./inventory.css";
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
+  void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>
+    root.render(<InventoryPreview />),
+  );
+} else {
+  root.render(<App />);
+}

@@ -101,3 +101,26 @@ The manifest intentionally contains null paths for unmapped roles. Resolve them 
 A final inventory layout, a usable journal, a spatial map, coherent transitions, and responsive input cannot be downloaded as individual PNGs. The supplied source files and selected packs supply parts; DESIGN.md defines how those parts become a product.
 
 The first deliverable is a working reference screen, not a claim that the entire art pipeline is complete. Record candidate/approved status, owner approval, and implementation commit before expanding the treatment.
+
+## 8. Initial Pass A repository audit — 2026-10-10 (superseded visual candidate)
+
+Actual files, rather than acquisition entries, were audited with `tools/audit_inventory_assets.py`. All eight supplied samples match their documented SHA-256 and Git blob hashes. Thirteen existing runtime PNGs were also inventoried, for 21 total; sizes, alpha bounds and hashes are recorded in the manifest and `output/inventory-pass-a/asset-audit.json`. The contact sheet was opened and visually inspected.
+
+- The four 16×8 button samples use orange/brown fills. Pressed artwork has a transparent first row; its alpha bounds are `[0, 1, 16, 8]`. The 16×16 frames have four different material/color treatments. None is adopted as an inventory skin. Slice insets remain unset because no nine-slice asset is being used.
+- Inventory uses original CSS geometry with the supplied Hearthwood tokens. This is a candidate implementation, not an approved derived PNG skin. The raw source samples remain outside `frontend/public` and unchanged.
+- All six existing item/currency icons are 16×16. Wood is the recorded CC0 tileset crop; seed, crop, stone, plank and gold are project-generated originals. Their provenance must not be inferred from the `ninja-adventure` directory name. The selected item icon is 48 CSS pixels (3×), slot/quick icons are 32 (2×), and compact currency art is 16 (1×).
+- The source sprite sheets, houses and terrain remain unchanged. The existing procedural farm states in `art.ts` / `WorldScene.ts` remain in use; this pass does not supply or approve new crop animations.
+- Kenney packs are still absent. No download, font installation, source recoloring, source-file modification or new runtime image was needed for this candidate.
+- Existing wood artwork is more saturated than the new UI; retained for identity and provenance continuity. Any icon replacement requires a separate reviewed binding, not a guessed asset path.
+
+Visual candidate and exact verification are recorded in `docs/tasks/01-inventory-slice.md`. Owner approval is pending.
+
+## 9. Approved satchel direction — implementation candidate
+
+The owner approved the [generated concept](references/inventory-satchel-concept.png) and explicitly requested implementation of the bag, floating item tag and quick pockets. This supersedes the initial plain linen composition for inventory only. The actual browser render still awaits review; other dialogs and the concept's illustrative world changes are excluded.
+
+One original textless material was produced with the built-in `image_gen` tool from that approved concept. The raw source is `assets/generated/hearthwood/satchel-shell-v1.png` (1254×1254 RGBA, 2,170,323 bytes). The [exact prompt](../../assets/generated/hearthwood/satchel-shell-v1.prompt.txt) is preserved. It contains only the moss cloth shell, leather and brass; no baked text, item, grid, quantity or button. This is generated project artwork, not an installed Kenney/Ninja UI skin or a claimed third-party CC0 asset.
+
+`tools/build_inventory_skin.py` packages it as lossless WebP (`lossless=True`, `exact=True`, `method=6`) and asserts decoded RGBA equality. The sole new runtime file is `frontend/public/assets/hearthwood/satchel-shell-v1.webp` (1,414,574 bytes). The source is unchanged and stays outside `public`. Runtime uses measured CSS nine-slice insets of top 220 / right 180 / bottom 200 / left 180 source pixels; the pocket roll samples the same cloth through a centered CSS background. The source hash, runtime hash, dimensions, pixel equality and paths are audited in `asset-manifest.json` and `tools/audit_inventory_assets.py`.
+
+The title plaque, linen inset, slot selection brackets, pointer, floating tag and pocket seams are original DOM/CSS using Hearthwood tokens. Existing 16px item PNGs remain byte-identical, with 48px tray/detail/desktop pocket icons and 32px phone pocket icons. All original 21 PNGs and eight raw-source Git blobs still match the manifest. The new audit has 22 entries including the generated WebP. Kenney packs remain absent. No world, portrait, font or sound replacement is implied.
