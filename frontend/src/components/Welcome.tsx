@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ArrowRight, Check, Feather } from "lucide-react";
 import { appearances, getAppearance } from "../game/appearances";
 import { useGame } from "../stores/game";
+import { RecoveryDialog } from "./RecoveryPanel";
 import { PixelPerson } from "./PixelPerson";
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
   onName: (name: string) => void;
   onAppearance: (appearance: number) => void;
   onStart: () => void;
+  onRecover?: () => void;
 };
 
 export function WelcomeView({
@@ -22,6 +24,7 @@ export function WelcomeView({
   onName,
   onAppearance,
   onStart,
+  onRecover,
 }: Props) {
   const composing = useRef(false);
   return (
@@ -133,8 +136,17 @@ export function WelcomeView({
           <p className="welcome-save-note">
             旅程会自动保存。
             <br />
-            请保留当前浏览器的游客 Cookie。
+            可在设置中下载旅程恢复凭证。
           </p>
+          {onRecover && (
+            <button
+              type="button"
+              className="welcome-recover"
+              onClick={onRecover}
+            >
+              已有旅程凭证？找回存档
+            </button>
+          )}
         </div>
       </form>
     </main>
@@ -142,20 +154,25 @@ export function WelcomeView({
 }
 
 export function Welcome() {
+  const [recovering, setRecovering] = useState(false);
   const [name, setName] = useState("唤醒者");
   const [appearance, setAppearance] = useState(0);
   const { command, busy, error } = useGame();
   return (
-    <WelcomeView
-      name={name}
-      appearance={appearance}
-      busy={busy}
-      error={error}
-      onName={setName}
-      onAppearance={setAppearance}
-      onStart={() => {
-        void command("create", { name: name.trim(), appearance });
-      }}
-    />
+    <>
+      {recovering && <RecoveryDialog onClose={() => setRecovering(false)} />}
+      <WelcomeView
+        onRecover={() => setRecovering(true)}
+        name={name}
+        appearance={appearance}
+        busy={busy}
+        error={error}
+        onName={setName}
+        onAppearance={setAppearance}
+        onStart={() => {
+          void command("create", { name: name.trim(), appearance });
+        }}
+      />
+    </>
   );
 }

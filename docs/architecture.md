@@ -10,7 +10,7 @@
 - `backend/app/rules.py`：确定性游戏规则；没有 LLM 依赖。
 - `backend/app/quests.py`：固定剧情委托定义、进度判定、解锁及派生状态。
 - `backend/app/world.py`：统一地图尺寸、碰撞几何与交互对象。通过 session API 提供给客户端。
-- `backend/app/models.py`：Player 与 Receipt，配套 Alembic 初始迁移。
+- `backend/app/models.py`：Player、Receipt、RecoveryKey、GuestSession；Alembic 001 / 002。
 
 ## 数据模型
 
@@ -20,7 +20,7 @@
 
 剧情 Quest 状态已保存在 JSON 聚合中；快照中的 `quest_log` 由固定定义、累计统计和事件派生。学习任务以 `study_tasks` 存在同一事务聚合中，`study_task_log` 从任务及带 `study_task_id` 的活动派生分钟数和实际已得经验。学习计时带稳定 ID 和可选任务 ID；完成计时、生成活动、结算经验和标记任务完成在同一事务中发生。`study_link` 仅关联同日未归属其他任务的学习记录，不发奖。旧记录补上稳定 `legacy-{index}` 标识，旧计时补上 `legacy-timer`；无 SQL 结构变化或存档清空。
 
-尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。新增学习任务不支持编辑、归档或自动每日重复；这些仍是下一阶段工作。
+尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。`study_plans` 保存稳定计划 ID、名称、默认时长与归档时间；任务增加可空 `plan_id` / `archived_at`。`study_plan_today` 用计划 UUID 与服务端上海自然日生成稳定 UUID，同一计划/日期的并发和重试只得到一页。新的书页沿用最近主题，使用当前计划默认时长；旧进度不搬移。未完成且未计时的任务可以修改；归档可逆，归档和计划完成均无新增奖励。书架/历史在客户端每页六项，完整历史仍存在 JSON 中，服务端分页尚未实现。
 
 ## 操作数据流
 
@@ -32,7 +32,7 @@ PostgreSQL 使用行锁，SQLite 使用 `BEGIN IMMEDIATE` 串行写入。客户�
 
 ## 时间与来源
 
-农田、采集恢复与学习计时使用服务端 Unix 时间戳。暂停计时累计 elapsed，继续计时重新写 started_at；计时展示用服务端返回时间校正本地时钟。现实奖励自然日按 Asia/Shanghai 计算，手动记录可补最近七天。
+农田、采集恢复与学习计时使用服务端 Unix 时间戳。暂停计时累计 elapsed，继续计时重新写 started_at；计时展示用服务器时间锚点加 `performance.now()` 增量，避免本机时钟调整改变时长；回到前台、pageshow、focus、online 和可见页面每 15 秒重新拉取权威状态。冻结/锁屏不暂停服务器计时，只有明确暂停才停止，结算仍使用服务器时间。现实奖励自然日按 Asia/Shanghai 计算，手动记录可补最近七天。
 
 手动输入记为 `manual`，计时完成记为 `timer`，两者均不标为已验证。客户端提交的 source / verified 字段不会改变规则生成的来源。没有导入、模拟或健康数据自动获取入口。
 
@@ -40,7 +40,9 @@ PostgreSQL 使用行锁，SQLite 使用 `BEGIN IMMEDIATE` 串行写入。客户�
 
 服务端生成 256-bit 随机游客凭证，仅保存哈希。浏览器使用 HttpOnly、SameSite=Strict Cookie；部署 HTTPS 时启用 Secure。存档不接受客户端指定玩家 ID。写请求检查 Origin / Sec-Fetch-Site，前端与 API 通过开发代理或 Nginx 同源。
 
-当前可导出存档及回执，或删除当前游客的全部状态和回执。不提供账号绑定和 Cookie 丢失恢复。公开部署所需限流、备份、记录纠错等见 TODO。
+可导出存档及回执供查看。`POST /recovery-file` 生成 256-bit 随机旅程凭证，数据库仅存哈希；`POST /recovery-preview` 返回对应存档的真实摘要，`POST /recover` 新建同一玩家的 HttpOnly 会话，不导入或修改文件中的角色、资源、奖励和计时。原会话继续有效。切换前 UI 要求先下载并确认保存当前旅程凭证，原存档保留。删除游客时一并删除回执、恢复凭证与附加会话。
+
+Alembic 002 只增加 RecoveryKey / GuestSession 表与外键索引，不重写玩家 JSON 或回执；已验证从有数据的 001 迁移及重复运行。普通导出 JSON 不可恢复；旅程凭证依赖原服务器数据库，数据库灾备和账号绑定另行实现。API 快照带 `save_id`，新客户端提交操作时带预期 ID；Cookie 在另一个标签页切换后，陈旧操作被拒绝，读到另一存档时整页重载，防止混合不同存档的 revision。旧客户端的无 ID 请求仍兼容。公开部署所需限流、备份、记录纠错等见 TODO。
 
 ## AI 后续边界
 

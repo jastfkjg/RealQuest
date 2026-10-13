@@ -28,6 +28,10 @@ def upgrade_state(original):
     state.setdefault('stats', {'wood':max(state['inventory'].get('wood',0),3 if 'first_gather' in state['events'] else 0),'stone':state['inventory'].get('stone',0),'harvest':state['inventory'].get('crop',0),'sold':0,'crafted':state['inventory'].get('plank',0)})
     state.setdefault('storage', {key:0 for key in ['wood','stone','seed','crop','plank']})
     state.setdefault('study_tasks', {})
+    state.setdefault('study_plans', {})
+    for task in state['study_tasks'].values():
+        task.setdefault('plan_id', None)
+        task.setdefault('archived_at', None)
     for index, record in enumerate(state['activities']):
         record.setdefault('id', f'legacy-{index}')
     if state['timer'] is not None:
@@ -71,6 +75,27 @@ def study_task_views(state):
         views.append({**task, 'minutes': sum(a['amount'] for a in records),
                       'earned_xp': sum(a['xp'] for a in records), 'record_count': len(records)})
     return sorted(views, key=lambda t: t['created_at'], reverse=True)
+
+def study_plan(state, plan_id):
+    require(isinstance(plan_id, str) and plan_id in state['study_plans'], '这本研习计划不存在')
+    return state['study_plans'][plan_id]
+
+def study_writable(state, task):
+    require(task.get('archived_at') is None, '这页已归档，请先从手记中取回')
+    if task.get('plan_id'):
+        require(study_plan(state, task['plan_id'])['archived_at'] is None, '计划已归档，请先从书架取回')
+
+def study_title(value):
+    require(isinstance(value, str) and 1 <= len(value.strip()) <= 80, '请写下 1–80 字的学习主题')
+    return value.strip()
+
+def study_uuid(value):
+    require(isinstance(value, str) and len(value) == 36, '研习标识无效')
+    try:
+        require(str(uuid.UUID(value)) == value, '研习标识无效')
+    except ValueError:
+        raise RuleError('研习标识无效')
+    return value
 
 def complete_study_task(state, task, now):
     minutes = sum(a['amount'] for a in state['activities'] if a.get('study_task_id') == task['id'])
@@ -144,6 +169,57 @@ def apply(state, action, data, now):
         return ''
     if action == 'activity':
         return activity(state, data, now)
+    if action == 'study_plan_create':
+        plan_id = study_uuid(data.get('plan_id'))
+        title = study_title(data.get('title'))
+        minutes = integer(data.get('daily_minutes'), 1, 120)
+        previous = state['study_plans'].get(plan_id)
+        if previous:
+            require(previous['title'] == title and previous['daily_minutes'] == minutes, '计划标识已被使用')
+            return '这本计划已经记下了'
+        require(len(state['study_plans']) < 100, '书架已放满 100 本计划')
+        state['study_plans'][plan_id] = {'id': plan_id, 'title': title, 'daily_minutes': minutes,
+            'created_at': now, 'archived_at': None}
+        return '计划已装订，准备好就翻开今天的一页'
+    if action in ['study_plan_edit', 'study_plan_archive', 'study_plan_today']:
+        plan = study_plan(state, data.get('plan_id'))
+        if action == 'study_plan_archive':
+            archived = data.get('archived')
+            require(isinstance(archived, bool), '请选择归档或取回')
+            timer_task = state['study_tasks'].get((state['timer'] or {}).get('study_task_id'))
+            require(not archived or not timer_task or timer_task.get('plan_id') != plan['id'], '请先结束这本计划的计时再归档')
+            plan['archived_at'] = (plan['archived_at'] or now) if archived else None
+            return '计划已归档，记录与成长都还在' if archived else '计划已放回书架'
+        require(plan['archived_at'] is None, '请先取回这本计划')
+        if action == 'study_plan_edit':
+            plan['title'] = study_title(data.get('title'))
+            plan['daily_minutes'] = integer(data.get('daily_minutes'), 1, 120)
+            return '计划已更新，新的时长从下一页开始生效'
+        # Stable per-plan/day identity makes retries and two-tab opening converge.
+        task_id = str(uuid.uuid5(uuid.UUID(plan['id']), today))
+        if task_id in state['study_tasks']:
+            return '今天的书页已经在这里'
+        require(sum(t['date'] == today for t in state['study_tasks'].values()) < 20, '今天已记下 20 项研习，先完成一项吧')
+        previous = sorted((t for t in state['study_tasks'].values() if t.get('plan_id') == plan['id']), key=lambda t: t['created_at'], reverse=True)
+        state['study_tasks'][task_id] = {'id': task_id, 'title': previous[0]['title'] if previous else plan['title'],
+            'target_minutes': plan['daily_minutes'], 'date': today, 'timezone': 'Asia/Shanghai',
+            'created_at': now, 'completed_at': None, 'archived_at': None, 'plan_id': plan['id']}
+        return '今天的一页已翻开，之前的记录留在手记里'
+    if action in ['study_edit', 'study_archive']:
+        task = study_task(state, data.get('task_id'))
+        require((state['timer'] or {}).get('study_task_id') != task['id'], '请先结束这一页的计时')
+        if action == 'study_archive':
+            archived = data.get('archived')
+            require(isinstance(archived, bool), '请选择归档或取回')
+            task['archived_at'] = (task['archived_at'] or now) if archived else None
+            return '书页已收进手记' if archived else '书页已取回'
+        study_writable(state, task)
+        require(task['completed_at'] is None, '已完成的书页保留原来的约定')
+        title = study_title(data.get('title'))
+        minutes = integer(data.get('target_minutes'), 1, 120)
+        task.update(title=title, target_minutes=minutes)
+        complete_study_task(state, task, now)
+        return '这一页已修改，已有记录和成长保持不变'
     if action == 'study_create':
         task_id = data.get('task_id')
         require(isinstance(task_id, str) and len(task_id) == 36, '任务标识无效')
@@ -161,10 +237,11 @@ def apply(state, action, data, now):
             return '这项研习已经记下了'
         require(sum(t['date'] == today for t in state['study_tasks'].values()) < 20, '今天已记下 20 项研习，先完成一项吧')
         state['study_tasks'][task_id] = {'id': task_id, 'title': title, 'target_minutes': minutes,
-            'date': today, 'timezone': 'Asia/Shanghai', 'created_at': now, 'completed_at': None}
+            'date': today, 'timezone': 'Asia/Shanghai', 'created_at': now, 'completed_at': None, 'archived_at': None, 'plan_id': None}
         return '研习已记下，准备好就开始吧'
     if action == 'study_link':
         task = study_task(state, data.get('task_id'))
+        study_writable(state, task)
         record = next((a for a in state['activities'] if a['id'] == data.get('activity_id')), None)
         require(record is not None and record['kind'] == 'study', '请选择一条学习记录')
         require(record['date'] == task['date'], '只能关联任务当天的学习记录')
@@ -180,6 +257,7 @@ def apply(state, action, data, now):
             task_id = data.get('task_id')
             task = study_task(state, task_id) if task_id is not None else None
             if task:
+                study_writable(state, task)
                 require(task['completed_at'] is None, '这项研习已经完成，可以写下新的学习任务')
                 topic = task['title']
             require(1 <= len(topic) <= 80, '请输入 1–80 字的学习主题')

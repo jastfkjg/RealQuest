@@ -1,3 +1,4 @@
+import { RecoveryPanel } from "./components/RecoveryPanel";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
@@ -169,9 +170,39 @@ function DialogueText({ text }: { text: string }) {
   );
 }
 function GrowthReceipt() {
-  const state = useGame(s=>s.state);
+  const state = useGame((s) => s.state);
   const latest = state?.activities.at(-1);
-  return <aside className="ha-growth-receipt" aria-label="最近的成长记录"><span><Check size={18}/>{latest ? "最近已记录" : "现实行动 → 游戏成长"}</span>{latest ? <><strong>{latest.note || activityNames[latest.kind]}<small>{latest.source === "timer" ? "计时" : latest.source === "manual" ? "手动" : latest.source} · {latest.date}</small></strong><b>+{latest.xp} EXP{latest.knowledge_shards ? ` · +${latest.knowledge_shards} 碎片` : ""}</b></> : <p>学习积累学识，运动积累体魄。实际奖励以保存结果为准。</p>}</aside>;
+  return (
+    <aside className="ha-growth-receipt" aria-label="最近的成长记录">
+      <span>
+        <Check size={18} />
+        {latest ? "最近已记录" : "现实行动 → 游戏成长"}
+      </span>
+      {latest ? (
+        <>
+          <strong>
+            {latest.note || activityNames[latest.kind]}
+            <small>
+              {latest.source === "timer"
+                ? "计时"
+                : latest.source === "manual"
+                  ? "手动"
+                  : latest.source}{" "}
+              · {latest.date}
+            </small>
+          </strong>
+          <b>
+            +{latest.xp} EXP
+            {latest.knowledge_shards
+              ? ` · +${latest.knowledge_shards} 碎片`
+              : ""}
+          </b>
+        </>
+      ) : (
+        <p>学习积累学识，运动积累体魄。实际奖励以保存结果为准。</p>
+      )}
+    </aside>
+  );
 }
 function ActivityPanel() {
   const { state, command, busy } = useGame(),
@@ -214,15 +245,30 @@ function ActivityPanel() {
   return (
     <div className="hp-growth">
       <div className="hp-study-entry">
-        <div><strong>把今天想学的，写进手札</strong><p>选一件小事，专注一会儿，让成长留下回响。</p></div>
-        <button className="rq-button rq-button--primary" onClick={() => useGame.getState().open("study")}><BookOpen size={18} /> 今日研习 <ArrowRight size={16} /></button>
+        <div>
+          <strong>把今天想学的，写进手札</strong>
+          <p>选一件小事，专注一会儿，让成长留下回响。</p>
+        </div>
+        <button
+          className="rq-button rq-button--primary"
+          onClick={() => useGame.getState().open("study")}
+        >
+          <BookOpen size={18} /> 今日研习 <ArrowRight size={16} />
+        </button>
       </div>
-      <div className="life-bridge"><Leaf size={22}/><div><strong>把今天的行动，记作一次成长</strong><p>计时或手动记录 · 保存后结算游戏奖励</p></div></div>
+      <div className="life-bridge">
+        <Leaf size={22} />
+        <div>
+          <strong>把今天的行动，记作一次成长</strong>
+          <p>计时或手动记录 · 保存后结算游戏奖励</p>
+        </div>
+      </div>
       <GrowthReceipt />
       <div className="hp-growth-columns">
         <section className="hp-focus-page">
           <div className="section-label">
-            <Timer size={17} /> 专注学习 <span className="ha-source">计时记录</span>
+            <Timer size={17} /> 专注学习{" "}
+            <span className="ha-source">计时记录</span>
           </div>
           <div className="timer-block">
             <span>{timer?.topic || "为好奇心留一点时间"}</span>
@@ -277,7 +323,8 @@ function ActivityPanel() {
         </section>
         <section className="hp-record-page">
           <div className="section-label">
-            <Plus size={17} /> 手动记录 <span className="ha-source">自行填写</span>
+            <Plus size={17} /> 手动记录{" "}
+            <span className="ha-source">自行填写</span>
           </div>
           <form className="form-grid" onSubmit={record}>
             <label>
@@ -495,10 +542,8 @@ export function Panels() {
             </label>
           </div>
           <hr />
-          <p>
-            当前使用游客存档.请保留当前浏览器的
-            Cookie；游戏进度由服务端数据库保存。
-          </p>
+          <RecoveryPanel />
+          <hr />
           <button
             onClick={async () => {
               try {
@@ -521,7 +566,7 @@ export function Panels() {
             <Download size={17} /> 导出存档与结算记录
           </button>
           <p className="muted">
-            导出用于个人查看与备份；当前版本暂不支持导入恢复。
+            此导出用于查看完整数据；找回旅程请使用上方的旅程凭证。
           </p>
           <hr />
           <h3>删除我的数据</h3>
@@ -592,13 +637,30 @@ export default function App() {
   }, [notice, panel]);
   useEffect(() => {
     if (!ready) return;
-    const id = setInterval(() => {
-      if (!document.hidden)
+    let refreshing = false;
+    const refresh = () => {
+      if (!document.hidden && !refreshing) {
+        refreshing = true;
         void api("state")
           .then((reply) => useGame.getState().accept(reply))
-          .catch(() => undefined);
-    }, 15000);
-    return () => clearInterval(id);
+          .catch(() => undefined)
+          .finally(() => {
+            refreshing = false;
+          });
+      }
+    };
+    const id = setInterval(refresh, 15000);
+    document.addEventListener("visibilitychange", refresh);
+    window.addEventListener("pageshow", refresh);
+    window.addEventListener("focus", refresh);
+    window.addEventListener("online", refresh);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", refresh);
+      window.removeEventListener("pageshow", refresh);
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("online", refresh);
+    };
   }, [ready]);
   const preferences = usePreferences();
   const nav: [Panel, string, typeof Compass][] = [

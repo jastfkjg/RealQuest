@@ -234,6 +234,12 @@ The owner requested a game-like learning loop on 2026-10-13. The full-screen “
 
 The journal, actor and palette are reused without changing their source pixels. The hourglass is original inline SVG. Page entrance, button press and the server-confirmed completion seal respect reduced motion. All functional text remains DOM. Stable tasks and timer identities restore after refresh; `#study` restores the view. Existing manual recording stays available. Linking an existing activity and completing a task cannot grant a second activity reward. See `docs/tasks/06-today-study.md` for evidence and limits; visual acceptance remains a separate owner checkpoint.
 
+### 7.7b Study journeys — plans, daily leaves and recovery
+
+The owner authorized the multi-day study chain on 2026-10-13. Extend the same book with four chapter bookmarks: today's study, study plans, archived memories and recovery. The plan index uses book spines and a single selected chapter; history uses dated leaves and one readable memory. Do not add a task table, KPI mosaic or a second palette. Plan/day opening is a server action with one page per day; yesterday's progress stays on its own leaf. Editing and reversible archive are disclosed under “整理”. Completion is an existing activity settlement, never another reward.
+
+On phones the selected plan or new-plan writing surface precedes the book index. History selection scrolls/focuses the chosen page; all controls remain native, at least 44 CSS px and usable without dragging. A downloaded recovery credential opens the latest server-side journey, with an identity preview and confirmation after backing up the current journey. Recovery is also reachable from welcome and settings without creating a character. It does not restore a lost database. Existing journal texture, tokens, actor frames and Lucide icons are reused; no asset acquisition. See `docs/tasks/08-study-journey.md` for evidence. Visual approval remains pending.
+
 ## 8. Interaction, timing, and sound
 
 Represent top-level input context explicitly, using the existing architecture: world play, overlay, dialogue, targeting, or Life Mode. A keyboard event must not activate two contexts. Ignore gameplay shortcuts during text input, content editing, and IME composition. Clear held movement on blur, visibility loss, and mode transition.

@@ -1,5 +1,17 @@
 # Hearthwood Review Checklist
 
+## Study journeys — 2026-10-13
+
+Status: implemented and browser-verified candidate; owner visual approval pending.
+
+- [x] Plan/day/book history, reversible archive, title/time editing and recovery credential preview use real server state and existing Hearthwood art.
+- [x] Desktop and phone layouts, 375px/landscape, large DOM text, focus containment, IME and reduced motion checked. Phone now prioritizes the selected chapter.
+- [x] Real 62-second Chromium lifecycle freeze, second-tab pause, foreground/reload recovery, offline action rejection and lost-response retry checked.
+- [x] Cookie-free recovery restores the latest server state with no repeated rewards; old v001 database survives migration to v002.
+- [x] Twelve texture-sampled contrast cases / 302 text runs, minimum 4.89:1; 31-image source/hash audit passes.
+- [ ] Physical Safari/iOS/Android lock-screen tests, native browser zoom and long background suspension remain unverified.
+- [ ] Owner visual approval pending. Evidence and exact command outcomes: [study journey](../tasks/08-study-journey.md).
+
 ## Today study — 2026-10-13
 
 Status: **implemented and verified; owner visual review pending**.

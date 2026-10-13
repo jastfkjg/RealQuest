@@ -16,7 +16,8 @@
     "test:character": "node scripts/character-smoke.mjs && node scripts/character-growth.mjs",
     "test:arrival": "node scripts/arrival-smoke.mjs && node scripts/arrival-capture.mjs && node scripts/arrival-contrast.mjs",
     "test:dialogs": "node scripts/dialogs-capture.mjs && node scripts/dialogs-interactions.mjs",
-    "test:study": "node scripts/study-smoke.mjs && node scripts/study-contrast.mjs"
+    "test:study": "node scripts/study-smoke.mjs && node scripts/study-contrast.mjs",
+    "test:journey": "node scripts/journey-smoke.mjs && node scripts/journey-review.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

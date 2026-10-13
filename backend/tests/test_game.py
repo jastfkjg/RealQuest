@@ -404,3 +404,154 @@ def test_side_quest_progress_survives_spending_and_rewards_once(quest_id,giver,l
     apply(s,'quest_claim',{'quest_id':quest_id},102)
     assert s['inventory']['gold']==gold+definition['reward']['gold']
     with pytest.raises(RuleError): apply(s,'quest_claim',{'quest_id':quest_id},103)
+
+# Study plans keep one server-dated leaf per day; archive/edit never mint rewards.
+def plan_create(state, now, minutes=25):
+    key = str(uuid.uuid4())
+    apply(state, 'study_plan_create', {'plan_id': key, 'title': '植物学手札', 'daily_minutes': minutes}, now)
+    return key
+
+
+def test_plan_daily_pages_continue_without_moving_records():
+    from app.rules import study_task_views
+    s = fresh(); now = datetime(2026, 10, 13, 12, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+    plan = plan_create(s, now)
+    for offset in [1, 2]: apply(s, 'study_plan_today', {'plan_id': plan}, now + offset)
+    first = next(iter(s['study_tasks']))
+    assert len(s['study_tasks']) == 1
+    apply(s, 'study_edit', {'task_id': first, 'title': '读到叶片结构', 'target_minutes': 25}, now + 3)
+    apply(s, 'timer_start', {'task_id': first}, now + 4)
+    apply(s, 'timer_finish', {}, now + 604)
+    apply(s, 'study_plan_edit', {'plan_id': plan, 'title': '慢慢读懂植物', 'daily_minutes': 15}, now + 605)
+    apply(s, 'study_plan_today', {'plan_id': plan}, now + 86400)
+    views = study_task_views(s)
+    assert len(views) == 2 and views[0]['title'] == '读到叶片结构'
+    assert views[0]['minutes'] == 0 and views[0]['target_minutes'] == 15
+    assert views[1]['minutes'] == 10 and views[1]['target_minutes'] == 25
+    assert views[1]['completed_at'] is None and s['xp'] == 10
+
+
+def test_plan_archive_edit_restore_and_legacy_compatibility():
+    from app.rules import upgrade_state
+    s = fresh(); now = 1800000000; plan = plan_create(s, now)
+    apply(s, 'study_plan_today', {'plan_id': plan}, now)
+    task = next(iter(s['study_tasks']))
+    apply(s, 'timer_start', {'task_id': task}, now)
+    for action, data in [('study_plan_archive', {'plan_id': plan, 'archived': True}), ('study_archive', {'task_id': task, 'archived': True}), ('study_edit', {'task_id': task, 'title': 'x', 'target_minutes': 1})]:
+        with pytest.raises(RuleError): apply(s, action, data, now + 1)
+    apply(s, 'timer_finish', {}, now + 600)
+    apply(s, 'study_edit', {'task_id': task, 'title': '完成本节', 'target_minutes': 10}, now + 601)
+    assert s['study_tasks'][task]['completed_at'] is not None and s['xp'] == 10
+    apply(s, 'study_plan_archive', {'plan_id': plan, 'archived': True}, now + 602)
+    with pytest.raises(RuleError): apply(s, 'study_plan_today', {'plan_id': plan}, now + 86400)
+    apply(s, 'study_plan_archive', {'plan_id': plan, 'archived': False}, now + 86401)
+    apply(s, 'study_archive', {'task_id': task, 'archived': True}, now + 86402)
+    apply(s, 'study_archive', {'task_id': task, 'archived': False}, now + 86403)
+    apply(s, 'study_plan_today', {'plan_id': plan}, now + 86404)
+    assert len(s['study_tasks']) == 2 and s['xp'] == 10
+    legacy = fresh(); del legacy['study_plans']; legacy_task = study_create(legacy, now)
+    del legacy['study_tasks'][legacy_task]['plan_id']; del legacy['study_tasks'][legacy_task]['archived_at']
+    upgraded = upgrade_state(legacy)
+    assert upgraded['study_tasks'][legacy_task]['plan_id'] is None
+    assert upgrade_state(upgraded) == upgraded
+
+
+def test_plan_cross_midnight_and_long_background_pause():
+    s = fresh(); now = datetime(2026, 10, 13, 23, 59, 30, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+    plan = plan_create(s, now, minutes=1); apply(s, 'study_plan_today', {'plan_id': plan}, now)
+    first = next(iter(s['study_tasks'])); apply(s, 'timer_start', {'task_id': first}, now)
+    apply(s, 'timer_pause', {}, now + 90)
+    apply(s, 'timer_resume', {}, now + 86400 * 3)
+    apply(s, 'timer_finish', {}, now + 86400 * 3 + 30)
+    assert s['activities'][0]['amount'] == 2 and s['activities'][0]['study_task_id'] == first
+    assert s['activities'][0]['date'] == '2026-10-17' and s['study_tasks'][first]['date'] == '2026-10-13'
+    apply(s, 'study_plan_today', {'plan_id': plan}, now + 86400 * 3 + 30)
+    assert len(s['study_tasks']) == 2 and s['xp'] == 2
+
+
+def test_plan_concurrent_daily_creation_and_rollback(client):
+    create(client); plan = str(uuid.uuid4())
+    assert cmd(client, 'study_plan_create', {'plan_id': plan, 'title': '研习', 'daily_minutes': 25}).status_code == 200
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        assert list(pool.map(lambda _: cmd(client, 'study_plan_today', {'plan_id': plan}).status_code, range(2))) == [200, 200]
+    before = client.get('/api/state').json()['state']; assert len(before['study_task_log']) == 1
+    assert cmd(client, 'study_plan_edit', {'plan_id': plan, 'title': '错误修改', 'daily_minutes': 0}).status_code == 422
+    assert client.get('/api/state').json()['state'] == before
+
+
+def test_recovery_latest_save_and_original_session(client):
+    create(client); credential = client.post('/api/recovery-file').json()
+    assert credential['format'] == 'realquest-recovery'
+    key = {'recovery_key': credential['recovery_key']}; plan = str(uuid.uuid4())
+    cmd(client, 'study_plan_create', {'plan_id': plan, 'title': '恢复后的手札', 'daily_minutes': 5})
+    cmd(client, 'study_plan_today', {'plan_id': plan})
+    task = client.get('/api/state').json()['state']['study_task_log'][0]['id']
+    cmd(client, 'timer_start', {'task_id': task})
+    before = client.get('/api/state').json()['state']; ledger = client.get('/api/export').json()['ledger']
+    with TestClient(app) as recovered:
+        preview = recovered.post('/api/recovery-preview', json=key)
+        assert preview.status_code == 200 and preview.json()['plan_count'] == 1
+        assert recovered.get('/api/state').status_code == 401
+        assert recovered.post('/api/recover', json=key).status_code == 200
+        assert recovered.get('/api/state').json()['state'] == before
+        assert recovered.get('/api/export').json()['ledger'] == ledger
+        assert recovered.post('/api/session').json()['state'] == before
+        assert client.get('/api/state').json()['state'] == before
+        assert recovered.post('/api/recover', json={**key, 'state': {'xp': 99999}}).status_code == 422
+        assert recovered.get('/api/state').json()['state'] == before
+
+
+def test_recovery_invalid_deleted_and_origin(client):
+    create(client); key = {'recovery_key': client.post('/api/recovery-file').json()['recovery_key']}
+    before = client.get('/api/state').json()['state']
+    assert client.post('/api/recover', json={'recovery_key': 'a' * 43}).status_code == 404
+    assert client.post('/api/recovery-preview', json={'recovery_key': 'short'}).status_code == 422
+    assert client.post('/api/recover', json=key, headers={'origin': 'https://untrusted.example'}).status_code == 403
+    assert client.get('/api/state').json()['state'] == before
+    with TestClient(app) as recovered:
+        assert recovered.post('/api/recover', json=key).status_code == 200
+        assert client.delete('/api/session').status_code == 200
+        assert recovered.get('/api/state').status_code == 401
+        assert recovered.post('/api/recover', json=key).status_code == 404
+
+
+def test_recovery_switch_preserves_previous_journey(client):
+    create(client); first_key = {'recovery_key': client.post('/api/recovery-file').json()['recovery_key']}
+    with TestClient(app) as other:
+        other.post('/api/session'); create(other); cmd(other, 'activity', {'kind': 'study', 'amount': 25})
+        second_key = {'recovery_key': other.post('/api/recovery-file').json()['recovery_key']}
+        other.post('/api/recover', json=first_key)
+        assert other.get('/api/state').json()['state']['xp'] == 0
+        other.post('/api/recover', json=second_key)
+        assert other.get('/api/state').json()['state']['xp'] == 25
+
+
+def test_plan_api_midnight_uses_server_day_not_client_day(client, monkeypatch):
+    import app.main as main
+    now = datetime(2026, 10, 13, 23, 59, 30, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+    monkeypatch.setattr(main.time, 'time', lambda: now)
+    create(client); plan = str(uuid.uuid4())
+    cmd(client, 'study_plan_create', {'plan_id': plan, 'title': '多日研习', 'daily_minutes': 5})
+    first = cmd(client, 'study_plan_today', {'plan_id': plan, 'date': '2099-01-01'}).json()['state']['study_task_log'][0]
+    assert first['date'] == '2026-10-13'
+    cmd(client, 'timer_start', {'task_id': first['id']})
+    now += 90
+    finished = cmd(client, 'timer_finish').json()['state']
+    assert finished['activities'][0]['date'] == '2026-10-14'
+    assert finished['activities'][0]['study_task_id'] == first['id']
+    new = cmd(client, 'study_plan_today', {'plan_id': plan}).json()['state']
+    assert len(new['study_task_log']) == 2 and new['study_task_log'][0]['date'] == '2026-10-14'
+    assert new['study_task_log'][0]['minutes'] == 0 and new['xp'] == 1
+
+
+def test_stale_tab_cannot_write_to_another_restored_journey(client):
+    create(client)
+    original_id = client.get('/api/state').json()['save_id']
+    with TestClient(app) as other:
+        other.post('/api/session'); create(other)
+        key = {'recovery_key': other.post('/api/recovery-file').json()['recovery_key']}
+        client.post('/api/recover', json=key)
+        reply = client.post('/api/command', json={'request_id': str(uuid.uuid4()), 'action': 'activity', 'data': {'kind': 'study', 'amount': 25}, 'save_id': original_id})
+        assert reply.status_code == 409
+        assert client.get('/api/state').json()['state']['xp'] == 0
+        assert other.get('/api/state').json()['state']['xp'] == 0

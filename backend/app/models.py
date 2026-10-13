@@ -18,3 +18,14 @@ class Receipt(Base):
     action: Mapped[str] = mapped_column(String(32))
     changes: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[float] = mapped_column(Float)
+
+class RecoveryKey(Base):
+    __tablename__ = 'recovery_keys'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey('players.id', ondelete='CASCADE'), index=True)
+    created_at: Mapped[float] = mapped_column(Float)
+
+class GuestSession(Base):
+    __tablename__ = 'guest_sessions'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey('players.id', ondelete='CASCADE'), index=True)

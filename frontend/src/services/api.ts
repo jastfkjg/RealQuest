@@ -20,11 +20,20 @@ export async function api<T = Reply>(
   return response.json();
 }
 let queue = Promise.resolve();
+let saveIdentity: string | undefined;
+export function setSessionIdentity(id: string) {
+  saveIdentity = id;
+}
 export function sendCommand(
   action: string,
   data: Record<string, unknown> = {},
 ): Promise<Reply> {
-  const body = { request_id: crypto.randomUUID(), action, data };
+  const body = {
+    request_id: crypto.randomUUID(),
+    action,
+    data,
+    save_id: saveIdentity,
+  };
   const run = async () => {
     try {
       return await api("command", "POST", body);

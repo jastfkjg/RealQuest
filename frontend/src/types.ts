@@ -13,6 +13,7 @@ export interface World extends MapData {
   interiors: Record<string, MapData>;
 }
 export interface GameState {
+  study_plan_log?: StudyPlan[];
   study_task_log?: StudyTask[];
   location: string;
   quest_log: Quest[];
@@ -56,6 +57,7 @@ export interface GameState {
   revision: number;
 }
 export interface Reply {
+  save_id?: string;
   state: GameState;
   world?: World;
   server_time: number;
@@ -79,6 +81,8 @@ export type Panel =
   | null;
 
 export interface StudyTask {
+  plan_id?: string | null;
+  archived_at?: number | null;
   id: string;
   title: string;
   target_minutes: number;
@@ -89,6 +93,14 @@ export interface StudyTask {
   minutes: number;
   earned_xp: number;
   record_count: number;
+}
+
+export interface StudyPlan {
+  id: string;
+  title: string;
+  daily_minutes: number;
+  created_at: number;
+  archived_at: number | null;
 }
 
 export interface Furniture {

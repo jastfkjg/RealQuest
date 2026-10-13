@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { itemNames } from "../game/items";
 export { itemNames } from "../game/items";
-import { api, sendCommand } from "../services/api";
+import { api, sendCommand, setSessionIdentity } from "../services/api";
 import type {
   GameState,
   NavigationTarget,
@@ -42,6 +42,9 @@ interface Store {
   setNearest: (obj: WorldObject | null) => void;
 }
 const defaultQuickItems = ["seed", "wood", "stone", "crop"];
+let clockAnchor = { time: Date.now() / 1000, tick: performance.now() };
+let hasServerClock = false;
+let saveIdentity: string | undefined;
 function readQuickItems(): string[] {
   try {
     const saved = JSON.parse(
@@ -102,14 +105,26 @@ export const useGame = create<Store>((set, get) => ({
   tracking: false,
   navigation: null,
   navigate: (navigation) => set({ navigation, panel: null }),
-  accept: (reply) =>
+  accept: (reply) => {
+    // Another tab may have restored a different journey in our shared cookie.
+    if (saveIdentity && reply.save_id && reply.save_id !== saveIdentity) {
+      window.location.reload();
+      return;
+    }
+    saveIdentity = reply.save_id || saveIdentity;
+    if (reply.save_id) setSessionIdentity(reply.save_id);
+    if (!hasServerClock || reply.server_time >= clockAnchor.time) {
+      clockAnchor = { time: reply.server_time, tick: performance.now() };
+      hasServerClock = true;
+    }
     set((current) => ({
       state:
         !current.state || reply.state.revision >= current.state.revision
           ? reply.state
           : current.state,
       clockOffset: reply.server_time - Date.now() / 1000,
-    })),
+    }));
+  },
   boot: async () => {
     try {
       const reply = await api("session", "POST");
@@ -165,6 +180,6 @@ export const useGame = create<Store>((set, get) => ({
   },
 }));
 export const serverNow = () =>
-  Date.now() / 1000 + useGame.getState().clockOffset;
+  clockAnchor.time + (performance.now() - clockAnchor.tick) / 1000;
 export { attributeNames } from "../game/characterGrowth";
 export { activityNames } from "../game/activities";

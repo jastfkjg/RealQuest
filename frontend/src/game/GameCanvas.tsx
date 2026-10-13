@@ -136,6 +136,7 @@ export function GameCanvas() {
         events: s.state?.events,
         timer: s.state?.timer,
         studyTasks: s.state?.study_task_log,
+        studyPlans: s.state?.study_plan_log,
         obstacles: instance.map?.obstacles,
         objects: instance.map?.objects,
         notice: s.notice,

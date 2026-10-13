@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Study journey material reuse — 2026-10-13
+
+`StudyLibrary` and the extended study book reuse the same audited journal spread, shared Hearthwood tokens, selected actor frame and installed Lucide icons. Plan spines, dated index and recovery layout are DOM/CSS; no new bitmap, font, audio, generated artwork or source modifications. Source/runtime manifest remains unchanged; 31-image audit passes. Evidence: `docs/tasks/08-study-journey.md`.
+
 ## Today study material reuse — 2026-10-13
 
 `StudyPage.tsx` / `study.css` reuse the existing `journal-spread-v1.webp` and selected `PixelPerson` sheet without source edits, resampling, new raster downloads or generated artwork. The original journal nine-slice uses the already audited 220/140/260/140 source insets; the mobile view exposes one leaf. Actor frames stay at integer 3×/4× scaling. The hourglass is original project SVG geometry authored in `StudyPage.tsx` and colored with existing Hearthwood tokens. It is decoration beside a native DOM timer, not a raster asset or simulated possession. No new font, audio or runtime image is added. Candidate evidence: `docs/tasks/06-today-study.md`.

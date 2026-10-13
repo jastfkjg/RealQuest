@@ -93,17 +93,15 @@ try {
     await p.keyboard.type("wasd");
     await p.getByLabel("写下你的学习主题").fill("读一页植物笔记");
     assert.deepEqual((await read(p)).player, pos);
-    await p
-      .getByLabel("写下你的学习主题")
-      .evaluate((el) =>
-        el.dispatchEvent(
-          new KeyboardEvent("keydown", {
-            key: "Enter",
-            isComposing: true,
-            bubbles: true,
-          }),
-        ),
-      );
+    await p.getByLabel("写下你的学习主题").evaluate((el) =>
+      el.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Enter",
+          isComposing: true,
+          bubbles: true,
+        }),
+      ),
+    );
     assert.equal((await state(p)).study_task_log.length, 0);
     let phase = "reject";
     await p.route("**/api/command", async (route) => {
@@ -211,6 +209,9 @@ try {
     });
     await p.getByRole("button", { name: "结束并记下" }).click();
     await until(p, (s) => !s.timer && s.studyTasks[0].completed_at !== null);
+    // Foreground polling may observe the commit before the lost-response retry finishes.
+    // Wait for the public pending state to settle before removing interception.
+    await p.getByRole("button", { name: "写下下一项研习", exact: true }).waitFor();
     await p.unroute("**/api/command");
     assert.equal(finishRequests.length, 2);
     assert.equal(finishRequests[0].request_id, finishRequests[1].request_id);
@@ -250,7 +251,10 @@ try {
     assert.equal(saved.knowledge_shard, 1);
     assert.equal(saved.activities.length, 2);
     await p.getByRole("button", { name: "已有学习记录？收起" }).click();
-    await p.locator(".study-records summary").click();
+    await p
+      .locator(".study-records summary")
+      .filter({ hasText: /^这一页的记录/ })
+      .click();
     await snap(p, "linked-completed-1440");
     await p.setViewportSize({ width: 390, height: 844 });
     await p.locator(".study-page").evaluate((el) => el.scrollTo(0, 0));
