@@ -33,6 +33,12 @@ for entry in manifest.get('additional_character_assets', []):
         for row in range(4):
             for column in range(4):
                 assert image.convert('RGBA').crop((column*16, row*16, column*16+16, row*16+16)).getbbox(), source
+for entry in manifest.get('original_item_assets', []):
+    runtime = ROOT / entry['runtime_path']
+    assert hashlib.sha256(runtime.read_bytes()).hexdigest() == entry['sha256'], runtime
+    assert hashlib.sha256((ROOT / entry['rebuild']).read_bytes()).hexdigest() == entry['script_sha256'], entry['rebuild']
+    with Image.open(runtime) as image:
+        assert image.size == (entry['width'], entry['height']) and image.mode == entry['mode'], runtime
 for entry in manifest.get('generated_runtime_assets', []):
     source = ROOT / entry['source_path']
     runtime = ROOT / entry['runtime_path']
@@ -42,7 +48,7 @@ for entry in manifest.get('generated_runtime_assets', []):
         assert source_image.convert('RGBA').tobytes() == runtime_image.convert('RGBA').tobytes(), runtime
     with Image.open(source) as image:
         assert image.size == (entry['width'], entry['height']) and image.mode == entry['mode'], source
-for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', [])]:
+for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', []) + manifest.get('original_item_assets', [])]:
     with Image.open(path) as source:
         rgba = source.convert('RGBA')
         rows.append({
@@ -52,7 +58,7 @@ for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + 
             'colors': len(rgba.getcolors(rgba.width * rgba.height)),
         })
 (OUTPUT / 'asset-audit.json').write_text(json.dumps(rows, indent=2) + '\n')
-samples = [r for r in rows if '/ui/' in r['path'] or '/icons/' in r['path']]
+samples = [r for r in rows if '/ui/' in r['path'] or '/icons/' in r['path'] or '/items/' in r['path']]
 sheet = Image.new('RGB', (800, 130 * ((len(samples) + 3) // 4)), '#dee3cf')
 draw = ImageDraw.Draw(sheet)
 for i, row in enumerate(samples):

@@ -114,7 +114,15 @@ export const useGame = create<Store>((set, get) => ({
     try {
       const reply = await api("session", "POST");
       get().accept(reply);
-      set({ world: reply.world!, ready: true, error: "" });
+      set({
+        world: reply.world!,
+        ready: true,
+        error: "",
+        panel:
+          window.location.hash === "#study" && reply.state.character
+            ? "study"
+            : null,
+      });
     } catch (e) {
       set({ error: (e as Error).message });
     }
@@ -141,8 +149,17 @@ export const useGame = create<Store>((set, get) => ({
       if (!silent) set({ busy: false });
     }
   },
-  open: (panel, selected) =>
-    set({ panel, selected: selected || null, error: "" }),
+  open: (panel, selected) => {
+    if (panel === "study" || window.location.hash === "#study")
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname +
+          window.location.search +
+          (panel === "study" ? "#study" : ""),
+      );
+    set({ panel, selected: selected || null, error: "" });
+  },
   setNearest: (nearest) => {
     if (get().nearest?.id !== nearest?.id) set({ nearest });
   },

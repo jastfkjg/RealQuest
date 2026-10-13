@@ -32,6 +32,129 @@ def create(client):
 def fresh():
     s=initial_state();apply(s,'create',{'name':'规则测试'},100);return s
 
+def study_create(state, now, minutes=25, title='读一章植物笔记'):
+    key = str(uuid.uuid4())
+    apply(state, 'study_create', {'task_id': key, 'title': title, 'target_minutes': minutes}, now)
+    return key
+
+def test_study_timer_progress_pause_restore_and_single_reward():
+    from app.rules import upgrade_state, study_task_views
+    now = datetime(2026, 10, 13, 12, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+    s = fresh()
+    task = study_create(s, now)
+    assert s['xp'] == 0 and s['inventory']['gold'] == 20
+    apply(s, 'timer_start', {'task_id': task, 'topic': 'ignored client topic'}, now)
+    timer_id = s['timer']['id']
+    assert s['timer']['topic'] == '读一章植物笔记'
+    apply(s, 'timer_pause', {'timer_id': timer_id}, now + 600)
+    s = upgrade_state(s)
+    assert s['timer']['elapsed'] == 600 and not s['timer']['running']
+    apply(s, 'timer_resume', {'timer_id': timer_id}, now + 3600)
+    apply(s, 'timer_finish', {'timer_id': timer_id}, now + 4500)
+    assert s['timer'] is None
+    assert s['xp'] == s['attributes']['wisdom'] == 25
+    assert s['knowledge_shard'] == 1
+    record = s['activities'][0]
+    assert record['study_task_id'] == task and record['amount'] == 25
+    assert record['source'] == 'timer' and record['verified'] is False
+    assert study_task_views(s)[0]['minutes'] == 25
+    assert s['study_tasks'][task]['completed_at'] == now + 4500
+    before = copy.deepcopy(s)
+    apply(s, 'study_link', {'task_id': task, 'activity_id': record['id']}, now + 4501)
+    assert s == before  # Completion/link is not another award.
+    with pytest.raises(RuleError):
+        apply(s, 'timer_start', {'task_id': task}, now + 4502)
+
+def test_study_partial_sessions_and_subminute():
+    s = fresh(); now = 1800000000
+    task = study_create(s, now, minutes=2)
+    apply(s, 'timer_start', {'task_id': task}, now)
+    apply(s, 'timer_finish', {}, now + 59)
+    assert s['activities'] == [] and s['study_tasks'][task]['completed_at'] is None
+    for offset in [100, 200]:
+        apply(s, 'timer_start', {'task_id': task}, now + offset)
+        apply(s, 'timer_finish', {}, now + offset + 60)
+    assert s['xp'] == 2 and len(s['activities']) == 2
+    assert s['study_tasks'][task]['completed_at'] == now + 260
+
+def test_study_daily_cap_still_completes_and_cross_midnight():
+    s = fresh()
+    now = datetime(2026, 10, 13, 23, 59, 30, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+    apply(s, 'activity', {'kind': 'study', 'amount': 100}, now)
+    task = study_create(s, now, minutes=1)
+    record = s['activities'][0]
+    apply(s, 'study_link', {'task_id': task, 'activity_id': record['id']}, now)
+    assert s['xp'] == 100 and s['study_tasks'][task]['completed_at'] is not None
+    capped = study_create(s, now - 100, minutes=1)
+    apply(s, 'timer_start', {'task_id': capped}, now - 100)
+    apply(s, 'timer_finish', {}, now - 40)
+    assert s['activities'][-1]['xp'] == 0 and s['study_tasks'][capped]['completed_at'] is not None
+    crossing = study_create(s, now, minutes=1)
+    apply(s, 'timer_start', {'task_id': crossing}, now)
+    apply(s, 'timer_finish', {}, now + 60)
+    assert s['study_tasks'][crossing]['date'] == '2026-10-13'
+    assert s['activities'][-1]['date'] == '2026-10-14'
+    assert s['xp'] == 101 and s['activities'][-1]['study_task_id'] == crossing
+
+def test_study_link_constraints_and_old_save_compatibility():
+    from app.rules import upgrade_state
+    s = fresh(); now = 1800000000
+    apply(s, 'activity', {'kind': 'study', 'amount': 10}, now)
+    del s['activities'][0]['id']; del s['study_tasks']
+    apply(s, 'timer_start', {'topic': '旧计时'}, now)
+    del s['timer']['id']; del s['timer']['study_task_id']
+    upgraded = upgrade_state(s)
+    assert upgraded['activities'][0]['id'] == 'legacy-0'
+    assert upgrade_state(upgraded) == upgraded
+    assert upgraded['xp'] == s['xp'] and upgraded['timer']['topic'] == '旧计时'
+    first = study_create(upgraded, now, minutes=10)
+    second = study_create(upgraded, now, minutes=10)
+    apply(upgraded, 'study_link', {'task_id': first, 'activity_id': 'legacy-0'}, now)
+    with pytest.raises(RuleError):
+        apply(upgraded, 'study_link', {'task_id': second, 'activity_id': 'legacy-0'}, now)
+    next_day = study_create(upgraded, now + 86400)
+    with pytest.raises(RuleError):
+        apply(upgraded, 'study_link', {'task_id': next_day, 'activity_id': 'legacy-0'}, now + 86400)
+    with pytest.raises(RuleError):
+        apply(upgraded, 'timer_finish', {'timer_id': str(uuid.uuid4())}, now + 60)
+    assert upgraded['timer']['topic'] == '旧计时'
+    apply(upgraded, 'timer_finish', {'timer_id': 'legacy-timer'}, now + 60)
+    assert upgraded['activities'][-1]['amount'] == 1
+
+@pytest.mark.parametrize('minutes,title', [(0,'a'), (121,'a'), (True,'a'), (1.5,'a'), (25,''), (25,' '*4), (25,'长'*81)])
+def test_study_rejects_invalid_create(client, minutes, title):
+    create(client)
+    before = client.get('/api/state').json()['state']
+    assert cmd(client, 'study_create', {'task_id': str(uuid.uuid4()), 'title': title, 'target_minutes': minutes}).status_code == 422
+    assert client.get('/api/state').json()['state'] == before
+
+def test_study_api_idempotency_isolation_and_reload(client, monkeypatch):
+    from app import main
+    create(client)
+    now = 1800000000
+    monkeypatch.setattr(main.time, 'time', lambda: now)
+    task_id = str(uuid.uuid4()); request_id = str(uuid.uuid4())
+    data = {'task_id': task_id, 'title': 'API 研习', 'target_minutes': 1}
+    for key in [request_id, request_id, str(uuid.uuid4())]:
+        assert cmd(client, 'study_create', data, key).status_code == 200
+    assert len(client.get('/api/state').json()['state']['study_task_log']) == 1
+    assert cmd(client, 'study_create', {**data, 'title': '不同标题'}).status_code == 422
+    assert cmd(client, 'timer_start', {'task_id': task_id}).status_code == 200
+    now += 61
+    finish = str(uuid.uuid4())
+    def finish_once(_): return cmd(client, 'timer_finish', {}, finish)
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(finish_once, range(3)))
+    assert all(r.status_code == 200 for r in results)
+    saved = client.post('/api/session').json()['state']
+    assert saved['xp'] == 1 and saved['timer'] is None
+    assert saved['study_task_log'][0]['minutes'] == 1
+    assert len(saved['activities']) == 1
+    with TestClient(app) as other:
+        other.post('/api/session'); create(other)
+        assert cmd(other, 'timer_start', {'task_id': task_id}).status_code == 422
+        assert cmd(other, 'study_link', {'task_id': task_id, 'activity_id': saved['activities'][0]['id']}).status_code == 422
+
 def test_create_restore_and_isolate(client):
     create(client)
     assert client.get('/api/state').json()['state']['character']['name'] == '测试旅人'

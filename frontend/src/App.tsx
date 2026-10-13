@@ -36,6 +36,12 @@ import { JournalPanel } from "./components/JournalPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { InventoryWallet } from "./components/InventoryView";
 import { Atlas } from "./components/Atlas";
+import { StudyPage } from "./components/StudyPage";
+import {
+  BuildingPanel,
+  ConversationPanel,
+  StoragePanel,
+} from "./components/WorldPanels";
 import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
 import { activityNames, itemNames, serverNow, useGame } from "./stores/game";
@@ -53,6 +59,14 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     open = useGame((s) => s.open);
   const panel = useGame((s) => s.panel);
   const state = useGame((s) => s.state);
+  const tactile = [
+    "board",
+    "map",
+    "storage",
+    "building",
+    "npc",
+    "activity",
+  ].includes(panel || "");
   useEffect(() => {
     const previous = document.activeElement;
     ref.current?.showModal();
@@ -63,17 +77,18 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className={`modal ${["inventory", "journal", "character"].includes(panel || "") ? "rq-theme" : ""} panel-${useGame.getState().panel} ${useGame.getState().panel === "npc" ? "dialogue-modal" : ""}`}
+      className={`modal ${tactile || ["inventory", "journal", "character"].includes(panel || "") ? "rq-theme" : ""} ${tactile ? "hp-panel" : ""} panel-${panel} ${panel === "npc" ? "dialogue-modal" : ""}`}
       aria-labelledby="panel-title"
       onKeyDown={(event) => {
         if (
-          !["inventory", "journal", "character"].includes(panel || "") ||
-          event.key !== "Tab"
+          event.key !== "Tab" ||
+          (!tactile &&
+            !["inventory", "journal", "character"].includes(panel || ""))
         )
           return;
         const controls = Array.from(
           event.currentTarget.querySelectorAll<HTMLElement>(
-            "button:not(:disabled), a[href], input:not(:disabled), summary, [tabindex='0']",
+            "button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, [tabindex='0']",
           ),
         ).filter((el) => el.getClientRects().length > 0);
         const first = controls[0],
@@ -108,7 +123,9 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
                 ? "rq-button hj-close"
                 : panel === "character"
                   ? "rq-button hc-close"
-                  : "icon-button"
+                  : tactile
+                    ? "rq-button hp-close"
+                    : "icon-button"
           }
           aria-label="关闭面板"
           onClick={() => open(null)}
@@ -151,6 +168,11 @@ function DialogueText({ text }: { text: string }) {
     </div>
   );
 }
+function GrowthReceipt() {
+  const state = useGame(s=>s.state);
+  const latest = state?.activities.at(-1);
+  return <aside className="ha-growth-receipt" aria-label="最近的成长记录"><span><Check size={18}/>{latest ? "最近已记录" : "现实行动 → 游戏成长"}</span>{latest ? <><strong>{latest.note || activityNames[latest.kind]}<small>{latest.source === "timer" ? "计时" : latest.source === "manual" ? "手动" : latest.source} · {latest.date}</small></strong><b>+{latest.xp} EXP{latest.knowledge_shards ? ` · +${latest.knowledge_shards} 碎片` : ""}</b></> : <p>学习积累学识，运动积累体魄。实际奖励以保存结果为准。</p>}</aside>;
+}
 function ActivityPanel() {
   const { state, command, busy } = useGame(),
     [kind, setKind] = useState(useGame.getState().activityKind),
@@ -190,137 +212,139 @@ function ActivityPanel() {
       setNote("");
   }
   return (
-    <>
-      <div className="life-bridge">
-        <Leaf size={22} />
-        <div>
-          <strong>现实的积累，会在世界里留下回响。</strong>
-          <p>
-            学习获得学识，累计 25 EXP
-            可解读遗迹符文；步行获得体魄经验与探索能量。关闭面板即可回到原处继续冒险。
-          </p>
-        </div>
+    <div className="hp-growth">
+      <div className="hp-study-entry">
+        <div><strong>把今天想学的，写进手札</strong><p>选一件小事，专注一会儿，让成长留下回响。</p></div>
+        <button className="rq-button rq-button--primary" onClick={() => useGame.getState().open("study")}><BookOpen size={18} /> 今日研习 <ArrowRight size={16} /></button>
       </div>
-      <div className="section-label">
-        <Timer size={17} /> 专注学习
-      </div>
-      <div className="timer-block">
-        <span>{timer?.topic || "为好奇心留一点时间"}</span>
-        <strong>
-          {String(Math.floor(seconds / 60)).padStart(2, "0")}
-          <b>:</b>
-          {String(seconds % 60).padStart(2, "0")}
-        </strong>
-        {!timer ? (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void command("timer_start", { topic });
-            }}
-          >
+      <div className="life-bridge"><Leaf size={22}/><div><strong>把今天的行动，记作一次成长</strong><p>计时或手动记录 · 保存后结算游戏奖励</p></div></div>
+      <GrowthReceipt />
+      <div className="hp-growth-columns">
+        <section className="hp-focus-page">
+          <div className="section-label">
+            <Timer size={17} /> 专注学习 <span className="ha-source">计时记录</span>
+          </div>
+          <div className="timer-block">
+            <span>{timer?.topic || "为好奇心留一点时间"}</span>
+            <strong>
+              {String(Math.floor(seconds / 60)).padStart(2, "0")}
+              <b>:</b>
+              {String(seconds % 60).padStart(2, "0")}
+            </strong>
+            {!timer ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void command("timer_start", { topic });
+                }}
+              >
+                <label>
+                  学习主题
+                  <input
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    maxLength={80}
+                    placeholder="今天想学些什么？"
+                    required
+                  />
+                </label>
+                <button className="primary" disabled={busy}>
+                  <Play size={16} /> 开始专注
+                </button>
+              </form>
+            ) : (
+              <div className="button-row">
+                <button
+                  onClick={() =>
+                    void command(timer.running ? "timer_pause" : "timer_resume")
+                  }
+                  disabled={busy}
+                >
+                  {timer.running ? <Pause size={16} /> : <Play size={16} />}{" "}
+                  {timer.running ? "暂停" : "继续"}
+                </button>
+                <button
+                  className="primary"
+                  onClick={() => void command("timer_finish")}
+                  disabled={busy}
+                >
+                  结束并记录
+                </button>
+              </div>
+            )}
+            <small>暂停时间不计入学习时长，刷新后可以继续。</small>
+          </div>
+        </section>
+        <section className="hp-record-page">
+          <div className="section-label">
+            <Plus size={17} /> 手动记录 <span className="ha-source">自行填写</span>
+          </div>
+          <form className="form-grid" onSubmit={record}>
             <label>
-              学习主题
+              活动类型
+              <select
+                value={kind}
+                onChange={(e) => {
+                  setKind(e.target.value);
+                  setAmount(e.target.value === "steps" ? "3000" : "25");
+                }}
+              >
+                {Object.entries(activityNames).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              日期（中国标准时间）
               <input
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                maxLength={80}
-                placeholder="今天想学些什么？"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
                 required
               />
             </label>
-            <button className="primary" disabled={busy}>
-              <Play size={16} /> 开始专注
+            {kind !== "management" && (
+              <label>
+                {kind === "steps" ? "当天累计步数" : "时长（分钟）"}
+                <input
+                  type="number"
+                  min="1"
+                  max={kind === "steps" ? 100000 : 480}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                />
+              </label>
+            )}
+            <label className="full-width">
+              {kind === "exercise" ? "运动类型与备注" : "主题或备注"}
+              <input
+                value={note}
+                maxLength={200}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder={
+                  kind === "management"
+                    ? "例如：完成本周预算检查"
+                    : "给这次成长留一句话"
+                }
+              />
+            </label>
+            <button className="primary full-width" disabled={busy}>
+              保存这次成长 <Leaf size={16} />
             </button>
           </form>
-        ) : (
-          <div className="button-row">
-            <button
-              onClick={() =>
-                void command(timer.running ? "timer_pause" : "timer_resume")
-              }
-              disabled={busy}
-            >
-              {timer.running ? <Pause size={16} /> : <Play size={16} />}{" "}
-              {timer.running ? "暂停" : "继续"}
-            </button>
-            <button
-              className="primary"
-              onClick={() => void command("timer_finish")}
-              disabled={busy}
-            >
-              结束并记录
-            </button>
-          </div>
-        )}
-        <small>暂停时间不计入学习时长，刷新后可以继续。</small>
+          <p className="muted">
+            手动记录不代表已验证。每个属性每天最多获得 100
+            点现实活动经验，休息不会扣除已有成长。
+          </p>
+        </section>
       </div>
-      <div className="section-label">
-        <Plus size={17} /> 手动记录
-      </div>
-      <form className="form-grid" onSubmit={record}>
-        <label>
-          活动类型
-          <select
-            value={kind}
-            onChange={(e) => {
-              setKind(e.target.value);
-              setAmount(e.target.value === "steps" ? "3000" : "25");
-            }}
-          >
-            {Object.entries(activityNames).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          日期（中国标准时间）
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </label>
-        {kind !== "management" && (
-          <label>
-            {kind === "steps" ? "当天累计步数" : "时长（分钟）"}
-            <input
-              type="number"
-              min="1"
-              max={kind === "steps" ? 100000 : 480}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-          </label>
-        )}
-        <label className="full-width">
-          {kind === "exercise" ? "运动类型与备注" : "主题或备注"}
-          <input
-            value={note}
-            maxLength={200}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder={
-              kind === "management"
-                ? "例如：完成本周预算检查"
-                : "给这次成长留一句话"
-            }
-          />
-        </label>
-        <button className="primary full-width" disabled={busy}>
-          保存这次成长 <Leaf size={16} />
-        </button>
-      </form>
-      <p className="muted">
-        手动记录不代表已验证。每个属性每天最多获得 100
-        点现实活动经验，休息不会扣除已有成长。
-      </p>
-    </>
+    </div>
   );
 }
-function Panels() {
+export function Panels() {
   const {
     panel,
     selected,
@@ -336,6 +360,7 @@ function Panels() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const preferences = usePreferences();
   if (!panel || !state) return null;
+  if (panel === "study") return <StudyPage />;
   const titles: Record<string, string> = {
     board: "委托告示板",
     map: "回响大陆 · 全域地图",
@@ -349,10 +374,8 @@ function Panels() {
     ai: "AI 旅途伙伴",
     menu: "旅途菜单",
     building: selected?.name || "建筑",
-    npc: selected?.name || "对话",
+    npc: "林间相逢",
   };
-  const buildingId = selected?.building || selected?.id || "home";
-  const level = state.buildings[buildingId] || 1;
   return (
     <Modal key={panel} title={titles[panel]}>
       {panel === "menu" && (
@@ -376,155 +399,17 @@ function Panels() {
       {panel === "map" && <Atlas />}
       {panel === "board" && (
         <>
-          <p className="muted">
-            在这里接取委托，达成目标后回到发布处交付。金色叹号表示有新任务。
-          </p>
           <QuestList giver={selected?.id} />
         </>
       )}
-      {panel === "storage" && (
-        <>
-          <p className="muted">
-            把物品留在家里，需要时再取回。储物箱内容会保存。
-          </p>
-          {Object.entries(state.storage).map(([item, count]) => (
-            <div className="shop-row" key={item}>
-              <span>
-                {itemNames[item]}
-                <small>
-                  背包 {state.inventory[item]} · 箱中 {count}
-                </small>
-              </span>
-              <div className="button-row">
-                <button
-                  disabled={busy || !state.inventory[item]}
-                  onClick={() =>
-                    void command("store", {
-                      target: "home_chest",
-                      item,
-                      amount: 1,
-                    })
-                  }
-                >
-                  存入 1
-                </button>
-                <button
-                  disabled={busy || !count}
-                  onClick={() =>
-                    void command("withdraw", {
-                      target: "home_chest",
-                      item,
-                      amount: 1,
-                    })
-                  }
-                >
-                  取回 1
-                </button>
-              </div>
-            </div>
-          ))}
-        </>
-      )}
+      {panel === "storage" && <StoragePanel />}
       {panel === "character" && <CharacterPanel />}
       {panel === "inventory" && <InventoryPanel />}
-      {panel === "building" && selected && (
-        <>
-          <div className="building-banner">
-            <Hammer size={32} />
-            <div>
-              <h3>{selected.name}</h3>
-              <span>等级 {level} / 3</span>
-            </div>
-          </div>
-          <p>
-            {
-              {
-                home: "升级至 2 级后，新种植的作物成熟时间由 60 秒缩短至 45 秒。",
-                workshop: "每升级一级，出售每份萝卜多获得 1 金币。",
-                library: "每一级使首次解读遗迹的知识碎片奖励增加 3 个。",
-              }[buildingId]
-            }
-          </p>
-          <div className="note">
-            <b>{level < 3 ? "升级材料" : "已达最高等级"}</b>
-            {level < 3 && (
-              <p>
-                {level * 6} 木材 · {level * 3} 石料 · {level * 10} 金币
-              </p>
-            )}
-          </div>
-          <button
-            className="primary"
-            disabled={busy || level >= 3}
-            onClick={() => void command("upgrade", { target: selected.id })}
-          >
-            升级建筑 <ArrowRight size={16} />
-          </button>
-          {buildingId === "workshop" && (
-            <>
-              <div className="section-label">工坊柜台</div>
-              <div className="shop-row">
-                <span>
-                  出售萝卜 <small>1 萝卜 → {8 + level - 1} 金币</small>
-                </span>
-                <button
-                  disabled={busy || !state.inventory.crop}
-                  onClick={() =>
-                    void command("sell", { target: "workshop_counter" })
-                  }
-                >
-                  出售
-                </button>
-              </div>
-              <div className="shop-row">
-                <span>
-                  购买种子 <small>2 金币 → 1 种子</small>
-                </span>
-                <button
-                  disabled={busy || state.inventory.gold < 2}
-                  onClick={() =>
-                    void command("buy_seed", { target: "workshop_counter" })
-                  }
-                >
-                  购买
-                </button>
-              </div>
-              <div className="shop-row">
-                <span>
-                  制作木板 <small>3 木材 → 1 木板</small>
-                </span>
-                <button
-                  disabled={busy || state.inventory.wood < 3}
-                  onClick={() =>
-                    void command("craft", { target: "workshop_counter" })
-                  }
-                >
-                  制作
-                </button>
-              </div>
-            </>
-          )}
-        </>
-      )}
+      {panel === "building" && <BuildingPanel />}
       {panel === "npc" && selected && (
-        <>
-          <div className="character-profile">
-            <PixelPerson variant={selected.id === "lia" ? 0 : 2} />
-            <div>
-              <h3>{selected.name}</h3>
-              <p>
-                {selected.id === "lia" ? "图书管理员" : "森林向导"} · 关系值{" "}
-                {state.relationships[selected.id]}
-              </p>
-            </div>
-          </div>
+        <ConversationPanel>
           <DialogueText text={dialogue} />
-          <small>预设剧情对话</small>
-          <QuestList giver={selected.id} />
-          <button className="primary" onClick={() => open(null)}>
-            再会，旅人 <ArrowRight size={16} />
-          </button>
-        </>
+        </ConversationPanel>
       )}
       {panel === "journal" && <JournalPanel />}
       {panel === "guide" && (

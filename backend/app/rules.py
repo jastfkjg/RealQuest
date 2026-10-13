@@ -1,6 +1,7 @@
 """Deterministic rules. No model output can change game assets."""
 import math
 import copy
+import uuid
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
@@ -26,6 +27,11 @@ def upgrade_state(original):
     state.setdefault('tracked_quest', 'settle_in')
     state.setdefault('stats', {'wood':max(state['inventory'].get('wood',0),3 if 'first_gather' in state['events'] else 0),'stone':state['inventory'].get('stone',0),'harvest':state['inventory'].get('crop',0),'sold':0,'crafted':state['inventory'].get('plank',0)})
     state.setdefault('storage', {key:0 for key in ['wood','stone','seed','crop','plank']})
+    state.setdefault('study_tasks', {})
+    for index, record in enumerate(state['activities']):
+        record.setdefault('id', f'legacy-{index}')
+    if state['timer'] is not None:
+        state['timer'].setdefault('id', 'legacy-timer')
     if state.get('save_version', 1) < 2:
         if state['location'] not in ['overworld', *INTERIORS] or not walkable(**state['position'], location=state['location']):
             state['location']='overworld'
@@ -53,6 +59,23 @@ def spend(state, costs):
 def grant_xp(state, attribute, amount):
     state['attributes'][attribute] += amount
     state['xp'] += amount
+
+def study_task(state, task_id):
+    require(isinstance(task_id, str) and task_id in state['study_tasks'], '这项研习任务不存在')
+    return state['study_tasks'][task_id]
+
+def study_task_views(state):
+    views = []
+    for task in state.get('study_tasks', {}).values():
+        records = [a for a in state['activities'] if a.get('study_task_id') == task['id']]
+        views.append({**task, 'minutes': sum(a['amount'] for a in records),
+                      'earned_xp': sum(a['xp'] for a in records), 'record_count': len(records)})
+    return sorted(views, key=lambda t: t['created_at'], reverse=True)
+
+def complete_study_task(state, task, now):
+    minutes = sum(a['amount'] for a in state['activities'] if a.get('study_task_id') == task['id'])
+    if minutes >= task['target_minutes'] and task['completed_at'] is None:
+        task['completed_at'] = now
 
 def activity(state, data, now, source='manual'):
     kind = data.get('kind')
@@ -85,11 +108,13 @@ def activity(state, data, now, source='manual'):
     grant_xp(state, attribute, earned)
     if kind in ['steps', 'exercise']:
         state['energy'] += earned // 2
+    shards = 0
     if kind == 'study':
         # Award shards at cumulative daily XP thresholds, independent of submission splitting.
         before = (daily[attribute] - earned) // 25
-        state['knowledge_shard'] += daily[attribute] // 25 - before
-    state['activities'].append({'kind': kind, 'amount': amount, 'date': day_key, 'source': source, 'verified': False, 'note': note, 'xp': earned, 'created_at': now})
+        shards = daily[attribute] // 25 - before
+        state['knowledge_shard'] += shards
+    state['activities'].append({'id': str(uuid.uuid4()), 'kind': kind, 'amount': amount, 'date': day_key, 'source': source, 'verified': False, 'note': note, 'xp': earned, 'knowledge_shards': shards, 'created_at': now})
     return f'记录已保存，获得 {earned} 点成长经验' if earned else '记录已保存，今日该属性奖励已达上限'
 
 def apply(state, action, data, now):
@@ -119,15 +144,49 @@ def apply(state, action, data, now):
         return ''
     if action == 'activity':
         return activity(state, data, now)
+    if action == 'study_create':
+        task_id = data.get('task_id')
+        require(isinstance(task_id, str) and len(task_id) == 36, '任务标识无效')
+        try:
+            require(str(uuid.UUID(task_id)) == task_id, '任务标识无效')
+        except ValueError:
+            raise RuleError('任务标识无效')
+        title = data.get('title')
+        require(isinstance(title, str) and 1 <= len(title.strip()) <= 80, '请写下 1–80 字的学习主题')
+        title = title.strip()
+        minutes = integer(data.get('target_minutes'), 1, 120)
+        previous = state['study_tasks'].get(task_id)
+        if previous:
+            require(previous['title'] == title and previous['target_minutes'] == minutes, '任务标识已用于另一项研习')
+            return '这项研习已经记下了'
+        require(sum(t['date'] == today for t in state['study_tasks'].values()) < 20, '今天已记下 20 项研习，先完成一项吧')
+        state['study_tasks'][task_id] = {'id': task_id, 'title': title, 'target_minutes': minutes,
+            'date': today, 'timezone': 'Asia/Shanghai', 'created_at': now, 'completed_at': None}
+        return '研习已记下，准备好就开始吧'
+    if action == 'study_link':
+        task = study_task(state, data.get('task_id'))
+        record = next((a for a in state['activities'] if a['id'] == data.get('activity_id')), None)
+        require(record is not None and record['kind'] == 'study', '请选择一条学习记录')
+        require(record['date'] == task['date'], '只能关联任务当天的学习记录')
+        require(record.get('study_task_id') in [None, task['id']], '这条记录已经记入另一项研习')
+        record['study_task_id'] = task['id']
+        complete_study_task(state, task, now)
+        return '记录已记入研习，已有成长不会重复发放'
     if action.startswith('timer_'):
         timer = state['timer']
         if action == 'timer_start':
             require(timer is None, '已有学习计时，请先结束')
             topic = str(data.get('topic', '')).strip()
+            task_id = data.get('task_id')
+            task = study_task(state, task_id) if task_id is not None else None
+            if task:
+                require(task['completed_at'] is None, '这项研习已经完成，可以写下新的学习任务')
+                topic = task['title']
             require(1 <= len(topic) <= 80, '请输入 1–80 字的学习主题')
-            state['timer'] = {'topic': topic, 'elapsed': 0, 'started_at': now, 'running': True}
+            state['timer'] = {'id': str(uuid.uuid4()), 'topic': topic, 'elapsed': 0, 'started_at': now, 'running': True, 'study_task_id': task_id}
             return '学习计时已开始'
         require(timer is not None, '没有进行中的学习计时')
+        require(data.get('timer_id', timer['id']) == timer['id'], '学习计时已改变，请刷新后重试')
         if action == 'timer_pause':
             require(timer['running'], '计时已经暂停')
             timer['elapsed'] += max(0, now - timer['started_at'])
@@ -139,6 +198,13 @@ def apply(state, action, data, now):
             seconds = timer['elapsed'] + (max(0, now-timer['started_at']) if timer['running'] else 0)
             minutes = min(480, int(seconds // 60))
             message = activity(state, {'kind': 'study', 'amount': minutes, 'note': timer['topic']}, now, 'timer') if minutes else '不足一分钟，计时已结束，未发放奖励'
+            if minutes:
+                record = state['activities'][-1]
+                record['timer_id'] = timer['id']
+                if timer.get('study_task_id'):
+                    task = study_task(state, timer['study_task_id'])
+                    record['study_task_id'] = task['id']
+                    complete_study_task(state, task, now)
             state['timer'] = None
             return message
         else:

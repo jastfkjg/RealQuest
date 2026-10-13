@@ -1,5 +1,21 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-13 UI archetypes — candidate
+
+- Owner requested all six existing screen archetypes. Implemented interactive map selection/destination dock, pinned notice index/detail, NPC scene with optional request, paired item grids, blueprint stages/materials, and utility growth workspace with actual source/reward receipt.
+- Preserved the concurrent Today study feature, original dirty tree, inventory/journal/character/arrival compositions, player DB and authoritative commands. No new bitmap assets or save fields.
+- Matched before/after fixtures at five viewports; actual game screenshots/recording; storage and quest mutation/input/persistence coverage; full fixed-build desktop/mobile smoke passes. Backend 44 tests, TypeScript/Vite build, 31-image audit and 36 contrast cases (921 text runs, min 4.56:1) pass.
+- Detailed implementation, evidence, commands, limits and cleanup: `docs/tasks/07-ui-archetypes.md`. Final visual approval pending. No commit/push/deploy.
+
+## 2026-10-10 World dialogs and item identities — current checkpoint
+
+- Owner explicitly requested the six pictured dialogs and recognizable wood/seed icons. Shared Hearthwood materials, different layouts: pinned commissions, conversation, folded map, chest tray, repair order, efficient growth forms.
+- Original 16px logs/seed pouch rebuilt by `tools/build_item_icons.py`; registry/quickbar/rewards/materials use the same identities. All previous source PNGs retained; new icon hashes/script and dimensions recorded. No world, rules, save or engine migration.
+- DEV-only `/dev/dialogs` reuses actual panels, labeled fixtures generated from existing backend create/upgrade rules; tested zero API/cookie/localStorage writes and absent from production output.
+- Isolated `output/dialogs-reference/test.db`, 5187/8021. Final build, 32 backend tests, full desktop/mobile smoke, RPG, journal, dialogs captures/interactions, 31-image audit/pixel rebuild and frame client pass. 36 contrast cases / 844 visible text runs, minimum 4.65:1.
+- Real 1440×900/390×844 and 768/1920/720 captures inspected, including mobile bottoms. Storage rejection/pending/retry/duplicate/conservation/reload, actual touch recording, keyboard focus/input/Escape and non-teleporting markers verified. Physical Safari/touch/keyboard/zoom remain unverified.
+- Candidate awaiting visual review; other menu/guide/settings/AI content untouched. Complete record in `docs/tasks/05-world-dialogs.md`. No commit/push/deploy; unrelated active database WAL/SHM preserved. Cleanup handoff is recorded in that report.
+
 ## 2026-10-10 Hearthwood inventory reference — Pass A
 
 - Scope: audit, isolated component preview, real inventory only, matched starter screenshots; stop for owner visual approval before Pass B or other screens.
@@ -148,3 +164,12 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - Two generated blank welcome materials packaged losslessly with source/prompt provenance. Assets audit verifies 29 images; Kenney still absent; playable world unchanged.
 - Browser checks cover all six create/reload/portrait/walk flows, blank name, keyboard/IME, rejection/pending/retry/idempotency, DPR2 touch and isolated preview. 32 backend tests and original RPG regression pass. Frame client capture inspected. Five viewport screenshots inspected. Mobile contrast findings fixed; default/hover text sampling passes, minimum 4.97:1.
 - User databases and pre-existing `scripts/start.py` edits left untouched; all mutations ran against output/arrival-reference/test.db. Stop at actual homepage visual checkpoint. Further details/commands/limits in docs/tasks/04-arrival-slice.md.
+
+## 2026-10-13 Today study — learning loop
+
+- Authorized one end-to-end learning-task slice, with Hearthwood game-page feel. Added a full-screen two-leaf study journal reached from 现实成长 → 今日研习; mobile prioritizes timer actions. Reused the existing journal/actor art, original inline SVG hourglass, shared tokens, restrained motion and reduced-motion handling.
+- Server JSON saves gain stable study tasks and record/timer identities. Existing timer produces linked activities; completion/retroactive association never awards XP again. Same-day linking, cumulative partial sessions, daily cap, cross-midnight finish-day settlement and legacy saves covered by deterministic tests. No SQL schema change or user-save mutation.
+- First build and 44 backend tests pass. Real Chromium one-minute timer, create/finish lost-response retry, paused refresh, manual record association without re-award, world threshold marker, keyboard/IME/Escape, mobile touch and 5 viewport layouts pass. Contrast edge findings corrected: 10 texture-sampled cases now pass, minimum 4.89:1. 31-image source/hash audit and existing game skill movement client pass.
+- Shared workspace continues to receive unrelated world-dialog changes. A broad smoke test was interrupted by HMR; preserved those edits and switched this task's 5193 frontend to a frozen production snapshot in output/study-reference/build. Backend 8023 uses only output/study-reference/test.db. Final fixed-build regression/cleanup and evidence will be recorded in docs/tasks/06-today-study.md.
+- Final: original desktop/mobile smoke passed on the fixed build after concurrent dialog work's locator update. Study flow passed on production output; final complete state now uses a closing-book message. Final contrast: 10 cases / 268 text runs / min 4.97:1. Backend 44 passed, build/audit/diff checks passed. Evidence and scope recorded in docs/tasks/06-today-study.md.
+- Handoff: fixed preview 5193 (Vite PID63576) + isolated backend8023 (PID67308) retained for manual review; preview uses realquest_study_preview Cookie to avoid other local guests. Both healthy. Own automation sessions/browsers exited; old own dev servers stopped. Other task 5189, independently running browser tests and unowned shared tool hosts preserved. No commit/push/deploy; physical Safari/native keyboard/browser-menu zoom remain unverified.

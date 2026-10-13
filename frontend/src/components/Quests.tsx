@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import {
   Check,
   Flag,
@@ -6,58 +7,166 @@ import {
   BookOpen,
   Circle,
   LockKeyhole,
+  ChevronRight,
 } from "lucide-react";
 import { useGame, itemNames } from "../stores/game";
 import { questTarget } from "../game/navigation";
 import type { Quest } from "../types";
 import { questStatuses } from "../game/questPresentation";
+import { itemDefinitions } from "../game/items";
+export function QuestRewards({ quest: q }: { quest: Quest }) {
+  return (
+    <div className="quest-reward" aria-label="委托奖励">
+      <span>回礼</span>
+      {Object.entries(q.reward).map(([id, value]) => (
+        <span key={id}>
+          <img
+            src={
+              id === "gold"
+                ? "/assets/ninja-adventure/icons/gold.png"
+                : itemDefinitions[id]?.icon
+            }
+            alt=""
+            width={16}
+            height={16}
+          />
+          {value} {itemNames[id]}
+        </span>
+      ))}
+      <span>{q.xp} EXP</span>
+    </div>
+  );
+}
+export function QuestDetails({
+  quest: q,
+  conversational = false,
+}: {
+  quest: Quest;
+  conversational?: boolean;
+}) {
+  return (
+    <>
+      <p className="ha-quest-description">{q.description}</p>
+      <ul className="ha-objectives">
+        {q.objectives.map((item, i) => (
+          <li key={item} className={q.checks[i] ? "complete" : ""}>
+            {q.checks[i] ? <Check size={17} /> : <Circle size={15} />}
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      <QuestRewards quest={q} />
+      <QuestActions quest={q} conversational={conversational} />
+    </>
+  );
+}
 export function QuestList({ giver }: { giver?: string }) {
   const { state } = useGame();
+  const [selectedId, setSelectedId] = useState(() => {
+    const entries =
+      state?.quest_log.filter((q) => !giver || q.giver === giver) || [];
+    return (
+      (
+        entries.find((q) =>
+          ["ready", "active", "available"].includes(q.status),
+        ) || entries[0]
+      )?.id || ""
+    );
+  });
+  const detailRef = useRef<HTMLElement>(null);
+  const [page, setPage] = useState(0);
   if (!state) return null;
   const quests = state.quest_log.filter((q) => !giver || q.giver === giver);
+  const selected =
+    quests.find((q) => q.id === selectedId) ||
+    quests.find((q) => ["ready", "active", "available"].includes(q.status)) ||
+    quests[0];
+  if (!selected)
+    return <p className="hp-board-intro">这里暂时没有新的委托。</p>;
   return (
-    <div className="quest-cards">
-      {quests.map((q) => {
-        return (
-          <article className={`quest-entry quest-${q.status}`} key={q.id}>
-            <div className="quest-entry-title">
-              <h3>{q.title}</h3>
-              <span className="quest-status">{questStatuses[q.status]}</span>
-            </div>
-            <small>
-              <MapPin size={12} />
-              {q.giver_name}
-            </small>
-            <p>{q.description}</p>
-            <ul>
-              {q.objectives.map((item, i) => (
-                <li key={item} className={q.checks[i] ? "complete" : ""}>
-                  {q.checks[i] ? <Check size={14} /> : <Circle size={12} />}{" "}
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="quest-reward">
-              奖励：
-              {Object.entries(q.reward)
-                .map(([k, v]) => `${v} ${itemNames[k]}`)
-                .join(" · ")}{" "}
-              · {q.xp} EXP
-            </div>
-            <QuestActions quest={q} />
-          </article>
-        );
-      })}
-      {!quests.length && <p className="muted">这里暂时没有新的委托。</p>}
+    <div className="ha-mission-board">
+      <nav className="ha-notices" aria-label="告示板委托">
+        <div className="ha-board-caption">
+          <Flag size={16} /> {quests.length} 份告示 · 选择一份查看
+        </div>
+        {quests.slice(page * 4, page * 4 + 4).map((q, i) => (
+          <button
+            key={q.id}
+            className="ha-notice"
+            data-status={q.status}
+            aria-pressed={selected.id === q.id}
+            onClick={() => {
+              setSelectedId(q.id);
+              if (window.matchMedia("(max-width: 650px)").matches)
+                detailRef.current?.scrollIntoView({
+                  block: "start",
+                  behavior: "instant",
+                });
+            }}
+          >
+            <span className="ha-notice-pin" aria-hidden="true" />
+            <span className="ha-notice-top">
+              <span>委托 {String(page * 4 + i + 1).padStart(2, "0")}</span>
+              <span>
+                {q.status === "locked" ? (
+                  <LockKeyhole size={14} />
+                ) : q.status === "claimed" ? (
+                  <Check size={14} />
+                ) : (
+                  <Flag size={14} />
+                )}{" "}
+                {questStatuses[q.status]}
+              </span>
+            </span>
+            <strong>{q.title}</strong>
+            <span className="ha-notice-bottom">
+              {q.status === "active" || q.status === "ready"
+                ? `${q.checks.filter(Boolean).length} / ${q.checks.length} 项已完成`
+                : q.giver_name}
+              <ChevronRight size={16} />
+            </span>
+          </button>
+        ))}
+        {quests.length > 4 && (
+          <div className="ha-board-pages">
+            <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+              上一页
+            </button>
+            <button
+              disabled={(page + 1) * 4 >= quests.length}
+              onClick={() => setPage(page + 1)}
+            >
+              下一页
+            </button>
+          </div>
+        )}
+      </nav>
+      <article
+        ref={detailRef}
+        className="ha-selected-notice"
+        key={selected.id}
+        aria-label="选中的委托"
+      >
+        <div className="ha-notice-seal" aria-hidden="true">
+          <Flag size={24} />
+        </div>
+        <small>
+          {selected.giver_name} · {questStatuses[selected.status]}
+        </small>
+        <h3>{selected.title}</h3>
+        <QuestDetails quest={selected} />
+      </article>
     </div>
   );
 }
 export function QuestActions({
   quest: q,
   journal = false,
+  conversational = false,
 }: {
   quest: Quest;
   journal?: boolean;
+  conversational?: boolean;
 }) {
   const { state, selected, command, busy, navigate, open } = useGame();
   if (!state) return null;
@@ -79,7 +188,8 @@ export function QuestActions({
           disabled={busy}
           onClick={() => void command("quest_accept", { quest_id: q.id })}
         >
-          {journal && busy ? "处理中…" : "接取任务"} <Flag size={15} />
+          {busy ? "处理中…" : conversational ? "接受委托" : "接取任务"}{" "}
+          <Flag size={15} />
         </button>
       ) : q.status === "ready" && atGiver ? (
         <button
@@ -87,7 +197,11 @@ export function QuestActions({
           disabled={busy}
           onClick={() => void command("quest_claim", { quest_id: q.id })}
         >
-          {journal && busy ? "处理中…" : "交付任务 · 领取奖励"}
+          {busy
+            ? "处理中…"
+            : conversational
+              ? "交付委托，领取回礼"
+              : "交付任务 · 领取奖励"}
         </button>
       ) : (
         <button

@@ -96,17 +96,28 @@ async function exitRoom(p) {
   await ready(p, (s) => s.location === "overworld", "exit room");
   await p.waitForTimeout(350);
 }
-const card = (p, title) =>
-  p
-    .locator(".quest-entry")
-    .filter({ has: p.getByRole("heading", { name: title, exact: true }) });
+async function selectCommission(p, title) {
+  if (await p.getByRole("navigation", { name: "告示板委托" }).count()) {
+    await p
+      .getByRole("navigation", { name: "告示板委托" })
+      .getByRole("button", { name: new RegExp(title) })
+      .click();
+  } else if (
+    await p.getByRole("button", { name: "继续 · 聊聊这份委托" }).count()
+  ) {
+    await p.getByRole("button", { name: "继续 · 聊聊这份委托" }).click();
+  }
+  await p.getByRole("heading", { name: title, exact: true }).waitFor();
+}
 async function accept(p, title) {
-  await card(p, title).getByRole("button", { name: "接取任务" }).click();
+  await selectCommission(p, title);
+  await p.getByRole("button", { name: /^(接取任务|接受委托)$/ }).click();
   await p.waitForTimeout(200);
 }
 async function claim(p, title) {
-  await card(p, title)
-    .getByRole("button", { name: "交付任务 · 领取奖励" })
+  await selectCommission(p, title);
+  await p
+    .getByRole("button", { name: /^(交付任务 · 领取奖励|交付委托，领取回礼)$/ })
     .click();
   await p.waitForTimeout(200);
 }
@@ -128,11 +139,10 @@ try {
     await snap(p, "home");
     await clickWorld(p, "home_chest");
     await ready(p, (s) => s.mode === "storage", "approach storage");
-    const seedRow = p.locator(".shop-row").filter({ hasText: "种子" });
-    await seedRow.getByRole("button", { name: "存入" }).click();
+    await p.getByRole("button", { name: "存入 1 种子", exact: true }).click();
     await p.waitForTimeout(200);
     assert.equal((await state(p)).storage.seed, 1);
-    await seedRow.getByRole("button", { name: "取回" }).click();
+    await p.getByRole("button", { name: "取回 1 种子", exact: true }).click();
     await p.waitForTimeout(200);
     assert.equal((await state(p)).inventory.seed, 6);
     await close(p);
@@ -237,7 +247,8 @@ try {
     await snap(p, "forest");
     await p.getByRole("button", { name: "地图", exact: true }).click();
     await snap(p, "atlas");
-    await p.getByRole("button", { name: /林间小屋/ }).click();
+    await p.getByRole("button", { name: /^选择林间小屋/ }).click();
+    await p.getByRole("button", { name: "标记方向并返回" }).click();
     await ready(p, (s) => s.mode === "explore", "map waypoint");
     await moveTo(p, 580, 352);
     await moveTo(p, 580, 432);
@@ -274,7 +285,7 @@ try {
     await snap(p, "workshop");
     await clickWorld(p, "workshop_counter");
     await ready(p, (s) => s.mode === "building", "workshop counter");
-    await p.getByRole("button", { name: "升级建筑", exact: true }).click();
+    await p.getByRole("button", { name: "开始修缮", exact: true }).click();
     await p.waitForTimeout(200);
     assert.equal((await state(p)).buildings.workshop, 2);
     await p.getByRole("button", { name: "出售", exact: true }).click();

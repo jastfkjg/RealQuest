@@ -13,6 +13,7 @@ export interface World extends MapData {
   interiors: Record<string, MapData>;
 }
 export interface GameState {
+  study_task_log?: StudyTask[];
   location: string;
   quest_log: Quest[];
   quests: Record<string, { status: string; accepted_at: number }>;
@@ -32,6 +33,10 @@ export interface GameState {
   relationships: Record<string, number>;
   events: string[];
   activities: {
+    id?: string;
+    study_task_id?: string;
+    knowledge_shards?: number;
+    created_at?: number;
     kind: string;
     amount: number;
     date: string;
@@ -41,6 +46,8 @@ export interface GameState {
     xp: number;
   }[];
   timer: {
+    id?: string;
+    study_task_id?: string | null;
     topic: string;
     elapsed: number;
     started_at: number;
@@ -62,6 +69,7 @@ export type Panel =
   | "character"
   | "inventory"
   | "activity"
+  | "study"
   | "journal"
   | "guide"
   | "settings"
@@ -69,6 +77,19 @@ export type Panel =
   | "building"
   | "npc"
   | null;
+
+export interface StudyTask {
+  id: string;
+  title: string;
+  target_minutes: number;
+  date: string;
+  timezone: string;
+  created_at: number;
+  completed_at: number | null;
+  minutes: number;
+  earned_xp: number;
+  record_count: number;
+}
 
 export interface Furniture {
   kind: string;

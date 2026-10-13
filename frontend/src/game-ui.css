@@ -780,7 +780,7 @@ a:focus-visible,
   transition: none !important;
 }
 .item-icon {
-  background: transparent url("/assets/ninja-adventure/icons/wood.png")
+  background: transparent url("/assets/hearthwood/items/wood.png")
     center/contain no-repeat;
   border: 0;
   border-radius: 0;
@@ -792,7 +792,7 @@ a:focus-visible,
   background-image: url("/assets/ninja-adventure/icons/stone.png");
 }
 .item-icon.seed {
-  background-image: url("/assets/ninja-adventure/icons/seed.png");
+  background-image: url("/assets/hearthwood/items/seed.png");
 }
 .item-icon.crop {
   background-image: url("/assets/ninja-adventure/icons/crop.png");

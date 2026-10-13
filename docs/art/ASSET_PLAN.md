@@ -1,5 +1,17 @@
 # RealQuest Asset Plan and Provenance
 
+## Today study material reuse — 2026-10-13
+
+`StudyPage.tsx` / `study.css` reuse the existing `journal-spread-v1.webp` and selected `PixelPerson` sheet without source edits, resampling, new raster downloads or generated artwork. The original journal nine-slice uses the already audited 220/140/260/140 source insets; the mobile view exposes one leaf. Actor frames stay at integer 3×/4× scaling. The hourglass is original project SVG geometry authored in `StudyPage.tsx` and colored with existing Hearthwood tokens. It is decoration beside a native DOM timer, not a raster asset or simulated possession. No new font, audio or runtime image is added. Candidate evidence: `docs/tasks/06-today-study.md`.
+
+## World-dialog item correction — 2026-10-10
+
+Owner reported that the existing wood crop looked like an orange vessel and the seed pouch looked like a medical bag. Audit confirmed wood was cropped from `tileset.png` at `(16,144,32,160)` by `frontend/scripts/build-village-assets.py`; the seed was a code-drawn bag with a cross. Their pixels did not communicate the stable item meanings.
+
+Two new **original project icons**, `frontend/public/assets/hearthwood/items/{wood,seed}.png`, replace only the presentation bindings: bark logs with cut ends/growth rings, and an open seed pouch with grains and a sprout. Both are 16×16 RGBA; together they add 509 bytes. `tools/build_item_icons.py` rebuilds them deterministically; `--check` compares decoded pixels without changing files. Exact file/script SHA-256, dimensions and visible bounds are in `asset-manifest.json` under `original_item_assets`. Existing source and legacy runtime PNGs remain byte-identical.
+
+The shared item registry, CSS quickbar, commission rewards, storage and repair materials use these identities. Other item sprites, actors, the world tileset and all supplied source samples remain unchanged. Dialog materials are scoped CSS; repair art reuses the audited house derivatives. No new external pack, font or generated background is acquired in this pass. Current candidate and screenshots: [world-dialog task record](../tasks/05-world-dialogs.md).
+
 **Checked:** 2026-10-10.  
 **Direction:** Hearthwood.  
 **Scope:** Fill the next UI/interaction slice, not replace the entire game's art.

@@ -379,8 +379,8 @@
     },
     {
       "semantic_id": "item.seed",
-      "status": "candidate_existing_icon_reused",
-      "local_path": "frontend/public/assets/ninja-adventure/icons/seed.png",
+      "status": "original_semantic_icon_candidate",
+      "local_path": "frontend/public/assets/hearthwood/items/seed.png",
       "frame_rect": [
         0,
         0,
@@ -389,12 +389,12 @@
       ],
       "pivot": null,
       "animation": null,
-      "note": "Existing source bytes unchanged; semantic binding in frontend/src/game/items.ts. Inventory uses 2x / 3x integer sizes. No world asset replacement."
+      "note": "Original 16px project icon rebuilt by tools/build_item_icons.py; superseded reference icon retained unchanged. Stable item ID, quantities and rules unchanged."
     },
     {
       "semantic_id": "item.wood",
-      "status": "candidate_existing_icon_reused",
-      "local_path": "frontend/public/assets/ninja-adventure/icons/wood.png",
+      "status": "original_semantic_icon_candidate",
+      "local_path": "frontend/public/assets/hearthwood/items/wood.png",
       "frame_rect": [
         0,
         0,
@@ -403,7 +403,7 @@
       ],
       "pivot": null,
       "animation": null,
-      "note": "Existing source bytes unchanged; semantic binding in frontend/src/game/items.ts. Inventory uses 2x / 3x integer sizes. No world asset replacement."
+      "note": "Original 16px project icon rebuilt by tools/build_item_icons.py; superseded reference icon retained unchanged. Stable item ID, quantities and rules unchanged."
     },
     {
       "semantic_id": "item.stone",
@@ -1152,5 +1152,45 @@
     "status": "owner_approved_direction_2026-10-10",
     "approval": "可以，按此调整，同时登录名和人物形象选择那块还是有点死板（不知道是不是太方方正正的原因？）同时适当添加更多可选人物形象",
     "runtime_status": "candidate_pending_actual_visual_review"
-  }
+  },
+  "original_item_assets": [
+    {
+      "semantic_id": "item.wood",
+      "runtime_path": "frontend/public/assets/hearthwood/items/wood.png",
+      "width": 16,
+      "height": 16,
+      "mode": "RGBA",
+      "visible_bounds": [
+        1,
+        2,
+        16,
+        16
+      ],
+      "sha256": "4769fe7cb520b4f72737b3594b3ad600077bd167891cb8a6589e043d7e24f2b1",
+      "source": "Original project code-native pixel drawing",
+      "license": "Project-authored artwork; no external pack",
+      "rebuild": "tools/build_item_icons.py",
+      "script_sha256": "774c8d0f51f3a304de91109ed47d285cf170260b6ff1798f9540730918aea0c0",
+      "status": "implemented_candidate_owner_review_pending"
+    },
+    {
+      "semantic_id": "item.seed",
+      "runtime_path": "frontend/public/assets/hearthwood/items/seed.png",
+      "width": 16,
+      "height": 16,
+      "mode": "RGBA",
+      "visible_bounds": [
+        1,
+        2,
+        16,
+        16
+      ],
+      "sha256": "b06349e5ad64b1b48c97652dd91581e6d66fe30812dbebe6a746d3839deac6f1",
+      "source": "Original project code-native pixel drawing",
+      "license": "Project-authored artwork; no external pack",
+      "rebuild": "tools/build_item_icons.py",
+      "script_sha256": "774c8d0f51f3a304de91109ed47d285cf170260b6ff1798f9540730918aea0c0",
+      "status": "implemented_candidate_owner_review_pending"
+    }
+  ]
 }

@@ -10,12 +10,12 @@ from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select, delete, text
 from .db import Session, engine
 from .models import Player, Receipt
-from .rules import initial_state, upgrade_state, apply, RuleError
+from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views
 from .quests import quest_views
 from .world import WORLD
 
 app = FastAPI(title='RealQuest API', version='0.1.0')
-COOKIE = 'realquest_session'
+COOKIE = os.getenv('SESSION_COOKIE_NAME', 'realquest_session')
 SECURE_COOKIE = os.getenv('COOKIE_SECURE', 'false').lower() == 'true'
 ALLOWED_ORIGINS = set(os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080,http://127.0.0.1:8080').split(','))
 
@@ -56,6 +56,7 @@ def lock_sqlite(db):
 def snapshot(state, **extra):
     view=upgrade_state(state)
     view['quest_log']=quest_views(view)
+    view['study_task_log']=study_task_views(view)
     return {'state': view, 'server_time': time.time(), **extra}
 
 @app.get('/api/health')

@@ -1,5 +1,32 @@
 # Hearthwood Review Checklist
 
+## Today study — 2026-10-13
+
+Status: **implemented and verified; owner visual review pending**.
+
+- [x] One complete learning-task/timer/record/growth/restore flow, existing art/tokens and authentic values; no duplicate completion rewards.
+- [x] Actual desktop/mobile create, real-minute timer, pause/restore, failed/retried commands, association and unlock marker checked.
+- [x] 1440/1920/768/390/720 layouts inspected; touch/DPR2, 375px/landscape, enlarged DOM text, keyboard/IME/Escape/focus and reduced motion checked.
+- [x] 44 backend tests, production build, original full game smoke, frame client and 31-image audit pass. Final sampled text minimum 4.97:1 over 10 cases / 268 runs.
+- [ ] Physical-device Safari/keyboard, actual browser-menu zoom and long-term operation remain unverified.
+- [ ] Actual visual acceptance by owner remains pending.
+
+Files, commands, screenshots, scoped provenance and retained preview services: [today-study report](../tasks/06-today-study.md).
+
+## World-dialog candidate — 2026-10-10
+
+Status: **implemented and verified; actual owner visual review pending**. User explicitly requested the six pictured dialogs after the earlier reference slices.
+
+- [x] Wood/seed identities corrected with original 16px reproducible icons; stable IDs/quantities and all previous source hashes retained.
+- [x] Distinct commission board, conversation, map, storage tray, repair order and efficient growth-recording compositions; shared Hearthwood controls/materials.
+- [x] 1440×900 / 390×844 plus 768×1024 / 1920×1080 / 720×450 captured and inspected. Scrolling, no horizontal overflow, 44px DOM controls and keyboard place-marker alternatives checked.
+- [x] Actual storage rejection/pending/retry/duplicates/conservation/persistence, focus/Escape/input ownership, emulated touch and isolated DEV preview checked.
+- [x] Build, 32 backend tests, full smoke, RPG and journal regressions, 31-image asset audit and pixel rebuild check pass. Functional text sample minimum 4.65:1 across 36 cases.
+- [ ] Physical-device Safari/touch, native mobile keyboard and browser-menu zoom unverified.
+- [ ] Owner visual review pending; no further rollout.
+
+Exact files, commands, recordings, limitations and final preview/cleanup: [task report](../tasks/05-world-dialogs.md).
+
 Status values: `not started`, `implemented`, `verified`, `blocked`, `owner-approved`.
 Do not pre-check a row because a component exists. Attach evidence and record the actual browser, viewport, scale, fixture, and commit.
 

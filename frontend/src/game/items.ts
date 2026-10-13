@@ -1,4 +1,4 @@
-// Stable game IDs and the existing, audited 16px icon family.
+// Stable game IDs, audited source icons and original 16px semantic replacements.
 export interface ItemDefinition {
   name: string;
   group: string;
@@ -8,7 +8,10 @@ export interface ItemDefinition {
   use: string;
   icon: string;
 }
-const icon = (id: string) => `/assets/ninja-adventure/icons/${id}.png`;
+const icon = (id: string) =>
+  ["wood", "seed"].includes(id)
+    ? `/assets/hearthwood/items/${id}.png`
+    : `/assets/ninja-adventure/icons/${id}.png`;
 export const itemDefinitions: Record<string, ItemDefinition> = {
   wood: {
     name: "木材",

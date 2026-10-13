@@ -22,6 +22,9 @@ A small, sunlit woodland settlement: clear pixel silhouettes, moss-green accents
 
 **Game interfaces:** tactile but restrained. A backpack is a compact tray of objects; a quest journal is an index and a selected entry; a map is an interactive collection of places. They share tokens and controls, not an identical large modal with a dark title slab.
 
+Different gameplay functions must not be expressed through one repeated generic modal template.
+A quest board, a dialogue event, a world map, a storage chest, a blueprint page, and a life dashboard must have distinct interaction archetypes and visibly different layout structures, even when they share the same palette and design tokens.
+
 **Life interfaces:** readable, efficient, and quiet. Use modern layout and typography with the same palette, avatar, icons, and reward vocabulary. Forms are appropriate here. Do not turn text entry or a focus timer into an elaborate fantasy prop.
 
 ### 2.2 What to retain and what to stop
@@ -182,6 +185,25 @@ The map is the main navigation surface. Derive marker positions, route data, and
 
 A location index is a compact optional aid, not a large bank of buttons beneath a passive diagram. Unexplored regions are visually distinct. If safe pathfinding is not implemented, show a destination marker and state that limitation; do not draw a decorative route through obstacles. Do not add fast travel unless separately authorized.
 
+Current archetype candidate (2026-10-13): the adventure map is the primary surface. Pointing at a landmark selects it in place; the destination dock's explicit “标记方向并返回” sets the existing direction marker and closes the map. The optional place index starts collapsed. Current position uses a filled navigation arrow, selection an amber bracket/ring, the tracked quest a flag, and rune requirements a lock. Unexplored landmark regions use hatching and question marks derived from persisted `discovered_*` events; buildings use `visited_*`. This is landmark discovery, not continuous fog-of-war. Undiscovered destinations remain navigable. Map geometry and anchors use authoritative coordinates; the travel chart compresses the vertical scale, with small leader lines for crowded markers. Touch uses a pannable surface with the same >=44px markers; zoom and recenter controls also work by keyboard.
+
+### 7.4a Interaction archetypes
+
+Share palette, item identities, readable Chinese typography, focus/pressed/pending/error behavior, and modal focus ownership. Do not share a fixed header/body/footer composition. A new screen must first choose its interaction archetype:
+
+| System | Composition | Primary interaction |
+|---|---|---|
+| World map | Interactive geography, landmark silhouettes, compact destination dock; collapsed index | Select a landmark, then explicitly mark direction |
+| Quest board | 2–4 short pinned notices on timber, one open selected commission | Choose, inspect progress/rewards, accept or turn in |
+| NPC encounter | Character/place stage beside a low dialogue surface; optional request below | Reveal dialogue, continue to the request, accept or leave |
+| Storage chest | Two item grids, one shared selected-item transfer strip | Select an item, move one unit between backpack and chest |
+| Building upgrade | Moss drafting grid, existing building image, current/next effects, icon-first materials | Check exact shortfall and start an authoritative upgrade |
+| Growth recording | Full-height utility workspace, timer and manual form, recent actual reward receipt | Record an action with explicit source; read saved reward |
+
+On phone the board has a short row of notices above selected details; storage stacks its two compact containers. NPC identity moves above dialogue. Never expand all quests into articles or substitute a resource-row table for item transfer. Blueprint art represents the existing building, not a fabricated next-stage asset. Full Life Mode planning/history and the separate Today study feature are outside this visual pass.
+
+Wood/seed and other imagery reuse the audited registry unchanged. This pass adds no bitmap assets, fonts, purchases, currencies, or save fields. The actual render is a **candidate**, awaiting owner visual review. Evidence: `docs/tasks/07-ui-archetypes.md`.
+
 ### 7.5 Character sheet
 
 Show the avatar at a controlled integer scale, identity, current growth, and the next meaningful unlock. Attribute rows expose current EXP and their specific future benefit. Distinguish `unlocked`, `eligible`, and `locked`; a condition described in text is not a granted ability.
@@ -205,6 +227,12 @@ A returning user can start a timer or log an activity without walking to an NPC.
 Show three kinds of outcome separately: recorded real activity, granted game rewards, and a newly available world action. Never imply that a possible unlock is already executed. A natural-language goal becomes a reviewable suggestion before it becomes a committed plan.
 
 Switching modes preserves the authoritative character, inventory, timers, and world state. Life Mode releases world input. Whether the Phaser scene remains mounted or is cleanly reconstructed is an implementation choice; a persistent instance is not mandatory. Avoid duplicate listeners and replayed rewards.
+
+### 7.7a Today study — first functional Life slice
+
+The owner requested a game-like learning loop on 2026-10-13. The full-screen “今日研习” reuses the journal material with a selected learning promise on one leaf and an hourglass/focus action on the other. Enter through 现实成长 → 今日研习, without walking. Mobile places the selected title, timer and pause/finish actions before the record details. The blank state asks only for a topic and a short duration choice; record association and provenance are progressively disclosed. This implements learning tasks, not the entire Today/Goals/History system.
+
+The journal, actor and palette are reused without changing their source pixels. The hourglass is original inline SVG. Page entrance, button press and the server-confirmed completion seal respect reduced motion. All functional text remains DOM. Stable tasks and timer identities restore after refresh; `#study` restores the view. Existing manual recording stays available. Linking an existing activity and completing a task cannot grant a second activity reward. See `docs/tasks/06-today-study.md` for evidence and limits; visual acceptance remains a separate owner checkpoint.
 
 ## 8. Interaction, timing, and sound
 

@@ -16,14 +16,12 @@ async function until(p, fn) {
 }
 async function click(p, x, y) {
   const s = await read(p);
-  await p
-    .locator("canvas")
-    .click({
-      position: {
-        x: (x - s.camera.viewX) * s.camera.zoom,
-        y: (y - s.camera.viewY) * s.camera.zoom,
-      },
-    });
+  await p.locator("canvas").click({
+    position: {
+      x: (x - s.camera.viewX) * s.camera.zoom,
+      y: (y - s.camera.viewY) * s.camera.zoom,
+    },
+  });
 }
 async function go(p, x, y) {
   await click(p, x, y);
@@ -79,12 +77,8 @@ try {
     );
     assert.equal((await read(p)).inventory.gold, 32);
     assert.equal((await read(p)).xp, 10);
-    const harvest = p
-      .locator(".quest-entry")
-      .filter({
-        has: p.getByRole("heading", { name: "土地的第一份回礼", exact: true }),
-      });
-    await harvest.getByRole("button", { name: "接取任务" }).click();
+    await p.getByRole("button", { name: /土地的第一份回礼/ }).click();
+    await p.getByRole("button", { name: "接取任务" }).click();
     await until(
       p,
       (s) => s.quests.find((q) => q.id === "first_harvest").status === "active",
@@ -103,7 +97,8 @@ try {
     await go(p, 520, 376);
     await click(p, 576, 384);
     await until(p, (s) => s.mode === "npc");
-    await p.getByRole("button", { name: "接取任务" }).click();
+    await p.getByRole("button", { name: "继续 · 聊聊这份委托" }).click();
+    await p.getByRole("button", { name: "接受委托" }).click();
     await until(
       p,
       (s) => s.quests.find((q) => q.id === "forest_path").status === "active",
