@@ -1,4 +1,5 @@
 import { RecoveryPanel } from "./components/RecoveryPanel";
+import { HudIcon } from "./components/HudIcon";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
@@ -16,9 +17,6 @@ import {
   Heart,
   Leaf,
   Map,
-  Menu,
-  Volume2,
-  VolumeX,
   Pause,
   Play,
   Plus,
@@ -663,11 +661,11 @@ export default function App() {
     };
   }, [ready]);
   const preferences = usePreferences();
-  const nav: [Panel, string, typeof Compass][] = [
-    ["inventory", "背包", Backpack],
-    ["character", "角色", User],
-    ["journal", "任务日志", BookOpen],
-    ["activity", "现实成长", Leaf],
+  const nav: [Panel, string, string][] = [
+    ["inventory", "背包", "I"],
+    ["character", "角色", "C"],
+    ["journal", "任务日志", "J"],
+    ["activity", "现实成长", "L"],
   ];
   return (
     <div
@@ -691,7 +689,7 @@ export default function App() {
           回响大陆<span className="header-separator">/</span> 第一章 · 万物生长
         </div>
         <div
-          className="header-actions"
+          className="header-actions rq-theme"
           style={{ visibility: state?.character ? "visible" : "hidden" }}
         >
           <button
@@ -699,25 +697,27 @@ export default function App() {
             title="地图 · M"
             onClick={() => open("map")}
           >
-            <Map size={19} />
+            <HudIcon name="map" />
           </button>
           <button
             className="sound-toggle"
             aria-label={preferences.sound ? "关闭游戏音效" : "开启游戏音效"}
+            aria-pressed={preferences.sound}
+            title={preferences.sound ? "关闭游戏音效" : "开启游戏音效"}
             onClick={() => {
               preferences.set({ sound: !preferences.sound });
               unlockSound();
               chime();
             }}
           >
-            {preferences.sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            <HudIcon name={preferences.sound ? "sound" : "muted"} />
           </button>
           <button
             aria-label="主菜单"
             title="主菜单"
             onClick={() => open("menu")}
           >
-            <Menu size={20} />
+            <HudIcon name="menu" />
           </button>
         </div>
       </header>
@@ -739,7 +739,7 @@ export default function App() {
           <main className="app-main">
             <div className="game-layout">
               <section className="game-section" aria-label="游戏世界">
-                <div className="game-status">
+                <div className="game-status rq-theme">
                   <button
                     aria-label="查看角色成长"
                     className="level"
@@ -747,7 +747,11 @@ export default function App() {
                   >
                     <div className="hud-portrait">
                       <PixelPerson variant={state.character.appearance} />
-                      <span>{1 + Math.floor(state.xp / 100)}</span>
+                      <span
+                        aria-label={`等级 ${1 + Math.floor(state.xp / 100)}`}
+                      >
+                        {1 + Math.floor(state.xp / 100)}
+                      </span>
                     </div>
                     <div className="hud-nameplate">
                       <b>
@@ -756,7 +760,14 @@ export default function App() {
                         </span>
                         <span> Lv.{1 + Math.floor(state.xp / 100)}</span>
                       </b>
-                      <div className="xp-track">
+                      <div
+                        className="xp-track"
+                        role="progressbar"
+                        aria-label="当前等级经验"
+                        aria-valuenow={state.xp % 100}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      >
                         <i style={{ width: `${state.xp % 100}%` }} />
                       </div>
                       <small>
@@ -771,7 +782,7 @@ export default function App() {
                       <small>金币</small>
                     </span>
                     <span aria-label={`探索能量 ${state.energy}`}>
-                      <Zap size={17} />
+                      <HudIcon name="energy" />
                       {state.energy}
                       <small>探索能量</small>
                     </span>
@@ -810,11 +821,12 @@ export default function App() {
                 </aside>
               )}
             </div>
-            <nav className="bottom-nav" aria-label="游戏菜单">
+            <nav className="bottom-nav rq-theme" aria-label="游戏菜单">
               <div className="quick-inventory">
                 {quickItems.map((item, index) => (
                   <button
                     key={item}
+                    data-depleted={!state.inventory[item]}
                     onClick={() => {
                       selectItem(item);
                       open("inventory");
@@ -832,15 +844,30 @@ export default function App() {
                 ))}
               </div>
               <div className="nav-actions">
-                {nav.map(([target, label, Icon]) => (
+                {nav.map(([target, label, shortcut]) => (
                   <button
                     key={target}
                     aria-label={label}
+                    title={`${label} · ${shortcut}`}
                     className={target === "activity" ? "life-entry" : undefined}
                     onClick={() => open(target)}
                   >
-                    <Icon size={19} />
-                    <span>{label}</span>
+                    {target === "character" ? (
+                      <span className="hud-menu-portrait">
+                        <PixelPerson variant={state.character?.appearance} />
+                      </span>
+                    ) : (
+                      <HudIcon
+                        name={
+                          target === "inventory"
+                            ? "backpack"
+                            : target === "journal"
+                              ? "journal"
+                              : "sprout"
+                        }
+                      />
+                    )}
+                    <span className="hud-menu-label">{label}</span>
 
                     {target === "journal" &&
                       state.quest_log.some((q) => q.status === "ready") && (

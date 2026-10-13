@@ -1213,5 +1213,46 @@
       "status": "candidate_pending_owner_visual_review",
       "excluded": "New upgrade progression appearances, saved furnishing states and other interiors"
     }
+  ],
+  "hud_concept": {
+    "path": "docs/art/references/hud-concept-v1.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0dd35a520ed82251ae58f2ba2cec17325a661af19ddec1d95e358d43b6bcd840",
+    "creator": "OpenAI built-in image_gen, directed for RealQuest",
+    "origin": "Generated HUD design board based on the three owner-provided game screenshot crops; reference only, outside runtime bundle.",
+    "license": "Generated project concept; no third-party license claimed.",
+    "status": "owner_approved_direction_2026-10-13",
+    "approval": "可以，按此进行调整优化",
+    "runtime_status": "candidate_pending_actual_visual_review"
+  },
+  "original_ui_art": [
+    {
+      "id": "hearthwood.hud.icons.v1",
+      "source_path": "frontend/src/components/HudIcon.tsx",
+      "sha256": "4ec76d282a8dff25c69967ad15e904413eb69788331e7173cbeea4c8b88b988a",
+      "source": "Original project code-native integer SVG paths, authored for the approved travel-kit HUD",
+      "license": "Project-authored artwork; no external asset pack",
+      "view_box": [
+        0,
+        0,
+        24,
+        24
+      ],
+      "variants": [
+        "backpack",
+        "journal",
+        "sprout",
+        "map",
+        "sound",
+        "muted",
+        "menu",
+        "pin",
+        "energy"
+      ],
+      "runtime_binding": "App HUD and QuestCompass only; decorative SVG, labels remain native DOM",
+      "rebuild": "npm run build in frontend",
+      "status": "implemented_candidate_owner_review_pending"
+    }
   ]
 }

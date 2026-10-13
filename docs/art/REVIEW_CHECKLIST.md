@@ -1,5 +1,17 @@
 # Hearthwood Review Checklist
 
+## Travel-kit HUD — 2026-10-13
+
+Concept owner-approved; actual implementation verified and awaiting visual review.
+
+- [x] Unified bottom rail, original pixel-object icons, actual appearance, identity/resources, quest note and utility keys; original actions and real quantities retained.
+- [x] Five desktop/phone/tablet/landscape viewports, DPR2 emulated touch at 375/390/844, reduced motion, long name, focus and 44px controls checked; screenshots inspected.
+- [x] Navigation/shortcuts, input/IME isolation, quick-slot assignment/reload/no consumption, sound persistence, marker-only guidance and existing full play-mode flow pass.
+- [x] Build, 31-image/source audit and diff check pass; 57 HUD text samples, minimum 5.67:1; no unexpected console errors.
+- [ ] Physical Safari/mobile devices/native browser zoom and actual owner acceptance remain unverified.
+
+Evidence, exact commands and cleanup: [HUD task record](../tasks/10-hud-travel-kit.md).
+
 ## Woodland cottage and yard — 2026-10-13
 
 Status: implemented and browser-verified candidate; **owner visual approval pending**.

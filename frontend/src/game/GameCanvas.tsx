@@ -250,7 +250,7 @@ export function GameCanvas() {
           </div>
           {nearest && (
             <button
-              className="interact"
+              className="interact rq-theme"
               disabled={!!interaction?.reason || busy}
               onClick={() => void scene.current?.interact()}
             >

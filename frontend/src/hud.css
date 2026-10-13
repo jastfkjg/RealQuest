@@ -1,0 +1,682 @@
+/* Approved travel-kit HUD. Source pixels belong to icons; type stays in CSS pixels.
+   This file owns the floating HUD skin, after the legacy world/dialog styles. */
+.playing
+  :is(.game-status, .bottom-nav, .header-actions, .quest-compass, .interact) {
+  --hud-outline: #29382b;
+  --hud-timber-dark: #524330;
+  --hud-timber-light: #c6a773;
+  --hud-leaf: #95ad69;
+  --hud-page-line: #b4a47f;
+  --hud-shadow: #192c2466;
+}
+.playing .hud-icon {
+  display: block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+/* One rail, with linen labels and recessed cloth pockets. */
+.playing .bottom-nav {
+  width: max-content;
+  max-width: calc(100% - 32px);
+  height: auto;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  align-items: center;
+  padding: 8px 10px;
+  gap: 16px;
+  border: 3px solid var(--rq-timber);
+  outline: 2px solid var(--hud-timber-dark);
+  border-radius: 1px;
+  background: var(--rq-pine);
+  box-shadow:
+    inset 0 1px var(--hud-timber-light),
+    0 4px var(--hud-shadow);
+}
+.playing .bottom-nav::before,
+.playing .bottom-nav::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  top: -4px;
+  border: 2px solid var(--hud-timber-dark);
+  background: var(--hud-timber-light);
+  pointer-events: none;
+}
+.playing .bottom-nav::before {
+  left: -4px;
+}
+.playing .bottom-nav::after {
+  right: -4px;
+}
+.playing .quick-inventory {
+  display: flex;
+  padding: 0 16px 0 0;
+  gap: 6px;
+  align-items: center;
+  border: 0;
+  border-right: 1px solid var(--rq-control-border);
+  outline: 0;
+  background: none;
+  box-shadow: none;
+}
+.playing .quick-inventory button {
+  width: 56px;
+  height: 60px;
+  min-height: 44px;
+  padding: 4px;
+  border: 2px solid var(--rq-control-border);
+  background: var(--rq-moss-hover);
+  border-radius: 1px;
+  box-shadow:
+    inset 0 2px var(--hud-outline),
+    0 1px var(--hud-outline);
+}
+.playing .quick-inventory button[data-depleted="true"] {
+  background: var(--rq-pine);
+}
+.playing .quick-inventory .item-icon {
+  width: 32px;
+  height: 32px;
+  background-size: 32px 32px;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+}
+.playing .quick-inventory kbd {
+  top: 2px;
+  left: 4px;
+  padding: 0;
+  font: 12px/16px var(--rq-font-body);
+  color: var(--rq-linen);
+  background: none;
+  border: 0;
+}
+.playing .quick-inventory b {
+  right: 3px;
+  bottom: 1px;
+  font: 600 14px/18px var(--rq-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--rq-linen-raised);
+  text-shadow: 1px 1px var(--hud-outline);
+}
+.playing .nav-actions {
+  display: flex;
+  width: auto;
+  padding: 0;
+  gap: 8px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.playing .nav-actions button,
+.playing .nav-actions .life-entry {
+  flex: none;
+  width: 84px;
+  min-width: 0;
+  height: 80px;
+  min-height: 44px;
+  margin: 0;
+  padding: 3px 0 0;
+  gap: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid var(--rq-control-border);
+  border-radius: 1px;
+  background: var(--rq-moss-hover);
+  color: var(--rq-linen);
+  box-shadow: inset 0 1px var(--rq-moss);
+  font: 600 14px/20px var(--rq-font-body);
+}
+.playing .nav-actions .hud-icon {
+  width: 48px;
+  height: 48px;
+}
+.playing .hud-menu-label {
+  display: block;
+  width: calc(100% + 2px);
+  padding: 2px 3px;
+  border: 1px solid var(--hud-page-line);
+  background: var(--rq-linen);
+  color: var(--rq-ink);
+  box-shadow: 0 2px var(--hud-timber-dark);
+}
+.playing .hud-menu-portrait {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+}
+.playing .hud-menu-portrait .pixel-person {
+  width: 48px !important;
+  height: 48px !important;
+  background-size: 192px 336px;
+}
+.playing .nav-dot {
+  top: 3px;
+  right: 3px;
+  background: var(--rq-amber);
+  border: 1px solid var(--rq-linen);
+}
+/* One identity plate, with a shared resource seam below the name. */
+.playing .game-status {
+  display: grid;
+  grid-template-columns: 1fr;
+  top: max(20px, env(safe-area-inset-top));
+  left: max(20px, env(safe-area-inset-left));
+  width: 284px;
+  max-width: none;
+  height: auto;
+  padding: 7px 9px;
+  gap: 0;
+  border: 3px solid var(--rq-timber);
+  border-radius: 1px;
+  background: var(--rq-pine);
+  outline: 1px solid var(--hud-timber-dark);
+  box-shadow:
+    inset 0 1px var(--hud-timber-light),
+    0 4px var(--hud-shadow);
+}
+.playing .level,
+.playing .level:hover {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  width: 100%;
+  height: auto;
+  min-height: 64px;
+  padding: 0;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.playing .level > .hud-portrait {
+  width: 64px;
+  min-width: 64px;
+  height: 64px;
+  border: 2px solid var(--hud-timber-light);
+  outline: 1px solid var(--hud-timber-dark);
+  background: var(--rq-control-border);
+  box-shadow: inset 0 0 0 3px var(--rq-slot);
+}
+.playing .hud-portrait .pixel-person {
+  width: 48px !important;
+  height: 48px !important;
+  background-size: 192px 336px;
+}
+.playing .hud-portrait > span {
+  bottom: -5px;
+  right: -5px;
+  height: 24px;
+  min-width: 24px;
+  border: 2px solid var(--hud-timber-light);
+  background: var(--hud-timber-dark);
+  color: var(--rq-linen);
+  font: 600 14px/20px var(--rq-font-body);
+}
+.playing .level > .hud-nameplate {
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.playing .level b {
+  max-width: none;
+  color: var(--rq-linen-raised);
+  font: 600 18px/26px var(--rq-font-body);
+}
+.playing .level small {
+  display: block;
+  white-space: nowrap;
+  font: 14px/20px var(--rq-font-body);
+  color: var(--rq-canvas);
+}
+.playing .xp-track {
+  width: 100%;
+  height: 6px;
+  margin: 4px 0 5px;
+  border: 1px solid var(--rq-control-border);
+  background: var(--hud-outline);
+  box-shadow: none;
+  border-radius: 0;
+}
+.playing .xp-track i {
+  background: var(--rq-amber);
+  border-radius: 0;
+}
+.playing .game-status .currencies {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 0 0;
+  margin: 6px 0 0 76px;
+  gap: 16px;
+  border-top: 1px solid var(--rq-control-border);
+}
+.playing .currencies > span {
+  min-width: 0;
+  height: 24px;
+  padding: 0;
+  gap: 6px;
+  border: 0;
+  background: none;
+  color: var(--rq-linen);
+  box-shadow: none;
+  font: 600 16px/24px var(--rq-font-body);
+  font-variant-numeric: tabular-nums;
+}
+.playing .currencies .coin {
+  width: 16px;
+  height: 16px;
+  background-size: 16px;
+}
+.playing .currencies .hud-icon {
+  width: 24px;
+  height: 24px;
+}
+/* Individual utility keys and a paper quest note. */
+.playing .app-header {
+  top: max(20px, env(safe-area-inset-top));
+  right: max(20px, env(safe-area-inset-right));
+}
+.playing .header-actions {
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  box-shadow: none;
+}
+.playing .header-actions > button {
+  width: 48px;
+  height: 48px;
+  min-height: 44px;
+  border: 3px solid var(--rq-timber);
+  outline: 1px solid var(--hud-timber-dark);
+  border-radius: 1px;
+  background: var(--rq-pine);
+  color: var(--rq-linen);
+  box-shadow:
+    inset 0 1px var(--hud-timber-light),
+    0 3px var(--hud-shadow);
+}
+.playing .quest-compass {
+  top: max(88px, calc(env(safe-area-inset-top) + 68px));
+  right: max(20px, env(safe-area-inset-right));
+  width: 316px;
+  padding: 6px;
+  gap: 4px;
+  border: 2px solid var(--rq-timber);
+  outline: 1px solid var(--hud-timber-dark);
+  border-radius: 2px;
+  background: var(--rq-linen);
+  color: var(--rq-ink);
+  box-shadow:
+    inset 0 0 0 2px var(--rq-linen-raised),
+    0 4px var(--hud-shadow);
+}
+.playing .quest-compass::before {
+  content: "";
+  position: absolute;
+  left: calc(50% - 12px);
+  top: -8px;
+  width: 24px;
+  height: 9px;
+  background: var(--rq-moss);
+  border: 2px solid var(--rq-pine);
+  box-shadow: inset 0 1px var(--rq-control-border);
+  pointer-events: none;
+}
+.playing .quest-compass .compass-action {
+  gap: 10px;
+  padding: 8px 4px 6px 8px;
+}
+.playing .compass-action small {
+  font: 14px/20px var(--rq-font-body);
+  color: var(--rq-ink-muted);
+}
+.playing .compass-action b {
+  font: 600 16px/24px var(--rq-font-body);
+  color: var(--rq-ink);
+  text-shadow: none;
+}
+.playing .quest-compass .compass-expand {
+  width: 44px;
+  min-width: 44px;
+  align-self: stretch;
+  padding: 8px;
+  border: 0;
+  border-left: 1px solid var(--rq-divider);
+}
+.playing .quest-compass button:hover {
+  background: var(--rq-canvas);
+}
+.playing .interact {
+  bottom: 144px;
+  max-width: min(340px, calc(100% - 32px));
+  padding: 8px 12px;
+  border: 2px solid var(--rq-timber);
+  border-radius: 2px;
+  background: var(--rq-linen);
+  color: var(--rq-ink);
+  box-shadow:
+    inset 0 0 0 1px var(--rq-linen-raised),
+    0 3px var(--hud-shadow);
+}
+.playing .interact small {
+  color: var(--rq-ink-muted);
+  font: 14px/20px var(--rq-font-body);
+}
+.playing .interact b {
+  color: var(--rq-ink);
+  font: 600 16px/24px var(--rq-font-body);
+}
+.playing .interact kbd {
+  border: 1px solid var(--rq-control-border);
+  background: var(--rq-moss);
+  color: var(--rq-linen);
+  border-radius: 1px;
+  padding: 4px 8px;
+}
+.playing .interact:hover:not(:disabled) {
+  background: var(--rq-linen-raised);
+}
+.playing .interact:disabled {
+  background: var(--rq-canvas);
+  color: var(--rq-ink-muted);
+}
+.playing .quick-inventory button:hover,
+.playing .nav-actions button:hover,
+.playing .nav-actions .life-entry:hover,
+.playing .header-actions > button:hover {
+  background: var(--rq-moss);
+  border-color: var(--rq-amber);
+}
+.playing .level:hover .player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.playing
+  :is(.game-status, .bottom-nav, .header-actions, .quest-compass)
+  button:active:not(:disabled) {
+  box-shadow: inset 0 2px var(--hud-outline);
+  translate: none;
+  transform: none;
+}
+.playing
+  :is(.game-status, .bottom-nav, .header-actions, .quest-compass)
+  button:focus-visible,
+.playing .interact:focus-visible {
+  outline: 2px solid var(--rq-linen-raised);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--rq-pine);
+}
+.playing .quest-compass button:focus-visible {
+  outline-color: var(--rq-pine);
+  box-shadow: none;
+  outline-offset: -2px;
+}
+.playing .game-footer {
+  bottom: 4px;
+  opacity: 1;
+}
+@media (max-width: 1100px) {
+  .playing .region-stamp {
+    top: 150px;
+  }
+  .playing .navigation-hint {
+    top: 205px;
+  }
+}
+@media (max-width: 600px) {
+  .playing .game-status {
+    top: max(12px, env(safe-area-inset-top));
+    left: 12px;
+    width: calc(100% - 126px);
+    padding: 6px;
+  }
+  .playing .level {
+    grid-template-columns: 48px minmax(0, 1fr);
+    min-height: 52px;
+    gap: 9px;
+  }
+  .playing .level > .hud-portrait {
+    width: 48px;
+    min-width: 48px;
+    height: 52px;
+  }
+  .playing .hud-portrait .pixel-person {
+    width: 32px !important;
+    height: 32px !important;
+    background-size: 128px 224px;
+  }
+  .playing .level b {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .playing .level small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .playing .game-status .currencies {
+    margin: 6px 0 0 57px;
+    padding-top: 4px;
+    gap: 14px;
+  }
+  .playing .currencies > span {
+    font-size: 14px;
+  }
+  .playing .app-header {
+    top: max(12px, env(safe-area-inset-top));
+    right: 12px;
+  }
+  .playing .header-actions {
+    gap: 8px;
+  }
+  .playing .header-actions > button {
+    width: 44px;
+    height: 44px;
+  }
+  .playing .header-actions > .sound-toggle {
+    display: none;
+  }
+  .playing .quest-compass {
+    top: 132px;
+    right: 12px;
+    width: 258px;
+  }
+  .playing .quest-compass .compass-action {
+    gap: 4px;
+    padding: 4px;
+  }
+  .playing .compass-action small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .playing .compass-action b {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .playing .quest-compass .hud-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .playing .region-stamp {
+    top: 128px;
+    left: 12px;
+    max-width: 88px;
+  }
+  .playing .region-stamp b {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .playing .navigation-hint {
+    top: 222px;
+    left: 12px;
+  }
+  .playing .sidebar {
+    top: 130px;
+  }
+  .playing .bottom-nav {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: calc(100% - 28px);
+    max-width: none;
+    height: auto;
+    padding: 6px;
+    gap: 0;
+  }
+  .playing .quick-inventory {
+    display: none;
+  }
+  .playing .nav-actions {
+    width: 100%;
+    gap: 7px;
+    padding: 0;
+  }
+  .playing .nav-actions button,
+  .playing .nav-actions .life-entry {
+    flex: 1;
+    width: 0;
+    height: 64px;
+    padding: 2px 0 0;
+    margin: 0;
+    font-size: 14px;
+  }
+  .playing .nav-actions .hud-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .playing .hud-menu-portrait {
+    width: 32px;
+    height: 32px;
+  }
+  .playing .hud-menu-portrait .pixel-person {
+    width: 32px !important;
+    height: 32px !important;
+    background-size: 128px 224px;
+  }
+  .playing .interact {
+    bottom: 122px;
+    max-width: 178px;
+    padding: 6px 8px;
+  }
+}
+@media (pointer: coarse) {
+  .playing .interact {
+    bottom: 122px;
+  }
+  .playing .dpad {
+    bottom: 118px;
+  }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .playing .game-status {
+    top: 10px;
+    left: 12px;
+    width: 256px;
+    padding: 4px 6px;
+  }
+  .playing .level {
+    grid-template-columns: 48px minmax(0, 1fr);
+    min-height: 48px;
+    gap: 9px;
+  }
+  .playing .level > .hud-portrait {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+  }
+  .playing .hud-portrait .pixel-person {
+    width: 32px !important;
+    height: 32px !important;
+    background-size: 128px 224px;
+  }
+  .playing .level b {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .playing .level small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .playing .game-status .currencies {
+    margin: 4px 0 0 57px;
+    padding-top: 2px;
+  }
+  .playing .currencies > span {
+    font-size: 14px;
+  }
+  .playing .app-header {
+    top: 10px;
+    right: 12px;
+  }
+  .playing .header-actions > button {
+    width: 44px;
+    height: 44px;
+  }
+  .playing .quest-compass {
+    top: 72px;
+    right: 12px;
+    width: 272px;
+  }
+  .playing .compass-action small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .playing .compass-action b {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .playing .quick-inventory {
+    display: none;
+  }
+  .playing .bottom-nav {
+    width: 328px;
+    bottom: 10px;
+    padding: 5px;
+    gap: 0;
+  }
+  .playing .nav-actions {
+    width: 100%;
+    gap: 6px;
+  }
+  .playing .nav-actions button,
+  .playing .nav-actions .life-entry {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    height: 60px;
+    padding: 1px 0 0;
+    font-size: 14px;
+  }
+  .playing .nav-actions .hud-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .playing .hud-menu-portrait {
+    width: 32px;
+    height: 32px;
+  }
+  .playing .hud-menu-portrait .pixel-person {
+    width: 32px !important;
+    height: 32px !important;
+    background-size: 128px 224px;
+  }
+  .playing .dpad {
+    left: 12px;
+    bottom: 14px;
+  }
+  .playing .interact {
+    bottom: 14px;
+    right: 12px;
+    max-width: 148px;
+  }
+  .playing .navigation-hint {
+    top: 116px;
+    left: 12px;
+  }
+}

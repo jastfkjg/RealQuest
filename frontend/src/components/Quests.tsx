@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { HudIcon } from "./HudIcon";
 import {
   Check,
   Flag,
@@ -342,7 +343,7 @@ export function QuestCompass() {
         ? `向${quest.giver_name}接取委托`
         : quest.objectives[quest.checks.findIndex((v) => !v)];
   return (
-    <aside className="quest-compass" aria-label="下一步引导">
+    <aside className="quest-compass rq-theme" aria-label="下一步引导">
       <button
         className="compass-action"
         aria-label="指引我的下一步"
@@ -366,7 +367,7 @@ export function QuestCompass() {
           </small>
           <b>{next}</b>
         </span>
-        <MapPin size={17} />
+        <HudIcon name="pin" />
       </button>
       <button
         className="compass-expand"
@@ -374,7 +375,7 @@ export function QuestCompass() {
         aria-expanded={false}
         onClick={() => useGame.setState({ tracking: true })}
       >
-        <BookOpen size={17} />
+        <HudIcon name="journal" />
       </button>
     </aside>
   );
