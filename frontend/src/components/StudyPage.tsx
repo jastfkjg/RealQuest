@@ -43,6 +43,7 @@ function Hourglass({ running }: { running: boolean }) {
 
 export function StudyPage() {
   const { state, command, open, busy, error, notice, noticePanel } = useGame();
+  const worldEntry = useRef(useGame.getState().selected?.kind === "study");
   const tasks = state!.study_task_log || [];
   const plans = state!.study_plan_log || [];
   const [view, setView] = useState<"today" | "plans" | "history" | "save">(
@@ -135,7 +136,9 @@ export function StudyPage() {
       requestAnimationFrame(() =>
         document
           .querySelector<HTMLButtonElement>(
-            '.nav-actions [aria-label="现实成长"]',
+            worldEntry.current
+              ? ".game-canvas"
+              : '.nav-actions [aria-label="现实成长"]',
           )
           ?.focus(),
       );
@@ -740,12 +743,10 @@ export function StudyPage() {
                           className="study-text-button"
                           onClick={() => {
                             open(null);
-                            useGame
-                              .getState()
-                              .navigate({
-                                mapId: "overworld",
-                                targetId: "ruins",
-                              });
+                            useGame.getState().navigate({
+                              mapId: "overworld",
+                              targetId: "ruins",
+                            });
                           }}
                         >
                           <MapPin aria-hidden="true" size={15} /> 标记古代遗迹{" "}

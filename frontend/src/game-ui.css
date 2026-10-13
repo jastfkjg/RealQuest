@@ -977,6 +977,13 @@ a:focus-visible,
 .playing .region-stamp {
   pointer-events: none;
 }
+/* In the low cottage viewport, keep the bed/chest clear. The journal and map
+   remain available in the existing HUD; this does not change outdoor tracking. */
+@media (max-height: 560px) and (orientation: landscape) {
+  .playing[data-location="home"] .quest-compass {
+    display: none;
+  }
+}
 .playing .game-footer {
   font-size: 12px;
 }

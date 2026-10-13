@@ -22,7 +22,12 @@ export function interactionFor(
     case "board":
       return { label: "查看委托", panel: "board" };
     case "station":
-      return { label: "打开工作台", panel: "building" };
+      return {
+        label: obj.id === "home_desk" ? "翻阅升级手册" : "打开工作台",
+        panel: "building",
+      };
+    case "study":
+      return { label: "翻开研习手记", panel: "study" };
     case "storage":
       return { label: "存取物品", panel: "storage" };
     case "rest":
@@ -83,6 +88,10 @@ export function interactionFor(
 
 // Visual hit areas resolve to the existing authoritative interaction anchors.
 export function hitObject(obj: WorldObject, x: number, y: number) {
+  if (obj.hitbox) {
+    const [rx, ry, w, h] = obj.hitbox;
+    return x >= rx && x <= rx + w && y >= ry && y <= ry + h;
+  }
   if (obj.rect) {
     const [rx, ry, w] = obj.rect;
     return x >= rx && x <= rx + w && y >= ry - 32 && y <= obj.y + 12;

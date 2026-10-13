@@ -1192,5 +1192,26 @@
       "script_sha256": "774c8d0f51f3a304de91109ed47d285cf170260b6ff1798f9540730918aea0c0",
       "status": "implemented_candidate_owner_review_pending"
     }
+  ],
+  "original_scene_art": [
+    {
+      "id": "hearthwood.cottage.v1",
+      "source_path": "frontend/src/game/hearthwood.ts",
+      "sha256": "7e6f56a8b1a87a79cad07cc34127006526fb715d43ef90d8163fb97aa2d4a6cf",
+      "source": "Original project code-native pixel drawing using Phaser Graphics; no third-party artwork or image generator input",
+      "license": "Project-authored artwork; no external asset pack",
+      "world_units_per_source_pixel": 2,
+      "logical_space": {
+        "yard": "existing home footprint, doorway and garden anchors",
+        "room": [
+          480,
+          368
+        ]
+      },
+      "runtime_binding": "village.ts home building/yard and WorldScene home room only",
+      "rebuild": "npm run build in frontend; geometry rendered directly by hearthwood.ts",
+      "status": "candidate_pending_owner_visual_review",
+      "excluded": "New upgrade progression appearances, saved furnishing states and other interiors"
+    }
   ]
 }

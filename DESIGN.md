@@ -306,3 +306,7 @@ Acceptance requires:
 Provide screenshots, a short interaction recording when possible, exact commands and results, browser errors, and remaining gaps. Capture the same viewport, state, and camera position for comparison. Use seeded fixtures and a test clock where needed, but also review normal motion. Do not certify gameplay from a screenshot or visual quality from a successful build.
 
 Keep the checklist in `docs/art/REVIEW_CHECKLIST.md`. New reference screenshots start as `candidate`, not `approved`. Record approval and commit only when actually obtained.
+
+### Woodland cottage checkpoint — 2026-10-13
+
+Candidate only; owner visual review pending. The home yard and interior use original two-world-unit pixel drawing with the existing actor sheets. The stepping-stone approach, low garden borders and warm timber room share Hearthwood materials. Existing collision/spawn geometry stays intact. The table's open book (`home_reading`) opens the existing study journal; its separate closed manual retains the `home_desk` upgrade action. Storage, rest and direct Life entry retain their behavior. Object brackets and short opening feedback reflect actual interactions; reduced motion keeps stable feedback. Desktop outdoor framing reveals the roof; the home room pans at readable scale on phones and short landscape. DOM controls remain in CSS pixels. New upgrade appearances/furnishing saves require the next owner checkpoint. Evidence: `docs/tasks/09-cottage-prototype.md`.

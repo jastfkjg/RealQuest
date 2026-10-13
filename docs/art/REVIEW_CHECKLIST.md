@@ -1,5 +1,19 @@
 # Hearthwood Review Checklist
 
+## Woodland cottage and yard — 2026-10-13
+
+Status: implemented and browser-verified candidate; **owner visual approval pending**.
+
+- [x] One walkable home/yard slice, recognizable reading book and separate upgrade manual; unchanged collision/spawn geometry and existing IDs.
+- [x] Actual approach/door/exit, reading→study→return/focus, storage conservation, rest, rejected/pending/accepted gathering and held-key handling checked.
+- [x] 1440/1920/768/390/720 layouts and DPR2 emulated-touch 390/375/844, reduced motion, wall collision and short-landscape entry checked; final screenshots inspected.
+- [x] 54 backend tests, production build, existing full game regression, final 25-capture cottage suite and skill frame client passed; no unexpected browser errors.
+- [x] 31 source/runtime images unchanged; new original procedural artwork/source hash documented and audited. No new raster, font, sound or external acquisition.
+- [ ] Physical Safari/iOS/Android and native browser zoom unverified.
+- [ ] New upgrade appearances and furnishing-save expansion await owner's next authorization. Current candidate is not owner-approved.
+
+Evidence and commands: [cottage prototype](../tasks/09-cottage-prototype.md).
+
 ## Study journeys — 2026-10-13
 
 Status: implemented and browser-verified candidate; owner visual approval pending.

@@ -672,6 +672,7 @@ export default function App() {
   return (
     <div
       className={`app-shell ${state?.character ? "playing" : ""} ${preferences.reducedMotion ? "reduce-motion" : ""}`}
+      data-location={state?.location}
     >
       <header className="app-header">
         <a href="/" className="brand">

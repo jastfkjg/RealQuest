@@ -12,6 +12,9 @@ OUTPUT = ROOT / parser.parse_args().output
 OUTPUT.mkdir(parents=True, exist_ok=True)
 manifest = json.loads((ROOT / 'docs/art/asset-manifest.json').read_text())
 rows = []
+for entry in manifest.get('original_scene_art', []):
+    source = ROOT / entry['source_path']
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == entry['sha256'], source
 for entry in manifest['source_files']:
     path = ROOT / entry['local_path']
     data = path.read_bytes()

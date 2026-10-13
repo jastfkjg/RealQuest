@@ -54,9 +54,10 @@ def interior(key, name, objects, furniture):
 
 INTERIORS = {
     'home': interior('home','林间小屋',[
-        {'id':'home_chest','kind':'storage','name':'家园储物箱','x':360,'y':192},
-        {'id':'home_desk','kind':'station','building':'home','name':'家园手册 · 升级','x':128,'y':208},
-        {'id':'home_bed','kind':'rest','name':'柔软的床 · 休息','x':336,'y':112},
+        {'id':'home_chest','kind':'storage','name':'家园储物箱','x':360,'y':192,'hitbox':[336,160,48,32]},
+        {'id':'home_desk','kind':'station','building':'home','name':'家园手册 · 升级','x':96,'y':152,'hitbox':[80,136,28,40]},
+        {'id':'home_reading','kind':'study','name':'窗边阅读角','x':144,'y':200,'hitbox':[110,130,66,48]},
+        {'id':'home_bed','kind':'rest','name':'柔软的床 · 休息','x':336,'y':112,'hitbox':[304,72,72,80]},
     ],[{'kind':'bed','rect':[304,72,72,80]},{'kind':'desk','rect':[80,136,96,40]},{'kind':'chest','rect':[336,160,48,28]},{'kind':'fireplace','rect':[200,64,72,32]},{'kind':'plant','rect':[64,72,24,28]},{'kind':'rug','rect':[168,208,144,64],'solid':False}]),
     'workshop': interior('workshop','木作工坊',[
         {'id':'workshop_counter','kind':'station','building':'workshop','name':'工坊柜台 · 交易与制作','x':240,'y':196},

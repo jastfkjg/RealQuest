@@ -7,6 +7,7 @@ export interface WorldObject {
   x: number;
   y: number;
   rect?: number[];
+  hitbox?: number[];
   building?: string;
 }
 export interface World extends MapData {

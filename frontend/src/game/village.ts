@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import type { MapData, WorldObject } from "../types";
 import { box, furniture } from "./art";
 import { appearances } from "./appearances";
+import { cottage, cottageYard } from "./hearthwood";
 
 // All source pixels render at 2 world pixels. These frame rectangles are the
 // unmodified CC0 sheet; collision and interactive anchors still come from /world.
@@ -172,12 +173,6 @@ const roads: [number[][], number][] = [
   ],
 ];
 const props: [string, number, number][] = [
-  ["laundry", 98, 275],
-  ["pot", 224, 244],
-  ["barrel", 92, 454],
-  ["flowers", 94, 218],
-  ["flowers", 224, 224],
-  ["daisies", 83, 482],
   ["crates", 400, 233],
   ["cart", 394, 282],
   ["bench", 568, 236],
@@ -311,6 +306,7 @@ export function village(scene: Phaser.Scene, map: MapData) {
     scene.textures.addCanvas("village-ground", canvas);
   }
   scene.add.image(0, 0, "village-ground").setOrigin(0).setDepth(-1000);
+  cottageYard(scene);
   const g = scene.add.graphics().setDepth(-900);
   // Bridges remain precisely aligned with the two safe river crossings.
   for (const y of [320, 872]) {
@@ -330,9 +326,6 @@ export function village(scene: Phaser.Scene, map: MapData) {
     }
   }
   for (const [x, y, length] of [
-    [82, 405, 164],
-    [82, 523, 90],
-    [254, 523, 42],
     [978, 592, 82],
     [1132, 592, 80],
   ]) {
@@ -375,11 +368,6 @@ export function village(scene: Phaser.Scene, map: MapData) {
   if (pink) sprite(scene, "treePink", pink[0], pink[1] + 12, pink[1] + 13);
   for (const [name, x, y] of props)
     sprite(scene, name, x, y, ["flowers", "daisies"].includes(name) ? -850 : y);
-  // Clothes hang from the imported line beside the cottage.
-  box(g, 0xeee3ba, 86, 240, 16, 18);
-  box(g, 0xf8f0d2, 82, 240, 24, 6);
-  box(g, 0x628d98, 116, 240, 14, 20);
-  box(g, 0x416c79, 122, 249, 2, 11);
   // Sparse curated plant groups: no props on the main path or at door anchors.
   for (const [x, y] of [
     [60, 570],
@@ -403,12 +391,11 @@ export function village(scene: Phaser.Scene, map: MapData) {
     scene.add
       .ellipse(x + w / 2 + 6, y + h - 2, w + 20, 20, 0x284d38, 0.2)
       .setDepth(-850);
-    const name =
-      obj.id === "home"
-        ? "cottage"
-        : obj.id === "workshop"
-          ? "workshop"
-          : "library";
+    if (obj.id === "home") {
+      cottage(scene, obj);
+      continue;
+    }
+    const name = obj.id === "workshop" ? "workshop" : "library";
     const house =
       obj.id === "home" || obj.id === "library"
         ? scene.add

@@ -23,6 +23,7 @@ export function GameCanvas() {
     scene = useRef<WorldScene | null>(null);
   const nearest = useGame((s) => s.nearest),
     panel = useGame((s) => s.panel);
+  const busy = useGame((s) => s.busy);
   const state = useGame((s) => s.state)!,
     world = useGame((s) => s.world)!,
     navigation = useGame((s) => s.navigation);
@@ -95,6 +96,8 @@ export function GameCanvas() {
         })),
         walking: instance.path,
         clickTarget: instance.clickTarget?.id,
+        hovered: instance.hovered?.id,
+        objectResponse: instance.response,
         camera: instance.cameras.main
           ? {
               x: instance.cameras.main.scrollX,
@@ -204,7 +207,9 @@ export function GameCanvas() {
           <small>
             {state.location === "overworld"
               ? "REALQUEST · 回响大陆"
-              : "室内 · 门口按 E 返回户外"}
+              : state.location === "home"
+                ? "收纳 · 休息 · 窗边研习"
+                : "室内 · 门口按 E 返回户外"}
           </small>
         </div>
       </div>
@@ -246,13 +251,17 @@ export function GameCanvas() {
           {nearest && (
             <button
               className="interact"
-              disabled={!!interaction?.reason || useGame.getState().busy}
+              disabled={!!interaction?.reason || busy}
               onClick={() => void scene.current?.interact()}
             >
               <Hand size={17} />
               <span>
                 <small>{nearest?.name || "探索回响大陆"}</small>
-                <b>{interaction?.reason || interaction?.label}</b>
+                <b>
+                  {busy
+                    ? "正在回应…"
+                    : interaction?.reason || interaction?.label}
+                </b>
               </span>
               {!interaction?.reason && <kbd>E</kbd>}
             </button>
