@@ -1,0 +1,66 @@
+name: realquest
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+services:
+  db:
+    image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: realquest
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a strong database password}
+      POSTGRES_DB: realquest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [default]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U realquest -d realquest"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+    logging: *logging
+  backend:
+    image: ${REALQUEST_BACKEND_IMAGE:?Set an immutable backend image}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://realquest:${POSTGRES_PASSWORD:?Set database password}@db:5432/realquest
+      COOKIE_SECURE: ${COOKIE_SECURE:?Set COOKIE_SECURE=true}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?Set the HTTPS origin}
+      REALQUEST_RUN_MIGRATIONS: "false"
+    networks: [default]
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+    logging: *logging
+  frontend:
+    image: ${REALQUEST_FRONTEND_IMAGE:?Set an immutable frontend image}
+    restart: unless-stopped
+    networks:
+      default: {}
+      proxy:
+        aliases: [realquest-upstream]
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, "http://127.0.0.1/api/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+    logging: *logging
+networks:
+  default:
+    name: realquest_private
+  proxy:
+    external: true
+    name: realquest_proxy
+volumes:
+  postgres_data:
+    name: realquest_postgres_data

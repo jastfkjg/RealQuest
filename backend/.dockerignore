@@ -3,3 +3,9 @@ __pycache__
 .pytest_cache
 *.db
 .env
+
+*.env
+.env.*
+*.dump
+*.db-*
+*.sqlite*

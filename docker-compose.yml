@@ -27,7 +27,9 @@ services:
       timeout: 5s
       retries: 15
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     ports: ["127.0.0.1:8080:80"]
     depends_on:
       backend:

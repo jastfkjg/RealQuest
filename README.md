@@ -42,7 +42,7 @@ npm run dev -- --host 127.0.0.1
 
 打开 Vite 输出的网址，默认 [http://localhost:5173](http://localhost:5173)。前端将 `/api` 代理到 `http://127.0.0.1:8017`。后端数据库默认保存在 `backend/realquest.db`，先运行迁移再启动。Vite 自动选择其他端口时，需要将该前端来源加入后端 `ALLOWED_ORIGINS`。
 
-## Docker Compose
+## Docker Compose（本地）
 
 ```bash
 cp .env.example .env
@@ -50,6 +50,10 @@ docker compose up -d --build
 ```
 
 打开 [http://localhost:8080](http://localhost:8080)。包含 Nginx 前端、FastAPI 后端和 PostgreSQL 17；后端启动时执行 Alembic 迁移。数据库使用命名卷，`docker compose down` 保留存档。默认仅绑定本机地址；公开部署前设置强数据库密码、HTTPS、`COOKIE_SECURE=true` 和正确的 `ALLOWED_ORIGINS`。
+
+## 生产部署
+
+腾讯云 `tencent-prod` 发布配置见 [部署指南](docs/deployment.md)。生产使用独立 Compose、固定 PostgreSQL 卷、HTTPS Cookie 和已验证镜像；main CI 只验证并发布镜像，服务器发布由手动工作流执行。主机初始化、GitHub/ACR 凭据、真实域名验收和存档迁移尚未执行。
 
 ## 环境变量
 

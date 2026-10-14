@@ -1,0 +1,54 @@
+name: Deploy tested images
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Business deployment target
+        type: choice
+        options: [tencent-prod]
+        required: true
+      build_run_id:
+        description: Successful main-branch Container CI and build run ID
+        type: string
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ inputs.target }}
+    concurrency:
+      group: realquest-${{ inputs.target }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select verified CI artifact
+        id: release
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          GH_TOKEN: ${{ github.token }}
+        run: bash deploy/fetch-release.sh "$RUNNER_TEMP/realquest-release"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.release.outputs.revision }}
+      - name: Publish selected release
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          RELEASE_FILE: ${{ runner.temp }}/realquest-release/artifact/release.json
+          REVISION: ${{ steps.release.outputs.revision }}
+          TARGET_ENVIRONMENT: ${{ inputs.target }}
+          DEPLOY_TARGET: ${{ vars.DEPLOY_TARGET }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: bash deploy/publish.sh
+      - name: Record deployment
+        env:
+          REVISION: ${{ steps.release.outputs.revision }}
+          TARGET: ${{ inputs.target }}
+        run: printf 'Target `%s`, source revision `%s`\n' "$TARGET" "$REVISION" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,103 @@
+name: Container CI and build
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: backend/requirements.lock.txt
+      - run: python -m pip install -r backend/requirements.lock.txt
+      - run: python -m pytest -q
+        working-directory: backend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci && npm run build
+        working-directory: frontend
+      - run: python3 -m unittest discover -s tests/deployment
+      - run: for script in deploy/*.sh; do bash -n "$script"; done
+      - run: bash deploy/smoke.sh
+  build:
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ACR_REGISTRY: ${{ vars.ACR_REGISTRY }}
+      ACR_NAMESPACE: ${{ vars.ACR_NAMESPACE }}
+      ACR_FRONTEND_REPOSITORY: ${{ vars.ACR_FRONTEND_REPOSITORY }}
+      ACR_BACKEND_REPOSITORY: ${{ vars.ACR_BACKEND_REPOSITORY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repositories
+        id: repositories
+        run: |
+          set -euo pipefail
+          [[ "$ACR_REGISTRY" =~ ^[a-z0-9][a-z0-9.-]*\.aliyuncs\.com$ ]]
+          [[ "$ACR_NAMESPACE" =~ ^[a-z0-9][a-z0-9._-]*$ ]]
+          [[ "$ACR_FRONTEND_REPOSITORY" =~ ^[a-z0-9][a-z0-9._-]*$ ]]
+          [[ "$ACR_BACKEND_REPOSITORY" =~ ^[a-z0-9][a-z0-9._-]*$ ]]
+          [[ "$ACR_FRONTEND_REPOSITORY" != "$ACR_BACKEND_REPOSITORY" ]]
+          echo "frontend=$ACR_REGISTRY/$ACR_NAMESPACE/$ACR_FRONTEND_REPOSITORY" >> "$GITHUB_OUTPUT"
+          echo "backend=$ACR_REGISTRY/$ACR_NAMESPACE/$ACR_BACKEND_REPOSITORY" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - uses: docker/build-push-action@v6
+        id: frontend
+        with:
+          context: .
+          file: frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          provenance: false
+          sbom: false
+          outputs: type=image,push=true,oci-mediatypes=false
+          tags: ${{ steps.repositories.outputs.frontend }}:${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+      - uses: docker/build-push-action@v6
+        id: backend
+        with:
+          context: backend
+          platforms: linux/amd64,linux/arm64
+          provenance: false
+          sbom: false
+          outputs: type=image,push=true,oci-mediatypes=false
+          tags: ${{ steps.repositories.outputs.backend }}:${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+      - name: Record immutable images
+        env:
+          FRONTEND_IMAGE: ${{ steps.repositories.outputs.frontend }}@${{ steps.frontend.outputs.digest }}
+          BACKEND_IMAGE: ${{ steps.repositories.outputs.backend }}@${{ steps.backend.outputs.digest }}
+        run: python3 deploy/validate.py create image-metadata/release.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: realquest-release
+          path: image-metadata/release.json
+          retention-days: 90
+          overwrite: true
+      - name: Record promotion inputs
+        run: |
+          printf 'Build run ID: `%s`\n\n' "$GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          cat image-metadata/release.json >> "$GITHUB_STEP_SUMMARY"

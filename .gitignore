@@ -10,3 +10,11 @@ output/
 .DS_Store
 
 *.tsbuildinfo
+
+# Production secrets, releases and database archives
+*.env
+!*.env.example
+*.dump
+image-metadata/
+release.json
+images.env
