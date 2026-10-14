@@ -220,6 +220,8 @@ try {
     assert.equal(saved.activities.length, 1);
     assert.equal(saved.activities[0].source, "timer");
     assert.equal(saved.study_task_log[0].minutes, 1);
+    assert.equal(saved.knowledge_points, 1);
+    assert.equal(saved.study_task_log[0].knowledge_reward, 1);
     assert.deepEqual(saved.inventory, initial.inventory);
     await snap(p, "completed-timer");
     await p.reload();
@@ -249,6 +251,7 @@ try {
     saved = await state(p);
     assert.equal(saved.xp, 26);
     assert.equal(saved.knowledge_shard, 1);
+    assert.equal(saved.knowledge_points, 2);
     assert.equal(saved.activities.length, 2);
     await p.getByRole("button", { name: "已有学习记录？收起" }).click();
     await p

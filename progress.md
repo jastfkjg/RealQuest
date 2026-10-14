@@ -1,5 +1,15 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-14 Knowledge growth slice
+
+- Owner requested study completion → knowledge points → science/magic growth, retaining game-like UI. Starting tree clean. Plan and rule contract in docs/tasks/12-knowledge-growth.md.
+- Extend the existing study journal and completion helper; reuse book art/tokens and authoritative command/receipt flow. No old XP conversion, retroactive completed-task awards, new equipment effects or user DB changes. Isolated preview/evidence under output/knowledge-growth.
+- Implemented knowledge balance and science/magic levels, per-task reward provenance, once-only completion helper and expected total-level spending guard. All 76 backend tests pass, including legacy compatibility, concurrent spend/link, receipts and recovery.
+- Added the knowledge chapter, two selectable paths, level marks, explicit investment, source links and character entry. Completion shows the point and next action. Fixed mobile toast overlap, five-bookmark fit, texture-edge contrast and visible result focus.
+- Final production feature flow passes with 22 captures and no unexpected console errors. Ten contrast cases / 328 runs / minimum 4.94:1; 31-image/source audit passes. Original real-minute study flow, prior health/stamina flow (19 captures, no DB exhaustion fixture), focused play-mode regression and final skill frame client pass.
+- Handoff: dedicated build at 5203 (Vite55793/npm55770), isolated8035 backend55797 retained for manual review. Codex browser opening queued; direct URL works. Earlier5201/8033 listeners absent without stop action in this turn. Physical device/Safari/native zoom and owner visual acceptance remain unverified. Next work: actual science/magic tools or effects and skill gates; no effects are claimed here. No commit/push/deploy.
+- Cleanup verified: owned test runners and headless browsers exited, retained preview/backend healthy. Seven unattributable shared Node tool hosts preserved; no broad kill or user browser closure.
+
 ## 2026-10-13 UI archetypes — candidate
 
 - Owner requested all six existing screen archetypes. Implemented interactive map selection/destination dock, pinned notice index/detail, NPC scene with optional request, paired item grids, blueprint stages/materials, and utility growth workspace with actual source/reward receipt.

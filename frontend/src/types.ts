@@ -14,6 +14,8 @@ export interface World extends MapData {
   interiors: Record<string, MapData>;
 }
 export interface GameState {
+  knowledge_points?: number;
+  knowledge_growth?: { science: number; magic: number };
   stamina?: { current: number; max: number; updated_at: number };
   stamina_rules?: {
     gather_costs: Record<string, number>;
@@ -93,6 +95,7 @@ export type Panel =
   | null;
 
 export interface StudyTask {
+  knowledge_reward?: number;
   plan_id?: string | null;
   archived_at?: number | null;
   id: string;

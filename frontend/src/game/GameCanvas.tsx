@@ -138,6 +138,8 @@ export function GameCanvas() {
           current: staminaNow(s.state, serverNow()),
         },
         healthPoints: s.state?.health_points,
+        knowledgePoints: s.state?.knowledge_points,
+        knowledgeGrowth: s.state?.knowledge_growth,
         healthInvested: s.state?.health_invested,
         exerciseTasks: s.state?.exercise_task_log,
         pendingFeedbackXp: Math.max(0, (s.state?.xp || 0) - instance.lastXp),

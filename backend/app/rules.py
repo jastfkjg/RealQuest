@@ -31,11 +31,14 @@ def upgrade_state(original):
     state.setdefault('storage', {key:0 for key in ['wood','stone','seed','crop','plank']})
     state.setdefault('study_tasks', {})
     state.setdefault('study_plans', {})
+    state.setdefault('knowledge_points', 0)
+    state.setdefault('knowledge_growth', {'science': 0, 'magic': 0})
     state.setdefault('exercise_tasks', {})
     state.setdefault('health_points', 0)
     state.setdefault('health_invested', 0)
     state.setdefault('stamina', {'current': 100, 'max': 100, 'updated_at': 0})
     for task in state['study_tasks'].values():
+        task.setdefault('knowledge_reward', 0)
         task.setdefault('plan_id', None)
         task.setdefault('archived_at', None)
     for index, record in enumerate(state['activities']):
@@ -138,6 +141,10 @@ def complete_study_task(state, task, now):
     minutes = sum(a['amount'] for a in state['activities'] if a.get('study_task_id') == task['id'])
     if minutes >= task['target_minutes'] and task['completed_at'] is None:
         task['completed_at'] = now
+        task['knowledge_reward'] = 1
+        state['knowledge_points'] += 1
+        return True
+    return False
 
 def activity(state, data, now, source='manual'):
     kind = data.get('kind')
@@ -206,6 +213,16 @@ def apply(state, action, data, now):
         return ''
     if action == 'activity':
         return activity(state, data, now)
+    if action == 'knowledge_spend':
+        branch = data.get('branch')
+        require(branch in ['science', 'magic'], '请选择科学或魔法')
+        expected = integer(data.get('expected_invested'), 0, 1000000)
+        require(expected == sum(state['knowledge_growth'].values()), '研修进度已更新，请查看最新等级后再投入')
+        require(state['knowledge_points'] > 0, '完成一项学习任务后，就能获得知识点')
+        state['knowledge_points'] -= 1
+        state['knowledge_growth'][branch] += 1
+        name = '科学' if branch == 'science' else '魔法'
+        return f'{name}提升至 {state["knowledge_growth"][branch]} 级，已投入 1 知识点。'
     if action == 'exercise_prepare':
         require(data.get('date', today) == today, '日期已经变化，请翻到今天再立下约定')
         task_id = 'exercise-' + today
@@ -294,8 +311,8 @@ def apply(state, action, data, now):
         title = study_title(data.get('title'))
         minutes = integer(data.get('target_minutes'), 1, 120)
         task.update(title=title, target_minutes=minutes)
-        complete_study_task(state, task, now)
-        return '这一页已修改，已有记录和成长保持不变'
+        completed = complete_study_task(state, task, now)
+        return '这一页已完成，获得 1 知识点；已有学习经验保持不变' if completed else '这一页已修改，已有记录和成长保持不变'
     if action == 'study_create':
         task_id = data.get('task_id')
         require(isinstance(task_id, str) and len(task_id) == 36, '任务标识无效')
@@ -323,8 +340,8 @@ def apply(state, action, data, now):
         require(record['date'] == task['date'], '只能关联任务当天的学习记录')
         require(record.get('study_task_id') in [None, task['id']], '这条记录已经记入另一项研习')
         record['study_task_id'] = task['id']
-        complete_study_task(state, task, now)
-        return '记录已记入研习，已有成长不会重复发放'
+        completed = complete_study_task(state, task, now)
+        return '研习完成，获得 1 知识点；关联不重复发放学习经验' if completed else '记录已记入研习，已有成长不会重复发放'
     if action.startswith('timer_'):
         timer = state['timer']
         if action == 'timer_start':
@@ -358,7 +375,8 @@ def apply(state, action, data, now):
                 if timer.get('study_task_id'):
                     task = study_task(state, timer['study_task_id'])
                     record['study_task_id'] = task['id']
-                    complete_study_task(state, task, now)
+                    if complete_study_task(state, task, now):
+                        message += '；研习完成，获得 1 知识点'
             state['timer'] = None
             return message
         else:

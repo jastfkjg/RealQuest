@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Knowledge research material reuse — 2026-10-14
+
+The knowledge chapter reuses the existing journal spread through `study.css`, shared tokens and installed Lucide Compass/Sparkles/Star icons. Its connector path and level marks are project-authored SVG/CSS UI, not inventory, tools or new unlock assets. No raster, font, audio, paid pack, download or source-pixel edit. All 31 existing image entries and source hashes pass audit. Actual rendered candidate and evidence: `docs/tasks/12-knowledge-growth.md`.
+
 ## Study journey material reuse — 2026-10-13
 
 `StudyLibrary` and the extended study book reuse the same audited journal spread, shared Hearthwood tokens, selected actor frame and installed Lucide icons. Plan spines, dated index and recovery layout are DOM/CSS; no new bitmap, font, audio, generated artwork or source modifications. Source/runtime manifest remains unchanged; 31-image audit passes. Evidence: `docs/tasks/08-study-journey.md`.

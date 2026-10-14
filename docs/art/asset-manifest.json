@@ -953,6 +953,9 @@
         60
       ],
       "binding": "frontend/src/journal.css: .hj-book::before. Mobile clips the left 50% of a double-width nine-slice to reveal one leaf, retaining fixed edge depth for long entries.",
+      "additional_bindings": [
+        "frontend/src/study.css: .study-book::before; reused by the knowledge chapter in KnowledgeStudy.tsx / knowledge.css, with unchanged source pixels and slice insets."
+      ],
       "content_audit": "Two empty warm paper leaves, moss cloth cover, stitched spine, layered page edges and ribbon. No baked text, task icons, rewards or buttons. Real DOM contents are separate. Alpha, dimensions and source/runtime pixels verified; actual browser screenshots inspected."
     },
     {

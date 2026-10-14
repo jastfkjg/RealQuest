@@ -11,10 +11,12 @@ import {
   Play,
   Plus,
   Square,
+  Star,
 } from "lucide-react";
 import { serverNow, useGame } from "../stores/game";
 import { api } from "../services/api";
 import { StudyLibrary } from "./StudyLibrary";
+import { KnowledgeStudy } from "./KnowledgeStudy";
 import { RecoveryPanel } from "./RecoveryPanel";
 import type { StudyTask } from "../types";
 import { PixelPerson } from "./PixelPerson";
@@ -46,18 +48,19 @@ export function StudyPage() {
   const worldEntry = useRef(useGame.getState().selected?.kind === "study");
   const tasks = state!.study_task_log || [];
   const plans = state!.study_plan_log || [];
-  const [view, setView] = useState<"today" | "plans" | "history" | "save">(
-    () => {
-      try {
-        const saved = sessionStorage.getItem("realquest-study-view");
-        if (["today", "plans", "history", "save"].includes(saved || ""))
-          return saved as "today";
-      } catch {
-        /* Optional view preference. */
-      }
-      return state!.timer ? "today" : plans.length ? "plans" : "today";
-    },
-  );
+  const [view, setView] = useState<
+    "today" | "plans" | "growth" | "history" | "save"
+  >(() => {
+    if (useGame.getState().studyEntry === "growth") return "growth";
+    try {
+      const saved = sessionStorage.getItem("realquest-study-view");
+      if (["today", "plans", "growth", "history", "save"].includes(saved || ""))
+        return saved as "today";
+    } catch {
+      /* Optional view preference. */
+    }
+    return state!.timer ? "today" : plans.length ? "plans" : "today";
+  });
   const visibleTasks = tasks.filter(
     (t) =>
       !t.archived_at && !plans.find((p) => p.id === t.plan_id)?.archived_at,
@@ -130,6 +133,14 @@ export function StudyPage() {
   }).format(now * 1000);
   useEffect(() => {
     dialog.current?.showModal();
+    if (useGame.getState().studyEntry) {
+      useGame.setState({ studyEntry: null });
+      try {
+        sessionStorage.setItem("realquest-study-view", "growth");
+      } catch {
+        /* Optional preference. */
+      }
+    }
     const ticker = window.setInterval(() => setNow(serverNow()), 1000);
     return () => {
       window.clearInterval(ticker);
@@ -167,7 +178,12 @@ export function StudyPage() {
   async function act(action: string, data: Record<string, unknown> = {}) {
     unlockSound();
     const ok = await command(action, data);
-    if (ok) chime(action === "timer_finish" ? "reward" : "interact");
+    if (ok)
+      chime(
+        action === "timer_finish" || action === "knowledge_spend"
+          ? "reward"
+          : "interact",
+      );
     else {
       // Resolve an uncertain response using authoritative state, without replaying rewards.
       await api("state")
@@ -243,9 +259,11 @@ export function StudyPage() {
                 ? "今日研习"
                 : view === "plans"
                   ? "研习计划"
-                  : view === "history"
-                    ? "归档回看"
-                    : "旅程存档"}
+                  : view === "growth"
+                    ? "知识研修"
+                    : view === "history"
+                      ? "归档回看"
+                      : "旅程存档"}
             </h1>
           </div>
           <span className="study-date">
@@ -258,6 +276,7 @@ export function StudyPage() {
             [
               ["today", "今日研习"],
               ["plans", "研习计划"],
+              ["growth", "知识研修"],
               ["history", "归档回看"],
               ["save", "存档与恢复"],
             ] as const
@@ -271,6 +290,13 @@ export function StudyPage() {
             </button>
           ))}
         </nav>
+        {view === "growth" && (
+          <KnowledgeStudy
+            act={act}
+            onStudy={() => turnTo("today")}
+            onRead={choose}
+          />
+        )}
         {(view === "plans" || view === "history") && (
           <StudyLibrary
             initialPlanId={task?.plan_id}
@@ -411,6 +437,9 @@ export function StudyPage() {
                       <Feather aria-hidden="true" size={17} />{" "}
                       {busy ? "正在记下…" : "记下这项研习"}
                     </button>
+                    <p className="study-clock-note">
+                      完成这一页，获得 1 知识点，可投入科学或魔法。
+                    </p>
                     {tasks.length > 0 && (
                       <button
                         type="button"
@@ -443,6 +472,12 @@ export function StudyPage() {
                       <p className="study-pledge">
                         留给好奇心的 <strong>{task.target_minutes} 分钟</strong>
                       </p>
+                      {task.completed_at === null && (
+                        <p className="study-knowledge-promise">
+                          <Star size={16} aria-hidden="true" /> 完成这一页 · ＋1
+                          知识点
+                        </p>
+                      )}
                       <div
                         className={`study-seal ${task.completed_at !== null ? "is-complete" : ""}`}
                       >
@@ -623,6 +658,27 @@ export function StudyPage() {
                       ? "学习已记录，成长已结算"
                       : "准备好了，就翻开书吧"}
                 </p>
+                {completed && task && (
+                  <div className="study-knowledge-reward">
+                    <span role="status">
+                      <Star size={20} aria-hidden="true" />
+                      {task.knowledge_reward
+                        ? "这一页获得了 1 知识点"
+                        : "旧日书页 · 保留原有成长"}
+                    </span>
+                    <small>
+                      可用知识点 {state!.knowledge_points || 0} · 科学{" "}
+                      {state!.knowledge_growth?.science || 0} · 魔法{" "}
+                      {state!.knowledge_growth?.magic || 0}
+                    </small>
+                    <button
+                      className="rq-button rq-button--primary study-primary"
+                      onClick={() => turnTo("growth")}
+                    >
+                      翻开知识研修 <ArrowRight size={18} aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
                 {timer ? (
                   <>
                     {!bound && (
@@ -680,7 +736,11 @@ export function StudyPage() {
                 ) : !draft && task ? (
                   <>
                     <button
-                      className="rq-button rq-button--primary study-primary"
+                      className={
+                        completed
+                          ? "study-text-button"
+                          : "rq-button rq-button--primary study-primary"
+                      }
                       disabled={busy || archived}
                       onClick={() =>
                         task.completed_at !== null
@@ -770,7 +830,7 @@ export function StudyPage() {
             记录其他成长 <ArrowRight aria-hidden="true" size={15} />
           </button>
         </footer>
-        {(error || showNotice) && (
+        {view !== "growth" && (error || (showNotice && !completed)) && (
           <div
             className={`study-feedback ${error ? "is-error" : ""}`}
             role={error ? "alert" : "status"}

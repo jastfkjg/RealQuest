@@ -18,6 +18,7 @@ interface Store {
   inventoryItem: string;
   quickItems: string[];
   activityKind: string;
+  studyEntry: "growth" | null;
   selectItem: (item: string) => void;
   pinItem: (item: string, index: number) => void;
   dialogue: string;
@@ -72,6 +73,7 @@ export const useGame = create<Store>((set, get) => ({
   inventoryItem: "seed",
   quickItems: readQuickItems(),
   activityKind: "study",
+  studyEntry: null,
   selectItem: (inventoryItem) => set({ inventoryItem }),
   pinItem: (item, index) => {
     if (

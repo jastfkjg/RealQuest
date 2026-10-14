@@ -1,5 +1,16 @@
 # Hearthwood Review Checklist
 
+## Knowledge research — 2026-10-14
+
+- [x] Learning completion awards an actual point once; selected science/magic investment, receipt deltas, current levels and provenance follow authoritative state.
+- [x] Existing journal material, palette and icons reused; connector UI is original code. No new bitmap/font/audio; all 31 image/source checks pass.
+- [x] Desktop/tablet/phone/short-landscape, 375 DPR2 touch, larger DOM text, keyboard/IME/tab ownership, pending/rejected/lost-response/conflicting actions and reload checked. Sources and 6+ level marks inspected.
+- [x] Duplicate completion toast no longer covers the mobile research button; paper margins keep text off the darker edge. Ten actual texture contrast cases / 328 text runs / minimum 4.94:1 pass.
+- [x] 76 backend tests, production build, 22-capture feature flow, original real-minute learning flow, 19-capture health regression, play-mode regression and game frame client pass. No unexpected console errors.
+- [ ] Physical Safari/iOS/Android, native browser zoom/keyboard and production PostgreSQL concurrency/load unverified. Owner visual approval pending.
+
+Files, commands, candidate screenshots and handoff: [knowledge growth](../tasks/12-knowledge-growth.md).
+
 ## Travel-kit HUD — 2026-10-13
 
 Concept owner-approved; actual implementation verified and awaiting visual review.

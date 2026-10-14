@@ -370,6 +370,13 @@ export function StudyLibrary({
               {historyTask.completed_at !== null ? "研习完成" : "记录留存"}
             </div>
             <p>这页记下了 {historyTask.minutes} 分钟的学习。</p>
+            {historyTask.completed_at !== null && (
+              <p className="study-earned">
+                {historyTask.knowledge_reward
+                  ? "首次完成已获得 1 知识点"
+                  : "旧日书页 · 保留原有成长，不补发知识点"}
+              </p>
+            )}
             <ul className="study-memory-records">
               {state!.activities
                 .filter((a) => a.study_task_id === historyTask.id)

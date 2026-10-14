@@ -18,9 +18,9 @@
 
 `Receipt` 保存玩家外键、请求 UUID、请求指纹、动作、经验和库存增减、状态版本与服务端时间。`(player_id, request_id)` 唯一，支持追踪与幂等。状态变更和回执在同一个事务提交。
 
-剧情 Quest 状态已保存在 JSON 聚合中；快照中的 `quest_log` 由固定定义、累计统计和事件派生。学习任务以 `study_tasks` 存在同一事务聚合中，`study_task_log` 从任务及带 `study_task_id` 的活动派生分钟数和实际已得经验。学习计时带稳定 ID 和可选任务 ID；完成计时、生成活动、结算经验和标记任务完成在同一事务中发生。`study_link` 仅关联同日未归属其他任务的学习记录，不发奖。旧记录补上稳定 `legacy-{index}` 标识，旧计时补上 `legacy-timer`；无 SQL 结构变化或存档清空。
+剧情 Quest 状态已保存在 JSON 聚合中；快照中的 `quest_log` 由固定定义、累计统计和事件派生。学习任务以 `study_tasks` 存在同一事务聚合中，`study_task_log` 从任务及带 `study_task_id` 的活动派生分钟数和实际已得经验。学习计时带稳定 ID 和可选任务 ID；完成计时、生成活动、结算经验和标记任务完成在同一事务中发生。`study_link` 仅关联同日未归属其他任务的学习记录，不重复发放活动经验；首次完成任务可发放下文定义的知识点。旧记录补上稳定 `legacy-{index}` 标识，旧计时补上 `legacy-timer`；无 SQL 结构变化或存档清空。
 
-尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。`study_plans` 保存稳定计划 ID、名称、默认时长与归档时间；任务增加可空 `plan_id` / `archived_at`。`study_plan_today` 用计划 UUID 与服务端上海自然日生成稳定 UUID，同一计划/日期的并发和重试只得到一页。新的书页沿用最近主题，使用当前计划默认时长；旧进度不搬移。未完成且未计时的任务可以修改；归档可逆，归档和计划完成均无新增奖励。书架/历史在客户端每页六项，完整历史仍存在 JSON 中，服务端分页尚未实现。
+尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。`study_plans` 保存稳定计划 ID、名称、默认时长与归档时间；任务增加可空 `plan_id` / `archived_at`。`study_plan_today` 用计划 UUID 与服务端上海自然日生成稳定 UUID，同一计划/日期的并发和重试只得到一页。新的书页沿用最近主题，使用当前计划默认时长；旧进度不搬移。未完成且未计时的任务可以修改；归档可逆，归档不发奖；计划本身不另发奖励，每日书页完成按知识点规则结算。书架/历史在客户端每页六项，完整历史仍存在 JSON 中，服务端分页尚未实现。
 
 ## 操作数据流
 
@@ -61,3 +61,11 @@ Additive JSON defaults preserve the current save version, inventory, five attrib
 The daily task ID is derived from the server's Asia/Shanghai date, so different requests cannot create multiple reward-bearing pledges for one day. Linked exercise record IDs and the task's completion marker prevent duplicate health awards. `exercise_record` accepts a stable record UUID and detects conflicting reuse, supplementing request receipts across uncertain responses. `health_spend` checks an expected investment count before subtracting a point and raising capacity/current stamina. Receipts include point and capacity deltas. Existing activity XP is awarded only by activity creation, not linking or pledge completion. Imported/client balances never become authority.
 
 The React field journal uses the same store and command queue; no second Phaser instance, gameplay clock or exercise-verification mechanism is introduced. Existing server-clock anchoring drives the HUD and text-state projection. The page's `#training` entry restores on reload, clears on return/bed marking, owns keyboard input and restores focus to its opener or the Life Mode entry.
+
+## Knowledge growth slice (2026-10-14)
+
+Additive save fields `knowledge_points`, `knowledge_growth` (science/magic), and per-study-task `knowledge_reward` preserve the existing SQL schema and legacy XP/shards. The existing `complete_study_task` helper awards one point only on the unfinished → completed transition, covering bound timer finish, record linking and target edits. Legacy completed tasks default to zero awarded points and never replay that transition. Task reward flags remain as provenance after points are spent.
+
+`knowledge_spend` validates a science/magic choice, a positive balance and the expected total of both levels inside the existing locked transaction; it subtracts one point and raises one level. The shared total guards cross-branch races even while points remain. Request receipts retain point and level deltas; transport replay returns current state without another debit. Old XP reward limits and rune conditions remain unchanged.
+
+`KnowledgeStudy` is a chapter of the existing `StudyPage`, not a separate world or timer. Chapter preference and `#study` restore after reload; a transient character-entry hint opens the growth chapter directly. UI selection is local and free, spending waits for server confirmation, and uncertain responses refresh authoritative state. The game-text hook includes actual knowledge balance and both levels.
