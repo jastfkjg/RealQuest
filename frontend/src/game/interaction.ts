@@ -1,4 +1,5 @@
 import type { GameState, Panel, WorldObject } from "../types";
+import { staminaNow } from "./stamina";
 
 // Inside the server's 72px validation radius, leaving room for position sync.
 export const INTERACTION_RADIUS = 65;
@@ -31,14 +32,22 @@ export function interactionFor(
     case "storage":
       return { label: "存取物品", panel: "storage" };
     case "rest":
-      return { label: "休息与保存", command: "rest" };
+      return { label: "睡觉 · 补满体力", command: "rest" };
     case "wood":
     case "stone": {
       const seconds = Math.ceil((state.gathered[obj.id] || 0) - now);
+      const cost =
+        state.stamina_rules?.gather_costs[obj.kind] ??
+        (obj.kind === "wood" ? 4 : 6);
       return {
-        label: "采集",
+        label: `采集 · ${cost} 体力`,
         command: "gather",
-        reason: seconds > 0 ? `${seconds} 秒后恢复` : undefined,
+        reason:
+          seconds > 0
+            ? `${seconds} 秒后恢复`
+            : staminaNow(state, now) < cost
+              ? `体力不足 · 需要 ${cost} 点，回家睡觉可补满`
+              : undefined,
       };
     }
     case "plot": {

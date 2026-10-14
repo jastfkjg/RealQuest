@@ -53,3 +53,11 @@ Alembic 002 只增加 RecoveryKey / GuestSession 表与外键索引，不重写�
 `world.py` 同时提供户外与四个室内的障碍和对象；所有交互都从当前场景查找目标，不能在室内操作户外对象。进出建筑由服务端切换 `location` 与出生点，刷新可恢复室内状态。客户端场景随快照重建。
 
 `upgrade_state` 以幂等方式将旧 JSON 存档升级为版本 2，保留库存/经验/活动等数据，补齐任务、仓储和统计；旧位置若落入新障碍，迁回安全出生点。读取时派生兼容状态，下一次写入时持久化；无需改变 SQL 表结构。
+
+## Health and stamina slice (2026-10-14)
+
+Additive JSON defaults preserve the current save version, inventory, five attribute histories, exploration energy, knowledge shards and unlocks. New fields are `exercise_tasks`, `health_points`, `health_invested` and `stamina` (current/max/server timestamp); no SQL schema migration is required. `/api/state` projects natural recovery on a copy, while gather/invest/rest settle against the stored state inside the existing player transaction. The projection preserves partial intervals; full capacity never banks additional recovery for later spending. `stamina_rules` is a presentation view of authoritative costs and recovery timing.
+
+The daily task ID is derived from the server's Asia/Shanghai date, so different requests cannot create multiple reward-bearing pledges for one day. Linked exercise record IDs and the task's completion marker prevent duplicate health awards. `exercise_record` accepts a stable record UUID and detects conflicting reuse, supplementing request receipts across uncertain responses. `health_spend` checks an expected investment count before subtracting a point and raising capacity/current stamina. Receipts include point and capacity deltas. Existing activity XP is awarded only by activity creation, not linking or pledge completion. Imported/client balances never become authority.
+
+The React field journal uses the same store and command queue; no second Phaser instance, gameplay clock or exercise-verification mechanism is introduced. Existing server-clock anchoring drives the HUD and text-state projection. The page's `#training` entry restores on reload, clears on return/bed marking, owns keyboard input and restores focus to its opener or the Life Mode entry.

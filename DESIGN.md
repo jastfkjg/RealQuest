@@ -240,6 +240,12 @@ The owner authorized the multi-day study chain on 2026-10-13. Extend the same bo
 
 On phones the selected plan or new-plan writing surface precedes the book index. History selection scrolls/focuses the chosen page; all controls remain native, at least 44 CSS px and usable without dragging. A downloaded recovery credential opens the latest server-side journey, with an identity preview and confirmation after backing up the current journey. Recovery is also reachable from welcome and settings without creating a character. It does not restore a lost database. Existing journal texture, tokens, actor frames and Lucide icons are reused; no asset acquisition. See `docs/tasks/08-study-journey.md` for evidence. Visual approval remains pending.
 
+### 7.7c Health and stamina field journal — 2026-10-14
+
+The authorized growth slice uses a dedicated “行前手札”: existing woodland arrival illustration and the actual traveler on one leaf, one daily exercise pledge on the facing linen leaf, and a health seal with a concrete capacity preview. Phone compresses the scenery and keeps the pledge action prominent; recording details and history disclose on demand. Default choices are intentions, never pre-recorded exercise. Manual minutes require an explicit entry; completion seals and point balances reflect server-confirmed state. Health investment explicitly shows its one-point cost and +5 capacity/current benefit. The HUD's formerly unused exploration-energy display now presents actionable current/max stamina; legacy energy remains in the inventory.
+
+The page is reached directly from the stamina HUD, character dossier or Life Mode. Modal input ownership, focus return, accessible native controls, reduced motion, readable Chinese and truthful marker-only bed navigation are required. No life/knowledge/skill controls appear before implementation. Reuses existing approved material direction; actual page render is a candidate for owner review. See `docs/tasks/11-health-stamina.md`.
+
 ## 8. Interaction, timing, and sound
 
 Represent top-level input context explicitly, using the existing architecture: world play, overlay, dialogue, targeting, or Life Mode. A keyboard event must not activate two contexts. Ignore gameplay shortcuts during text input, content editing, and IME composition. Clear held movement on blur, visibility loss, and mode transition.

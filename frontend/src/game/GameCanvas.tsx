@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import { unlockSound } from "./feel";
 import { WorldScene } from "./WorldScene";
 import { interactionFor } from "./interaction";
+import { staminaNow } from "./stamina";
 import { accessibleTarget } from "./navigation";
 import { serverNow, useGame } from "../stores/game";
 import {
@@ -132,6 +133,13 @@ export function GameCanvas() {
         quickItems: s.quickItems,
         navigation: s.navigation,
         xp: s.state?.xp,
+        stamina: s.state?.stamina && {
+          ...s.state.stamina,
+          current: staminaNow(s.state, serverNow()),
+        },
+        healthPoints: s.state?.health_points,
+        healthInvested: s.state?.health_invested,
+        exerciseTasks: s.state?.exercise_task_log,
         pendingFeedbackXp: Math.max(0, (s.state?.xp || 0) - instance.lastXp),
         attributes: s.state?.attributes,
         plots: s.state?.plots,

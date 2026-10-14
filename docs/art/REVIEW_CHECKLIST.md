@@ -178,3 +178,16 @@ Status: **verified implementation / owner review pending**. Owner approved the h
 - [ ] Actual render awaits owner visual approval; no further screen rollout.
 
 See `docs/tasks/04-arrival-slice.md` for complete files, provenance, commands, captures, gaps and preview handoff.
+
+## Health and stamina field journal — 2026-10-14
+
+Status: implemented and browser-verified candidate; owner visual approval pending.
+
+- [x] One daily exercise pledge, explicit manual records/linking, one health point, visible investment cost and capacity preview, real gathering/bed/time recovery.
+- [x] Existing village/actor artwork and Hearthwood tokens; no bitmap/font/audio addition or fabricated possessions. Manifest reuse binding recorded; 31-image audit passes.
+- [x] Desktop 1440/1920, tablet 768, phone 390, 720 reflow and DPR2 touch 375/844 inspected. Keyboard/IME/world ownership, focus return, scrolling, 44px buttons and reduced motion checked.
+- [x] Failure, committed-response retry, duplicate linking, pending investment, persistence, zero stamina and marker-only bed navigation checked in an actual Chromium browser. Six contrast states / 190 text runs / minimum 4.97:1.
+- [x] 64 backend tests, build, focused play-mode regression, full desktop/mobile game regression and skill frame client pass. No unexpected console errors.
+- [ ] Physical Safari/iOS/Android, native browser zoom and actual owner acceptance remain unverified.
+
+Files, exact commands, screenshots/video, rules and retained-preview/cleanup evidence: [task 11](../tasks/11-health-stamina.md).

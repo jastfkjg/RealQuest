@@ -11,6 +11,7 @@ import "./welcome.css";
 import "./world-panels.css";
 import "./study.css";
 import "./hud.css";
+import "./training.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

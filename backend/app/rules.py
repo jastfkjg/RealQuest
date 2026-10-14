@@ -9,6 +9,8 @@ from .quests import QUESTS, progress, quest_views
 
 ATTRIBUTES = ['strength', 'wisdom', 'craft', 'stewardship', 'bond']
 ZONE = ZoneInfo('Asia/Shanghai')
+STAMINA_SECONDS = 720
+GATHER_COSTS = {'wood': 4, 'stone': 6}
 
 class RuleError(ValueError):
     pass
@@ -29,6 +31,10 @@ def upgrade_state(original):
     state.setdefault('storage', {key:0 for key in ['wood','stone','seed','crop','plank']})
     state.setdefault('study_tasks', {})
     state.setdefault('study_plans', {})
+    state.setdefault('exercise_tasks', {})
+    state.setdefault('health_points', 0)
+    state.setdefault('health_invested', 0)
+    state.setdefault('stamina', {'current': 100, 'max': 100, 'updated_at': 0})
     for task in state['study_tasks'].values():
         task.setdefault('plan_id', None)
         task.setdefault('archived_at', None)
@@ -75,6 +81,37 @@ def study_task_views(state):
         views.append({**task, 'minutes': sum(a['amount'] for a in records),
                       'earned_xp': sum(a['xp'] for a in records), 'record_count': len(records)})
     return sorted(views, key=lambda t: t['created_at'], reverse=True)
+
+def recover_stamina(state, now):
+    """Lazy recovery on a copy for reads, or inside a mutation transaction."""
+    stamina = state['stamina']
+    if stamina['current'] >= stamina['max']:
+        stamina['updated_at'] = max(now, stamina['updated_at'])
+        return
+    steps = max(0, math.floor((now - stamina['updated_at']) / STAMINA_SECONDS))
+    stamina['current'] = min(stamina['max'], stamina['current'] + steps)
+    stamina['updated_at'] = (max(now, stamina['updated_at']) if stamina['current'] == stamina['max']
+                             else stamina['updated_at'] + steps * STAMINA_SECONDS)
+
+def exercise_task_views(state):
+    return sorted([{**task, 'minutes': sum(a['amount'] for a in state['activities']
+                   if a.get('exercise_task_id') == task['id'])}
+                   for task in state['exercise_tasks'].values()], key=lambda t: t['date'], reverse=True)
+
+def exercise_task(state, task_id):
+    require(isinstance(task_id, str) and task_id in state['exercise_tasks'], '这项锻炼约定不存在')
+    return state['exercise_tasks'][task_id]
+
+def link_exercise(state, task, record, now):
+    require(record['kind'] == 'exercise' and record['date'] == task['date'], '请选择约定当天的运动记录')
+    require(not record.get('exercise_task_id') or record['exercise_task_id'] == task['id'], '这条记录已经用于另一项约定')
+    record['exercise_task_id'] = task['id']
+    minutes = sum(a['amount'] for a in state['activities'] if a.get('exercise_task_id') == task['id'])
+    if minutes >= task['target_minutes'] and task['completed_at'] is None:
+        task['completed_at'] = now
+        state['health_points'] += 1
+        return '约定完成，获得 1 健康点。把这份成长带上旅途吧。'
+    return '运动记录已装订进约定；关联不会重复发放经验。'
 
 def study_plan(state, plan_id):
     require(isinstance(plan_id, str) and plan_id in state['study_plans'], '这本研习计划不存在')
@@ -169,6 +206,45 @@ def apply(state, action, data, now):
         return ''
     if action == 'activity':
         return activity(state, data, now)
+    if action == 'exercise_prepare':
+        require(data.get('date', today) == today, '日期已经变化，请翻到今天再立下约定')
+        task_id = 'exercise-' + today
+        title = study_title(data.get('title'))
+        minutes = integer(data.get('target_minutes'), 1, 120)
+        previous = state['exercise_tasks'].get(task_id)
+        if previous:
+            require(previous['title'] == title and previous['target_minutes'] == minutes, '今天已有一项约定，完成它或安心休息，明天可以重新选择。')
+            return '今天的约定已经保存'
+        state['exercise_tasks'][task_id] = {'id': task_id, 'title': title, 'target_minutes': minutes,
+            'date': today, 'timezone': 'Asia/Shanghai', 'created_at': now, 'completed_at': None}
+        return '约定已写下。按自己的节奏完成，回来记下一笔。'
+    if action in ['exercise_record', 'exercise_link']:
+        task = exercise_task(state, data.get('task_id'))
+        if action == 'exercise_link':
+            record = next((a for a in state['activities'] if a['id'] == data.get('activity_id')), None)
+            require(record is not None, '这条运动记录不存在')
+        else:
+            record_id = study_uuid(data.get('activity_id'))
+            minutes = integer(data.get('minutes'), 1, 480)
+            record = next((a for a in state['activities'] if a['id'] == record_id), None)
+            if record:
+                require(record.get('exercise_task_id') == task['id'] and record['amount'] == minutes, '记录标识已用于其他内容，请重新打开手札')
+                return '这次运动已经保存，无需重复记录'
+            require(task['completed_at'] is None, '约定已经完成；其他运动可以在现实成长中记录')
+            activity(state, {'kind': 'exercise', 'amount': minutes, 'date': task['date'], 'note': task['title']}, now)
+            record = state['activities'][-1]
+            record['id'] = record_id
+        return link_exercise(state, task, record, now)
+    if action == 'health_spend':
+        expected = integer(data.get('expected_invested'), 0, 1000000)
+        require(expected == state['health_invested'], '培养进度已更新，请查看最新体力后再选择')
+        require(state['health_points'] > 0, '完成一项锻炼约定后，就能获得健康点')
+        recover_stamina(state, now)
+        state['health_points'] -= 1
+        state['health_invested'] += 1
+        state['stamina']['max'] += 5
+        state['stamina']['current'] += 5
+        return f'体力上限提升至 {state["stamina"]["max"]}，当前体力增加 5 点。'
     if action == 'study_plan_create':
         plan_id = study_uuid(data.get('plan_id'))
         title = study_title(data.get('title'))
@@ -333,7 +409,9 @@ def apply(state, action, data, now):
         require(target == 'home_bed', '请走近家里的床')
         remember(state,'rested_home')
         state['last_rest']=now
-        return '在家里歇了歇脚。进度已保存，作物会按自己的节奏生长。'
+        state['stamina']['current'] = state['stamina']['max']
+        state['stamina']['updated_at'] = now
+        return '睡了一觉，体力已补满。进度已保存，作物仍按真实时间生长。'
     if action in ['store', 'withdraw']:
         require(target == 'home_chest', '请先走近家园储物箱')
         item=data.get('item')
@@ -361,13 +439,17 @@ def apply(state, action, data, now):
     if action == 'gather':
         require(obj['kind'] in ['wood', 'stone'], '这里不能采集')
         require(state['gathered'].get(target, 0) <= now, '资源正在恢复，稍后再来吧')
+        recover_stamina(state, now)
+        cost = GATHER_COSTS[obj['kind']]
+        require(state['stamina']['current'] >= cost, f'体力不足，需要 {cost} 点。回家睡觉可补满，也会随时间自然恢复。')
+        state['stamina']['current'] -= cost
         quantity = 3 + int(state['attributes']['strength'] >= 50)
         state['inventory'][obj['kind']] += quantity
         bump(state,obj['kind'],quantity)
         if 'first_gather' not in state['events']:
             state['events'].append('first_gather')
         state['gathered'][target] = now + 30
-        return f'采集成功，获得 {quantity} 份' + ('木材' if obj['kind'] == 'wood' else '石料')
+        return f'采集成功，获得 {quantity} 份' + ('木材' if obj['kind'] == 'wood' else '石料') + f' · 体力 −{cost}'
     if action == 'talk':
         require(obj['kind'] == 'npc', '这不是可交谈的角色')
         if state['npc_days'].get(target) != today:

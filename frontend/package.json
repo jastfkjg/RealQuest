@@ -19,7 +19,8 @@
     "test:study": "node scripts/study-smoke.mjs && node scripts/study-contrast.mjs",
     "test:journey": "node scripts/journey-smoke.mjs && node scripts/journey-review.mjs",
     "test:cottage": "node scripts/cottage-smoke.mjs",
-    "test:hud": "node scripts/hud-smoke.mjs"
+    "test:hud": "node scripts/hud-smoke.mjs",
+    "test:health": "node scripts/health-smoke.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

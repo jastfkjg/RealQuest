@@ -1,4 +1,6 @@
 import { RecoveryPanel } from "./components/RecoveryPanel";
+import { TrainingPage } from "./components/TrainingPage";
+import { StaminaBadge } from "./components/StaminaBadge";
 import { HudIcon } from "./components/HudIcon";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
@@ -242,6 +244,18 @@ function ActivityPanel() {
   }
   return (
     <div className="hp-growth">
+      <div className="hp-training-entry">
+        <div>
+          <strong>把现实中的脚步，带上旅途</strong>
+          <p>立下锻炼约定，获得健康点，培养远行的体力。</p>
+        </div>
+        <button
+          className="rq-button rq-button--primary"
+          onClick={() => useGame.getState().open("training")}
+        >
+          <Leaf size={18} /> 行前手札 <ArrowRight size={16} />
+        </button>
+      </div>
       <div className="hp-study-entry">
         <div>
           <strong>把今天想学的，写进手札</strong>
@@ -406,6 +420,7 @@ export function Panels() {
   const preferences = usePreferences();
   if (!panel || !state) return null;
   if (panel === "study") return <StudyPage />;
+  if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
     board: "委托告示板",
     map: "回响大陆 · 全域地图",
@@ -781,11 +796,7 @@ export default function App() {
                       {state.inventory.gold}
                       <small>金币</small>
                     </span>
-                    <span aria-label={`探索能量 ${state.energy}`}>
-                      <HudIcon name="energy" />
-                      {state.energy}
-                      <small>探索能量</small>
-                    </span>
+                    <StaminaBadge />
                   </div>
                 </div>
                 <GameCanvas />

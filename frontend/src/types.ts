@@ -14,6 +14,15 @@ export interface World extends MapData {
   interiors: Record<string, MapData>;
 }
 export interface GameState {
+  stamina?: { current: number; max: number; updated_at: number };
+  stamina_rules?: {
+    gather_costs: Record<string, number>;
+    seconds_per_point: number;
+    capacity_per_point: number;
+  };
+  health_points?: number;
+  health_invested?: number;
+  exercise_task_log?: ExerciseTask[];
   study_plan_log?: StudyPlan[];
   study_task_log?: StudyTask[];
   location: string;
@@ -37,6 +46,7 @@ export interface GameState {
   activities: {
     id?: string;
     study_task_id?: string;
+    exercise_task_id?: string;
     knowledge_shards?: number;
     created_at?: number;
     kind: string;
@@ -65,6 +75,7 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
+  | "training"
   | "menu"
   | "map"
   | "board"
@@ -94,6 +105,17 @@ export interface StudyTask {
   minutes: number;
   earned_xp: number;
   record_count: number;
+}
+
+export interface ExerciseTask {
+  id: string;
+  title: string;
+  target_minutes: number;
+  date: string;
+  timezone: string;
+  created_at: number;
+  completed_at: number | null;
+  minutes: number;
 }
 
 export interface StudyPlan {

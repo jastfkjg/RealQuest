@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select, delete, text, or_
 from .db import Session, engine
 from .models import Player, Receipt, RecoveryKey, GuestSession
-from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views
+from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS
 from .quests import quest_views
 from .world import WORLD
 
@@ -60,10 +60,15 @@ def lock_sqlite(db):
 
 def snapshot(state, **extra):
     view=upgrade_state(state)
+    now = time.time()
+    if view['stamina']['current'] < view['stamina']['max']:
+        recover_stamina(view, now)
+    view['exercise_task_log'] = exercise_task_views(view)
+    view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': 5}
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)
-    return {'state': view, 'server_time': time.time(), **extra}
+    return {'state': view, 'server_time': now, **extra}
 
 @app.get('/api/health')
 def health():
@@ -117,6 +122,9 @@ def command(body: Command, request: Request):
         updated['revision'] += 1
         player.state = updated
         changes = {'message': message, 'xp': updated['xp'] - before['xp'], 'inventory': {key: value-before['inventory'].get(key,0) for key,value in updated['inventory'].items() if value != before['inventory'].get(key,0)}, 'revision': updated['revision']}
+        changes.update(health_points=updated['health_points'] - before['health_points'],
+                       health_invested=updated['health_invested'] - before['health_invested'],
+                       stamina_max=updated['stamina']['max'] - before['stamina']['max'])
         db.add(Receipt(id=str(uuid.uuid4()), player_id=player.id, request_id=body.request_id, fingerprint=fingerprint, action=body.action, changes=changes, created_at=time.time()))
         return snapshot(updated, message=message, replayed=False, save_id=player.id)
 

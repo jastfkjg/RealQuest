@@ -134,9 +134,11 @@ export const useGame = create<Store>((set, get) => ({
         ready: true,
         error: "",
         panel:
-          window.location.hash === "#study" && reply.state.character
-            ? "study"
-            : null,
+          window.location.hash === "#training" && reply.state.character
+            ? "training"
+            : window.location.hash === "#study" && reply.state.character
+              ? "study"
+              : null,
       });
     } catch (e) {
       set({ error: (e as Error).message });
@@ -165,13 +167,21 @@ export const useGame = create<Store>((set, get) => ({
     }
   },
   open: (panel, selected) => {
-    if (panel === "study" || window.location.hash === "#study")
+    if (
+      panel === "study" ||
+      panel === "training" ||
+      ["#study", "#training"].includes(window.location.hash)
+    )
       window.history.replaceState(
         null,
         "",
         window.location.pathname +
           window.location.search +
-          (panel === "study" ? "#study" : ""),
+          (panel === "study"
+            ? "#study"
+            : panel === "training"
+              ? "#training"
+              : ""),
       );
     set({ panel, selected: selected || null, error: "" });
   },

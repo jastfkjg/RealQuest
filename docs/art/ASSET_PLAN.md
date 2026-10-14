@@ -178,3 +178,7 @@ All 31 prior source/runtime raster assets remain byte-identical. The original ho
 ## 14. Approved travel-kit HUD — 2026-10-13
 
 Owner approved the generated `references/hud-concept-v1.png` design board; it is a reference outside the runtime bundle. Implementation uses original code-native 24×24 integer SVG paths in `frontend/src/components/HudIcon.tsx` (nine variants) and shared Hearthwood CSS edges. Main desktop icons render at 2× and compact controls at 1×. Character/menu/portrait reuse the actual existing appearance sheet; item icons and currency identity remain audited existing files. All functional text remains DOM. Source/concept hashes, original artwork provenance and reference approval are in the manifest; UI source checks are included in the audit. No new runtime raster, font, audio, purchase or third-party pack. Actual render awaits owner review; see task 10.
+
+## 15. Health and stamina field journal — 2026-10-14
+
+Reuses the unchanged generated `arrival-village-v1.webp` as a woodland vignette and the actual existing character appearance. All pledge choices, progress footprints, health seal, capacity preview and text are live DOM/CSS with the shared Hearthwood tokens; outline symbols use the existing Lucide dependency. No new bitmap, font, audio, downloaded pack or image-generation request. The manifest records the additional village-art binding without changing hashes. Actual render remains a candidate; evidence and limits are in task 11.

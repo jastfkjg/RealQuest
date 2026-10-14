@@ -1025,7 +1025,10 @@
       ],
       "runtime_processing": "tools/build_inventory_skin.py --asset arrival-village-v1; lossless WebP exact=True method=6, decoded RGBA equality asserted; no resampling/recoloring/art edits.",
       "binding": "frontend/src/welcome.css",
-      "content_audit": "Viewed at source and in browser: no baked text, controls or characters."
+      "content_audit": "Viewed at source and in browser: no baked text, controls or characters.",
+      "additional_bindings": [
+        "frontend/src/training.css: .training-scenery; cropped woodland vignette, original bytes unchanged; candidate 2026-10-14"
+      ]
     },
     {
       "id": "ui.surface.welcome.registration",
