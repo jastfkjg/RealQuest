@@ -1,5 +1,19 @@
 # RealQuest Asset Plan and Provenance
 
+## Active commission contract — 2026-10-14
+
+The owner approved `references/commission-contract-concept-v1.png` to replace Noah's active-task data blocks with a signed scroll and hourglass. Two new original textless assets were produced using built-in `image_gen`: a blank curled parchment and an empty hourglass frame with transparent surroundings/glass. Sources/prompts are `assets/generated/hearthwood/commission-{scroll,hourglass}-v1.{png,prompt.txt}`. Lossless WebP packaging through `tools/build_inventory_skin.py` asserts RGBA equality; no source edit, resampling, external pack, font or audio. Runtime additions total 2,605,194 bytes. Exact dimensions, hashes, alpha bounds and source/runtime paths are in the manifest.
+
+The scroll uses source slices180/170/200/170, desktop CSS43/40/48/40 and phone33/23/35/23. `ContractHourglass.tsx` draws original clipped SVG sand behind the unmodified transparent frame using authoritative remaining/total time; frame and sand share a100×150 coordinate ratio. It represents waiting only, never verification of real behavior. Chinese content, status, deadline, reward and actions remain DOM. Existing wood, river and NPC actor remain unchanged. Scope/evidence: `docs/tasks/16-commission-contract.md`; actual implementation acceptance pending.
+
+## Noah commission board — 2026-10-14
+
+Owner approved `references/commission-board-concept-v1.png` as the direction for Noah's existing reality-commission dialogue. It remains a reference outside runtime, with the exact prompt and approval in the manifest. The actual implementation is a candidate pending owner review.
+
+Two original textless assets were generated from that approved generated concept: `commission-wood-v1.png` (blank timber board) and `commission-river-v1.png` (character-free riverside backdrop). They stay in `assets/generated/hearthwood`; `tools/build_inventory_skin.py --asset <name>` packages lossless WebP with decoded RGBA equality. Runtime files total 2,756,642 bytes. No source resampling, recoloring, third-party pack, font, audio or paid acquisition. The wood uses measured 105px source slices and 24px desktop / 15px mobile CSS borders. Scenery is an isolated illustration, never a playable map.
+
+The existing Noah actor is overlaid at 4× desktop / 3× phone; it is not baked into the backdrop. `CommissionIcon.tsx` supplies original integer-grid book, boots and hammer decorations beside DOM labels. All text, selection, quota, reward and controls are real DOM driven by current state. `commission-board.css` scopes the new materials to Noah; other NPCs and journal layouts keep their existing bindings. Exact dimensions, hashes, processing and provenance are recorded in `asset-manifest.json`. Evidence: `docs/tasks/15-commission-board.md`.
+
 ## Knowledge research material reuse — 2026-10-14
 
 The knowledge chapter reuses the existing journal spread through `study.css`, shared tokens and installed Lucide Compass/Sparkles/Star icons. Its connector path and level marks are project-authored SVG/CSS UI, not inventory, tools or new unlock assets. No raster, font, audio, paid pack, download or source-pixel edit. All 31 existing image entries and source hashes pass audit. Actual rendered candidate and evidence: `docs/tasks/12-knowledge-growth.md`.

@@ -1,4 +1,4 @@
-import { LifeQuestDialogue } from "./LifeQuests";
+import { LifeQuestDialogue, LifeQuota } from "./LifeQuests";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowUpFromLine,
@@ -302,39 +302,89 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
   }, [showRequest]);
   if (!selected || !state) return null;
   const librarian = selected.id === "lia";
+  const noah = selected.id === "noah";
+  const activeCommission = state.life_journal?.tasks.some(
+    (task) => task.status === "active",
+  );
   const quests = state.quest_log.filter((q) => q.giver === selected.id);
   const quest =
     quests.find((q) => ["ready", "active", "available"].includes(q.status)) ||
     quests[0];
   return (
-    <div className="ha-encounter">
-      <aside className="ha-npc-identity">
-        <span className="ha-eyebrow">林间相逢</span>
-        <div className="ha-npc-vignette">
-          <PixelPerson variant={librarian ? 0 : 2} />
-          <Leaf size={24} />
-        </div>
-        <h3>{selected.name}</h3>
-        <p>{librarian ? "图书管理员" : "森林向导"}</p>
-        <span className="ha-npc-place">
-          <MapPin size={14} />
-          {librarian ? "回响图书馆前" : "回响村庄 · 河岸"}
-        </span>
-        <small>关系值 {state.relationships[selected.id] || 0}</small>
-      </aside>
+    <div
+      className={`ha-encounter ${noah ? "ha-commission" : ""}`}
+      data-contract={noah && life && activeCommission ? "true" : undefined}
+    >
+      {noah && (
+        <h2 className="commission-title" aria-hidden="true">
+          <Leaf size={22} aria-hidden="true" />
+          林间委托
+        </h2>
+      )}
+      {noah ? (
+        <aside className="commission-host" aria-label="森林向导诺亚">
+          <div className="commission-riverside" aria-hidden="true">
+            <PixelPerson variant={2} />
+          </div>
+          <div className="commission-host-paper">
+            <h3>{selected.name}</h3>
+            <p>森林向导</p>
+            <div className="commission-host-line" aria-hidden="true">
+              ✧
+            </div>
+            <blockquote>
+              {activeCommission ? (
+                <>
+                  去忙你的吧。
+                  <br />
+                  我替你守着这份约定。
+                </>
+              ) : (
+                <>
+                  给好奇心留一段时间。
+                  <br />
+                  今天，想做些什么？
+                </>
+              )}
+            </blockquote>
+            <small>
+              <MapPin size={13} aria-hidden="true" />
+              河岸 · 关系值 {state.relationships[selected.id] || 0}
+            </small>
+          </div>
+        </aside>
+      ) : (
+        <aside className="ha-npc-identity">
+          <span className="ha-eyebrow">林间相逢</span>
+          <div className="ha-npc-vignette">
+            <PixelPerson variant={librarian ? 0 : 2} />
+            <Leaf size={24} />
+          </div>
+          <h3>{selected.name}</h3>
+          <p>{librarian ? "图书管理员" : "森林向导"}</p>
+          <span className="ha-npc-place">
+            <MapPin size={14} />
+            {librarian ? "回响图书馆前" : "回响村庄 · 河岸"}
+          </span>
+          <small>关系值 {state.relationships[selected.id] || 0}</small>
+        </aside>
+      )}
       <div className="ha-dialogue-scene">
-        {selected.id === "noah" && (
-          <div
-            className="life-dialogue-tabs"
-            role="group"
-            aria-label="对话话题"
-          >
-            <button aria-pressed={life} onClick={() => setLife(true)}>
-              现实委托
-            </button>
-            <button aria-pressed={!life} onClick={() => setLife(false)}>
-              村庄闲谈
-            </button>
+        {noah && (
+          <div className="life-paper-heading">
+            <div
+              className="life-dialogue-tabs"
+              role="group"
+              aria-label="对话话题"
+            >
+              <button aria-pressed={life} onClick={() => setLife(true)}>
+                现实委托
+              </button>
+              <button aria-pressed={!life} onClick={() => setLife(false)}>
+                村庄闲谈
+              </button>
+            </div>
+            <LifeQuota />
           </div>
         )}
         {life && selected.id === "noah" ? (
@@ -364,16 +414,18 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
             )}
           </>
         )}
-        <div className="ha-dialogue-actions">
-          {!life && quest && !showRequest && (
-            <button className="primary" onClick={() => setShowRequest(true)}>
-              继续 · 聊聊这份委托 <ArrowRight size={16} />
+        {(!noah || !life) && (
+          <div className="ha-dialogue-actions">
+            {!life && quest && !showRequest && (
+              <button className="primary" onClick={() => setShowRequest(true)}>
+                继续 · 聊聊这份委托 <ArrowRight size={16} />
+              </button>
+            )}
+            <button className="hp-farewell" onClick={() => open(null)}>
+              暂时离开
             </button>
-          )}
-          <button className="hp-farewell" onClick={() => open(null)}>
-            暂时离开
-          </button>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

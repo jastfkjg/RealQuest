@@ -202,6 +202,10 @@ Share palette, item identities, readable Chinese typography, focus/pressed/pendi
 
 On phone the board has a short row of notices above selected details; storage stacks its two compact containers. NPC identity moves above dialogue. Never expand all quests into articles or substitute a resource-row table for item transfer. Blueprint art represents the existing building, not a fabricated next-stage asset. Full Life Mode planning/history and the separate Today study feature are outside this visual pass.
 
+Noah commission direction approved on 2026-10-14: a warm wooden board holds a riverside character stage and one paper commission. Topic tabs and authoritative daily quota lead into three short task slips, wooden hour tokens, an exact reward preview and one acceptance action. Rules expand on demand; active countdown, settlement, cancellation and the story topic use the same board. On phone, identity becomes a compact scene strip above the paper. The river illustration is presentation only. Other NPCs retain their encounter layout. Actual candidate evidence: `docs/tasks/15-commission-board.md`.
+
+The second approved preview replaces the active/ready right pane with a signed parchment on moss cloth: one hourglass with server-time-derived sand, a small time note, a state ribbon and a sealed pending-reward tag. Waiting offers “收起委托”; reaching the server deadline offers the existing settlement action. Cancellation and rules stay secondary. Duplicate acceptance notices are suppressed while the contract itself confirms acceptance; errors remain visible. The same promise closes/reopens without cancelling, and all text/actions remain DOM. Evidence: `docs/tasks/16-commission-contract.md`.
+
 Wood/seed and other imagery reuse the audited registry unchanged. This pass adds no bitmap assets, fonts, purchases, currencies, or save fields. The actual render is a **candidate**, awaiting owner visual review. Evidence: `docs/tasks/07-ui-archetypes.md`.
 
 ### 7.5 Character sheet

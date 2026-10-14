@@ -182,7 +182,7 @@ export function Panels() {
     ai: "AI 旅途伙伴",
     menu: "旅途菜单",
     building: selected?.name || "建筑",
-    npc: "林间相逢",
+    npc: selected?.id === "noah" ? "林间委托" : "林间相逢",
   };
   return (
     <Modal key={panel} title={titles[panel]}>

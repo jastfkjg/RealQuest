@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -7,12 +7,16 @@ import {
   Footprints,
   Hammer,
   MapPin,
+  Leaf,
+  ScrollText,
   Sprout,
   X,
 } from "lucide-react";
 import { serverNow, useGame, activityNames } from "../stores/game";
 import { api } from "../services/api";
 import type { LifeTask } from "../types";
+import { CommissionIcon } from "./CommissionIcon";
+import { ContractHourglass } from "./ContractHourglass";
 
 const paths = {
   study: {
@@ -65,7 +69,7 @@ export function NoahMarker() {
     </button>
   );
 }
-function Quota() {
+export function LifeQuota() {
   const journal = useGame((s) => s.state?.life_journal);
   if (!journal) return null;
   return (
@@ -99,6 +103,38 @@ function Quota() {
     </div>
   );
 }
+function CommissionRules() {
+  return (
+    <details
+      className="life-commission-rules"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && event.currentTarget.open) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.currentTarget.open = false;
+          event.currentTarget.querySelector("summary")?.focus();
+        }
+      }}
+    >
+      <summary>
+        <ScrollText size={17} aria-hidden="true" />
+        委托规则
+      </summary>
+      <div>
+        <p>
+          每小时 1 点，学习、运动、工作每日合计最多 5
+          点；同一时间只能进行一份委托。
+        </p>
+        <p>
+          领取时预留额度，取消不获点数并释放预留。按中国标准时间的领取日计算额度，跨天仍可结算。
+        </p>
+        <p>
+          关闭页面仍继续计时。到时回诺亚身边结算；等待时间不代表现实行为已被验证。
+        </p>
+      </div>
+    </details>
+  );
+}
 function Countdown({ task, now }: { task: LifeTask; now: number }) {
   const remaining = Math.max(0, Math.ceil(task.ready_at - now));
   const value = [
@@ -121,12 +157,152 @@ function Countdown({ task, now }: { task: LifeTask; now: number }) {
     </div>
   );
 }
-function CancelTask({
+function CommissionContract({
   task,
+  now,
+  busy,
+  heading,
+  claim,
   act,
 }: {
   task: LifeTask;
+  now: number;
+  busy: boolean;
+  heading: RefObject<HTMLHeadingElement | null>;
+  claim: () => Promise<void>;
   act: (action: string, data: Record<string, unknown>) => Promise<boolean>;
+}) {
+  const open = useGame((s) => s.open);
+  const seconds = Math.max(
+    0,
+    Math.min(task.hours * 3600, Math.ceil(task.ready_at - now)),
+  );
+  const ready = seconds === 0;
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const time = `${hours ? `${hours}小时` : ""}${minutes}分${String(seconds % 60).padStart(2, "0")}秒`;
+  const title =
+    task.kind === "study" ? "研习" : task.kind === "exercise" ? "活力" : "专注";
+  const number = ["", "一", "两", "三", "四", "五"][task.hours] || task.hours;
+  return (
+    <section
+      className="life-contract-conversation"
+      aria-label="现实委托"
+      data-ready={ready}
+    >
+      <div className="life-contract-scroll">
+        <div className="contract-ribbon" role="status" aria-atomic="true">
+          <Leaf size={20} aria-hidden="true" />
+          {ready ? "可结算" : "进行中"}
+        </div>
+        <header className="contract-heading">
+          <span>与诺亚的约定</span>
+          <h3 ref={heading} tabIndex={-1}>
+            {number}小时的{title}
+          </h3>
+          <p>
+            {paths[task.kind].name}委托 · 约定 {task.hours} 小时
+          </p>
+        </header>
+        <div className="contract-stage">
+          <div className="contract-signature">
+            <p>
+              {ready ? (
+                <>
+                  约定时间到了，
+                  <br />
+                  回来收下这份成长吧。
+                </>
+              ) : (
+                <>
+                  约定已记下，
+                  <br />
+                  安心去做吧。
+                </>
+              )}
+            </p>
+            <span>
+              <Leaf size={19} aria-hidden="true" />— 诺亚
+            </span>
+          </div>
+          <div className="contract-hourglass-wrap">
+            <ContractHourglass
+              remainingRatio={Math.max(
+                0,
+                Math.min(
+                  1,
+                  (task.ready_at - now) /
+                    Math.max(1, task.ready_at - task.accepted_at),
+                ),
+              )}
+            />
+            <p
+              className="contract-time-note"
+              role="timer"
+              aria-live="off"
+              aria-label={
+                ready ? "约定时间已到，可以结算" : `距可结算还需 ${time}`
+              }
+            >
+              {ready ? (
+                "约定时间已到"
+              ) : (
+                <>
+                  还需 <span>{time}</span>
+                </>
+              )}
+            </p>
+          </div>
+          <aside
+            className="contract-reward"
+            aria-label={`约定报酬 ${task.hours} ${paths[task.kind].point}，待结算`}
+          >
+            <div className="contract-wax-seal" aria-hidden="true">
+              <CommissionIcon kind={task.kind} />
+            </div>
+            <span>约定报酬</span>
+            <strong>
+              +{task.hours} {paths[task.kind].point}
+            </strong>
+            <small>待结算</small>
+          </aside>
+        </div>
+        <p className="contract-deadline">
+          {ready
+            ? "回到诺亚身边，即可结算这份约定。"
+            : `${stamp(task.ready_at)} 后，回来找诺亚结算。`}
+        </p>
+      </div>
+      <div className="contract-actions">
+        <button
+          className="rq-button rq-button--primary life-main-action"
+          disabled={busy}
+          onClick={() => (ready ? void claim() : open(null))}
+        >
+          {busy
+            ? "正在记下…"
+            : ready
+              ? `结算委托 · 领取 ${task.hours} ${paths[task.kind].point}`
+              : "收起委托"}
+          <ArrowRight size={18} aria-hidden="true" />
+        </button>
+        <CancelTask key={task.id} task={task} act={act} compact />
+        <CommissionRules />
+      </div>
+      <small className="contract-footer-note">
+        离开村庄或关闭页面，计时仍会继续。
+      </small>
+    </section>
+  );
+}
+function CancelTask({
+  task,
+  act,
+  compact = false,
+}: {
+  task: LifeTask;
+  act: (action: string, data: Record<string, unknown>) => Promise<boolean>;
+  compact?: boolean;
 }) {
   const busy = useGame((s) => s.busy);
   const [confirm, setConfirm] = useState(false);
@@ -175,11 +351,12 @@ function CancelTask({
         <button
           ref={button}
           className="life-text-button"
+          aria-label="取消这份委托"
           disabled={busy}
           onClick={() => setConfirm(true)}
         >
           <X size={16} aria-hidden="true" />
-          取消这份委托
+          {compact ? "取消约定" : "取消这份委托"}
         </button>
       )}
     </div>
@@ -231,19 +408,29 @@ export function LifeQuestDialogue() {
       setReceipt(null);
     }
   }
+  if (active)
+    return (
+      <CommissionContract
+        task={active}
+        now={now}
+        busy={busy}
+        heading={heading}
+        act={act}
+        claim={async () => {
+          if (await act("life_claim", { target: "noah", task_id: active.id }))
+            setReceipt(active);
+        }}
+      />
+    );
   return (
     <section className="life-conversation" aria-label="现实委托">
-      <span className="life-eyebrow">诺亚的现实委托</span>
       <h3 ref={heading} tabIndex={-1}>
-        {active
-          ? "约定在身，安心去做吧"
-          : receipt
-            ? "这份成长，我替你记下了"
-            : remaining
-              ? "今天，想在哪条路上前进一步？"
-              : "今天的五枚成长印记，集齐了"}
+        {receipt
+          ? "这份成长，我替你记下了"
+          : remaining
+            ? "选择一份今日委托"
+            : "今天的五枚成长印记，集齐了"}
       </h3>
-      <Quota />
       {receipt && !active && (
         <div className="life-receipt" role="status">
           <Check size={25} aria-hidden="true" />
@@ -257,37 +444,7 @@ export function LifeQuestDialogue() {
           </div>
         </div>
       )}
-      {active ? (
-        <>
-          <p className="life-promise">
-            <strong>
-              {paths[active.kind].name} · {active.hours} 小时
-            </strong>
-            <span>
-              完成后获得 {active.hours} {paths[active.kind].point}
-            </span>
-          </p>
-          <Countdown task={active} now={now} />
-          <p>去专心做约定的事吧。离开村庄或关闭页面，时间都会继续。</p>
-          <button
-            className="rq-button rq-button--primary life-main-action"
-            disabled={busy || now < active.ready_at}
-            onClick={async () => {
-              if (
-                await act("life_claim", { target: "noah", task_id: active.id })
-              )
-                setReceipt(active);
-            }}
-          >
-            {busy
-              ? "正在结算…"
-              : now < active.ready_at
-                ? "约定时间未到，暂不可结算"
-                : `结算委托 · 领取 ${active.hours} ${paths[active.kind].point}`}
-          </button>
-          <CancelTask key={active.id} task={active} act={act} />
-        </>
-      ) : remaining > 0 ? (
+      {remaining > 0 ? (
         <>
           <div
             className="life-paths"
@@ -295,7 +452,6 @@ export function LifeQuestDialogue() {
             aria-label="选择现实任务类型"
           >
             {Object.entries(paths).map(([id, path]) => {
-              const Icon = path.icon;
               return (
                 <button
                   key={id}
@@ -306,16 +462,22 @@ export function LifeQuestDialogue() {
                     draft.current = crypto.randomUUID();
                   }}
                 >
-                  <Icon size={23} aria-hidden="true" />
-                  <strong>{path.name}</strong>
-                  <small>{path.point}</small>
+                  <span className="life-selected-stamp" aria-hidden="true">
+                    <Check size={13} />
+                  </span>
+                  <CommissionIcon kind={id as LifeTask["kind"]} />
+                  <span>
+                    <strong>{path.name}</strong>
+                    <small>{path.point}</small>
+                  </span>
                 </button>
               );
             })}
           </div>
-          <p className="life-choice-line">
-            “{paths[kind].line}你想为它留几个小时？”
-          </p>
+          <h4 className="life-hours-heading">
+            <Sprout size={17} aria-hidden="true" />
+            约定时长
+          </h4>
           <div className="life-hours" role="group" aria-label="选择委托时长">
             {Array.from({ length: remaining }, (_, i) => i + 1).map((n) => (
               <button
@@ -333,25 +495,38 @@ export function LifeQuestDialogue() {
               </button>
             ))}
           </div>
-          <p className="life-summary">
-            约定{" "}
-            <strong>
-              {duration} 小时{paths[kind].name}
-            </strong>
-            ，结算{" "}
-            <strong>
-              {duration} {paths[kind].point}
-            </strong>
-            <small>领取后开始计时 · 每日三类合计最多 5 点</small>
-          </p>
-          <button
-            className="rq-button rq-button--primary life-main-action"
-            disabled={busy}
-            onClick={() => void accept()}
+          <div
+            className="life-reward-preview"
+            aria-live="polite"
+            aria-atomic="true"
           >
-            {busy ? "正在记下约定…" : "就这么约定 · 领取委托"}
-            <ArrowRight size={18} aria-hidden="true" />
-          </button>
+            <CommissionIcon kind={kind} />
+            <span>
+              完成 {duration} 小时{paths[kind].name}
+            </span>
+            <strong>
+              +{duration} {paths[kind].point}
+            </strong>
+          </div>
+          <p className="life-accept-note">
+            领取后开始计时，到时回诺亚处结算。
+            <br />
+            每小时 1 点 · 三类每日合计最多 5 点
+          </p>
+          <div className="life-accept-footer">
+            <button
+              className="rq-button rq-button--primary life-main-action"
+              disabled={busy}
+              onClick={() => void accept()}
+            >
+              {busy ? "正在记下约定…" : "领取这份委托"}
+              <ArrowRight size={18} aria-hidden="true" />
+            </button>
+            <CommissionRules />
+          </div>
+          <small className="life-accept-footnote">
+            取消不获点数 · 按领取日计算额度
+          </small>
         </>
       ) : (
         <div className="life-rest">
@@ -364,13 +539,9 @@ export function LifeQuestDialogue() {
           <button className="rq-button" onClick={() => open("activity")}>
             翻看成长手记
           </button>
+          <CommissionRules />
         </div>
       )}
-      <small className="life-rules">
-        中国标准时间 · 每小时 1 点 · 取消不获点数
-        <br />
-        跨天归领取日；结算检查等待时间，不验证现实行为。
-      </small>
     </section>
   );
 }
@@ -410,7 +581,7 @@ export function LifeQuestHistory() {
           技能点 <b>{state.skill_points || 0}</b>
         </span>
       </div>
-      <Quota />
+      <LifeQuota />
       {active && (
         <section className="life-current" aria-label="当前现实委托">
           <span className="life-eyebrow">尚未落款的约定</span>

@@ -1,5 +1,25 @@
 # Hearthwood Review Checklist
 
+## Active commission contract — 2026-10-14
+
+- [x] Second approved preview implemented for Noah active/ready state: curled parchment, live sand hourglass, status ribbon, pending reward seal and matching dialogue; waiting closes, deadline enables the real settlement action.
+- [x] Two original textless materials and original SVG sand have prompts/source/runtime hashes, transparent alpha and lossless pixel equality;35-image audit passes. DOM text/actions and existing actor/world preserved.
+- [x] Production build,19 commission rule tests,39-capture feature suite, play-mode regression and frame client pass; no unexpected console errors. Close/reopen, midpoint/deadline, rejection/retry, cancellation, quotas, story and focus verified.
+- [x] Desktop/tablet/phone/short-landscape/DPR2 touch, scrolling rules,125% text enlargement and reduced motion checked. Actual screenshots inspected. Actual texture audit:12 cases/262 runs/minimum4.75:1; separate computed CSS cases minimum4.51:1.
+- [ ] Actual owner acceptance, physical devices/Safari/screen readers, native browser-menu zoom and long endurance remain unverified.
+
+Evidence, commands, assets and retained preview: [active contract report](../tasks/16-commission-contract.md).
+
+## Noah wooden commission board — 2026-10-14
+
+- [x] Owner-approved preview implemented for Noah: riverside actor stage, timber frame, paper task slips, hour tokens, live quota/reward and one main action. Existing commission rules and story topic preserved.
+- [x] Two original textless assets packaged losslessly with prompts/hashes; existing actor and world unchanged. All Chinese text and controls remain DOM. 33-image/source audit passes.
+- [x] Production build, 19 commission backend tests, final 30-capture browser feature suite, play-mode regression and skill frame client pass. Zero unexpected browser errors; 28 contrast cases / 828 runs / minimum4.97:1 using computed CSS backgrounds.
+- [x] Desktop/tablet/phone/short landscape, 375px/DPR2 touch, scrolling, focus wrap, Escape, expanded rules, reduced motion and larger journal text checked. Actual screenshots inspected; close remains visible while scrolling.
+- [ ] Owner acceptance of the actual implementation, physical Safari/devices, native browser-menu zoom and multi-hour endurance remain unverified.
+
+Evidence, commands, asset provenance and cleanup: [commission board report](../tasks/15-commission-board.md).
+
 ## Character point allocation — 2026-10-14
 
 - [x] Owner-approved concept implemented with vitality/stamina, five concrete growth paths, three available point balances and exact-cost purchases; no EXP display in the dossier.

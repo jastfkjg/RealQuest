@@ -1077,6 +1077,150 @@
         62,
         46
       ]
+    },
+    {
+      "id": "ui.commission.wood",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/commission-wood-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/commission-wood-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless project artwork derived from the owner-approved generated commission concept; no third-party pack supplied to generation.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-14",
+      "prompt_path": "assets/generated/hearthwood/commission-wood-v1.prompt.txt",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "7a9ff1e5956fca829ec392d17ae6ff6673fb7d3ebdf53b8b1c29a115dc300f3d",
+      "source_sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f",
+      "source_size_bytes": 1594329,
+      "size_bytes": 1085914,
+      "runtime_processing": "tools/build_inventory_skin.py --asset commission-wood-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted; no artwork edits, resampling or recoloring.",
+      "binding": "frontend/src/commission-board.css",
+      "content_audit": "Blank timber notice-board material. CSS frame nine-slice and center background; all controls/text are DOM.",
+      "nine_slice_insets_source_px": {
+        "top": 105,
+        "right": 105,
+        "bottom": 105,
+        "left": 105
+      },
+      "default_border_image_width_css_px": [
+        24,
+        24,
+        24,
+        24
+      ],
+      "mobile_border_image_width_css_px": [
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "id": "ui.commission.riverside",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/commission-river-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/commission-river-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless project artwork derived from the owner-approved generated commission concept; no third-party pack supplied to generation.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-14",
+      "prompt_path": "assets/generated/hearthwood/commission-river-v1.prompt.txt",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGB",
+      "alpha_bounds": [
+        0,
+        0,
+        1086,
+        1448
+      ],
+      "sha256": "2b5fe98009a7b51eecdce7dcd0e7bc66eac6a49739b5d2f4fddc9394f5d6dc88",
+      "source_sha256": "99efc29394ca5836f629ca892ecbafb77278c73367b8a73dd80fe43ea12ee6cf",
+      "source_size_bytes": 2005239,
+      "size_bytes": 1670728,
+      "runtime_processing": "tools/build_inventory_skin.py --asset commission-river-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted; no artwork edits, resampling or recoloring.",
+      "binding": "frontend/src/commission-board.css",
+      "content_audit": "Character-free riverside illustration for Noah dialogue only; existing character-2 sprite overlays it at integer scale. Not a playable map."
+    },
+    {
+      "id": "ui.contract.scroll",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/commission-scroll-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/commission-scroll-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless material generated from the approved project-generated active-contract concept; no vendor pack supplied.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-14",
+      "prompt_path": "assets/generated/hearthwood/commission-scroll-v1.prompt.txt",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        21,
+        1514,
+        1024
+      ],
+      "sha256": "5b0f3f10f779bf1ede9776d8736c1e189188877457e4f0def779fcabffadd4b3",
+      "source_sha256": "7c38e5eab042db658bc7becdb90114de891ba141bfaa580869ada1eb013883e6",
+      "size_bytes": 1451002,
+      "source_size_bytes": 2114101,
+      "runtime_processing": "tools/build_inventory_skin.py --asset commission-scroll-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted. No art edits, cropping, resampling or recoloring.",
+      "binding": "frontend/src/commission-contract.css and components/ContractHourglass.tsx",
+      "content_audit": "Completely blank curled parchment, transparent outside; all contract content remains DOM. Source alpha and actual browser composition inspected.",
+      "nine_slice_insets_source_px": {
+        "top": 180,
+        "right": 170,
+        "bottom": 200,
+        "left": 170
+      },
+      "default_border_image_width_css_px": [
+        43,
+        40,
+        48,
+        40
+      ],
+      "mobile_border_image_width_css_px": [
+        33,
+        23,
+        35,
+        23
+      ]
+    },
+    {
+      "id": "ui.contract.hourglass",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/commission-hourglass-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/commission-hourglass-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless material generated from the approved project-generated active-contract concept; no vendor pack supplied.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-14",
+      "prompt_path": "assets/generated/hearthwood/commission-hourglass-v1.prompt.txt",
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        1024,
+        1536
+      ],
+      "sha256": "01a2a06ba1ba72f8c86d393c8ffefd40424f3310ea7e5cdc09cd5fb1c13e2b10",
+      "source_sha256": "20022017d5f4879566aa6c59f5602237992b11323e782d32b6bd6acc05d08716",
+      "size_bytes": 1154192,
+      "source_size_bytes": 1629411,
+      "runtime_processing": "tools/build_inventory_skin.py --asset commission-hourglass-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted. No art edits, cropping, resampling or recoloring.",
+      "binding": "frontend/src/commission-contract.css and components/ContractHourglass.tsx",
+      "content_audit": "Empty hourglass, transparent background and mostly transparent empty glass. Dynamic project SVG sand is drawn behind the unmodified frame; no baked sand or timer."
     }
   ],
   "additional_character_assets": [
@@ -1259,6 +1403,43 @@
       "runtime_binding": "App HUD and QuestCompass only; decorative SVG, labels remain native DOM",
       "rebuild": "npm run build in frontend",
       "status": "implemented_candidate_owner_review_pending"
+    },
+    {
+      "id": "hearthwood.commission.icons.v1",
+      "source_path": "frontend/src/components/CommissionIcon.tsx",
+      "sha256": "96aaeb35acc2cce2365181d90dac0b428c6b6123b80f2cb4eecf2012f20eb1d9",
+      "source": "Original project integer-grid SVG book, boots and hammer; decorative selection/reward icons, not inventory possessions.",
+      "license": "Project-authored artwork; no external pack",
+      "view_box": [
+        0,
+        0,
+        24,
+        24
+      ],
+      "variants": [
+        "study",
+        "exercise",
+        "work"
+      ],
+      "runtime_binding": "LifeQuestDialogue only",
+      "rebuild": "npm run build in frontend",
+      "status": "implemented_candidate_owner_review_pending"
+    },
+    {
+      "id": "hearthwood.contract.sand.v1",
+      "source_path": "frontend/src/components/ContractHourglass.tsx",
+      "sha256": "d931e20f6c5e0d6c2a181826143d8f36d8043d3c43595e3355f48b53e83ee33e",
+      "source": "Project-authored SVG clipped sand, derived from authoritative remaining/total time; decorative and not a second timer.",
+      "license": "Project-authored code-native artwork; no external asset",
+      "view_box": [
+        0,
+        0,
+        100,
+        150
+      ],
+      "runtime_binding": "Noah active/ready contract only",
+      "rebuild": "npm run build in frontend",
+      "status": "implemented_candidate_owner_review_pending"
     }
   ],
   "character_points_concept": {
@@ -1274,5 +1455,31 @@
     "sha256": "7b409b57f9e959c92043e3da0aaa53e79151cc77de06dd96fdd876a90017de95",
     "runtime": false,
     "note": "Concept sample numbers only. Actual implementation reuses existing blank dossier WebP and actor sprite; text and controls are DOM. Actual browser acceptance remains pending."
+  },
+  "commission_board_concept": {
+    "path": "docs/art/references/commission-board-concept-v1.png",
+    "prompt_path": "docs/art/references/commission-board-concept-v1.prompt.txt",
+    "sha256": "f62f813fd392ae24cdfc33c7824872475ad49a11ff045e153e8c4169a1a4fa96",
+    "width": 1586,
+    "height": 992,
+    "creator": "OpenAI built-in image_gen",
+    "status": "owner_approved_reference",
+    "approved_on": "2026-10-14",
+    "approval": "可以，就按这版预览图实现。",
+    "runtime": false,
+    "note": "Concept illustrative scene and numbers only. Actual candidate uses separate textless assets and real DOM/game state."
+  },
+  "commission_contract_concept": {
+    "path": "docs/art/references/commission-contract-concept-v1.png",
+    "prompt_path": "docs/art/references/commission-contract-concept-v1.prompt.txt",
+    "sha256": "0f962dd6eeb5488378c666a71f0c40864afa61e1e38b36cfe4c89cf92b59a687",
+    "width": 1586,
+    "height": 992,
+    "creator": "OpenAI built-in image_gen",
+    "status": "owner_approved_reference",
+    "approval": "可以，按此进行实现",
+    "approved_on": "2026-10-14",
+    "runtime": false,
+    "note": "Reference for active state only. Actual render uses blank scroll, empty glass frame, live SVG sand and DOM state/controls."
   }
 }

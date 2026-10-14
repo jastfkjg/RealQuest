@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 const base = process.env.REALQUEST_URL || "http://127.0.0.1:5205";
-const output = new URL("../../output/life-commissions/", import.meta.url);
+const output = new URL(
+  process.env.REALQUEST_TEST_OUTPUT || "../../output/life-commissions/",
+  import.meta.url,
+);
 const db = process.env.REALQUEST_TEST_DB;
 assert(
   db?.includes("/output/life-commissions/"),
@@ -11,6 +14,8 @@ assert(
 );
 const python = new URL("../../backend/.venv/bin/python", import.meta.url)
   .pathname;
+const imagePython = process.env.REALQUEST_IMAGE_PYTHON;
+const textureContrasts = [];
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const errors = [],
@@ -47,7 +52,7 @@ async function command(action, data = {}) {
   assert.equal(r.status(), 200, await r.text());
   return (await r.json()).state;
 }
-function fixture(saveId, taskId = null) {
+function fixture(saveId, taskId = null, dueIn = -1) {
   // Explicit isolated fixture: relocate only this test guest, or make their task due.
   execFileSync(python, [
     "-c",
@@ -55,7 +60,7 @@ function fixture(saveId, taskId = null) {
 conn=sqlite3.connect(sys.argv[1]); key=sys.argv[2]; task=sys.argv[3]
 s=json.loads(conn.execute('select state from players where id=?',(key,)).fetchone()[0])
 if task:
- t=s['life_tasks'][task]; t['ready_at']=time.time()-1; t['accepted_at']=t['ready_at']-t['hours']*3600
+ t=s['life_tasks'][task]; t['ready_at']=time.time()+float(sys.argv[4]); t['accepted_at']=t['ready_at']-t['hours']*3600
 else:
  s['position']={'x':576,'y':420}; s['location']='overworld'
 s['revision']+=1
@@ -63,6 +68,7 @@ conn.execute('update players set state=? where id=?',(json.dumps(s),key));conn.c
     db,
     saveId,
     taskId || "",
+    String(dueIn),
   ]);
 }
 async function talk() {
@@ -80,6 +86,7 @@ async function talk() {
 }
 async function shot(name) {
   await p.waitForTimeout(200);
+  await p.screenshot({ path: new URL(name + ".png", output).pathname });
   const dialog = p.locator("dialog[open]");
   assert.equal(
     await dialog.evaluate((e) => e.scrollWidth > e.clientWidth + 2),
@@ -114,6 +121,8 @@ async function shot(name) {
           e.getBoundingClientRect().width > 2 &&
           e.getBoundingClientRect().height > 2 &&
           !e.closest('[aria-hidden="true"],button:disabled') &&
+          // Image-backed parchment is measured against captured pixels below.
+          !e.closest(".life-contract-scroll") &&
           [...e.childNodes].some(
             (n) => n.nodeType === 3 && n.textContent.trim(),
           ),
@@ -152,6 +161,83 @@ async function shot(name) {
     name + " text contrast",
   );
   await p.screenshot({ path: new URL(name + ".png", output).pathname });
+  if (imagePython && (await p.locator(".life-contract-conversation").count())) {
+    const text = await p
+      .locator(".life-contract-conversation")
+      .evaluate((root) =>
+        [...root.querySelectorAll("*")]
+          .filter(
+            (el) =>
+              el.checkVisibility() &&
+              !el.closest('[aria-hidden="true"],button:disabled'),
+          )
+          .flatMap((el) =>
+            [...el.childNodes]
+              .filter(
+                (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim(),
+              )
+              .flatMap((n) => {
+                const range = document.createRange();
+                range.selectNodeContents(n);
+                return [...range.getClientRects()]
+                  .filter(
+                    (r) =>
+                      r.width > 1 &&
+                      r.height > 1 &&
+                      // Offscreen/clipped lines have no visible paper pixels to sample.
+                      r.top >=
+                        Math.max(
+                          0,
+                          root.closest("dialog").getBoundingClientRect().top,
+                        ) &&
+                      r.bottom <=
+                        Math.min(
+                          innerHeight,
+                          root.closest("dialog").getBoundingClientRect().bottom,
+                        ) &&
+                      r.left >= 0 &&
+                      r.right <= innerWidth,
+                  )
+                  .map((r) => ({
+                    text: n.textContent.trim(),
+                    color: getComputedStyle(el).color,
+                    rect: [r.x, r.y, r.width, r.height],
+                  }));
+              }),
+          ),
+      );
+    const folder = new URL("contrast-" + name + "/", output);
+    await fs.mkdir(folder, { recursive: true });
+    const hide = await p.addStyleTag({
+      content:
+        ".life-contract-conversation *,.life-contract-conversation *::before,.life-contract-conversation *::after{color:transparent!important;text-shadow:none!important;}",
+    });
+    try {
+      await p.screenshot({
+        path: new URL("contrast-background.png", folder).pathname,
+      });
+    } finally {
+      await hide.evaluate((el) => el.remove());
+    }
+    await fs.writeFile(
+      new URL("contrast-text.json", folder),
+      JSON.stringify(text, null, 2),
+    );
+    execFileSync(imagePython, [
+      new URL("../../tools/check_character_contrast.py", import.meta.url)
+        .pathname,
+      "--output",
+      folder.pathname,
+    ]);
+    const values = JSON.parse(
+      await fs.readFile(new URL("contrast-result.json", folder), "utf8"),
+    );
+    textureContrasts.push({
+      name,
+      runs: values.length,
+      min: Math.min(...values.map((v) => v.minimum_ratio)),
+    });
+  }
   shots.push(name);
 }
 try {
@@ -171,14 +257,50 @@ try {
   assert.equal((await read()).navigation.targetId, "noah");
   await talk();
   await shot("choices-1440");
+  await p.getByText("委托规则", { exact: true }).click();
+  await p.getByText(/等待时间不代表现实行为已被验证/).waitFor();
+  await shot("rules-open-1440");
+  await p.keyboard.press("Escape");
+  assert.equal(
+    await p.locator(".life-commission-rules").evaluate((e) => e.open),
+    false,
+  );
+  assert.equal((await read()).mode, "npc");
+  const close = p.getByRole("button", { name: "关闭面板", exact: true });
+  await close.focus();
+  await p.keyboard.press("Shift+Tab");
+  assert.equal(
+    await p
+      .locator(".life-commission-rules summary")
+      .evaluate((e) => e === document.activeElement),
+    true,
+  );
+  await p.keyboard.press("Tab");
+  assert.equal(await close.evaluate((e) => e === document.activeElement), true);
+  await p.getByRole("button", { name: "村庄闲谈", exact: true }).click();
+  await p.getByText("预设剧情对话", { exact: true }).waitFor();
+  await shot("story-1440");
+  await p.setViewportSize({ width: 390, height: 844 });
+  await shot("story-390");
+  await p.getByRole("button", { name: "现实委托", exact: true }).click();
   for (const [w, h] of [
     [1920, 1080],
     [768, 1024],
     [390, 844],
+    [375, 812],
     [720, 450],
   ]) {
     await p.setViewportSize({ width: w, height: h });
     await shot("choices-" + w);
+    if (w === 720) {
+      await p.locator(".life-main-action").scrollIntoViewIfNeeded();
+      const closeBox = await close.boundingBox();
+      assert(
+        closeBox.y >= 0 && closeBox.y + closeBox.height <= h,
+        "close remains visible while scrolling",
+      );
+      await shot("choices-720-scrolled");
+    }
   }
   await p.setViewportSize({ width: 1440, height: 900 });
   const position = (await read()).player;
@@ -204,7 +326,7 @@ try {
       });
     else await route.continue();
   });
-  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await p.getByRole("button", { name: /领取这份委托/ }).click();
   await p.getByRole("alert").filter({ hasText: "测试拒绝" }).waitFor();
   assert.equal((await state()).life_journal.tasks.length, 0);
   await shot("rejected");
@@ -220,19 +342,49 @@ try {
       await route.abort("failed");
     } else await route.continue();
   });
-  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await p.getByRole("button", { name: /领取这份委托/ }).click();
   await wait((s) => s.lifeJournal.tasks.length === 1);
   await p.unroute("**/api/command");
   expectedFailure = false;
   assert.equal((await state()).life_journal.reserved, 5);
   await shot("active-1440");
+  for (const [width, height] of [
+    [1920, 1080],
+    [768, 1024],
+    [390, 844],
+    [375, 812],
+    [720, 450],
+  ]) {
+    await p.setViewportSize({ width, height });
+    await shot("active-" + width);
+    if (width === 720) {
+      await p
+        .getByRole("button", { name: "收起委托", exact: true })
+        .scrollIntoViewIfNeeded();
+      await shot("active-720-scrolled");
+    }
+  }
+  await p.setViewportSize({ width: 1440, height: 900 });
+  await p.locator(".life-commission-rules summary").click();
+  await shot("active-rules-1440");
+  await p
+    .locator(".life-commission-rules > div p:last-child")
+    .scrollIntoViewIfNeeded();
+  await shot("active-rules-scrolled-1440");
+  await p.keyboard.press("Escape");
   assert.equal(
-    await p
-      .getByRole("button", { name: "约定时间未到，暂不可结算" })
-      .isDisabled(),
+    await p.getByRole("button", { name: "收起委托", exact: true }).isEnabled(),
     true,
   );
   const active = (await state()).life_journal.tasks[0];
+  await p.getByRole("button", { name: "收起委托", exact: true }).click();
+  assert.equal((await read()).mode, "explore");
+  assert.equal((await state()).life_journal.tasks[0].id, active.id);
+  await talk();
+  assert.equal(
+    await p.getByRole("button", { name: /结算委托 · 领取/ }).count(),
+    0,
+  );
   const early = await c.request.post(base + "/api/command", {
     data: {
       request_id: crypto.randomUUID(),
@@ -241,6 +393,15 @@ try {
     },
   });
   assert.equal(early.status(), 422);
+  fixture(session.save_id, active.id, active.hours * 1800);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await talk();
+  const ratio = Number(
+    await p.locator(".contract-hourglass").getAttribute("data-remaining-ratio"),
+  );
+  assert(ratio > 0.49 && ratio < 0.51);
+  await shot("active-half-1440");
   await p.getByRole("button", { name: "取消这份委托", exact: true }).click();
   await p.keyboard.press("Escape");
   assert.equal((await read()).mode, "npc");
@@ -259,7 +420,7 @@ try {
     .getByRole("group", { name: "选择委托时长" })
     .getByRole("button", { name: "2 小时", exact: true })
     .click();
-  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await p.getByRole("button", { name: /领取这份委托/ }).click();
   await wait((s) => s.lifeJournal.reserved === 2);
   await p.reload();
   await p.waitForSelector("canvas");
@@ -277,11 +438,36 @@ try {
   const study = (await state()).life_journal.tasks.find(
     (t) => t.status === "active",
   );
-  fixture(session.save_id, study.id);
+  fixture(session.save_id, study.id, 3);
   await p.reload();
   await p.waitForSelector("canvas");
   await talk();
+  await p
+    .getByRole("button", { name: "结算委托 · 领取 2 知识点", exact: true })
+    .waitFor();
+  assert.equal(
+    await p.locator(".contract-hourglass").getAttribute("data-remaining-ratio"),
+    "0.0000",
+  );
   await shot("ready");
+  expectedFailure = true;
+  await p.route("**/api/command", async (route) => {
+    if (route.request().postDataJSON().action === "life_claim")
+      await route.fulfill({
+        status: 422,
+        contentType: "application/json",
+        body: JSON.stringify({ detail: "测试拒绝：暂时无法结算，请重试" }),
+      });
+    else await route.continue();
+  });
+  await p
+    .getByRole("button", { name: "结算委托 · 领取 2 知识点", exact: true })
+    .click();
+  await p.getByRole("alert").filter({ hasText: "暂时无法结算" }).waitFor();
+  assert.equal((await state()).knowledge_points, 0);
+  await shot("settlement-rejected");
+  await p.unroute("**/api/command");
+  expectedFailure = false;
   await p
     .getByRole("button", { name: "结算委托 · 领取 2 知识点", exact: true })
     .click();
@@ -304,7 +490,7 @@ try {
     .getByRole("group", { name: "选择委托时长" })
     .getByRole("button", { name: "3 小时", exact: true })
     .click();
-  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await p.getByRole("button", { name: /领取这份委托/ }).click();
   await wait((s) => s.lifeJournal.reserved === 3);
   const exercise = (await state()).life_journal.tasks.find(
     (t) => t.status === "active",
@@ -390,8 +576,8 @@ try {
       .getByRole("group", { name: "选择现实任务类型" })
       .getByRole("button", { name: /工作/ })
       .tap();
-    await m.getByRole("button", { name: /就这么约定/ }).tap();
-    await m.getByRole("button", { name: "约定时间未到，暂不可结算" }).waitFor();
+    await m.getByRole("button", { name: /领取这份委托/ }).tap();
+    await m.getByRole("button", { name: "收起委托", exact: true }).waitFor();
     const active = (
       await (await mobile.request.get(base + "/api/state")).json()
     ).state.life_journal.tasks[0];
@@ -408,8 +594,8 @@ try {
       path: new URL("touch-work-375.png", output).pathname,
     });
     shots.push("touch-work-375");
-    await m.getByRole("button", { name: /就这么约定/ }).tap();
-    await m.getByRole("button", { name: "约定时间未到，暂不可结算" }).waitFor();
+    await m.getByRole("button", { name: /领取这份委托/ }).tap();
+    await m.getByRole("button", { name: "收起委托", exact: true }).waitFor();
     await m.getByRole("button", { name: "关闭面板", exact: true }).tap();
     await m.getByRole("button", { name: "现实成长", exact: true }).tap();
     await m.getByRole("button", { name: "取消这份委托", exact: true }).tap();
@@ -434,7 +620,13 @@ try {
   await fs.writeFile(
     new URL("result.json", output),
     JSON.stringify(
-      { shots, errors, contrasts, isolatedMaturityFixture: true },
+      {
+        shots,
+        errors,
+        contrasts,
+        textureContrasts,
+        isolatedMaturityFixture: true,
+      },
       null,
       2,
     ),

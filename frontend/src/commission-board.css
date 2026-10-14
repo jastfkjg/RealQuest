@@ -1,0 +1,769 @@
+/* Noah's approved timber-board composition. Other encounters stay unchanged. */
+.modal.hp-panel.panel-npc:has(.ha-commission) {
+  width: min(1120px, calc(100vw - 48px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  scrollbar-width: thin;
+  background: transparent;
+  overflow: auto;
+  box-shadow: 0 20px 70px #10231980;
+}
+.panel-npc:has(.ha-commission) .modal-head {
+  position: sticky;
+  top: 14px;
+  right: auto;
+  display: block;
+  height: 0;
+  min-height: 0;
+  pointer-events: none;
+}
+.panel-npc:has(.ha-commission) .modal-head .hp-close {
+  position: absolute;
+  right: 24px;
+  pointer-events: auto;
+  border-radius: 1px;
+  border: 2px solid var(--rq-amber);
+  background: var(--rq-pine);
+  color: var(--rq-linen-raised);
+  box-shadow:
+    0 3px 0 #382c20,
+    inset 0 0 0 2px #8f6e4d;
+}
+.ha-commission {
+  position: relative;
+  isolation: isolate;
+  grid-template-columns: minmax(200px, 0.85fr) minmax(0, 2.3fr);
+  gap: 14px;
+  padding: 76px 28px 28px;
+  min-height: 660px;
+  background: var(--rq-timber) url("/assets/hearthwood/commission-wood-v1.webp")
+    center / cover;
+  animation: commission-open var(--rq-duration-panel) var(--rq-ease-out) both;
+}
+.ha-commission::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border: 24px solid transparent;
+  border-image: url("/assets/hearthwood/commission-wood-v1.webp") 105 fill /
+    24px / 0 stretch;
+  box-shadow: inset 0 0 0 2px #352b22;
+}
+.hp-panel .commission-title {
+  position: absolute;
+  top: 13px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 4px 16px;
+  color: var(--rq-linen-raised);
+  background: #483821;
+  border: 1px solid var(--rq-amber);
+  box-shadow: 0 3px 0 #382c20;
+  font: 600 27px/1.45 var(--rq-font-title);
+  letter-spacing: 0.12em;
+}
+.commission-title svg {
+  color: var(--rq-amber);
+}
+.commission-host {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  border: 2px solid #483821;
+  box-shadow: 0 3px 0 #382c2060;
+}
+.commission-riverside {
+  position: relative;
+  flex: 1;
+  min-height: 255px;
+  background: var(--rq-moss) url("/assets/hearthwood/commission-river-v1.webp")
+    center 48% / cover;
+  image-rendering: pixelated;
+}
+.commission-riverside .pixel-person {
+  position: absolute;
+  left: 44%;
+  top: 62%;
+  transform: translate(-50%, -50%);
+  width: 64px !important;
+  min-width: 64px;
+  height: 64px !important;
+  background-size: 256px 448px;
+  filter: drop-shadow(0 4px 0 #233d3150);
+}
+.commission-host-paper {
+  padding: 18px 18px 16px;
+  text-align: center;
+  background: var(--rq-linen);
+  background-image: radial-gradient(
+    ellipse at 10% 100%,
+    #d3a45025,
+    transparent 65%
+  );
+  border-top: 3px solid #b39970;
+}
+.hp-panel .commission-host-paper h3 {
+  margin: 0;
+  font: 600 27px/1.35 var(--rq-font-title);
+}
+.hp-panel .commission-host-paper p {
+  margin: 4px 0 8px;
+  font-size: 14px;
+}
+.commission-host-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--rq-timber);
+  font-size: 15px;
+  line-height: 1;
+}
+.commission-host-line::before,
+.commission-host-line::after {
+  content: "";
+  height: 1px;
+  background: var(--rq-divider);
+  flex: 1;
+}
+.commission-host-paper blockquote {
+  padding: 0;
+  margin: 14px -2px;
+  border: 0;
+  background: transparent;
+  color: var(--rq-ink);
+  font: 16px/1.9 var(--rq-font-title);
+}
+.commission-host-paper small {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+.ha-commission .ha-dialogue-scene {
+  position: relative;
+  min-width: 0;
+  align-self: stretch;
+  margin: 0;
+  padding: 22px 30px 20px;
+  border: 1px solid #bba785;
+  border-radius: 3px 1px 4px 2px;
+  background: var(--rq-linen);
+  background-image:
+    radial-gradient(ellipse at 0 0, #d3a4501c, transparent 55%),
+    repeating-linear-gradient(0deg, transparent 0 3px, #8f6e4d04 3px 4px);
+  box-shadow:
+    0 4px 0 #48382170,
+    inset 0 0 0 5px #fffbf045,
+    inset 0 0 18px #8f6e4d20;
+}
+.ha-commission .ha-dialogue-scene::before,
+.ha-commission .ha-dialogue-scene::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #705431;
+  background: var(--rq-amber);
+  box-shadow: 1px 2px 0 #48382145;
+}
+.ha-commission .ha-dialogue-scene::before {
+  left: 8px;
+}
+.ha-commission .ha-dialogue-scene::after {
+  right: 8px;
+}
+.life-paper-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 10px;
+  margin-bottom: 22px;
+}
+.ha-commission .life-dialogue-tabs {
+  gap: 4px;
+  margin: 0;
+}
+.hp-panel .ha-commission .life-dialogue-tabs button {
+  min-height: 45px;
+  padding: 9px 13px;
+  border: 1px solid #a38e68;
+  border-radius: 2px 5px 0 0;
+  color: var(--rq-ink);
+  background: #e6d7b8;
+  box-shadow:
+    inset 0 2px 0 #fff9e85c,
+    0 2px 0 #8f6e4d30;
+  font: 600 15px/1.5 var(--rq-font-title);
+}
+.hp-panel .ha-commission .life-dialogue-tabs button[aria-pressed="true"] {
+  background: var(--rq-moss);
+  border-color: var(--rq-pine);
+  color: var(--rq-linen-raised);
+}
+.ha-commission .life-quota {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  gap: 5px 10px;
+  padding: 0;
+  border: 0;
+  font-size: 12px;
+}
+.ha-commission .life-quota > span:first-child {
+  gap: 7px;
+  white-space: nowrap;
+  align-items: center;
+}
+.ha-commission .life-quota b {
+  font-size: 16px;
+}
+.ha-commission .life-quota small {
+  grid-column: 1 / -1;
+  text-align: right;
+  font-size: 12px;
+}
+.ha-commission .life-seeds {
+  gap: 3px;
+}
+.ha-commission .life-seeds i {
+  width: 18px;
+  height: 21px;
+  border-color: #879073;
+}
+.ha-commission .life-seeds svg {
+  width: 13px;
+  height: 13px;
+}
+.ha-commission .life-conversation {
+  max-width: none;
+}
+.hp-panel .ha-commission .life-conversation h3 {
+  margin: 0 0 16px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--rq-divider);
+  font: 600 25px/1.5 var(--rq-font-title);
+}
+.ha-commission .life-paths {
+  gap: 10px;
+  margin: 0 0 20px;
+}
+.hp-panel .ha-commission .life-paths button {
+  position: relative;
+  min-width: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 7px;
+  border: 1px solid #bba785;
+  border-radius: 1px 4px 2px 1px;
+  background: #f8f1df;
+  box-shadow:
+    inset 0 0 0 3px #dfd0b665,
+    0 3px 0 #8f6e4d33;
+  transition:
+    transform var(--rq-duration-fast),
+    background var(--rq-duration-fast);
+}
+.hp-panel .ha-commission .life-paths button[aria-pressed="true"] {
+  border-color: var(--rq-moss);
+  background: #e0e6cd;
+  box-shadow:
+    inset 6px 0 0 var(--rq-moss),
+    inset 0 0 0 2px #3f634845,
+    0 3px 0 #3f634880;
+}
+.life-paths .commission-icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+}
+.ha-commission .life-paths button > span:last-child {
+  display: block;
+  text-align: left;
+}
+.ha-commission .life-paths strong {
+  display: block;
+  font-size: 18px;
+}
+.ha-commission .life-paths small {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+}
+.life-selected-stamp {
+  display: none;
+  position: absolute;
+  top: -6px;
+  left: -5px;
+  width: 19px;
+  height: 19px;
+  place-items: center;
+  border: 1px solid #705431;
+  border-radius: 50%;
+  color: #27392f;
+  background: var(--rq-amber);
+  box-shadow:
+    inset 0 1px 0 #fff9e8b0,
+    0 2px 0 #70543150;
+}
+[aria-pressed="true"] > .life-selected-stamp {
+  display: grid;
+}
+.hp-panel .life-hours-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 12px;
+  padding-top: 17px;
+  border-top: 1px solid var(--rq-divider);
+  font: 600 17px/1.5 var(--rq-font-title);
+}
+.life-hours-heading svg {
+  color: var(--rq-moss);
+}
+.ha-commission .life-hours {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
+}
+.hp-panel .ha-commission .life-hours button {
+  min-height: 45px;
+  min-width: 0;
+  padding: 5px 6px;
+  gap: 4px;
+  border: 2px solid #8f6e4d;
+  border-radius: 1px;
+  background: #dec6a0;
+  color: var(--rq-ink);
+  box-shadow:
+    inset 0 2px 0 #fff9e875,
+    inset 0 -2px 0 #8f6e4d38,
+    0 3px 0 #70543180;
+  font-size: 22px;
+  transition:
+    transform var(--rq-duration-fast),
+    background var(--rq-duration-fast);
+}
+.hp-panel .ha-commission .life-hours button[aria-pressed="true"] {
+  background: var(--rq-moss);
+  color: var(--rq-linen-raised);
+  border-color: var(--rq-amber);
+  box-shadow:
+    inset 0 0 0 2px #233d31,
+    0 3px 0 #483821;
+}
+.ha-commission .life-hours button[aria-pressed="true"] small {
+  color: inherit;
+}
+.ha-commission .life-hours small {
+  font-size: 12px;
+  color: var(--rq-ink);
+}
+.life-reward-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px 10px;
+  margin-top: 20px;
+  padding: 9px 12px;
+  background: #dfe5cd;
+  border-radius: 2px;
+  color: var(--rq-ink);
+  font-size: 14px;
+}
+.life-reward-preview .commission-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+.life-reward-preview strong {
+  margin-left: auto;
+  font-size: 19px;
+  white-space: nowrap;
+}
+.hp-panel .life-accept-note {
+  margin: 13px 0 12px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.life-accept-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hp-panel .ha-commission .life-main-action {
+  min-height: 52px;
+  width: auto;
+  min-width: 240px;
+  padding: 10px 23px;
+  border: 2px solid var(--rq-amber);
+  border-radius: 1px;
+  background: var(--rq-moss);
+  box-shadow:
+    inset 0 0 0 2px var(--rq-pine),
+    inset 0 3px 0 #ffffff20,
+    0 4px 0 #483821;
+  color: var(--rq-linen-raised);
+  font: 600 19px/1.5 var(--rq-font-title);
+  transition:
+    transform var(--rq-duration-fast),
+    background var(--rq-duration-fast);
+}
+.hp-panel .ha-commission .life-main-action:disabled {
+  color: var(--rq-ink-muted);
+  background: #dfdccb;
+  border-color: #a19a80;
+  box-shadow: none;
+  opacity: 1;
+}
+.life-accept-footnote {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  text-align: right;
+}
+.life-commission-rules {
+  color: var(--rq-ink-muted);
+  font-size: 13px;
+}
+.life-commission-rules summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  width: fit-content;
+  padding: 7px 0;
+  cursor: pointer;
+  color: var(--rq-moss);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  list-style: none;
+  white-space: nowrap;
+}
+.life-commission-rules summary::-webkit-details-marker {
+  display: none;
+}
+.life-commission-rules > div {
+  padding: 8px 12px;
+  border: 1px solid var(--rq-divider);
+  background: var(--rq-linen-raised);
+}
+.hp-panel .life-commission-rules p {
+  margin: 7px 0;
+}
+.life-accept-footer:has(details[open]) {
+  flex-wrap: wrap;
+}
+.life-accept-footer details[open] {
+  flex-basis: 100%;
+}
+.life-accept-footer:has(details[open]) > button {
+  margin-left: auto;
+}
+.ha-commission .life-promise {
+  margin-top: 18px;
+}
+.ha-commission .life-clock {
+  padding: 18px;
+}
+.ha-commission .life-conversation > .life-main-action {
+  width: 100%;
+  margin-top: 18px;
+  font-size: 17px;
+}
+.ha-commission .life-cancel {
+  margin-top: 14px;
+}
+.ha-commission .life-rest {
+  padding: 30px 0;
+}
+.hp-panel .ha-commission .dialogue-text .text-button {
+  min-height: 44px;
+  padding: 8px 10px;
+}
+.hp-panel
+  .ha-commission
+  :is(.ha-dialogue-actions, .ha-request-details, .life-actions, .dialogue-text)
+  button {
+  border-radius: 2px;
+}
+.ha-commission .life-rest > .life-commission-rules {
+  text-align: left;
+  margin-top: 20px;
+}
+.panel-npc:has(.ha-commission) :is(.form-error, .panel-notice) {
+  position: relative;
+  margin: 0 28px 15px;
+  padding: 12px 16px;
+  background: var(--rq-linen);
+  border: 2px solid var(--rq-timber);
+  border-radius: 2px;
+}
+.hp-panel .ha-commission button:hover:not(:disabled) {
+  border-color: var(--rq-moss);
+}
+.hp-panel .ha-commission .life-main-action:hover:not(:disabled) {
+  border-color: var(--rq-amber);
+  background: var(--rq-pine);
+  color: var(--rq-linen-raised);
+}
+.hp-panel .ha-commission .life-paths button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.hp-panel
+  .ha-commission
+  :is(.life-hours button, .life-main-action):active:not(:disabled) {
+  transform: translateY(2px);
+}
+.ha-commission :is(button, summary):focus-visible {
+  outline: 3px solid var(--rq-moss);
+  outline-offset: 4px;
+}
+.ha-commission
+  :is(.life-main-action, button[aria-pressed="true"]):focus-visible {
+  outline-color: var(--rq-ink);
+}
+.ha-commission h3:focus {
+  outline: none;
+}
+@keyframes commission-open {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1000px) {
+  .ha-commission {
+    grid-template-columns: minmax(175px, 0.75fr) minmax(0, 2.3fr);
+    padding-inline: 24px;
+  }
+  .ha-commission .ha-dialogue-scene {
+    padding-inline: 22px;
+  }
+  .life-paper-heading {
+    gap: 12px;
+  }
+  .ha-commission .life-quota {
+    width: 100%;
+    justify-content: start;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+  }
+  .ha-commission .life-quota small {
+    grid-column: auto;
+    text-align: right;
+  }
+  .commission-host-paper {
+    padding-inline: 12px;
+  }
+  .hp-panel .ha-commission .life-main-action {
+    min-width: 205px;
+  }
+}
+@media (max-width: 700px) {
+  .modal.hp-panel.panel-npc:has(.ha-commission) {
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  .panel-npc:has(.ha-commission) .modal-head {
+    top: 10px;
+    right: auto;
+  }
+  .panel-npc:has(.ha-commission) .modal-head .hp-close {
+    right: 16px;
+  }
+  .ha-commission {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 66px 16px 18px;
+    min-height: 0;
+  }
+  .ha-commission::before {
+    border-width: 15px;
+    border-image-width: 15px;
+  }
+  .hp-panel .commission-title {
+    left: 18px;
+    top: 11px;
+    font-size: 21px;
+    padding: 5px 12px;
+  }
+  .commission-title svg {
+    width: 18px;
+  }
+  .commission-host {
+    display: grid;
+    grid-template-columns: 105px 1fr;
+    border-width: 1px;
+  }
+  .commission-riverside {
+    min-height: 100px;
+    background-position: 44% 58%;
+  }
+  .commission-riverside .pixel-person {
+    width: 48px !important;
+    min-width: 48px;
+    height: 48px !important;
+    background-size: 192px 336px;
+    left: 45%;
+    top: 58%;
+  }
+  .commission-host-paper {
+    text-align: left;
+    padding: 8px 12px;
+    border-top: 0;
+    border-left: 2px solid #b39970;
+  }
+  .hp-panel .commission-host-paper h3 {
+    display: inline;
+    font-size: 21px;
+  }
+  .hp-panel .commission-host-paper p {
+    display: inline;
+    margin-left: 8px;
+    font-size: 12px;
+  }
+  .commission-host-line {
+    display: none;
+  }
+  .commission-host-paper blockquote {
+    margin: 5px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .commission-host-paper small {
+    justify-content: flex-start;
+    font-size: 12px;
+  }
+  .ha-commission .ha-dialogue-scene {
+    padding: 18px 16px 16px;
+  }
+  .life-paper-heading {
+    gap: 10px;
+    margin-bottom: 13px;
+  }
+  .ha-commission .life-quota {
+    gap: 6px 8px;
+    grid-template-columns: auto 1fr;
+  }
+  .ha-commission .life-quota small {
+    grid-column: 1/-1;
+    text-align: left;
+  }
+  .ha-commission .life-seeds {
+    justify-content: flex-end;
+  }
+  .hp-panel .ha-commission .life-conversation h3 {
+    font-size: 22px;
+    margin-bottom: 13px;
+    padding-bottom: 10px;
+  }
+  .ha-commission .life-paths {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .hp-panel .ha-commission .life-paths button {
+    flex-direction: row;
+    gap: 5px;
+    padding: 12px 5px;
+    min-height: 70px;
+  }
+  .life-paths .commission-icon {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+  .ha-commission .life-paths button > span:last-child {
+    text-align: left;
+  }
+  .ha-commission .life-paths strong {
+    font-size: 15px;
+  }
+  .ha-commission .life-paths small {
+    font-size: 12px;
+    margin-top: 0;
+  }
+  .ha-commission .life-hours {
+    gap: 7px;
+  }
+  .hp-panel .ha-commission .life-hours button {
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 2px;
+    min-height: 56px;
+    font-size: 21px;
+    gap: 3px;
+    line-height: 1.2;
+  }
+  .life-reward-preview {
+    gap: 6px;
+    padding: 10px;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  .life-reward-preview .commission-icon {
+    width: 27px;
+    height: 27px;
+  }
+  .life-reward-preview strong {
+    font-size: 17px;
+  }
+  .life-accept-footer {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .hp-panel .ha-commission .life-main-action {
+    width: 100%;
+    min-width: 0;
+    font-size: 18px;
+  }
+  .life-accept-footer:has(details[open]) > button {
+    margin-left: 0;
+  }
+  .life-accept-footnote {
+    text-align: left;
+    margin-top: 0;
+  }
+  .ha-commission .life-clock {
+    padding: 14px 12px;
+  }
+  .ha-commission .life-clock strong {
+    font-size: 24px;
+  }
+  .panel-npc:has(.ha-commission) :is(.form-error, .panel-notice) {
+    margin-inline: 16px;
+  }
+}
+@media (max-height: 560px) and (min-width: 701px) {
+  .ha-commission {
+    min-height: 0;
+  }
+  .commission-riverside {
+    min-height: 180px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ha-commission,
+  .ha-commission button {
+    animation: none !important;
+    transition: none !important;
+  }
+}

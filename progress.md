@@ -1,5 +1,21 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-14 Active commission contract
+
+- Owner approved the second preview, asking for a signed-scroll/hourglass active state rather than data blocks. Plan: `docs/tasks/16-commission-contract.md`. Prior board implementation changes remain uncommitted and preserved.
+- Added blank scroll/empty glass materials through built-in image generation, with prompts, raw sources, lossless runtime packaging and provenance. Dynamic SVG sand follows authoritative elapsed time; waiting closes the dialog, due time exposes the existing claim command. Rules, confirmation, retry, quota and other layouts retained.
+- First production build, 19 commission backend tests,35-image audit, play-mode regression and frame client pass. Actual textured-paper checks found footer contrast/phone ribbon edge issues; corrected. Final browser/texture verification in progress. Isolated previous preview DB only; no backend/user-data mutation.
+- Final production feature suite passes39 captures/no unexpected errors, including close/reopen, half-time, automatic deadline, rejected/retried claim, cancellation and touch.12 actual texture cases/262 text runs/min4.75;37 computed cases/937 runs/min4.51. Final desktop/phone/ready/half-time/scrolled-rule screenshots inspected; reduced motion and125% text check pass.
+- Preview5209 now serves the contract build (Vite81678/npm81655; API8041/PID76440 retained). Owned test browsers/runners and prior preview exited; shared app hosts preserved. Health verified. No backend/user data change, commit/push/deploy. Remaining actual acceptance/physical-device/native zoom/endurance gaps in task16.
+
+## 2026-10-14 Noah wooden commission board
+
+- Owner approved the generated preview and requested implementation. Scope/plan in `docs/tasks/15-commission-board.md`; clean starting tree. Reused current commission APIs/rules, story topic and actor; no backend or user-save changes.
+- Implemented timber board, character-free river backdrop with existing Noah sprite, DOM paper slips/hour tokens/reward preview, expandable rules, active/settlement/cancellation/quota states and narrow-screen composition. Two original textless materials packaged losslessly; original pixel selection icons and provenance recorded.
+- First build and 19 commission backend tests pass; initial 24-capture browser suite and play-mode regression pass. Added story/rules/focus checks found a small pre-existing reveal-dialogue target; fixed within Noah scope. Final production and responsive verification in progress.
+- Final production passes 30-capture feature/touch/story/rules/focus suite, skill frame client and 33-image/source audit; no unexpected browser errors. Contrast28 cases/828 runs/min4.97. Actual phone/tablet/desktop/short-landscape screenshots inspected, with primary phone action visible and close retained during scroll.
+- Preview5209/API8041 retained for owner review and health verified; all owned test browsers/runners and original dev server exited. Shared unowned app tool hosts preserved. No backend/user-save changes, commit, push or deployment. Actual visual acceptance and physical-device/native zoom/endurance remain pending; full evidence and process identities in task15.
+
 ## 2026-10-14 NPC reality commissions
 
 - User requests NPC dialogue instead of growth forms, timed study/exercise/work, 1 point/hour and 5 points/day; cancellation and history. Scope/plan: docs/tasks/13-life-commissions.md. Starting Git tree clean.
