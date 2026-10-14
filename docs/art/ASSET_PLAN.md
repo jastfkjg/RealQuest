@@ -186,3 +186,7 @@ Owner approved the generated `references/hud-concept-v1.png` design board; it is
 ## 15. Health and stamina field journal — 2026-10-14
 
 Reuses the unchanged generated `arrival-village-v1.webp` as a woodland vignette and the actual existing character appearance. All pledge choices, progress footprints, health seal, capacity preview and text are live DOM/CSS with the shared Hearthwood tokens; outline symbols use the existing Lucide dependency. No new bitmap, font, audio, downloaded pack or image-generation request. The manifest records the additional village-art binding without changing hashes. Actual render remains a candidate; evidence and limits are in task 11.
+
+## Character point allocation — 2026-10-14
+
+Owner approved `references/character-points-concept-v1.png`, generated with built-in image_gen using the supplied UI screenshot. Exact prompt and SHA-256 are recorded. It is a design reference only, excluded from runtime. Implementation reuses `character-dossier-v1.webp`, unchanged actor sheets, shared tokens and installed Lucide SVG components. All values and controls remain DOM; no new runtime asset/font/pack. Actual render and evidence: task 14.

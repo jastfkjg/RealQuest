@@ -7,11 +7,12 @@ from zoneinfo import ZoneInfo
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import select
+from test_game import client, cmd, create, fresh, study_create, plan_create
 from app.main import app
 from app.models import Receipt
 from app.db import Session
 from app.rules import apply, upgrade_state, RuleError
-from test_game import client, cmd, create, fresh, study_create, plan_create
+from test_life_tasks import at_noah, accept, npc_client
 
 NOW = datetime(2026, 10, 14, 12, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
 
@@ -32,8 +33,8 @@ def test_partial_timer_then_completion_and_duplicate_link():
     for offset in [100, 200]:
         apply(s, 'timer_start', {'task_id': task}, NOW + offset)
         apply(s, 'timer_finish', {}, NOW + offset + 60)
-        assert s['knowledge_points'] == (1 if offset == 200 else 0)
-    assert s['study_tasks'][task]['knowledge_reward'] == 1
+        assert s['knowledge_points'] == 0
+    assert s['study_tasks'][task]['knowledge_reward'] == 0
     assert s['xp'] == 2 and s['activities'][-1]['source'] == 'timer'
     assert s['activities'][-1]['verified'] is False
     before = copy.deepcopy(s)
@@ -45,11 +46,11 @@ def test_link_record_ownership_and_xp_cap_are_independent():
     s = fresh()
     first, second = [study_create(s, NOW, minutes=5) for _ in range(2)]
     record = link_minutes(s, first, 100)
-    assert s['knowledge_points'] == 1 and s['xp'] == 100
+    assert s['knowledge_points'] == 0 and s['xp'] == 100
     with pytest.raises(RuleError):
         apply(s, 'study_link', {'task_id': second, 'activity_id': record}, NOW)
     link_minutes(s, second, 5)
-    assert s['knowledge_points'] == 2 and s['xp'] == 100
+    assert s['knowledge_points'] == 0 and s['xp'] == 100
     assert s['activities'][-1]['xp'] == 0
 
 
@@ -60,11 +61,11 @@ def test_edit_to_recorded_minutes_archive_and_restore_only_award_once():
     task = next(iter(s['study_tasks']))
     link_minutes(s, task, 5)
     apply(s, 'study_edit', {'task_id': task, 'title': '读懂叶片', 'target_minutes': 5}, NOW)
-    assert s['knowledge_points'] == 1
+    assert s['knowledge_points'] == 0
     for archived in [True, False, True, False]:
         apply(s, 'study_archive', {'task_id': task, 'archived': archived}, NOW)
         apply(s, 'study_plan_archive', {'plan_id': plan, 'archived': archived}, NOW)
-    assert s['knowledge_points'] == 1 and s['xp'] == 5
+    assert s['knowledge_points'] == 0 and s['xp'] == 5
     apply(s, 'study_plan_today', {'plan_id': plan}, NOW)
     assert len(s['study_tasks']) == 1
 
@@ -77,13 +78,13 @@ def test_midnight_task_reward_not_bound_to_xp_day_and_free_timer_no_point():
     apply(s, 'timer_finish', {}, midnight + 60)
     assert s['study_tasks'][task]['date'] == '2026-10-14'
     assert s['activities'][-1]['date'] == '2026-10-15'
-    assert s['knowledge_points'] == 1
+    assert s['knowledge_points'] == 0
     apply(s, 'timer_start', {'topic': '自由阅读'}, midnight + 90)
     apply(s, 'timer_finish', {}, midnight + 150)
-    assert s['knowledge_points'] == 1 and s['xp'] == 2
+    assert s['knowledge_points'] == 0 and s['xp'] == 2
 
 
-def test_legacy_completed_no_backfill_unfinished_can_earn():
+def test_legacy_completed_and_unfinished_notes_no_longer_mint_points():
     s = fresh()
     done, pending = [study_create(s, NOW, minutes=5) for _ in range(2)]
     record = link_minutes(s, done, 5)
@@ -100,7 +101,7 @@ def test_legacy_completed_no_backfill_unfinished_can_earn():
     apply(upgraded, 'study_link', {'task_id': done, 'activity_id': record}, NOW)
     assert upgraded['knowledge_points'] == 0 and upgraded['xp'] == s['xp']
     link_minutes(upgraded, pending, 5)
-    assert upgraded['knowledge_points'] == 1
+    assert upgraded['knowledge_points'] == 0
     assert upgrade_state(upgraded) == upgraded
 
 
@@ -123,7 +124,9 @@ def test_investment_balance_and_zero_point_rejection():
     with pytest.raises(RuleError):
         apply(s, 'knowledge_spend', {'branch': 'science', 'expected_invested': 0}, NOW)
     for branch, index in [('science', 0), ('magic', 1), ('magic', 2)]:
-        link_minutes(s, study_create(s, NOW, minutes=1), 1)
+        at_noah(s)
+        task = accept(s, 1, 'study', NOW + index * 3600)
+        apply(s, 'life_claim', {'target': 'noah', 'task_id': task}, NOW + (index + 1) * 3600)
         before = {key: copy.deepcopy(s[key]) for key in ['xp', 'knowledge_shard', 'attributes', 'health_points', 'stamina']}
         apply(s, 'knowledge_spend', {'branch': branch, 'expected_invested': index}, NOW)
         assert s['knowledge_points'] == 0
@@ -143,7 +146,12 @@ def test_concurrent_completion_spending_replay_receipts_and_recovery(client, mon
     data = {'task_id': task_id, 'activity_id': record}
     with ThreadPoolExecutor(max_workers=2) as pool:
         assert list(pool.map(lambda _: cmd(client, 'study_link', data).status_code, range(2))) == [200, 200]
-    assert client.get('/api/state').json()['state']['knowledge_points'] == 1
+    assert client.get('/api/state').json()['state']['knowledge_points'] == 0
+    npc_client(client)
+    commission = str(uuid.uuid4())
+    assert cmd(client, 'life_accept', {'target': 'noah', 'task_id': commission, 'hours': 1, 'kind': 'study'}).status_code == 200
+    monkeypatch.setattr(main.time, 'time', lambda: NOW + 3600)
+    assert cmd(client, 'life_claim', {'target': 'noah', 'task_id': commission}).status_code == 200
     def spend(branch):
         return cmd(client, 'knowledge_spend', {'branch': branch, 'expected_invested': 0}).status_code
     with ThreadPoolExecutor(max_workers=2) as pool:
@@ -152,7 +160,7 @@ def test_concurrent_completion_spending_replay_receipts_and_recovery(client, mon
     assert saved['knowledge_points'] == 0 and sum(saved['knowledge_growth'].values()) == 1
     with Session() as db:
         receipts = db.scalars(select(Receipt).where(Receipt.action == 'study_link')).all()
-        assert sum(r.changes['knowledge_points'] for r in receipts) == 1
+        assert sum(r.changes['knowledge_points'] for r in receipts) == 0
         receipt = db.scalar(select(Receipt).where(Receipt.action == 'knowledge_spend'))
         key = receipt.request_id
         branch = next(k for k, v in receipt.changes['knowledge_growth'].items() if v)

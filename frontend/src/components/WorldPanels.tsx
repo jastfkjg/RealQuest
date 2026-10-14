@@ -1,3 +1,4 @@
+import { LifeQuestDialogue } from "./LifeQuests";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowUpFromLine,
@@ -291,6 +292,7 @@ export function BuildingPanel() {
 export function ConversationPanel({ children }: { children: ReactNode }) {
   const { selected, state, open } = useGame();
   const [showRequest, setShowRequest] = useState(false);
+  const [life, setLife] = useState(selected?.id === "noah");
   const requestRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (showRequest)
@@ -321,29 +323,49 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
         <small>关系值 {state.relationships[selected.id] || 0}</small>
       </aside>
       <div className="ha-dialogue-scene">
-        <div className="ha-dialogue-label">{selected.name}说</div>
-        <div className="hp-speech">
-          {children}
-          <small className="hp-story-label">预设剧情对话</small>
-        </div>
-        {quest && (
-          <section className="ha-encounter-request">
-            <div className="ha-request-teaser">
-              <Sparkles size={18} />
-              <div>
-                <small>{questStatuses[quest.status]}</small>
-                <h4>{quest.title}</h4>
-              </div>
+        {selected.id === "noah" && (
+          <div
+            className="life-dialogue-tabs"
+            role="group"
+            aria-label="对话话题"
+          >
+            <button aria-pressed={life} onClick={() => setLife(true)}>
+              现实委托
+            </button>
+            <button aria-pressed={!life} onClick={() => setLife(false)}>
+              村庄闲谈
+            </button>
+          </div>
+        )}
+        {life && selected.id === "noah" ? (
+          <LifeQuestDialogue />
+        ) : (
+          <>
+            <div className="ha-dialogue-label">{selected.name}说</div>
+            <div className="hp-speech">
+              {children}
+              <small className="hp-story-label">预设剧情对话</small>
             </div>
-            {showRequest && (
-              <div className="ha-request-details" ref={requestRef}>
-                <QuestDetails quest={quest} conversational />
-              </div>
+            {quest && (
+              <section className="ha-encounter-request">
+                <div className="ha-request-teaser">
+                  <Sparkles size={18} />
+                  <div>
+                    <small>{questStatuses[quest.status]}</small>
+                    <h4>{quest.title}</h4>
+                  </div>
+                </div>
+                {showRequest && (
+                  <div className="ha-request-details" ref={requestRef}>
+                    <QuestDetails quest={quest} conversational />
+                  </div>
+                )}
+              </section>
             )}
-          </section>
+          </>
         )}
         <div className="ha-dialogue-actions">
-          {quest && !showRequest && (
+          {!life && quest && !showRequest && (
             <button className="primary" onClick={() => setShowRequest(true)}>
               继续 · 聊聊这份委托 <ArrowRight size={16} />
             </button>

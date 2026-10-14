@@ -11,6 +11,12 @@ ATTRIBUTES = ['strength', 'wisdom', 'craft', 'stewardship', 'bond']
 ZONE = ZoneInfo('Asia/Shanghai')
 STAMINA_SECONDS = 720
 GATHER_COSTS = {'wood': 4, 'stone': 6}
+LIFE_KINDS = {'study': ('学习', 'knowledge_points', '知识点'),
+              'exercise': ('运动', 'health_points', '健康点'),
+              'work': ('工作', 'skill_points', '技能点')}
+LIFE_DAILY_LIMIT = 5
+SKILL_NAMES = {'planting': '种植', 'ranching': '养殖', 'building': '建造'}
+HEALTH_CAPACITY_GAIN = 5
 
 class RuleError(ValueError):
     pass
@@ -35,7 +41,11 @@ def upgrade_state(original):
     state.setdefault('knowledge_growth', {'science': 0, 'magic': 0})
     state.setdefault('exercise_tasks', {})
     state.setdefault('health_points', 0)
+    state.setdefault('skill_points', 0)
+    state.setdefault('life_tasks', {})
     state.setdefault('health_invested', 0)
+    state.setdefault('vitality', {'current': 100, 'max': 100})
+    state.setdefault('skill_growth', {key: 0 for key in SKILL_NAMES})
     state.setdefault('stamina', {'current': 100, 'max': 100, 'updated_at': 0})
     for task in state['study_tasks'].values():
         task.setdefault('knowledge_reward', 0)
@@ -51,6 +61,25 @@ def upgrade_state(original):
             state['position']={'x':240,'y':320}
         state['save_version']=2
     return state
+
+
+def character_growth_options(state):
+    """Server quotes for the dossier; no XP conversion or client-priced purchases."""
+    options = {}
+    for target in ['vitality', 'stamina']:
+        options[target] = {'currency': 'health_points', 'cost': 1,
+                           'current': state[target]['max'],
+                           'next': state[target]['max'] + HEALTH_CAPACITY_GAIN,
+                           'expected_invested': state['health_invested']}
+    for branch, level in state['knowledge_growth'].items():
+        options[branch] = {'currency': 'knowledge_points', 'cost': 1,
+                           'current': level, 'next': level + 1,
+                           'expected_invested': sum(state['knowledge_growth'].values())}
+    for branch, level in state['skill_growth'].items():
+        options[branch] = {'currency': 'skill_points', 'cost': level + 1,
+                           'current': level, 'next': level + 1,
+                           'expected_invested': sum(state['skill_growth'].values())}
+    return options
 
 def bump(state, key, amount=1):
     state['stats'][key] = state['stats'].get(key, 0) + amount
@@ -112,8 +141,7 @@ def link_exercise(state, task, record, now):
     minutes = sum(a['amount'] for a in state['activities'] if a.get('exercise_task_id') == task['id'])
     if minutes >= task['target_minutes'] and task['completed_at'] is None:
         task['completed_at'] = now
-        state['health_points'] += 1
-        return '约定完成，获得 1 健康点。把这份成长带上旅途吧。'
+        return '旧约定已记入手札。健康点请通过诺亚的现实委托获得。'
     return '运动记录已装订进约定；关联不会重复发放经验。'
 
 def study_plan(state, plan_id):
@@ -141,10 +169,60 @@ def complete_study_task(state, task, now):
     minutes = sum(a['amount'] for a in state['activities'] if a.get('study_task_id') == task['id'])
     if minutes >= task['target_minutes'] and task['completed_at'] is None:
         task['completed_at'] = now
-        task['knowledge_reward'] = 1
-        state['knowledge_points'] += 1
+        # Legacy notes remain usable, but points now come only from timed NPC commissions.
+        task['knowledge_reward'] = 0
         return True
     return False
+
+def life_task_views(state, now):
+    today = datetime.fromtimestamp(now, ZONE).date().isoformat()
+    tasks = sorted(state['life_tasks'].values(), key=lambda t: t['accepted_at'], reverse=True)
+    spent = sum(t['hours'] for t in tasks if t['date'] == today and t['status'] == 'claimed')
+    reserved = sum(t['hours'] for t in tasks if t['date'] == today and t['status'] == 'active')
+    return {'date': today, 'timezone': 'Asia/Shanghai', 'limit': LIFE_DAILY_LIMIT,
+            'claimed': spent, 'reserved': reserved, 'remaining': max(0, LIFE_DAILY_LIMIT - spent - reserved),
+            'tasks': tasks}
+
+def life_command(state, action, data, now):
+    if action != 'life_cancel':
+        npc = next(o for o in OBJECTS if o['id'] == 'noah')
+        require(data.get('target') == 'noah' and state['location'] == 'overworld'
+                and math.hypot(state['position']['x'] - npc['x'], state['position']['y'] - npc['y']) <= 72,
+                '请到河岸的诺亚身边，交谈后领取或结算现实委托')
+    if action == 'life_accept':
+        task_id = study_uuid(data.get('task_id'))
+        kind = data.get('kind')
+        require(isinstance(kind, str) and kind in LIFE_KINDS, '请选择学习、运动或工作')
+        hours = integer(data.get('hours'), 1, LIFE_DAILY_LIMIT)
+        previous = state['life_tasks'].get(task_id)
+        if previous:
+            require(previous['kind'] == kind and previous['hours'] == hours, '委托标识已用于其他内容')
+            return '这份委托已经记下，不会重复领取'
+        require(not any(t['status'] == 'active' for t in state['life_tasks'].values()), '先结算或取消进行中的委托，再来领取下一项')
+        quota = life_task_views(state, now)
+        require(quota['remaining'] > 0, '今天的 5 点成长已全部领取，明天再来吧')
+        require(hours <= quota['remaining'], f'今天还可领取 {quota["remaining"]} 小时的委托')
+        state['life_tasks'][task_id] = {'id': task_id, 'kind': kind, 'hours': hours,
+            'date': quota['date'], 'giver': 'noah', 'accepted_at': now, 'ready_at': now + hours * 3600,
+            'status': 'active', 'claimed_at': None, 'cancelled_at': None, 'reward': 0,
+            'source': 'npc_elapsed', 'verified': False}
+        return f'约定好了：{hours} 小时{LIFE_KINDS[kind][0]}。到时来找我，收下你的成长。'
+    task_id = data.get('task_id')
+    require(isinstance(task_id, str) and task_id in state['life_tasks'], '这份现实委托不存在')
+    task = state['life_tasks'][task_id]
+    if action == 'life_cancel':
+        require(task['status'] != 'claimed', '已结算的委托不能取消')
+        if task['status'] == 'cancelled':
+            return '这份委托已取消，没有消耗额度'
+        task.update(status='cancelled', cancelled_at=now)
+        return '委托已取消，预留额度已释放。这次不发放点数，准备好再出发。'
+    require(task['status'] != 'cancelled', '这份委托已取消，不能结算')
+    if task['status'] == 'claimed':
+        return '这份委托已经结算，成长不会重复发放'
+    require(now >= task['ready_at'], '约定时间还没到，请到期后再来结算')
+    task.update(status='claimed', claimed_at=now, reward=task['hours'])
+    state[LIFE_KINDS[task['kind']][1]] += task['hours']
+    return f'委托完成，获得 {task["hours"]} {LIFE_KINDS[task["kind"]][2]}。每一步都算数。'
 
 def activity(state, data, now, source='manual'):
     kind = data.get('kind')
@@ -202,6 +280,8 @@ def apply(state, action, data, now):
         state['quests']['settle_in']={'status':'active','accepted_at':now}
         return '新任务：给新生活一个落脚点。走近小屋门口按 E 进入，再收集 3 份木材。'
     require(state['character'] is not None, '请先创建角色')
+    if action in ['life_accept', 'life_claim', 'life_cancel']:
+        return life_command(state, action, data, now)
     if action == 'move':
         x, y = data.get('x'), data.get('y')
         require(all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in [x,y]), '坐标无效')
@@ -218,11 +298,21 @@ def apply(state, action, data, now):
         require(branch in ['science', 'magic'], '请选择科学或魔法')
         expected = integer(data.get('expected_invested'), 0, 1000000)
         require(expected == sum(state['knowledge_growth'].values()), '研修进度已更新，请查看最新等级后再投入')
-        require(state['knowledge_points'] > 0, '完成一项学习任务后，就能获得知识点')
+        require(state['knowledge_points'] > 0, '结算诺亚的学习委托后，就能获得知识点')
         state['knowledge_points'] -= 1
         state['knowledge_growth'][branch] += 1
         name = '科学' if branch == 'science' else '魔法'
         return f'{name}提升至 {state["knowledge_growth"][branch]} 级，已投入 1 知识点。'
+    if action == 'skill_spend':
+        branch = data.get('branch')
+        require(isinstance(branch, str) and branch in SKILL_NAMES, '请选择种植、养殖或建造')
+        expected = integer(data.get('expected_invested'), 0, 1000000)
+        require(expected == sum(state['skill_growth'].values()), '技能进度已更新，请查看最新等级后再升级')
+        cost = state['skill_growth'][branch] + 1
+        require(state['skill_points'] >= cost, f'技能点不足，本次升级需要 {cost} 技能点')
+        state['skill_points'] -= cost
+        state['skill_growth'][branch] += 1
+        return f'{SKILL_NAMES[branch]}提升至 {state["skill_growth"][branch]} 级，已消耗 {cost} 技能点。'
     if action == 'exercise_prepare':
         require(data.get('date', today) == today, '日期已经变化，请翻到今天再立下约定')
         task_id = 'exercise-' + today
@@ -253,15 +343,19 @@ def apply(state, action, data, now):
             record['id'] = record_id
         return link_exercise(state, task, record, now)
     if action == 'health_spend':
+        target = data.get('target', 'stamina')
+        require(target in ['vitality', 'stamina'], '请选择生命值或体力值')
         expected = integer(data.get('expected_invested'), 0, 1000000)
-        require(expected == state['health_invested'], '培养进度已更新，请查看最新体力后再选择')
-        require(state['health_points'] > 0, '完成一项锻炼约定后，就能获得健康点')
-        recover_stamina(state, now)
+        require(expected == state['health_invested'], '培养进度已更新，请查看最新上限后再选择')
+        require(state['health_points'] > 0, '结算诺亚的运动委托后，就能获得健康点')
+        if target == 'stamina':
+            recover_stamina(state, now)
         state['health_points'] -= 1
         state['health_invested'] += 1
-        state['stamina']['max'] += 5
-        state['stamina']['current'] += 5
-        return f'体力上限提升至 {state["stamina"]["max"]}，当前体力增加 5 点。'
+        state[target]['max'] += HEALTH_CAPACITY_GAIN
+        state[target]['current'] += HEALTH_CAPACITY_GAIN
+        name = '生命' if target == 'vitality' else '体力'
+        return f'{name}上限提升至 {state[target]["max"]}，当前{name}增加 {HEALTH_CAPACITY_GAIN} 点。'
     if action == 'study_plan_create':
         plan_id = study_uuid(data.get('plan_id'))
         title = study_title(data.get('title'))
@@ -312,7 +406,7 @@ def apply(state, action, data, now):
         minutes = integer(data.get('target_minutes'), 1, 120)
         task.update(title=title, target_minutes=minutes)
         completed = complete_study_task(state, task, now)
-        return '这一页已完成，获得 1 知识点；已有学习经验保持不变' if completed else '这一页已修改，已有记录和成长保持不变'
+        return '这一页已完成；知识点请通过诺亚的现实委托获得' if completed else '这一页已修改，已有记录和成长保持不变'
     if action == 'study_create':
         task_id = data.get('task_id')
         require(isinstance(task_id, str) and len(task_id) == 36, '任务标识无效')
@@ -341,7 +435,7 @@ def apply(state, action, data, now):
         require(record.get('study_task_id') in [None, task['id']], '这条记录已经记入另一项研习')
         record['study_task_id'] = task['id']
         completed = complete_study_task(state, task, now)
-        return '研习完成，获得 1 知识点；关联不重复发放学习经验' if completed else '记录已记入研习，已有成长不会重复发放'
+        return '研习已记录；知识点请通过诺亚的现实委托获得' if completed else '记录已记入研习，已有成长不会重复发放'
     if action.startswith('timer_'):
         timer = state['timer']
         if action == 'timer_start':
@@ -376,7 +470,7 @@ def apply(state, action, data, now):
                     task = study_task(state, timer['study_task_id'])
                     record['study_task_id'] = task['id']
                     if complete_study_task(state, task, now):
-                        message += '；研习完成，获得 1 知识点'
+                        message += '；研习已记录，知识点由现实委托结算'
             state['timer'] = None
             return message
         else:

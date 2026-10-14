@@ -7,6 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 from test_game import client, cmd, create, fresh
+from test_life_tasks import npc_client
 from app.main import app
 from app.db import Session
 from app.models import Player
@@ -30,7 +31,7 @@ def test_partial_link_reward_once_and_daily_limit():
     for offset in [3,4]:
         apply(s, 'exercise_link', {'task_id': task, 'activity_id': record['id']}, now+offset)
     pledge(s, now+5)
-    assert s['health_points'] == 1 and s['xp'] == 10
+    assert s['health_points'] == 0 and s['xp'] == 10
     assert exercise_task_views(s)[0]['minutes'] == 10
     with pytest.raises(RuleError): pledge(s, now+6, 1)
     with pytest.raises(RuleError):
@@ -47,10 +48,10 @@ def test_dates_sources_and_xp_cap():
     apply(s, 'exercise_record', {'task_id': task, 'activity_id': str(uuid.uuid4()), 'minutes': 1}, now+120)
     record = s['activities'][-1]
     assert record['date'] == '2026-10-14' and record['source'] == 'manual' and record['verified'] is False
-    assert record['xp'] == 0 and s['health_points'] == 1
+    assert record['xp'] == 0 and s['health_points'] == 0
     tomorrow = pledge(s, now+120, 1)
     with pytest.raises(RuleError): apply(s, 'exercise_link', {'task_id': tomorrow, 'activity_id': record['id']}, now+120)
-    assert s['health_points'] == 1 and len(s['exercise_tasks']) == 2
+    assert s['health_points'] == 0 and len(s['exercise_tasks']) == 2
     with pytest.raises(RuleError): apply(s, 'exercise_record', {'task_id': tomorrow, 'activity_id': str(uuid.uuid4()), 'minutes': 1}, now+86400*10)
 
 
@@ -75,13 +76,20 @@ def test_recovery_fraction_cap_clock_and_legacy():
     assert s['stamina']['current'] == 96
 
 
-def test_concurrent_reward_and_investment(client):
+def test_concurrent_reward_and_investment(client, monkeypatch):
+    now = 1800000000
+    monkeypatch.setattr("app.main.time.time", lambda: now)
     create(client)
     task = cmd(client, 'exercise_prepare', {'title': '散步', 'target_minutes': 1}).json()['state']['exercise_task_log'][0]['id']
     data = {'task_id': task, 'activity_id': str(uuid.uuid4()), 'minutes': 1}
     with ThreadPoolExecutor(2) as pool:
         assert list(pool.map(lambda _: cmd(client, 'exercise_record', data).status_code, range(2))) == [200,200]
-    assert client.get('/api/state').json()['state']['health_points'] == 1
+    assert client.get('/api/state').json()['state']['health_points'] == 0
+    npc_client(client)
+    commission = str(uuid.uuid4())
+    assert cmd(client, 'life_accept', {'target': 'noah', 'task_id': commission, 'hours': 1, 'kind': 'exercise'}).status_code == 200
+    now += 3600
+    assert cmd(client, 'life_claim', {'target': 'noah', 'task_id': commission}).status_code == 200
     with ThreadPoolExecutor(2) as pool:
         codes = list(pool.map(lambda _: cmd(client, 'health_spend', {'expected_invested': 0}).status_code, range(2)))
     assert sorted(codes) == [200,422]

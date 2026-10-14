@@ -97,6 +97,8 @@ async function exitRoom(p) {
   await p.waitForTimeout(350);
 }
 async function selectCommission(p, title) {
+  if (await p.getByRole("button", { name: "村庄闲谈", exact: true }).count())
+    await p.getByRole("button", { name: "村庄闲谈", exact: true }).click();
   if (await p.getByRole("navigation", { name: "告示板委托" }).count()) {
     await p
       .getByRole("navigation", { name: "告示板委托" })
@@ -171,28 +173,37 @@ try {
     await interact(p);
     assert.ok((await state(p)).plots.plot_2);
     await p.getByRole("button", { name: "现实成长", exact: true }).click();
-    await p.getByLabel("主题或备注").fill("浏览器验收：学习记录");
-    await p.getByRole("button", { name: "保存这次成长" }).click();
-    await p.waitForTimeout(250);
+    assert.equal(await p.locator("dialog input, dialog select").count(), 0);
+    await close(p);
+    // Legacy note/timer compatibility uses the public API; new point earning is covered by test:life.
+    const legacyCommand = async (action, data = {}) => {
+      const response = await context.request.post(`${base}/api/command`, {
+        data: { request_id: crypto.randomUUID(), action, data },
+      });
+      assert.equal(response.status(), 200, await response.text());
+      await p.evaluate(() => window.dispatchEvent(new Event("focus")));
+      await p.waitForTimeout(250);
+      return response.json();
+    };
+    await legacyCommand("activity", {
+      kind: "study",
+      amount: 25,
+      note: "浏览器验收：旧记录兼容",
+    });
     assert.equal((await state(p)).attributes.wisdom, 25);
-    await p.getByLabel("学习主题").fill("计时恢复测试");
-    await p.getByRole("button", { name: "开始专注" }).click();
+    assert.equal((await state(p)).knowledgePoints, 0);
+    await legacyCommand("timer_start", { topic: "旧计时恢复测试" });
     await p.waitForTimeout(1200);
-    await p.getByRole("button", { name: "暂停", exact: true }).click();
-    await p.waitForTimeout(200);
+    await legacyCommand("timer_pause");
     const elapsed = (await state(p)).timer.elapsed;
     assert.ok(elapsed >= 1);
     await p.reload();
     await p.waitForSelector("canvas");
     await p.waitForTimeout(350);
     assert.equal((await state(p)).timer.elapsed, elapsed);
-    await p.getByRole("button", { name: "现实成长", exact: true }).click();
-    await p.getByRole("button", { name: "继续", exact: true }).click();
-    await p.waitForTimeout(200);
+    await legacyCommand("timer_resume");
     assert.equal((await state(p)).timer.running, true);
-    await p.getByRole("button", { name: "结束并记录" }).click();
-    await p.waitForTimeout(200);
-    await close(p);
+    await legacyCommand("timer_finish");
     await moveTo(p, 400, 352);
     await moveTo(p, 580, 352);
     await moveTo(p, 580, 382);

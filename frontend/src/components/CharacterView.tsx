@@ -1,72 +1,113 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import {
   ArrowRight,
+  BookOpen,
   Check,
-  Compass,
+  ChevronRight,
+  FlaskConical,
   Hammer,
-  LockKeyhole,
-  Map,
-  MapPin,
+  Heart,
+  Info,
+  Bird,
   Sprout,
+  WandSparkles,
+  Zap,
 } from "lucide-react";
-import type { Attribute, GameState, NavigationTarget } from "../types";
-import {
-  appearanceNames,
-  attributeNames,
-  growth,
-} from "../game/characterGrowth";
+import type {
+  GameState,
+  GrowthCurrency,
+  GrowthOption,
+  GrowthTarget,
+} from "../types";
+import { appearanceNames } from "../game/characterGrowth";
 import { PixelPerson } from "./PixelPerson";
 
+const targets = {
+  vitality: { name: "生命", icon: Heart },
+  stamina: { name: "体力", icon: Zap },
+  science: { name: "科学", icon: FlaskConical },
+  magic: { name: "魔法", icon: WandSparkles },
+  planting: { name: "种植", icon: Sprout },
+  ranching: { name: "养殖", icon: Bird },
+  building: { name: "建造", icon: Hammer },
+};
+const currencies = {
+  health_points: { name: "健康点", use: "生命 / 体力上限", icon: Heart },
+  knowledge_points: { name: "知识点", use: "科学 / 魔法", icon: BookOpen },
+  skill_points: { name: "技能点", use: "种植 / 养殖 / 建造", icon: Sprout },
+};
 export interface CharacterViewProps {
   character: NonNullable<GameState["character"]>;
-  xp: number;
-  attributes: GameState["attributes"];
-  events: string[];
-  onRecord: (attribute: Attribute) => void;
-  onNavigate: (destination: NavigationTarget) => void;
-  onMap: () => void;
-}
-
-function Progress({
-  value,
-  max,
-  label,
-}: {
-  value: number;
-  max: number;
-  label: string;
-}) {
-  return (
-    <div
-      className="hc-meter"
-      role="progressbar"
-      aria-label={label}
-      aria-valuemin={0}
-      aria-valuemax={max}
-      aria-valuenow={Math.min(max, value)}
-      aria-valuetext={`${value} / ${max} EXP`}
-    >
-      <i style={{ width: `${Math.min(100, (value / max) * 100)}%` }} />
-    </div>
-  );
+  vitality: { current: number; max: number };
+  stamina: { current: number; max: number };
+  balances: Record<GrowthCurrency, number>;
+  options: Record<GrowthTarget, GrowthOption>;
+  busy?: boolean;
+  error?: string;
+  result?: string;
+  preview?: boolean;
+  onUpgrade: (target: GrowthTarget, option: GrowthOption) => void;
+  onSelectionChange?: () => void;
 }
 
 export function CharacterView({
   character,
-  xp,
-  attributes,
-  events,
-  onRecord,
-  onNavigate,
-  onMap,
+  vitality,
+  stamina,
+  balances,
+  options,
+  busy = false,
+  error,
+  result,
+  preview,
+  onUpgrade,
+  onSelectionChange,
 }: CharacterViewProps) {
-  const [attribute, setAttribute] = useState<Attribute>("wisdom");
-  const skillId = useId();
-  const data = growth[attribute],
-    value = attributes[attribute];
-  const unlocked = value >= data.threshold;
-  const studied = attribute === "wisdom" && events.includes("rune_awakened");
-  const Icon = data.icon;
+  const [selected, setSelected] = useState<GrowthTarget>("planting");
+  const detailId = useId(),
+    hintId = useId();
+  const detailHeading = useRef<HTMLHeadingElement>(null);
+  const option = options[selected],
+    target = targets[selected],
+    Icon = target.icon;
+  const isCapacity = selected === "vitality" || selected === "stamina";
+  const currency = currencies[option.currency].name;
+  const balance = balances[option.currency],
+    shortage = Math.max(0, option.cost - balance);
+  function select(key: GrowthTarget) {
+    setSelected(key);
+    onSelectionChange?.();
+    if (window.matchMedia("(max-width: 760px)").matches) {
+      requestAnimationFrame(() => detailHeading.current?.focus());
+    }
+  }
+  function rows(keys: GrowthTarget[]) {
+    return keys.map((key) => {
+      const item = targets[key],
+        ItemIcon = item.icon,
+        quote = options[key];
+      return (
+        <button
+          key={key}
+          type="button"
+          className="hc-growth-row"
+          aria-label={`${item.name}，等级 ${quote.current}`}
+          aria-pressed={selected === key}
+          aria-controls={detailId}
+          disabled={busy}
+          onClick={() => select(key)}
+        >
+          <ItemIcon size={25} aria-hidden="true" />
+          <b>{item.name}</b>
+          <span className="hc-level">Lv.{quote.current}</span>
+          <small>
+            升级需 {quote.cost} {currencies[quote.currency].name}
+          </small>
+          <ChevronRight size={19} aria-hidden="true" />
+        </button>
+      );
+    });
+  }
   return (
     <div className="hc-dossier">
       <section className="hc-identity" aria-label="冒险者身份">
@@ -74,176 +115,186 @@ export function CharacterView({
           <div className="hc-portrait-picture">
             <PixelPerson variant={character.appearance} />
           </div>
-          <span>
-            <Compass size={14} aria-hidden="true" />
-            回响大陆
-          </span>
         </div>
         <div className="hc-name-block">
           <span className="hc-eyebrow">冒险者档案</span>
           <h3>{character.name}</h3>
-          <p className="hc-title">
-            {xp >= 100 ? "逐光的旅人" : "初生的唤醒者"}
-          </p>
-          <p className="hc-outfit">
-            <Check size={14} aria-hidden="true" />
-            {appearanceNames[character.appearance]}
-            <small>当前穿着 · 无属性加成</small>
-          </p>
+          <p>回响大陆 · {appearanceNames[character.appearance]}</p>
         </div>
-        <div
-          className="hc-rank"
-          aria-label={`冒险等级 ${1 + Math.floor(xp / 100)}`}
-        >
-          <span>冒险等级</span>
-          <b>
-            <small>Lv.</small>
-            {1 + Math.floor(xp / 100)}
-          </b>
-          <Sprout size={18} aria-hidden="true" />
-        </div>
-        <div className="hc-experience">
-          <div>
-            <span>旅程经验</span>
-            <b>
-              {xp % 100} / 100 <small>EXP</small>
-            </b>
-          </div>
-          <Progress label="旅程经验" value={xp % 100} max={100} />
-          <small>
-            累计 {xp} EXP · 距下一等级还需 {100 - (xp % 100)} EXP
-          </small>
-        </div>
+        {preview && (
+          <span className="hc-preview-label">方案预览 · 示例数值</span>
+        )}
       </section>
-      <section className="hc-growth" aria-label="成长档案">
-        <div className="hc-section-title">
-          <h3>成长印记</h3>
-          <span>选择属性，查看能力</span>
-        </div>
-        <div className="hc-attributes" role="group" aria-label="选择成长属性">
-          {(Object.keys(growth) as Attribute[]).map((key) => {
-            const AttributeIcon = growth[key].icon,
-              amount = attributes[key];
-            return (
+      <section className="hc-vitals" aria-label="生命与体力">
+        {(["vitality", "stamina"] as const).map((key) => {
+          const value = key === "vitality" ? vitality : stamina,
+            VitalIcon = targets[key].icon;
+          return (
+            <div className="hc-vital" key={key} data-resource={key}>
+              <VitalIcon size={28} aria-hidden="true" />
+              <div className="hc-vital-value">
+                <div>
+                  <b>{targets[key].name}值</b>
+                  <strong>
+                    {value.current} <span>/ {value.max}</span>
+                  </strong>
+                </div>
+                <div
+                  className="hc-meter"
+                  role="progressbar"
+                  aria-label={`${targets[key].name}值`}
+                  aria-valuemin={0}
+                  aria-valuemax={value.max}
+                  aria-valuenow={value.current}
+                  aria-valuetext={`${value.current} / ${value.max}`}
+                >
+                  <i
+                    style={{
+                      width: `${Math.max(0, Math.min(100, (value.current / value.max) * 100))}%`,
+                    }}
+                  />
+                </div>
+              </div>
               <button
-                key={key}
-                className="hc-attribute"
-                aria-label={`${attributeNames[key]}，等级 ${1 + Math.floor(amount / 50)}，累计 ${amount} EXP`}
-                aria-pressed={attribute === key}
-                aria-controls={skillId}
-                onClick={() => setAttribute(key)}
+                type="button"
+                className="rq-button hc-capacity"
+                aria-label={`提升${targets[key].name}上限`}
+                aria-pressed={selected === key}
+                aria-controls={detailId}
+                disabled={busy}
+                onClick={() => select(key)}
               >
-                <AttributeIcon size={20} aria-hidden="true" />
-                <b>{attributeNames[key]}</b>
-                <span>Lv.{1 + Math.floor(amount / 50)}</span>
-                <small>{amount % 50} / 50 EXP</small>
-                <i className="hc-attribute-line" aria-hidden="true">
-                  <i style={{ width: `${(amount % 50) * 2}%` }} />
-                </i>
+                提升上限
               </button>
-            );
-          })}
+            </div>
+          );
+        })}
+      </section>
+      <div className="hc-body">
+        <div className="hc-paths">
+          <section aria-label="知识研修">
+            <div className="hc-section-title">
+              <h3>知识研修</h3>
+              <span>消耗知识点</span>
+            </div>
+            <div className="hc-rows">{rows(["science", "magic"])}</div>
+          </section>
+          <section aria-label="生活技能">
+            <div className="hc-section-title">
+              <h3>生活技能</h3>
+              <span>消耗技能点</span>
+            </div>
+            <div className="hc-rows">
+              {rows(["planting", "ranching", "building"])}
+            </div>
+          </section>
         </div>
-        <section
-          id={skillId}
-          className="hc-skill"
-          aria-label="所选属性能力"
-          aria-live="polite"
-        >
-          <div className="hc-skill-topline">
-            <span>
-              {attributeNames[attribute]} Lv.{1 + Math.floor(value / 50)}{" "}
-              <ArrowRight size={14} aria-hidden="true" /> Lv.
-              {2 + Math.floor(value / 50)}
-            </span>
-            <span>
-              {value % 50} / 50 EXP · 还差 {50 - (value % 50)}
-            </span>
+        <section className="hc-wallet" aria-label="可用成长点">
+          <div className="hc-section-title">
+            <h3>可用成长点</h3>
+            <span>尚未分配</span>
           </div>
-          <div className="hc-skill-heading">
-            <div className="hc-emblem" data-unlocked={unlocked}>
-              <Icon size={28} aria-hidden="true" />
+          <dl>
+            {(Object.keys(currencies) as GrowthCurrency[]).map((key) => {
+              const entry = currencies[key],
+                CurrencyIcon = entry.icon;
+              return (
+                <div key={key}>
+                  <CurrencyIcon size={25} aria-hidden="true" />
+                  <dt>
+                    <b>{entry.name}</b>
+                    <small>{entry.use}</small>
+                  </dt>
+                  <dd aria-label={`可用${entry.name} ${balances[key]}`}>
+                    {balances[key]}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </section>
+        <section
+          id={detailId}
+          className="hc-upgrade"
+          aria-label="升级详情"
+          aria-busy={busy}
+        >
+          <div className="hc-upgrade-heading">
+            <Icon size={32} aria-hidden="true" />
+            <div>
+              <span>当前选择</span>
+              <h3 ref={detailHeading} tabIndex={-1}>
+                {target.name}
+                {isCapacity ? "上限提升" : "升级"}
+              </h3>
+            </div>
+          </div>
+          <p
+            className="hc-transition"
+            aria-label={`${target.name}${isCapacity ? "上限" : "等级"} ${option.current} 到 ${option.next}`}
+          >
+            <span>
+              {isCapacity ? "" : "Lv."}
+              {option.current}
+            </span>
+            <ArrowRight size={24} aria-hidden="true" />
+            <strong>
+              {isCapacity ? "" : "Lv."}
+              {option.next}
+            </strong>
+          </p>
+          <dl className="hc-accounting">
+            <div>
+              <dt>本次消耗</dt>
+              <dd>
+                {option.cost} {currency}
+              </dd>
             </div>
             <div>
-              <span className="hc-skill-state">
-                {unlocked ? <Check size={14} /> : <LockKeyhole size={14} />}
-                {unlocked
-                  ? `${data.type} · 已掌握`
-                  : `下一项能力 · 累计 ${data.threshold} EXP 解锁`}
-              </span>
-              <h4>{data.skill}</h4>
+              <dt>{shortage ? "还需积累" : "升级后剩余"}</dt>
+              <dd>
+                {shortage || balance - option.cost} {currency}
+              </dd>
             </div>
-          </div>
-          <p className="hc-effect">{data.effect}</p>
-          {!unlocked ? (
-            <div className="hc-unlock">
-              <Progress
-                label={`${data.skill}解锁进度`}
-                value={value}
-                max={data.threshold}
-              />
-              <p>
-                再获得 <b>{data.threshold - value} EXP</b> 即可解锁，可通过
-                {data.activity}获得。
-              </p>
-            </div>
-          ) : (
-            <p className="hc-earned">
-              <Check size={16} aria-hidden="true" />
-              {studied
-                ? "已完成这处遗迹的解读"
-                : data.threshold
-                  ? "能力已生效，可以在世界中使用"
-                  : "启程时掌握的能力"}
+          </dl>
+          <button
+            type="button"
+            className="rq-button rq-button--primary hc-invest"
+            disabled={busy || shortage > 0}
+            aria-describedby={hintId}
+            onClick={() => onUpgrade(selected, option)}
+          >
+            {busy
+              ? "正在保存…"
+              : shortage
+                ? `${currency}不足 · 还差 ${shortage} 点`
+                : `消耗 ${option.cost} ${currency} · ${isCapacity ? "提升" : "升级"}`}
+          </button>
+          <p id={hintId} className="hc-upgrade-note">
+            {shortage
+              ? `完成诺亚的${option.currency === "health_points" ? "运动" : option.currency === "knowledge_points" ? "学习" : "工作"}委托，结算后获得${currency}。`
+              : isCapacity
+                ? `上限与当前${target.name}各增加 ${option.next - option.current} 点。`
+                : selected === "science" || selected === "magic"
+                  ? "升级保存研修等级；道具与法术效果尚未开放。"
+                  : "升级保存技能等级；技能加成尚未开放。"}
+          </p>
+          {error && (
+            <p className="hc-feedback hc-error" role="alert">
+              {error}
             </p>
           )}
-          <div className="hc-skill-actions">
-            <button
-              className="rq-button rq-button--primary"
-              onClick={
-                unlocked
-                  ? () => onNavigate(data.destination)
-                  : () => onRecord(attribute)
-              }
-            >
-              {unlocked
-                ? studied
-                  ? "标记遗迹，重访旧地"
-                  : data.action
-                : `记录${data.activity}，积累经验`}
-              <ArrowRight size={16} aria-hidden="true" />
-            </button>
-            {unlocked && data.kind && (
-              <button className="rq-button" onClick={() => onRecord(attribute)}>
-                继续成长
-              </button>
-            )}
-          </div>
-          {unlocked && (
-            <p className="hc-note">
-              标记只指引方向。下一属性等级记录积累，当前能力效果保持不变。
+          {result && (
+            <p className="hc-feedback hc-result" role="status">
+              <Check size={18} aria-hidden="true" />
+              {result}
             </p>
           )}
         </section>
-      </section>
+      </div>
       <footer className="hc-footer">
-        <div className="hc-tools">
-          <button
-            onClick={() =>
-              onNavigate({ mapId: "overworld", targetId: "wood_1" })
-            }
-          >
-            <Hammer size={17} aria-hidden="true" />
-            标记徒手采集点
-            <MapPin size={14} aria-hidden="true" />
-          </button>
-          <button onClick={onMap}>
-            <Map size={17} aria-hidden="true" />
-            随身地图
-            <ArrowRight size={14} aria-hidden="true" />
-          </button>
-        </div>
-        <p>这是旅途的成长记录，不是对现实能力的评分。</p>
+        <Info size={16} aria-hidden="true" />
+        <p>选择项目查看升级详情，确认后扣除对应点数。</p>
       </footer>
     </div>
   );

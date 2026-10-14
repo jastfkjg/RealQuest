@@ -1260,5 +1260,19 @@
       "rebuild": "npm run build in frontend",
       "status": "implemented_candidate_owner_review_pending"
     }
-  ]
+  ],
+  "character_points_concept": {
+    "path": "docs/art/references/character-points-concept-v1.png",
+    "prompt_path": "docs/art/references/character-points-concept-v1.prompt.txt",
+    "creator": "OpenAI built-in image_gen",
+    "source": "Owner-supplied existing UI screenshot used as visual reference; generated in this chat",
+    "status": "owner_approved_reference",
+    "approved_on": "2026-10-14",
+    "approval": "可以，就按此实现",
+    "width": 1448,
+    "height": 1086,
+    "sha256": "7b409b57f9e959c92043e3da0aaa53e79151cc77de06dd96fdd876a90017de95",
+    "runtime": false,
+    "note": "Concept sample numbers only. Actual implementation reuses existing blank dossier WebP and actor sprite; text and controls are DOM. Actual browser acceptance remains pending."
+  }
 }

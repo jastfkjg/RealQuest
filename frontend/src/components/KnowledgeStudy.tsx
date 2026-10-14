@@ -28,11 +28,9 @@ type Branch = keyof typeof paths;
 
 export function KnowledgeStudy({
   act,
-  onStudy,
   onRead,
 }: {
   act: (action: string, data: Record<string, unknown>) => Promise<boolean>;
-  onStudy: () => void;
   onRead: (id: string) => void;
 }) {
   const { state, busy, error } = useGame();
@@ -219,10 +217,10 @@ export function KnowledgeStudy({
         )}
         <button
           className="study-text-button knowledge-return"
-          onClick={onStudy}
+          onClick={() => useGame.getState().open("activity")}
         >
           <ArrowLeft size={16} aria-hidden="true" />
-          {points ? "回到今日研习" : "去完成一页研习"}
+          查看现实委托
         </button>
         <p className="knowledge-future">
           科学与魔法等级会永久保留。相应道具与法术的使用效果将在后续开放。
@@ -232,8 +230,8 @@ export function KnowledgeStudy({
             知识从哪里来{earned.length ? ` · ${earned.length} 页` : ""}
           </summary>
           <p>
-            每项学习任务首次完成，获得 1
-            知识点。计时或关联真实学习记录都可以，重读与归档不重复领奖。
+            在诺亚处结算学习委托，每小时获得 1 知识点。三类委托每日合计最多 5
+            点；旧手札不再发放点数。
           </p>
           {earned.slice(0, 4).map((task) => (
             <button

@@ -1,47 +1,83 @@
-import { useGame } from "../stores/game";
+import { useEffect, useRef, useState } from "react";
+import { serverNow, useGame } from "../stores/game";
+import { api } from "../services/api";
+import { staminaNow } from "../game/stamina";
+import type { GrowthOption, GrowthTarget } from "../types";
 import { CharacterView } from "./CharacterView";
-import { growth } from "../game/characterGrowth";
 
 export function CharacterPanel() {
-  const { state, navigate, open } = useGame();
+  const { state, command, busy } = useGame();
+  const [now, setNow] = useState(serverNow);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState("");
+  const [syncing, setSyncing] = useState(false);
+  const inFlight = useRef(false);
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(serverNow()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  async function upgrade(target: GrowthTarget, option: GrowthOption) {
+    if (inFlight.current || useGame.getState().busy) return;
+    inFlight.current = true;
+    setError("");
+    setResult("");
+    setSyncing(true);
+    const capacity = target === "vitality" || target === "stamina";
+    try {
+      const ok = await command(
+        capacity
+          ? "health_spend"
+          : option.currency === "knowledge_points"
+            ? "knowledge_spend"
+            : "skill_spend",
+        {
+          [capacity ? "target" : "branch"]: target,
+          expected_invested: option.expected_invested,
+        },
+      );
+      if (ok) setResult(useGame.getState().notice);
+      else {
+        const message = useGame.getState().error || "升级未保存，请稍后重试";
+        try {
+          useGame.getState().accept(await api("state"));
+          setError(`${message}。已同步最新数据，请核对后再操作。`);
+        } catch {
+          setError(`${message}。暂时无法同步，重试不会重复扣点。`);
+        }
+      }
+    } finally {
+      setNow(serverNow());
+      setSyncing(false);
+      inFlight.current = false;
+    }
+  }
   if (!state?.character) return null;
+  if (!state.character_growth_options || !state.vitality || !state.stamina) {
+    return (
+      <p className="hc-unavailable" role="alert">
+        档案数据尚未就绪，请刷新页面并确认后端已更新。
+      </p>
+    );
+  }
   return (
-    <>
-      <button
-        className="rq-button hc-training-entry"
-        onClick={() => open("training")}
-      >
-        <span>远行体力 · 上限 {state.stamina?.max || 100}</span>
-        <span>{state.health_points || 0} 健康点 · 打开培养手札 →</span>
-      </button>
-      <button
-        className="rq-button hc-training-entry"
-        onClick={() => {
-          useGame.setState({ studyEntry: "growth" });
-          open("study");
-        }}
-      >
-        <span>
-          科学 {state.knowledge_growth?.science || 0} · 魔法{" "}
-          {state.knowledge_growth?.magic || 0}
-        </span>
-        <span>{state.knowledge_points || 0} 知识点 · 翻开知识研修 →</span>
-      </button>
-      <CharacterView
-        character={state.character}
-        xp={state.xp}
-        attributes={state.attributes}
-        events={state.events}
-        onNavigate={navigate}
-        onMap={() => open("map")}
-        onRecord={(attribute) => {
-          const data = growth[attribute];
-          if (data.kind) {
-            useGame.setState({ activityKind: data.kind });
-            open("activity");
-          } else navigate(data.destination);
-        }}
-      />
-    </>
+    <CharacterView
+      character={state.character}
+      vitality={state.vitality}
+      stamina={{ current: staminaNow(state, now), max: state.stamina.max }}
+      balances={{
+        health_points: state.health_points || 0,
+        knowledge_points: state.knowledge_points || 0,
+        skill_points: state.skill_points || 0,
+      }}
+      options={state.character_growth_options}
+      busy={busy || syncing}
+      error={error}
+      result={result}
+      onUpgrade={(target, option) => void upgrade(target, option)}
+      onSelectionChange={() => {
+        setError("");
+        setResult("");
+      }}
+    />
   );
 }

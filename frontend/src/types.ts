@@ -13,7 +13,44 @@ export interface WorldObject {
 export interface World extends MapData {
   interiors: Record<string, MapData>;
 }
+export interface LifeTask {
+  id: string;
+  kind: "study" | "exercise" | "work";
+  hours: number;
+  date: string;
+  giver: string;
+  accepted_at: number;
+  ready_at: number;
+  status: "active" | "claimed" | "cancelled";
+  claimed_at: number | null;
+  cancelled_at: number | null;
+  reward: number;
+  source: "npc_elapsed";
+  verified: false;
+}
+export type GrowthTarget = "vitality" | "stamina" | "science" | "magic" | "planting" | "ranching" | "building";
+export type GrowthCurrency = "health_points" | "knowledge_points" | "skill_points";
+export interface GrowthOption {
+  currency: GrowthCurrency;
+  cost: number;
+  current: number;
+  next: number;
+  expected_invested: number;
+}
 export interface GameState {
+  vitality?: { current: number; max: number };
+  skill_growth?: { planting: number; ranching: number; building: number };
+  character_growth_options?: Record<GrowthTarget, GrowthOption>;
+  skill_points?: number;
+  life_journal?: {
+    date: string;
+    timezone: string;
+    limit: number;
+    claimed: number;
+    reserved: number;
+    remaining: number;
+    tasks: LifeTask[];
+  };
   knowledge_points?: number;
   knowledge_growth?: { science: number; magic: number };
   stamina?: { current: number; max: number; updated_at: number };

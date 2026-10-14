@@ -290,13 +290,7 @@ export function StudyPage() {
             </button>
           ))}
         </nav>
-        {view === "growth" && (
-          <KnowledgeStudy
-            act={act}
-            onStudy={() => turnTo("today")}
-            onRead={choose}
-          />
-        )}
+        {view === "growth" && <KnowledgeStudy act={act} onRead={choose} />}
         {(view === "plans" || view === "history") && (
           <StudyLibrary
             initialPlanId={task?.plan_id}
@@ -438,7 +432,7 @@ export function StudyPage() {
                       {busy ? "正在记下…" : "记下这项研习"}
                     </button>
                     <p className="study-clock-note">
-                      完成这一页，获得 1 知识点，可投入科学或魔法。
+                      手札保留学习记录。知识点请到诺亚处领取并结算学习委托。
                     </p>
                     {tasks.length > 0 && (
                       <button
@@ -474,8 +468,8 @@ export function StudyPage() {
                       </p>
                       {task.completed_at === null && (
                         <p className="study-knowledge-promise">
-                          <Star size={16} aria-hidden="true" /> 完成这一页 · ＋1
-                          知识点
+                          <Star size={16} aria-hidden="true" />{" "}
+                          知识点来自诺亚的学习委托
                         </p>
                       )}
                       <div
@@ -664,7 +658,7 @@ export function StudyPage() {
                       <Star size={20} aria-hidden="true" />
                       {task.knowledge_reward
                         ? "这一页获得了 1 知识点"
-                        : "旧日书页 · 保留原有成长"}
+                        : "学习已记录 · 点数由现实委托结算"}
                     </span>
                     <small>
                       可用知识点 {state!.knowledge_points || 0} · 科学{" "}

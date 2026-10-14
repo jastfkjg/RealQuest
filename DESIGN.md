@@ -206,9 +206,9 @@ Wood/seed and other imagery reuse the audited registry unchanged. This pass adds
 
 ### 7.5 Character sheet
 
-Show the avatar at a controlled integer scale, identity, current growth, and the next meaningful unlock. Attribute rows expose current EXP and their specific future benefit. Distinguish `unlocked`, `eligible`, and `locked`; a condition described in text is not a granted ability.
+Owner approved the point-allocation concept on 2026-10-14. The dossier presents identity, current/max vitality and stamina, science/magic levels, planting/ranching/building levels, and unallocated health/knowledge/skill points. Select a row freely; one explicit action shows server-priced cost, next level/capacity, and remaining balance. Do not show EXP progression in this sheet. Vitality/stamina capacity cost one health point for +5; knowledge retains one point per level; each skill upgrade costs its target level. Preserve legacy EXP and world gates without converting them. Actual implementation evidence is in `docs/tasks/14-character-points.md`.
 
-Do not add fake equipment slots, unsupported stats, or a decorative radar chart to fill space. Real-life attributes are game abstractions, not claims about a user's intelligence, health, or worth.
+Do not add fake equipment slots, unimplemented effects, or a decorative radar chart to fill space. New vitality and skill levels are persisted state; combat, ranching gameplay and skill bonuses are not implied by their presence. Real-life attributes are game abstractions, not claims about a user's intelligence, health, or worth.
 
 ### 7.6 Character creation
 
@@ -251,6 +251,12 @@ The page is reached directly from the stamina HUD, character dossier or Life Mod
 The owner authorized learning completion → knowledge points → science/magic growth. Add “知识研修” to the existing book. A real point seal connects to two selectable discipline marks; the facing leaf shows one selected discipline, current → next level, real earned level marks and one explicit spending button. Selection is free and never spends implicitly. A confirmed result stamps the actual level. The completion leaf offers a direct research action; the character dossier shows both actual levels and another entry.
 
 Reuse the existing journal nine-slice, tokens and installed Lucide symbols. Connecting paths are original inline SVG; no new bitmap, font or fictional equipment. Phone compacts the marks and navigation, keeps text inside the paper's readable region and puts provenance below the primary action. Completion feedback lives on the page instead of a duplicate toast covering the research button. All controls remain native, keyboard/touch accessible and at least 44 CSS px, with reduced-motion states. Task reward provenance distinguishes newly awarded knowledge from historical completed pages. Future tools/spells are explicitly not presented as unlocked. Evidence: `docs/tasks/12-knowledge-growth.md`.
+
+### 7.7e NPC reality commissions — owner request, 2026-10-14
+
+This request supersedes the earlier form-based growth/reward entry in 7.7–7.7d. Noah's existing encounter scene offers three dialogue choices (study, exercise, work), then hour tokens and an explicit acceptance. Active promises show a server-based countdown and settlement eligibility; cancellation is reversible only by starting a new promise, with its time reset. A confirmed receipt shows actual awarded points, and five filled growth marks end today's offers. The existing HUD growth entry becomes a dated journal of current, settled and cancelled commissions, with a truthful marker to Noah. This is a scoped exception to the earlier direct-recording target, explicitly requested by the owner.
+
+Reuse existing actor art, the encounter vignette, linen/moss tokens and native controls. Phone keeps the task choices and acceptance prominent; hours use two-line tokens deliberately. Health investment and knowledge research remain accessible, while legacy notes/records and already earned assets are preserved. No new raster or font. Evidence and exact rules: `docs/tasks/13-life-commissions.md`. Actual visual acceptance remains pending.
 
 ## 8. Interaction, timing, and sound
 

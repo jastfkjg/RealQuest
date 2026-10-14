@@ -1,0 +1,39 @@
+Use case: ui-mockup.
+Create ONE polished high-fidelity desktop game profile UI preview for RealQuest, using the attached screenshot ONLY as the visual reference for the cozy pixel world, recognizable tiny hat-wearing avatar, green cloth dossier, pale parchment, leather corners, and restrained brass clips. Redesign the information layout completely according to this specification. This is a proposed static visual mockup, not a screenshot of implemented functionality.
+Canvas: landscape 4:3, preferably 1600x1200 or equivalent high resolution, flat front-on screen capture with the ENTIRE panel comfortably visible, no crop, no browser chrome, no perspective, no presentation arrows, no second screen.
+Visual thesis: a calm, tactile adventurer field dossier with crisp Chinese interface typography and a clear allocation-of-points workflow. Maintain the established palette: ink #27392F, muted #56614F, parchment #F4EFDE, moss #3F6348, subdued brass #D3A450. Red is permitted only for the HP meter. Subtle fabric/paper textures, never dirty or busy beneath text. Clean readable text, small sharp pixel illustrations; NOT pixelated text. Use a restrained Chinese serif title and CJK sans-serif for utility text.
+Backdrop: the familiar top-down pixel woodland village from the reference, darkened to make the central dossier prominent. One moss-cloth-backed parchment panel fills about 90% of the canvas. Reduce the bulky reference frame. Two small brass clips and leather corner accents. No UI outside the dossier besides the village backdrop.
+Exact content and hierarchy, with generous but efficient spacing:
+1. Top header inside parchment: left, compact pinned portrait of the reference hat-wearing pixel avatar (small, not giant) beside large name "唤醒者". Above or alongside identity, title "冒险者档案". Under name, small "回响大陆 · 林间旅行者". Upper right, a quiet outlined label "方案预览 · 示例数值" and a clear close X button. Remove the old adventure level badge.
+2. Beneath header, two substantial horizontal player resource meters side by side. First heart icon, label "生命值", numeric "100 / 100", a full muted brick-red bar. Second lightning icon, label "体力值", numeric "68 / 100", moss-green bar exactly 68% filled. Below or beside each meter a small understated outlined control labeled "提升上限". Do not add levels to these resources. These are the ONLY progress bars anywhere in the design.
+3. Below a thin divider, a MAIN LEFT AREA (about 65% width) and narrower RIGHT AREA (35%) separated by one fine vertical rule. No generic dashboard tiles; use printed sections and aligned rows.
+LEFT AREA:
+Section title "知识研修", small right-aligned note "消耗知识点".
+Two generous rows with fine separators and coherent 24px line icons (flask for science, wand for magic). Each row contains name, prominently aligned current level, exact next-upgrade cost, and quiet right chevron.
+Row 1: "科学" | "Lv.3" | "升级需 1 知识点" | chevron.
+Row 2: "魔法" | "Lv.1" | "升级需 1 知识点" | chevron.
+Then section title "生活技能", small right-aligned note "消耗技能点".
+Three generous rows with icons sprout, chicken, hammer:
+Row 1: "种植" | "Lv.2" | "升级需 3 技能点" | chevron.
+Row 2: "养殖" | "Lv.0" | "升级需 1 技能点" | chevron.
+Row 3: "建造" | "Lv.1" | "升级需 2 技能点" | chevron.
+The planting row is SELECTED, using a pale sage wash and narrow moss left marker; all its text stays dark. Row selection is visually different from the primary spending button. Do not add experience bars or descriptions to these rows.
+RIGHT AREA:
+Section title "可用成长点", small secondary text "尚未分配".
+Three compact ledger-style lines, each with a small semantic icon, name left, large number right, and very short destination under its name:
+"健康点" : "3" ; sublabel "生命 / 体力上限"
+"知识点" : "2" ; sublabel "科学 / 魔法"
+"技能点" : "5" ; sublabel "种植 / 养殖 / 建造"
+Use the same moss/ink palette, not three bright colored cards.
+Below the point balance ledger, a fine separator and ONE lightly inset selected-upgrade area with a little sprout icon:
+small eyebrow "当前选择"
+heading "种植升级"
+large clear level transition "Lv.2 → Lv.3"
+two tidy accounting rows:
+"本次消耗" left; "3 技能点" right
+"升级后剩余" left; "2 技能点" right
+One prominent moss-green full-width button with linen text: "消耗 3 技能点 · 升级"
+No other competing primary button. Do not invent unlocks, crop yields, achievements or equipment effects.
+4. At the very bottom of the parchment a thin line and quiet hint: "选择项目查看升级详情，确认后扣除对应点数。"
+Text must be legible, accurately spelled Simplified Chinese, with exact correct values and arithmetic. Do not include ANY "EXP", "XP", "经验", experience progress, five legacy attribute categories, old growth-stamp tabs, rune unlocks, graph, radar chart, coins, invented possessions, or active overlay dialogs. Avoid extreme ornamentation, fake English filler, giant game character, tiny cramped labels, long explanatory copy, card mosaics and excessive white gaps.
+Output only the single finished game UI mockup image.

@@ -1,5 +1,14 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-14 NPC reality commissions
+
+- User requests NPC dialogue instead of growth forms, timed study/exercise/work, 1 point/hour and 5 points/day; cancellation and history. Scope/plan: docs/tasks/13-life-commissions.md. Starting Git tree clean.
+- Existing noah NPC, JSON saves, locked commands/receipts and Hearthwood dialogue reused. New point rewards replace legacy note-completion point awards; old records/balances preserved.
+- Implemented three path choices/hour tokens, server deadlines/daily reservation, cancellation/retry guards and dated growth history. Existing health/science/magic spending retained; no new assets or SQL migrations.
+- Verification at NPC checkpoint: 95 backend tests; production build; 24-capture feature/touch flow with no console errors; 22 contrast cases / 705 runs / min4.97; focused and full world regressions and game frame client pass. Timestamps advanced only for dedicated test guest fixtures, no production clock override.
+- Fixed preview5205 (Vite66597/npm66574) and isolatedAPI8037 (66561) retained for owner review, health verified. Own dev/test browser/runner processes exited; shared app tool hosts and another active chat preserved. Earlier5203/8035 disappeared without our stop action.
+- Concurrent “优化个人数据页面” added separate character growth options/fields during final checks; preserve those co-edits and exclude them from this feature's fixed preview/evidence. Full scope, files, limitations and handoff in docs/tasks/13-life-commissions.md. No commit/push/deploy. Owner visual review and physical-device/endurance tests remain pending.
+
 ## 2026-10-14 Knowledge growth slice
 
 - Owner requested study completion → knowledge points → science/magic growth, retaining game-like UI. Starting tree clean. Plan and rule contract in docs/tasks/12-knowledge-growth.md.
@@ -221,3 +230,12 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - Production build and original play-mode/full desktop+mobile smoke pass. Initial production health run needed a test camera-resize settle wait; subsequent complete production flow passes. Contrast: 6 cases / 190 text runs / minimum 4.97:1. Final artifacts/cleanup pending below.
 - Final production feature regression passes: 20 captures, localized network-failure handling next to the action, gather/rest/exhaustion and direct bed marker; final game frame loop and contrast pass. Low-height 720 layout exposes the pledge immediately; actual landscape touch record/investment and long-title/history wrapping pass. No unexpected console errors. Updated rules, architecture, README, TODO, asset reuse and task/checklist evidence.
 - Handoff: 5201 Vite preview PID52415/npm52392 + isolated8033 backend PID52429 retained for manual review; actual health checks pass. Codex browser open returned queued. All owned test browsers/runners exited; previous dev server/backend51947 exited. Unattributable shared app node_repl/Playwright hosts preserved. No commit/push/deploy or user DB mutation. Physical devices/native zoom and owner visual acceptance remain pending; knowledge/skills/combat deferred.
+
+## 2026-10-14 Character points dossier
+
+- Owner approved the generated preview and requested implementation. Plan/rule contract: `docs/tasks/14-character-points.md`. Existing uncommitted NPC commission work preserved.
+- Added vitality, independent skill levels and server-priced upgrades; no legacy XP conversion, point minting or combat/skill effects. Rebuilt the dossier using existing material/portrait and DOM text, with live resource bars, point wallet, selection and explicit purchase feedback.
+- Validation in progress on isolated `output/character-points/` data. No user DB writes or external actions.
+
+- Character dossier final: production build, all 108 backend tests, final 15-capture flow, existing play-mode regression, frame client, 77-run contrast (minimum4.97:1) and 31-image audit pass. Actual desktop/tablet/phone/touch screenshots inspected; fixed paper-edge/footnote readability.
+- Isolated production preview5207/backend8039 retained for manual review; test browsers and runners close in finally, temporary helper scripts removed. Shared hosts and other task preview5205/8037 preserved. User DB unchanged; actual visual acceptance/physical devices/native zoom remain open. Details: task14.

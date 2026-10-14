@@ -1,34 +1,23 @@
+import { LifeQuestHistory } from "./components/LifeQuests";
 import { RecoveryPanel } from "./components/RecoveryPanel";
 import { TrainingPage } from "./components/TrainingPage";
 import { StaminaBadge } from "./components/StaminaBadge";
 import { HudIcon } from "./components/HudIcon";
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   ArrowRight,
-  Backpack,
-  BookOpen,
   Check,
   ChevronRight,
   CircleHelp,
   Compass,
   Download,
-  Feather,
   Flag,
-  Hammer,
-  Heart,
-  Leaf,
-  Map,
-  Pause,
-  Play,
-  Plus,
   Settings,
   Sparkles,
   Sprout,
-  Timer,
   User,
   X,
-  Zap,
 } from "lucide-react";
 import { CharacterPanel, PixelPerson } from "./components/RpgPanels";
 import { Welcome } from "./components/Welcome";
@@ -45,16 +34,9 @@ import {
 } from "./components/WorldPanels";
 import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
-import { activityNames, itemNames, serverNow, useGame } from "./stores/game";
+import { itemNames, useGame } from "./stores/game";
 import { api } from "./services/api";
-import type { Attribute, Panel } from "./types";
-const attrIcons = {
-  strength: Heart,
-  wisdom: BookOpen,
-  craft: Hammer,
-  stewardship: Sprout,
-  bond: Sparkles,
-};
+import type { Panel } from "./types";
 function Modal({ title, children }: { title: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null),
     open = useGame((s) => s.open);
@@ -169,240 +151,6 @@ function DialogueText({ text }: { text: string }) {
     </div>
   );
 }
-function GrowthReceipt() {
-  const state = useGame((s) => s.state);
-  const latest = state?.activities.at(-1);
-  return (
-    <aside className="ha-growth-receipt" aria-label="最近的成长记录">
-      <span>
-        <Check size={18} />
-        {latest ? "最近已记录" : "现实行动 → 游戏成长"}
-      </span>
-      {latest ? (
-        <>
-          <strong>
-            {latest.note || activityNames[latest.kind]}
-            <small>
-              {latest.source === "timer"
-                ? "计时"
-                : latest.source === "manual"
-                  ? "手动"
-                  : latest.source}{" "}
-              · {latest.date}
-            </small>
-          </strong>
-          <b>
-            +{latest.xp} EXP
-            {latest.knowledge_shards
-              ? ` · +${latest.knowledge_shards} 碎片`
-              : ""}
-          </b>
-        </>
-      ) : (
-        <p>学习积累学识，运动积累体魄。实际奖励以保存结果为准。</p>
-      )}
-    </aside>
-  );
-}
-function ActivityPanel() {
-  const { state, command, busy } = useGame(),
-    [kind, setKind] = useState(useGame.getState().activityKind),
-    [amount, setAmount] = useState(
-      useGame.getState().activityKind === "steps" ? "3000" : "25",
-    ),
-    [note, setNote] = useState(""),
-    [topic, setTopic] = useState(""),
-    [date, setDate] = useState(
-      new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" }),
-    ),
-    [, tick] = useState(0);
-  useEffect(() => {
-    const handle = setInterval(() => tick((n) => n + 1), 1000);
-    return () => clearInterval(handle);
-  }, []);
-  const timer = state!.timer,
-    seconds = timer
-      ? Math.max(
-          0,
-          Math.floor(
-            timer.elapsed +
-              (timer.running ? serverNow() - timer.started_at : 0),
-          ),
-        )
-      : 0;
-  async function record(e: FormEvent) {
-    e.preventDefault();
-    if (
-      await command("activity", {
-        kind,
-        amount: kind === "management" ? 1 : Number(amount),
-        date,
-        note,
-      })
-    )
-      setNote("");
-  }
-  return (
-    <div className="hp-growth">
-      <div className="hp-training-entry">
-        <div>
-          <strong>把现实中的脚步，带上旅途</strong>
-          <p>立下锻炼约定，获得健康点，培养远行的体力。</p>
-        </div>
-        <button
-          className="rq-button rq-button--primary"
-          onClick={() => useGame.getState().open("training")}
-        >
-          <Leaf size={18} /> 行前手札 <ArrowRight size={16} />
-        </button>
-      </div>
-      <div className="hp-study-entry">
-        <div>
-          <strong>把今天想学的，写进手札</strong>
-          <p>选一件小事，专注一会儿，让成长留下回响。</p>
-        </div>
-        <button
-          className="rq-button rq-button--primary"
-          onClick={() => useGame.getState().open("study")}
-        >
-          <BookOpen size={18} /> 今日研习 <ArrowRight size={16} />
-        </button>
-      </div>
-      <div className="life-bridge">
-        <Leaf size={22} />
-        <div>
-          <strong>把今天的行动，记作一次成长</strong>
-          <p>计时或手动记录 · 保存后结算游戏奖励</p>
-        </div>
-      </div>
-      <GrowthReceipt />
-      <div className="hp-growth-columns">
-        <section className="hp-focus-page">
-          <div className="section-label">
-            <Timer size={17} /> 专注学习{" "}
-            <span className="ha-source">计时记录</span>
-          </div>
-          <div className="timer-block">
-            <span>{timer?.topic || "为好奇心留一点时间"}</span>
-            <strong>
-              {String(Math.floor(seconds / 60)).padStart(2, "0")}
-              <b>:</b>
-              {String(seconds % 60).padStart(2, "0")}
-            </strong>
-            {!timer ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void command("timer_start", { topic });
-                }}
-              >
-                <label>
-                  学习主题
-                  <input
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                    maxLength={80}
-                    placeholder="今天想学些什么？"
-                    required
-                  />
-                </label>
-                <button className="primary" disabled={busy}>
-                  <Play size={16} /> 开始专注
-                </button>
-              </form>
-            ) : (
-              <div className="button-row">
-                <button
-                  onClick={() =>
-                    void command(timer.running ? "timer_pause" : "timer_resume")
-                  }
-                  disabled={busy}
-                >
-                  {timer.running ? <Pause size={16} /> : <Play size={16} />}{" "}
-                  {timer.running ? "暂停" : "继续"}
-                </button>
-                <button
-                  className="primary"
-                  onClick={() => void command("timer_finish")}
-                  disabled={busy}
-                >
-                  结束并记录
-                </button>
-              </div>
-            )}
-            <small>暂停时间不计入学习时长，刷新后可以继续。</small>
-          </div>
-        </section>
-        <section className="hp-record-page">
-          <div className="section-label">
-            <Plus size={17} /> 手动记录{" "}
-            <span className="ha-source">自行填写</span>
-          </div>
-          <form className="form-grid" onSubmit={record}>
-            <label>
-              活动类型
-              <select
-                value={kind}
-                onChange={(e) => {
-                  setKind(e.target.value);
-                  setAmount(e.target.value === "steps" ? "3000" : "25");
-                }}
-              >
-                {Object.entries(activityNames).map(([k, v]) => (
-                  <option key={k} value={k}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              日期（中国标准时间）
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </label>
-            {kind !== "management" && (
-              <label>
-                {kind === "steps" ? "当天累计步数" : "时长（分钟）"}
-                <input
-                  type="number"
-                  min="1"
-                  max={kind === "steps" ? 100000 : 480}
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  required
-                />
-              </label>
-            )}
-            <label className="full-width">
-              {kind === "exercise" ? "运动类型与备注" : "主题或备注"}
-              <input
-                value={note}
-                maxLength={200}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder={
-                  kind === "management"
-                    ? "例如：完成本周预算检查"
-                    : "给这次成长留一句话"
-                }
-              />
-            </label>
-            <button className="primary full-width" disabled={busy}>
-              保存这次成长 <Leaf size={16} />
-            </button>
-          </form>
-          <p className="muted">
-            手动记录不代表已验证。每个属性每天最多获得 100
-            点现实活动经验，休息不会扣除已有成长。
-          </p>
-        </section>
-      </div>
-    </div>
-  );
-}
 export function Panels() {
   const {
     panel,
@@ -427,7 +175,7 @@ export function Panels() {
     storage: "家园储物箱",
     character: "冒险者档案",
     inventory: "旅行背包",
-    activity: "现实中的成长",
+    activity: "现实成长 · 成长手记",
     journal: "冒险日志",
     guide: "旅人指南",
     settings: "存档与数据",
@@ -455,7 +203,7 @@ export function Panels() {
           </button>
         </div>
       )}
-      {panel === "activity" && <ActivityPanel />}
+      {panel === "activity" && <LifeQuestHistory />}
       {panel === "map" && <Atlas />}
       {panel === "board" && (
         <>
@@ -524,7 +272,7 @@ export function Panels() {
             现在你可以记录真实活动，与莉亚和诺亚进行预设剧情对话。普通游戏不依赖模型服务。
           </div>
           <button className="primary" onClick={() => open("activity")}>
-            记录一次成长 <ArrowRight size={16} />
+            翻看成长手记 <ArrowRight size={16} />
           </button>
         </>
       )}
@@ -610,7 +358,7 @@ export function Panels() {
           )}
         </>
       )}
-      {error && panel !== "inventory" && panel !== "journal" && (
+      {error && panel !== "inventory" && panel !== "journal" && panel !== "character" && (
         <p className="form-error" role="alert">
           {error}
         </p>
@@ -618,6 +366,7 @@ export function Panels() {
       {notice &&
         panel !== "inventory" &&
         panel !== "journal" &&
+        panel !== "character" &&
         noticePanel === panel &&
         !(panel === "npc" && notice === dialogue) && (
           <p className="panel-notice" role="status">

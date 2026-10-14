@@ -1,5 +1,26 @@
 # Hearthwood Review Checklist
 
+## Character point allocation — 2026-10-14
+
+- [x] Owner-approved concept implemented with vitality/stamina, five concrete growth paths, three available point balances and exact-cost purchases; no EXP display in the dossier.
+- [x] Server prices, compatibility defaults, concurrency/retry guards, receipt deltas and reload/recovery verified; existing XP/inventory preserved.
+- [x] Production build, 108 backend tests, 15-capture browser flow, existing play-mode regression and game frame client pass; no unexpected browser errors.
+- [x] 1440/1920/768/390/720 layouts, DPR2 touch, large DOM text, keyboard/focus and reduced motion checked. Actual captures inspected; 77 text runs/minimum 4.97:1.
+- [x] Existing 31 source/runtime images preserved; only the approved concept reference and prompt added outside runtime.
+- [ ] Physical device/Safari/native browser zoom and owner acceptance of the actual implementation remain unverified. Combat/skill effects remain outside scope.
+
+Evidence and cleanup: [character points task record](../tasks/14-character-points.md).
+
+## NPC reality commissions — 2026-10-14
+
+- [x] Noah dialogue choices → hours → timed acceptance → settlement/cancellation; three point types and five-point daily quota are server-authoritative. Early, repeated and concurrent commands are covered.
+- [x] HUD growth entry is a journal with real active/settled/cancelled records, truthful marker navigation and retained legacy records. Legacy note completion cannot mint new points.
+- [x] Existing NPC art/tokens/icons reused; no new artwork or font. Desktop/tablet/phone/short-landscape/DPR2 emulated touch, keyboard/Escape/focus, reload, reduced motion and larger text checked.
+- [x] 95 backend tests, production build, 24-capture feature flow, focused and complete world regressions, and skill frame client pass. No unexpected console errors. Contrast: 22 cases, 705 runs, minimum 4.97:1.
+- [ ] Actual owner acceptance, physical devices/Safari/native zoom, multi-hour real-time endurance and production PostgreSQL load remain unverified. Browser maturity states use an explicitly isolated fixture.
+
+Evidence, exact files/commands and retained preview: [NPC commission report](../tasks/13-life-commissions.md). Separate concurrent character-panel changes are excluded from this checkpoint.
+
 ## Knowledge research — 2026-10-14
 
 - [x] Learning completion awards an actual point once; selected science/magic investment, receipt deltas, current levels and provenance follow authoritative state.

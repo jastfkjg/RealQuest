@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select, delete, text, or_
 from .db import Session, engine
 from .models import Player, Receipt, RecoveryKey, GuestSession
-from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS
+from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS, life_task_views, character_growth_options, HEALTH_CAPACITY_GAIN
 from .quests import quest_views
 from .world import WORLD
 
@@ -64,7 +64,9 @@ def snapshot(state, **extra):
     if view['stamina']['current'] < view['stamina']['max']:
         recover_stamina(view, now)
     view['exercise_task_log'] = exercise_task_views(view)
-    view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': 5}
+    view['life_journal'] = life_task_views(view, now)
+    view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': HEALTH_CAPACITY_GAIN}
+    view['character_growth_options'] = character_growth_options(view)
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)
@@ -126,8 +128,12 @@ def command(body: Command, request: Request):
                        health_invested=updated['health_invested'] - before['health_invested'],
                        stamina_max=updated['stamina']['max'] - before['stamina']['max'])
         changes.update(knowledge_points=updated['knowledge_points'] - before['knowledge_points'],
+                       skill_points=updated['skill_points'] - before['skill_points'],
                        knowledge_growth={key: value - before['knowledge_growth'][key]
                                          for key, value in updated['knowledge_growth'].items()})
+        changes.update(vitality_max=updated['vitality']['max'] - before['vitality']['max'],
+                       skill_growth={key: value - before['skill_growth'][key]
+                                     for key, value in updated['skill_growth'].items()})
         db.add(Receipt(id=str(uuid.uuid4()), player_id=player.id, request_id=body.request_id, fingerprint=fingerprint, action=body.action, changes=changes, created_at=time.time()))
         return snapshot(updated, message=message, replayed=False, save_id=player.id)
 

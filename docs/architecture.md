@@ -18,9 +18,9 @@
 
 `Receipt` 保存玩家外键、请求 UUID、请求指纹、动作、经验和库存增减、状态版本与服务端时间。`(player_id, request_id)` 唯一，支持追踪与幂等。状态变更和回执在同一个事务提交。
 
-剧情 Quest 状态已保存在 JSON 聚合中；快照中的 `quest_log` 由固定定义、累计统计和事件派生。学习任务以 `study_tasks` 存在同一事务聚合中，`study_task_log` 从任务及带 `study_task_id` 的活动派生分钟数和实际已得经验。学习计时带稳定 ID 和可选任务 ID；完成计时、生成活动、结算经验和标记任务完成在同一事务中发生。`study_link` 仅关联同日未归属其他任务的学习记录，不重复发放活动经验；首次完成任务可发放下文定义的知识点。旧记录补上稳定 `legacy-{index}` 标识，旧计时补上 `legacy-timer`；无 SQL 结构变化或存档清空。
+剧情 Quest 状态已保存在 JSON 聚合中；快照中的 `quest_log` 由固定定义、累计统计和事件派生。学习任务以 `study_tasks` 存在同一事务聚合中，`study_task_log` 从任务及带 `study_task_id` 的活动派生分钟数和实际已得经验。学习计时带稳定 ID 和可选任务 ID；完成计时、生成活动、结算经验和标记任务完成在同一事务中发生。`study_link` 仅关联同日未归属其他任务的学习记录，不重复发放活动经验；旧手札完成不再发成长点数，点数由下文现实委托统一结算。旧记录补上稳定 `legacy-{index}` 标识，旧计时补上 `legacy-timer`；无 SQL 结构变化或存档清空。
 
-尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。`study_plans` 保存稳定计划 ID、名称、默认时长与归档时间；任务增加可空 `plan_id` / `archived_at`。`study_plan_today` 用计划 UUID 与服务端上海自然日生成稳定 UUID，同一计划/日期的并发和重试只得到一页。新的书页沿用最近主题，使用当前计划默认时长；旧进度不搬移。未完成且未计时的任务可以修改；归档可逆，归档不发奖；计划本身不另发奖励，每日书页完成按知识点规则结算。书架/历史在客户端每页六项，完整历史仍存在 JSON 中，服务端分页尚未实现。
+尚无独立 Goal / 阶段任务 / AI Suggestion 表。JSON 聚合用于缩小第一版复杂度，长历史分页和后续结构演进列入 TODO。`study_plans` 保存稳定计划 ID、名称、默认时长与归档时间；任务增加可空 `plan_id` / `archived_at`。`study_plan_today` 用计划 UUID 与服务端上海自然日生成稳定 UUID，同一计划/日期的并发和重试只得到一页。新的书页沿用最近主题，使用当前计划默认时长；旧进度不搬移。未完成且未计时的任务可以修改；归档可逆，归档不发奖；计划本身不另发奖励，每日书页保留进度但不再发知识点。书架/历史在客户端每页六项，完整历史仍存在 JSON 中，服务端分页尚未实现。
 
 ## 操作数据流
 
@@ -69,3 +69,14 @@ Additive save fields `knowledge_points`, `knowledge_growth` (science/magic), and
 `knowledge_spend` validates a science/magic choice, a positive balance and the expected total of both levels inside the existing locked transaction; it subtracts one point and raises one level. The shared total guards cross-branch races even while points remain. Request receipts retain point and level deltas; transport replay returns current state without another debit. Old XP reward limits and rune conditions remain unchanged.
 
 `KnowledgeStudy` is a chapter of the existing `StudyPage`, not a separate world or timer. Chapter preference and `#study` restore after reload; a transient character-entry hint opens the growth chapter directly. UI selection is local and free, spending waits for server confirmation, and uncertain responses refresh authoritative state. The game-text hook includes actual knowledge balance and both levels.
+
+
+## NPC reality commissions (2026-10-14, supersedes prior note-completion point rewards)
+
+`life_tasks` and `skill_points` are additive JSON fields. Snapshot `life_journal` derives current Shanghai-day claimed/reserved/remaining quota and task history from stored commissions, independently of spendable balances. `life_accept`, `life_claim`, and `life_cancel` run under the existing player transaction/receipt lock. Acceptance and claim require Noah proximity; timestamps, quota, status and reward are server-owned. A stable task UUID prevents uncertain acceptance retries creating another commission. Terminal status guards duplicate claims/cancels, including requests with different receipt IDs. Active hours reserve quota, claimed hours permanently consume the acceptance day's quota, cancellation releases reservations. One active commission globally prevents overlapping timers.
+
+Legacy study/exercise completion helpers retain progress and provenance without granting knowledge/health points. Existing earned point balances, levels and XP are preserved. Receipts now include skill-point deltas. No SQL migration is needed. The journal renders ten closed tasks at a time; all records still live in the JSON aggregate. Tests use isolated databases with explicit maturity fixtures, never a production clock-override endpoint.
+
+## Character point allocation — 2026-10-14
+
+Additive `vitality` (current/max) and `skill_growth` (planting/ranching/building) live in the JSON save; no SQL schema migration. `character_growth_options` is a snapshot-only server quote containing currency, current/next value, exact cost and expected investment count. Health spending accepts an optional vitality/stamina target (defaults to stamina for existing callers); skills spend target-level points. Transaction locks, expected investment counts and existing idempotent receipts guard concurrency/retries. Receipt deltas include vitality capacity and skill levels. No XP conversion, new reward source or skill effect is introduced. See task 14 for evidence.

@@ -103,26 +103,17 @@ try {
   await p.waitForTimeout(500);
   assert.equal((await read()).inventory.gold, 32);
   assert.equal((await read()).xp, 10);
-  // Existing Life entry works immediately; no fake dashboard or AI is introduced.
+  // The Life shortcut now opens read-only commission history, without rewarding a view.
+  const beforeHistory = await read();
   await p.keyboard.press("l");
   await until((s) => s.mode === "activity", "Life shortcut");
-  await p.getByLabel("主题或备注").fill("隔离测试存档：手动学习记录");
-  await p.getByRole("button", { name: "保存这次成长" }).click();
-  await until((s) => s.attributes.wisdom === 25, "server settles study");
-  await p.waitForTimeout(1200);
-  assert.equal(
-    (await read()).pendingFeedbackXp,
-    25,
-    "Growth feedback waits until returning to the world",
-  );
-  await p.locator(".panel-notice").scrollIntoViewIfNeeded();
-  await screenshot("study-record-complete");
+  await p.getByRole("region", { name: "历史现实任务" }).waitFor();
+  assert.equal(await p.locator("dialog input, dialog select").count(), 0);
+  await p.keyboard.press("d");
+  assert.deepEqual((await read()).player, beforeHistory.player);
+  assert.equal((await read()).xp, beforeHistory.xp);
+  await screenshot("life-history");
   await p.keyboard.press("Escape");
-  await until(
-    (s) => s.pendingFeedbackXp === 0,
-    "visible growth feedback on return",
-  );
-  await screenshot("world-growth-feedback");
   // Blur cancels movement; verify recovery with a fresh physical keypress.
   await p.keyboard.down("d");
   await p.waitForTimeout(80);
@@ -147,7 +138,7 @@ try {
       "held-key reset",
       "quest reward",
       "save restore",
-      "manual study reward",
+      "read-only commission history",
       "blur recovery",
     ],
     errors,

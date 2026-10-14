@@ -1,0 +1,446 @@
+import { chromium } from "playwright";
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+const base = process.env.REALQUEST_URL || "http://127.0.0.1:5205";
+const output = new URL("../../output/life-commissions/", import.meta.url);
+const db = process.env.REALQUEST_TEST_DB;
+assert(
+  db?.includes("/output/life-commissions/"),
+  "Only the dedicated test database may be changed",
+);
+const python = new URL("../../backend/.venv/bin/python", import.meta.url)
+  .pathname;
+await fs.mkdir(output, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const errors = [],
+  shots = [],
+  contrasts = [];
+let expectedFailure = false;
+const c = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  recordVideo: {
+    dir: new URL("recordings/", output).pathname,
+    size: { width: 1440, height: 900 },
+  },
+});
+const p = await c.newPage();
+p.on("pageerror", (e) => errors.push(e.message));
+p.on("console", (m) => {
+  if (m.type() === "error" && !expectedFailure) errors.push(m.text());
+});
+const read = () => p.evaluate(() => JSON.parse(window.render_game_to_text()));
+const state = async () =>
+  (await (await c.request.get(base + "/api/state")).json()).state;
+async function wait(check) {
+  for (let i = 0; i < 100; i++) {
+    const s = await read();
+    if (check(s)) return s;
+    await p.waitForTimeout(100);
+  }
+  throw Error("Timed out: " + JSON.stringify(await read()));
+}
+async function command(action, data = {}) {
+  const r = await c.request.post(base + "/api/command", {
+    data: { request_id: crypto.randomUUID(), action, data },
+  });
+  assert.equal(r.status(), 200, await r.text());
+  return (await r.json()).state;
+}
+function fixture(saveId, taskId = null) {
+  // Explicit isolated fixture: relocate only this test guest, or make their task due.
+  execFileSync(python, [
+    "-c",
+    `import sqlite3,json,sys,time
+conn=sqlite3.connect(sys.argv[1]); key=sys.argv[2]; task=sys.argv[3]
+s=json.loads(conn.execute('select state from players where id=?',(key,)).fetchone()[0])
+if task:
+ t=s['life_tasks'][task]; t['ready_at']=time.time()-1; t['accepted_at']=t['ready_at']-t['hours']*3600
+else:
+ s['position']={'x':576,'y':420}; s['location']='overworld'
+s['revision']+=1
+conn.execute('update players set state=? where id=?',(json.dumps(s),key));conn.commit();conn.close()`,
+    db,
+    saveId,
+    taskId || "",
+  ]);
+}
+async function talk() {
+  const s = await read();
+  if (s.mode !== "explore") await p.keyboard.press("Escape");
+  await p.waitForTimeout(250);
+  const v = await read(),
+    box = await p.locator("canvas").boundingBox();
+  await p.mouse.click(
+    box.x + (576 - v.camera.viewX) * v.camera.zoom,
+    box.y + (374 - v.camera.viewY) * v.camera.zoom,
+  );
+  await p.getByRole("group", { name: "对话话题" }).waitFor();
+  await p.getByRole("button", { name: "现实委托", exact: true }).click();
+}
+async function shot(name) {
+  await p.waitForTimeout(200);
+  const dialog = p.locator("dialog[open]");
+  assert.equal(
+    await dialog.evaluate((e) => e.scrollWidth > e.clientWidth + 2),
+    false,
+    name + " overflow",
+  );
+  const small = await dialog
+    .locator("button")
+    .evaluateAll((es) =>
+      es
+        .filter(
+          (e) =>
+            e.checkVisibility() &&
+            (e.getBoundingClientRect().height < 43 ||
+              e.getBoundingClientRect().width < 43),
+        )
+        .map((e) => e.textContent),
+    );
+  assert.deepEqual(small, [], name + " touch target");
+  const contrast = await dialog.evaluate((root) => {
+    const rgb = (v) => v.match(/[\d.]+/g)?.map(Number) || [0, 0, 0];
+    const lum = (c) =>
+      c
+        .slice(0, 3)
+        .map((v) => v / 255)
+        .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+        .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+    return [...root.querySelectorAll("*")]
+      .filter(
+        (e) =>
+          e.checkVisibility() &&
+          e.getBoundingClientRect().width > 2 &&
+          e.getBoundingClientRect().height > 2 &&
+          !e.closest('[aria-hidden="true"],button:disabled') &&
+          [...e.childNodes].some(
+            (n) => n.nodeType === 3 && n.textContent.trim(),
+          ),
+      )
+      .map((e) => {
+        const colors = [];
+        let node = e;
+        while (node) {
+          const c = rgb(getComputedStyle(node).backgroundColor);
+          colors.push(c);
+          if (c.length === 3 || c[3] === 1) break;
+          node = node.parentElement;
+        }
+        let bg = [244, 239, 222];
+        for (const c of colors.reverse()) {
+          const alpha = c[3] ?? 1;
+          bg = bg.map((v, i) => c[i] * alpha + v * (1 - alpha));
+        }
+        const fg = rgb(getComputedStyle(e).color);
+        const a = lum(fg),
+          b = lum(bg);
+        return {
+          text: e.textContent.trim().slice(0, 60),
+          ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+        };
+      });
+  });
+  contrasts.push({
+    name,
+    min: Math.min(...contrast.map((t) => t.ratio)),
+    runs: contrast.length,
+  });
+  assert.deepEqual(
+    contrast.filter((t) => t.ratio < 4.5),
+    [],
+    name + " text contrast",
+  );
+  await p.screenshot({ path: new URL(name + ".png", output).pathname });
+  shots.push(name);
+}
+try {
+  await p.goto(base);
+  await p.getByLabel("你的名字").fill("现实委托试行旅人");
+  await p.click("#start-btn");
+  await p.waitForSelector("canvas");
+  const session = await (await c.request.post(base + "/api/session")).json();
+  fixture(session.save_id);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await p.getByRole("button", { name: "现实成长", exact: true }).click();
+  await shot("empty-1440");
+  const start = (await read()).player;
+  await p.getByRole("button", { name: "标记诺亚的位置", exact: true }).click();
+  assert.deepEqual((await read()).player, start);
+  assert.equal((await read()).navigation.targetId, "noah");
+  await talk();
+  await shot("choices-1440");
+  for (const [w, h] of [
+    [1920, 1080],
+    [768, 1024],
+    [390, 844],
+    [720, 450],
+  ]) {
+    await p.setViewportSize({ width: w, height: h });
+    await shot("choices-" + w);
+  }
+  await p.setViewportSize({ width: 1440, height: 900 });
+  const position = (await read()).player;
+  await p.keyboard.press("d");
+  await p.keyboard.press("e");
+  assert.deepEqual((await read()).player, position);
+  await p
+    .getByRole("group", { name: "选择现实任务类型" })
+    .getByRole("button", { name: /工作/ })
+    .click();
+  await p
+    .getByRole("group", { name: "选择委托时长" })
+    .getByRole("button", { name: "5 小时", exact: true })
+    .click();
+  // Rejection retains choices; no task is written.
+  expectedFailure = true;
+  await p.route("**/api/command", async (route) => {
+    if (route.request().postDataJSON().action === "life_accept")
+      await route.fulfill({
+        status: 422,
+        contentType: "application/json",
+        body: JSON.stringify({ detail: "测试拒绝：请重试这份约定" }),
+      });
+    else await route.continue();
+  });
+  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await p.getByRole("alert").filter({ hasText: "测试拒绝" }).waitFor();
+  assert.equal((await state()).life_journal.tasks.length, 0);
+  await shot("rejected");
+  await p.unroute("**/api/command");
+  expectedFailure = false;
+  // Lost response is retried with the same request, and is only accepted once.
+  let dropped = false;
+  expectedFailure = true;
+  await p.route("**/api/command", async (route) => {
+    if (!dropped && route.request().postDataJSON().action === "life_accept") {
+      dropped = true;
+      await route.fetch();
+      await route.abort("failed");
+    } else await route.continue();
+  });
+  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await wait((s) => s.lifeJournal.tasks.length === 1);
+  await p.unroute("**/api/command");
+  expectedFailure = false;
+  assert.equal((await state()).life_journal.reserved, 5);
+  await shot("active-1440");
+  assert.equal(
+    await p
+      .getByRole("button", { name: "约定时间未到，暂不可结算" })
+      .isDisabled(),
+    true,
+  );
+  const active = (await state()).life_journal.tasks[0];
+  const early = await c.request.post(base + "/api/command", {
+    data: {
+      request_id: crypto.randomUUID(),
+      action: "life_claim",
+      data: { target: "noah", task_id: active.id, now: 9999999999 },
+    },
+  });
+  assert.equal(early.status(), 422);
+  await p.getByRole("button", { name: "取消这份委托", exact: true }).click();
+  await p.keyboard.press("Escape");
+  assert.equal((await read()).mode, "npc");
+  assert.equal(
+    await p.getByRole("button", { name: "确认取消委托", exact: true }).count(),
+    0,
+  );
+  await p.getByRole("button", { name: "取消这份委托", exact: true }).click();
+  await p.getByRole("button", { name: "确认取消委托", exact: true }).click();
+  await wait((s) => s.lifeJournal.remaining === 5);
+  await p
+    .getByRole("group", { name: "选择现实任务类型" })
+    .getByRole("button", { name: /学习/ })
+    .click();
+  await p
+    .getByRole("group", { name: "选择委托时长" })
+    .getByRole("button", { name: "2 小时", exact: true })
+    .click();
+  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await wait((s) => s.lifeJournal.reserved === 2);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await p.getByRole("button", { name: "现实成长", exact: true }).click();
+  await shot("history-active-1440");
+  for (const [w, h] of [
+    [390, 844],
+    [375, 812],
+    [720, 450],
+  ]) {
+    await p.setViewportSize({ width: w, height: h });
+    await shot("history-active-" + w);
+  }
+  await p.setViewportSize({ width: 1440, height: 900 });
+  const study = (await state()).life_journal.tasks.find(
+    (t) => t.status === "active",
+  );
+  fixture(session.save_id, study.id);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await talk();
+  await shot("ready");
+  await p
+    .getByRole("button", { name: "结算委托 · 领取 2 知识点", exact: true })
+    .click();
+  await wait((s) => s.knowledgePoints === 2);
+  await shot("claimed-two");
+  assert.equal(
+    await p
+      .getByRole("group", { name: "选择委托时长" })
+      .getByRole("button")
+      .count(),
+    3,
+  );
+  await command("life_claim", { target: "noah", task_id: study.id });
+  assert.equal((await state()).knowledge_points, 2);
+  await p
+    .getByRole("group", { name: "选择现实任务类型" })
+    .getByRole("button", { name: /运动/ })
+    .click();
+  await p
+    .getByRole("group", { name: "选择委托时长" })
+    .getByRole("button", { name: "3 小时", exact: true })
+    .click();
+  await p.getByRole("button", { name: /就这么约定/ }).click();
+  await wait((s) => s.lifeJournal.reserved === 3);
+  const exercise = (await state()).life_journal.tasks.find(
+    (t) => t.status === "active",
+  );
+  fixture(session.save_id, exercise.id);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await talk();
+  await p
+    .getByRole("button", { name: "结算委托 · 领取 3 健康点", exact: true })
+    .click();
+  await wait((s) => s.healthPoints === 3);
+  await shot("daily-cap");
+  assert.equal(await p.getByRole("group", { name: "选择委托时长" }).count(), 0);
+  await p.getByRole("button", { name: "翻看成长手记", exact: true }).click();
+  await shot("history-complete-1440");
+  await p
+    .getByRole("group", { name: "筛选任务记录" })
+    .getByRole("button", { name: "已取消", exact: true })
+    .click();
+  assert.equal(await p.locator(".life-memories li").count(), 1);
+  await p
+    .getByRole("group", { name: "筛选任务记录" })
+    .getByRole("button", { name: "全部", exact: true })
+    .click();
+  for (const [w, h] of [
+    [1920, 1080],
+    [768, 1024],
+    [390, 844],
+    [375, 812],
+    [720, 450],
+  ]) {
+    await p.setViewportSize({ width: w, height: h });
+    await shot("history-complete-" + w);
+  }
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  await p.addStyleTag({ content: ".life-journal{font-size:20px!important}" });
+  await shot("large-text-reduced-motion");
+  await p.setViewportSize({ width: 1440, height: 900 });
+  await p.getByRole("button", { name: /知识研修/ }).click();
+  await p.getByRole("button", { name: /投入 1 知识点/ }).click();
+  await wait((s) => s.knowledgePoints === 1);
+  await p.keyboard.press("Escape");
+  await p.getByRole("button", { name: "现实成长", exact: true }).click();
+  await p.getByRole("button", { name: /体力培养/ }).click();
+  await p
+    .getByRole("button", { name: "投入 1 健康点 · 提升体力", exact: true })
+    .click();
+  await wait((s) => s.healthPoints === 2);
+  assert.equal((await state()).life_journal.remaining, 0);
+  await p.keyboard.press("Escape");
+  await p.getByRole("button", { name: "现实成长", exact: true }).click();
+  await p.keyboard.press("Escape");
+  assert.equal(
+    await p
+      .getByRole("button", { name: "现实成长", exact: true })
+      .evaluate((e) => e === document.activeElement),
+    true,
+  );
+  // Separate actual touch context, work-point settlement, orientation and cancellation from history.
+  const mobile = await browser.newContext({
+    viewport: { width: 375, height: 812 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    reducedMotion: "reduce",
+  });
+  try {
+    const m = await mobile.newPage();
+    m.on("pageerror", (e) => errors.push(e.message));
+    await m.goto(base);
+    await m.getByLabel("你的名字").fill("触屏委托旅人");
+    await m.locator("#start-btn").tap();
+    await m.waitForSelector("canvas");
+    const ms = await (await mobile.request.post(base + "/api/session")).json();
+    fixture(ms.save_id);
+    await m.reload();
+    await m.waitForSelector("canvas");
+    await m.waitForTimeout(350);
+    await m.locator(".interact").tap();
+    await m.getByRole("group", { name: "对话话题" }).waitFor();
+    await m
+      .getByRole("group", { name: "选择现实任务类型" })
+      .getByRole("button", { name: /工作/ })
+      .tap();
+    await m.getByRole("button", { name: /就这么约定/ }).tap();
+    await m.getByRole("button", { name: "约定时间未到，暂不可结算" }).waitFor();
+    const active = (
+      await (await mobile.request.get(base + "/api/state")).json()
+    ).state.life_journal.tasks[0];
+    fixture(ms.save_id, active.id);
+    await m.reload();
+    await m.waitForSelector("canvas");
+    await m.waitForTimeout(350);
+    await m.locator(".interact").tap();
+    await m
+      .getByRole("button", { name: "结算委托 · 领取 1 技能点", exact: true })
+      .tap();
+    await m.getByText("+1 技能点", { exact: true }).waitFor();
+    await m.screenshot({
+      path: new URL("touch-work-375.png", output).pathname,
+    });
+    shots.push("touch-work-375");
+    await m.getByRole("button", { name: /就这么约定/ }).tap();
+    await m.getByRole("button", { name: "约定时间未到，暂不可结算" }).waitFor();
+    await m.getByRole("button", { name: "关闭面板", exact: true }).tap();
+    await m.getByRole("button", { name: "现实成长", exact: true }).tap();
+    await m.getByRole("button", { name: "取消这份委托", exact: true }).tap();
+    await m.getByRole("button", { name: "确认取消委托", exact: true }).tap();
+    await m.setViewportSize({ width: 844, height: 390 });
+    await m.screenshot({
+      path: new URL("touch-landscape.png", output).pathname,
+    });
+    shots.push("touch-landscape");
+    const end = (await (await mobile.request.get(base + "/api/state")).json())
+      .state;
+    assert.equal(end.skill_points, 1);
+    assert.equal(end.life_journal.remaining, 4);
+    assert.equal(
+      end.life_journal.tasks.filter((t) => t.status === "cancelled").length,
+      1,
+    );
+  } finally {
+    await mobile.close();
+  }
+  assert.deepEqual(errors, []);
+  await fs.writeFile(
+    new URL("result.json", output),
+    JSON.stringify(
+      { shots, errors, contrasts, isolatedMaturityFixture: true },
+      null,
+      2,
+    ),
+  );
+  console.log(JSON.stringify({ captures: shots.length, errors }));
+} finally {
+  await c.close();
+  await browser.close();
+}
