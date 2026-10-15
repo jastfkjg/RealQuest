@@ -1,3 +1,4 @@
+import type { LifeTask } from "../types";
 import { LifeQuestDialogue, LifeQuota } from "./LifeQuests";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
@@ -292,13 +293,16 @@ export function BuildingPanel() {
 export function ConversationPanel({ children }: { children: ReactNode }) {
   const { selected, state, open } = useGame();
   const [showRequest, setShowRequest] = useState(false);
+  const [receipt, setReceipt] = useState<LifeTask | null>(null);
   const [life, setLife] = useState(selected?.id === "noah");
   const requestRef = useRef<HTMLDivElement>(null);
+  const replyRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (showRequest)
       requestRef.current
         ?.querySelector<HTMLButtonElement>("button:not(:disabled)")
         ?.focus();
+    else replyRef.current?.focus();
   }, [showRequest]);
   if (!selected || !state) return null;
   const librarian = selected.id === "lia";
@@ -314,6 +318,17 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
     <div
       className={`ha-encounter ${noah ? "ha-commission" : ""}`}
       data-contract={noah && life && activeCommission ? "true" : undefined}
+      data-commission-phase={
+        noah
+          ? !life
+            ? "talk"
+            : activeCommission
+              ? "active"
+              : receipt
+                ? "receipt"
+                : "offer"
+          : undefined
+      }
     >
       {noah && (
         <h2 className="commission-title" aria-hidden="true">
@@ -333,7 +348,15 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
               ✧
             </div>
             <blockquote>
-              {activeCommission ? (
+              {!life ? (
+                "不急，坐下来聊聊。"
+              ) : receipt && !activeCommission ? (
+                <>
+                  这份约定，辛苦了。
+                  <br />
+                  你的成长，我记下了。
+                </>
+              ) : activeCommission ? (
                 <>
                   去忙你的吧。
                   <br />
@@ -384,11 +407,83 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
                 村庄闲谈
               </button>
             </div>
-            <LifeQuota />
+            {life ? (
+              <LifeQuota />
+            ) : (
+              <span className="commission-place">
+                <MapPin size={16} aria-hidden="true" />
+                回响村庄 · 河岸
+              </span>
+            )}
           </div>
         )}
         {life && selected.id === "noah" ? (
-          <LifeQuestDialogue />
+          <LifeQuestDialogue receipt={receipt} onReceipt={setReceipt} />
+        ) : noah ? (
+          <section className="noah-talk" aria-label="与诺亚闲谈">
+            <div className="life-contract-scroll talk-parchment">
+              <div className="talk-nameplate">
+                <Leaf size={18} aria-hidden="true" />
+                <strong>{selected.name}</strong>
+                <span>森林向导</span>
+              </div>
+              <div className="hp-speech">{children}</div>
+              <p className="talk-signature">
+                想听听我最近的发现吗？ <span>— 诺亚</span>
+              </p>
+            </div>
+            {quest && !showRequest && (
+              <div className="talk-letter" aria-label="诺亚的剧情委托">
+                <img
+                  src="/assets/hearthwood/commission-letter-v1.webp"
+                  alt=""
+                />
+                <div>
+                  <span>诺亚的委托</span>
+                  <h4>{quest.title}</h4>
+                  <small>{questStatuses[quest.status]}</small>
+                </div>
+              </div>
+            )}
+            {quest && showRequest && (
+              <div className="talk-quest-details" ref={requestRef}>
+                <header>
+                  <h4>{quest.title}</h4>
+                  <small>{questStatuses[quest.status]}</small>
+                </header>
+                <QuestDetails quest={quest} conversational />
+                <button
+                  className="life-text-button"
+                  onClick={() => {
+                    setShowRequest(false);
+                  }}
+                >
+                  收起信件
+                </button>
+              </div>
+            )}
+            <div className="contract-actions talk-actions">
+              {quest && !showRequest && (
+                <button
+                  className="rq-button rq-button--primary life-main-action"
+                  ref={replyRef}
+                  onClick={() => setShowRequest(true)}
+                >
+                  聊聊这份委托 <ArrowRight size={18} aria-hidden="true" />
+                </button>
+              )}
+              <button
+                className="rq-button talk-farewell"
+                onClick={() => open(null)}
+              >
+                改天再聊
+              </button>
+            </div>
+            <small className="hp-story-label">
+              <Leaf size={14} aria-hidden="true" />
+              预设剧情对话
+            </small>
+          </section>
         ) : (
           <>
             <div className="ha-dialogue-label">{selected.name}说</div>
@@ -414,7 +509,7 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
             )}
           </>
         )}
-        {(!noah || !life) && (
+        {!noah && (
           <div className="ha-dialogue-actions">
             {!life && quest && !showRequest && (
               <button className="primary" onClick={() => setShowRequest(true)}>

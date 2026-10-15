@@ -16,6 +16,7 @@ import "./knowledge.css";
 import "./life-quests.css";
 import "./commission-board.css";
 import "./commission-contract.css";
+import "./commission-pages.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

@@ -122,7 +122,7 @@ async function shot(name) {
           e.getBoundingClientRect().height > 2 &&
           !e.closest('[aria-hidden="true"],button:disabled') &&
           // Image-backed parchment is measured against captured pixels below.
-          !e.closest(".life-contract-scroll") &&
+          !e.closest(".life-contract-scroll,.talk-letter") &&
           [...e.childNodes].some(
             (n) => n.nodeType === 3 && n.textContent.trim(),
           ),
@@ -161,9 +161,18 @@ async function shot(name) {
     name + " text contrast",
   );
   await p.screenshot({ path: new URL(name + ".png", output).pathname });
-  if (imagePython && (await p.locator(".life-contract-conversation").count())) {
+  if (
+    imagePython &&
+    (await p
+      .locator(
+        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk",
+      )
+      .count())
+  ) {
     const text = await p
-      .locator(".life-contract-conversation")
+      .locator(
+        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk",
+      )
       .evaluate((root) =>
         [...root.querySelectorAll("*")]
           .filter(
@@ -196,7 +205,21 @@ async function shot(name) {
                           root.closest("dialog").getBoundingClientRect().bottom,
                         ) &&
                       r.left >= 0 &&
-                      r.right <= innerWidth,
+                      r.right <= innerWidth &&
+                      // The floating close latch can cover a scrolled text run.
+                      // Exclude that occluded run rather than sampling its ink
+                      // against a different control's dark background.
+                      ![
+                        ...root.closest("dialog").querySelectorAll(".hp-close"),
+                      ].some((button) => {
+                        const b = button.getBoundingClientRect();
+                        return (
+                          r.left < b.right &&
+                          r.right > b.left &&
+                          r.top < b.bottom &&
+                          r.bottom > b.top
+                        );
+                      }),
                   )
                   .map((r) => ({
                     text: n.textContent.trim(),
@@ -210,7 +233,7 @@ async function shot(name) {
     await fs.mkdir(folder, { recursive: true });
     const hide = await p.addStyleTag({
       content:
-        ".life-contract-conversation *,.life-contract-conversation *::before,.life-contract-conversation *::after{color:transparent!important;text-shadow:none!important;}",
+        ":is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *::before,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *::after{color:transparent!important;text-shadow:none!important;}",
     });
     try {
       await p.screenshot({
@@ -279,10 +302,71 @@ try {
   assert.equal(await close.evaluate((e) => e === document.activeElement), true);
   await p.getByRole("button", { name: "村庄闲谈", exact: true }).click();
   await p.getByText("预设剧情对话", { exact: true }).waitFor();
+  assert.equal(
+    await p.locator(".life-quota").count(),
+    0,
+    "Story does not show reality quota",
+  );
+  const reveal = p.getByRole("button", { name: "显示完整对话" });
+  if (await reveal.count()) await reveal.click();
   await shot("story-1440");
   await p.setViewportSize({ width: 390, height: 844 });
   await shot("story-390");
-  await p.getByRole("button", { name: "现实委托", exact: true }).click();
+  await p.getByRole("button", { name: "聊聊这份委托", exact: true }).click();
+  await p.getByRole("button", { name: "接受委托", exact: true }).click();
+  await wait(
+    (s) => s.quests.find((q) => q.id === "forest_path").status === "active",
+  );
+  await shot("story-accepted-390");
+  await p.getByRole("button", { name: "收起信件", exact: true }).click();
+  await p.waitForFunction(
+    () =>
+      document.querySelector(".talk-actions .life-main-action") ===
+      document.activeElement,
+  );
+  // Deterministic progress only for the newly created isolated guest. Actions and
+  // rewards still go through the real UI and server rules, never the owner save.
+  execFileSync(python, [
+    "-c",
+    `import sqlite3,json,sys
+conn=sqlite3.connect(sys.argv[1]); key=sys.argv[2]
+s=json.loads(conn.execute('select state from players where id=?',(key,)).fetchone()[0])
+s['stats']['stone']=6
+if 'discovered_grove' not in s['events']: s['events'].append('discovered_grove')
+s['revision']+=1
+conn.execute('update players set state=? where id=?',(json.dumps(s),key));conn.commit();conn.close()`,
+    db,
+    session.save_id,
+  ]);
+  await p.reload();
+  await p.waitForSelector("canvas");
+  await talk();
+  await p.getByRole("button", { name: "村庄闲谈", exact: true }).click();
+  await p
+    .getByRole("button", { name: "显示完整对话" })
+    .click()
+    .catch(() => {});
+  await shot("story-ready-390");
+  await p.setViewportSize({ width: 1440, height: 900 });
+  await shot("story-ready-1440");
+  const beforeStory = await state();
+  await p.getByRole("button", { name: "聊聊这份委托", exact: true }).click();
+  await p
+    .getByRole("button", { name: "交付委托，领取回礼", exact: true })
+    .click();
+  await wait(
+    (s) => s.quests.find((q) => q.id === "forest_path").status === "claimed",
+  );
+  assert.equal((await state()).inventory.gold, beforeStory.inventory.gold + 25);
+  await shot("story-completed-1440");
+  await p.getByRole("button", { name: "收起信件", exact: true }).click();
+  await p
+    .locator(".talk-letter")
+    .getByText("已完成", { exact: true })
+    .waitFor();
+  await p.getByRole("button", { name: "改天再聊", exact: true }).click();
+  assert.equal((await read()).mode, "explore");
+  await talk();
   for (const [w, h] of [
     [1920, 1080],
     [768, 1024],
@@ -467,12 +551,37 @@ try {
   assert.equal((await state()).knowledge_points, 0);
   await shot("settlement-rejected");
   await p.unroute("**/api/command");
-  expectedFailure = false;
+  // The server commits but its response is lost: reconciliation must show
+  // the confirmed receipt, never a fabricated credit or a second claim.
+  await p.route("**/api/command", async (route) => {
+    if (route.request().postDataJSON().action === "life_claim") {
+      const response = await route.fetch();
+      assert.equal(response.status(), 200);
+      await route.abort("failed");
+    } else await route.continue();
+  });
   await p
     .getByRole("button", { name: "结算委托 · 领取 2 知识点", exact: true })
     .click();
   await wait((s) => s.knowledgePoints === 2);
+  await p.getByRole("button", { name: "再约一份委托" }).waitFor();
+  await p.unroute("**/api/command");
+  expectedFailure = false;
   await shot("claimed-two");
+  for (const [width, height] of [
+    [1920, 1080],
+    [768, 1024],
+    [390, 844],
+    [375, 812],
+    [720, 450],
+  ]) {
+    await p.setViewportSize({ width, height });
+    await shot("receipt-" + width);
+  }
+  await p.setViewportSize({ width: 1440, height: 900 });
+  await p.getByRole("button", { name: "村庄闲谈", exact: true }).click();
+  await p.getByRole("button", { name: "现实委托", exact: true }).click();
+  await p.getByRole("button", { name: "再约一份委托" }).click();
   assert.equal(
     await p
       .getByRole("group", { name: "选择委托时长" })
@@ -594,6 +703,7 @@ try {
       path: new URL("touch-work-375.png", output).pathname,
     });
     shots.push("touch-work-375");
+    await m.getByRole("button", { name: "再约一份委托" }).tap();
     await m.getByRole("button", { name: /领取这份委托/ }).tap();
     await m.getByRole("button", { name: "收起委托", exact: true }).waitFor();
     await m.getByRole("button", { name: "关闭面板", exact: true }).tap();

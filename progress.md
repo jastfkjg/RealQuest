@@ -255,3 +255,12 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 
 - Character dossier final: production build, all 108 backend tests, final 15-capture flow, existing play-mode regression, frame client, 77-run contrast (minimum4.97:1) and 31-image audit pass. Actual desktop/tablet/phone/touch screenshots inspected; fixed paper-edge/footnote readability.
 - Isolated production preview5207/backend8039 retained for manual review; test browsers and runners close in finally, temporary helper scripts removed. Shared hosts and other task preview5205/8037 preserved. User DB unchanged; actual visual acceptance/physical devices/native zoom remain open. Details: task14.
+
+## 2026-10-15 Noah commission page family
+
+- Owner approved acceptance, confirmed receipt and small-talk previews. Scoped plan: `docs/tasks/17-commission-pages.md`; reused actual APIs and Hearthwood materials.
+- Added five built-in generated textless props with original PNGs/prompts, lossless WebPs, exact RGBA check and manifest provenance. Pinned task slips, hour tokens, confirmed receipt/continuation and dialogue/story letter implemented; no reward/rule/backend change.
+- Production build,19 backend commission tests and40-image provenance/pixel audit pass. Real-browser verification in progress on isolated `output/life-commissions/board-ui/test.db`. Fixed curled-edge text spacing, inherited muted copy on real texture, signal labels on the letter and close-letter focus restoration.
+- Final family suite passes48 captures/no unexpected errors, including actual story acceptance/turn-in, lost-response settlement reconciliation and receipt continuation. Computed46 cases/888 runs/min4.51; actual texture34 cases/690 runs/min4.68. Desktop/phone/receipt/quota/touch/story screenshots inspected.
+- Final phone-only spacing review passes:375×812 and390×844 acceptance CTA fully visible (y749.42/h52), all three illustrations, real work claim, reduced-motion seal/slips, reply focus,125% text and no overflow. Game/play-mode/frame checks and40-image audit pass. Physical/native-device checks and owner actual acceptance remain pending in task17.
+- Owned test browsers/runners exit via finally; no task runner/headless browser remains. Manual preview5209/Vite74805/npm74782 + isolated API8041/PID74759 retained for owner review; shared pre-existing MCP tools preserved because their task ownership is unknown. No backend/user data mutation, commit/push/deploy.

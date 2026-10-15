@@ -243,3 +243,16 @@ Status: implemented and browser-verified candidate; owner visual approval pendin
 - [ ] Physical Safari/iOS/Android, native browser zoom and actual owner acceptance remain unverified.
 
 Files, exact commands, screenshots/video, rules and retained-preview/cleanup evidence: [task 11](../tasks/11-health-stamina.md).
+
+## Noah acceptance, receipt and small talk — 2026-10-15
+
+Status: implemented and browser-verified candidate; the three concepts are owner-approved, actual render acceptance pending.
+
+- [x] Offer uses task slips, type illustration, exact pending reward/hour tokens and signing; receipt shows only server-confirmed credit, supports another promise/history/close; small talk shows actual dialogue and quest letter without reality quota.
+- [x] Actual story acceptance/turn-in, claim rejection/retry/lost response, duplicate rewards, daily quota, topic persistence, keyboard focus/Escape, scrolling and DPR2 touch checked in isolated data.
+- [x] Desktop1440/1920, tablet768, phone390/375 and720 reflow screenshots inspected; final phone CTA inside initial viewport,125% text and reduced motion checked.
+- [x]48-capture feature suite/no unexpected errors,19 backend commission tests, build, existing play-mode flow, frame client and40-image hash/pixel audit pass. Actual texture:34 cases/690 runs/min4.68:1; computed46 cases/888 runs/min4.51:1.
+- [x] Five textless built-in generated props retain original PNG/prompt/alpha and exact lossless runtime pixels; no vendor/font addition or invented possessions. Other NPC/world structures preserved.
+- [ ] Physical devices/Safari, native browser zoom, actual screen-reader/device testing and owner render acceptance remain unverified.
+
+Exact files, commands, source/prompt paths, screenshots, fixture disclosure and retained preview/cleanup: [task17](../tasks/17-commission-pages.md).

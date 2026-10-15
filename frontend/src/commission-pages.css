@@ -1,0 +1,724 @@
+/* Noah's offer, confirmed receipt and small talk share materials, not layouts. */
+.commission-slips {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 13px 22px 8px;
+}
+.hp-panel .commission-slips button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 13px 24px 16px;
+  border: 1px solid #a58a59;
+  border-radius: 0;
+  color: var(--rq-ink);
+  background: #eee1c4;
+  box-shadow:
+    inset 0 0 0 4px #fffbf045,
+    2px 4px 0 #142b2180;
+  transform: rotate(-2deg);
+  transition:
+    transform var(--rq-duration-fast) var(--rq-ease-out),
+    background var(--rq-duration-fast);
+}
+.hp-panel .commission-slips button:nth-child(2) {
+  transform: rotate(2deg);
+}
+.commission-slips button::before {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 10px;
+  top: -7px;
+  left: calc(50% - 3px);
+  border: 1px solid #4e3b22;
+  background: var(--rq-amber);
+  box-shadow: 1px 1px 0 #48382160;
+}
+.hp-panel .commission-slips button[aria-pressed="true"] {
+  background: #dce3c8;
+  border-color: var(--rq-moss);
+}
+.hp-panel .commission-slips button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background: var(--rq-linen-raised);
+}
+.commission-slips .commission-icon {
+  width: 33px;
+  height: 33px;
+}
+.commission-slips strong {
+  display: block;
+  font: 600 19px/1.4 var(--rq-font-title);
+}
+.hp-panel .commission-slips small {
+  display: block;
+  font-size: 12px;
+}
+.slip-seal {
+  position: absolute;
+  right: -8px;
+  bottom: -6px;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border: 2px solid #ab8842;
+  border-radius: 50%;
+  color: var(--rq-linen-raised);
+  background: var(--rq-moss);
+}
+.life-offer .life-contract-scroll {
+  padding-top: 25px;
+  padding-bottom: 50px;
+}
+.offer-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: 10px;
+  max-width: 530px;
+  margin: 0 auto;
+}
+.offer-illustration {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.offer-stage .contract-reward {
+  grid-column: 2;
+  transform: rotate(3deg);
+  margin-top: 20px;
+}
+.offer-duration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 1px;
+}
+.hp-panel .offer-duration > p {
+  margin: 0;
+  font: 17px/1.5 var(--rq-font-title);
+  white-space: nowrap;
+}
+.life-offer .life-hours {
+  flex: 0 1 390px;
+  margin: 0;
+  gap: 8px;
+}
+.hp-panel .life-offer .life-hours button {
+  min-width: 0;
+  min-height: 49px;
+  padding: 7px 4px;
+  border: 2px solid #92714c;
+  color: var(--rq-ink);
+  background: #e6cfab;
+  box-shadow:
+    inset 0 2px 0 #fffbf05c,
+    0 3px 0 #8a6942;
+}
+.hp-panel .life-offer .life-hours button[aria-pressed="true"] {
+  border-color: #a17a32;
+  background: var(--rq-moss);
+  color: var(--rq-linen-raised);
+  box-shadow:
+    inset 0 0 0 2px #d3a45080,
+    0 3px 0 #483821;
+}
+.hp-panel .life-offer .life-hours button:hover:not(:disabled) {
+  background: var(--rq-linen-raised);
+  color: var(--rq-ink);
+}
+.hp-panel .offer-promise {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 13px;
+}
+.life-offer .contract-actions {
+  margin-top: 0;
+}
+.life-rest img {
+  display: block;
+  width: 280px;
+  max-width: 100%;
+  height: 190px;
+  object-fit: contain;
+  margin: 8px auto;
+  image-rendering: pixelated;
+}
+.ha-commission .life-rest {
+  margin-top: 20px;
+}
+.settlement-stage {
+  position: relative;
+  height: 280px;
+  width: 100%;
+  max-width: 580px;
+  margin: 4px auto 0;
+}
+.settlement-ledger {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 91%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.settlement-receipt {
+  position: absolute;
+  top: 24px;
+  right: 25px;
+  width: 215px;
+  min-height: 228px;
+  padding: 20px 16px 15px;
+  border: 1px solid #9a7d4d;
+  color: var(--rq-ink);
+  background: #f4e8cc;
+  box-shadow:
+    inset 0 0 0 5px #d9c49560,
+    3px 5px 0 #48382135;
+  text-align: center;
+}
+.settlement-receipt > span:first-child {
+  display: block;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #b59d75;
+  font: 15px/1.4 var(--rq-font-title);
+  letter-spacing: 0.08em;
+}
+.hp-panel .settlement-receipt h4 {
+  margin: 10px 0;
+  font: 600 19px/1.5 var(--rq-font-title);
+}
+.settlement-receipt > strong {
+  display: block;
+  font: 600 25px/1.5 var(--rq-font-title);
+}
+.hp-panel .settlement-receipt small {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.settlement-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 48px;
+  max-width: 125px;
+  margin: auto;
+  padding: 7px 12px;
+  border: 3px double #d2b366;
+  border-radius: 50%;
+  background: var(--rq-moss);
+  color: var(--rq-linen-raised);
+  box-shadow:
+    0 0 0 3px #2b4b36,
+    1px 4px 0 #48382140;
+  font: 600 19px/1.5 var(--rq-font-title);
+  animation: receipt-seal 0.25s var(--rq-ease-out) both;
+}
+.hp-panel .settlement-note {
+  margin: 5px 0 0;
+  text-align: center;
+  font: 19px/1.5 var(--rq-font-title);
+}
+.hp-panel .settlement-signature {
+  margin: 12px 0 0;
+  text-align: center;
+  font: 15px/1.6 var(--rq-font-title);
+}
+.settlement-signature span {
+  margin-left: 15px;
+}
+.commission-place {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 14px;
+  border: 1px solid #a18a63;
+  background: #483821;
+  color: var(--rq-linen-raised);
+  font-size: 13px;
+  box-shadow: 1px 3px 0 #142b2180;
+}
+.noah-talk {
+  position: relative;
+  padding: 19px 0 0;
+}
+.noah-talk .talk-parchment {
+  min-height: 330px;
+  padding: 27px 190px 50px 38px;
+}
+.talk-nameplate {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: start;
+  gap: 1px 8px;
+  width: fit-content;
+  margin: 0 0 16px -8px;
+  padding: 8px 24px;
+  border: 1px solid #b18b49;
+  background: #483821;
+  color: var(--rq-linen-raised);
+  box-shadow: 0 3px 0 #382c2040;
+}
+.talk-nameplate strong {
+  font: 600 22px/1.4 var(--rq-font-title);
+}
+.talk-nameplate svg {
+  grid-row: 1/3;
+  color: var(--rq-amber);
+}
+.talk-nameplate span {
+  font-size: 12px;
+}
+.ha-commission .noah-talk .hp-speech {
+  min-height: 100px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font: 600 22px/1.95 var(--rq-font-title);
+}
+.hp-panel .talk-signature {
+  margin: 24px 0 4px;
+  padding-top: 14px;
+  border-top: 1px solid #b49b71;
+  font: 17px/1.8 var(--rq-font-title);
+}
+.talk-signature span {
+  display: block;
+  text-align: right;
+}
+.talk-letter {
+  position: absolute;
+  right: 0;
+  top: 86px;
+  width: 203px;
+  height: 302px;
+}
+.talk-letter img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.talk-letter > div {
+  position: absolute;
+  inset: 49% 15% 16% 14%;
+  text-align: center;
+  color: var(--rq-ink);
+}
+.talk-letter span {
+  font-size: 12px;
+}
+.hp-panel .talk-letter h4 {
+  margin: 6px 0;
+  font: 600 18px/1.5 var(--rq-font-title);
+}
+.hp-panel .talk-letter small {
+  font-size: 13px;
+}
+.talk-actions {
+  justify-content: flex-start;
+  margin: 18px 20px 0;
+}
+.hp-panel .ha-commission .talk-actions .life-main-action {
+  min-width: 240px;
+}
+.hp-panel .talk-farewell {
+  min-width: 110px;
+  background: #eee1c4;
+  color: var(--rq-ink);
+  border-color: #a58a59;
+}
+.noah-talk > .hp-story-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 7px 22px 0;
+  color: var(--rq-linen);
+  font-size: 12px;
+}
+.talk-quest-details {
+  margin: 14px 22px;
+  padding: 18px;
+  border: 1px solid #a58a59;
+  background: var(--rq-linen);
+  color: var(--rq-ink);
+}
+@keyframes receipt-seal {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (max-width: 900px) and (min-width: 701px) {
+  .commission-slips {
+    gap: 10px;
+    padding-inline: 10px;
+  }
+  .hp-panel .commission-slips button {
+    padding-inline: 15px;
+  }
+  .noah-talk .talk-parchment {
+    padding-right: 150px;
+  }
+  .talk-letter {
+    width: 170px;
+    height: 255px;
+    top: 140px;
+  }
+  .ha-commission .noah-talk .hp-speech {
+    font-size: 19px;
+  }
+  .offer-duration {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .life-offer .life-hours {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .commission-slips {
+    gap: 8px;
+    padding: 10px 5px 6px;
+  }
+  .hp-panel .commission-slips button {
+    flex: 1;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 4px 12px;
+    transform: none;
+  }
+  .hp-panel .commission-slips button:nth-child(2) {
+    transform: none;
+  }
+  .commission-slips .commission-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .commission-slips strong {
+    font-size: 16px;
+  }
+  .hp-panel .commission-slips small {
+    font-size: 11px;
+  }
+  .slip-seal {
+    width: 22px;
+    height: 22px;
+    right: -3px;
+    bottom: -5px;
+  }
+  .life-offer .life-contract-scroll {
+    padding: 25px 23px 44px;
+  }
+  .offer-stage {
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 4px;
+  }
+  .offer-illustration {
+    height: 128px;
+  }
+  .offer-stage .contract-reward {
+    width: 100px;
+    margin-top: 23px;
+    padding: 27px 3px 8px;
+    transform: none;
+  }
+  .offer-stage .contract-wax-seal {
+    width: 39px;
+    height: 39px;
+    top: -18px;
+    left: calc(50% - 19px);
+  }
+  .offer-stage .contract-wax-seal::after {
+    display: none;
+  }
+  .offer-stage .contract-wax-seal .commission-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .offer-stage .contract-reward strong {
+    font-size: 16px;
+    margin: 3px 0;
+  }
+  .hp-panel .offer-stage .contract-reward > span,
+  .hp-panel .offer-stage .contract-reward small {
+    font-size: 11px;
+  }
+  .offer-duration {
+    display: block;
+    margin-top: 3px;
+  }
+  .hp-panel .offer-duration > p {
+    text-align: center;
+    font-size: 14px;
+    margin: 0 0 6px;
+  }
+  .life-offer .life-hours {
+    width: 100%;
+    gap: 5px;
+  }
+  .hp-panel .life-offer .life-hours button {
+    min-height: 44px;
+    padding: 5px 2px;
+    font-size: 19px;
+  }
+  .hp-panel .life-offer .life-hours small {
+    font-size: 11px;
+  }
+  .hp-panel .offer-promise {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  .settlement-stage {
+    height: 238px;
+    margin-top: 8px;
+  }
+  .settlement-ledger {
+    width: 100%;
+    height: 180px;
+    top: 13px;
+  }
+  .settlement-receipt {
+    width: 159px;
+    min-height: 202px;
+    top: 23px;
+    right: 5px;
+    padding: 14px 10px;
+  }
+  .settlement-receipt > span:first-child {
+    font-size: 12px;
+  }
+  .hp-panel .settlement-receipt h4 {
+    font-size: 16px;
+  }
+  .settlement-receipt > strong {
+    font-size: 21px;
+  }
+  .settlement-seal {
+    min-height: 43px;
+    max-width: 110px;
+    font-size: 17px;
+  }
+  .hp-panel .settlement-note {
+    font-size: 16px;
+    margin-top: 0;
+  }
+  .hp-panel .settlement-signature {
+    margin-top: 7px;
+    font-size: 13px;
+  }
+  .commission-place {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .noah-talk {
+    padding-top: 5px;
+  }
+  .noah-talk .talk-parchment {
+    min-height: 0;
+    padding: 25px 25px 47px;
+  }
+  .talk-nameplate {
+    margin-bottom: 12px;
+    padding: 5px 16px;
+  }
+  .talk-nameplate strong {
+    font-size: 19px;
+  }
+  .ha-commission .noah-talk .hp-speech {
+    min-height: 0;
+    font-size: 18px;
+    line-height: 1.9;
+  }
+  .hp-panel .talk-signature {
+    margin-top: 15px;
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  .talk-letter {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 185px;
+    height: 264px;
+    margin: -14px auto 0;
+  }
+  .talk-letter > div {
+    inset: 49% 16% 16%;
+  }
+  .hp-panel .talk-letter h4 {
+    font-size: 16px;
+    margin: 3px 0;
+  }
+  .talk-actions {
+    margin-top: 4px;
+  }
+  .hp-panel .talk-actions > button {
+    flex: 1;
+  }
+  .talk-quest-details {
+    margin: 10px 12px;
+    padding: 13px;
+  }
+  .life-rest img {
+    width: 220px;
+    height: 160px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-panel .commission-slips button {
+    transition: none;
+  }
+  .settlement-seal {
+    animation: none;
+  }
+}
+.reduce-motion .commission-slips button {
+  transition: none;
+}
+.reduce-motion .settlement-seal {
+  animation: none;
+}
+
+.life-settlement .life-contract-scroll {
+  padding-bottom: 50px;
+}
+
+.hp-panel .talk-letter small {
+  color: var(--rq-ink);
+}
+.hp-panel .ha-commission .noah-talk > .hp-story-label {
+  color: var(--rq-linen-raised);
+}
+
+.hp-panel .ha-commission .noah-talk .dialogue-text .text-button {
+  display: inline-flex;
+  width: auto;
+  min-height: 44px;
+  gap: 8px;
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--rq-moss);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.talk-quest-details header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--rq-divider);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.hp-panel .talk-quest-details h4 {
+  margin: 0;
+  font: 600 21px/1.5 var(--rq-font-title);
+}
+.hp-panel .talk-quest-details header small {
+  color: var(--rq-ink);
+}
+
+.hp-panel
+  :is(
+    .talk-signature,
+    .settlement-note,
+    .settlement-signature,
+    .offer-promise
+  ) {
+  color: var(--rq-ink);
+}
+
+.hp-panel .offer-duration > p {
+  color: var(--rq-ink);
+}
+.hp-panel .talk-quest-details .quest-actions > span {
+  color: var(--rq-success);
+}
+@media (max-width: 700px) {
+  .ha-commission[data-commission-phase="offer"] .life-quota {
+    padding-block: 4px;
+  }
+  .life-offer .offer-illustration {
+    height: 104px;
+  }
+  .hp-panel .life-offer .life-hours button {
+    font-size: 18px;
+    line-height: 22px;
+    padding-block: 4px;
+  }
+  .hp-panel .life-offer .life-hours small {
+    font-size: 11px;
+    line-height: 12px;
+  }
+  .hp-panel .life-offer .offer-promise {
+    margin-top: 7px;
+    line-height: 1.5;
+  }
+}
+@media (max-width: 700px) {
+  .ha-commission:is(
+      [data-commission-phase="offer"],
+      [data-commission-phase="receipt"]
+    )
+    .life-quota {
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 3px 6px;
+    padding: 4px 8px;
+  }
+  .ha-commission:is(
+      [data-commission-phase="offer"],
+      [data-commission-phase="receipt"]
+    )
+    .life-quota
+    small {
+    grid-column: auto;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .ha-commission:is(
+      [data-commission-phase="offer"],
+      [data-commission-phase="receipt"]
+    )
+    .life-seeds {
+    gap: 2px;
+  }
+  .ha-commission:is(
+      [data-commission-phase="offer"],
+      [data-commission-phase="receipt"]
+    )
+    .life-seeds
+    i {
+    width: 14px;
+  }
+}
+@media (max-width: 700px) {
+  .commission-slips {
+    padding-bottom: 2px;
+  }
+  .hp-panel .commission-slips button {
+    padding-block: 8px 6px;
+  }
+}

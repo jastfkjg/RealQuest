@@ -1,5 +1,5 @@
 /* The active promise is a scroll on cloth; all text and state stay native DOM. */
-.ha-commission[data-contract="true"] .ha-dialogue-scene {
+.ha-commission[data-commission-phase] .ha-dialogue-scene {
   isolation: isolate;
   padding: 0 0 10px;
   border: 0;
@@ -7,7 +7,7 @@
   background: transparent;
   box-shadow: none;
 }
-.ha-commission[data-contract="true"] .ha-dialogue-scene::before {
+.ha-commission[data-commission-phase] .ha-dialogue-scene::before {
   inset: 30px 3px 0;
   z-index: -1;
   width: auto;
@@ -22,27 +22,27 @@
     0 5px 0 #382c2050;
   transform: rotate(-1deg);
 }
-.ha-commission[data-contract="true"] .ha-dialogue-scene::after {
+.ha-commission[data-commission-phase] .ha-dialogue-scene::after {
   display: none;
 }
-.ha-commission[data-contract="true"] .life-paper-heading {
+.ha-commission[data-commission-phase] .life-paper-heading {
   position: relative;
   z-index: 1;
   align-items: flex-start;
   margin: 0 3px 5px;
   gap: 10px;
 }
-.ha-commission[data-contract="true"] .life-quota {
+.ha-commission[data-commission-phase] .life-quota {
   padding: 9px 12px;
   background: var(--rq-linen);
   border: 1px solid #bba785;
   box-shadow: 0 2px 0 #48382150;
   transform: rotate(1deg);
 }
-.ha-commission[data-contract="true"] .life-seeds i {
+.ha-commission[data-commission-phase] .life-seeds i {
   border: 0;
 }
-.ha-commission[data-contract="true"] .life-seeds i[data-state="reserved"] {
+.ha-commission[data-commission-phase] .life-seeds i[data-state="reserved"] {
   color: #8d5f1d;
   background: #f0deb5;
 }
@@ -372,20 +372,20 @@
   .hp-panel .contract-time-note {
     font-size: 14px;
   }
-  .ha-commission[data-contract="true"] .life-quota {
+  .ha-commission[data-commission-phase] .life-quota {
     grid-template-columns: auto auto 1fr;
   }
 }
 @media (max-width: 700px) {
-  .ha-commission[data-contract="true"] .life-paper-heading {
+  .ha-commission[data-commission-phase] .life-paper-heading {
     gap: 10px;
     margin: 0 2px 4px;
   }
-  .ha-commission[data-contract="true"] .life-quota {
+  .ha-commission[data-commission-phase] .life-quota {
     padding: 6px 9px;
     grid-template-columns: auto 1fr;
   }
-  .ha-commission[data-contract="true"] .ha-dialogue-scene::before {
+  .ha-commission[data-commission-phase] .ha-dialogue-scene::before {
     inset: 25px 2px 0;
   }
   .life-contract-scroll {
@@ -520,6 +520,6 @@
 .reduce-motion .contract-sand-stream {
   animation: none;
 }
-.panel-npc:has(.ha-commission[data-contract="true"]) .panel-notice {
+.panel-npc:has(.ha-commission:is([data-commission-phase="active"], [data-commission-phase="receipt"])) .panel-notice {
   display: none;
 }

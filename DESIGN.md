@@ -336,3 +336,9 @@ Candidate only; owner visual review pending. The home yard and interior use orig
 ### Travel-kit HUD — 2026-10-13
 
 Owner approved `docs/art/references/hud-concept-v1.png`; actual browser implementation is a candidate. Floating HUD uses a single light timber/moss rail with pixel-object navigation and readable linen labels, a compact traveler identity/resource plate, three utility keys and a clipped linen next-step note. `hud.css` owns the final skin after legacy world/dialog styles. Native labels/actions and actual values remain authoritative; character navigation reflects the current appearance. Compact phone/landscape layouts retain direct Life access and existing world controls. Opened inventory, dossier and journal layouts retain their own contracts. Source, evidence and limitations: `docs/tasks/10-hud-travel-kit.md`.
+
+### Noah offer, receipt and small talk — approved direction, 2026-10-14
+
+The remaining encounter states share Noah's timber desk and moss cloth. Three small pinned slips select the reality task type, then one illustrated scroll carries the exact promise, reward tag and wooden hour tokens. A server-confirmed settlement replaces the offer with a ledger and stamped native receipt; another commission explicitly returns to selection, while history and dismissal remain secondary. The receipt survives a topic switch within the same encounter. It never implies an unconfirmed reward.
+
+Village small talk has a nameplate and dialogue parchment, with an actual story-quest letter and two replies. It does not display reality quota. Opening the letter uses the existing quest objectives, actions and authoritative status; closing it restores the reply's keyboard focus. Other NPCs and the active hourglass contract retain their structures. Text is DOM, generated props are textless, and reduced motion removes paper/seal motion. Evidence: `docs/tasks/17-commission-pages.md`.

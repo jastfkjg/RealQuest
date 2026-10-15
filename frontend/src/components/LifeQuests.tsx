@@ -378,13 +378,45 @@ function useAction() {
     return ok;
   };
 }
-export function LifeQuestDialogue() {
+const contractTitle = (kind: LifeTask["kind"], hours: number) =>
+  `${["", "一", "两", "三", "四", "五"][hours] || hours}小时的${kind === "study" ? "研习" : kind === "exercise" ? "活力" : "专注"}`;
+
+function PromiseReward({
+  kind,
+  hours,
+}: {
+  kind: LifeTask["kind"];
+  hours: number;
+}) {
+  return (
+    <aside
+      className="contract-reward"
+      aria-label={`约定报酬 ${hours} ${paths[kind].point}，结算时获得`}
+    >
+      <div className="contract-wax-seal" aria-hidden="true">
+        <CommissionIcon kind={kind} />
+      </div>
+      <span>约定报酬</span>
+      <strong>
+        +{hours} {paths[kind].point}
+      </strong>
+      <small>结算时获得</small>
+    </aside>
+  );
+}
+
+export function LifeQuestDialogue({
+  receipt,
+  onReceipt,
+}: {
+  receipt: LifeTask | null;
+  onReceipt: (task: LifeTask | null) => void;
+}) {
   const { state, busy, open } = useGame();
   const act = useAction();
   const now = useClock();
   const [kind, setKind] = useState<LifeTask["kind"]>("study");
   const [hours, setHours] = useState(1);
-  const [receipt, setReceipt] = useState<LifeTask | null>(null);
   const draft = useRef(crypto.randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const journal = state?.life_journal;
@@ -405,7 +437,7 @@ export function LifeQuestDialogue() {
       })
     ) {
       draft.current = crypto.randomUUID();
-      setReceipt(null);
+      onReceipt(null);
     }
   }
   if (active)
@@ -417,130 +449,209 @@ export function LifeQuestDialogue() {
         heading={heading}
         act={act}
         claim={async () => {
-          if (await act("life_claim", { target: "noah", task_id: active.id }))
-            setReceipt(active);
+          await act("life_claim", { target: "noah", task_id: active.id });
+          // A receipt exists only after the authoritative state confirms credit,
+          // including reconciliation when a committed response was lost.
+          const confirmed = useGame
+            .getState()
+            .state?.life_journal?.tasks.find(
+              (t) => t.id === active.id && t.status === "claimed",
+            );
+          if (confirmed) {
+            useGame.setState({ error: "" });
+            onReceipt(confirmed);
+          }
         }}
       />
     );
-  return (
-    <section className="life-conversation" aria-label="现实委托">
-      <h3 ref={heading} tabIndex={-1}>
-        {receipt
-          ? "这份成长，我替你记下了"
-          : remaining
-            ? "选择一份今日委托"
-            : "今天的五枚成长印记，集齐了"}
-      </h3>
-      {receipt && !active && (
-        <div className="life-receipt" role="status">
-          <Check size={25} aria-hidden="true" />
-          <div>
-            <strong>
-              +{receipt.hours} {paths[receipt.kind].point}
-            </strong>
-            <p>
-              {paths[receipt.kind].name}委托已结算 · {receipt.hours} 小时
-            </p>
+  if (receipt)
+    return (
+      <section className="life-settlement" aria-label="现实委托结算回执">
+        <div className="life-contract-scroll">
+          <header className="contract-heading">
+            <span>约定已结算</span>
+            <h3 ref={heading} tabIndex={-1}>
+              {contractTitle(receipt.kind, receipt.hours)}
+            </h3>
+          </header>
+          <div className="settlement-stage">
+            <img
+              className="settlement-ledger"
+              src="/assets/hearthwood/commission-ledger-v1.webp"
+              alt=""
+            />
+            <div
+              className="settlement-receipt"
+              role="status"
+              aria-atomic="true"
+            >
+              <span>林间委托回执</span>
+              <h4>
+                {paths[receipt.kind].name} · {receipt.hours} 小时
+              </h4>
+              <strong>
+                +{receipt.reward} {paths[receipt.kind].point}
+              </strong>
+              <small>已入账</small>
+              <span className="settlement-seal">
+                <Check size={20} aria-hidden="true" />
+                已结算
+              </span>
+            </div>
           </div>
+          <p className="settlement-note">这份成长，已记入手记。</p>
+          <p className="settlement-signature">
+            一点一滴，也在向前。 <span>— 诺亚</span>
+          </p>
         </div>
-      )}
+        <div className="contract-actions">
+          {remaining > 0 && (
+            <button
+              className="rq-button rq-button--primary life-main-action"
+              onClick={() => onReceipt(null)}
+            >
+              再约一份委托 <ArrowRight size={18} aria-hidden="true" />
+            </button>
+          )}
+          <button
+            className={
+              remaining
+                ? "life-text-button"
+                : "rq-button rq-button--primary life-main-action"
+            }
+            onClick={() => open("activity")}
+          >
+            <BookOpen size={18} aria-hidden="true" />
+            翻看成长手记
+          </button>
+          <button className="life-text-button" onClick={() => open(null)}>
+            收起回执
+          </button>
+        </div>
+        {!remaining && (
+          <p className="contract-footer-note">
+            今天的五枚成长印记，集齐了。明天再来吧。
+          </p>
+        )}
+      </section>
+    );
+  return (
+    <section className="life-offer" aria-label="现实委托">
       {remaining > 0 ? (
         <>
           <div
-            className="life-paths"
+            className="commission-slips"
             role="group"
             aria-label="选择现实任务类型"
           >
-            {Object.entries(paths).map(([id, path]) => {
-              return (
-                <button
-                  key={id}
-                  disabled={busy}
-                  aria-pressed={kind === id}
-                  onClick={() => {
-                    setKind(id as LifeTask["kind"]);
-                    draft.current = crypto.randomUUID();
-                  }}
-                >
-                  <span className="life-selected-stamp" aria-hidden="true">
-                    <Check size={13} />
-                  </span>
-                  <CommissionIcon kind={id as LifeTask["kind"]} />
-                  <span>
-                    <strong>{path.name}</strong>
-                    <small>{path.point}</small>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <h4 className="life-hours-heading">
-            <Sprout size={17} aria-hidden="true" />
-            约定时长
-          </h4>
-          <div className="life-hours" role="group" aria-label="选择委托时长">
-            {Array.from({ length: remaining }, (_, i) => i + 1).map((n) => (
+            {Object.entries(paths).map(([id, path]) => (
               <button
-                key={n}
-                aria-label={`${n} 小时`}
+                key={id}
                 disabled={busy}
-                aria-pressed={duration === n}
+                aria-pressed={kind === id}
                 onClick={() => {
-                  setHours(n);
+                  setKind(id as LifeTask["kind"]);
                   draft.current = crypto.randomUUID();
                 }}
               >
-                {n}
-                <small>小时</small>
+                <CommissionIcon kind={id as LifeTask["kind"]} />
+                <span>
+                  <strong>{path.name}</strong>
+                  <small>{path.point}</small>
+                </span>
+                {kind === id && (
+                  <span className="slip-seal" aria-hidden="true">
+                    <Leaf size={15} />
+                  </span>
+                )}
               </button>
             ))}
           </div>
-          <div
-            className="life-reward-preview"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            <CommissionIcon kind={kind} />
-            <span>
-              完成 {duration} 小时{paths[kind].name}
-            </span>
-            <strong>
-              +{duration} {paths[kind].point}
-            </strong>
+          <div className="life-contract-scroll">
+            <header className="contract-heading">
+              <span>与诺亚立下约定</span>
+              <h3 ref={heading} tabIndex={-1}>
+                {contractTitle(kind, duration)}
+              </h3>
+            </header>
+            <div className="offer-stage" aria-live="polite" aria-atomic="true">
+              <img
+                className="offer-illustration"
+                src={`/assets/hearthwood/commission-${kind}-v1.webp`}
+                alt=""
+              />
+              <PromiseReward kind={kind} hours={duration} />
+            </div>
+            <div className="offer-duration">
+              <p>想留出多久？</p>
+              <div
+                className="life-hours"
+                role="group"
+                aria-label="选择委托时长"
+              >
+                {Array.from({ length: remaining }, (_, i) => i + 1).map((n) => (
+                  <button
+                    key={n}
+                    aria-label={`${n} 小时`}
+                    disabled={busy}
+                    aria-pressed={duration === n}
+                    onClick={() => {
+                      setHours(n);
+                      draft.current = crypto.randomUUID();
+                    }}
+                  >
+                    {n}
+                    <small>小时</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <p className="offer-promise">
+              完成 {duration} 小时{paths[kind].name}，回来收下这份成长。
+            </p>
           </div>
-          <p className="life-accept-note">
-            领取后开始计时，到时回诺亚处结算。
-            <br />
-            每小时 1 点 · 三类每日合计最多 5 点
-          </p>
-          <div className="life-accept-footer">
+          <div className="contract-actions">
             <button
               className="rq-button rq-button--primary life-main-action"
+              aria-label={busy ? "正在记下约定…" : "领取这份委托"}
               disabled={busy}
               onClick={() => void accept()}
             >
-              {busy ? "正在记下约定…" : "领取这份委托"}
+              {busy ? "正在记下约定…" : "签下约定 · 领取委托"}
               <ArrowRight size={18} aria-hidden="true" />
             </button>
             <CommissionRules />
           </div>
-          <small className="life-accept-footnote">
-            取消不获点数 · 按领取日计算额度
-          </small>
+          <p className="contract-footer-note">
+            领取后开始计时 · 每小时 1 点 · 三类每日合计最多 5 点
+          </p>
         </>
       ) : (
-        <div className="life-rest">
-          <Sprout size={32} aria-hidden="true" />
-          <p>
-            辛苦了，剩下的时间留给自己。
-            <br />
-            明天零点后，再来约定新的旅程。
-          </p>
-          <button className="rq-button" onClick={() => open("activity")}>
-            翻看成长手记
-          </button>
-          <CommissionRules />
-        </div>
+        <>
+          <div className="life-contract-scroll life-rest">
+            <header className="contract-heading">
+              <span>今日约定已记满</span>
+              <h3 ref={heading} tabIndex={-1}>
+                五枚成长印记，集齐了
+              </h3>
+            </header>
+            <img src="/assets/hearthwood/commission-ledger-v1.webp" alt="" />
+            <p>
+              辛苦了，剩下的时间留给自己。
+              <br />
+              明天零点后，再来约定新的旅程。
+            </p>
+          </div>
+          <div className="contract-actions">
+            <button
+              className="rq-button rq-button--primary life-main-action"
+              onClick={() => open("activity")}
+            >
+              翻看成长手记
+            </button>
+            <CommissionRules />
+          </div>
+        </>
       )}
     </section>
   );

@@ -204,3 +204,7 @@ Reuses the unchanged generated `arrival-village-v1.webp` as a woodland vignette 
 ## Character point allocation — 2026-10-14
 
 Owner approved `references/character-points-concept-v1.png`, generated with built-in image_gen using the supplied UI screenshot. Exact prompt and SHA-256 are recorded. It is a design reference only, excluded from runtime. Implementation reuses `character-dossier-v1.webp`, unchanged actor sheets, shared tokens and installed Lucide SVG components. All values and controls remain DOM; no new runtime asset/font/pack. Actual render and evidence: task 14.
+
+## Noah commission pages — 2026-10-15
+
+Owner approved the three acceptance/receipt/small-talk concepts. Reuse the existing timber board, riverbank, actor, blank scroll and native icons. Five textless original illustrations are now bound only to these states: `commission-{study,exercise,work,ledger,letter}-v1`. Source PNGs and complete built-in image_gen prompts live in `assets/generated/hearthwood/`; lossless decoded-RGBA-identical WebPs live in `frontend/public/assets/hearthwood/`. No font, vendor pack or source artwork modification. The objects represent a commission/receipt, not an inventory grant. All task text, point amounts, credited status, quest status and controls remain native DOM. Concept previews in `docs/art/references/commission-{accept,receipt,talk}-concept-v1.*` are reference-only and never runtime UI. Manifest contains dimensions, alpha bounds, hashes and bindings. Actual implementation acceptance remains pending; see task17.
