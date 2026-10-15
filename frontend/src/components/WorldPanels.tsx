@@ -380,7 +380,7 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
         <aside className="ha-npc-identity">
           <span className="ha-eyebrow">林间相逢</span>
           <div className="ha-npc-vignette">
-            <PixelPerson variant={librarian ? 0 : 2} />
+            <PixelPerson variant={librarian ? 1 : 2} />
             <Leaf size={24} />
           </div>
           <h3>{selected.name}</h3>

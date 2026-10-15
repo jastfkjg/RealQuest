@@ -1,0 +1,13 @@
+Use case: stylized-concept. Production transparent 2D pixel game detail sprite sheet, matching the attached original village scenery atlas and approved village screen. Same finely textured warm timber and natural sage/olive leaves, crisp small pixel clusters, colored dark outline, orthographic top-down RPG, not isometric, no blur or painterly smooth rendering.
+Exactly 4 columns and 2 rows, eight separate objects on transparent background, generous transparent gutters and no overlap. Wide 2:1 atlas, target 1536×768. No labels, no text, no scenery background, no ground platforms, no characters.
+Top row, left to right:
+1 a sparse small grass tuft of roughly 12 thin blades, shaded sage and olive, low airy irregular silhouette, NO FLOWERS, 160×90 source pixels.
+2 a low patch of meadow grass, about 20 small blade clusters with irregular open gaps, sage/olive/yellow-green, NO FLOWERS, about 250×110 pixels.
+3 a natural group of 5 small rounded bank stones with moss in crevices and just 4 thin reed blades, cream-gray and sage, about 220×100.
+4 one weathered flat STEPPING STONE slab seen from above with front lip, gently broken corners, fine cracks and tiny lichen, pale gray beige, about 230×85.
+Bottom row, left to right:
+1 a simple horizontal low fence segment with two upright posts, 3 timber rails, fine wood grain, no flowers or leaves, 280×150.
+2 a single slim timber lantern post with warm small hanging lantern, understated, about 100×220.
+3 a small closed travel chest, copper latch and metal bands, warm brown timber, straight front-facing horizontal lid, 190×140.
+4 a small ancient stone rune arch made of two short weathered pillars and a horizontal lintel, pale moss-gray stones, a small floating cyan diamond rune in the opening, about 210×220.
+All objects fully visible. Match fine pixel detail of the source buildings and trees; every object isolated, clean transparent alpha. Background genuinely transparent, no checkered pattern, no cast ground shadows. These fill details in an existing game, not new features.

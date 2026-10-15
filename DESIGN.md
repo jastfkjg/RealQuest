@@ -110,6 +110,8 @@ Do not enlarge a character independently of doors, props, and terrain to fix a c
 
 ### 4.2 Motion and framing
 
+**Approved fine-village exception (2026-10-15):** the owner approved `docs/art/references/village-fine-concept-v1.png` and requested the current village with fewer flowers/grass. Outdoor scenery now uses two native art pixels per world unit; actors use 48×64 frames at 2/3 world scale with a 54-native-pixel (36-world-unit) silhouette. Gameplay grid and saved coordinates remain unchanged. Outdoor camera fit uses width/640 and height/400 in half-step zooms (minimum 1.5), independently of DPR. At zoom 2/2.5 this gives 72/90 CSS-pixel actor height and approximately 1.33/1.67 CSS pixels per actor source pixel. This supersedes the coarse 16px actor baseline for this village; do not enlarge old 16px sprites to reproduce it. Exact cuts, palettes, real directional walk poses and processing are recorded in `docs/art/village-art-v2.json` and task 18. Interior layouts are outside this checkpoint.
+
 Use a stable follow camera with a small dead zone and sensible bounds. Subpixel physics may be continuous; quantize the final display appropriately rather than rounding every physics update. Prevent visible shimmer and seams. Do not add camera shake to ordinary walking, opening menus, or recording a habit.
 
 The spawn composition should reveal the home entrance, one nearby person or landmark, and a plausible next route. Do not spawn beneath a panel or behind an opaque foreground object. Fixed HUD belongs to screen space; world interaction prompts must be transformed and clamped correctly.

@@ -1493,10 +1493,28 @@
           368
         ]
       },
-      "runtime_binding": "village.ts home building/yard and WorldScene home room only",
+      "runtime_binding": "WorldScene home room; original outdoor cottage/yard retained in source, superseded by fine village v2",
       "rebuild": "npm run build in frontend; geometry rendered directly by hearthwood.ts",
       "status": "candidate_pending_owner_visual_review",
       "excluded": "New upgrade progression appearances, saved furnishing states and other interiors"
+    },
+    {
+      "id": "hearthwood.village-ground.v2",
+      "source_path": "frontend/src/game/villageGround.ts",
+      "sha256": "a657eacb34883083a44826bfe9dec149b81c0d68bb11b17c268863fed6b1448b",
+      "source": "Original deterministic high-density canvas terrain with separately recorded generated texture stamps",
+      "license": "Project-authored scene code; no external pack",
+      "status": "implemented_candidate_pending_owner_visual_review",
+      "runtime_binding": "Current outdoor world; existing identifiers, collisions and saves preserved"
+    },
+    {
+      "id": "hearthwood.farm-plots.v2",
+      "source_path": "frontend/src/game/art.ts",
+      "sha256": "f57c3ec67a5c396b516eb314b9c036f2220a7421347a83184fd389a832a774c2",
+      "source": "Original native-code field soil and crop-state presentation; game rules unchanged",
+      "license": "Project-authored scene code; no external pack",
+      "status": "implemented_candidate_pending_owner_visual_review",
+      "runtime_binding": "Current outdoor world; existing identifiers, collisions and saves preserved"
     }
   ],
   "hud_concept": {
@@ -1655,5 +1673,29 @@
     "approved_on": "2026-10-14",
     "runtime": false,
     "note": "Approved direction only. The actual candidate uses separate textless materials and native DOM; sample quest/reward values in the concept are not game state. Actual rendered acceptance remains pending."
+  },
+  "village_art": {
+    "manifest": "docs/art/village-art-v2.json",
+    "concept": "docs/art/references/village-fine-concept-v1.png",
+    "concept_sha256": "17016ff4072e3188457b2a285fe4e7970b14d622cfeeccef3e943b4c188db8cf",
+    "concept_owner_approved_on": "2026-10-15",
+    "status": "implemented_candidate_pending_actual_render_review",
+    "source": "Original built-in image_gen output, no new external pack/font/audio",
+    "prompts": [
+      {
+        "path": "assets/generated/hearthwood/village-actors-v2.prompt.txt",
+        "sha256": "3d1e512995aefd9546982762e692f014d57ecb6d9f3d181013f534d4c1b92f40"
+      },
+      {
+        "path": "assets/generated/hearthwood/village-details-v2.prompt.txt",
+        "sha256": "8fea5ce828a01a649ad196f8e6da109c65efff82d1153238904538916e64b3a9"
+      },
+      {
+        "path": "assets/generated/hearthwood/village-scenery-v2.prompt.txt",
+        "sha256": "d606a49a9c7de7d4fa17f4891afa3fd8edbe8f8e60a441da743a3cc7cb2702ae"
+      }
+    ],
+    "geometry": "Existing world/colliders unchanged; outdoor camera fit width/640, height/400. Scenery 2 native px/world unit; 48x64 actors at 2/3 scale. Ground backing 3840x2560 for existing 1920x1280 world.",
+    "animation": "Four directions, idle/step A/idle/step B. Generated bottom row clipped and excluded. IDs 0/1/2 use original generated player/Lia/Noah; IDs 3/4/5 use explicitly recorded sky/silver/sun palette derivatives."
   }
 }

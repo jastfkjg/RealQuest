@@ -510,7 +510,7 @@ export default function App() {
                     onClick={() => open("character")}
                   >
                     <div className="hud-portrait">
-                      <PixelPerson variant={state.character.appearance} />
+                      <PixelPerson variant={state.character.appearance} portrait />
                       <span
                         aria-label={`等级 ${1 + Math.floor(state.xp / 100)}`}
                       >
@@ -614,7 +614,7 @@ export default function App() {
                   >
                     {target === "character" ? (
                       <span className="hud-menu-portrait">
-                        <PixelPerson variant={state.character?.appearance} />
+                        <PixelPerson variant={state.character?.appearance} portrait />
                       </span>
                     ) : (
                       <HudIcon

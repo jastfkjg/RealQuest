@@ -51,7 +51,25 @@ for entry in manifest.get('generated_runtime_assets', []):
         assert source_image.convert('RGBA').tobytes() == runtime_image.convert('RGBA').tobytes(), runtime
     with Image.open(source) as image:
         assert image.size == (entry['width'], entry['height']) and image.mode == entry['mode'], source
-for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', []) + manifest.get('original_item_assets', [])]:
+village_entries = []
+if manifest.get('village_art'):
+    record = manifest['village_art']
+    village = json.loads((ROOT / record['manifest']).read_text())
+    assert hashlib.sha256((ROOT / village['rebuild']).read_bytes()).hexdigest() == village['rebuild_sha256']
+    for entry in village['records']:
+        path = ROOT / entry['path']
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], path
+        assert hashlib.sha256((ROOT / entry['source']).read_bytes()).hexdigest() == entry['source_sha256'], path
+        with Image.open(path) as image:
+            assert image.size == (entry['width'],entry['height']), path
+            if entry['id'].startswith('actor-'):
+                assert image.size == (192,256)
+                for col in range(4):
+                    poses = [image.crop((col*48,row*64,col*48+48,row*64+64)) for row in range(4)]
+                    assert all(p.getbbox() and p.getbbox()[3] < 64 for p in poses), path
+                    assert poses[1].tobytes() != poses[3].tobytes(), path
+        village_entries.append(path)
+for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', []) + manifest.get('original_item_assets', [])] + village_entries:
     with Image.open(path) as source:
         rgba = source.convert('RGBA')
         rows.append({

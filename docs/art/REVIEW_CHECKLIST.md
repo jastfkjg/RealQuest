@@ -1,5 +1,18 @@
 # Hearthwood Review Checklist
 
+## Fine pixel village — 2026-10-15
+
+Status: approved concept implemented; actual owner render acceptance pending.
+
+- [x] Current outdoor village uses original fine scenery, independent depth layers,48×64 actors, real four-direction walking, consistent HUD/dialogue identities, reduced flower density and fine soil. Existing map/collision/anchors/IDs and server mutations preserved.
+- [x] Roof hit bounds and NPC approach spacing match the new presentation; canopy occlusion remains legible. All four entrances/exits, bridge route, keyboard/input ownership, save reload, six appearances, five viewports and DPR2 emulated touch checked in the actual production build.
+- [x]21-capture feature suite, existing play-mode regression, actual planting rejection/pending/lost-response retry, game skill frame client, TypeScript/Vite build and108 backend tests pass. Unexpected feature-console errors: zero. Final screenshots/contact sheets opened and inspected.
+- [x] Three original built-in generated source sheets, exact prompts, reviewed cuts/complete walk poses, explicit palette derivatives and48 runtime PNGs recorded.88-image audit verifies prior files and new source/runtime hashes; code-native ground/soil and rebuild hashes included. No vendor pack/font/audio change.
+- [x] Task automation browsers/runners closed in finally; old DEV service stopped. Fixed preview5211 and isolated API8043 retained for owner review, with process/HTTP verification at handoff.
+- [ ] Physical Safari/devices, native browser-menu zoom, long-session memory/performance, complete accessibility audit and actual owner render acceptance remain unverified. Interior backgrounds and new upgrade facades remain outside scope.
+
+Exact files, commands, source/prompt/manifest links, screenshots, compatibility test disclosure and cleanup: [task18](../tasks/18-village-fine-art.md).
+
 ## Active commission contract — 2026-10-14
 
 - [x] Second approved preview implemented for Noah active/ready state: curled parchment, live sand hourglass, status ribbon, pending reward seal and matching dialogue; waiting closes, deadline enables the real settlement action.

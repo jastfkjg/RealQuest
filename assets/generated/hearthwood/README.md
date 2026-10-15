@@ -1,5 +1,11 @@
 # Inventory satchel material
 
+## Fine village sources, 2026-10-15
+
+`village-{scenery,actors,details}-v2.png` are immutable original built-in image_gen sheets based on the owner-approved fine-village reference. Adjacent `.prompt.txt` files contain the exact prompts. They are processed by `tools/build_village_art.py` (Python/Pillow) into48 runtime sprites/portraits. Processing is explicit alpha threshold, measured cropping, nearest-neighbor native sizing and three documented outfit palette ramps. Unlike the UI shells below, these are deliberately processed derivatives, not lossless copies of their source sheet.
+
+`village-actors-v2.layout.json` records the reviewed four directions and two complete walking poses. The clipped generated bottom row is excluded; the actual loop is idle/stepA/idle/stepB. Source and runtime dimensions/hashes, cuts, palette choices and rebuild hash are in `docs/art/village-art-v2.json`; task18 records actual browser evidence. Original vendor assets remain untouched; no new pack/font/audio.
+
 Original generated RealQuest UI decoration, produced with the built-in `image_gen` tool on 2026-10-10 from the owner-approved concept in `docs/art/references/inventory-satchel-concept.png`. The exact generation prompt is `satchel-shell-v1.prompt.txt`. No external asset pack was acquired. The concept's background is illustrative, not a world asset.
 
 The immutable PNG is 1254×1254 RGBA. It has no text or interactive content. `tools/build_inventory_skin.py` losslessly encodes the runtime WebP and verifies exact decoded RGBA equality; it does not edit or resize the art. Rebuild with Python + Pillow/WebP, then run `tools/audit_inventory_assets.py`. Both tools resolve paths relative to the repository.

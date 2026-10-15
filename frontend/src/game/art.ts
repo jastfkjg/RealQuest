@@ -190,11 +190,21 @@ export function objectArt(g: G, obj: WorldObject, state: any, now: number) {
     box(g, 0x748275, x + 6, y - 7, 9, 8);
     box(g, 0x9dbfc0, x - 8, y - 10, 5, 4);
   } else if (obj.kind === "plot") {
-    box(g, 0x80613c, x - 21, y - 18, 42, 37);
-    box(g, 0xa47a47, x - 19, y - 17, 38, 34);
-    for (let yy = y - 13; yy < y + 14; yy += 7) {
-      box(g, 0x775232, x - 17, yy, 34, 3);
-      box(g, 0xc19253, x - 16, yy + 3, 30, 1);
+    // Fine soil and broken edges share the village's small-pixel density.
+    // Crop state below remains authoritative; decorative seeds are never added.
+    box(g, 0x756143, x - 21, y - 17, 42, 35);
+    box(g, 0x99764e, x - 20, y - 16, 40, 33);
+    box(g, 0xad8b5c, x - 19, y - 17, 38, 1);
+    box(g, 0x6d593e, x - 19, y + 17, 38, 1);
+    for (let yy = y - 13; yy < y + 14; yy += 6) {
+      box(g, 0x795d3d, x - 16, yy, 32, 2);
+      box(g, 0x886740, x - 17, yy + 1, 34, 1);
+      box(g, 0xb38d5d, x - 15, yy + 3, 30, 1);
+    }
+    for (let i = 0; i < 37; i++) {
+      const xx = x - 17 + ((i * 13 + x) % 34);
+      const yy = y - 14 + ((i * 11 + y) % 29);
+      box(g, i % 3 ? 0xa38153 : 0xc2a276, xx, yy, 1, 1);
     }
     const crop = state.plots[obj.id];
     if (crop) {

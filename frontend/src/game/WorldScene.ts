@@ -3,7 +3,15 @@ import { serverNow, useGame } from "../stores/game";
 import type { MapData, WorldObject } from "../types";
 import { box, objectArt, room } from "./art";
 import { cottageRoom, hearthAmbient, homeObjectResponse } from "./hearthwood";
-import { preloadVillage, village, updateVillageBuilding } from "./village";
+import {
+  preloadVillage,
+  village,
+  updateVillageBuilding,
+  hasVillageObjectArt,
+  updateVillageObjects,
+  updateVillageCanopies,
+  ACTOR_FRAME,
+} from "./village";
 import { chime, personFrame, unlockSound, usePreferences } from "./feel";
 import { hitObject, interactionFor, INTERACTION_RADIUS } from "./interaction";
 import {
@@ -85,9 +93,9 @@ export class WorldScene extends Phaser.Scene {
           .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
           .setDepth(obj.y - 1);
         const sprite = this.add
-          .sprite(obj.x, obj.y, `villager-${obj.id === "lia" ? 0 : 2}`, 0)
+          .sprite(obj.x, obj.y, `villager-${obj.id}`, 0)
           .setOrigin(0.5, 1)
-          .setScale(2)
+          .setScale(ACTOR_FRAME.scale)
           .setDepth(obj.y);
         this.npcs.push({ obj, sprite, direction: 0 });
       } else {
@@ -121,7 +129,7 @@ export class WorldScene extends Phaser.Scene {
         0,
       )
       .setOrigin(0.5, 1)
-      .setScale(2);
+      .setScale(ACTOR_FRAME.scale);
     this.synced = { ...state.position };
     this.keys = this.input.keyboard!.addKeys(
       "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,I,C,L,SHIFT",
@@ -146,7 +154,7 @@ export class WorldScene extends Phaser.Scene {
     ]);
     this.cameras.main.setBackgroundColor(
       state.location === "overworld"
-        ? "#559653"
+        ? "#78955e"
         : state.location === "home"
           ? "#27352d"
           : "#3c3930",
@@ -228,6 +236,24 @@ export class WorldScene extends Phaser.Scene {
       let destination = obj
         ? { x: obj.x, y: obj.y }
         : { x: pointer.worldX, y: pointer.worldY };
+      if (obj?.kind === "npc") {
+        // Stop beside a person, keeping both silhouettes visible in conversation.
+        const distance = Phaser.Math.Distance.Between(
+          this.player.x,
+          this.player.y,
+          obj.x,
+          obj.y,
+        );
+        const approach = {
+          x: obj.x + ((this.player.x - obj.x) / distance) * 42,
+          y: obj.y + ((this.player.y - obj.y) / distance) * 42,
+        };
+        if (
+          walkable(this.map, approach.x, approach.y) &&
+          pathfind(this.map, this.player, approach).length
+        )
+          destination = approach;
+      }
       if (obj && !walkable(this.map, destination.x, destination.y)) {
         const approaches: { x: number; y: number }[] = [];
         for (let dx = -64; dx <= 64; dx += 16)
@@ -308,9 +334,10 @@ export class WorldScene extends Phaser.Scene {
     const fit = Math.min(width / 480, height / 368);
     const outdoor = this.map.id === "overworld";
     const home = this.map.id === "home";
-    // Half-world zoom steps yield integer CSS source pixels (art is 2×).
+    // Review a useful amount of village around the refined actors. DPR never
+    // controls zoom; scenery has two native art pixels per world unit.
     const zoom = outdoor
-      ? Math.max(1.5, Math.floor(Math.min(width / 560, height / 340) * 2) / 2)
+      ? Math.max(1.5, Math.floor(Math.min(width / 640, height / 400) * 2) / 2)
       : home
         ? Math.max(
             1.5,
@@ -353,7 +380,16 @@ export class WorldScene extends Phaser.Scene {
   };
   objectAt(x: number, y: number) {
     return this.map.objects
-      .filter((o) => hitObject(o, x, y))
+      .filter((o) => {
+        if (this.map.id === "overworld" && o.kind === "building") {
+          const facade = this.children.list.find(
+            (c) => c.getData("building") === o.id,
+          );
+          if (facade instanceof Phaser.GameObjects.Image)
+            return facade.getBounds().contains(x, y);
+        }
+        return hitObject(o, x, y);
+      })
       .sort(
         (a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y),
       )[0];
@@ -698,11 +734,16 @@ export class WorldScene extends Phaser.Scene {
       now = serverNow();
     if (this.response && this.response.until < this.elapsed)
       this.response = null;
+    if (this.map.id === "overworld") {
+      updateVillageObjects(this, state, now);
+      updateVillageCanopies(this, this.player.x, this.player.y);
+    }
     for (const obj of this.map.objects) {
       const layer = this.objectLayers.get(obj.id);
       if (layer) {
         layer.clear();
-        objectArt(layer, obj, state, now);
+        if (this.map.id !== "overworld" || !hasVillageObjectArt(obj))
+          objectArt(layer, obj, state, now);
         if (this.map.id === "home" || obj.id === "home")
           homeObjectResponse(
             layer,
@@ -728,11 +769,13 @@ export class WorldScene extends Phaser.Scene {
     this.cameras.main.setLerp(this.reduced ? 1 : 0.12, this.reduced ? 1 : 0.12);
     this.water.clear();
     if (this.map.id === "overworld") {
-      this.water.lineStyle(1, 0xb1d5bf, 0.6);
+      this.water.lineStyle(1, 0x9dc9bd, 0.5);
       for (let i = 0; i < 50; i++) {
-        const y = (i * 29 + (this.reduced ? 0 : this.elapsed / 170)) % 1280;
+        const y = Math.floor(
+          (i * 29 + (this.reduced ? 0 : this.elapsed / 170)) % 1280,
+        );
         if ((y < 310 || y > 398) && (y < 862 || y > 950))
-          this.water.lineBetween(458 + (i % 3) * 12, y, 472 + (i % 3) * 12, y);
+          this.water.lineBetween(458 + (i % 3) * 12, y, 462 + (i % 3) * 12, y);
       }
       for (let i = 0; i < 12; i++) {
         const y = 878 + i * 12;
@@ -744,7 +787,7 @@ export class WorldScene extends Phaser.Scene {
       for (const obj of this.map.objects.filter((o) => o.kind === "building")) {
         // Retain the existing level marker; no new upgrade states in this pass.
         updateVillageBuilding(this, obj, state.buildings[obj.id] || 1);
-        if (!this.reduced) {
+        if (!this.reduced && obj.id === "home") {
           const [x, y, w] = obj.rect!;
           for (let i = 0; i < 3; i++) {
             const drift = (this.elapsed / 80 + i * 13) % 42;
@@ -755,8 +798,8 @@ export class WorldScene extends Phaser.Scene {
                   Math.sin(drift / 10) * 4,
               ),
               Math.round((obj.id === "home" ? 80 : y - 18) - drift),
-              6 + i * 2,
-              6 + i * 2,
+              2 + i,
+              2 + i,
             );
           }
         }
@@ -822,7 +865,7 @@ export class WorldScene extends Phaser.Scene {
       )
         continue;
       const x = obj.x,
-        y = obj.y - (obj.kind === "npc" ? 66 : 48),
+        y = obj.y - (obj.kind === "npc" ? 49 : 48),
         ready = q.some((q) => q.status === "ready");
       box(this.marker, 0x66482f, x - 7, y - 12, 14, 18);
       box(this.marker, ready ? 0x92b365 : 0xf1c671, x - 6, y - 13, 12, 16);

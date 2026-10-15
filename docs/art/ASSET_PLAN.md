@@ -1,5 +1,15 @@
 # RealQuest Asset Plan and Provenance
 
+## Fine pixel village — 2026-10-15
+
+The owner approved `references/village-fine-concept-v1.png` and requested the existing village at that fidelity with fewer flowers/grass. Three original transparent sheets were generated using built-in `image_gen`: `assets/generated/hearthwood/village-{scenery,actors,details}-v2.png`; exact prompts are adjacent. They remain source files outside the runtime bundle. No new third-party pack, font or audio was acquired, and all previous vendor/runtime image bytes remain unchanged.
+
+`tools/build_village_art.py` measures/trims reviewed cells, thresholds alpha at160 and uses nearest-neighbor normalization. It produces48 runtime PNGs (1,470,001 bytes total) in `frontend/public/assets/hearthwood/village/`. Scenery has two native art pixels per world unit. Actors use48×64 frames at2/3 scale, maintaining a36-world-unit visible body. Four directions use idle/stepA/idle/stepB: the generator's cropped bottom row is explicitly excluded. Three extra saved appearance IDs use documented sky/silver/sun palette derivatives; IDs and player data are unchanged. Separate full-body and head/shoulder crops keep dialogue/HUD identities consistent.
+
+The source sheets are1254×1254 RGBA (1,788,196 bytes),2172×724 RGBA (1,620,642 bytes) and1774×887 RGBA (984,231 bytes), respectively. Exact source/runtime hashes, crop rectangles, alpha bounds, dimensions, processing and rebuild-script hash live in `village-art-v2.json`, linked from `asset-manifest.json`. Existing source/hash checks plus all48 new runtime entries are covered by `tools/audit_inventory_assets.py`.
+
+Ground uses original deterministic canvas composition, with a3840×2560 backing for the existing1920×1280 world. Paths, collision, door/resource anchors and saves remain authoritative. A few white flower clumps, grass clustered near verges/trees and bank stones replace indiscriminate planting. Scenery/actors remain independent depth-sorted objects; canopies fade when they cover the player. Actual render acceptance remains pending; see task18 for browser evidence and limitations.
+
 ## Active commission contract — 2026-10-14
 
 The owner approved `references/commission-contract-concept-v1.png` to replace Noah's active-task data blocks with a signed scroll and hourglass. Two new original textless assets were produced using built-in `image_gen`: a blank curled parchment and an empty hourglass frame with transparent surroundings/glass. Sources/prompts are `assets/generated/hearthwood/commission-{scroll,hourglass}-v1.{png,prompt.txt}`. Lossless WebP packaging through `tools/build_inventory_skin.py` asserts RGBA equality; no source edit, resampling, external pack, font or audio. Runtime additions total 2,605,194 bytes. Exact dimensions, hashes, alpha bounds and source/runtime paths are in the manifest.

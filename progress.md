@@ -1,5 +1,12 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-15 Fine pixel village
+
+- Owner approved the fine-pixel concept and authorized the current village, with fewer flowers/grass. Scope and plan: `docs/tasks/18-village-fine-art.md`. Preserve the pre-existing `backend/realquest.db-wal` modification; no player-data edits.
+- Implemented independent fine scenery/terrain, 48×64 directional actors, consistent HUD/dialogue portraits, lighter frames, sparse flowers and finer field soil. Roof hit bounds and NPC auto-approach refined; geometry, IDs and server transitions retained. Three original generated sheets/prompts, reviewed cuts/palette ramps and 48 runtime images (1.47 MB) recorded.
+- Final fixed-build village suite passes 21 captures with zero unexpected errors: real bridge/NPC route, all four buildings, walking poses, canopy, five viewports, DPR2 touch, modes and reload. Build, 108 backend tests, production play-mode, arrival/IME, current inventory compatibility copy and real mutation retry, skill frame client and 88-image audit pass. Actual images inspected. The legacy unmodified inventory form selector is obsolete and is not reported as passing.
+- Fixed preview 5211 (node89454) and isolated API8043 (85957) retained for owner review. Old DEV Vite85993/npm85970 and owned test browsers/runners exited; shared unattributable hosts preserved. No commit/push/deploy or user-save edit. Actual render acceptance, physical devices/native zoom and long mobile memory/performance remain pending; task18 contains evidence and service details.
+
 ## 2026-10-14 Active commission contract
 
 - Owner approved the second preview, asking for a signed-scroll/hourglass active state rather than data blocks. Plan: `docs/tasks/16-commission-contract.md`. Prior board implementation changes remain uncommitted and preserved.

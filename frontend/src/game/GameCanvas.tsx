@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import { unlockSound } from "./feel";
 import { WorldScene } from "./WorldScene";
+import { ACTOR_FRAME } from "./village";
 import { interactionFor } from "./interaction";
 import { staminaNow } from "./stamina";
 import { accessibleTarget } from "./navigation";
@@ -89,6 +90,17 @@ export function GameCanvas() {
         frame: instance.player?.frame.name,
         appearance: s.state?.character?.appearance,
         playerTexture: instance.player?.texture.key,
+        art: {
+          family: "hearthwood-village-v2",
+          actorFrame: [
+            instance.player?.frame.width,
+            instance.player?.frame.height,
+          ],
+          actorScale: instance.player?.scaleX,
+          nativeActorPixelCSS:
+            ACTOR_FRAME.scale * (instance.cameras.main?.zoom || 1),
+          visibleActorHeight: ACTOR_FRAME.visibleHeight,
+        },
         npcs: instance.npcs.map((n) => ({
           id: n.obj.id,
           x: n.sprite.x,
@@ -108,7 +120,8 @@ export function GameCanvas() {
               viewY: instance.cameras.main.worldView.y,
               width: instance.cameras.main.worldView.width,
               height: instance.cameras.main.worldView.height,
-              playerPixels: 32 * instance.cameras.main.zoom,
+              playerPixels:
+                ACTOR_FRAME.visibleHeight * instance.cameras.main.zoom,
             }
           : null,
         quests: s.state?.quest_log,
