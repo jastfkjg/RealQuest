@@ -70,6 +70,12 @@ export function CharacterPanel() {
         skill_points: state.skill_points || 0,
       }}
       options={state.character_growth_options}
+      journal={state.life_journal}
+      onOpenJournal={() => useGame.getState().open("activity")}
+      onLocateNoah={() => {
+        useGame.getState().open(null);
+        useGame.getState().navigate({ mapId: "overworld", targetId: "noah" });
+      }}
       busy={busy || syncing}
       error={error}
       result={result}

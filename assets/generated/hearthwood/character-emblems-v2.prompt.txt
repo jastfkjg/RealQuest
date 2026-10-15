@@ -1,0 +1,9 @@
+Use case: precise-object-edit. Transform the approved RealQuest dossier concept image into a PRODUCTION ART SPRITE SHEET, extracting and refining only its five ability illustrations. This is NOT a UI screenshot. Preserve their quiet hand-painted woodland field-guide style, moss green leaves, soft colored ink outlines, warm timber, restrained purple crystal, translucent teal flask, on genuinely transparent background.
+One landscape 3-column by 2-row sheet with SIX equal square cells, generous empty padding; no grid lines. Exactly five complete isolated emblems and one completely EMPTY cell:
+top-left SCIENCE: small teal glass flask beside a small open naturalist notebook, illegible blank pages, a few leaves;
+top-center MAGIC: slender gnarled wooden wand diagonally alongside a modest violet crystal and tiny botanical sprig;
+top-right PLANTING: young three-leaf green seedling rooted in a small mound of soil, fine soft root/pebble details;
+bottom-left RANCHING: warm brown hen in profile with a few straw stems;
+bottom-center BUILDING: modest wooden mallet leaned against two short cut timber pieces;
+bottom-right: fully transparent EMPTY.
+Each illustration centered in its own equal cell, maximum 65 percent cell width/height, fully visible, never touching cell edges. Native finely detailed painted pixel-compatible game UI objects, matching reference but NOT coarse giant pixels and NOT 3D/photoreal. Clear small silhouettes, minimal foliage. NO circular frame, NO outer ring, NO badges, NO checkmarks, NO letters, NO Chinese text, NO numerals, NO captions, NO background paper, NO interface controls, NO shadows outside objects. All objects separated by ample genuine transparency. The circles, labels, levels, selection and controls will be rendered in code, do not include them in this art.

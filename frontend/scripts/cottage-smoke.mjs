@@ -1,8 +1,8 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-const base = process.env.REALQUEST_URL || "http://127.0.0.1:5197";
-const out = new URL("../../output/cottage-prototype/", import.meta.url);
+const base = process.env.REALQUEST_URL || "http://127.0.0.1:5211";
+const out = new URL("../../output/hud-interiors/cottage/", import.meta.url);
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const errors = [],
@@ -45,6 +45,34 @@ async function object(p, id, touch = false) {
   const s = await read(p),
     o = s.objects.find((o) => o.id === id);
   assert.ok(o, id);
+  if (o.kind === "building" && s.nearest?.id === id) {
+    if (touch) await p.locator(".interact").tap();
+    else await p.locator(".interact").click();
+    return;
+  }
+  if (id === "wood_1") {
+    await point(p, o.x, o.y - 40, touch);
+    await until(
+      p,
+      (s) => !s.walking.length && s.nearest?.id === id,
+      "wood approach",
+    );
+    await p.keyboard.press("e");
+    return;
+  }
+
+  if (o.kind === "exit") {
+    await point(p, 240, 280, touch);
+    await until(
+      p,
+      (s) => !s.walking.length && s.nearest?.kind === "exit",
+      "door approach",
+    );
+    if (touch) await p.locator(".interact").tap();
+    else await p.keyboard.press("e");
+    return;
+  }
+
   const x = o.hitbox ? o.hitbox[0] + o.hitbox[2] / 2 : o.x;
   const y = o.hitbox
     ? o.hitbox[1] + o.hitbox[3] / 2
@@ -319,7 +347,11 @@ try {
   await m.keyboard.up("ArrowRight");
   assert.ok((await read(m)).player.x > 70, "can leave wall without trapping");
   await point(m, 240, 264, true);
-  await until(m, s => s.walking.length === 0 && s.nearest?.id === "home_exit", "walk to doorway on touch");
+  await until(
+    m,
+    (s) => s.walking.length === 0 && s.nearest?.id === "home_exit",
+    "walk to doorway on touch",
+  );
   await m.locator(".interact").tap();
   await until(
     m,

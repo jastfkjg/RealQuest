@@ -780,7 +780,7 @@ a:focus-visible,
   transition: none !important;
 }
 .item-icon {
-  background: transparent url("/assets/hearthwood/items/wood.png")
+  background: transparent url("/assets/hearthwood/detail/items/wood.png")
     center/contain no-repeat;
   border: 0;
   border-radius: 0;
@@ -789,16 +789,16 @@ a:focus-visible,
   image-rendering: pixelated;
 }
 .item-icon.stone {
-  background-image: url("/assets/ninja-adventure/icons/stone.png");
+  background-image: url("/assets/hearthwood/detail/items/stone.png");
 }
 .item-icon.seed {
-  background-image: url("/assets/hearthwood/items/seed.png");
+  background-image: url("/assets/hearthwood/detail/items/seed.png");
 }
 .item-icon.crop {
-  background-image: url("/assets/ninja-adventure/icons/crop.png");
+  background-image: url("/assets/hearthwood/detail/items/crop.png");
 }
 .item-icon.plank {
-  background-image: url("/assets/ninja-adventure/icons/plank.png");
+  background-image: url("/assets/hearthwood/detail/items/plank.png");
 }
 .playing .quick-inventory .item-icon {
   width: 28px;
@@ -822,7 +822,7 @@ a:focus-visible,
   background-repeat: no-repeat;
 }
 .item-icon.gold {
-  background-image: url("/assets/ninja-adventure/icons/gold.png");
+  background-image: url("/assets/hearthwood/detail/items/gold.png");
 }
 .playing .quick-inventory .item-icon {
   width: 32px;

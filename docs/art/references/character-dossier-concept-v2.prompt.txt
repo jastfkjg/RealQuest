@@ -1,0 +1,30 @@
+Use case: ui-mockup
+Asset type: One high-fidelity desktop UI redesign preview for RealQuest's adventurer profile, in Simplified Chinese.
+Input image: the attached screenshot is the EDIT TARGET and source for the existing moss-cloth folder, cream paper, brass corner fittings, color family, and red-haired player identity.
+Primary request: Redesign the INSIDE layout completely so this feels like a personal adventurer's field dossier with tangible abilities, not a spreadsheet or administrative form. Keep the original cozy Hearthwood identity and the functional screen scope. Produce ONE clean straight-on full-screen UI image, landscape about 4:3, all screen edges visible. No device, perspective, comparison, callouts or presentation border.
+
+Visual direction: exquisitely restrained woodland RPG interface, warm pale linen, moss green #3F6348, ink #27392F, small dull brass accents #D3A450, muted terracotta health bar. Fine crisp illustrated objects and clean native-looking Chinese text. Existing outer moss cloth folder and brass fittings remain recognizable but frame is quieter. Light paper grain only, strong text legibility. Typography: small serif section titles, clean sans-serif body. Plenty of breathing room without huge blank areas. This is a polished plausible application screen.
+
+Composition at a conceptual 1440x1080:
+A calm full-width header at top, title "冒险者档案", tiny secondary label "视觉提案 · 未实现" and a clear close X at far right.
+Below, a narrow identity column on the left (~27%) separated by one subtle paper crease from the main growth area (~73%). This is NOT three panels of tables.
+
+LEFT COLUMN:
+An intimate pinned field portrait / small woodland vignette on pale green paper featuring the SAME recognizable red-haired adventurer from the input, modest natural sprite size (~80–100px tall), never a giant blurred sprite, no new outfit, equipment, pet or trophy. The woodland background is ambient scenery, not an earned asset. Below: prominent player name "唤醒者", subtitle "回响大陆 · 林间旅行装".
+Two compact stacked resource displays with icon, readable label, exact numbers, thin full meter, and a small clear action "提升": "生命值" and "100 / 100"; "体力值" and "100 / 100". These should feel like annotated character status, not form fields. Quiet rounded counter below: heart icon and "健康点 0". Bottom note "提升上限消耗健康点".
+Keep this column useful and elegant, not dominated by an enormous avatar.
+
+MAIN GROWTH AREA:
+First section header "知识研修", aligned right a compact book-token counter "知识点 0".
+Two generous clickable illustrated medallions spread horizontally across the section, with delicate circular engraved outlines on the bare linen, not boxed cards. First a colored fine illustrated glass flask and open notebook, text below "科学", then "Lv.0". Second a small wand and soft violet crystal, text "魔法", then "Lv.0". Simple confident silhouettes, modest detail, no glow effects. Do NOT repeat upgrade cost in each medallion.
+Subtle separator.
+Second section header "生活技能", aligned right a compact sprout-token counter "技能点 0".
+Three evenly spaced illustrated medallions: sprout/soil ("种植", "Lv.0"), small hen ("养殖", "Lv.0"), wooden mallet/tool ("建造", "Lv.0"). All five abilities are equally legible and clickable. Planting is the selected ability, with a restrained moss-green circular double outline and a tiny visible check marker plus text "已选择". Other medallions remain light. Do not add branching trees, XP bars, stars, locked abilities, tiers, or implied earned achievements.
+
+CONTEXTUAL GROWTH NOTE:
+Under the abilities, one wide tactile inserted paper slip with a quiet green edge, the only rectangular detail surface. A modest seedling illustration at the left echoes the selected medallion. To its right a strong heading "种植" and readable progression "Lv.0 → Lv.1". Below, one compact plain text line "需要 1 技能点 · 当前 0". A useful status line "再积累 1 技能点，就能提升等级".
+A clear moss primary button on the right/lower-right reads "查看工作委托 →". This is a proposed navigation affordance to browse existing commissions, never a teleport. A brief explanatory line "完成诺亚的工作委托，结算后获得技能点。".
+At the bottom of this slip, a small but legible factual note "升级保存技能等级；技能加成尚未开放。". Do not show a dominant disabled purchase button. This mockup depicts zero balance so there is no enabled spending action.
+Footer across main paper: small info icon and "选择能力查看详情，确认升级后才扣点。"
+
+Constraints: The exact starter values from input remain truthful: health100/100 stamina100/100, science/magic/planting/ranching/building all Lv.0, health/knowledge/skill points all0. No fake extra currency, EXP, achievements, possessions, skill effects, powers, percentages or history. Reduce repeated labels, dividers and rectangular boxes. No rows of name-level-price-chevron. No dashboard grid or form inputs. Don't add nav tabs that are not used. All Chinese text correct and readable. The screenshot should show a thoughtfully composed single screen with an obvious selected ability and useful next step. Richness comes from composition and purposeful ability emblems, not heavy decoration.

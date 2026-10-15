@@ -1,0 +1,24 @@
+Use case: stylized-concept. Production 2D pixel RPG INTERIOR FURNITURE atlas, original assets on a genuinely TRANSPARENT background.
+The attached original fine-village scenery sheet and village screen are STYLE references only. Match their finely detailed warm timber, cream linen and plaster, moss cloth, blue-green glass, warm brass and colored dark outlines. Sharp small pixel clusters, hand-authored fine pixel art, no blur, painterly smearing, giant source pixels, 3D render or black cartoon outline.
+Layout: one large square atlas, target2048×2048, EXACTLY4 equal columns and4 equal rows,16 separate objects in regular cells with transparent gutters. All fully visible inside their own cell. No lettering, numbers, UI, people, scenery background, floor platforms or ground shadows. Room perspective is orthographic top-down RPG with FRONT furniture elevations and visible top surfaces; never rotated isometric footprints. Front edges are horizontal. Furniture must be readable at small in-game sizes.
+ROW1 left to right:
+1 a WIDE WALL NOTICE BOARD, horizontal warm timber frame,3 blank pinned cream papers, tiny brass tacks, fine wood grain, no legs, about3:1 width/height.
+2 a WIDE WOOD BOOKCASE with two shelves of small moss/blue/ochre book spines, tiny folded linen and ceramic jug, about2:1 width/height, broad solid base, no text.
+3 a WIDE CRAFT WORKBENCH with timber top, one small hammer, one plank and rolled blank plan, three fine tabletop planks, sturdy front legs, about3:1 width/height.
+4 a READING TABLE with warm timber top and front legs, small open cream book on RIGHT, plain moss closed manual on LEFT, tiny ceramic mug, about2.5:1 width/height.
+ROW2 left to right:
+1 a single WOOD BED, headboard on top, pillow, cream linen sheet and moss woven blanket with restrained border, footboard below, overall slightly taller than wide, bed fully visible from top/front.
+2 a low STONE FIREPLACE, fine gray-beige blocks and timber mantel, dark fire opening with tiny warm embers, no tall chimney, about1.4:1 width/height.
+3 a small TERRACOTTA PLANTER with layered green leaves, no flowers, about1:1.
+4 one wooden BARREL with steel bands, detailed staves and visible top, about0.8:1.
+ROW3 left to right:
+1 a small gray steel ANVIL on a low wood block, readable horn pointing LEFT, about1.4:1.
+2 a flat top-down WOVEN RUG, moss green field, restrained warm cream geometric border, soft small tassels, rectangular about2:1, no letters.
+3 one wall WINDOW with warm timber frame, four blue-green glass panes, subtle lit glass reflections, short pale linen curtains at sides, about1.15:1.
+4 an OPEN WOOD STORAGE CHEST with lid raised, warm brown timber, brass latch/bands, visibly EMPTY dark interior, front-facing, no coins or possessions, about1.2:1.
+ROW4 left to right:
+1 one small CLOSED MOSS FIELD MANUAL, blank cover with a simple brass leaf emblem, cream page block and small leather strap, top-down, about0.7:1.
+2 one OPEN STUDY BOOK, cream paper, fine spine, tiny bookmark and sparse unreadable decorative lines, top-down, about1.5:1.
+3 one small brass-and-wood WALL LANTERN with warm glass, compact quiet silhouette.
+4 one horizontal repeating WALL MATERIAL PANEL: cream lightly textured plaster above a warm timber wainscot and horizontal lower beam, no end posts, no window, about3:1. It is the only rectangular opaque material tile; keep surrounding cell transparent.
+Keep the regular16-cell order, no overlap, no extra objects, no baked readable text. Favor clear useful furniture shapes over a decorative jumble. All materials should feel like they belong inside the village buildings.

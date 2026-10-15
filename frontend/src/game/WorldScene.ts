@@ -1,8 +1,13 @@
 import Phaser from "phaser";
 import { serverNow, useGame } from "../stores/game";
 import type { MapData, WorldObject } from "../types";
-import { box, objectArt, room } from "./art";
-import { cottageRoom, hearthAmbient, homeObjectResponse } from "./hearthwood";
+import { box, objectArt } from "./art";
+import { homeObjectResponse } from "./hearthwood";
+import {
+  preloadInteriors,
+  fineRoom,
+  updateInteriorPresentation,
+} from "./interiors";
 import {
   preloadVillage,
   village,
@@ -64,6 +69,7 @@ export class WorldScene extends Phaser.Scene {
   }
   preload() {
     preloadVillage(this);
+    preloadInteriors(this);
   }
   create() {
     const { world, state } = useGame.getState();
@@ -82,8 +88,7 @@ export class WorldScene extends Phaser.Scene {
     this.lastXp = state.xp;
     this.lastFootstep = this.elapsed;
     if (state.location === "overworld") village(this, this.map);
-    else if (state.location === "home") cottageRoom(this);
-    else room(this, this.map);
+    else fineRoom(this, this.map);
     this.water = this.add.graphics().setDepth(-800);
     this.smoke = this.add.graphics().setDepth(2000);
     this.marker = this.add.graphics().setDepth(9999);
@@ -93,7 +98,7 @@ export class WorldScene extends Phaser.Scene {
           .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
           .setDepth(obj.y - 1);
         const sprite = this.add
-          .sprite(obj.x, obj.y, `villager-${obj.id}`, 0)
+          .sprite(obj.x, obj.y, `villager-${obj.id === "mira" ? 5 : obj.id}`, 0)
           .setOrigin(0.5, 1)
           .setScale(ACTOR_FRAME.scale)
           .setDepth(obj.y);
@@ -331,21 +336,15 @@ export class WorldScene extends Phaser.Scene {
     if (!this.map) return;
     const width = Number(this.scale.width),
       height = Number(this.scale.height);
-    const fit = Math.min(width / 480, height / 368);
     const outdoor = this.map.id === "overworld";
-    const home = this.map.id === "home";
     // Review a useful amount of village around the refined actors. DPR never
     // controls zoom; scenery has two native art pixels per world unit.
     const zoom = outdoor
       ? Math.max(1.5, Math.floor(Math.min(width / 640, height / 400) * 2) / 2)
-      : home
-        ? Math.max(
-            1.5,
-            Math.floor(Math.min(width / 480, (height - 144) / 368) * 2) / 2,
-          )
-        : fit >= 1
-          ? Math.max(1, Math.floor(fit))
-          : fit;
+      : Math.max(
+          1.5,
+          Math.floor(Math.min(width / 520, (height - 144) / 368) * 2) / 2,
+        );
     this.cameras.main.setZoom(zoom);
     if (outdoor) {
       const offsetX = width < 600 ? 40 : 0;
@@ -355,7 +354,7 @@ export class WorldScene extends Phaser.Scene {
         this.player.x - offsetX,
         this.player.y - offsetY,
       );
-    } else if (home && (width < 720 || height < 560)) {
+    } else if (width < 720 || height < 560) {
       const viewHeight = height / zoom;
       const viewWidth = width / zoom;
       this.cameras.main.setBounds(
@@ -737,14 +736,25 @@ export class WorldScene extends Phaser.Scene {
     if (this.map.id === "overworld") {
       updateVillageObjects(this, state, now);
       updateVillageCanopies(this, this.player.x, this.player.y);
-    }
+    } else
+      updateInteriorPresentation(
+        this,
+        store.panel
+          ? store.selected?.id
+          : this.response?.phase === "accepted"
+            ? this.response.id
+            : undefined,
+      );
     for (const obj of this.map.objects) {
       const layer = this.objectLayers.get(obj.id);
       if (layer) {
         layer.clear();
-        if (this.map.id !== "overworld" || !hasVillageObjectArt(obj))
+        if (
+          (this.map.id !== "overworld" || !hasVillageObjectArt(obj)) &&
+          obj.id !== "guild_board"
+        )
           objectArt(layer, obj, state, now);
-        if (this.map.id === "home" || obj.id === "home")
+        if (this.map.id === "overworld" && obj.id === "home")
           homeObjectResponse(
             layer,
             obj,
@@ -805,8 +815,6 @@ export class WorldScene extends Phaser.Scene {
         }
       }
     }
-    if (this.map.id === "home")
-      hearthAmbient(this.smoke, this.elapsed, this.reduced);
     this.marker.clear();
     const near = this.hovered || store.nearest;
     const highlighted = near && !store.panel;

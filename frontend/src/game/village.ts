@@ -37,6 +37,7 @@ export const ACTOR_FRAME = {
 };
 
 export function preloadVillage(scene: Phaser.Scene) {
+  scene.load.image("village-shop", "/assets/hearthwood/market/shop.png");
   for (const name of scenery)
     scene.load.image(
       `village-${name}`,
@@ -119,6 +120,13 @@ export function village(scene: Phaser.Scene, map: MapData) {
       "building",
       obj.id,
     );
+  }
+  // A quiet sign and supplies connect the new shop to the village path.
+  const shop = map.objects.find((o) => o.id === "shop");
+  if (shop) {
+    sprite(scene, "crates", 904, 690, 676);
+    sprite(scene, "lantern", 758, 690, 676);
+    scene.add.text(958, 404, "杂货铺 ↓", { fontFamily: "sans-serif", fontSize: "11px", color: "#27392f", backgroundColor: "#f4efde", padding: { x: 5, y: 4 } }).setOrigin(0.5).setDepth(405);
   }
   for (const obj of map.objects) {
     if (!["wood", "stone", "board", "chest", "event"].includes(obj.kind))

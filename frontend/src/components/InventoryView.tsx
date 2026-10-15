@@ -103,7 +103,7 @@ export function InventoryWallet({
       <span>
         <img
           className="rq-pixel-art"
-          src="/assets/ninja-adventure/icons/gold.png"
+          src="/assets/hearthwood/detail/items/gold.png"
           width="16"
           height="16"
           alt=""

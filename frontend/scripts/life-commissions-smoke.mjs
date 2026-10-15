@@ -24,10 +24,14 @@ const errors = [],
 let expectedFailure = false;
 const c = await browser.newContext({
   viewport: { width: 1440, height: 900 },
-  recordVideo: {
-    dir: new URL("recordings/", output).pathname,
-    size: { width: 1440, height: 900 },
-  },
+  ...(process.env.REALQUEST_RECORD_VIDEO === "0"
+    ? {}
+    : {
+        recordVideo: {
+          dir: new URL("recordings/", output).pathname,
+          size: { width: 1440, height: 900 },
+        },
+      }),
 });
 const p = await c.newPage();
 p.on("pageerror", (e) => errors.push(e.message));
@@ -122,7 +126,7 @@ async function shot(name) {
           e.getBoundingClientRect().height > 2 &&
           !e.closest('[aria-hidden="true"],button:disabled') &&
           // Image-backed parchment is measured against captured pixels below.
-          !e.closest(".life-contract-scroll,.talk-letter") &&
+          !e.closest(".life-contract-scroll,.talk-letter,.lj-book") &&
           [...e.childNodes].some(
             (n) => n.nodeType === 3 && n.textContent.trim(),
           ),
@@ -165,13 +169,13 @@ async function shot(name) {
     imagePython &&
     (await p
       .locator(
-        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk",
+        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk,.lj-book",
       )
       .count())
   ) {
     const text = await p
       .locator(
-        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk",
+        ".life-contract-conversation,.life-offer,.life-settlement,.noah-talk,.lj-book",
       )
       .evaluate((root) =>
         [...root.querySelectorAll("*")]
@@ -233,7 +237,7 @@ async function shot(name) {
     await fs.mkdir(folder, { recursive: true });
     const hide = await p.addStyleTag({
       content:
-        ":is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *::before,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk) *::after{color:transparent!important;text-shadow:none!important;}",
+        ":is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk,.lj-book) *,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk,.lj-book) *::before,:is(.life-contract-conversation,.life-offer,.life-settlement,.noah-talk,.lj-book) *::after{color:transparent!important;text-shadow:none!important;}",
     });
     try {
       await p.screenshot({
@@ -743,6 +747,9 @@ conn.execute('update players set state=? where id=?',(json.dumps(s),key));conn.c
   );
   console.log(JSON.stringify({ captures: shots.length, errors }));
 } finally {
-  await c.close();
-  await browser.close();
+  try {
+    await c.close();
+  } finally {
+    await browser.close();
+  }
 }

@@ -1,0 +1,16 @@
+Creator: OpenAI built-in image_gen
+Created: 2026-10-15
+Use: textless Hearthwood world-map terrain, with all UI and landmarks added at runtime
+Input references: project-generated world-map-concept-v1.png and village-fine-concept-v1.png
+No third-party source pack, font or paid artwork provided to image generation.
+
+PROMPT
+Use case: stylized-concept.
+Asset type: TEXTLESS runtime terrain illustration for a top-down interactive travel map in a cozy fine-pixel RPG. 1536x1024 landscape, full bleed, absolutely NO user interface, NO text, NO lettering, NO logos, NO icons, NO markers, NO buildings, NO bridges, NO people, NO flags, NO compass, NO parchment frame, NO title, NO labels. The app adds all landmarks and UI separately.
+
+Reference image 1 is the owner-approved proposed full map SCREEN; use its geographic layout and fine-pixel landscape art direction, but remove EVERY overlay, marker, building, bridge, label, frame and panel. Reference image 2 is project-generated approved fine-pixel village style; match its coherent orthographic two-dimensional pixels, mossy forests, warm pale sand paths, stone-edged clear teal water and modest flowers. Do not copy its buildings/people/text. Both references are project-generated; no vendor packs are supplied.
+
+Cartographic geometry must align to a game world 1920x1280, mapping linearly to the entire image. A north-south river centered at x=480 game units, i.e. x=25% width or about384 image px; a narrow, winding stone-banked waterway from top to bottom. River has two clear straight bridge-ready gaps at 27% and 71% image height but NO bridge art. Dense dark evergreen forest in northeastern region x>64%, y<60% with subtle natural mist. Pale rough quarry zone with believable rock ledges and old sandy excavation in southwestern x<23%,y>60%. Small irregular blue lake in southeastern x=62-75%,y=67-85%, with reeds. Settlement terrain left/top and center has restrained clustered broadleaf trees and sunny ground, visually calmer near expected UI markers.
+Thin warm ochre walkable-path ribbons follow these pre-existing game map routes, with organic edges, not harsh straight highway geometry: west home around (13%,22%) to upper river crossing at (25%,27%), then village library around (50%,25%) and guild around (61%,48%); south branch from west cottage toward quarry around (18%,75%), crossing second bridge gap around (25%,71%); center branch toward lake around (67%,72%). The dirt trails are illustrative landscape and must not look like a highlighted navigation route. Crucially leave clear negative-space halos around approximate landmark points at (10%,20%), (17%,25%), (49%,23%), (62%,49%), (72%,29%), (19%,76%), (66%,74%), and player near (23%,29%) so DOM marker labels and sprites remain legible.
+Fine, clean pixel art detail at stable density. Distinct but cohesive terrain: tiny shrubs, small clusters of trees, sparse rocks, small flowers, cobbled banks. No trees blocking paths or site halos. Bright midday light, saturated-but-calm Hearthwood palette sage green/moss #3F6348, deep forest #233D31, linen pale highlights #F4EFDE, sandy paths #c6ae78, teal river/lake #60989E. No photorealism, no isometric perspective, no watercolor/blur, no clutter.
+The final output is an ONLY-TERRAIN image, not a complete map screenshot.

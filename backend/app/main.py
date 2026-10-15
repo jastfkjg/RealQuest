@@ -13,6 +13,7 @@ from .models import Player, Receipt, RecoveryKey, GuestSession
 from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS, life_task_views, character_growth_options, HEALTH_CAPACITY_GAIN
 from .quests import quest_views
 from .world import WORLD
+from .market import market_view
 
 app = FastAPI(title='RealQuest API', version='0.1.0')
 COOKIE = os.getenv('SESSION_COOKIE_NAME', 'realquest_session')
@@ -67,6 +68,7 @@ def snapshot(state, **extra):
     view['life_journal'] = life_task_views(view, now)
     view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': HEALTH_CAPACITY_GAIN}
     view['character_growth_options'] = character_growth_options(view)
+    view['market'] = market_view(view, now)
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)

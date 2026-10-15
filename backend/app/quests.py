@@ -1,7 +1,9 @@
 """Hand-authored quests; progress and rewards are always calculated by rules."""
 QUESTS = [
+    {'id': 'market_neighbor', 'title': '小铺的第一位熟客', 'giver': 'mira', 'giver_name': '杂货铺店主 · 米拉', 'description': '田里的收获、路边的落枝，都有用处。到小铺出售一份物品，挣下自己的第一笔生意钱。', 'objectives': ['进入风铃杂货铺', '向米拉出售 1 份物品'], 'reward': {'gold': 10, 'seed': 2}, 'xp': 10, 'attribute': 'bond', 'requires': None},
+    {'id': 'village_supplier', 'title': '在村里扎下根', 'giver': 'mira', 'giver_name': '杂货铺店主 · 米拉', 'description': '帮邻居们完成三份补给订单，再把自己的小屋修缮到 2 级。下一轮播种会更快成熟。', 'objectives': ['累计交付 3 份小铺订单', '林间小屋升至 2 级'], 'reward': {'gold': 50}, 'xp': 20, 'attribute': 'stewardship', 'requires': 'market_neighbor'},
     {'id': 'settle_in', 'title': '给新生活一个落脚点', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '先认认自己的家，再收集一些修缮用的木材。', 'objectives': ['进入林间小屋', '采集 3 份木材'], 'reward': {'gold': 12, 'seed': 3}, 'xp': 10, 'attribute': 'stewardship', 'requires': None},
-    {'id': 'first_harvest', 'title': '土地的第一份回礼', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '种下一份期待。收获后，到工坊柜台出售一份萝卜。', 'objectives': ['收获 2 份萝卜', '在工坊出售 1 份萝卜'], 'reward': {'gold': 25}, 'xp': 15, 'attribute': 'stewardship', 'requires': 'settle_in'},
+    {'id': 'first_harvest', 'title': '土地的第一份回礼', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '种下一份期待。收获后，到风铃杂货铺或工坊柜台出售一份萝卜。', 'objectives': ['收获 2 份萝卜', '出售 1 份萝卜'], 'reward': {'gold': 25}, 'xp': 15, 'attribute': 'stewardship', 'requires': 'settle_in'},
     {'id': 'forest_path', 'title': '沿着风去森林', 'giver': 'noah', 'giver_name': '森林向导 · 诺亚', 'description': '沿村道向东，越过古老石桥，找到微光林地。带回 6 份石料。', 'objectives': ['发现微光林地', '采集 6 份石料'], 'reward': {'gold': 25, 'seed': 3}, 'xp': 15, 'attribute': 'strength', 'requires': None},
     {'id': 'rune_research', 'title': '纸页间沉睡的秘密', 'giver': 'lia', 'giver_name': '图书管理员 · 莉亚', 'description': '进入图书馆寻找线索。在现实中积累 25 点学识经验，再解读东侧石门的符文。', 'objectives': ['进入回响图书馆', '积累 25 点学识经验', '唤醒沉睡的符文'], 'reward': {'gold': 30}, 'xp': 20, 'attribute': 'wisdom', 'requires': None},
     {'id': 'craft_home', 'title': '让家园焕然一新', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '到工坊工作台制作木板，并升级任意一座建筑。', 'objectives': ['制作 1 块木板', '任意建筑升至 2 级'], 'reward': {'gold': 20}, 'xp': 20, 'attribute': 'craft', 'requires': 'settle_in'},
@@ -12,6 +14,8 @@ def progress(state, quest_id):
     stats = state.get('stats', {})
     events = state['events']
     return {
+        'market_neighbor': ['visited_shop' in events, stats.get('market_sold', 0) >= 1],
+        'village_supplier': [stats.get('deliveries', 0) >= 3, state['buildings']['home'] >= 2],
         'settle_in': ['visited_home' in events, stats.get('wood', 0) >= 3],
         'first_harvest': [stats.get('harvest', 0) >= 2, stats.get('sold', 0) >= 1],
         'forest_path': ['discovered_grove' in events, stats.get('stone', 0) >= 6],

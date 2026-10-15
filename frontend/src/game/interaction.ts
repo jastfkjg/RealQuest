@@ -19,7 +19,9 @@ export function interactionFor(
     case "exit":
       return { label: "回到户外", command: "exit" };
     case "npc":
-      return { label: "交谈 / 委托", command: "talk", panel: "npc" };
+      return obj.id === "mira"
+        ? { label: "逛小铺 / 村民订单", command: "talk", panel: "shop" }
+        : { label: "交谈 / 委托", command: "talk", panel: "npc" };
     case "board":
       return { label: "查看委托", panel: "board" };
     case "station":
@@ -60,7 +62,7 @@ export function interactionFor(
           seconds > 0
             ? `${seconds} 秒后成熟`
             : !crop && state.inventory.seed < 1
-              ? "需要种子 · 可在工坊购买"
+              ? "需要种子 · 杂货铺或工坊可购买"
               : undefined,
       };
     }

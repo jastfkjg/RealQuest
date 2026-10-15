@@ -37,7 +37,15 @@ export interface GrowthOption {
   next: number;
   expected_invested: number;
 }
+export interface Market {
+  date: string;
+  timezone: string;
+  buy: Record<string, number>;
+  sell: Record<string, number>;
+  orders: { id: string; title: string; item: string; amount: number; gold: number; note: string; completed: boolean }[];
+}
 export interface GameState {
+  market?: Market;
   vitality?: { current: number; max: number };
   skill_growth?: { planting: number; ranching: number; building: number };
   character_growth_options?: Record<GrowthTarget, GrowthOption>;
@@ -127,6 +135,7 @@ export type Panel =
   | "guide"
   | "settings"
   | "ai"
+  | "shop"
   | "building"
   | "npc"
   | null;

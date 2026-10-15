@@ -16,14 +16,19 @@
     "test:character": "node scripts/character-points.mjs",
     "test:arrival": "node scripts/arrival-smoke.mjs && node scripts/arrival-capture.mjs && node scripts/arrival-contrast.mjs",
     "test:dialogs": "node scripts/dialogs-capture.mjs && node scripts/dialogs-interactions.mjs",
+    "test:encounters": "node scripts/encounter-ui.mjs",
     "test:study": "node scripts/study-smoke.mjs && node scripts/study-contrast.mjs",
     "test:journey": "node scripts/journey-smoke.mjs && node scripts/journey-review.mjs",
     "test:cottage": "node scripts/cottage-smoke.mjs",
     "test:village": "node scripts/village-fine.mjs",
+    "test:details": "node scripts/hud-detail.mjs && node scripts/interiors-detail.mjs",
+    "test:details:contrast": "node scripts/hud-detail-contrast.mjs",
     "test:hud": "node scripts/hud-smoke.mjs",
     "test:health": "node scripts/health-smoke.mjs",
     "test:knowledge": "node scripts/knowledge-smoke.mjs",
-    "test:life": "node scripts/life-commissions-smoke.mjs"
+    "test:life": "node scripts/life-commissions-smoke.mjs",
+    "test:life-journal": "node scripts/life-journal-dates.mjs && node scripts/life-journal-smoke.mjs",
+    "test:market": "node scripts/market-smoke.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

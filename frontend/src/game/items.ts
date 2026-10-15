@@ -1,4 +1,4 @@
-// Stable game IDs, audited source icons and original 16px semantic replacements.
+// Stable game IDs; fine64px original item art shares one presentation registry.
 export interface ItemDefinition {
   name: string;
   group: string;
@@ -8,10 +8,7 @@ export interface ItemDefinition {
   use: string;
   icon: string;
 }
-const icon = (id: string) =>
-  ["wood", "seed"].includes(id)
-    ? `/assets/hearthwood/items/${id}.png`
-    : `/assets/ninja-adventure/icons/${id}.png`;
+const icon = (id: string) => `/assets/hearthwood/detail/items/${id}.png`;
 export const itemDefinitions: Record<string, ItemDefinition> = {
   wood: {
     name: "木材",
@@ -36,17 +33,17 @@ export const itemDefinitions: Record<string, ItemDefinition> = {
     group: "种植",
     summary: "在家园农田播种。",
     description: "一小袋萝卜种子。在家门口的农田播下，等待新生活破土而出。",
-    source: "工坊购买 · 收获时留种",
+    source: "杂货铺／工坊购买 · 收获时留种",
     use: "1 种子 → 2 萝卜 + 1 种子",
     icon: icon("seed"),
   },
   crop: {
     name: "萝卜",
     group: "收获",
-    summary: "带到工坊，换取下一袋种子。",
-    description: "刚从泥土中拔出的新鲜萝卜。带去工坊，为下一次冒险换些金币。",
+    summary: "卖给杂货铺，或交付村民的蔬菜订单。",
+    description: "刚从泥土中拔出的新鲜萝卜。带去杂货铺，为下一次冒险换些金币。",
     source: "家园农田 · 成熟后收获",
-    use: "在工坊柜台出售",
+    use: "在杂货铺或工坊出售；也可交付订单",
     icon: icon("crop"),
   },
   plank: {
@@ -55,7 +52,7 @@ export const itemDefinitions: Record<string, ItemDefinition> = {
     summary: "交给工匠，完成制作委托。",
     description: "细心打磨的木板，保留着温暖的木纹。也是完成工匠委托的证明。",
     source: "工坊制作 · 消耗 3 木材",
-    use: "完成制作相关委托",
+    use: "制作委托或在杂货铺出售",
     icon: icon("plank"),
   },
 };

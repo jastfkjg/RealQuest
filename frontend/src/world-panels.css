@@ -1038,6 +1038,7 @@
   right: auto;
 }
 .ha-marker-leader {
+  pointer-events: none;
   position: absolute;
   height: 1px;
   background: var(--rq-control-border);

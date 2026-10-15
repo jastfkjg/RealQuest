@@ -1,5 +1,33 @@
 # RealQuest Asset Plan and Provenance
 
+## World map concept and terrain — 2026-10-15
+
+The owner approved `references/world-map-concept-v1.png` for implementation. The concept remains a non-runtime reference. Built-in `image_gen` produced one original textless 1536×1024 terrain illustration from that project-generated concept and the project-generated fine-village reference. The source and exact prompt are `assets/generated/hearthwood/world-map-terrain-v1.{png,prompt.txt}`; a byte-identical PNG copy is the only new runtime art at `frontend/public/assets/hearthwood/world-map-terrain-v1.png`. No external pack, font, sound or vendor artwork was sent to generation. Exact dimensions and hashes are in `asset-manifest.json`. Existing village building and bridge cuts are reused unchanged. The terrain is illustrative; world geometry, marker positions, discovery, and navigation remain live data.
+
+## Illustrated adventurer dossier — 2026-10-15
+
+Owner approved `references/character-dossier-concept-v2.png` and requested implementation with unchanged data and upgrade rules. Built-in image_gen derived one original textless 1536×1024 RGBA sheet, `assets/generated/hearthwood/character-emblems-v2.png`, from that generated concept. Exact prompt is adjacent. Five 512×512 cells become lossless WebP emblems (1,273,356 total bytes) through `tools/build_character_art.py`; decoded source-crop equality and all hashes are recorded in `character-art-v2.json`. Source is never modified or shipped in the runtime bundle. No font, paid pack, downloaded artwork or dependency was added.
+
+The existing dossier backing, arrival-village vignette and saved actor appearance are reused unchanged. Circles, checkmarks, levels, text and actions remain native DOM/CSS. This artwork illustrates ability categories, not owned items or earned unlocks. Actual implementation is a candidate for owner review; evidence and limits are in `docs/tasks/23-character-dossier.md`.
+
+## Daily growth journal — 2026-10-15
+
+The owner approved `references/life-journal-concept-v1.png` with “可以，按此进行实现”. The concept and exact original prompt are reference-only. Built-in `image_gen` generated one original textless asymmetric journal using that project-owned reference; source and prompt are `assets/generated/hearthwood/life-journal-v1.{png,prompt.txt}`. No vendor asset, font, audio or external pack was acquired or uploaded. The existing commission ledger, hourglass and integer-grid icons are reused unchanged.
+
+`tools/build_inventory_skin.py --asset life-journal-v1` packages the1536×1024 RGBA source as a1,391,868-byte lossless runtime WebP, asserting decoded RGBA equality. The manifest records both hashes, bounds, provenance and measured source slices120/110/140/110 (top/right/bottom/left). Desktop CSS edges are72/66/84/66; compact layouts clip the right leaf with60/44/68/44 or40/24/48/24 edges. All date cells, text, timer, state, reward amounts and controls remain DOM. The illustration is not an inventory possession. Actual layout/evidence: task20; runtime owner acceptance remains pending.
+
+## Village board and Lia dialogue — 2026-10-15
+
+Owner approved the two reference-only concepts `references/village-board-concept-v1.png` and `references/library-dialogue-concept-v1.png` and authorized implementation. Built-in `image_gen` produced two original textless assets: `assets/generated/hearthwood/{notice-paper,library-encounter}-v1.png`; exact prompts are adjacent. No vendor pack, font, sound or external acquisition. The library background contains no actors, labels or controls. Its scene is illustrative, not a replacement playable map.
+
+`tools/build_encounter_art.py` packages the library without pixel changes, removes the paper's faint outer shadow with an alpha160 threshold and trims it to1434×867, and crops a104×104 Lia head/shoulder portrait from the already audited original actor sheet. Source images remain untouched. Three lossless runtime WebPs total3,410,296bytes; dimensions, crop, processing, source/runtime hashes and rebuild hash are in `encounter-art-v1.json`, linked from the main manifest and covered by the asset audit. Paper source slices are80px with18px CSS edges. Existing timber, cottage/workshop/item art and actual player appearance are reused. All text, selection, objectives, statuses, rewards and controls remain DOM. Actual-render evidence and limits: task21.
+
+## Fine HUD, item art and interiors — 2026-10-15
+
+The five pictured HUD elements and existing four rooms now use the fine village family. Two original built-in `image_gen` sheets (`items-ui-v3.png`, `interiors-v3.png`) retain exact adjacent prompts outside runtime. `tools/build_detail_art.py` packs nine 64px item/menu illustrations, six 64px original-source head crops and eighteen room pieces: 33 PNGs, 690,923 bytes. The closed chest and portraits reuse the previous original high-resolution village sources; all old source/runtime assets are preserved. No new external pack/font/audio was acquired.
+
+Room scenery uses two native pixels per world unit, with unchanged room geography, furniture collision footprints, object anchors and commands. Fine oak grain, plaster, wainscot, nine-patch rugs and independently depth-sorted furniture replace the coarse room drawing. HUD text stays DOM; utility strokes reuse the installed Lucide dependency. Crops, dimensions, hashes and processing are in `detail-art-v3.json`, linked from the root manifest and covered by the asset audit. Implementation candidate and actual-render acceptance remain distinct; task19 records verification.
+
 ## Fine pixel village — 2026-10-15
 
 The owner approved `references/village-fine-concept-v1.png` and requested the existing village at that fidelity with fewer flowers/grass. Three original transparent sheets were generated using built-in `image_gen`: `assets/generated/hearthwood/village-{scenery,actors,details}-v2.png`; exact prompts are adjacent. They remain source files outside the runtime bundle. No new third-party pack, font or audio was acquired, and all previous vendor/runtime image bytes remain unchanged.
@@ -218,3 +246,7 @@ Owner approved `references/character-points-concept-v1.png`, generated with buil
 ## Noah commission pages — 2026-10-15
 
 Owner approved the three acceptance/receipt/small-talk concepts. Reuse the existing timber board, riverbank, actor, blank scroll and native icons. Five textless original illustrations are now bound only to these states: `commission-{study,exercise,work,ledger,letter}-v1`. Source PNGs and complete built-in image_gen prompts live in `assets/generated/hearthwood/`; lossless decoded-RGBA-identical WebPs live in `frontend/public/assets/hearthwood/`. No font, vendor pack or source artwork modification. The objects represent a commission/receipt, not an inventory grant. All task text, point amounts, credited status, quest status and controls remain native DOM. Concept previews in `docs/art/references/commission-{accept,receipt,talk}-concept-v1.*` are reference-only and never runtime UI. Manifest contains dimensions, alpha bounds, hashes and bindings. Actual implementation acceptance remains pending; see task17.
+
+## Village market — 2026-10-15
+
+Two original built-in image_gen assets: `assets/generated/hearthwood/market-{shop,counter}-v1.png`, with exact adjacent prompts. No reference upload, external pack, font or sound. `tools/build_market_art.py` crops transparent bounds and packs nearest-neighbor sprites with alpha retained, preserving immutable sources. Shop272×232 and counter416×169 use two native pixels/world unit; total211,708 bytes. Exact source/runtime hashes, dimensions and crop bounds are in `market-art-v1.json`, covered by the main asset audit. Mira reuses audited appearance5; a unique NPC sprite remains a recorded gap. Actual render is a candidate, not owner-approved.

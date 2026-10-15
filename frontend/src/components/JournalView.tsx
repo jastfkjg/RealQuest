@@ -324,7 +324,7 @@ export function JournalView({
                   {Object.entries(quest.reward).map(([id, amount]) => {
                     const icon =
                       id === "gold"
-                        ? "/assets/ninja-adventure/icons/gold.png"
+                        ? "/assets/hearthwood/detail/items/gold.png"
                         : itemDefinitions[id]?.icon;
                     return (
                       <span key={id}>

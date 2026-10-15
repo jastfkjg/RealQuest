@@ -43,6 +43,12 @@ In a menu: **selected content and next action > available content > explanation 
 
 Empty inventory slots are intentionally quiet. A one-item starter save must still look deliberate. Never invent extra possessions, rewards, or completed quests to make a screenshot look richer.
 
+### 2.4 Fine village, HUD and rooms
+
+The fine-village direction extends to the five in-world HUD surfaces and the four existing interiors (task19). Preserve moss cloth, thin timber/brass edges and pale linen, with native readable Chinese text. UI object illustrations and original-source head crops are64px; fine room scenery is authored at two native pixels per unchanged world unit. Utility controls use the existing fine native stroke family. Do not enlarge a16px item to stand in for detailed artwork.
+
+Retain the480×368 room footprints, furniture collisions, object anchors and saved identities. Depth-sort furniture independently. Small screens follow the actor at a readable common camera scale; do not shrink individual furniture to fit. Exit prompts print an identical object/action caption once. Numeric quick-slot labels need their own quiet contrasting ground so a pale object cannot obscure a real quantity. Phone portrait and short-landscape layouts keep the status, quest note, toast, action prompt and menu clear of one another.
+
 ## 3. Palette, materials, and typography
 
 The companion `styles/realquest-tokens.css` supplies initial implementation values. Scope the theme to RealQuest; do not overwrite unrelated global application styles.
@@ -189,7 +195,11 @@ A location index is a compact optional aid, not a large bank of buttons beneath 
 
 Current archetype candidate (2026-10-13): the adventure map is the primary surface. Pointing at a landmark selects it in place; the destination dock's explicit “标记方向并返回” sets the existing direction marker and closes the map. The optional place index starts collapsed. Current position uses a filled navigation arrow, selection an amber bracket/ring, the tracked quest a flag, and rune requirements a lock. Unexplored landmark regions use hatching and question marks derived from persisted `discovered_*` events; buildings use `visited_*`. This is landmark discovery, not continuous fog-of-war. Undiscovered destinations remain navigable. Map geometry and anchors use authoritative coordinates; the travel chart compresses the vertical scale, with small leader lines for crowded markers. Touch uses a pannable surface with the same >=44px markers; zoom and recenter controls also work by keyboard.
 
+**Approved map concept checkpoint (2026-10-15):** `docs/art/references/world-map-concept-v1.png` is approved for implementation. The map uses a textless fine-pixel terrain illustration and existing village silhouettes. A selected place is presented on an attached linen leaf with one explicit direction action. Map labels, place details, discovery/visit/quest/rune indicators, player position, zoom, pan, and navigation remain live DOM/state. The decorative terrain does not claim a verified walkable route; the action marks direction and returns to world play. Default selection may show the library as an example without changing navigation or save state.
+
 ### 7.4a Interaction archetypes
+
+Owner-approved board/Lia direction (2026-10-15): the village board is a timber object with short pinned notices and one open illustrated parchment. Lia's conversation uses an actor-free library stage, the actual traveler and Lia, a compact nameplate/portrait and one low dialogue surface. The optional quest expands within the paper; Escape first folds it and returns reply focus. Noah retains his existing commission composition. All state and text remain native controls; actual render review is separate. References and evidence: `docs/tasks/21-board-library-dialogue.md`.
 
 Share palette, item identities, readable Chinese typography, focus/pressed/pending/error behavior, and modal focus ownership. Do not share a fixed header/body/footer composition. A new screen must first choose its interaction archetype:
 
@@ -212,7 +222,9 @@ Wood/seed and other imagery reuse the audited registry unchanged. This pass adds
 
 ### 7.5 Character sheet
 
-Owner approved the point-allocation concept on 2026-10-14. The dossier presents identity, current/max vitality and stamina, science/magic levels, planting/ranching/building levels, and unallocated health/knowledge/skill points. Select a row freely; one explicit action shows server-priced cost, next level/capacity, and remaining balance. Do not show EXP progression in this sheet. Vitality/stamina capacity cost one health point for +5; knowledge retains one point per level; each skill upgrade costs its target level. Preserve legacy EXP and world gates without converting them. Actual implementation evidence is in `docs/tasks/14-character-points.md`.
+The owner approved the illustrated dossier treatment on 2026-10-15 (`character-dossier-concept-v2.png`). A left identity/resource column faces open knowledge/skill medallions with adjacent point balances and one contextual growth slip. Native labels, levels, selection rings and controls remain separate from five textless illustrations. On small screens identity becomes compact and selecting an ability focuses its detail. Insufficient points open commission guidance, a marker-only Noah action and the existing growth journal; acceptance/settlement still require proximity. Escape first dismisses expanded guidance and restores focus. Implementation and actual-render evidence: `docs/tasks/23-character-dossier.md`.
+
+Owner approved the point-allocation concept on 2026-10-14. The dossier presents identity, current/max vitality and stamina, science/magic levels, planting/ranching/building levels, and unallocated health/knowledge/skill points. Select an ability freely; one explicit action shows server-priced cost, next level/capacity, and remaining balance. Do not show EXP progression in this sheet. Vitality/stamina capacity cost one health point for +5; knowledge retains one point per level; each skill upgrade costs its target level. Preserve legacy EXP and world gates without converting them. Original rule implementation evidence is in `docs/tasks/14-character-points.md`.
 
 Do not add fake equipment slots, unimplemented effects, or a decorative radar chart to fill space. New vitality and skill levels are persisted state; combat, ranching gameplay and skill bonuses are not implied by their presence. Real-life attributes are game abstractions, not claims about a user's intelligence, health, or worth.
 
@@ -263,6 +275,12 @@ Reuse the existing journal nine-slice, tokens and installed Lucide symbols. Conn
 This request supersedes the earlier form-based growth/reward entry in 7.7–7.7d. Noah's existing encounter scene offers three dialogue choices (study, exercise, work), then hour tokens and an explicit acceptance. Active promises show a server-based countdown and settlement eligibility; cancellation is reversible only by starting a new promise, with its time reset. A confirmed receipt shows actual awarded points, and five filled growth marks end today's offers. The existing HUD growth entry becomes a dated journal of current, settled and cancelled commissions, with a truthful marker to Noah. This is a scoped exception to the earlier direct-recording target, explicitly requested by the owner.
 
 Reuse existing actor art, the encounter vignette, linen/moss tokens and native controls. Phone keeps the task choices and acceptance prominent; hours use two-line tokens deliberately. Health investment and knowledge research remain accessible, while legacy notes/records and already earned assets are preserved. No new raster or font. Evidence and exact rules: `docs/tasks/13-life-commissions.md`. Actual visual acceptance remains pending.
+
+### 7.7f Daily growth journal — approved concept, 2026-10-15
+
+The owner approved `docs/art/references/life-journal-concept-v1.png`. The HUD growth entry uses an asymmetric bound journal: a monthly calendar index on the narrow leaf, the selected acceptance day's current promise and closed records on the wide leaf. Record markers, selected/today states, previous/next day, month navigation and return-to-today use real records and China Standard Time. An overnight active promise stays on its acceptance date and is reachable through an explicit current-promise link from other dates. Today quota and current wallet balances remain labelled separately from the selected historical day.
+
+On narrow screens the selected day's task comes first; the calendar opens on demand, with native day buttons, keyboard arrows/Home/End/PageUp/PageDown and explicit previous/next controls. Cancellation uses the existing authoritative command and confirmation; failure/success feedback stays in the reading flow. The Noah action only marks a location. Text, filters, countdown, quota and actions are DOM. A blank generated asymmetric book reuses the material direction; existing ledger, icons and sand-clock art are unchanged. Concept approval is recorded; actual-render acceptance is a separate checkpoint. Evidence: `docs/tasks/20-life-journal.md`.
 
 ## 8. Interaction, timing, and sound
 
@@ -344,3 +362,7 @@ Owner approved `docs/art/references/hud-concept-v1.png`; actual browser implemen
 The remaining encounter states share Noah's timber desk and moss cloth. Three small pinned slips select the reality task type, then one illustrated scroll carries the exact promise, reward tag and wooden hour tokens. A server-confirmed settlement replaces the offer with a ledger and stamped native receipt; another commission explicitly returns to selection, while history and dismissal remain secondary. The receipt survives a topic switch within the same encounter. It never implies an unconfirmed reward.
 
 Village small talk has a nameplate and dialogue parchment, with an actual story-quest letter and two replies. It does not display reality quota. Opening the letter uses the existing quest objectives, actions and authoritative status; closing it restores the reply's keyboard focus. Other NPCs and the active hourglass contract retain their structures. Text is DOM, generated props are textless, and reduced motion removes paper/seal motion. Evidence: `docs/tasks/17-commission-pages.md`.
+
+### Village market livelihood — 2026-10-15
+
+Authorized connected slice: the general store, Mira, real inventory trading, dated material orders and home goals. Shop uses existing Hearthwood linen/moss controls and a small illustrated keeper beside one transactional surface; native text shows quantities, price and resulting balance before commitment. Orders display actual needs, owned quantities and confirmed completion. Navigation marks locations without teleportation. Original shop/counter sprites retain two native pixels per world unit; Mira temporarily uses appearance5. Other screens keep their contracts. Actual rendered acceptance remains pending; see task22.

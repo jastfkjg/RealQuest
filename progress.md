@@ -1,5 +1,11 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-15 Refined HUD/items/interiors
+
+- Refined five HUD surfaces, original64px items/head portraits, and all four existing interiors at2 native pixels/world unit. One exit caption; phone/landscape overlap and numeric contrast corrected.33 runtime PNGs/690,923 bytes, exact prompts/cuts/hashes and reproducible packing recorded in `docs/tasks/19-hud-interiors.md`.
+- Final fixed-build verification passed:108 backend tests,21 village captures,12 HUD cases,23 room captures,25 cottage captures, inventory rejection/pending/idempotent retry/reload and2 frame-client iterations. Eight texture cases/188 text runs/min5.47:1;125-image audit and diff check pass. Actual sample screenshots inspected.
+- Owned automation browsers/runners and intermediate dev/preview processes exited; preview5211/PID1216 and isolated API8043/PID96709 retained for owner review. Other active/shared tasks/tools preserved. No player-data reset, dependency migration, commit/push/deploy. Actual owner/physical-device/native-zoom/endurance acceptance remains pending.
+
 ## 2026-10-15 Fine pixel village
 
 - Owner approved the fine-pixel concept and authorized the current village, with fewer flowers/grass. Scope and plan: `docs/tasks/18-village-fine-art.md`. Preserve the pre-existing `backend/realquest.db-wal` modification; no player-data edits.
@@ -271,3 +277,37 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - Final family suite passes48 captures/no unexpected errors, including actual story acceptance/turn-in, lost-response settlement reconciliation and receipt continuation. Computed46 cases/888 runs/min4.51; actual texture34 cases/690 runs/min4.68. Desktop/phone/receipt/quota/touch/story screenshots inspected.
 - Final phone-only spacing review passes:375×812 and390×844 acceptance CTA fully visible (y749.42/h52), all three illustrations, real work claim, reduced-motion seal/slips, reply focus,125% text and no overflow. Game/play-mode/frame checks and40-image audit pass. Physical/native-device checks and owner actual acceptance remain pending in task17.
 - Owned test browsers/runners exit via finally; no task runner/headless browser remains. Manual preview5209/Vite74805/npm74782 + isolated API8041/PID74759 retained for owner review; shared pre-existing MCP tools preserved because their task ownership is unknown. No backend/user data mutation, commit/push/deploy.
+
+## 2026-10-15 Village board and Lia dialogue
+
+- Owner approved both preview images and requested implementation. Scope/short plan: docs/tasks/21-board-library-dialogue.md. Preserve concurrent HUD/interiors/Life journal changes and user saves.
+- Implemented scoped pinned-paper board and library-stage conversation, optional native quest details and Escape/focus return. Reused actual player/NPC/item identities; generated two textless assets with exact prompts and reproducible processing/manifest. First build and53 backend game tests pass; fixed production browser verification is in progress. Independent test DB and5291/8091 services only.
+
+- Final board/Lia candidate:22 actual browser captures and all scoped public interactions pass; exact reward failure/retry/persistence, normal typing reveal, Escape/focus,375/DPR2 touch,125% text and reduced motion verified. Build/53 game backend tests/125-image audit/136 real-texture runs(min5.00)/skill movement+modal-input bursts pass. Original broad mouse regression remains blocked by an existing HUD prompt intercepting its hardcoded pickup click; explicitly recorded, not claimed passed.
+- Task21 records files, generated assets/prompts/provenance, commands and evidence. Fixed5291/API8091 retained solely for manual review; owned automation browsers/recordings/runners exited and unused own servers stopped. User saves and concurrent HUD/Life work preserved; no commit/push/deploy. Actual owner render approval and physical-device checks remain pending.
+
+## 2026-10-15 Village market and livelihood
+
+- User requested maps/buildings/NPCs, earning channels and goals, with Stardew-like inspiration. Scoped connected market loop and rules: docs/tasks/22-village-market.md. Starting/concurrent changes and player DB preserved.
+- Added authoritative shop/Mira, trading, three dated delivery orders and persistent home/story goals. Original108 tests and16 new market tests pass. Production build passes. Browser smoke reached real gathering/planting, shop, retry, quests/orders and lost-response purchase replay. Visual refinement and complete responsive flow underway on isolated5295/8095 services.
+
+## 2026-10-15 Illustrated adventurer dossier
+
+- Owner approved the v2 preview and requested implementation with unchanged data/rules. Scoped plan and evidence: docs/tasks/23-character-dossier.md. Preserved concurrent market/map/HUD/Life/encounter work and all player databases.
+- Replaced attribute rows/wallet with identity/status column, five illustrated selectable medallions, adjacent balances and one growth slip. Existing commands/reconciliation unchanged. Zero points open guidance with existing Noah marker/growth journal; no remote acceptance or teleport.
+- Generated one textless original sheet, five exact lossless crops with prompts/hashes/rebuild audit; reused dossier/village/actor sources. Native text, focus/keyboard/touch, pending/errors/success and reduced-motion states preserved.
+- Production build, 35 relevant backend tests, 16-capture full interaction flow, 16-case visual audit/834 text runs/min5.70:1, five-crop audit and cleanup-wrapped skill frame client pass. Actual screenshots inspected; corrected header/clip spacing, desktop height and immediate Escape focus return. Test origin/isolated-cookie setup corrected before final run.
+- Manual fixed preview5293/API8093 uses output/character-dossier/test.db and a distinct cookie. Physical devices/Safari/native zoom/screen readers and owner actual-render approval remain pending. No commit, push, deploy, backend rule changes or user-save writes.
+- Dossier handoff: final source/runtime audit132 images, formatting/diff checks pass. Fixed preview5293/PID29680 and isolatedAPI8093/PID29974 retained; health verified. Own DEV/superseded backends exited, all test browsers closed in finally, two temporary runners removed. Shared unowned app tools and concurrent tasks preserved. Actual desktop screenshot opened in Codex.
+
+- Village market final: unique original shop/counter art, merchant Mira, server-priced buying/selling, three CST daily orders and first-sale→three-deliveries→home-level2 story chain complete. Real-browser25-capture flow includes actual60-second crops, rejection/retry/lost-response reconciliation, persistence, earned home upgrade and reward-once; no unexpected errors.124 backend tests, production build, nine final layout states/357 texture runs(min5.53:1),133-image shared asset audit, frame client and diff checks pass.
+- Shop task22 records exact files/art prompts/hashes/commands/screenshots/limits. Unique Mira sprite, schedules and seasons remain future work; actual render awaits owner review. Owned test browsers/runners verified exited; fixed5295 preview PID27169 and isolated8095 API PID30099 retained/healthy for manual review. Shared hosts/other task services and player data preserved. No commit/push/deploy.
+
+## 2026-10-15 World map concept implementation
+
+- Owner approved `docs/art/references/world-map-concept-v1.png`. Implemented its fine-pixel travel chart, live village/landmark markers, attached destination leaf and map navigation in the existing map panel. Existing player/world state and non-teleporting direction action are preserved.
+- Generated one textless original terrain source and byte-identical runtime PNG; prompt, hashes and bindings are documented in `docs/tasks/24-world-map.md` and the asset manifest. Existing village cuts are reused.
+- Build, asset audit, five-viewport fixture review and actual-game desktop/phone navigation pass. Screenshots and the recorded flow are under `output/world-map/`. Actual rendered approval and physical-device/Safari review remain open.
+- Final short-screen refinement: selected growth slip scrolls fully into view, confirmed receipt is revealed, and the stable action control regains focus after native pending-disable blur unless the user chose another control. Full16-capture flow and frame client pass again; final contrast834 runs/min5.70. Temporary runner removed again after final verification.
+
+- Dossier final resume: interrupted final browser tests completed successfully (16 captures, no errors; frame client pass). Inspected the corrected touch-action contrast and desktop screenshot. Removed the temporary frame runner; preview5293/API8093 healthy and retained for manual review. No further implementation work remains.

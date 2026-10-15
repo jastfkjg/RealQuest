@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "creator": "OpenAI built-in image_gen, directed for RealQuest",
+  "license": "Original generated project artwork; no third-party license claimed.",
+  "rebuild": "tools/build_encounter_art.py",
+  "rebuild_sha256": "3771ae94fdfff4d1537754769a7ef22cb4023aefdaa706436ccb52402cde175e",
+  "records": [
+    {
+      "id": "library-stage",
+      "source_path": "assets/generated/hearthwood/library-encounter-v1.png",
+      "source_sha256": "4c074466662da8a89ea36876168a2244520b3e4d1eabace5eb5f9c27cd56bb2b",
+      "runtime_path": "frontend/public/assets/hearthwood/encounters/library-stage.webp",
+      "sha256": "25591790b936ae5c8b85d408778c0fd4b64fd7091e73b0bef12f7bd5f443b439",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "size_bytes": 2503842,
+      "processing": "Lossless WebP; exact decoded RGBA equality; no art changes."
+    },
+    {
+      "id": "notice-paper",
+      "source_path": "assets/generated/hearthwood/notice-paper-v1.png",
+      "source_sha256": "d1aad64806a96edc406a0db18fd2de674e97d49daa3d42dea78437f8899e15c8",
+      "runtime_path": "frontend/public/assets/hearthwood/encounters/notice-paper.webp",
+      "sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "width": 1434,
+      "height": 867,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        1434,
+        867
+      ],
+      "size_bytes": 890326,
+      "processing": {
+        "alpha_threshold": 160,
+        "crop": [
+          53,
+          82,
+          1487,
+          949
+        ],
+        "nine_slice_source_px": [
+          80,
+          80,
+          80,
+          80
+        ],
+        "css_border_width_px": [
+          18,
+          18,
+          18,
+          18
+        ]
+      }
+    },
+    {
+      "id": "lia-portrait",
+      "source_path": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "runtime_path": "frontend/public/assets/hearthwood/encounters/lia-portrait.webp",
+      "sha256": "ae5fe5adef957dcf303e83dfa0fef11ac4e5ba1b0e85e5eb3e91a240b343669c",
+      "width": 104,
+      "height": 104,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        104,
+        104
+      ],
+      "size_bytes": 16128,
+      "processing": {
+        "source_cell": [
+          1440,
+          0,
+          1620,
+          205
+        ],
+        "alpha_threshold": 160,
+        "crop": "trimmed original head/shoulders square; no resize"
+      }
+    }
+  ]
+}

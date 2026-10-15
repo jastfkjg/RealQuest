@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
 from .quests import QUESTS, progress, quest_views
+from .market import market_view
 
 ATTRIBUTES = ['strength', 'wisdom', 'craft', 'stewardship', 'bond']
 ZONE = ZoneInfo('Asia/Shanghai')
@@ -31,6 +32,8 @@ def initial_state():
 def upgrade_state(original):
     state = copy.deepcopy(original)
     state.setdefault('location', 'overworld')
+    state.setdefault('market_orders', {})
+    state['relationships'].setdefault('mira', 0)
     state.setdefault('quests', {'settle_in': {'status':'active','accepted_at':0}} if state['character'] else {})
     state.setdefault('tracked_quest', 'settle_in')
     state.setdefault('stats', {'wood':max(state['inventory'].get('wood',0),3 if 'first_gather' in state['events'] else 0),'stone':state['inventory'].get('stone',0),'harvest':state['inventory'].get('crop',0),'sold':0,'crafted':state['inventory'].get('plank',0)})
@@ -60,6 +63,12 @@ def upgrade_state(original):
             state['location']='overworld'
             state['position']={'x':240,'y':320}
         state['save_version']=2
+    if state.get('save_version', 1) < 3:
+        if state['location'] == 'overworld' and not walkable(**state['position']):
+            x, y = state['position']['x'], state['position']['y']
+            candidates = ({'x': xx, 'y': yy} for xx in range(24, 1897, 16) for yy in range(40, 1257, 16))
+            state['position'] = min((p for p in candidates if walkable(**p)), key=lambda p: math.hypot(p['x']-x, p['y']-y))
+        state['save_version'] = 3
     return state
 
 
@@ -505,6 +514,35 @@ def apply(state, action, data, now):
     require(obj is not None, '交互对象不存在')
     require(math.hypot(state['position']['x']-obj['x'], state['position']['y']-obj['y']) <= 72, '请先走近这个对象')
     target = obj['id']
+    if action in ['market_trade', 'market_deliver']:
+        require(location == 'shop' and target == 'mira', '请到风铃杂货铺，和米拉当面交易')
+        market = market_view(state, now)
+        if action == 'market_trade':
+            side, item = data.get('side'), data.get('item')
+            require(isinstance(side, str) and side in ['buy', 'sell'], '请选择买入或卖出')
+            require(isinstance(item, str) and item in market[side], '小铺不交易这种物品')
+            amount = integer(data.get('amount', 1), 1, 99)
+            total = market[side][item] * amount
+            spend(state, {'gold': total} if side == 'buy' else {item: amount})
+            if side == 'buy':
+                state['inventory'][item] += amount
+                return f'买入 {amount} 份种子，花费 {total} 金币。'
+            state['inventory']['gold'] += total
+            bump(state, 'market_sold', amount)
+            bump(state, 'trade_income', total)
+            if item == 'crop':
+                bump(state, 'sold', amount)
+            return f'出售 {amount} 份物品，获得 {total} 金币。'
+        require(data.get('date') == market['date'], '小铺已换上今天的新订单，请刷新后重新查看')
+        order = next((o for o in market['orders'] if o['id'] == data.get('order_id')), None)
+        require(order is not None, '这份订单不存在')
+        require(not order['completed'], '今天这份订单已经交付，明天再来看看吧')
+        spend(state, {order['item']: order['amount']})
+        state['market_orders'][order['id']] = market['date']
+        state['inventory']['gold'] += order['gold']
+        bump(state, 'deliveries')
+        bump(state, 'trade_income', order['gold'])
+        return f'订单完成：{order["title"]}，获得 {order["gold"]} 金币。'
     if action == 'enter':
         require(location == 'overworld' and obj['kind'] == 'building' and target in INTERIORS, '这里没有可以进入的建筑')
         state['location']=target
@@ -568,6 +606,8 @@ def apply(state, action, data, now):
             state['relationships'][target] += 1
             state['npc_days'][target] = today
             grant_xp(state, 'bond', 5)
+        if target == 'mira':
+            return '欢迎来到风铃杂货铺！种子在左边，收获可以卖给我。货架上还贴着村里的订单，备齐材料再来，每份都有额外酬谢。'
         if target == 'lia':
             return '你的知识已经唤醒了符文。去图书馆东边的遗迹看看吧。' if state['attributes']['wisdom'] >= 25 else '每一次学习，都会在大陆留下回响。积累 25 点学识经验，就能读懂东边遗迹的符文。'
         return '沿着村道向东，微光林地里藏着新的风景。想一起探索吗？下面可以接取我的委托。资源每 30 秒恢复，别忘了带上地图。'

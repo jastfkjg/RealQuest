@@ -17,6 +17,11 @@ import "./life-quests.css";
 import "./commission-board.css";
 import "./commission-contract.css";
 import "./commission-pages.css";
+import "./hud-detail.css";
+import "./encounter-ui.css";
+import "./life-journal.css";
+import "./market.css";
+import "./components/atlas.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

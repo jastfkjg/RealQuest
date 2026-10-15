@@ -1,0 +1,800 @@
+{
+  "version": 3,
+  "source": "Original built-in image_gen outputs; exact prompts adjacent",
+  "rebuild": "tools/build_detail_art.py",
+  "rebuild_sha256": "5ae8f318a115caf28d76effbae9e5bc3fe6cbfc966f3061173c7a54a4799ff50",
+  "records": [
+    {
+      "id": "seed",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/seed.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        2,
+        61,
+        62
+      ],
+      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
+      "size_bytes": 7593,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        0,
+        0,
+        418,
+        418
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "wood",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/wood.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        9,
+        62,
+        54
+      ],
+      "sha256": "e78ff54825ebaafaeed0870503464d88a0472c140ab8d26865bad4bdeeb12a6a",
+      "size_bytes": 6132,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        418,
+        0,
+        836,
+        418
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "stone",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/stone.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        7,
+        62,
+        57
+      ],
+      "sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249",
+      "size_bytes": 6111,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        836,
+        0,
+        1254,
+        418
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "crop",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/crop.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        7,
+        2,
+        56,
+        62
+      ],
+      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
+      "size_bytes": 5111,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        0,
+        418,
+        418,
+        836
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "plank",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/plank.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        10,
+        62,
+        54
+      ],
+      "sha256": "d896c43ff0922f26f00b5f3a51ec6171d44b362e5404d7af165cb1b34ccc1b80",
+      "size_bytes": 5404,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        418,
+        418,
+        836,
+        836
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "gold",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/gold.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        3,
+        2,
+        61,
+        62
+      ],
+      "sha256": "bb04bccdf92ead66281025bc214b3083ca28b8b7d9cdd5eb8de8a1bee7c8cfb1",
+      "size_bytes": 7281,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        836,
+        418,
+        1254,
+        836
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "backpack",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/backpack.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        2,
+        62,
+        62
+      ],
+      "sha256": "919731c141b7af551b0481bfbfeb6f5adbdbc6751e4f7483c4359cb52f60682e",
+      "size_bytes": 7886,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        0,
+        836,
+        418,
+        1254
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "journal",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/journal.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        10,
+        62,
+        53
+      ],
+      "sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab",
+      "size_bytes": 5645,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        418,
+        836,
+        836,
+        1254
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "sprout",
+      "category": "items",
+      "path": "frontend/public/assets/hearthwood/detail/items/sprout.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        2,
+        5,
+        62,
+        58
+      ],
+      "sha256": "f4c9d2fd4efa79052629361df4454076734d48fb2a0962cd5cc97fb7fadafd89",
+      "size_bytes": 4795,
+      "source": "assets/generated/hearthwood/items-ui-v3.png",
+      "source_sha256": "ee2ea3eab51408f5bc332ed244475a14bb9bd4fd0f38a8e8e956739e40f09275",
+      "crop": [
+        836,
+        836,
+        1254,
+        1254
+      ],
+      "processing": "alpha>=160; visible bounds; nearest-neighbor fit60px; centered64x64"
+    },
+    {
+      "id": "character-0",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-0.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "43c6e1cd39aa2a8069a178113b70d9dce5c45bb84f28ffb73c1b6d2f1b6cf1a0",
+      "size_bytes": 9085,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        0,
+        0,
+        210,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "character-1",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-1.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "f693977f6f768be3c9e9a467e234d7cbc36f8d213c060766de1acb31e62e853e",
+      "size_bytes": 9045,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        1440,
+        0,
+        1620,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "character-2",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-2.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "fba8c7e419e6b94c99e15de62c4510acab0782f8f55690e826f99e01c53198c7",
+      "size_bytes": 9135,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        735,
+        0,
+        915,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "character-3",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-3.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "6bf62099cd4f1a4b18330a2bfd7a65e0ea08517e7c4bcb5544a6961c09d84f23",
+      "size_bytes": 9086,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        0,
+        0,
+        210,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "character-4",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-4.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "dbecc621db72ee3c5e736321f13d644cb3a64cb0088b5056b60bb4fe791c07ab",
+      "size_bytes": 8647,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        0,
+        0,
+        210,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "character-5",
+      "category": "portraits",
+      "path": "frontend/public/assets/hearthwood/detail/portraits/character-5.png",
+      "width": 64,
+      "height": 64,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "sha256": "d31b43577a01223c83df6e51444cdf89980f63618c2d494ea3de0a47be550e60",
+      "size_bytes": 9034,
+      "source": "assets/generated/hearthwood/village-actors-v2.png",
+      "source_sha256": "166a2f1aa8d88902e673078eb29491fd8e8b76335a6200198aa13861568cc9d4",
+      "crop": [
+        1440,
+        0,
+        1620,
+        205
+      ],
+      "processing": "original head/shoulders square crop; matching recorded palette; nearest-neighbor64px"
+    },
+    {
+      "id": "notice",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/notice.png",
+      "width": 288,
+      "height": 177,
+      "visible_bounds": [
+        0,
+        0,
+        288,
+        177
+      ],
+      "sha256": "314879cd3227eeb598041cc650ddefca7283336dca60f84c4aa1c350f6e9ff20",
+      "size_bytes": 74798,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        0,
+        0,
+        313,
+        359
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "bookcase",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/bookcase.png",
+      "width": 224,
+      "height": 184,
+      "visible_bounds": [
+        0,
+        0,
+        224,
+        184
+      ],
+      "sha256": "43ffb8cbaf2898370b80844c78557c037cd767f96b7cc53090c0621fc9cb4ca8",
+      "size_bytes": 72113,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        313,
+        0,
+        627,
+        359
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "workbench",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/workbench.png",
+      "width": 416,
+      "height": 122,
+      "visible_bounds": [
+        0,
+        0,
+        416,
+        122
+      ],
+      "sha256": "d8e3fcd658fb1e25b80e1ae24e060137fe601b2702cb8712132b4f28ebdf6056",
+      "size_bytes": 42261,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        627,
+        0,
+        940,
+        359
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit; two adjacent104world-unit modules, no tool enlargement"
+    },
+    {
+      "id": "desk-88",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/desk-88.png",
+      "width": 176,
+      "height": 109,
+      "visible_bounds": [
+        0,
+        0,
+        176,
+        109
+      ],
+      "sha256": "b57fd86f9d865d9688eb919661770d4402fbd976b2cefa7810fd1ad247f049fd",
+      "size_bytes": 31170,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        940,
+        0,
+        1254,
+        359
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "desk-96",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/desk-96.png",
+      "width": 192,
+      "height": 119,
+      "visible_bounds": [
+        0,
+        0,
+        192,
+        119
+      ],
+      "sha256": "dc8e0caf5cbc799b3de5588debd4a845dfc84681cd30296b0434d1666ad989c2",
+      "size_bytes": 36124,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        940,
+        0,
+        1254,
+        359
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "bed",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/bed.png",
+      "width": 144,
+      "height": 203,
+      "visible_bounds": [
+        0,
+        0,
+        144,
+        203
+      ],
+      "sha256": "c142ea1c0b65217b08e959ef7900b4f4399537f41a78b1e04aa093d98530583c",
+      "size_bytes": 50177,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        0,
+        359,
+        313,
+        704
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "hearth",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/hearth.png",
+      "width": 144,
+      "height": 112,
+      "visible_bounds": [
+        0,
+        0,
+        144,
+        112
+      ],
+      "sha256": "006059f41c59aae5ede906ef209239f60877dc8fcfdb091422e30f67b6ad028e",
+      "size_bytes": 33245,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        313,
+        359,
+        627,
+        704
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "planter",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/planter.png",
+      "width": 48,
+      "height": 54,
+      "visible_bounds": [
+        0,
+        0,
+        48,
+        54
+      ],
+      "sha256": "959e750a69e575c19b77fa761cf2da5fabb9903ffa331abb0cdd9e498b220275",
+      "size_bytes": 5477,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        627,
+        359,
+        940,
+        704
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "barrel",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/barrel.png",
+      "width": 64,
+      "height": 90,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        90
+      ],
+      "sha256": "6fa08c301e23798f5e470b754b5aab7dc4f54882715257f992bd989264efaa79",
+      "size_bytes": 13081,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        940,
+        359,
+        1254,
+        704
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "anvil",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/anvil.png",
+      "width": 96,
+      "height": 80,
+      "visible_bounds": [
+        0,
+        0,
+        96,
+        80
+      ],
+      "sha256": "2570dad3eca15ee1347918433e2f7a5c3c19be7427ea664b08c94f2ce9306de6",
+      "size_bytes": 14483,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        0,
+        704,
+        313,
+        975
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "rug",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/rug.png",
+      "width": 288,
+      "height": 157,
+      "visible_bounds": [
+        0,
+        0,
+        288,
+        157
+      ],
+      "sha256": "80fcc056eb326007a955762dfc2cfdabd7c9f207848e83a271570a05947cffd8",
+      "size_bytes": 104564,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        313,
+        704,
+        627,
+        975
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "window",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/window.png",
+      "width": 80,
+      "height": 66,
+      "visible_bounds": [
+        0,
+        0,
+        80,
+        66
+      ],
+      "sha256": "b9f59b5bbc4e46480349caf23020db83aed6faa533b8c3b09fb296feb1d28f56",
+      "size_bytes": 11636,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        627,
+        704,
+        940,
+        975
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "chest-open",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/chest-open.png",
+      "width": 96,
+      "height": 94,
+      "visible_bounds": [
+        0,
+        0,
+        96,
+        94
+      ],
+      "sha256": "e31464398fcc54da9a97f106af8eef2ca1a63c2d8c903ad2fb8ec5d6c62907f4",
+      "size_bytes": 16729,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        940,
+        704,
+        1254,
+        975
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "manual",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/manual.png",
+      "width": 36,
+      "height": 37,
+      "visible_bounds": [
+        0,
+        0,
+        36,
+        37
+      ],
+      "sha256": "3d712fb67352c70e535fbecc5c2f867c1321d7a377b4b6731c016b101eac99c3",
+      "size_bytes": 3100,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        0,
+        975,
+        313,
+        1254
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "book",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/book.png",
+      "width": 64,
+      "height": 39,
+      "visible_bounds": [
+        0,
+        0,
+        64,
+        39
+      ],
+      "sha256": "e96f5437bae2982a6ff7323c9a8c50fd2860436a2f52a1f590495951d1a8051a",
+      "size_bytes": 5341,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        313,
+        975,
+        627,
+        1254
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "lantern",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/lantern.png",
+      "width": 28,
+      "height": 29,
+      "visible_bounds": [
+        0,
+        0,
+        28,
+        29
+      ],
+      "sha256": "0a71879a435d3f6f150b9efd9cc95345dcd9882f6883120cababf2056bb8f96c",
+      "size_bytes": 1358,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        627,
+        975,
+        940,
+        1254
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "wall",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/wall.png",
+      "width": 256,
+      "height": 145,
+      "visible_bounds": [
+        0,
+        0,
+        256,
+        145
+      ],
+      "sha256": "4665b1d12ceb5b800cb43d14f91cfcfc1d55d422742f91418472640d69ae550f",
+      "size_bytes": 50851,
+      "source": "assets/generated/hearthwood/interiors-v3.png",
+      "source_sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
+      "crop": [
+        940,
+        975,
+        1254,
+        1254
+      ],
+      "processing": "alpha>=160; reviewed cut; nearest-neighbor at2nativepx/world-unit"
+    },
+    {
+      "id": "chest-closed",
+      "category": "interiors",
+      "path": "frontend/public/assets/hearthwood/detail/interiors/chest-closed.png",
+      "width": 96,
+      "height": 71,
+      "visible_bounds": [
+        0,
+        0,
+        96,
+        71
+      ],
+      "sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51",
+      "size_bytes": 14425,
+      "source": "assets/generated/hearthwood/village-details-v2.png",
+      "source_sha256": "e1af696c8a2a008e723e04e7313f5525f1059a2510b4a7c8fc0cad84dd5b4d9f",
+      "crop": [
+        884,
+        400,
+        1310,
+        887
+      ],
+      "processing": "original village chest; alpha>=160; nearest-neighbor at2nativepx/world-unit"
+    }
+  ]
+}

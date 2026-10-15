@@ -2,6 +2,7 @@ import type Phaser from "phaser";
 import type { MapData } from "../types";
 
 const roads: [number[][], number][] = [
+  [[[960, 350], [960, 720], [832, 720], [832, 688]], 32],
   // Board spur and a farm entrance that skirts, rather than crosses, the plots.
   [
     [

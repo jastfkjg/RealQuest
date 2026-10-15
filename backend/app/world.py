@@ -6,6 +6,7 @@ OBJECTS = [
     {'id': 'workshop', 'kind': 'building', 'name': '木作工坊', 'x': 352, 'y': 232, 'rect': [292, 136, 120, 72]},
     {'id': 'library', 'kind': 'building', 'name': '回响图书馆', 'x': 704, 'y': 232, 'rect': [632, 112, 144, 96]},
     {'id': 'guild', 'kind': 'building', 'name': '旅人公会', 'x': 1088, 'y': 552, 'rect': [1008, 408, 160, 112]},
+    {'id': 'shop', 'kind': 'building', 'name': '风铃杂货铺', 'x': 832, 'y': 688, 'rect': [768, 568, 128, 96]},
     {'id': 'board', 'kind': 'board', 'name': '村庄告示板', 'x': 256, 'y': 272},
     {'id': 'lia', 'kind': 'npc', 'name': '莉亚', 'x': 624, 'y': 272},
     {'id': 'noah', 'kind': 'npc', 'name': '诺亚', 'x': 576, 'y': 384},
@@ -37,7 +38,7 @@ for row in range(6):
         if any(hypot(x-o['x'],y-o['y']) < 66 for o in OBJECTS):
             continue
         TREES.append((x,y))
-TREES += [(48,720),(144,704),(344,736),(384,816),(64,1120),(176,1200),(384,1216),(576,736),(664,752),(752,704),(896,752),(1008,736),(1184,704),(1312,752),(1512,800),(1648,768),(1840,864),(1568,1120),(1728,1040),(1808,1192),(640,1152),(784,1216),(912,1152)]
+TREES += [(48,720),(144,704),(344,736),(384,816),(64,1120),(176,1200),(384,1216),(576,736),(664,752),(752,704),(896,816),(1008,736),(1184,704),(1312,752),(1512,800),(1648,768),(1840,864),(1568,1120),(1728,1040),(1808,1192),(640,1152),(784,1216),(912,1152)]
 RIVER = [[448,0,64,320],[448,384,64,488],[448,936,64,344]]
 LAKE = [[1184,864,224,176],[1232,816,128,48],[1232,1040,128,32]]
 OBSTACLES = [o['rect'] for o in OBJECTS if 'rect' in o] + [[x-10,y-8,20,24] for x,y in TREES] + RIVER + LAKE
@@ -53,6 +54,9 @@ def interior(key, name, objects, furniture):
     return {'id':key,'name':name,'width':480,'height':368,'tile':16,'spawn':{'x':240,'y':294},'objects':[{'id':f'{key}_exit','kind':'exit','name':'回到户外','x':240,'y':328}]+objects,'furniture':furniture,'trees':[], 'obstacles':[[0,0,480,64],[0,64,48,304],[432,64,48,304],[0,344,480,24]]+[f['rect'] for f in furniture if f.get('solid',True)]}
 
 INTERIORS = {
+    'shop': interior('shop','风铃杂货铺',[
+        {'id':'mira','kind':'npc','name':'米拉 · 杂货铺店主','x':240,'y':188},
+    ],[{'kind':'workbench','rect':[136,112,208,40]},{'kind':'shelf','rect':[64,64,112,40]},{'kind':'shelf','rect':[296,64,112,40]},{'kind':'barrel','rect':[64,216,32,40]},{'kind':'chest','rect':[352,216,48,28]},{'kind':'plant','rect':[64,288,24,28]},{'kind':'rug','rect':[176,240,128,64],'solid':False}]),
     'home': interior('home','林间小屋',[
         {'id':'home_chest','kind':'storage','name':'家园储物箱','x':360,'y':192,'hitbox':[336,160,48,32]},
         {'id':'home_desk','kind':'station','building':'home','name':'家园手册 · 升级','x':96,'y':152,'hitbox':[80,136,28,40]},

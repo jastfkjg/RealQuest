@@ -1,0 +1,92 @@
+[
+  {
+    "id": "notice",
+    "width": 288,
+    "height": 177
+  },
+  {
+    "id": "bookcase",
+    "width": 224,
+    "height": 184
+  },
+  {
+    "id": "workbench",
+    "width": 416,
+    "height": 122
+  },
+  {
+    "id": "desk-88",
+    "width": 176,
+    "height": 109
+  },
+  {
+    "id": "desk-96",
+    "width": 192,
+    "height": 119
+  },
+  {
+    "id": "bed",
+    "width": 144,
+    "height": 203
+  },
+  {
+    "id": "hearth",
+    "width": 144,
+    "height": 112
+  },
+  {
+    "id": "planter",
+    "width": 48,
+    "height": 54
+  },
+  {
+    "id": "barrel",
+    "width": 64,
+    "height": 90
+  },
+  {
+    "id": "anvil",
+    "width": 96,
+    "height": 80
+  },
+  {
+    "id": "rug",
+    "width": 288,
+    "height": 157
+  },
+  {
+    "id": "window",
+    "width": 80,
+    "height": 66
+  },
+  {
+    "id": "chest-open",
+    "width": 96,
+    "height": 94
+  },
+  {
+    "id": "manual",
+    "width": 36,
+    "height": 37
+  },
+  {
+    "id": "book",
+    "width": 64,
+    "height": 39
+  },
+  {
+    "id": "lantern",
+    "width": 28,
+    "height": 29
+  },
+  {
+    "id": "wall",
+    "width": 256,
+    "height": 145
+  },
+  {
+    "id": "chest-closed",
+    "width": 96,
+    "height": 71
+  }
+]

@@ -126,6 +126,7 @@ export function GameCanvas() {
           : null,
         quests: s.state?.quest_log,
         storage: s.state?.storage,
+        market: s.state?.market,
         mode: s.panel || "explore",
         player: instance.player
           ? {
@@ -283,7 +284,9 @@ export function GameCanvas() {
             >
               <Hand size={17} />
               <span>
-                <small>{nearest?.name || "探索回响大陆"}</small>
+                {nearest?.name !== interaction?.label && (
+                  <small>{nearest?.name || "探索回响大陆"}</small>
+                )}
                 <b>
                   {busy
                     ? "正在回应…"

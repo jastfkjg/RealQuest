@@ -1,3 +1,4 @@
+import { MarketPanel } from "./components/MarketPanel";
 import { LifeQuestHistory } from "./components/LifeQuests";
 import { RecoveryPanel } from "./components/RecoveryPanel";
 import { TrainingPage } from "./components/TrainingPage";
@@ -47,6 +48,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     "map",
     "storage",
     "building",
+    "shop",
     "npc",
     "activity",
   ].includes(panel || "");
@@ -171,7 +173,7 @@ export function Panels() {
   if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
     board: "委托告示板",
-    map: "回响大陆 · 全域地图",
+    map: "回响大陆 · 旅行地图",
     storage: "家园储物箱",
     character: "冒险者档案",
     inventory: "旅行背包",
@@ -181,6 +183,7 @@ export function Panels() {
     settings: "存档与数据",
     ai: "AI 旅途伙伴",
     menu: "旅途菜单",
+    shop: "风铃杂货铺",
     building: selected?.name || "建筑",
     npc: selected?.id === "noah" ? "林间委托" : "林间相逢",
   };
@@ -189,6 +192,9 @@ export function Panels() {
       {panel === "menu" && (
         <div className="journey-menu">
           <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
+          <button onClick={() => useGame.getState().navigate({ mapId: "overworld", targetId: "shop" })}>
+            <Compass size={18} />风铃杂货铺<span>标记方向 · 买卖与村民订单</span>
+          </button>
           <button onClick={() => open("guide")}>
             <CircleHelp size={18} />
             旅人指南<span>移动、交互与玩法</span>
@@ -214,6 +220,7 @@ export function Panels() {
       {panel === "character" && <CharacterPanel />}
       {panel === "inventory" && <InventoryPanel />}
       {panel === "building" && <BuildingPanel />}
+      {panel === "shop" && <MarketPanel />}
       {panel === "npc" && selected && (
         <ConversationPanel>
           <DialogueText text={dialogue} />
@@ -358,11 +365,14 @@ export function Panels() {
           )}
         </>
       )}
-      {error && panel !== "inventory" && panel !== "journal" && panel !== "character" && (
-        <p className="form-error" role="alert">
-          {error}
-        </p>
-      )}
+      {error &&
+        panel !== "inventory" &&
+        panel !== "journal" &&
+        panel !== "character" && (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        )}
       {notice &&
         panel !== "inventory" &&
         panel !== "journal" &&
@@ -510,7 +520,10 @@ export default function App() {
                     onClick={() => open("character")}
                   >
                     <div className="hud-portrait">
-                      <PixelPerson variant={state.character.appearance} portrait />
+                      <PixelPerson
+                        variant={state.character.appearance}
+                        portrait
+                      />
                       <span
                         aria-label={`等级 ${1 + Math.floor(state.xp / 100)}`}
                       >
@@ -597,7 +610,7 @@ export default function App() {
                     <kbd>{index + 1}</kbd>
                     <span
                       className={`item-icon ${item}`}
-                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.35 }}
+                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.55 }}
                     />
                     <b>{state.inventory[item] || 0}</b>
                   </button>
@@ -614,7 +627,10 @@ export default function App() {
                   >
                     {target === "character" ? (
                       <span className="hud-menu-portrait">
-                        <PixelPerson variant={state.character?.appearance} portrait />
+                        <PixelPerson
+                          variant={state.character?.appearance}
+                          portrait
+                        />
                       </span>
                     ) : (
                       <HudIcon
@@ -643,13 +659,15 @@ export default function App() {
             </nav>
           </main>
           {notice && !panel && (
-            <div className="toast" role="status">
-              <Check size={17} />
-              {notice}
+            <div className="toast rq-theme" role="status">
+              <span className="hud-toast-icon">
+                <Check size={18} />
+              </span>
+              <span className="hud-toast-copy">{notice}</span>
             </div>
           )}
           {error && !panel && (
-            <div className="toast error" role="alert">
+            <div className="toast error rq-theme" role="alert">
               {error}
               <button
                 aria-label="关闭错误提示"

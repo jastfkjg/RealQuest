@@ -1,0 +1,971 @@
+/* Owner-approved daily journal. All functional text and controls remain DOM. */
+.modal.hp-panel.panel-activity.rq-theme {
+  width: min(1320px, calc(100vw - 24px));
+  max-width: none;
+  min-height: 0;
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rq-timber) transparent;
+}
+.modal.hp-panel.panel-activity.rq-theme::backdrop {
+  background: var(--rq-scrim);
+}
+.modal.hp-panel.panel-activity.rq-theme .modal-body {
+  padding: 0;
+  overflow: visible;
+  max-height: none;
+}
+.modal.hp-panel.panel-activity.rq-theme .modal-head {
+  position: sticky;
+  top: 26px;
+  z-index: 6;
+  height: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+.panel-activity.rq-theme .modal-head h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.modal.hp-panel.panel-activity.rq-theme .hp-close {
+  position: absolute;
+  top: 0;
+  right: 28px;
+  border: 2px solid var(--rq-timber);
+  border-radius: 3px;
+  background: var(--rq-pine);
+  color: var(--rq-linen-raised);
+  box-shadow:
+    inset 0 0 0 2px var(--rq-moss),
+    0 2px 0 var(--rq-pine);
+  pointer-events: auto;
+}
+.panel-activity .lj-book {
+  position: relative;
+  isolation: isolate;
+  min-height: 760px;
+  padding: 52px 68px 66px;
+  color: var(--rq-ink);
+  animation: lj-open var(--rq-duration-panel) var(--rq-ease-out);
+}
+.lj-book::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  z-index: -1;
+  border: 1px solid transparent;
+  border-image: url("/assets/hearthwood/life-journal-v1.webp") 120 110 140 110
+    fill / 72px 66px 84px 66px / 0 stretch;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.lj-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  padding: 0 28px 24px 0;
+}
+.lj-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+.lj-title > svg {
+  flex-shrink: 0;
+  color: var(--rq-moss);
+}
+.panel-activity .lj-title h3 {
+  margin: 0;
+  font: 600 28px/1.4 var(--rq-font-title);
+}
+.lj-title h3 small {
+  font: 400 16px/1.5 var(--rq-font-title);
+  color: var(--rq-ink-muted);
+}
+.lj-header .lj-wallet {
+  gap: 14px 22px;
+  padding: 0;
+}
+.lj-wallet > span {
+  gap: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.lj-wallet .commission-icon {
+  width: 27px;
+  height: 27px;
+}
+.lj-wallet b {
+  font-size: 20px;
+}
+.lj-spread {
+  display: grid;
+  grid-template-columns: minmax(308px, 0.48fr) minmax(0, 1fr);
+  gap: 70px;
+}
+.lj-index {
+  min-width: 0;
+}
+.panel-activity .lj-calendar h3 {
+  font: 600 20px/1.5 var(--rq-font-title);
+  margin: 0 0 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rq-divider);
+}
+.lj-month {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+.lj-month strong {
+  font: 600 19px/1.5 var(--rq-font-title);
+}
+.panel-activity .lj-book button {
+  min-width: 44px;
+  min-height: 44px;
+  font: inherit;
+  touch-action: manipulation;
+}
+.panel-activity .lj-month button,
+.panel-activity .lj-day-heading nav button {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border: 1px solid var(--rq-control-border);
+  border-radius: 3px;
+  color: var(--rq-ink);
+  background: transparent;
+  box-shadow: none;
+}
+.lj-calendar-week,
+.lj-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.lj-calendar-week {
+  padding-block: 0 8px;
+  color: var(--rq-ink-muted);
+  text-align: center;
+  font-size: 14px;
+}
+.lj-calendar-days {
+  border-block-start: 1px solid var(--rq-divider);
+  border-inline-start: 1px solid var(--rq-divider);
+}
+.panel-activity .lj-calendar-days > button,
+.lj-calendar-blank {
+  position: relative;
+  min-width: 0;
+  height: 46px;
+  padding: 3px 0 5px;
+  margin: 0;
+  border: 0;
+  border-right: 1px solid var(--rq-divider);
+  border-bottom: 1px solid var(--rq-divider);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--rq-ink);
+  font-variant-numeric: tabular-nums;
+}
+.panel-activity .lj-calendar-days > button {
+  min-width: 44px;
+  font-size: 17px;
+}
+.panel-activity .lj-calendar-days > button[data-future="true"] {
+  color: var(--rq-ink-muted);
+}
+.panel-activity .lj-calendar-days > button[aria-current="date"]::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--rq-moss);
+  pointer-events: none;
+}
+.panel-activity .lj-calendar-days > button[aria-pressed="true"] {
+  background: var(--rq-moss);
+  color: var(--rq-linen-raised);
+}
+.lj-calendar-days button > i {
+  position: absolute;
+  bottom: 4px;
+  left: calc(50% - 2.5px);
+  width: 5px;
+  height: 5px;
+  background: var(--rq-moss);
+  border-radius: 50%;
+}
+.lj-calendar-days button[data-active="true"] > i {
+  background: var(--rq-amber);
+  outline: 1px solid var(--rq-timber);
+}
+.lj-calendar-days button[aria-pressed="true"] > i {
+  background: var(--rq-linen-raised);
+}
+.lj-calendar-days button[aria-pressed="true"][data-active="true"] > i {
+  background: var(--rq-amber);
+}
+.lj-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+  margin-top: 6px;
+}
+.lj-calendar-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-calendar-legend i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--rq-timber);
+  border-radius: 50%;
+  background: var(--rq-amber);
+}
+.panel-activity .lj-calendar-legend button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0 6px 8px;
+  border: 0;
+  box-shadow: none;
+  color: var(--rq-moss);
+  background: transparent;
+  font-size: 14px;
+}
+.lj-quota {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  padding-top: 18px;
+  margin-top: 8px;
+  border-top: 1px dashed var(--rq-divider);
+}
+.lj-quota > strong {
+  width: 100%;
+  font: 600 18px/1.5 var(--rq-font-title);
+}
+.lj-quota b {
+  padding-left: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.lj-quota .life-seeds {
+  gap: 7px;
+}
+.lj-quota .life-seeds i {
+  width: 34px;
+  height: 34px;
+  background: transparent;
+}
+.lj-quota .life-seeds i[data-state="claimed"] {
+  background: var(--rq-moss);
+}
+.lj-quota .life-seeds i[data-state="reserved"] {
+  border: 2px solid var(--rq-timber);
+  color: var(--rq-moss);
+  box-shadow: inset 0 0 0 2px var(--rq-amber);
+}
+.lj-quota > small {
+  width: 100%;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-ledger {
+  display: block;
+  width: min(100%, 290px);
+  height: auto;
+  margin: 6px auto -18px;
+  image-rendering: pixelated;
+}
+.lj-day {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lj-day-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lj-day-heading > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.panel-activity .lj-day-heading h3 {
+  margin: 0;
+  font: 600 32px/1.35 var(--rq-font-title);
+  scroll-margin-top: 70px;
+}
+.lj-day-heading h3:focus {
+  outline: none;
+}
+.lj-day-heading h3:focus-visible {
+  outline: 2px solid var(--rq-moss);
+  outline-offset: 4px;
+}
+.lj-today {
+  border: 1px solid var(--rq-pine);
+  border-radius: 3px;
+  padding: 2px 10px;
+  color: var(--rq-linen-raised);
+  background: var(--rq-moss);
+  font-size: 14px;
+}
+.lj-day-heading nav {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.panel-activity .lj-day-summary {
+  margin: 8px 0 14px;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-other-active {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  padding-block: 8px;
+  border-block: 1px dashed var(--rq-divider);
+  font-size: 14px;
+}
+.lj-other-active > svg {
+  color: var(--rq-moss);
+  flex-shrink: 0;
+}
+.panel-activity .lj-other-active button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  background: transparent;
+  color: var(--rq-moss);
+  border: 0;
+  box-shadow: none;
+  font-size: 14px;
+}
+.panel-activity .lj-filters {
+  display: block;
+  margin: 0 0 20px;
+  border-bottom: 1px solid var(--rq-divider);
+}
+.lj-filters [role="group"] {
+  gap: 10px;
+}
+.panel-activity .lj-filters button {
+  min-width: 76px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 2px 2px 0 0;
+  background: transparent;
+  box-shadow: none;
+}
+.panel-activity .lj-filters button[aria-pressed="true"] {
+  background: var(--rq-moss);
+  color: var(--rq-linen-raised);
+  box-shadow: inset 0 -2px var(--rq-pine);
+}
+.lj-day-content {
+  animation: lj-leaf var(--rq-duration-panel) var(--rq-ease-out);
+}
+.panel-activity .lj-current {
+  margin: 0 0 24px;
+  padding: 20px 22px 14px;
+  border: 1px solid var(--rq-divider);
+  border-left: 3px solid var(--rq-moss);
+  background: rgb(255 251 240 / 55%);
+  box-shadow: 1px 3px 0 rgb(143 110 77 / 12%);
+}
+.lj-task-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.lj-task-heading > .commission-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.panel-activity .lj-task-heading h4 {
+  margin: 0;
+  font: 600 20px/1.5 var(--rq-font-title);
+}
+.lj-task-status {
+  font-size: 14px;
+  color: var(--rq-moss);
+  padding: 2px 8px;
+  border: 1px solid var(--rq-control-border);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.lj-expected {
+  margin-left: auto;
+  text-align: right;
+}
+.lj-expected strong {
+  font-size: 17px;
+}
+.lj-expected small {
+  display: block;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-task-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 104px;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+.lj-task-clock {
+  min-width: 0;
+}
+.lj-task-clock > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-countdown {
+  display: block;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.4;
+  color: var(--rq-pine);
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lj-task-clock progress {
+  display: block;
+  width: 100%;
+  height: 10px;
+  margin: 8px 0 10px;
+  appearance: none;
+  border: 1px solid var(--rq-control-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--rq-slot);
+}
+.lj-task-clock progress::-webkit-progress-bar {
+  background: var(--rq-slot);
+}
+.lj-task-clock progress::-webkit-progress-value {
+  background: var(--rq-moss);
+  border-radius: 6px;
+}
+.lj-task-clock progress::-moz-progress-bar {
+  background: var(--rq-moss);
+}
+.lj-task-clock > small {
+  display: block;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-task-body .contract-hourglass {
+  width: 100%;
+  max-width: 104px;
+}
+.panel-activity .lj-task-hint {
+  margin: 12px 0 8px;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 12px;
+}
+.panel-activity.rq-theme .lj-task-actions > .rq-button,
+.panel-activity.rq-theme .lj-empty > .rq-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  color: var(--rq-linen-raised);
+  background: var(--rq-moss);
+  border: 2px solid var(--rq-timber);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1px var(--rq-pine),
+    0 2px 0 var(--rq-pine);
+}
+.lj-task-actions .life-cancel {
+  margin: 0;
+}
+.lj-task-actions .life-cancel:has([role="group"]) {
+  flex: 1 1 100%;
+}
+.lj-task-actions .life-cancel > [role="group"] {
+  background: var(--rq-linen-raised);
+}
+.lj-provenance {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.panel-activity .lj-records h4 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 4px;
+  font: 600 18px/1.5 var(--rq-font-title);
+}
+.lj-records h4::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dashed var(--rq-divider);
+}
+.lj-records li {
+  gap: 10px;
+  padding-block: 16px;
+}
+.lj-records li > time {
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.lj-records li > .commission-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.lj-records .life-record-stamp {
+  padding: 5px 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.lj-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 8px 24px;
+  text-align: center;
+  color: var(--rq-ink-muted);
+}
+.panel-activity .lj-empty p {
+  margin: 0;
+}
+.lj-empty > svg {
+  color: var(--rq-moss);
+}
+.lj-empty > small {
+  display: block;
+  font-size: 14px;
+}
+.lj-more {
+  margin-top: 12px;
+}
+.panel-activity .lj-footer {
+  margin-top: auto;
+  padding: 16px 0 8px;
+  gap: 2px 18px;
+  border-bottom: 1px solid var(--rq-divider);
+}
+.lj-footer .life-text-button {
+  padding-inline: 0;
+  font-size: 14px;
+}
+.lj-footer > span {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--rq-ink-muted);
+}
+.lj-notes {
+  color: var(--rq-ink-muted);
+  font-size: 14px;
+}
+.lj-notes summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.panel-activity .lj-feedback {
+  padding: 12px;
+  border-left: 3px solid var(--rq-moss);
+  background: var(--rq-linen-raised);
+  color: var(--rq-ink);
+  font-size: 14px;
+}
+.panel-activity .lj-feedback--error {
+  border-color: var(--rq-danger);
+  color: var(--rq-danger);
+}
+.lj-notes summary::-webkit-details-marker {
+  display: none;
+}
+.lj-notes summary::before {
+  content: "›";
+  display: inline-block;
+  font-size: 20px;
+  line-height: 1;
+}
+.lj-notes[open] summary::before {
+  transform: rotate(90deg);
+}
+.lj-notes summary > svg {
+  vertical-align: -3px;
+  margin-right: 5px;
+}
+.panel-activity .lj-notes p {
+  margin: 0 0 12px;
+}
+.panel-activity .lj-book button:focus-visible {
+  z-index: 1;
+  outline: 3px solid var(--rq-pine);
+  outline-offset: 2px;
+}
+.panel-activity .lj-book button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.lj-calendar-toggle,
+.lj-mobile-quota {
+  display: none;
+}
+.panel-activity .modal-body > :is(.form-error, .panel-notice) {
+  display: none;
+}
+@media (hover: hover) {
+  .panel-activity .lj-calendar-days > button:hover:not([aria-pressed="true"]),
+  .panel-activity .lj-month button:hover,
+  .panel-activity .lj-day-heading nav button:hover {
+    background: var(--rq-canvas);
+  }
+  .panel-activity.rq-theme .lj-task-actions > .rq-button:hover:not(:disabled),
+  .panel-activity.rq-theme .lj-empty > .rq-button:hover:not(:disabled) {
+    background: var(--rq-moss-hover);
+    color: var(--rq-linen-raised);
+  }
+  .panel-activity .lj-filters button:hover:not([aria-pressed="true"]) {
+    background: var(--rq-canvas);
+  }
+}
+@keyframes lj-open {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes lj-leaf {
+  from {
+    opacity: 0.5;
+    transform: translateX(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 1180px) and (min-width: 1051px) {
+  .panel-activity .lj-book {
+    padding-inline: 52px;
+  }
+  .lj-spread {
+    gap: 54px;
+  }
+  .lj-title h3 small {
+    display: none;
+  }
+  .lj-header .lj-wallet {
+    gap: 12px;
+  }
+  .lj-task-body {
+    grid-template-columns: minmax(0, 1fr) 84px;
+  }
+  .lj-expected {
+    flex: 1 1 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+@media (max-width: 1050px) {
+  .modal.hp-panel.panel-activity.rq-theme {
+    width: min(720px, calc(100vw - 16px));
+    max-height: calc(100dvh - 16px);
+  }
+  .panel-activity .lj-book {
+    min-height: 640px;
+    padding: 42px 44px 56px;
+    overflow: hidden;
+  }
+  .lj-book::before {
+    width: 158%;
+    left: auto;
+    right: 0;
+    border-image-width: 60px 44px 68px 44px;
+  }
+  .lj-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 14px;
+  }
+  .panel-activity .lj-title h3 {
+    font-size: 25px;
+  }
+  .lj-title h3 small {
+    font-size: 16px;
+  }
+  .lj-header .lj-wallet {
+    gap: 10px 20px;
+  }
+  .lj-spread {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lj-index {
+    display: none;
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+  }
+  .lj-index.is-open {
+    display: block;
+  }
+  .lj-index > .lj-quota,
+  .lj-ledger {
+    display: none;
+  }
+  .panel-activity .lj-calendar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 0;
+    margin: 0 0 16px;
+    border: 0;
+    border-block: 1px solid var(--rq-divider);
+    background: transparent;
+    color: var(--rq-moss);
+    box-shadow: none;
+    font-size: 14px;
+  }
+  .lj-calendar-toggle > span {
+    margin-left: auto;
+    color: var(--rq-ink-muted);
+  }
+  .lj-mobile-quota {
+    display: block;
+  }
+  .lj-mobile-quota .lj-quota {
+    padding: 0;
+    margin: 0 0 16px;
+    border: 0;
+    gap: 6px 10px;
+  }
+  .lj-mobile-quota .lj-quota > strong {
+    width: auto;
+    font: 600 14px/1.5 var(--rq-font-body);
+  }
+  .lj-mobile-quota .lj-quota .life-seeds {
+    gap: 4px;
+  }
+  .lj-mobile-quota .life-seeds i {
+    width: 24px;
+    height: 24px;
+  }
+  .lj-mobile-quota .lj-quota > small {
+    width: auto;
+    font-size: 14px;
+  }
+  .lj-task-body {
+    grid-template-columns: minmax(0, 1fr) 92px;
+  }
+  .lj-countdown {
+    font-size: 34px;
+  }
+  .lj-footer > span {
+    flex-basis: 100%;
+    margin: 0 0 4px;
+  }
+}
+@media (max-width: 600px) {
+  .modal.hp-panel.panel-activity.rq-theme {
+    width: calc(100vw - 8px);
+    max-height: calc(100dvh - 8px);
+  }
+  .modal.hp-panel.panel-activity.rq-theme .modal-head {
+    top: 16px;
+  }
+  .modal.hp-panel.panel-activity.rq-theme .hp-close {
+    right: 14px;
+  }
+  .panel-activity .lj-book {
+    padding: 30px 24px 42px;
+    min-height: 0;
+  }
+  .lj-book::before {
+    border-image-width: 40px 24px 48px 24px;
+  }
+  .lj-header {
+    padding-right: 20px;
+    gap: 10px;
+  }
+  .lj-title {
+    gap: 8px;
+  }
+  .lj-title > svg {
+    width: 25px;
+  }
+  .panel-activity .lj-title h3 {
+    font-size: 22px;
+  }
+  .lj-title h3 small {
+    font-size: 14px;
+  }
+  .lj-header .lj-wallet {
+    gap: 8px 12px;
+  }
+  .lj-wallet > span {
+    gap: 4px;
+  }
+  .lj-wallet .commission-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .lj-wallet b {
+    font-size: 17px;
+  }
+  .lj-day-heading > div {
+    gap: 5px 8px;
+  }
+  .panel-activity .lj-day-heading h3 {
+    font-size: 26px;
+  }
+  .lj-day-heading > div > span {
+    font-size: 14px;
+  }
+  .lj-today {
+    padding: 1px 7px;
+  }
+  .lj-day-heading nav {
+    gap: 5px;
+  }
+  .panel-activity .lj-day-heading nav button {
+    padding: 4px;
+  }
+  .lj-day-heading {
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .lj-task-heading {
+    gap: 6px 8px;
+  }
+  .panel-activity .lj-task-heading h4 {
+    font-size: 18px;
+  }
+  .lj-task-heading > .commission-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .lj-expected {
+    flex: 1 1 100%;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    text-align: left;
+  }
+  .lj-expected strong {
+    font-size: 16px;
+  }
+  .panel-activity .lj-current {
+    padding: 16px 14px 12px;
+  }
+  .lj-task-body {
+    grid-template-columns: minmax(0, 1fr) 62px;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .lj-countdown {
+    font-size: 28px;
+    letter-spacing: 0;
+  }
+  .lj-task-clock > span {
+    gap: 5px;
+  }
+  .lj-task-clock > span svg {
+    width: 17px;
+    height: 17px;
+  }
+  .lj-task-actions {
+    gap: 6px;
+  }
+  .panel-activity .lj-task-actions > .rq-button {
+    padding: 9px 12px;
+  }
+  .lj-task-actions .life-text-button {
+    padding: 8px 4px;
+  }
+  .lj-provenance {
+    font-size: 14px;
+  }
+  .lj-records li > div {
+    flex: 1 1 calc(100% - 94px);
+  }
+  .lj-records .life-record-stamp {
+    margin-left: 83px;
+  }
+  .panel-activity .lj-calendar-days > button {
+    min-width: 44px;
+  }
+  .lj-calendar-days {
+    margin-inline: -3px;
+  }
+  .panel-activity .modal-body > :is(.form-error, .panel-notice) {
+    margin-inline: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-activity .lj-book,
+  .lj-day-content {
+    animation: none;
+  }
+}
+.reduce-motion .panel-activity .lj-book,
+.reduce-motion .lj-day-content {
+  animation: none;
+}

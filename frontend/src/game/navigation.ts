@@ -25,18 +25,26 @@ export function questTarget(
 ): NavigationTarget | null {
   if (quest.status === "ready" || quest.status === "available")
     return {
-      mapId: quest.giver === "guild_board" ? "guild" : "overworld",
+      mapId: quest.giver === "mira" ? "shop" : quest.giver === "guild_board" ? "guild" : "overworld",
       targetId: quest.giver,
     };
   const step = quest.checks.findIndex((v) => !v);
   const targets: Record<string, NavigationTarget[]> = {
+    market_neighbor: [
+      { mapId: "overworld", targetId: "shop" },
+      { mapId: "shop", targetId: "mira" },
+    ],
+    village_supplier: [
+      { mapId: "shop", targetId: "mira" },
+      { mapId: "home", targetId: "home_desk" },
+    ],
     settle_in: [
       { mapId: "overworld", targetId: "home" },
       { mapId: "overworld", targetId: "wood_1" },
     ],
     first_harvest: [
       { mapId: "overworld", targetId: Object.keys(state.plots)[0] || "plot_0" },
-      { mapId: "workshop", targetId: "workshop_counter" },
+      { mapId: "shop", targetId: "mira" },
     ],
     forest_path: [
       { mapId: "overworld", targetId: "grove" },

@@ -24,7 +24,7 @@ export function QuestRewards({ quest: q }: { quest: Quest }) {
           <img
             src={
               id === "gold"
-                ? "/assets/ninja-adventure/icons/gold.png"
+                ? "/assets/hearthwood/detail/items/gold.png"
                 : itemDefinitions[id]?.icon
             }
             alt=""
@@ -98,10 +98,13 @@ export function QuestList({ giver }: { giver?: string }) {
             aria-pressed={selected.id === q.id}
             onClick={() => {
               setSelectedId(q.id);
-              if (window.matchMedia("(max-width: 650px)").matches)
-                detailRef.current?.scrollIntoView({
-                  block: "start",
-                  behavior: "instant",
+              if (window.matchMedia("(max-width: 750px)").matches)
+                requestAnimationFrame(() => {
+                  detailRef.current?.focus({ preventScroll: true });
+                  detailRef.current?.scrollIntoView({
+                    block: "start",
+                    behavior: "instant",
+                  });
                 });
             }}
           >
@@ -147,6 +150,7 @@ export function QuestList({ giver }: { giver?: string }) {
         className="ha-selected-notice"
         key={selected.id}
         aria-label="选中的委托"
+        tabIndex={-1}
       >
         <div className="ha-notice-seal" aria-hidden="true">
           <Flag size={24} />
@@ -155,8 +159,40 @@ export function QuestList({ giver }: { giver?: string }) {
           {selected.giver_name} · {questStatuses[selected.status]}
         </small>
         <h3>{selected.title}</h3>
+        <QuestIllustration quest={selected} />
         <QuestDetails quest={selected} />
       </article>
+    </div>
+  );
+}
+
+function QuestIllustration({ quest }: { quest: Quest }) {
+  const image =
+    quest.id === "settle_in"
+      ? "/assets/hearthwood/village/home.png"
+      : quest.id === "craft_home"
+        ? "/assets/hearthwood/village/workshop.png"
+        : quest.id === "first_harvest"
+          ? itemDefinitions.crop.icon
+          : null;
+  if (!image) return null;
+  return (
+    <div className="notice-illustration" aria-hidden="true">
+      <img className="notice-landmark" src={image} alt="" />
+      {quest.id === "settle_in" && (
+        <img
+          className="notice-material"
+          src={itemDefinitions.wood.icon}
+          alt=""
+        />
+      )}
+      {quest.id === "craft_home" && (
+        <img
+          className="notice-material"
+          src={itemDefinitions.plank.icon}
+          alt=""
+        />
+      )}
     </div>
   );
 }

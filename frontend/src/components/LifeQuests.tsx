@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BookOpen,
   Check,
-  Clock3,
   Footprints,
   Hammer,
   MapPin,
@@ -12,11 +11,12 @@ import {
   Sprout,
   X,
 } from "lucide-react";
-import { serverNow, useGame, activityNames } from "../stores/game";
+import { serverNow, useGame } from "../stores/game";
 import { api } from "../services/api";
 import type { LifeTask } from "../types";
 import { CommissionIcon } from "./CommissionIcon";
 import { ContractHourglass } from "./ContractHourglass";
+import { LifeJournal } from "./LifeJournal";
 
 const paths = {
   study: {
@@ -133,28 +133,6 @@ function CommissionRules() {
         </p>
       </div>
     </details>
-  );
-}
-function Countdown({ task, now }: { task: LifeTask; now: number }) {
-  const remaining = Math.max(0, Math.ceil(task.ready_at - now));
-  const value = [
-    Math.floor(remaining / 3600),
-    Math.floor((remaining % 3600) / 60),
-    remaining % 60,
-  ]
-    .map((n) => String(n).padStart(2, "0"))
-    .join(":");
-  return (
-    <div className="life-clock">
-      <Clock3 size={22} aria-hidden="true" />
-      <div>
-        <strong>{remaining ? value : "约定时间已到"}</strong>
-        <small>
-          {remaining ? "距可结算还有" : "可以找诺亚结算了"} ·{" "}
-          {stamp(task.ready_at)} 起
-        </small>
-      </div>
-    </div>
   );
 }
 function CommissionContract({
@@ -299,10 +277,12 @@ function CancelTask({
   task,
   act,
   compact = false,
+  onCancelled,
 }: {
   task: LifeTask;
   act: (action: string, data: Record<string, unknown>) => Promise<boolean>;
   compact?: boolean;
+  onCancelled?: () => void;
 }) {
   const busy = useGame((s) => s.busy);
   const [confirm, setConfirm] = useState(false);
@@ -341,7 +321,10 @@ function CancelTask({
             <button
               className="rq-button life-danger"
               disabled={busy}
-              onClick={() => void act("life_cancel", { task_id: task.id })}
+              onClick={async () => {
+                if (await act("life_cancel", { task_id: task.id }))
+                  onCancelled?.();
+              }}
             >
               {busy ? "正在取消…" : "确认取消委托"}
             </button>
@@ -657,166 +640,24 @@ export function LifeQuestDialogue({
   );
 }
 export function LifeQuestHistory() {
-  const { state, open } = useGame();
+  const state = useGame((s) => s.state);
   const act = useAction();
   const now = useClock();
-  const journal = state?.life_journal;
-  const active = journal?.tasks.find((t) => t.status === "active");
-  const [filter, setFilter] = useState("all");
-  const [page, setPage] = useState(1);
   if (!state) return null;
-  const closed = (journal?.tasks || []).filter(
-    (t) => t.status !== "active" && (filter === "all" || t.status === filter),
-  );
   return (
-    <div className="life-journal">
-      <header className="life-journal-intro">
-        <div>
-          <span className="life-eyebrow">HEARTHWOOD · 成长手记</span>
-          <h3>现实里的努力，旅途中的回响</h3>
-          <p>与河岸的诺亚约定一段时间，回来收下成长。</p>
-        </div>
-        <NoahMarker />
-      </header>
-      <div className="life-wallet" aria-label="成长点数">
-        <span>
-          <BookOpen size={18} aria-hidden="true" />
-          知识点 <b>{state.knowledge_points || 0}</b>
-        </span>
-        <span>
-          <Footprints size={18} aria-hidden="true" />
-          健康点 <b>{state.health_points || 0}</b>
-        </span>
-        <span>
-          <Hammer size={18} aria-hidden="true" />
-          技能点 <b>{state.skill_points || 0}</b>
-        </span>
-      </div>
-      <LifeQuota />
-      {active && (
-        <section className="life-current" aria-label="当前现实委托">
-          <span className="life-eyebrow">尚未落款的约定</span>
-          <div className="life-current-heading">
-            <h3>
-              {paths[active.kind].name} · {active.hours} 小时
-            </h3>
-            <span>
-              {active.hours} {paths[active.kind].point}
-            </span>
-          </div>
-          <Countdown task={active} now={now} />
-          <p>领取于 {stamp(active.accepted_at)} · 到期后找诺亚结算</p>
-          <CancelTask task={active} act={act} />
-        </section>
+    <LifeJournal
+      state={state}
+      now={now}
+      marker={() => <NoahMarker />}
+      cancel={(task, onCancelled) => (
+        <CancelTask
+          key={task.id}
+          task={task}
+          act={act}
+          compact
+          onCancelled={onCancelled}
+        />
       )}
-      <section className="life-memories" aria-label="历史现实任务">
-        <div className="life-history-heading">
-          <h3>已经走过的路</h3>
-          <div role="group" aria-label="筛选任务记录">
-            {[
-              ["all", "全部"],
-              ["claimed", "已结算"],
-              ["cancelled", "已取消"],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                aria-pressed={filter === id}
-                onClick={() => {
-                  setFilter(id);
-                  setPage(1);
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-        {closed.length ? (
-          <ol>
-            {closed.slice(0, page * 10).map((task) => {
-              const Icon = paths[task.kind].icon;
-              return (
-                <li key={task.id}>
-                  <Icon size={24} aria-hidden="true" />
-                  <div>
-                    <strong>
-                      {paths[task.kind].name}委托 · {task.hours} 小时
-                    </strong>
-                    <small>
-                      {stamp(task.accepted_at)} 领取 →{" "}
-                      {stamp(task.claimed_at ?? task.cancelled_at!)}{" "}
-                      {task.status === "claimed" ? "结算" : "取消"}
-                    </small>
-                    <small>归属 {task.date} · 现实委托 / 等待计时</small>
-                  </div>
-                  <span
-                    className="life-record-stamp"
-                    data-cancelled={task.status === "cancelled"}
-                  >
-                    {task.status === "claimed"
-                      ? `+${task.reward} ${paths[task.kind].point}`
-                      : "已取消 · 0 点"}
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
-        ) : (
-          <p className="life-empty">
-            {filter === "all"
-              ? "手记里还没有结束的委托。和诺亚聊聊，让今天留下第一枚印记。"
-              : "还没有这类记录。"}
-          </p>
-        )}
-        {closed.length > page * 10 && (
-          <button className="rq-button" onClick={() => setPage((p) => p + 1)}>
-            再翻十条记录
-          </button>
-        )}
-      </section>
-      <footer className="life-journal-footer">
-        <button
-          className="life-text-button"
-          onClick={() => {
-            useGame.setState({ studyEntry: "growth" });
-            open("study");
-          }}
-        >
-          知识研修 <ArrowRight size={16} aria-hidden="true" />
-        </button>
-        <button className="life-text-button" onClick={() => open("training")}>
-          体力培养 <ArrowRight size={16} aria-hidden="true" />
-        </button>
-        <small>技能点已存入旅程，后续用于技能成长。</small>
-      </footer>
-      {(state.activities.length > 0 ||
-        (state.study_task_log || []).length > 0 ||
-        (state.exercise_task_log || []).length > 0) && (
-        <details className="life-legacy">
-          <summary>翻阅旧日记录</summary>
-          <p>旧记录与已获奖励仍保留；旧手记不再发放成长点数。</p>
-          <button className="rq-button" onClick={() => open("study")}>
-            打开旧研习手札
-          </button>
-          {state.activities
-            .slice()
-            .reverse()
-            .map((a, i) => (
-              <p key={a.id || i}>
-                {a.date} · {a.note || activityNames[a.kind]} · {a.amount}{" "}
-                {a.kind === "steps"
-                  ? "步"
-                  : a.kind === "management"
-                    ? "次"
-                    : "分钟"}{" "}
-                · {a.source === "timer" ? "计时" : "手动记录"} · {a.xp} EXP
-              </p>
-            ))}
-        </details>
-      )}
-      <p className="life-rules">
-        每日上限按领取日计算（中国标准时间）。取消释放预留额度，已结算点数不会因使用而恢复额度。
-      </p>
-    </div>
+    />
   );
 }

@@ -1,0 +1,44 @@
+Use case: ui-mockup.
+Create ONE polished, production-believable desktop interface preview for RealQuest's Chinese real-life growth journal, wide landscape approximately 1536x1024. This is a new design concept using the supplied images as references, NOT editing the production app and NOT a collage or presentation board. Full image is a single straight-on application screen. No device frame, no designer annotations.
+
+REFERENCE ROLES:
+Image 1 is the CURRENT screenshot; it supplies exact player state, task facts and Chinese vocabulary. Redesign its layout substantially to solve daily browsing and form-like appearance.
+Image 2 is the project's approved reality-commission art direction: warm timber, moss cloth, ivory papers, fine cozy pixel illustrations. Use its material/color family with much lighter framing for efficient daily reading; do not copy its dialogue layout.
+Image 3 is a project character-sheet concept, a reference for crisp legible Chinese typography and linen/moss material coherence. Do not copy its data or layout.
+
+VISUAL THESIS:
+A quietly tactile woodland field journal opened to one day's real-life tasks. A practical calendar and task list made at home in the cozy pixel RPG. Warm, fine pixel-art edges and small carefully detailed illustrated objects, with clean, readable Chinese UI text. Moss-green cloth cover, pale ivory paper, restrained timber edge, dark pine ink. Avoid generic SaaS dashboard cards, large uniform form rectangles and ornate medieval scroll excess. Pixel artwork should be fine and crisp; type should be smooth, readable modern system-style Chinese, title may use restrained CJK serif. No jagged pixel fonts for Chinese. Tiny copper fittings and stitched spine are subtle, not visually loud.
+
+COMPOSITION:
+A dim, defocused top-down woodland village is visible only around the perimeter. Large centered journal panel occupies 92% width and 88% height, with a slim moss cloth outer cover and small rounded timber/copper corners, not a giant dark title bar.
+Header across the top: small sprout emblem, main title "现实成长", modest subtitle "成长手记"; right side compact inline balances "知识点 0" "健康点 0" "技能点 0", with matching small book/boots/hammer icon illustrations; far-right square close latch with X.
+Below header a large, restrained ivory reading surface divided into a LEFT DATE INDEX (about 30% width) and RIGHT DAILY PAGE (about 70%). A visible cloth/book binding, not card frames around every region. Generous but efficient layout. Everything legible at this image size.
+
+LEFT DATE INDEX:
+Top heading "按日翻阅". Month row with previous/next chevrons and centered "2026年10月".
+A properly aligned seven-column monthly calendar with week headings "一 二 三 四 五 六 日". October 1, 2026 is Thursday. Rows:
+blank blank blank 1 2 3 4
+5 6 7 8 9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30 31 blank
+October 15 is selected: moss-green square, ivory number, tiny amber dot for the single active record. Past unselected dates are ordinary dark ink; future dates quieter. Do not fabricate completed-task marks on other days. Under the calendar show small legend with a dot and "有任务记录", plus a modest readable "回到今天" control.
+A subtle horizontal divider.
+Below calendar a small quiet block "今日成长 0 / 5", five small sprout marks, first mark amber outlined for reserved NOT earned, other four unfilled, explanatory text "预留 1 点 · 还可领取 4 点".
+At bottom of left leaf place a compact decorative fine pixel illustration of a closed moss notebook, a feather and small leafy sprig. This is atmosphere only, not a collectible or reward. It must not compete with the calendar.
+
+RIGHT DAILY PAGE:
+Top row strong title "10月15日" with adjacent "星期四" and small moss "今天" tag; at right discreet previous-day / next-day chevrons.
+Under it concise status summary "1 份约定 · 进行中 1 · 已结算 0".
+A short tab row "全部" selected, "已结算", "已取消" as readable understated text tabs; no huge button group.
+Then one single beautiful ACTIVE TASK ENTRY, integrated into the paper. A small timeline dot and time "13:10" in a narrow gutter; a fine book icon and title "学习 · 1小时", a discreet outlined green status "进行中". At upper right of this entry write "+1 知识点" with small text "结算后获得". This is expected reward, NOT already earned.
+Within this entry, put the dominant timer number "00:56:49" in dark moss with caption "距可结算还有", a slim quiet progress line showing about 5% elapsed, then readable timing "13:10 领取 · 14:10 起可结算". A small warm timber hourglass illustration with soft sand and a leafy sprig occupies the right portion of the task area. It is a supporting image about 140px tall, not an elaborate standalone fantasy prop. The task is a pale paper inset with a single thin moss margin / subtle folded corner; do not enclose every line in its own rectangle.
+Below timer, readable helper "到期后，前往诺亚处结算". Main action is a small moss-green, lightly timber-trimmed button with a map pin and exact label "标记诺亚的位置". Secondary action "取消约定" as quiet text beside it. This action ONLY marks Noah; do not imply teleporting, direct reward claim, or task creation here.
+Lower on the daily page a thin divider and heading "当日手记", then a restrained small leaf glyph and truthful empty text "今天还没有已结算的委托". This should feel intentional and calm, with some breathing room, not a giant empty card or fake rows.
+Small quiet footer within the journal: "按领取日期归档 · 记录会自动保留". Do not add daily streaks, achievements, charts, fabricated history, new currencies, new task creation forms or extra menu destinations.
+
+PALETTE:
+Ink #27392F; muted ink #56614F; linen #F4EFDE; raised ivory #FFFBF0; moss #3F6348; pine #233D31; timber #8F6E4D; amber #D3A450; divider #B4B89C. High text contrast, restrained minimal shadows, calm paper texture with no noise under the text. All functional text is Simplified Chinese and clearly legible. This is only a visual concept; production would render text as real UI rather than baked artwork.
+
+QUALITY:
+A coherent shippable-looking game companion interface with clear calendar/day hierarchy, balanced spacing and convincing shared art direction. The calendar and actual task information must be the focus. No fake completed items, no invented balances, no marketing headline, no unrelated people, no watercolor or photoreal surfaces, no glassmorphism. Produce only the single finished screen image.

@@ -1,5 +1,50 @@
 # Hearthwood Review Checklist
 
+## Approved world map — 2026-10-15
+
+- [x] Owner-approved generated concept saved with its prompt; actual map render is a separate candidate.
+- [x] Textless fine-pixel terrain and existing village buildings/bridge are combined with live Chinese DOM labels, state-bound markers and a selected-place leaf. Source/runtime image bytes, dimensions and provenance are recorded.
+- [x] Five desktop/tablet/phone/short-landscape viewports captured and inspected. Index selection, pointer pan, button/wheel zoom, recenter, discovery changes, direction marking without teleport, Escape, minimum 44px controls and browser errors checked in an isolated fixture.
+- [x] Actual game desktop/phone flow opened the map, marked a destination and returned with unchanged player position, inventory and XP; destination art fits its leaf without clipping.
+- [x] TypeScript/Vite build and map browser review pass; source/runtime PNG byte identity verified.
+- [ ] Physical device/Safari, native browser zoom, long-session performance and owner acceptance of the actual browser render remain unverified.
+
+Evidence and exact commands: [world-map task](../tasks/24-world-map.md).
+
+## Illustrated adventurer dossier — 2026-10-15
+
+- [x] Owner approved concept v2; actual browser rendering remains a separate review candidate.
+- [x] Identity/resources, five selectable illustrated abilities, contextual exact-cost spending and insufficient-point guidance implemented. Existing server quotes, save fields and upgrade rules retained.
+- [x] Browser flow: free selection, pending lock, rejected purchase, lost-response replay, stale quote synchronization, all resource/knowledge/skill purchases, reload, focus/Escape, marker-only navigation and touch pass; 16 captures, no unexpected errors.
+- [x] Six viewport layouts and large-text/commission-detail cases inspected; 16 visual captures and 834 visible text runs on actual texture pass, minimum 5.70:1. Existing game frame client passes.
+- [x] TypeScript/Vite build, 35 relevant backend tests and five exact source-crop asset checks pass. Original sources preserved; generated prompt/crops/hashes recorded.
+- [ ] Actual owner render approval, physical devices/Safari, native browser zoom and screen-reader testing remain unverified.
+
+Commands, changed files, evidence and cleanup: [task23](../tasks/23-character-dossier.md).
+
+## Village board and Lia dialogue — 2026-10-15
+
+- [x] Owner approved both generated directions; concept approval and original prompts are recorded. Actual render remains a candidate.
+- [x] Timber/pinned-notice board and scene/low-dialogue Lia layout implemented with native Chinese content, existing quest state, actual actors and existing item identities. Noah and other panel treatments retained.
+- [x] Real objective completion, exact reward turn-in, failed/retried mutation, pending duplicate guard, locked selection and reload checked in an isolated database. Lia request acceptance/folding/farewell, Escape, focus return, focus wrap and first-continue text reveal checked.
+- [x]22 captures at1440/1920/768/390/720 and375/DPR2 touch;125% text and reduced motion inspected. Narrow/short views scroll; no horizontal overflow or undersized changed controls. Close latch has a reserved text gutter.
+- [x] Build,53 backend game tests, skill movement/modal input bursts,125-image audit and3 new asset checks pass. Six actual-texture cases /136 text runs /minimum5.00:1.
+- [ ] Original broad mouse regression did not pass its pickup click because an existing HUD interaction prompt intercepts it. Scoped public keyboard/E route and changed-page mouse/touch flows pass; no broader pass claimed.
+- [ ] Physical device/Safari/native browser zoom/screen reader and actual owner render acceptance remain pending.
+
+Evidence, exact commands, limitations, retained preview and cleanup: [task21](../tasks/21-board-library-dialogue.md).
+
+## Daily growth journal — 2026-10-15
+
+- [x] Owner approved the calendar/daily-journal concept; actual DOM implementation is a separate candidate.
+- [x] Asymmetric moss/linen journal, real balances and quota, record-marked calendar, selected-day task/history, filters and paging implemented. Text and controls remain DOM; one new original blank surface has exact source/runtime provenance.
+- [x] Month/day/keyboard navigation, return-to-today, acceptance-day/overnight archive, due-without-auto-reward, marker-only navigation, cancellation rejection/retry, persistence and focus return pass. Existing48-capture commission flow regression passes with no unexpected browser errors.
+- [x] Six desktop/tablet/phone/landscape sizes,375px/DPR2 touch, large text and reduced motion checked.15 dedicated captures inspected;1,092 actual-texture text runs, minimum5.13:1.
+- [x] TypeScript/Vite build,19 relevant backend rules tests, deterministic date/quota checks,125-image shared-art audit and diff/format checks pass.
+- [ ] Physical devices/Safari, native zoom, actual screen-reader testing and actual-render owner acceptance remain unverified.
+
+Files, exact commands, evidence, limitations and cleanup: [daily journal report](../tasks/20-life-journal.md).
+
 ## Fine pixel village — 2026-10-15
 
 Status: approved concept implemented; actual owner render acceptance pending.
@@ -269,3 +314,28 @@ Status: implemented and browser-verified candidate; the three concepts are owner
 - [ ] Physical devices/Safari, native browser zoom, actual screen-reader/device testing and owner render acceptance remain unverified.
 
 Exact files, commands, source/prompt paths, screenshots, fixture disclosure and retained preview/cleanup: [task17](../tasks/17-commission-pages.md).
+
+## Fine HUD/items and existing interiors — 2026-10-15
+
+- [x] Five floating HUD surfaces share fine moss/linen/timber materials and native readable type; high-resolution original head/item art replaces coarse enlargements. Real counts and empty slots remain truthful.
+- [x] All four existing rooms use fine floors/walls and independent furniture at two native pixels per world unit. Collision/door/action anchors, IDs and authoritative transitions retained; one exit caption.
+- [x] Build,108 backend tests,21-capture village regression,12 HUD cases,23 room captures and inventory mutation/retry/reload checks pass. Desktop/phone images inspected.
+- [x] Four viewport texture checks in default/hover states:8 cases /188 text runs, minimum5.47:1. Numeric pockets and short-landscape prompt placement corrected from actual rendered evidence.
+- [x]33 original runtime assets /690,923 bytes, exact prompts/cuts/hashes and reproducible packing recorded;125 source/runtime images audited. Existing source packs/runtime image bytes preserved.
+- [x] Final cottage25-capture suite and2-iteration game frame client pass; owned browsers/runners verified closed. Preview5211/API8043 intentionally retained for review; other active-task/shared tools preserved.
+- [ ] Actual owner approval, physical Safari/mobile devices, native browser-menu zoom and multi-hour endurance remain unverified.
+
+Evidence, commands, file scope and preview cleanup: [HUD/interior report](../tasks/19-hud-interiors.md).
+
+## Village market and livelihood — 2026-10-15
+
+Status: implemented and browser-verified candidate; owner visual approval pending.
+
+- [x] Walkable shop/path/interior and Mira; server-priced trades, three daily deliveries and two story quests connect gathering/farming to income and home improvement.
+- [x] Actual60-second farming, sales, all orders, home upgrade, persistence, rejection/retry, lost-response reconciliation and reward-once checks pass;124 backend tests pass.
+- [x]25 flow captures across desktop/tablet/phone/short reflow, emulated DPR2 touch/reduced motion, focus/keyboard isolation and marker-only map navigation verified. Nine final layout states/357 actual-texture text runs pass, minimum5.53:1;44px controls, enlarged375px text and bottom-action scrolling checked.
+- [x] Original generated shop/counter preserve exact sources/prompts/alpha with reproducible packing;211,708 runtime bytes. Final shared-tree audit133 images passes. Mira's appearance5 reuse is explicit, not claimed unique art.
+- [x] TypeScript/build, skill frame client and diff checks pass. Owned test browsers/runners exited; fixed5295/API8095 isolated preview intentionally retained and health checked.
+- [ ] Owner render acceptance, physical devices/Safari, native zoom, screen readers and multi-day economy/endurance unverified. Existing distant-exit HUD pointer overlap remains documented; keyboard door flow passes.
+
+Exact files, commands, captures, fixtures, provenance, remaining scope and cleanup: [market report](../tasks/22-village-market.md).

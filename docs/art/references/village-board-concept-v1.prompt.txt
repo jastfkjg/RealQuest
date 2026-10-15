@@ -1,0 +1,17 @@
+Use case: ui-mockup
+Create ONE high-fidelity desktop UI preview screenshot, landscape 1536x1024, for RealQuest, an original cozy woodland pixel RPG. This is a complete redesigned quest notice board screen, ready for a product visual checkpoint, not a wireframe or a presentation slide.
+Reference roles: first image is the CURRENT quest board to redesign and the authoritative source of Simplified Chinese content, task states and rewards. Second image is project-generated Hearthwood material/color style reference ONLY; do NOT copy its NPC sidebar or task-type controls. Third image is project-generated village atmosphere/pixel-art fidelity reference ONLY.
+Composition: a large inviting real wooden village notice board fills roughly 90% of the canvas, with a thin sliver of softly dimmed green pixel village behind. Warm plank grain, measured brass fasteners, restrained moss accents. Avoid the flat brown rectangular admin panel of the current screenshot. The board is the object, not a generic software window. A small tasteful wood plaque at upper left reads “委托告示板”; a moss square close latch upper right.
+Inside the board: 3 short pinned paper notices down the left 31%, one large open selected parchment on the right 63%, clean visual hierarchy and ample breathing room. The left papers have lightly irregular edges, one brass pin each, subtle shadows and intentional different sheet lengths, readable Chinese text; no identical rounded web cards. Selected note bright linen with a small moss ribbon and brass selection accent. The other two are subdued cream, with small bronze lock seals and clearly readable “尚未解锁”. DO NOT add fictional quests, statuses, inventories or rewards.
+Exact left content:
+“3 份告示 · 选择一份查看”
+Selected note: “委托 01” / “给新生活一个落脚点” / “2 / 2 项已完成” / “可交付”
+Second note: “委托 02” / “土地的第一份回礼” / “尚未解锁”
+Third note: “委托 03” / “让家园焕然一新” / “尚未解锁”
+Right selected parchment is elegant pale warm linen, calm texture under type, pinned with two brass pins. Header small “村庄告示板 · 可交付”. Main title “给新生活一个落脚点”. Body “先认认自己的家，再收集一些修缮用的木材。” Include a small original crisp pixel still-life of the existing woodland cottage and 3 logs beside the text, as decorative task illustration, not an inventory or new reward. Do not make it bigger than the main task content.
+Two well-spaced completed objectives with moss checkmarks:
+“进入林间小屋”
+“采集 3 份木材”
+Below a quiet divider: “回礼” then a clear pixel coin with “12 金币”, seed pouch with “3 种子”, and “10 EXP”. These rewards are pending upon turn-in, NEVER mark credited.
+One principal wide moss-green button with restrained timber/brass edges: “交付任务 · 领取奖励” with right arrow. Keep all text legible and high contrast, exact Simplified Chinese, modern CJK body and a restrained serif title. Title and body crisp, not pixelated glyphs. Colors ink #27392F, linen #F4EFDE, raised linen #FFFBF0, moss #3F6348, warm timber #8F6E4D, small amber #D3A450. Actual pixel art should have fine crisp pixels, not smeary painting.
+Avoid SaaS dashboards, form fields, tables, giant empty blocks, KPI tiles, repeated thick frames, generic rounded cards, excessive ornamental vines, photorealism, 3D, brand copies, illegible microtext, mock browser chrome, extra controls or quests. No outer annotations or explanatory captions.

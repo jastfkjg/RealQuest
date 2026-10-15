@@ -1,0 +1,51 @@
+{
+  "creator": "OpenAI built-in image_gen",
+  "license": "Original generated project artwork; no third-party pack",
+  "status": "candidate_pending_owner_visual_review",
+  "rebuild": "tools/build_market_art.py",
+  "rebuild_sha256": "2088b0d873b24279fa0f1b0562605bf06dfea218257345f441aa32823b4c8be4",
+  "records": [
+    {
+      "id": "market-shop",
+      "source": "assets/generated/hearthwood/market-shop-v1.png",
+      "source_sha256": "17fdb2c9714c50052c53ae69c245f5662664d3383a3279c2edb22d34a525ef2d",
+      "source_dimensions": [
+        1345,
+        1169
+      ],
+      "crop": [
+        0,
+        0,
+        1344,
+        1145
+      ],
+      "path": "frontend/public/assets/hearthwood/market/shop.png",
+      "width": 272,
+      "height": 232,
+      "sha256": "4bbb5436eddd41b7cb75e53b5895970b2873a3a325832a99dd26f577cad1bd6c",
+      "size_bytes": 118554,
+      "processing": "Transparent bounds crop; nearest-neighbor proportional resize to two native pixels/world unit; alpha preserved; source unchanged"
+    },
+    {
+      "id": "market-counter",
+      "source": "assets/generated/hearthwood/market-counter-v1.png",
+      "source_sha256": "62059c60d329d10d7d441c9a690cded776a59d7facf863d48ced5888f85e5002",
+      "source_dimensions": [
+        1983,
+        793
+      ],
+      "crop": [
+        43,
+        11,
+        1967,
+        793
+      ],
+      "path": "frontend/public/assets/hearthwood/market/counter.png",
+      "width": 416,
+      "height": 169,
+      "sha256": "13881ae9bd228c8c366f180180beabdd523cff62e52fcbb679ed1ba5b5f3fb58",
+      "size_bytes": 93154,
+      "processing": "Transparent bounds crop; nearest-neighbor proportional resize to two native pixels/world unit; alpha preserved; source unchanged"
+    }
+  ]
+}

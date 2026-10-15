@@ -12,7 +12,9 @@ export function PixelPerson({
       aria-hidden="true"
       className={`pixel-person person-${variant}`}
       style={{
-        backgroundImage: `url("/assets/hearthwood/village/${portrait ? "portrait" : "character"}-${getAppearance(variant).id}.png")`,
+        backgroundImage: portrait
+          ? `url("/assets/hearthwood/detail/portraits/character-${getAppearance(variant).id}.png")`
+          : `url("/assets/hearthwood/village/character-${getAppearance(variant).id}.png")`,
         backgroundSize: "100% 100%",
         backgroundPosition: "center",
       }}

@@ -18,11 +18,12 @@ import { itemDefinitions, itemNames } from "../game/items";
 import { PixelPerson } from "./PixelPerson";
 import { QuestDetails } from "./Quests";
 import { questStatuses } from "../game/questPresentation";
+import { LibraryEncounter } from "./LibraryEncounter";
 
 export function MaterialIcon({ item }: { item: string }) {
   const src =
     item === "gold"
-      ? "/assets/ninja-adventure/icons/gold.png"
+      ? "/assets/hearthwood/detail/items/gold.png"
       : itemDefinitions[item]?.icon;
   return src ? (
     <img className="hp-item-icon" src={src} width={32} height={32} alt="" />
@@ -291,6 +292,15 @@ export function BuildingPanel() {
 }
 
 export function ConversationPanel({ children }: { children: ReactNode }) {
+  const selected = useGame((s) => s.selected);
+  return selected?.id === "lia" ? (
+    <LibraryEncounter>{children}</LibraryEncounter>
+  ) : (
+    <OtherConversationPanel>{children}</OtherConversationPanel>
+  );
+}
+
+function OtherConversationPanel({ children }: { children: ReactNode }) {
   const { selected, state, open } = useGame();
   const [showRequest, setShowRequest] = useState(false);
   const [receipt, setReceipt] = useState<LifeTask | null>(null);

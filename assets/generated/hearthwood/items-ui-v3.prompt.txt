@@ -1,0 +1,16 @@
+Use case: stylized-concept. Production asset: original fine-pixel cozy RPG item/icon atlas with genuinely TRANSPARENT background.
+The attached fine-village screen is STYLE reference only. Design readable original small item illustrations matching its warm timber, cream linen, moss canvas, soft gold, blue-gray stones and finely pixel-authored highlights. Crisp tiny pixel clusters, restrained colored dark outlines, not chunky 16px icons enlarged, not smooth vector or blurry painting. Silhouettes must remain readable at 32–48 CSS pixels, with clear materials and subtle depth. No micro clutter, no thick black outline, no background shadows, no UI frames, labels, letters, numbers or watermarks.
+Layout: ONE SQUARE image, target1024×1024, exactly 3 equal columns and 3 equal rows. Nine separated fully visible objects, centered in their own cells with generous transparent gutters; no objects crossing cell boundaries. Each object fills about two thirds of its cell. No scenery or platforms.
+Row1 left to right:
+1 a small cream linen pouch of radish SEEDS, tied brown drawstring, a simple green sprout emblem stitched on front, 3 small tan seeds visible near its opening; appealing warm canvas folds.
+2 a tied bundle of THREE short LOGS, rich brown bark with fine grain, pale visible round end rings, green twine. Round logs clearly distinct from rectangular planks.
+3 a small cluster of THREE angular gray-blue STONES, highlighted facets and subtle mineral flecks, heavy readable silhouette.
+Row2 left to right:
+4 ONE fresh cream-white TURNIP/RADISH with a small lavender shoulder and three green leaves, tiny root tip; NOT an orange carrot, not multiple crops.
+5 THREE neat rectangular timber PLANKS stacked at a slight offset, squared cut ends, warm grain and small pale edge highlights, no tools.
+6 ONE polished warm gold COIN with thick rim and a simple embossed diamond/sun center, no letter/currency symbol; no pile of coins.
+Row3 left to right:
+7 an adventurer's MOSS CANVAS BACKPACK with brown leather straps, little brass buckles, tidy stitched front pocket, soft cloth folds, recognizable pack silhouette.
+8 an OPEN QUEST JOURNAL with cream pages and moss cloth binding, small brown bookmark, restrained unlettered page lines and a tiny brass corner. No readable text.
+9 a small growing green SPROUT with two leaves and one new central leaf above a tiny bit of dark soil, hopeful and recognizable, no pot and no number.
+All nine share the same overhead/front oblique ITEM illustration perspective and pixel density. They are illustrative game objects, not generic flat symbols. Preserve transparent alpha.

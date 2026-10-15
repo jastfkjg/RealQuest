@@ -41,6 +41,7 @@ export function InventoryPanel() {
         Math.hypot(b.x - state.position.x, b.y - state.position.y),
     )[0];
   const atCounter = !!nearby("workshop_counter");
+  const atMarket = !!nearby("mira");
   let actionLabel = "查看相关委托",
     action = () => open("journal"),
     disabled = false;
@@ -60,13 +61,14 @@ export function InventoryPanel() {
       else navigate({ mapId: "workshop", targetId: "workshop_counter" });
     };
   } else if (item === "crop") {
-    actionLabel = atCounter
+    actionLabel = atCounter || atMarket
       ? `出售 · +${7 + state.buildings.workshop} 金币`
-      : "标记工坊柜台";
+      : "标记风铃杂货铺";
     disabled = !count;
     action = () => {
       if (atCounter) void command("sell", { target: "workshop_counter" });
-      else navigate({ mapId: "workshop", targetId: "workshop_counter" });
+      else if (atMarket) void command("market_trade", { target: "mira", side: "sell", item: "crop", amount: 1 });
+      else navigate({ mapId: "shop", targetId: "mira" });
     };
   } else if (item === "stone") {
     actionLabel = "标记小屋工作台";

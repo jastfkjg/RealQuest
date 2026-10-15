@@ -1356,6 +1356,65 @@
       "runtime_processing": "tools/build_inventory_skin.py --asset commission-letter-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted. No art edits, cropping, resampling or recoloring.",
       "binding": "frontend/src/components/WorldPanels.tsx",
       "content_audit": "Textless decorative commission illustration. Native DOM supplies all task descriptions, rewards, controls and statuses; not inventory or an earned item."
+    },
+    {
+      "id": "ui.life.journal",
+      "status": "candidate_runtime_render_review_pending",
+      "source_path": "assets/generated/hearthwood/life-journal-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/life-journal-v1.webp",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless asymmetrical journal generated from the owner-approved project concept. No third-party pack uploaded. Existing ledger and hourglass are reused unchanged.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-15",
+      "prompt_path": "assets/generated/hearthwood/life-journal-v1.prompt.txt",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        0,
+        0,
+        1536,
+        1016
+      ],
+      "source_sha256": "a97cb740374ba78421d7fb2356acfd0ef5e0c76019093923f831ea4642971e59",
+      "sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "source_size_bytes": 2054804,
+      "size_bytes": 1391868,
+      "runtime_processing": "tools/build_inventory_skin.py --asset life-journal-v1; lossless WebP exact=True method=6; decoded RGBA equality asserted. No artwork edits, resampling or recoloring.",
+      "nine_slice_insets_source_px": {
+        "top": 120,
+        "right": 110,
+        "bottom": 140,
+        "left": 110
+      },
+      "default_border_image_width_css_px": [
+        72,
+        66,
+        84,
+        66
+      ],
+      "binding": "frontend/src/life-journal.css: .lj-book::before; mobile clips the right reading leaf of the same nine-slice.",
+      "content_audit": "Blank ivory leaves, moss cloth and small leather corners only. Date grid, text, badges, task records, timer, quota, filters and all controls are native DOM. Decorative art is not an inventory possession."
+    },
+    {
+      "id": "ui.map.terrain",
+      "status": "implemented_candidate_pending_actual_render_review",
+      "source_path": "assets/generated/hearthwood/world-map-terrain-v1.png",
+      "runtime_path": "frontend/public/assets/hearthwood/world-map-terrain-v1.png",
+      "creator": "OpenAI built-in image_gen, directed for RealQuest",
+      "origin": "Original textless project art derived from the owner-approved generated map concept and project-generated fine-village reference; no vendor pack supplied.",
+      "license": "Generated project artwork; no third-party license claimed.",
+      "generated_on": "2026-10-15",
+      "prompt_path": "assets/generated/hearthwood/world-map-terrain-v1.prompt.txt",
+      "prompt_sha256": "f89e31bb5e268400486012b20b7b810d4c261737195327395d7e0a07aab98827",
+      "source_sha256": "285a0cc5003355322880638113e828996c16ab42cf57b3cae4ee922480e18d61",
+      "sha256": "285a0cc5003355322880638113e828996c16ab42cf57b3cae4ee922480e18d61",
+      "width": 1536,
+      "height": 1024,
+      "size_bytes": 3885267,
+      "mode": "RGB",
+      "runtime_processing": "Byte-identical source copy; no resampling, recoloring or text burned into terrain.",
+      "binding": "frontend/src/components/Atlas.tsx; world positions, discoveries, marker states and actions remain live DOM bound to authoritative data."
     }
   ],
   "additional_character_assets": [
@@ -1493,7 +1552,7 @@
           368
         ]
       },
-      "runtime_binding": "WorldScene home room; original outdoor cottage/yard retained in source, superseded by fine village v2",
+      "runtime_binding": "Historical cottage renderer retained; current rooms use interiors.ts; outdoor home response retained",
       "rebuild": "npm run build in frontend; geometry rendered directly by hearthwood.ts",
       "status": "candidate_pending_owner_visual_review",
       "excluded": "New upgrade progression appearances, saved furnishing states and other interiors"
@@ -1501,7 +1560,7 @@
     {
       "id": "hearthwood.village-ground.v2",
       "source_path": "frontend/src/game/villageGround.ts",
-      "sha256": "a657eacb34883083a44826bfe9dec149b81c0d68bb11b17c268863fed6b1448b",
+      "sha256": "91e66c3a3f6b2d9c31209050233b31b1070a9e3b324f50735a78e59e067586af",
       "source": "Original deterministic high-density canvas terrain with separately recorded generated texture stamps",
       "license": "Project-authored scene code; no external pack",
       "status": "implemented_candidate_pending_owner_visual_review",
@@ -1515,6 +1574,15 @@
       "license": "Project-authored scene code; no external pack",
       "status": "implemented_candidate_pending_owner_visual_review",
       "runtime_binding": "Current outdoor world; existing identifiers, collisions and saves preserved"
+    },
+    {
+      "id": "hearthwood.interiors.v3",
+      "source_path": "frontend/src/game/interiors.ts",
+      "sha256": "8da6dfbdecfbc551346d0aab74ca43ca3e69b2285b5a87801be8808c9d1bafbf",
+      "source": "Original deterministic fine oak floor and nine-patch rug canvas; separately recorded generated furniture",
+      "license": "Project-authored code and generated art; no new external pack",
+      "runtime_binding": "Four existing interiors; furniture footprints, colliders, interaction anchors and saves unchanged",
+      "status": "implemented_candidate_pending_actual_render_review"
     }
   ],
   "hud_concept": {
@@ -1533,9 +1601,9 @@
     {
       "id": "hearthwood.hud.icons.v1",
       "source_path": "frontend/src/components/HudIcon.tsx",
-      "sha256": "4ec76d282a8dff25c69967ad15e904413eb69788331e7173cbeea4c8b88b988a",
-      "source": "Original project code-native integer SVG paths, authored for the approved travel-kit HUD",
-      "license": "Project-authored artwork; no external asset pack",
+      "sha256": "7be8ffac533762e6ec3f5e59d8d8f081c35673da867b04363467cb5fb09ddc64",
+      "source": "Original generated 64px object illustrations (detail-art-v3.json); utility strokes reuse existing lucide-react dependency",
+      "license": "Generated project artwork; existing Lucide dependency ISC license retained",
       "view_box": [
         0,
         0,
@@ -1553,7 +1621,7 @@
         "pin",
         "energy"
       ],
-      "runtime_binding": "App HUD and QuestCompass only; decorative SVG, labels remain native DOM",
+      "runtime_binding": "Current refined HUD icon variants; historical integer paths superseded",
       "rebuild": "npm run build in frontend",
       "status": "implemented_candidate_owner_review_pending"
     },
@@ -1697,5 +1765,113 @@
     ],
     "geometry": "Existing world/colliders unchanged; outdoor camera fit width/640, height/400. Scenery 2 native px/world unit; 48x64 actors at 2/3 scale. Ground backing 3840x2560 for existing 1920x1280 world.",
     "animation": "Four directions, idle/step A/idle/step B. Generated bottom row clipped and excluded. IDs 0/1/2 use original generated player/Lia/Noah; IDs 3/4/5 use explicitly recorded sky/silver/sun palette derivatives."
+  },
+  "detail_art": {
+    "manifest": "docs/art/detail-art-v3.json",
+    "source": "Original built-in image_gen outputs and original high-resolution village head/chest crops",
+    "status": "implemented_candidate_pending_actual_render_review",
+    "prompts": [
+      {
+        "path": "assets/generated/hearthwood/interiors-v3.prompt.txt",
+        "sha256": "d599008179529a7012a56d3893c6cd04d4a556f2618da9ef4b20697d6f25574f"
+      },
+      {
+        "path": "assets/generated/hearthwood/items-ui-v3.prompt.txt",
+        "sha256": "c2068beccfae459b28db80f51fbff8d083871c871e604d9416ad84c0d886e48d"
+      }
+    ],
+    "geometry": "Room scenery 2 native px/world unit; same 480x368 geography. UI items and original-head portraits 64px. DOM type remains native CSS pixels. Common interior camera minimum1.5, half steps fitting width/520 and (height-144)/368.",
+    "note": "No new external asset pack, font, audio, download or commercial purchase. Existing runtime/source packs preserved. Exact crops, source/runtime hashes and packing script hash in linked manifest."
+  },
+  "encounter_art": {
+    "manifest": "docs/art/encounter-art-v1.json",
+    "status": "implemented_candidate_pending_actual_render_review",
+    "concept_owner_approved_on": "2026-10-15",
+    "concepts": [
+      {
+        "path": "docs/art/references/village-board-concept-v1.png",
+        "sha256": "d12e8cc7b256ad3bdb0205b349b6ea8d801f9cbef6255f6e23e88e3ca91ab658",
+        "prompt_path": "docs/art/references/village-board-concept-v1.prompt.txt"
+      },
+      {
+        "path": "docs/art/references/library-dialogue-concept-v1.png",
+        "sha256": "ee1fd367171b320d67e92e76656c5cacd2bce44a1622ef1381190c74ead138fc",
+        "prompt_path": "docs/art/references/library-dialogue-concept-v1.prompt.txt"
+      }
+    ],
+    "prompts": [
+      {
+        "path": "assets/generated/hearthwood/notice-paper-v1.prompt.txt",
+        "sha256": "a65b563b593a79a4f46066a8dffbe3dcab7b956dcddfe90bca4bcce340328d35"
+      },
+      {
+        "path": "assets/generated/hearthwood/library-encounter-v1.prompt.txt",
+        "sha256": "cfb8c36b9a3c64d5dfa98f651c52e4d53d345b0c592fa9821df5b28255410991"
+      }
+    ],
+    "binding": "frontend/src/encounter-ui.css and LibraryEncounter.tsx; real content and state in DOM; source sheets outside runtime bundle"
+  },
+  "life_journal_concept": {
+    "path": "docs/art/references/life-journal-concept-v1.png",
+    "prompt_path": "docs/art/references/life-journal-concept-v1.prompt.txt",
+    "sha256": "aa40476f6f49d5b95c9b5dca5d7b68b778fc341443031d32de8196badfb802d1",
+    "width": 1536,
+    "height": 1024,
+    "creator": "OpenAI built-in image_gen",
+    "status": "owner_approved_reference",
+    "approval": "可以，按此进行实现",
+    "approved_on": "2026-10-15",
+    "runtime": false,
+    "note": "Calendar index and daily task leaf; approval applies to the concept, actual DOM implementation remains a separate review checkpoint."
+  },
+  "world_map_concept": {
+    "path": "docs/art/references/world-map-concept-v1.png",
+    "prompt_path": "docs/art/references/world-map-concept-v1.prompt.txt",
+    "sha256": "1d3254b015170e862b92d3fbd529836a304798d4d1e757021bbee2a9a14488e0",
+    "prompt_sha256": "89ab5b1d11b4b92e23971ac52144b6fbd3484da421398c8f92222ead00e7b0be",
+    "width": 1536,
+    "height": 1024,
+    "creator": "OpenAI built-in image_gen",
+    "status": "owner_approved_reference_2026-10-15",
+    "runtime": false,
+    "note": "The owner approved this concept for implementation. Its sample labels and geography are illustrative; runtime text, positions, exploration and navigation are bound to existing game state. Actual browser implementation remains a separate review checkpoint."
+  },
+  "market_art": {
+    "manifest": "docs/art/market-art-v1.json",
+    "source": "Original built-in image_gen; no third-party reference input",
+    "status": "candidate_pending_owner_visual_review",
+    "prompts": [
+      {
+        "path": "assets/generated/hearthwood/market-shop-v1.prompt.txt",
+        "sha256": "6eace48a283f734c30ca25abf7349fb592060a0228d471f7ad933f6a87b7b123"
+      },
+      {
+        "path": "assets/generated/hearthwood/market-counter-v1.prompt.txt",
+        "sha256": "a2249a7321dbc925607c1ec576c33a0ad403bafc7ce2ca699107877c7e28082f"
+      }
+    ],
+    "actor": "Mira temporarily reuses audited appearance5 sprite and portrait; no unique NPC art claimed"
+  },
+  "character_dossier_v2": {
+    "concept": "docs/art/references/character-dossier-concept-v2.png",
+    "concept_sha256": "e260a984fd15d1ca12d2f803c0ff0da6d3d093e9a49f4abd7fd2ca846c3b1805",
+    "concept_prompt": "docs/art/references/character-dossier-concept-v2.prompt.txt",
+    "concept_status": "owner_approved_reference",
+    "approved_on": "2026-10-15",
+    "approval": "可以，就按这版预览图实现个人档案页，保留现有数据和升级规则。",
+    "source": "assets/generated/hearthwood/character-emblems-v2.png",
+    "prompt": "assets/generated/hearthwood/character-emblems-v2.prompt.txt",
+    "manifest": "docs/art/character-art-v2.json",
+    "rebuild": "tools/build_character_art.py --check",
+    "creator": "OpenAI built-in image_gen",
+    "license": "Original generated project artwork; no third-party license claimed.",
+    "reuse": [
+      "frontend/public/assets/hearthwood/character-dossier-v1.webp",
+      "frontend/public/assets/hearthwood/arrival-village-v1.webp",
+      "frontend/public/assets/hearthwood/village/character-<saved appearance>.png"
+    ],
+    "binding": "CharacterView.tsx and character.css; all values, text, levels, circles, selection and controls are DOM/CSS.",
+    "status": "implemented_candidate_owner_review_pending",
+    "report": "docs/tasks/23-character-dossier.md"
   }
 }

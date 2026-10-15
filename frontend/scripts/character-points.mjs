@@ -3,10 +3,14 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 const base = process.env.REALQUEST_URL || "http://127.0.0.1:5207";
-const out = new URL("../../output/character-points/", import.meta.url);
+const suite =
+  process.env.REALQUEST_DOSSIER === "1"
+    ? "character-dossier"
+    : "character-points";
+const out = new URL(`../../output/${suite}/`, import.meta.url);
 const db = process.env.REALQUEST_TEST_DB;
 assert(
-  db?.endsWith("/output/character-points/test.db"),
+  db?.endsWith(`/output/${suite}/test.db`),
   "Use only the isolated character-points database",
 );
 const python = new URL("../../backend/.venv/bin/python", import.meta.url)
@@ -89,10 +93,48 @@ try {
     assert(!/EXP|经验/.test(await p.locator(".hc-dossier").innerText()));
     assert(
       await p
-        .getByRole("button", { name: "技能点不足 · 还差 1 点" })
-        .isDisabled(),
+        .getByRole("button", { name: "查看工作委托", exact: true })
+        .isEnabled(),
+    );
+    assert.equal(
+      await p.getByRole("button", { name: /消耗 .* · 升级/ }).count(),
+      0,
+    );
+    assert.match(
+      await p.locator(".hc-remaining").innerText(),
+      /再积累 1 技能点/,
     );
     await shot(p, "starter-1440");
+    await p.getByRole("button", { name: "查看工作委托", exact: true }).click();
+    await p.getByRole("region", { name: "工作委托说明" }).waitFor();
+    await p.waitForFunction(
+      () =>
+        document.activeElement === document.querySelector(".hc-commission h4"),
+    );
+    await shot(p, "commission-help");
+    await p.keyboard.press("Escape");
+    assert.equal(await p.locator("dialog[open]").count(), 1);
+    assert.equal(await p.locator(".hc-commission").count(), 0);
+    assert(
+      await p
+        .getByRole("button", { name: "查看工作委托", exact: true })
+        .evaluate((e) => e === document.activeElement),
+    );
+    await p.getByRole("button", { name: "查看工作委托", exact: true }).click();
+    await p
+      .getByRole("button", { name: "标记诺亚的位置", exact: true })
+      .click();
+    assert.equal(await p.locator("dialog[open]").count(), 0);
+    assert.deepEqual((await read(p)).player, baseline.player);
+    await open();
+    await p.getByRole("button", { name: "科学，等级 0", exact: true }).click();
+    await p.getByRole("button", { name: "查看学习委托", exact: true }).click();
+    await p.getByRole("button", { name: "查看成长手记", exact: true }).click();
+    await p.locator(".lj-book").waitFor();
+    assert.deepEqual((await read(p)).player, baseline.player);
+    assert.equal((await read(p)).knowledgePoints, 0);
+    await p.keyboard.press("Escape");
+    await open();
     await p.keyboard.press("d");
     await p.keyboard.press("e");
     assert.deepEqual((await read(p)).player, baseline.player);
@@ -176,12 +218,19 @@ try {
       await shot(p, "purchase-pending");
       await p.locator(".hc-result").waitFor();
       assert.equal((await read(p)).skillPoints, 2);
+      await p.waitForFunction(
+        () => document.activeElement === document.querySelector(".hc-invest"),
+      );
       assert.equal((await read(p)).skillGrowth.planting, 3);
       assert.equal(requests.at(-1).request_id, requests.at(-2).request_id);
       assert(
         await p
-          .getByRole("button", { name: "技能点不足 · 还差 2 点" })
-          .isDisabled(),
+          .getByRole("button", { name: "查看工作委托", exact: true })
+          .isEnabled(),
+      );
+      assert.match(
+        await p.locator(".hc-remaining").innerText(),
+        /再积累 2 技能点/,
       );
       await shot(p, "purchase-saved");
       await p.unroute("**/api/command");
@@ -272,7 +321,7 @@ try {
       await shot(p, "final-1440");
       await p.addStyleTag({
         content:
-          ".hc-growth-row small,.hc-upgrade-note,.hc-accounting > div,.hc-wallet dt small { font-size:18px !important;line-height:1.6 !important }",
+          ".hc-upgrade-note,.hc-effect,.hc-accounting,.hc-remaining,.hc-balance { font-size:18px !important;line-height:1.6 !important }",
       });
       await shot(p, "large-text-1440");
       const touch = await browser.newContext({
@@ -297,6 +346,28 @@ try {
         await phone.locator(".hc-result").waitFor();
         assert.equal((await read(phone)).vitality.max, 110);
         assert.equal((await read(phone)).healthPoints, 0);
+        const actionContrast = await phone
+          .locator(".hc-invest")
+          .evaluate((e) => {
+            const style = getComputedStyle(e);
+            const luminance = (color) =>
+              color
+                .match(/[\d.]+/g)
+                .slice(0, 3)
+                .map(Number)
+                .map((v) => v / 255)
+                .map((v) =>
+                  v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4,
+                )
+                .reduce((n, v, i) => n + v * [0.2126, 0.7152, 0.0722][i], 0);
+            const a = luminance(style.color),
+              b = luminance(style.backgroundColor);
+            return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+          });
+        assert(
+          actionContrast >= 4.5,
+          "Touch sticky hover retains readable action contrast",
+        );
         await shot(phone, "touch-upgrade-saved");
       } finally {
         await touch.close();

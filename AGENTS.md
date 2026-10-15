@@ -31,6 +31,7 @@ Do not ask for permission for every small engineering choice. Obtain an explicit
 
 ## Visual implementation rules
 
+- Prioritize desktop web display for future UI design, implementation, and visual review. Provide reasonable support for phones in landscape orientation; phone portrait layouts and testing are out of scope.
 - Use the shared tokens and Hearthwood component states. Do not invent a new palette, font scale, or frame treatment for each page.
 - Share primitives, not identical layouts: inventory, journal, map, dialogue, and Life Mode have different structures.
 - Keep world units, source pixels, and CSS pixels distinct. Do not scale DOM text with the camera or resize individual world objects to hide a camera problem.

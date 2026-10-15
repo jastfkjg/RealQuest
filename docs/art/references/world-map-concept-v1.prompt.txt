@@ -1,0 +1,56 @@
+RealQuest world map concept v1
+Created: 2026-10-15
+Creator: OpenAI built-in image_gen
+Purpose: Static visual preview only; not implemented or owner-approved.
+Artwork: Generated project concept. No third-party license claimed; no downloaded packs or fonts.
+References: Owner-provided current map screenshot, project-generated approved village-fine-concept-v1.png, project-generated approved village-board-concept-v1.png.
+Runtime: false. Proposed artwork, selected state and illustrated terrain are not player state or authoritative collision/pathfinding data.
+The output was visually inspected for readable Chinese text, consistent fine-pixel scenery, marker differentiation and selected-place hierarchy. No browser or interaction validation applies to this static image.
+Known concept refinement: the generator added a flag beside the selected library; implementation must keep selection brackets separate from the actual tracked quest flag. Unknown-region mist is an illustration of existing landmark discovery only.
+No app code, save data, browser session or development service was changed or started.
+
+PROMPT
+
+Use case: ui-mockup.
+Create ONE polished high-fidelity desktop game world-map redesign preview for the Chinese cozy pixel-life RPG RealQuest, landscape 1536x1024. This is an original visual concept for review, not an implementation or a photographed object. Render the actual finished interface edge-to-edge, no device mockup, no split-screen, no annotations around it.
+
+Reference images:
+Image 1 is the user's CURRENT map screenshot: use ONLY its existing place names, relative geography, navigation semantics, and unknown region states. Dramatically improve its visual quality and composition.
+Image 2 is the approved fine-pixel village art direction: match its coherent fine-pixel timber houses, slate/terracotta roofs, lush but restrained moss foliage, clear teal water, warm dirt paths and crisp small-pixel craftsmanship.
+Image 3 is the approved noticeboard concept: reference its readable native-looking Chinese typography and moss/brass/linen materials only. DO NOT copy its heavy noticeboard structure or huge dark wood framing.
+
+Art direction: Hearthwood. An elegant travel atlas / explorer's fold-out map with a highly legible, detailed MINIATURE pixel-art illustrated landscape, on a restrained moss-cloth backing with very thin timber/brass edging. It should feel like a lovingly crafted game map, not a business dashboard, not a huge blank beige modal, not a photorealistic fantasy painting. Ground remains gently desaturated sage green, river teal, paths sandy ochre, ink very dark pine. Rich detail in destination silhouettes, clustered woods, riverbanks and terrain contours; quiet negative space near labels. No giant source pixels, no blurry art. Top-down orthographic world with front-facing tiny building elevations, not isometric.
+
+Composition:
+Narrow outer margin of the darkened pixel village is visible, about 16px. A simple 68px-high header has a small original compass icon, title “回响大陆” and smaller subtitle “旅行地图” on the left, a compact “地点索引” control near the right and a clearly clickable moss square X close control on the far right.
+The map canvas dominates about 75% of the width and most of the height. A slender right-hand selected-destination information leaf takes about 25%, visually connected to the map by a thin brass divider, NOT a stack of cards.
+A quiet footer contains distinct marker legend and useful controls; no giant empty instruction zone.
+
+Map geography MUST remain recognizably aligned to image 1: vertical river around 25% of map width with two wooden bridges; home/cottage west of river in upper left; village and library east of river in upper middle; dense unknown woodland northeast; quarry southwest; lake southeast. Existing sandy roads visibly connect existing points across the bridges. Road layout is simple and legible; do not invent new towns, islands or castles. Carefully group miniature trees instead of the current repeated triangle stamps. Water has detailed pixel banks and subtle ripples.
+Use five unobtrusive linen/ink region labels with clear Simplified Chinese:
+“向阳家园”, “回响村庄”, “微光林地”, “旧采石场”, “风铃湖畔”.
+Northeast woodland, southwest quarry, southeast lake stay unexplored, rendered as muted low-contrast silhouettes under pale cartographic mist / sparse etched stipple; label each “未探索”. This is landmark discovery indication, no invented real-time fog system. Keep landmark positions readable and selectable, do NOT use lock icons for unexplored areas.
+Explored center has beautiful small consistent pixel-art building landmarks, recognizable but kept to atlas scale: “林间小屋” (warm terracotta-roof cottage west), “工坊” (small workshop near cottage), “回响图书馆” (slate blue roof half-timber library east), “旅人公会” (small timber guild farther southeast). A small noticeboard west beside the path has a single restrained quest-flag pin. No duplicated building giants or tiny real character sprites floating in circles.
+Current-position marker is a filled moss navigation arrow in a pale circle near the west end of the upper bridge, with a compact legible label “你在这里”. It must be unambiguous.
+Selected destination is “回响图书馆”. Give ONLY this landmark a crisp amber four-corner selection bracket and a small amber pennant, with its linen label emphasized. Keep marker labels from colliding. Existing roads are scenery, NOT a promised auto-navigation route. Do NOT draw a fake shortest path, teleport line, arbitrary travel time or distance.
+
+Right selection leaf:
+At top a modest, original detailed pixel vignette of the selected slate-roof library (part of the leaf, not a second photo card), with plenty of calm linen.
+Small eyebrow “目的地 · 回响村庄”
+Prominent but restrained title “回响图书馆”
+Two short readable body lines: “在书页之间，寻找新的线索。” and “可在此与莉娅交谈。”
+One understated open-book feature row “图书与交谈”
+A separate thin divider and small lock glyph ONLY for a semantic event row “沉睡的符文” with supporting text “解读条件尚未满足”. Lock applies to rune reading, NOT to entry to library.
+Lower on the same leaf a compass heading “下一步”
+Text “返回世界，沿方向指引步行前往。”
+One obvious moss-green primary button with a thin brass edge and navigation icon, exact label “标记方向并返回”. Button is large enough to click and has a subtle tactile pressed-edge shadow. No second competing primary action, no fast travel.
+
+Footer and navigation:
+Within map bottom right a neat compass rose marked “北”; near top right of map a tiny grouped − / + control and a crosshair “定位我” button. Zoom and recenter are visible accessible alternatives to dragging. Keep all controls out of labels and terrain landmarks.
+Bottom legend with distinct small shape icons: “当前位置” (filled arrow), “所选地点” (amber corners), “追踪目标” (flag), “未探索” (question marker).
+Bottom hint text: “拖动查看 · 滚轮缩放 · 点击地标查看” with small right-aligned “Esc 关闭”.
+All Chinese text sharp, correctly written, dark high-contrast, native-UI-like typesetting; only the title uses a subtle serif, body uses clean CJK sans. No fake data, no currencies, no reward numbers, no arbitrary completion percentage.
+Palette reference: ink #27392F, linen #F4EFDE, sage #DEE3CF, moss #3F6348, pine #233D31, timber #8F6E4D, amber #D3A450, water #60989E.
+Polish: disciplined spacing, readable map labels with subtle opaque grounds, no overlapping labels, no over-ornamented giant frame, no cards for every place, no neon, no glassmorphism, no photorealistic textures, no English marketing title, no watermark.
+Include only a tiny “设计预览” label in the outer lower margin so this is clearly a proposed screen.
+
