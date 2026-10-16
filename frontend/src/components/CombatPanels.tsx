@@ -15,6 +15,7 @@ import { useGame } from "../stores/game";
 import { itemDefinitions, itemNames } from "../game/items";
 import { caveSight, combatInput } from "../game/cave";
 import { mapById } from "../game/navigation";
+import { IntroContext } from "./VillageIntro";
 
 export function GearPanel() {
   const { state, panel, busy, command, navigate } = useGame();
@@ -42,6 +43,7 @@ export function GearPanel() {
     ) || [];
   return (
     <div className="gear-workbench">
+      {!equipment && <IntroContext place="gear" />}
       <p className="gear-intro">
         {equipment
           ? "选择随身武器并装备。洞内空格攻击，Q施法，R喝汤；点怪物可选择目标。"
@@ -216,7 +218,7 @@ export function GearPanel() {
         <div className="gear-empty">
           <Swords size={40} />
           <h3>还没有随身武器</h3>
-          <p>安家后已有的32金币，足够购买24金币的石刃短剑。</p>
+          <p>当前持有 {state.inventory.gold} 金币。工坊的石刃短剑售价 {c.weapons.stone_sword.price} 金币，购买不要求制造等级。</p>
           <button
             onClick={() =>
               navigate({ mapId: "workshop", targetId: "armory_counter" })
@@ -305,6 +307,7 @@ export function GatePanel() {
   const ready = c.boss_first && stone > 0 && magic >= 3;
   return (
     <div className="stone-gate-panel">
+      <IntroContext place="gate" />
       <div className="gate-emblem">
         <DoorOpen size={56} />
       </div>
@@ -379,6 +382,7 @@ export function CavePanel() {
         : selected.name;
   return (
     <div className="cave-route-panel">
+      <IntroContext place="cave" />
       <Mountain size={44} />
       <small>石根山洞 · 5层</small>
       <h3>{entry ? "石根之下，有微光在呼吸" : selected.name}</h3>
@@ -522,6 +526,7 @@ export function CombatHud() {
               : "可从路标离开或继续前进"}
         </p>
         <small role="status">{hint}</small>
+        {!state.village_intro?.dismissed && !state.village_intro?.reviewed && c.floor === 1 && <p className="intro-combat-hint">{c.cleared ? "首层初探完成 · 可带材料回工坊查看用途" : "首次目标：3只苔团 · 观察预兆，出手后退让"}</p>}
       </div>
       {boss && (
         <div
@@ -597,7 +602,7 @@ export function CombatHud() {
           onClick={() => void command("cave_retreat", {})}
         >
           <Footprints />
-          撤至洞口
+          {state.village_intro?.first_clear && !state.village_intro.reviewed && !state.village_intro.dismissed ? "带材料回洞口" : "撤至洞口"}
         </button>
       </div>
     </>

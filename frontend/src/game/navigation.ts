@@ -7,6 +7,7 @@ import type {
 } from "../types";
 import { serverNow } from "../stores/game";
 import { residentPositions } from "./residents";
+import { villageIntroStep } from "./villageIntro";
 
 export const mapById = (world: World, id: string): MapData =>
   id === "overworld" ? world : world.areas?.[id] || world.interiors[id];
@@ -62,6 +63,10 @@ export function questTarget(
   quest: Quest,
   state: GameState,
 ): NavigationTarget | null {
+  if (quest.id === "leave_valley" && quest.status === "active") {
+    const intro = villageIntroStep(state);
+    if (intro) return intro.target || null;
+  }
   if (quest.status === "ready" || quest.status === "available")
     return {
       mapId:

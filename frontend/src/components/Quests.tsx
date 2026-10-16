@@ -15,6 +15,8 @@ import { questTarget } from "../game/navigation";
 import type { Quest } from "../types";
 import { questStatuses } from "../game/questPresentation";
 import { itemDefinitions } from "../game/items";
+import { IntroContext, IntroTracker, followIntroStep } from "./VillageIntro";
+import { trackedIntroStep, villageIntroStep } from "../game/villageIntro";
 export function QuestRewards({ quest: q }: { quest: Quest }) {
   return (
     <div className="quest-reward" aria-label="委托奖励">
@@ -58,6 +60,7 @@ export function QuestDetails({
       </ul>
       <QuestRewards quest={q} />
       <QuestActions quest={q} conversational={conversational} />
+      {["settle_in", "leave_valley"].includes(q.id) && <IntroContext place="board" />}
     </>
   );
 }
@@ -208,6 +211,7 @@ export function QuestActions({
   const { state, selected, command, busy, navigate, open } = useGame();
   if (!state) return null;
   const atGiver = selected?.id === q.giver;
+  const intro = q.id === "leave_valley" && q.status === "active" ? villageIntroStep(state) : null;
   return (
     <div className={`quest-actions ${journal ? "hj-actions" : ""}`}>
       {q.status === "locked" ? (
@@ -245,6 +249,7 @@ export function QuestActions({
           className={journal ? "rq-button rq-button--primary" : undefined}
           disabled={journal && busy}
           onClick={() => {
+            if (intro) return followIntroStep(intro);
             const target = questTarget(q, state);
             if (target) navigate(target);
           }}
@@ -258,7 +263,7 @@ export function QuestActions({
               ? journal
                 ? "标记委托人"
                 : "找到委托人"
-              : "标记下一步"}
+              : intro?.action || "标记下一步"}
         </button>
       )}
       {q.status === "active" && (
@@ -285,6 +290,7 @@ export function QuestActions({
 export function QuestTracker() {
   const { state, open, navigate } = useGame();
   if (!state) return null;
+  if (trackedIntroStep(state)) return <IntroTracker />;
   const quest =
     state.quest_log.find(
       (q) =>
@@ -363,6 +369,7 @@ export function QuestTracker() {
 export function QuestCompass() {
   const { state, navigate, open } = useGame();
   if (!state) return null;
+  const intro = trackedIntroStep(state);
   const quest =
     state.quest_log.find(
       (q) =>
@@ -371,7 +378,7 @@ export function QuestCompass() {
     state.quest_log.find((q) =>
       ["ready", "active", "available"].includes(q.status),
     );
-  const next = !quest
+  const next = intro ? intro.title : !quest
     ? "照顾家园，或随心探索"
     : quest.status === "ready"
       ? `回到${quest.giver_name}交付`
@@ -384,6 +391,7 @@ export function QuestCompass() {
         className="compass-action"
         aria-label="指引我的下一步"
         onClick={() => {
+          if (intro) return followIntroStep(intro);
           if (!quest) return open("journal");
           if (
             quest.id === "rune_research" &&
@@ -397,7 +405,7 @@ export function QuestCompass() {
       >
         <span>
           <small>
-            {quest?.status === "ready"
+            {intro ? "第一次初探" : quest?.status === "ready"
               ? "委托已就绪"
               : quest?.title || "自由探索"}
           </small>

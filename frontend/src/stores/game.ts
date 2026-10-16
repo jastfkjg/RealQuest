@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { trackedIntroStep } from "../game/villageIntro";
 import { itemNames } from "../game/items";
 export { itemNames } from "../game/items";
 import {
@@ -139,12 +140,18 @@ export const useGame = create<Store>((set, get) => ({
       !!nextNight &&
       !!get().state &&
       (!previousNight || previousNight.day !== nextNight.day);
+    const oldIntro = get().state && trackedIntroStep(get().state!);
+    const nextIntro = trackedIntroStep(reply.state);
+    const marker = get().navigation;
+    const introMarkerChanged = oldIntro?.id !== nextIntro?.id && marker && oldIntro?.target &&
+      marker.mapId === oldIntro.target.mapId && marker.targetId === oldIntro.target.targetId;
     set((current) => ({
       state:
         !current.state || reply.state.revision >= current.state.revision
           ? reply.state
           : current.state,
       clockOffset: reply.server_time - Date.now() / 1000,
+      ...(introMarkerChanged && (!current.state || reply.state.revision >= current.state.revision) ? { navigation: null } : {}),
       ...(dawn &&
       (!current.state || reply.state.revision >= current.state.revision)
         ? {

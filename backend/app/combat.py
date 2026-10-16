@@ -145,6 +145,9 @@ def defeated(state, enemy):
     if all(e['hp'] <= 0 for e in enemies):
         floor = int(state['location'][5:])
         c['unlocked'] = max(c['unlocked'], min(5, floor+1))
+        if floor == 1:
+            from .village_intro import ensure_intro
+            ensure_intro(state)['first_clear'] = True
 
 
 def attack_hit(state, cast):

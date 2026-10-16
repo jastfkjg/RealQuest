@@ -1920,5 +1920,16 @@
     },
     "status": "Playable candidate; owner art and balance acceptance pending. No raster monster animation sheet is claimed.",
     "report": "docs/tasks/28-village-combat.md"
+  },
+  "village_intro": {
+    "source": "Native DOM/CSS using existing Hearthwood tokens, existing item icons and installed Lucide; no new art generation or external assets",
+    "new_runtime_assets": [],
+    "bindings": [
+      "frontend/src/components/VillageIntro.tsx",
+      "frontend/src/game/villageIntro.ts",
+      "frontend/src/village-intro.css"
+    ],
+    "status": "Implemented and browser-verified candidate; owner visual and gameplay acceptance pending",
+    "report": "docs/tasks/29-first-expedition.md"
   }
 }

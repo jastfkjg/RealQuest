@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## First expedition guidance — 2026-10-16
+
+No image, font, audio, external pack or source processing is added. The guide uses native Chinese DOM/CSS, shared Hearthwood tokens, installed Lucide and existing item identities within the board, armory, cave and tracker. Bindings and the empty new-asset list are recorded under `village_intro` in the manifest. Actual browser evidence and pending owner review: [task29](../tasks/29-first-expedition.md).
+
 ## Village combat — 2026-10-16
 
 The five cave floors, entrance, stone gate, route anchors and four enemy silhouettes are original deterministic canvas/Phaser geometry in `frontend/src/game/cave.ts`. Each640×448 world backdrop is drawn at1280×896 source pixels, then bound at0.5 world scale; the existing village actor keeps its established scale and source sheet. The nine new item symbols are original64×64 viewBox inline SVG in `game/items.ts`; installed Lucide supplies DOM action icons. No raster, font, audio, downloaded pack or source-sprite modification is added; no third-party artwork was uploaded to generation. Existing156-image hashes remain audited. These geometry/vector visuals are a playable candidate, with formal cave art, sound, animation and owner approval still pending. Evidence and limitations: [task28](../tasks/28-village-combat.md).

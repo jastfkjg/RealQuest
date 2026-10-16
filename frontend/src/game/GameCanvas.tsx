@@ -141,6 +141,7 @@ export function GameCanvas() {
         departure: s.state?.departure,
         travel: s.state?.travel,
         combat: s.state?.combat,
+        villageIntro: s.state?.village_intro,
         combatTarget: combatInput.target,
         worldClock: s.state?.world_clock,
         gameTime: s.state ? villageClock(s.state, serverNow()) : null,

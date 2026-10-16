@@ -78,6 +78,8 @@ def upgrade_state(original):
         state['save_version'] = 3
     from .combat import ensure_combat
     ensure_combat(state)
+    from .village_intro import ensure_intro
+    ensure_intro(state)
     return state
 
 
@@ -322,6 +324,9 @@ def apply(state, action, data, now):
     if action in ['cave_tick','gear_equip','gear_buy','gear_craft','gear_sell','spark_learn','gate_open','stone_recover','cave_retreat','cave_interact']:
         from .combat import command
         return command(state, action, data, now)
+    if action in ['intro_toggle', 'intro_brief', 'intro_review']:
+        from .village_intro import command
+        return command(state, action, data)
     if action in ['npc_release', 'npc_keep']:
         lease = state['npc_encounter']
         if not lease or data.get('token') != lease['token']:
@@ -544,6 +549,8 @@ def apply(state, action, data, now):
             require(view['status'] == 'available', '任务尚未开放或已经接取')
             state['quests'][quest['id']]={'status':'active','accepted_at':now}
             state['tracked_quest']=quest['id']
+            if quest['id'] == 'leave_valley':
+                state['village_intro']['briefed'] = True
             return f'已接取：{quest["title"]}。下一步已加入旅程追踪'
         require(view['status'] == 'ready', '请先完成任务目标，奖励只能领取一次')
         for item, amount in quest['reward'].items():
@@ -595,6 +602,8 @@ def apply(state, action, data, now):
         state['location']=target
         state['position']=dict(INTERIORS[target]['spawn'])
         remember(state, 'visited_'+target)
+        if target == 'workshop' and state['village_intro']['first_clear'] and state['inventory'].get('gel', 0) > 0:
+            state['village_intro']['returned'] = True
         return f'进入{obj["name"]} · 走近家具按 E 互动，门口可返回户外'
     if action == 'exit':
         require(location != 'overworld' and obj['kind'] == 'exit', '请走到门口离开')

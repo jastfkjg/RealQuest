@@ -4,6 +4,7 @@ import {
   WorldClockLifecycle,
 } from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
+import { IntroGuidePreference } from "./components/VillageIntro";
 import { TravelPanel } from "./components/TravelPanel";
 import { GearPanel, SpellPanel, CavePanel, GatePanel } from "./components/CombatPanels";
 import { itemDefinitions } from "./game/items";
@@ -267,6 +268,7 @@ export function Panels() {
       {panel === "journal" && <JournalPanel />}
       {panel === "guide" && (
         <>
+          <IntroGuidePreference />
           <p>
             现实生活为角色带来成长；森林与家园为你提供物品。即使没有现实记录，也能自由游玩。
           </p>

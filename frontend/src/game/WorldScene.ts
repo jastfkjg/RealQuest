@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { trackedIntroStep } from "./villageIntro";
 import { caveLandscape, CaveController, clearCombatInput, combatInput, combatObjectArt } from "./cave";
 import { journeyLandscape, updateJourney, preloadJourney } from "./journey";
 import { serverNow, useGame } from "../stores/game";
@@ -1028,7 +1029,7 @@ export class WorldScene extends Phaser.Scene {
     }
     const tracked = state.quest_log.find((q) => q.id === state.tracked_quest);
     const target =
-      store.navigation || (tracked ? questTarget(tracked, state) : null);
+      store.navigation || trackedIntroStep(state)?.target || (tracked ? questTarget(tracked, state) : null);
     const obj = target ? accessibleTarget(target, store.world!, state) : null;
     if (obj) {
       const pulse = this.reduced ? 0 : Math.sin(this.elapsed / 260) * 2;

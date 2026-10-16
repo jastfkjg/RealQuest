@@ -1,5 +1,13 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-16 First expedition — verified candidate
+
+- User authorized settle-in claim → departure briefing → weapon preparation → cave floor1 → return with materials. Plan and boundaries: docs/tasks/29-first-expedition.md. Clean starting Git tree; existing npm/Phaser3.90/React19/Python virtualenv reused.
+- Added optional server-persisted briefing/first-clear/physical-workshop-return/review milestones, state-aware next steps and reused board/armory/cave/tracker surfaces. No rewards, balance changes, new art, dependency or SQL migration. Final validation follows below.
+- Final224 backend tests, production build,19 policy decisions, actual new-guest6-flow/19-capture full slice and7-control/4-capture UI fixture suite pass. Main flow never seeds positions, growth, enemies or rewards; zero-level sword clears3 slimes for original3gel/6gold then physically returns. Retry/replay/refresh preserve resources; skip/resume, stored materials, low stamina, side-quest ownership, keyboard and DPR2 touch/reduced-motion/Life/single canvas checked.
+- Scoped typography refinement overrides tiny legacy tracker text only for the new guide;15 actual-background text runs/min6.80:1 and44px actions pass.156-image audit, final2-iteration skill frame client, formatting/diff checks and screenshot inspection pass. Detailed evidence/recording/limits: docs/tasks/29-first-expedition.md. Full3-hour real growth, departure/full-cave balance, owner art/feel and physical-device/endurance acceptance remain pending; do not claim the broader chapter verified.
+- Final cleanup: all browser contexts/runner processes closed, API8104 and preview5404/npm/Vite/esbuild exited and ports free; exact owned identities and results in output/first-expedition/{owned-runtimes,cleanup}.json. No manual preview retained, no shared/user process closed, no player DB edit or commit/push/deploy.78 local document links valid.
+
 ## 2026-10-16 Village weapons, five-floor cave and gate — verified candidate
 
 - Owner authorized village v1 purchase/crafting, five floors and boss, boss stone plus magic3 gate; city advancement excluded. Preserved pre-existing travel/UI changes and all player databases; baseline copies in output/village-combat/baseline. No new dependencies, SQL migration, external art, font or audio.

@@ -1,5 +1,18 @@
 # Hearthwood Review Checklist
 
+## First expedition — 2026-10-16
+
+Status: implemented and browser-verified candidate; owner gameplay/visual acceptance pending.
+
+- [x] Real new-guest starter claim → explicit departure briefing → purchase/equip → actual first-floor sword combat → carry loot back to workshop → inspect uses and save recap. No position, kill or drop fixture in this flow; original prices/rewards and magic0 exploration retained.
+- [x]224 backend tests,19 UI policy decisions,6 flow groups/19 captures and7 control groups/4 captures pass; scoped rejection/retry/replay, reload, skip/resume, stored loot, recovery, tracked side quests and marker-only navigation checked.
+- [x] Desktop1440/1920 and landscape844/720 layouts, DPR2 actual touch events, reduced motion, reading input and Life Mode/single canvas verified. Final two-frame-client captures and actual screenshots inspected.
+- [x] Initial guide font inheritance corrected within this slice.15 visible text runs over actual hidden-text background pixels pass at minimum6.80:1; guide copy≥14px and actions≥44px. This is not a universal contrast audit.
+- [x] No new art/font/audio/dependency/migration;156 existing images audited unchanged. No commit, push, deployment or normal player-data edit.
+- [ ] Owner visual/gameplay confirmation, physical devices/Safari/native zoom/screen readers, complete real-growth-to-departure timing, full-cave balance and long-run/production-load checks remain open.
+
+Files, commands, captures, recording and cleanup: [task29](../tasks/29-first-expedition.md).
+
 ## Day/night and sleep — 2026-10-16
 
 - [x] Reuse the existing resident clock, native Chinese controls, tokens and source artwork; no new bitmap, font, sound or external pack.

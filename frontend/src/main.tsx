@@ -26,6 +26,7 @@ import "./residents.css";
 import "./sleep.css";
 import "./travel.css";
 import "./combat.css";
+import "./village-intro.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

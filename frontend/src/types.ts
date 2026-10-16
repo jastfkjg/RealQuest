@@ -132,6 +132,14 @@ export interface TravelOption {
   reasons: string[];
 }
 export interface GameState {
+  village_intro?: {
+    version: number;
+    dismissed: boolean;
+    briefed: boolean;
+    first_clear: boolean;
+    returned: boolean;
+    reviewed: boolean;
+  };
   village_combat?: { gate_open: boolean; legacy_passage: boolean; boss_first: boolean; equipped: string | null };
   combat?: CombatView;
   departure?: {
