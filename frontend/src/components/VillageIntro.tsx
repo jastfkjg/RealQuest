@@ -87,10 +87,17 @@ export function IntroContext({
   if (place === "board" && selected?.id !== "board") return null;
   if (intro.reviewed)
     return place === "gear" ? (
-      <p className="intro-complete">
-        <Check size={17} />
-        第一次初探已完成。材料和已打通的通路都已保存。
-      </p>
+      <section className="intro-context">
+        <p className="intro-complete">
+          <Check size={17} />
+          第一次初探已完成，收获与通路已保存。
+        </p>
+        <h4>准备下一次出发</h4>
+        <p>看看材料能改善什么装备，也为深入洞穴和启门魔法留一份打算。</p>
+        <button onClick={() => useGame.getState().open("preparation")}>
+          翻开再出发手记 <ArrowRight size={16} />
+        </button>
+      </section>
     ) : null;
   const step = villageIntroStep(state);
   if (!step) return null;
@@ -187,7 +194,10 @@ export function IntroContext({
         <button
           className="primary"
           disabled={busy || !atCounter}
-          onClick={() => void command("intro_review", {})}
+          onClick={async () => {
+            if (await command("intro_review", {}))
+              useGame.getState().open("preparation");
+          }}
         >
           {busy ? "正在保存…" : "记下这次初探"}
         </button>
@@ -221,15 +231,12 @@ export function IntroContext({
 
 export function IntroGuidePreference() {
   const { state, busy, command } = useGame();
-  if (
-    !state?.village_intro ||
-    state.village_intro.reviewed ||
-    state.combat?.gate_open
-  )
-    return null;
+  if (!state?.village_intro || state.combat?.gate_open) return null;
   return (
     <p className="intro-preference">
-      第一次初探引导会保存进度，可随时收起。
+      {state.village_intro.reviewed
+        ? "下一程引导按实际准备更新，可随时收起。"
+        : "第一次初探引导会保存进度，可随时收起。"}
       <button
         disabled={busy}
         onClick={() =>
@@ -238,7 +245,11 @@ export function IntroGuidePreference() {
           })
         }
       >
-        {state.village_intro.dismissed ? "继续初探引导" : "暂时收起引导"}
+        {state.village_intro.dismissed
+          ? state.village_intro.reviewed
+            ? "继续下一程引导"
+            : "继续初探引导"
+          : "暂时收起引导"}
       </button>
     </p>
   );

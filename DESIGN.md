@@ -292,6 +292,14 @@ The owner approved `docs/art/references/life-journal-concept-v1.png`. The HUD gr
 
 On narrow screens the selected day's task comes first; the calendar opens on demand, with native day buttons, keyboard arrows/Home/End/PageUp/PageDown and explicit previous/next controls. Cancellation uses the existing authoritative command and confirmation; failure/success feedback stays in the reading flow. The Noah action only marks a location. Text, filters, countdown, quota and actions are DOM. A blank generated asymmetric book reuses the material direction; existing ledger, icons and sand-clock art are unchanged. Concept approval is recorded; actual-render acceptance is a separate checkpoint. Evidence: `docs/tasks/20-life-journal.md`.
 
+### 7.8 Next departure journal — 2026-10-16
+
+The authorized continuation after the actual first-floor workshop recap uses an illustrated packing place facing a linen preparation leaf. Three native bookmarks connect owned equipment and optional upgrades, permanent five-floor cave routes, and the actual growth wallet/promise. The default leaf and compact tracker follow a single state-aware next action; magic growth and cave exploration can proceed independently. Reading, comparing and marking never spend resources, move the player or assert completed growth. Existing armory, NPC settlement and explicit research remain the mutation surfaces.
+
+Reuse the village arrival vignette, backpack/book props, magic emblem and existing item symbols unchanged. Only this journal and its small return slip gain the new composition. Desktop1440/1920 and1024 keep each leaf fitted; short landscape keeps bookmarks and the primary action fixed while the one reading leaf scrolls, with a fade and explicit scrolling cue. Keyboard focus,44px main actions, touch and reduced motion apply.
+
+After at least five minutes away, an optional per-save device bookmark may trigger a small continuation slip only after a successful current server snapshot. It never steals focus or replaces an open page, respects dismissed guidance and manual side-quest tracking, and does not auto-claim or spend. Background polling cannot consume the absence. Device metadata stores only timestamp/depth/magic, independently of authoritative save state; unavailable storage simply omits the slip. Exact scope and evidence: `docs/tasks/33-next-departure.md`. Actual owner render/feel approval remains pending.
+
 ## 8. Interaction, timing, and sound
 
 Represent top-level input context explicitly, using the existing architecture: world play, overlay, dialogue, targeting, or Life Mode. A keyboard event must not activate two contexts. Ignore gameplay shortcuts during text input, content editing, and IME composition. Clear held movement on blur, visibility loss, and mode transition.

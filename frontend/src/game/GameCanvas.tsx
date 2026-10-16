@@ -10,6 +10,7 @@ import { WorldScene } from "./WorldScene";
 import { ACTOR_FRAME } from "./village";
 import { interactionFor } from "./interaction";
 import { staminaNow } from "./stamina";
+import { nextDeparture } from "./nextDeparture";
 import { accessibleTarget } from "./navigation";
 import { serverNow, useGame } from "../stores/game";
 import {
@@ -142,6 +143,8 @@ export function GameCanvas() {
         travel: s.state?.travel,
         combat: s.state?.combat,
         villageIntro: s.state?.village_intro,
+        nextDeparture: s.state ? nextDeparture(s.state, serverNow()) : null,
+        returnCue: s.returnCue,
         combatTarget: combatInput.target,
         worldClock: s.state?.world_clock,
         gameTime: s.state ? villageClock(s.state, serverNow()) : null,
@@ -257,13 +260,15 @@ export function GameCanvas() {
         <div>
           <b>{region?.name || "回响大陆"}</b>
           <small>
-            {state.location.startsWith("cave_") ? "战斗区 · 空格攻击 · Q法术 · R菜汤" : state.location === "overworld"
-              ? "REALQUEST · 回响大陆"
-              : world.areas?.[state.location]
-                ? "远行途中 · 走近路牌或旅人按 E"
-                : state.location === "home"
-                  ? "收纳 · 休息 · 窗边研习"
-                  : "室内 · 门口按 E 返回户外"}
+            {state.location.startsWith("cave_")
+              ? "战斗区 · 空格攻击 · Q法术 · R菜汤"
+              : state.location === "overworld"
+                ? "REALQUEST · 回响大陆"
+                : world.areas?.[state.location]
+                  ? "远行途中 · 走近路牌或旅人按 E"
+                  : state.location === "home"
+                    ? "收纳 · 休息 · 窗边研习"
+                    : "室内 · 门口按 E 返回户外"}
           </small>
         </div>
       </div>

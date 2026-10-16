@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Next departure journal — 2026-10-16
+
+No new raster, font, audio, downloaded pack or generated source. A scoped native React/CSS journal reuses the original village arrival vignette, backpack/book PNGs, magic emblem and registry item symbols unchanged. Cloth stitching, book binding, route knots, paper bookmarks and the return slip are CSS/DOM; Chinese text remains native. Bindings and the empty new-asset list are recorded under `next_departure_journal` in the manifest. Actual render approval is pending; evidence and limits: [task33](../tasks/33-next-departure.md).
+
 ## Functional worktables and field pages — 2026-10-16
 
 No new image, font, audio, source processing or external pack is added. The armory and utility frames reuse `commission-wood-v1.webp` and the full textless `encounters/notice-paper.webp`; no new paper slice margin is claimed. Existing magic emblem, book, stone, backpack, chest, journey cliff and village vignette supply the scene props. The building sketch now uses the audited Hearthwood home/workshop/library PNGs rather than the old Ninja placeholder. Stone arches are original native CSS geometry; weapon/key art remains the existing item registry. Bindings and exact reuse are in `living_field_panels`;156-image preservation passes. Evidence and pending owner review: [task32](../tasks/32-field-panels.md).

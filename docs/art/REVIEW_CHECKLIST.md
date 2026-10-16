@@ -1,5 +1,16 @@
 # Hearthwood Review Checklist
 
+## Next departure and return guidance — 2026-10-16
+
+- [x] Actual workshop recap connects to a distinct cloth/linen journal with equipment, cave and growth bookmarks. State-aware tracker/manual menu access, dismissed guidance and manually tracked side quests checked. Existing art/asset bytes, rewards and server rules preserved.
+- [x] Final production10groups/25captures: fitted desktop1440/1920/1024, fixed actions and explicitly scrollable reading leaf on844/740landscape, DPR2 touch/reduced motion, keyboard ownership/focus and Escape pass. Screenshots inspected; zero unexpected page/console errors, three injected503logs separate.
+- [x] Actual rejected/retried sword purchase, exact96-gold spend, equip/reload, actual one-point NPC settlement and explicit magic spend pass. Pending promises allow cave play. No new reward or automatic growth, claim, movement or tutorial completion.
+- [x] Optional per-save return slip uses refreshed server state after a simulated600-second absence, waits on failed refresh, preserves another open page, stays quiet through background polling and respects dismiss/side-quest ownership.15.5-second poll regression checked; native OS/tab switching not certified.
+- [x] Build, policy checks,19 prior intro decisions,81 relevant backend tests,156-image audit,7solid contrast pairs(min5.67) and supplied frame client pass. Test-only fixture paths are asserted.
+- [ ] Owner actual-render/feel approval, physical devices/Safari/zoom/screen readers, blocked storage, long-session endurance and full real-growth-to-departure chapter remain unverified.
+
+Files, commands, screenshots, recording and cleanup: [task33](../tasks/33-next-departure.md).
+
 ## Functional popup compositions — 2026-10-16
 
 - [x] Armory rack/work order, illustrated spell/cave/gate, paged paired storage, blueprint/counter and quoted route pages replace the remaining generic utility compositions. Menu/guide/settings use matching materials with explicit native pages.

@@ -1,5 +1,13 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-16 Next departure after first-floor return
+
+- User authorized a coherent first-return continuation: optional equipment improvement, cave progression, real-life growth and offline resumption, with beautiful Hearthwood UI and unchanged rewards/rules. Plan/report: docs/tasks/33-next-departure.md. Starting Git tree was clean.
+- Added a scoped illustrated packing/journal composition with three bookmarks, real equipment comparisons/costs, permanent five-floor route, current knowledge/magic and actual promise state. Workshop recap opens it; menu and state-aware tracker continue the flow. Reading/markers do not mutate or teleport; existing NPC settlement, armory and explicit research remain authoritative.
+- Added optional per-save device-local return metadata, refreshed-server-only continuation, quiet dismissed/side-quest behavior and focus-preserving return. Background polling must not consume an absence; failed refresh waits for a later successful foreground/online refresh. No backend, balance, dependency or art-source changes.
+- Final production suite passes10groups/25captures at desktop1440/1920/1024, short-landscape844/740 and DPR2 touch. Actual rejected/retried96-gold purchase, equip/reload, one-point NPC settlement and explicit magic spend verified; policy checks,19old intro decisions,81 relevant backend tests, build,156-image audit and7contrast pairs(min5.67) pass. Short-screen scrolling is explicit and keeps actions fixed; stabilized final screenshots inspected, background-poll absence and Escape regression pass. Supplied frame client passes final10up/6idle frames with one canvas/no errors. No actual3-hour wait or full chapter/combat replay is claimed.
+- All task browsers/runners and dev/production/API services are closed;5414/8114 are free and the temporary frame wrapper is removed. Runtime identities and cleanup evidence are recorded under output/next-departure/. No task preview remains. Owner visual/feel acceptance and physical-device/Safari/accessibility/endurance checks remain open in task33; no commit/push/deploy.
+
 ## 2026-10-16 In-world functional dialogs
 
 - User requested full redesign of generic popup pages illustrated by armory. Scope/plan: docs/tasks/32-field-panels.md. Previous task30/31 work and player DB/WAL preserved.

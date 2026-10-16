@@ -16,23 +16,73 @@ export interface WorldObject {
   walking?: boolean;
 }
 export interface WeaponDefinition {
-  name: string; price: number; damage: number; interval: number; reach: number; stamina: number;
-  magic: boolean; science: number; magic_level: number; either: boolean;
-  costs: Record<string, number>; craft_reasons: string[];
+  name: string;
+  price: number;
+  damage: number;
+  interval: number;
+  reach: number;
+  stamina: number;
+  magic: boolean;
+  science: number;
+  magic_level: number;
+  either: boolean;
+  costs: Record<string, number>;
+  craft_reasons: string[];
 }
 export interface CaveEnemy {
-  id: string; kind: string; name: string; x: number; y: number; hp: number; max_hp: number;
-  phase: string; until: number; tx: number; ty: number; style?: string;
+  id: string;
+  kind: string;
+  name: string;
+  x: number;
+  y: number;
+  hp: number;
+  max_hp: number;
+  phase: string;
+  until: number;
+  tx: number;
+  ty: number;
+  style?: string;
 }
 export interface CombatView {
-  encounter: string; input_seq: number;
-  projectiles: { x:number; y:number; angle:number; until:number; wave:string }[];
-  weapons: Record<string, WeaponDefinition>; enemies: CaveEnemy[]; floor: number; time: number;
-  effects: { x: number; y: number; text: string; until: number; kind: string }[];
-  cast: { kind: string; angle?: number; reach?: number; until: number; started: number } | null;
-  message: string; cleared: boolean; unlocked: number; equipped: string | null;
-  gate_open: boolean; legacy_passage: boolean; boss_first: boolean; spark_learned: boolean;
-  soups_used: number; attack_at: number; spark_at: number; soup_at: number;
+  encounter: string;
+  input_seq: number;
+  projectiles: {
+    x: number;
+    y: number;
+    angle: number;
+    until: number;
+    wave: string;
+  }[];
+  weapons: Record<string, WeaponDefinition>;
+  enemies: CaveEnemy[];
+  floor: number;
+  time: number;
+  effects: {
+    x: number;
+    y: number;
+    text: string;
+    until: number;
+    kind: string;
+  }[];
+  cast: {
+    kind: string;
+    angle?: number;
+    reach?: number;
+    until: number;
+    started: number;
+  } | null;
+  message: string;
+  cleared: boolean;
+  unlocked: number;
+  equipped: string | null;
+  gate_open: boolean;
+  legacy_passage: boolean;
+  boss_first: boolean;
+  spark_learned: boolean;
+  soups_used: number;
+  attack_at: number;
+  spark_at: number;
+  soup_at: number;
 }
 export interface World extends MapData {
   interiors: Record<string, MapData>;
@@ -140,7 +190,12 @@ export interface GameState {
     returned: boolean;
     reviewed: boolean;
   };
-  village_combat?: { gate_open: boolean; legacy_passage: boolean; boss_first: boolean; equipped: string | null };
+  village_combat?: {
+    gate_open: boolean;
+    legacy_passage: boolean;
+    boss_first: boolean;
+    equipped: string | null;
+  };
   combat?: CombatView;
   departure?: {
     bridge_repaired: boolean;
@@ -261,7 +316,12 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
-  | "armory" | "equipment" | "spellbook" | "cave" | "gate"
+  | "preparation"
+  | "armory"
+  | "equipment"
+  | "spellbook"
+  | "cave"
+  | "gate"
   | "travel"
   | "sleep"
   | "neighbors"

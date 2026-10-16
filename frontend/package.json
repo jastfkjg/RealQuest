@@ -38,7 +38,8 @@
     "test:intro:controls": "node scripts/village-intro-controls.mjs",
     "test:world-ui": "node scripts/world-ui-refinement.mjs",
     "test:controls": "REALQUEST_UI_SUITE=living-controls node scripts/world-ui-refinement.mjs",
-    "test:field-panels": "node scripts/field-panels.mjs"
+    "test:field-panels": "node scripts/field-panels.mjs",
+    "test:next-departure": "node scripts/next-departure-state.mjs && node scripts/next-departure.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

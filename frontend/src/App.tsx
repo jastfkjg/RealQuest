@@ -5,6 +5,14 @@ import {
 } from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
 import { VillageGuide } from "./components/VillageGuide";
+import { NextDeparture, ReturnJourneySlip } from "./components/NextDeparture";
+import {
+  hasDepartureNotes,
+  readJourneyBookmark,
+  rememberJourney,
+  returnNote,
+  trackedDeparture,
+} from "./game/nextDeparture";
 import { TravelPanel } from "./components/TravelPanel";
 import {
   GearPanel,
@@ -23,6 +31,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
+  BookOpen,
   Check,
   ChevronRight,
   CircleHelp,
@@ -50,8 +59,8 @@ import {
 } from "./components/WorldPanels";
 import { chime, unlockSound, usePreferences } from "./game/feel";
 import { GameCanvas } from "./game/GameCanvas";
-import { itemNames, useGame } from "./stores/game";
-import { api } from "./services/api";
+import { itemNames, serverNow, useGame } from "./stores/game";
+import { api, getSessionIdentity } from "./services/api";
 import type { Panel } from "./types";
 function Modal({ title, children }: { title: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null),
@@ -72,6 +81,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     "ai",
   ].includes(panel || "");
   const tactile = [
+    "preparation",
     "armory",
     "equipment",
     "spellbook",
@@ -92,7 +102,10 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     const previous = document.activeElement;
     ref.current?.showModal();
     return () => {
-      if (previous instanceof HTMLElement) previous.focus();
+      if (previous instanceof HTMLElement && previous.isConnected)
+        previous.focus();
+      else if (panel === "preparation")
+        document.querySelector<HTMLElement>('[aria-label="主菜单"]')?.focus();
     };
   }, []);
   return (
@@ -209,6 +222,7 @@ export function Panels() {
   if (panel === "study") return <StudyPage />;
   if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
+    preparation: "再出发手记",
     armory: "工坊武备台",
     equipment: "远行装备",
     spellbook: "术式研习",
@@ -237,6 +251,12 @@ export function Panels() {
       {panel === "menu" && (
         <div className="journey-menu">
           <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
+          {hasDepartureNotes(state) && (
+            <button onClick={() => open("preparation")}>
+              <BookOpen size={18} />
+              再出发手记<span>装备改善、洞穴路标与成长约定</span>
+            </button>
+          )}
           <button
             onClick={() =>
               useGame
@@ -296,6 +316,7 @@ export function Panels() {
         </div>
       )}
       {panel === "activity" && <LifeQuestHistory />}
+      {panel === "preparation" && <NextDeparture />}
       {(panel === "armory" || panel === "equipment") && <GearPanel />}
       {panel === "spellbook" && <SpellPanel />}
       {panel === "cave" && <CavePanel />}
@@ -479,6 +500,7 @@ export default function App() {
     panel,
     quickItems,
     selectItem,
+    returnCue,
   } = useGame();
   useEffect(() => {
     void boot();
@@ -491,11 +513,42 @@ export default function App() {
   useEffect(() => {
     if (!ready) return;
     let refreshing = false;
-    const refresh = () => {
+    let away = document.hidden;
+    const remember = () => {
+      const s = useGame.getState().state;
+      if (s) rememberJourney(s, serverNow(), getSessionIdentity());
+    };
+    const leave = () => {
+      if (!away) remember();
+      away = true;
+    };
+    const refresh = (event?: Event) => {
+      const resumed =
+        event &&
+        (["focus", "pageshow", "visibilitychange"].includes(event.type) ||
+          (event.type === "online" && document.hasFocus()));
+      // Background polling must not consume an absence before the traveler returns.
+      if (away && !resumed) return;
       if (!document.hidden && !refreshing) {
         refreshing = true;
+        const returning = away;
         void api("state")
-          .then((reply) => useGame.getState().accept(reply))
+          .then((reply) => {
+            const store = useGame.getState();
+            if (reply.state.revision < (store.state?.revision || 0)) return;
+            store.accept(reply);
+            if (reply.save_id && getSessionIdentity() !== reply.save_id) return;
+            if (returning) {
+              const cue = returnNote(
+                reply.state,
+                reply.server_time,
+                readJourneyBookmark(reply.save_id || getSessionIdentity()),
+              );
+              if (cue) useGame.setState({ returnCue: cue });
+              away = false;
+            }
+            if (document.hasFocus() && !document.hidden) remember();
+          })
           .catch(() => undefined)
           .finally(() => {
             refreshing = false;
@@ -503,13 +556,23 @@ export default function App() {
       }
     };
     const id = setInterval(refresh, 15000);
-    document.addEventListener("visibilitychange", refresh);
+    const visibility = (event: Event) => {
+      if (document.hidden) leave();
+      else refresh(event);
+    };
+    document.addEventListener("visibilitychange", visibility);
+    window.addEventListener("blur", leave);
+    window.addEventListener("pagehide", leave);
+    window.addEventListener("offline", leave);
     window.addEventListener("pageshow", refresh);
     window.addEventListener("focus", refresh);
     window.addEventListener("online", refresh);
     return () => {
       clearInterval(id);
-      document.removeEventListener("visibilitychange", refresh);
+      document.removeEventListener("visibilitychange", visibility);
+      window.removeEventListener("blur", leave);
+      window.removeEventListener("pagehide", leave);
+      window.removeEventListener("offline", leave);
       window.removeEventListener("pageshow", refresh);
       window.removeEventListener("focus", refresh);
       window.removeEventListener("online", refresh);
@@ -658,9 +721,11 @@ export default function App() {
                   </span>
                 </div>
               </section>
-              {!panel && !tracking && !state.location.startsWith("cave_") && (
-                <QuestCompass />
-              )}
+              {!panel &&
+                !tracking &&
+                !(returnCue && trackedDeparture(state, serverNow())) &&
+                !state.location.startsWith("cave_") && <QuestCompass />}
+              {!tracking && <ReturnJourneySlip />}
               {!panel && tracking && !state.location.startsWith("cave_") && (
                 <aside className="sidebar">
                   <div className="sidebar-title">

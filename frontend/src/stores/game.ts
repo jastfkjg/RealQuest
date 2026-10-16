@@ -1,5 +1,12 @@
 import { create } from "zustand";
 import { trackedIntroStep } from "../game/villageIntro";
+import {
+  trackedDeparture,
+  returnNote,
+  readJourneyBookmark,
+  rememberJourney,
+  type ReturnNote,
+} from "../game/nextDeparture";
 import { itemNames } from "../game/items";
 export { itemNames } from "../game/items";
 import {
@@ -25,6 +32,8 @@ interface Store {
   quickItems: string[];
   activityKind: string;
   studyEntry: "growth" | null;
+  knowledgeBranch: "science" | "magic" | null;
+  returnCue: ReturnNote | null;
   selectItem: (item: string) => void;
   pinItem: (item: string, index: number) => void;
   dialogue: string;
@@ -61,9 +70,7 @@ function readQuickItems(): string[] {
       Array.isArray(saved) &&
       saved.length === 4 &&
       new Set(saved).size === 4 &&
-      saved.every((item) =>
-        Object.hasOwn(itemNames, item) && item !== "gold",
-      )
+      saved.every((item) => Object.hasOwn(itemNames, item) && item !== "gold")
     )
       return saved;
   } catch {
@@ -80,6 +87,8 @@ export const useGame = create<Store>((set, get) => ({
   quickItems: readQuickItems(),
   activityKind: "study",
   studyEntry: null,
+  knowledgeBranch: null,
+  returnCue: null,
   selectItem: (inventoryItem) => set({ inventoryItem }),
   pinItem: (item, index) => {
     if (
@@ -140,18 +149,31 @@ export const useGame = create<Store>((set, get) => ({
       !!nextNight &&
       !!get().state &&
       (!previousNight || previousNight.day !== nextNight.day);
-    const oldIntro = get().state && trackedIntroStep(get().state!);
-    const nextIntro = trackedIntroStep(reply.state);
+    const previous = get().state;
+    const oldIntro =
+      previous &&
+      (trackedIntroStep(previous) ||
+        trackedDeparture(previous, reply.server_time));
+    const nextIntro =
+      trackedIntroStep(reply.state) ||
+      trackedDeparture(reply.state, reply.server_time);
     const marker = get().navigation;
-    const introMarkerChanged = oldIntro?.id !== nextIntro?.id && marker && oldIntro?.target &&
-      marker.mapId === oldIntro.target.mapId && marker.targetId === oldIntro.target.targetId;
+    const introMarkerChanged =
+      oldIntro?.id !== nextIntro?.id &&
+      marker &&
+      oldIntro?.target &&
+      marker.mapId === oldIntro.target.mapId &&
+      marker.targetId === oldIntro.target.targetId;
     set((current) => ({
       state:
         !current.state || reply.state.revision >= current.state.revision
           ? reply.state
           : current.state,
       clockOffset: reply.server_time - Date.now() / 1000,
-      ...(introMarkerChanged && (!current.state || reply.state.revision >= current.state.revision) ? { navigation: null } : {}),
+      ...(introMarkerChanged &&
+      (!current.state || reply.state.revision >= current.state.revision)
+        ? { navigation: null }
+        : {}),
       ...(dawn &&
       (!current.state || reply.state.revision >= current.state.revision)
         ? {
@@ -170,9 +192,17 @@ export const useGame = create<Store>((set, get) => ({
     try {
       const reply = await api("session", "POST");
       get().accept(reply);
+      const cue = returnNote(
+        reply.state,
+        reply.server_time,
+        readJourneyBookmark(reply.save_id),
+      );
+      if (!document.hidden)
+        rememberJourney(reply.state, reply.server_time, reply.save_id);
       set({
         world: reply.world!,
         ready: true,
+        returnCue: cue,
         error: "",
         panel:
           window.location.hash === "#training" && reply.state.character
@@ -195,10 +225,13 @@ export const useGame = create<Store>((set, get) => ({
       // Combat polling stays quiet; an actual defeat needs an outcome after
       // the cave HUD disappears. Morning outcomes retain their own UI owner.
       if (
-        silent && action === "cave_tick" && reply.message &&
+        silent &&
+        action === "cave_tick" &&
+        reply.message &&
         reply.state.location !== data.location &&
         reply.state.world_clock?.last_night?.day === previousMorning
-      ) set({ notice: reply.message, noticePanel: null });
+      )
+        set({ notice: reply.message, noticePanel: null });
       if (["track_quest", "quest_accept", "quest_claim"].includes(action))
         set({ navigation: null });
       if (!silent)

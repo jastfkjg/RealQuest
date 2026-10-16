@@ -1998,5 +1998,23 @@
     "notes": "Full notice-paper bitmap is used as a textless background; no unmeasured new slice inset. Existing vector item symbols remain presentation-only. Unknown future assets are not introduced.",
     "status": "Implemented and production-browser-verified candidate; owner actual-render acceptance pending",
     "report": "docs/tasks/32-field-panels.md"
+  },
+  "next_departure_journal": {
+    "source": "Native React/CSS field journal and return slip, using shared Hearthwood tokens, installed Lucide and unchanged existing project-owned art.",
+    "new_runtime_assets": [],
+    "reuse": [
+      "frontend/public/assets/hearthwood/arrival-village-v1.webp",
+      "frontend/public/assets/hearthwood/detail/items/backpack.png",
+      "frontend/public/assets/hearthwood/detail/interiors/book.png",
+      "frontend/public/assets/hearthwood/character/magic.webp"
+    ],
+    "bindings": [
+      "frontend/src/components/NextDeparture.tsx",
+      "frontend/src/next-departure.css",
+      "frontend/src/game/items.ts",
+      "frontend/src/game/nextDeparture.ts"
+    ],
+    "status": "Implemented candidate; final evidence and owner actual-render acceptance tracked separately",
+    "report": "docs/tasks/33-next-departure.md"
   }
 }

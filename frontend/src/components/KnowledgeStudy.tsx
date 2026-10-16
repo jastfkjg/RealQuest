@@ -34,7 +34,9 @@ export function KnowledgeStudy({
   onRead: (id: string) => void;
 }) {
   const { state, busy, error } = useGame();
-  const [branch, setBranch] = useState<Branch>("science");
+  const [branch, setBranch] = useState<Branch>(
+    useGame.getState().knowledgeBranch || "science",
+  );
   const [result, setResult] = useState<{
     branch: Branch;
     level: number;
@@ -53,6 +55,7 @@ export function KnowledgeStudy({
     (t) => t.knowledge_reward,
   );
   useEffect(() => {
+    useGame.setState({ knowledgeBranch: null });
     heading.current?.focus({ preventScroll: true });
   }, []);
   async function invest() {
@@ -223,7 +226,7 @@ export function KnowledgeStudy({
           查看现实委托
         </button>
         <p className="knowledge-future">
-          科学与魔法等级会永久保留。相应道具与法术的使用效果将在后续开放。
+          科学与魔法等级永久保留。魔法1级可在图书馆学习火花术；魔法3级可配合门钥魔法石启门。打造仍须满足对应图纸条件。
         </p>
         <details className="study-records knowledge-sources">
           <summary>

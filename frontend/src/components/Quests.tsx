@@ -17,6 +17,12 @@ import { questStatuses } from "../game/questPresentation";
 import { itemDefinitions } from "../game/items";
 import { IntroContext, IntroTracker, followIntroStep } from "./VillageIntro";
 import { trackedIntroStep, villageIntroStep } from "../game/villageIntro";
+import { trackedDeparture } from "../game/nextDeparture";
+import {
+  DepartureTracker,
+  followPreparation,
+  usePreparationClock,
+} from "./NextDeparture";
 export function QuestRewards({ quest: q }: { quest: Quest }) {
   return (
     <div className="quest-reward" aria-label="委托奖励">
@@ -384,8 +390,10 @@ export function QuestActions({
 
 export function QuestTracker() {
   const { state, open, navigate } = useGame();
+  const now = usePreparationClock();
   if (!state) return null;
   if (trackedIntroStep(state)) return <IntroTracker />;
+  if (trackedDeparture(state, now)) return <DepartureTracker />;
   const quest =
     state.quest_log.find(
       (q) =>
@@ -463,8 +471,10 @@ export function QuestTracker() {
 // One actionable next step, using the same authoritative quest checks.
 export function QuestCompass() {
   const { state, navigate, open } = useGame();
+  const now = usePreparationClock();
   if (!state) return null;
   const intro = trackedIntroStep(state);
+  const preparation = !intro && trackedDeparture(state, now);
   const quest =
     state.quest_log.find(
       (q) =>
@@ -475,13 +485,15 @@ export function QuestCompass() {
     );
   const next = intro
     ? intro.title
-    : !quest
-      ? "照顾家园，或随心探索"
-      : quest.status === "ready"
-        ? `回到${quest.giver_name}交付`
-        : quest.status === "available"
-          ? `向${quest.giver_name}接取委托`
-          : quest.objectives[quest.checks.findIndex((v) => !v)];
+    : preparation
+      ? preparation.title
+      : !quest
+        ? "照顾家园，或随心探索"
+        : quest.status === "ready"
+          ? `回到${quest.giver_name}交付`
+          : quest.status === "available"
+            ? `向${quest.giver_name}接取委托`
+            : quest.objectives[quest.checks.findIndex((v) => !v)];
   return (
     <aside className="quest-compass rq-theme" aria-label="下一步引导">
       <button
@@ -489,6 +501,7 @@ export function QuestCompass() {
         aria-label="指引我的下一步"
         onClick={() => {
           if (intro) return followIntroStep(intro);
+          if (preparation) return followPreparation(preparation);
           if (!quest) return open("journal");
           if (
             quest.id === "rune_research" &&
@@ -502,11 +515,13 @@ export function QuestCompass() {
       >
         <span>
           <small>
-            {intro
-              ? "第一次初探"
-              : quest?.status === "ready"
-                ? "委托已就绪"
-                : quest?.title || "自由探索"}
+            {preparation
+              ? "下一次出发"
+              : intro
+                ? "第一次初探"
+                : quest?.status === "ready"
+                  ? "委托已就绪"
+                  : quest?.title || "自由探索"}
           </small>
           <b>{next}</b>
         </span>
