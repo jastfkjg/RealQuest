@@ -7,11 +7,9 @@ from functools import lru_cache
 from heapq import heappop, heappush
 from math import hypot
 
-DAY_SECONDS = 1800
-START_MINUTE = 510  # A welcoming, settled 08:30 on first arrival.
+from .daynight import DAY_SECONDS, START_MINUTE, CLOCK_LEASE_SECONDS, ensure_clock, clock_elapsed, settle_clock, clock_view
 SPEED = 40
 LEASE_SECONDS = 90
-CLOCK_LEASE_SECONDS = 10
 
 
 def stop(hour, location, x, y, activity, line):
@@ -74,29 +72,6 @@ RESIDENTS = {
         ],
     },
 }
-
-
-def ensure_clock(state, now):
-    state.setdefault('world_clock', {'elapsed':0, 'updated_at':now, 'running_until':0, 'day_seconds':DAY_SECONDS})
-
-
-def clock_elapsed(state, now):
-    clock = state.get('world_clock', {})
-    return clock.get('elapsed',0) + max(0, min(now,clock.get('running_until',0))-clock.get('updated_at',now))
-
-
-def settle_clock(state, now, running=None):
-    ensure_clock(state, now)
-    clock = state['world_clock']
-    clock['elapsed'] = clock_elapsed(state,now)
-    clock['updated_at'] = now
-    if running is not None:
-        clock['running_until'] = now+CLOCK_LEASE_SECONDS if running else 0
-
-
-def clock_view(state, now):
-    total = START_MINUTE + clock_elapsed(state,now) * 1440 / DAY_SECONDS
-    return {'day': int(total // 1440) + 1, 'minute': total % 1440, 'day_seconds': DAY_SECONDS}
 
 
 @lru_cache(maxsize=256)

@@ -4,12 +4,22 @@ export const villageClock = (state: GameState, now: number) => {
   const clock = state.world_clock;
   const elapsed =
     (clock?.elapsed || 0) +
-    Math.max(
-      0,
-      Math.min(now, clock?.running_until || 0) - (clock?.updated_at || now),
-    );
-  const total = 510 + (elapsed * 1440) / (clock?.day_seconds || 1800);
-  return { day: Math.floor(total / 1440) + 1, minute: total % 1440 };
+    (clock && now <= clock.running_until
+      ? Math.max(0, now - clock.updated_at)
+      : 0);
+  const base = clock?.start_minute ?? 510;
+  const total = base + (elapsed * 1440) / (clock?.day_seconds || 1800);
+  const day =
+    clock?.version === 2
+      ? Math.floor((clock.elapsed || 0) / clock.day_seconds) + 1
+      : Math.floor(total / 1440) + 1;
+  return {
+    day,
+    minute:
+      (clock?.version === 2
+        ? Math.min(total, (day - 1) * 1440 + 1500)
+        : total) % 1440,
+  };
 };
 export const clockLabel = (minute: number) =>
   `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;

@@ -123,7 +123,7 @@ def test_gather_rejection_atomic_and_bed_rest(client, monkeypatch):
         value['location'] = 'home'
         bed = next(o for o in INTERIORS['home']['objects'] if o['id'] == 'home_bed')
         value['position'] = {'x': bed['x'], 'y': bed['y']}; p.state = value
-    rested = cmd(client, 'rest', {'target':'home_bed'}).json()['state']
+    rested = cmd(client, 'rest', {'target':'home_bed', 'expected_day':1}).json()['state']
     assert rested['stamina']['current'] == 100 and rested['inventory'] == s['inventory']
     assert rested['plots'] == s['plots'] and rested['health_points'] == 0
 

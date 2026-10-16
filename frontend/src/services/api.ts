@@ -1,4 +1,8 @@
 import type { Reply } from "../types";
+let worldDay: number | undefined;
+export function setWorldDay(day: number) {
+  worldDay = day;
+}
 export async function api<T = Reply>(
   path: string,
   method = "GET",
@@ -32,7 +36,19 @@ export function sendCommand(
   const body = {
     request_id: crypto.randomUUID(),
     action,
-    data,
+    data:
+      [
+        "move",
+        "enter",
+        "exit",
+        "gather",
+        "plant",
+        "harvest",
+        "rest",
+        "short_rest",
+      ].includes(action) && worldDay !== undefined
+        ? { world_day: worldDay, ...data }
+        : data,
     save_id: saveIdentity,
   };
   const run = async () => {

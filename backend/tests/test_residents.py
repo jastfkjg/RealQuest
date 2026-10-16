@@ -20,7 +20,7 @@ NOW = datetime(2026,10,16,12,tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
 
 def resident_state(id='lia', hour=8.5):
     s = fresh()
-    s['world_clock']={'elapsed':(hour*60-510)*1.25,'updated_at':NOW,'running_until':NOW+10,'day_seconds':1800}
+    s['world_clock']={'version':2,'start_minute':360,'elapsed':(hour*60-360)*1.25,'updated_at':NOW,'running_until':NOW+10,'day_seconds':1800,'owner':'test-view'}
     p = resident_position(s,id,NOW)
     s['location'],s['position']=p['location'],{'x':p['x'],'y':p['y']}
     return s
@@ -43,12 +43,14 @@ def test_routes_are_walkable_and_only_cross_maps_at_doors():
 def test_clock_is_server_owned_and_distinct_from_real_daily_limits():
     s=resident_state(); c=clock_view(s,NOW)
     assert c['day']==1 and c['minute']==510
-    # Offline time is bounded by a ten-second heartbeat lease, not hours.
-    assert clock_view(s,NOW+1800)['minute']==518
+    # Missing heartbeat tails are discarded; offline cannot cause fainting.
+    assert clock_view(s,NOW+1800)['minute']==510
     assert clock_view(s,NOW-100)['minute']==510
     for when in range(0,1801,3):
         apply(s,'world_resume',{'owner':'test-view'},NOW+when)
-    assert clock_view(s,NOW+1800)=={'day':2,'minute':510,'day_seconds':1800}
+    clock=clock_view(s,NOW+1800)
+    assert clock['day']==2 and 808 <= clock['minute'] <= 811
+    assert s['world_clock']['last_night']['kind']=='faint'
     assert s['inventory']['gold']==20
 
 

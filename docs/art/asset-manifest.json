@@ -1874,6 +1874,13 @@
     "status": "implemented_candidate_owner_review_pending",
     "report": "docs/tasks/23-character-dossier.md"
   },
+  "day_night_sleep": {
+    "source": "Original DOM/CSS using existing Hearthwood tokens and installed Lucide icons; existing Phaser tint and doorway light layer",
+    "new_runtime_assets": [],
+    "binding": "frontend/src/components/SleepPanel.tsx, frontend/src/sleep.css and existing clock/canvas/scene",
+    "status": "implemented_candidate_owner_render_review_pending",
+    "report": "docs/tasks/26-day-night-sleep.md"
+  },
   "resident_art": {
     "manifest": "docs/art/resident-art-v1.json",
     "source": "Three original built-in image_gen character sheets with exact adjacent prompts",

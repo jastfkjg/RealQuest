@@ -1,5 +1,16 @@
 # Hearthwood Review Checklist
 
+## Day/night and sleep — 2026-10-16
+
+- [x] Reuse the existing resident clock, native Chinese controls, tokens and source artwork; no new bitmap, font, sound or external pack.
+- [x] New06:00 journey, 24-hour clock, midnight,01:00 faint, next morning at home, HP loss without sleep stamina recovery, free short rest and sleep-to-morning checked with deterministic rules and actual browser flows.
+- [x] Life/reading, disconnect and pagehide pause; expired lease tails discarded; old-save migration, concurrent initialization, receipt replay and late yesterday movement preserve assets and state.
+- [x] Production build,174 backend tests,9 feature flows/16 desktop/landscape/DPR2-touch captures and cleanup-wrapped skill frame client pass. Inspected the actual sleep, night and morning images; improved short-screen actions and kept morning feedback clear of the clock.
+- [x] Existing keyboard/gameplay regression passes using a local compatibility copy that replaces the old intercepted gather click with physical keyboard approach/E. Unmodified mouse regression still stops at that existing HUD obstruction; no mouse-regression pass is claimed.
+- [ ] Actual-render owner approval, physical devices/Safari, native browser zoom/screen readers, full-day endurance and final gameplay balance remain unverified. Production clock migration and lodging remain future work.
+
+Files, commands, evidence and cleanup: [task26](../tasks/26-day-night-sleep.md).
+
 ## Approved world map — 2026-10-15
 
 - [x] Owner-approved generated concept saved with its prompt; actual map render is a separate candidate.

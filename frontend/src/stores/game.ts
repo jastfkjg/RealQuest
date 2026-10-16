@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { itemNames } from "../game/items";
 export { itemNames } from "../game/items";
-import { api, sendCommand, setSessionIdentity } from "../services/api";
+import {
+  api,
+  sendCommand,
+  setSessionIdentity,
+  setWorldDay,
+} from "../services/api";
 import type {
   GameState,
   NavigationTarget,
@@ -115,16 +120,43 @@ export const useGame = create<Store>((set, get) => ({
     }
     saveIdentity = reply.save_id || saveIdentity;
     if (reply.save_id) setSessionIdentity(reply.save_id);
+    if (
+      reply.state.world_clock?.version === 2 &&
+      reply.state.revision >= (get().state?.revision ?? 0)
+    )
+      setWorldDay(
+        Math.floor(
+          reply.state.world_clock.elapsed / reply.state.world_clock.day_seconds,
+        ) + 1,
+      );
     if (!hasServerClock || reply.server_time >= clockAnchor.time) {
       clockAnchor = { time: reply.server_time, tick: performance.now() };
       hasServerClock = true;
     }
+    const previousNight = get().state?.world_clock?.last_night;
+    const nextNight = reply.state.world_clock?.last_night;
+    const dawn =
+      !!nextNight &&
+      !!get().state &&
+      (!previousNight || previousNight.day !== nextNight.day);
     set((current) => ({
       state:
         !current.state || reply.state.revision >= current.state.revision
           ? reply.state
           : current.state,
       clockOffset: reply.server_time - Date.now() / 1000,
+      ...(dawn &&
+      (!current.state || reply.state.revision >= current.state.revision)
+        ? {
+            panel: null,
+            selected: null,
+            nearest: null,
+            navigation: null,
+            error: "",
+            notice: "",
+            noticePanel: null,
+          }
+        : {}),
     }));
   },
   boot: async () => {
@@ -149,6 +181,7 @@ export const useGame = create<Store>((set, get) => ({
   command: async (action, data = {}, silent = false) => {
     if (!silent && get().busy) return false;
     if (!silent) set({ busy: true, error: "" });
+    const previousMorning = get().state?.world_clock?.last_night?.day;
     try {
       const reply = await sendCommand(action, data);
       get().accept(reply);
@@ -156,7 +189,10 @@ export const useGame = create<Store>((set, get) => ({
         set({ navigation: null });
       if (!silent)
         set({
-          notice: reply.message || "",
+          notice:
+            reply.state.world_clock?.last_night?.day !== previousMorning
+              ? ""
+              : reply.message || "",
           noticePanel: get().panel,
           dialogue: ["talk", "npc_topic", "npc_gift", "npc_help"].includes(
             action,

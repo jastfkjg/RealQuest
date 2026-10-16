@@ -23,6 +23,7 @@ import "./life-journal.css";
 import "./market.css";
 import "./components/atlas.css";
 import "./residents.css";
+import "./sleep.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

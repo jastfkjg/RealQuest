@@ -4,6 +4,7 @@ import {
   WorldClockLifecycle,
 } from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
+import { SleepPanel } from "./components/SleepPanel";
 import { LifeQuestHistory } from "./components/LifeQuests";
 import { RecoveryPanel } from "./components/RecoveryPanel";
 import { TrainingPage } from "./components/TrainingPage";
@@ -49,6 +50,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   const panel = useGame((s) => s.panel);
   const state = useGame((s) => s.state);
   const tactile = [
+    "sleep",
     "neighbors",
     "board",
     "map",
@@ -178,6 +180,7 @@ export function Panels() {
   if (panel === "study") return <StudyPage />;
   if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
+    sleep: "林间小屋 · 安心休息",
     board: "委托告示板",
     map: "回响大陆 · 旅行地图",
     storage: "家园储物箱",
@@ -239,6 +242,7 @@ export function Panels() {
       {panel === "inventory" && <InventoryPanel />}
       {panel === "building" && <BuildingPanel />}
       {panel === "neighbors" && <ResidentsPanel />}
+      {panel === "sleep" && <SleepPanel />}
       {panel === "shop" && <MarketPanel />}
       {panel === "npc" && selected && (
         <ConversationPanel>
@@ -276,6 +280,10 @@ export function Panels() {
               走近小屋南侧农田种下种子，60 秒后回来收获。离线不会让作物枯萎。
             </li>
             <li>去工坊出售萝卜、制作木板，用材料升级建筑。</li>
+            <li>
+              06:00 起床，01:00
+              前到家中床铺睡觉。未睡会被送回家，生命下降且体力不恢复；床边也可免费小憩。阅读面板、现实成长、后台与离线暂停游戏时间。
+            </li>
             <li>
               记录一次 25 分钟学习，获得符文解读能力，再去图书馆东侧寻找遗迹。
             </li>
@@ -385,6 +393,7 @@ export function Panels() {
         </>
       )}
       {error &&
+        panel !== "sleep" &&
         panel !== "inventory" &&
         panel !== "journal" &&
         panel !== "character" && (
@@ -393,6 +402,7 @@ export function Panels() {
           </p>
         )}
       {notice &&
+        panel !== "sleep" &&
         panel !== "inventory" &&
         panel !== "journal" &&
         panel !== "character" &&

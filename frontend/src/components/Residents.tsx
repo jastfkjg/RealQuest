@@ -11,6 +11,7 @@ import {
 import { staminaNow } from "../game/stamina";
 import { itemNames } from "../game/items";
 import { NpcPerson } from "./NpcPerson";
+import { BedtimeReminder } from "./SleepPanel";
 
 function useVillageNow() {
   const [now, setNow] = useState(serverNow);
@@ -23,22 +24,27 @@ function useVillageNow() {
 
 export function VillageClock() {
   const state = useGame((s) => s.state),
+    panel = useGame((s) => s.panel),
     open = useGame((s) => s.open),
     now = useVillageNow();
   if (!state) return null;
   const clock = villageClock(state, now);
   return (
-    <button
-      className="village-clock rq-theme"
-      onClick={() => open("neighbors")}
-      aria-label="查看村民近况和日常作息"
-    >
-      <Clock3 size={16} />
-      <span>
-        第 {clock.day} 天 · {clockLabel(clock.minute)}
-      </span>
-      <small>村庄时间</small>
-    </button>
+    <>
+      <button
+        className="village-clock rq-theme"
+        data-late={clock.minute >= 1380 || clock.minute < 60}
+        onClick={() => open("neighbors")}
+        aria-label="查看村民近况和日常作息"
+      >
+        <Clock3 size={16} />
+        <span>
+          第 {clock.day} 天 · {clockLabel(clock.minute)}
+        </span>
+        <small>{panel ? "游戏已暂停" : "01:00 前入睡"}</small>
+      </button>
+      {!panel && <BedtimeReminder minute={clock.minute} />}
+    </>
   );
 }
 
@@ -286,8 +292,8 @@ export function ResidentsPanel() {
         <p className="residents-time">
           <Clock3 size={17} />第 {clock.day} 天 · {clockLabel(clock.minute)}
           <small>
-            游玩 30
-            分钟为村庄一天。阅读面板、后台与离线时暂停；现实委托仍按真实时间计算。
+            06:00 起床，01:00
+            前入睡。阅读面板、后台与离线时暂停；现实委托仍按真实时间计算。
           </small>
         </p>
       </aside>

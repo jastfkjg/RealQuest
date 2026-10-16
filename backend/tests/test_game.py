@@ -28,9 +28,17 @@ def cmd(client, action, data=None, key=None):
 
 def create(client):
     assert cmd(client,'create',{'name':'测试旅人','appearance':1}).status_code == 200
+    # Existing NPC/economy fixtures take place at 08:30, independently of the
+    # new journey's 06:00 start. Keep those scenario conditions deterministic.
+    with Session.begin() as db:
+        p = db.scalar(select(Player)); value = copy.deepcopy(p.state)
+        value['world_clock'].update(elapsed=187.5, running_until=0)
+        p.state = value
 
 def fresh():
-    s=initial_state();apply(s,'create',{'name':'规则测试'},100);return s
+    s=initial_state();apply(s,'create',{'name':'规则测试'},100)
+    s['world_clock'].update(elapsed=187.5, running_until=0)
+    return s
 
 def study_create(state, now, minutes=25, title='读一章植物笔记'):
     key = str(uuid.uuid4())

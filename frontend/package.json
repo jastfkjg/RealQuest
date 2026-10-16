@@ -30,6 +30,7 @@
     "test:life-journal": "node scripts/life-journal-dates.mjs && node scripts/life-journal-smoke.mjs",
     "test:market": "node scripts/market-smoke.mjs",
     "test:residents": "node scripts/residents-smoke.mjs",
+    "test:sleep": "node scripts/day-night-smoke.mjs",
     "test:residents:visual": "node scripts/residents-visual.mjs"
   },
   "dependencies": {

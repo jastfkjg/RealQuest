@@ -38,6 +38,7 @@ export class WorldScene extends Phaser.Scene {
   direction = 0;
   elapsed = 0;
   lastSync = 0;
+  lastMorning = 0;
   lastDraw = 0;
   pending = false;
   interacting = false;
@@ -90,6 +91,7 @@ export class WorldScene extends Phaser.Scene {
     this.response = null;
     this.objectLayers = new Map();
     this.lastXp = state.xp;
+    this.lastMorning = state.world_clock?.last_night?.at || 0;
     this.lastFootstep = this.elapsed;
     if (state.location === "overworld") village(this, this.map);
     else fineRoom(this, this.map);
@@ -686,6 +688,21 @@ export class WorldScene extends Phaser.Scene {
   }
   step(delta: number) {
     if (!this.player || this.transitioning) return;
+    const night = useGame.getState().state?.world_clock?.last_night;
+    if (night && night.at > (this.lastMorning || 0)) {
+      this.lastMorning = night.at;
+      const state = useGame.getState().state!;
+      this.path = [];
+      this.clickTarget = null;
+      this.hovered = null;
+      this.touch = { x: 0, y: 0 };
+      this.input.keyboard?.resetKeys();
+      if (state.location === this.map.id) {
+        this.player.setPosition(state.position.x, state.position.y);
+        this.synced = { ...state.position };
+        this.lastSync = this.elapsed;
+      }
+    }
     if (useGame.getState().state?.location !== this.map.id) {
       this.transitioning = true;
       useGame.getState().setNearest(null);
@@ -701,7 +718,9 @@ export class WorldScene extends Phaser.Scene {
       this.isTyping() ||
       useGame.getState().busy ||
       this.interacting ||
-      document.hidden;
+      document.hidden ||
+      !navigator.onLine ||
+      villageClock(useGame.getState().state!, serverNow()).minute === 60;
     let dx =
       Number(this.keys.D.isDown || this.keys.RIGHT.isDown) -
       Number(this.keys.A.isDown || this.keys.LEFT.isDown) +
@@ -809,7 +828,7 @@ export class WorldScene extends Phaser.Scene {
     if (this.map.id === "overworld") {
       const hour = villageClock(state, now).minute / 60;
       const night =
-        hour >= 20 || hour < 6 ? 0.16 : hour >= 18 ? (hour - 18) * 0.08 : 0;
+        hour >= 20 || hour < 6 ? 0.32 : hour >= 18 ? (hour - 18) * 0.16 : 0;
       this.villageLight
         .clear()
         .fillStyle(0x293e50, night)

@@ -15,6 +15,7 @@ from .quests import quest_views
 from .world import WORLD
 from .market import market_view
 from .residents import routine_definitions, ensure_clock, social_view
+from .daynight import sleep_rules
 
 app = FastAPI(title='RealQuest API', version='0.1.0')
 COOKIE = os.getenv('SESSION_COOKIE_NAME', 'realquest_session')
@@ -63,6 +64,8 @@ def lock_sqlite(db):
 def snapshot(state, **extra):
     view=upgrade_state(state)
     now = time.time()
+    if view['character']:
+        ensure_clock(view, now)
     if view['stamina']['current'] < view['stamina']['max']:
         recover_stamina(view, now)
     view['exercise_task_log'] = exercise_task_views(view)
@@ -71,6 +74,7 @@ def snapshot(state, **extra):
     view['character_growth_options'] = character_growth_options(view)
     view['market'] = market_view(view, now)
     view['npc_social'] = social_view(view, view['market']['date'])
+    view['sleep_rules'] = sleep_rules()
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)
@@ -85,14 +89,16 @@ def health():
 @app.post('/api/session')
 def session(request: Request, response: Response):
     with Session.begin() as db:
+        # Clock migration writes player state; serialize it with game commands.
+        lock_sqlite(db)
         existing = request.cookies.get(COOKIE)
-        player = db.scalar(player_query(hashlib.sha256(existing.encode()).hexdigest())) if existing else None
+        player = db.scalar(player_query(hashlib.sha256(existing.encode()).hexdigest()).with_for_update()) if existing else None
         if not player:
             token = secrets.token_urlsafe(32)
             player = Player(id=str(uuid.uuid4()), token_hash=hashlib.sha256(token.encode()).hexdigest(), state=initial_state())
             db.add(player)
             response.set_cookie(COOKIE, token, httponly=True, samesite='strict', secure=SECURE_COOKIE, max_age=31536000)
-        if player.state.get('character') and player.state.get('world_clock') is None:
+        if player.state.get('character') and (player.state.get('world_clock') or {}).get('version') != 2:
             updated = copy.deepcopy(player.state)
             ensure_clock(updated, time.time())
             player.state = updated

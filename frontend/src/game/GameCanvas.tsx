@@ -1,4 +1,5 @@
-import { residentPositions } from "./residents";
+import { residentPositions, villageClock } from "./residents";
+import { DaybreakNotice } from "../components/SleepPanel";
 import { VillageClock } from "../components/Residents";
 import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
@@ -88,6 +89,7 @@ export function GameCanvas() {
         coordinate_system:
           "origin top-left; x right, y down; outdoor world 1920×1280",
         location: s.state?.location,
+        sceneLocation: instance.map?.id,
         direction: instance.direction,
         frame: instance.player?.frame.name,
         appearance: s.state?.character?.appearance,
@@ -135,6 +137,7 @@ export function GameCanvas() {
         storage: s.state?.storage,
         market: s.state?.market,
         worldClock: s.state?.world_clock,
+        gameTime: s.state ? villageClock(s.state, serverNow()) : null,
         residentEncounter: s.state?.npc_encounter,
         residentSocial: s.state?.npc_social,
         residentLocations:
@@ -256,6 +259,7 @@ export function GameCanvas() {
         </div>
       </div>
       <VillageClock />
+      {!panel && <DaybreakNotice />}
       {target && (
         <button
           className="navigation-hint"

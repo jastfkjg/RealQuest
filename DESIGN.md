@@ -12,7 +12,7 @@ This specification was prepared from product discussion and screenshots, not a r
 
 Use this file as the visual and interaction specification. Read `AGENTS.md` for implementation rules and `docs/art/ASSET_PLAN.md` for asset acquisition and provenance. Implementation values below are project defaults, not claims about a third-party asset's dimensions or an external standard. An approved, recorded exception may refine a default; it must not silently create a second design system.
 
-The owner confirmed the next gameplay direction on 2026-10-16: a remote starting village, a river-and-mountain departure chapter, game days and sleep, technology/magic progression, and an expandable home. Gameplay rules and provisional values live in [docs/game-design.md](docs/game-design.md); implementation order lives in [TODO.md](TODO.md). This is a documented future direction, not implemented functionality or visual approval. Current runtime rules remain in effect until their scoped replacements are implemented and verified.
+The owner confirmed the next gameplay direction on 2026-10-16: a remote starting village, a river-and-mountain departure chapter, game days and sleep, technology/magic progression, and an expandable home. Gameplay rules and provisional values live in [docs/game-design.md](docs/game-design.md); implementation order lives in [TODO.md](TODO.md). Day/night and home sleep are now an implemented candidate (task26); the remaining directions are future scope, and neither the design nor implementation implies owner visual approval.
 
 ## 2. The selected art direction
 
@@ -316,7 +316,7 @@ No penalty for missing a day should be introduced by this visual pass. Demo fixt
 
 ### 9.1 Departure, daily life and home — future interaction contracts (2026-10-16)
 
-These contracts apply to future scoped work; they do not describe existing controls or assets. Prioritize desktop web and reasonable phone-landscape support. Follow the gameplay document for conditions and settlement rather than duplicating balance values here.
+These contracts govern scoped work; day/night, bedside sleep/short rest and morning outcomes are implemented candidates in [task26](docs/tasks/26-day-night-sleep.md), while departure, lodging, combat and home expansion remain future scope. Prioritize desktop web and reasonable phone-landscape support. Follow the gameplay document for conditions and settlement rather than duplicating balance values here.
 
 - **Departure and travel:** show distant destinations, the actual exit route and known requirements. River crossings distinguish bridge work from boat passage; mountain preparation distinguishes current stamina, capacity, equipment and expected arrival time. Show exact shortfalls before commitment. Existing village bridges and accessible destinations remain usable. Map selection marks a direction; explicit travel happens at a usable crossing or exit with authoritative conditions, costs and outcome.
 - **Day and night:** keep the 24-hour clock and game-day label legible within the shared HUD. Night lighting must preserve readable paths, characters and interaction cues. Use staged bedtime reminders with a route to home or a valid lodging place; avoid flashing or color-only warnings. Life Mode retains its direct entry and pauses the game world while real commissions continue. Reading pauses, input ownership and focus restoration follow the gameplay contract.

@@ -92,10 +92,28 @@ export interface Market {
 }
 export interface GameState {
   world_clock?: {
+    version?: number;
+    start_minute?: number;
     elapsed: number;
     updated_at: number;
     running_until: number;
     day_seconds: number;
+    last_night?: {
+      day: number;
+      kind: "sleep" | "faint";
+      health_delta: number;
+      stamina_delta: number;
+      at: number;
+    } | null;
+  };
+  sleep_rules?: {
+    wake_minute: number;
+    deadline_minute: number;
+    faint_damage: number;
+    sleep_health: number;
+    short_rest_minutes: number;
+    short_rest_stamina: number;
+    short_rest_health: number;
   };
   npc_encounter?: NpcEncounter | null;
   npc_social?: Record<
@@ -185,6 +203,7 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
+  | "sleep"
   | "neighbors"
   | "training"
   | "menu"

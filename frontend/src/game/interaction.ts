@@ -36,7 +36,7 @@ export function interactionFor(
     case "storage":
       return { label: "存取物品", panel: "storage" };
     case "rest":
-      return { label: "睡觉 · 补满体力", command: "rest" };
+      return { label: "上床休息", panel: "sleep" };
     case "wood":
     case "stone": {
       const seconds = Math.ceil((state.gathered[obj.id] || 0) - now);

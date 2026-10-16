@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Day/night and sleep — 2026-10-16
+
+No raster, font, audio, sprite cut or downloaded asset is added. Bedside choices, night reminders and morning outcomes use native Chinese DOM/CSS, existing Hearthwood tokens and already installed Lucide icons. Outdoor night tint and warm doorway light reuse the existing `WorldScene` presentation layer; source imagery and resident sheets remain unchanged. Source bindings are `frontend/src/components/SleepPanel.tsx`, `frontend/src/sleep.css` and the existing clock/canvas/scene. Actual-render approval remains pending; evidence is recorded in task26.
+
 ## World map concept and terrain — 2026-10-15
 
 The owner approved `references/world-map-concept-v1.png` for implementation. The concept remains a non-runtime reference. Built-in `image_gen` produced one original textless 1536×1024 terrain illustration from that project-generated concept and the project-generated fine-village reference. The source and exact prompt are `assets/generated/hearthwood/world-map-terrain-v1.{png,prompt.txt}`; a byte-identical PNG copy is the only new runtime art at `frontend/public/assets/hearthwood/world-map-terrain-v1.png`. No external pack, font, sound or vendor artwork was sent to generation. Exact dimensions and hashes are in `asset-manifest.json`. Existing village building and bridge cuts are reused unchanged. The terrain is illustrative; world geometry, marker positions, discovery, and navigation remain live data.

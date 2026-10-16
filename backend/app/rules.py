@@ -8,6 +8,7 @@ from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
 from .quests import QUESTS, progress, quest_views
 from .market import market_view
 from .residents import RESIDENTS, ensure_clock, resident_position, near_resident, greeting, release_encounter, LEASE_SECONDS, settle_clock
+from .daynight import clock_view, night_due, finish_day, SHORT_REST_MINUTES, DAY_SECONDS
 
 ATTRIBUTES = ['strength', 'wisdom', 'craft', 'stewardship', 'bond']
 ZONE = ZoneInfo('Asia/Shanghai')
@@ -280,7 +281,6 @@ def apply(state, action, data, now):
     state.clear()
     state.update(migrated)
     today = datetime.fromtimestamp(now, ZONE).date().isoformat()
-    location = state['location']
     if action == 'create':
         require(state['character'] is None, '角色已创建')
         name = str(data.get('name', '')).strip()
@@ -298,10 +298,18 @@ def apply(state, action, data, now):
         require(isinstance(owner,str) and len(owner) <= 64 and len(owner) >= 8, '世界视图标识无效')
         if action == 'world_pause' and state['world_clock'].get('owner') != owner:
             return '当前由另一个世界视图管理时间'
-        settle_clock(state, now, action == "world_resume")
+        # Taking over from another view does not confirm its unseen final span.
+        if action == 'world_resume' and state['world_clock'].get('owner') != owner:
+            state['world_clock']['running_until'] = 0
+        message = settle_clock(state, now, action == "world_resume")
         state['world_clock']['owner'] = owner
         if action == "world_resume": release_encounter(state, now)
-        return "继续村庄时光" if action == "world_resume" else "村庄稍等片刻"
+        return message or ("继续村庄时光" if action == "world_resume" else "村庄稍等片刻")
+    if night_due(state, now):
+        return settle_clock(state, now)
+    location = state['location']
+    if 'world_day' in data and data['world_day'] != clock_view(state, now)['day']:
+        return '已经是新的一天，请重新选择操作。'
     if state['npc_encounter'] and state['npc_encounter']['until'] <= now:
         release_encounter(state, now)
     if action in ['npc_release', 'npc_keep']:
@@ -580,13 +588,21 @@ def apply(state, action, data, now):
         state['location']='overworld'
         state['position']={'x':door['x'],'y':door['y']+12}
         return '回到了户外'
-    if action == 'rest':
+    if action in ['rest', 'short_rest']:
         require(target == 'home_bed', '请走近家里的床')
-        remember(state,'rested_home')
-        state['last_rest']=now
-        state['stamina']['current'] = state['stamina']['max']
+        day = integer(data.get('expected_day'), 1, 1000000000)
+        require(day == clock_view(state, now)['day'], '日期已经变化，请重新打开床边面板。')
+        settle_clock(state, now, False)
+        if action == 'rest':
+            return finish_day(state, now, 'sleep')
+        total = 360 + state['world_clock']['elapsed'] * 1440 / DAY_SECONDS
+        require(total % 1440 + (1440 if total % 1440 < 360 else 0) + SHORT_REST_MINUTES < 1500,
+                '离 01:00 太近了，请直接睡到明早。')
+        state['world_clock']['elapsed'] += SHORT_REST_MINUTES * DAY_SECONDS / 1440
+        state['stamina']['current'] = min(state['stamina']['max'], state['stamina']['current'] + 20)
         state['stamina']['updated_at'] = now
-        return '睡了一觉，体力已补满。进度已保存，作物仍按真实时间生长。'
+        state['vitality']['current'] = min(state['vitality']['max'], state['vitality']['current'] + 10)
+        return '小憩了 30 游戏分钟，体力 +20、生命 +10（不超过上限）；作物仍按现实时间生长。'
     if action in ['store', 'withdraw']:
         require(target == 'home_chest', '请先走近家园储物箱')
         item=data.get('item')
