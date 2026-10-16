@@ -1,0 +1,1932 @@
+/* The remaining village utilities are objects in the world, not form dialogs. */
+.modal.rq-theme.field-panel {
+  box-sizing: border-box;
+  width: min(1040px, calc(100vw - 32px));
+  height: min(704px, calc(100dvh - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 12px solid transparent;
+  border-image: url("/assets/hearthwood/commission-wood-v1.webp") 105 fill /
+    12px / 0 stretch;
+  border-radius: 0;
+  background: var(--rq-pine);
+  color: var(--rq-ink);
+  box-shadow: 0 14px 46px #10231980;
+  overflow: hidden;
+}
+.modal.rq-theme.field-panel[open] {
+  display: flex;
+  flex-direction: column;
+}
+.modal.rq-theme.field-panel:not([open]) {
+  display: none;
+}
+.modal.rq-theme.field-panel::backdrop {
+  background: #132b2370;
+}
+.modal.rq-theme.field-panel .modal-head {
+  position: relative;
+  inset: auto;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: 56px;
+  height: auto;
+  margin: 0;
+  padding: 2px 6px 10px 14px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  pointer-events: auto;
+}
+.modal.rq-theme.field-panel .modal-head::before {
+  display: none;
+}
+.modal.rq-theme.field-panel .modal-head h2 {
+  position: static;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--rq-linen-raised);
+  font: 600 23px/1.4 var(--rq-font-title);
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px #382c20;
+}
+.modal.rq-theme.field-panel .modal-head button {
+  position: static;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: 2px solid #c39a57;
+  border-radius: 50%;
+  background: var(--rq-pine);
+  color: var(--rq-linen-raised);
+  box-shadow: inset 0 0 0 2px #8f6e4d;
+}
+.modal.rq-theme.field-panel .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  padding: 18px;
+  background:
+    repeating-linear-gradient(0deg, #ffffff03 0 1px, transparent 1px 5px),
+    var(--rq-pine);
+  overflow: hidden;
+}
+.modal.rq-theme.field-panel :is(h3, h4) {
+  font-family: var(--rq-font-title);
+}
+.modal.rq-theme.field-panel p {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.modal.rq-theme.field-panel button {
+  font-size: 14px;
+  min-height: 44px;
+}
+.modal.rq-theme.field-panel :is(.form-error, .panel-notice) {
+  position: static;
+  flex: 0 0 auto;
+  max-width: 100%;
+  padding: 9px 14px;
+  margin: 0;
+  background: var(--rq-linen-raised);
+  border: 1px solid var(--rq-timber);
+  border-radius: var(--rq-paper-radius);
+  box-shadow: 0 3px 10px #10231940;
+}
+.field-panel .field-tabs,
+.field-panel .field-pager {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.field-panel .field-tabs button {
+  border-radius: var(--rq-tab-radius);
+  padding: 7px 16px;
+  border: 1px solid #a9b296;
+  background: #dce0cc;
+  color: var(--rq-ink);
+}
+.field-panel .field-tabs button[aria-pressed="true"] {
+  background: var(--rq-linen-raised);
+  box-shadow: inset 0 -3px var(--rq-moss);
+}
+.field-panel .field-pager {
+  justify-content: space-between;
+  gap: 12px;
+}
+.field-panel .field-pager span {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.field-panel .field-pager button {
+  padding: 5px 13px;
+}
+.field-paper,
+.field-panel .gear-detail,
+.field-panel .gear-handbook {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-radius: 0;
+  background: url("/assets/hearthwood/encounters/notice-paper.webp") center /
+    100% 100% no-repeat;
+  color: var(--rq-ink);
+  box-shadow: none;
+}
+.field-panel .intro-context {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.field-panel .intro-context h4 {
+  margin: 6px 0;
+  font-size: 21px;
+}
+.field-panel .intro-context p {
+  font-size: 15px;
+  margin: 12px 0;
+}
+.field-panel .field-paper > .field-tabs {
+  margin-bottom: 13px;
+}
+.field-panel .field-page-content > small {
+  color: var(--rq-ink-muted);
+  font-size: 13px;
+}
+.field-panel .field-page-content h3 {
+  font-size: 25px;
+  margin: 7px 0 12px;
+  line-height: 1.35;
+}
+.field-panel .field-page-content p {
+  margin: 10px 0;
+}
+.field-panel .field-page-content > button {
+  margin: 7px 7px 0 0;
+}
+.field-panel .button-row {
+  gap: 8px;
+  margin-top: 10px;
+}
+.field-panel .button-row button {
+  flex: 0 1 auto;
+  padding: 7px 12px;
+}
+
+/* The weapon rack and a single work order. */
+.modal.rq-theme.field-panel.panel-armory {
+  width: min(1080px, calc(100vw - 32px));
+}
+.panel-armory .gear-workbench {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.panel-armory .gear-intro {
+  color: #dfe6d1;
+  margin: 0 0 6px;
+}
+.panel-armory .gear-wallet {
+  flex: 0 0 auto;
+  padding: 5px 0 9px;
+  border-top: 0;
+  border-bottom: 1px solid #839276;
+  color: var(--rq-linen-raised);
+}
+.panel-armory .gear-wallet > span {
+  color: #d2ddc6;
+  font-size: 13px;
+}
+.panel-armory .gear-tabs {
+  flex: 0 0 auto;
+  margin: 10px 0;
+  gap: 8px;
+}
+.panel-armory .gear-tabs button {
+  background: #cdd5bb;
+  border: 0;
+  border-radius: var(--rq-tab-radius);
+  padding: 5px 20px;
+}
+.panel-armory .gear-tabs button[aria-pressed="true"] {
+  color: var(--rq-ink);
+  background: var(--rq-linen-raised);
+  box-shadow: inset 0 -3px var(--rq-amber);
+}
+.panel-armory .gear-layout {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+.panel-armory .gear-rack {
+  padding: 12px;
+  gap: 7px;
+  border: 2px solid #b08c57;
+  border-radius: 5px;
+  background: #8f6e4d url("/assets/hearthwood/commission-wood-v1.webp") center /
+    cover;
+  box-shadow: inset 0 0 0 4px #533f2d55;
+}
+.panel-armory .gear-rack > button {
+  flex: 1;
+  min-height: 64px;
+  padding: 6px 9px;
+  gap: 7px;
+  border: 1px solid #ead5a85e;
+  border-radius: 4px 8px 6px 3px;
+  background: #3c3028a8;
+  color: var(--rq-linen-raised);
+  box-shadow: inset 0 -3px #241d2255;
+}
+.panel-armory .gear-rack > button small {
+  color: #eee1bb;
+  font-size: 12px;
+}
+.panel-armory .gear-rack > button b {
+  font-size: 15px;
+}
+.panel-armory .gear-rack > button img {
+  width: 44px;
+  height: 44px;
+}
+.panel-armory .gear-rack > button[aria-pressed="true"] {
+  padding: 6px 9px;
+  background: var(--rq-linen-raised);
+  color: var(--rq-ink);
+  border: 1px solid #f1d497;
+  box-shadow:
+    inset 3px 0 var(--rq-moss),
+    0 2px #352b2360;
+}
+.panel-armory .gear-rack > button[aria-pressed="true"] small {
+  color: var(--rq-ink-muted);
+}
+.panel-armory .gear-rack > button:hover:not([aria-pressed="true"]) {
+  background: #243d30d9;
+  color: var(--rq-linen-raised);
+}
+.panel-armory .gear-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 21px 26px;
+}
+.panel-armory .gear-heading {
+  min-height: 112px;
+  gap: 18px;
+}
+.panel-armory .gear-display {
+  flex: 0 0 104px;
+  width: 104px;
+  height: 108px;
+  display: grid;
+  place-items: center;
+  border-radius: 46% 44% 9px 8px;
+  background:
+    repeating-linear-gradient(90deg, #ffffff04 0 1px, transparent 1px 4px),
+    var(--rq-pine);
+  border: 2px solid #b09a64;
+  box-shadow:
+    inset 0 0 0 4px #fffbf00d,
+    0 3px #8f6e4d24;
+}
+.panel-armory .gear-display img {
+  width: 80px;
+  height: 80px;
+}
+.panel-armory .gear-heading h3 {
+  margin: 5px 0;
+  font: 600 26px/1.35 var(--rq-font-title);
+}
+.panel-armory .gear-heading small,
+.panel-armory .gear-heading span {
+  font-size: 13px;
+}
+.panel-armory .gear-stats {
+  gap: 10px;
+  padding: 12px 0;
+  margin: 12px 0;
+  border-top: 0;
+  border-bottom: 1px dashed var(--rq-divider);
+}
+.panel-armory .gear-stats dt {
+  font-size: 12px;
+}
+.panel-armory .gear-stats dd {
+  font-size: 17px;
+  margin-top: 4px;
+}
+.panel-armory .gear-recipe {
+  flex: 1;
+}
+.panel-armory .gear-recipe h4 {
+  margin: 2px 0;
+  font-size: 16px;
+}
+.panel-armory .gear-recipe p {
+  font-size: 13px;
+  margin: 3px 0;
+}
+.panel-armory .gear-recipe ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px 13px;
+  margin: 6px 0;
+}
+.panel-armory .gear-recipe li {
+  gap: 5px;
+  font-size: 13px;
+  padding: 2px 0;
+  border: 0;
+}
+.panel-armory .gear-recipe li span {
+  white-space: nowrap;
+}
+.panel-armory .gear-buttons {
+  margin: auto 0 0;
+  padding-top: 10px;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.panel-armory .gear-buttons button {
+  padding: 7px 11px;
+  font-size: 13px;
+}
+.panel-armory .gear-supplies {
+  flex: 0 0 auto;
+  color: var(--rq-linen-raised);
+  margin: 12px 0 0;
+  padding: 10px 8px 0;
+  border-top: 1px solid #839276;
+}
+.panel-armory .gear-supplies b {
+  font-size: 14px;
+}
+.panel-armory .gear-supplies small {
+  color: #d2ddc6;
+  font-size: 12px;
+}
+.panel-armory .gear-handbook {
+  flex: 1;
+}
+
+/* A spell folio and the two stone route sheets share paper, not composition. */
+.modal.rq-theme.field-panel:is(.panel-spellbook, .panel-gate, .panel-cave) {
+  width: min(950px, calc(100vw - 32px));
+  height: min(650px, calc(100dvh - 32px));
+}
+.field-panel :is(.spell-leaf, .stone-gate-panel, .cave-route-panel) {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 20px;
+  padding: 0;
+}
+.field-illustration {
+  position: relative;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.field-illustration--spell {
+  border-bottom: 10px solid #9e7c4d;
+  background: radial-gradient(ellipse, #52694d33, transparent 70%);
+}
+.field-magic-art {
+  width: min(100%, 190px);
+  height: auto;
+  object-fit: contain;
+}
+.field-book-art {
+  width: 64px;
+  height: 39px;
+  margin-top: 24px;
+  image-rendering: pixelated;
+}
+.field-stone-arch {
+  width: 150px;
+  height: 240px;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 2px solid #333f36;
+  border-radius: 78px 78px 3px 3px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 33px, #47564b 33px 36px),
+    repeating-linear-gradient(90deg, #80917b 0 48px, #52614f 48px 51px);
+  box-shadow: 4px 7px #122e2460;
+}
+.field-stone-arch span {
+  display: block;
+  height: 100%;
+  border: 3px solid #394b3d;
+  border-radius: 65px 65px 0 0;
+  background: linear-gradient(#101f1a, #233d31);
+}
+.field-stone-art {
+  position: absolute;
+  width: 80px;
+  height: auto;
+  bottom: 40px;
+  left: 0;
+  image-rendering: pixelated;
+}
+.field-key-art {
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  left: calc(50% - 39px);
+  top: calc(50% - 20px);
+}
+.field-illustration--cave .field-key-art {
+  width: 44px;
+  height: 44px;
+  left: calc(50% - 22px);
+  top: auto;
+  bottom: 28%;
+}
+.field-panel .gate-requirements {
+  margin: 12px 0;
+  padding: 0;
+}
+.field-panel .gate-requirements li {
+  font-size: 14px;
+  padding: 9px 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  border-bottom: 1px dashed var(--rq-divider);
+}
+.field-panel .gate-requirements li svg {
+  width: 18px;
+  height: 18px;
+}
+.field-panel .gate-requirements li span {
+  font-size: 13px;
+}
+.field-panel .cave-route-stages {
+  gap: 10px;
+  margin: 13px 0;
+  padding: 13px 0;
+  border-block: 1px dashed var(--rq-divider);
+}
+.field-panel .cave-route-stages span {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+}
+.field-panel
+  :is(.spell-leaf, .stone-gate-panel, .cave-route-panel)
+  .gear-stats {
+  margin: 13px 0;
+  padding: 12px 0;
+  border-block-style: dashed;
+}
+.field-panel
+  :is(.spell-leaf, .stone-gate-panel, .cave-route-panel)
+  .gear-stats
+  dd {
+  font-size: 18px;
+}
+
+/* Two actual containers and one reversible transfer strip. */
+.modal.rq-theme.field-panel.panel-storage {
+  width: min(950px, calc(100vw - 32px));
+  height: min(650px, calc(100dvh - 32px));
+}
+.field-panel .ha-transfer {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+.field-panel .ha-transfer-hint {
+  color: #e1e7d4;
+  margin: 0;
+}
+.field-panel .ha-containers {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.field-panel .ha-container {
+  min-height: 0;
+  padding: 15px 17px;
+  background: #cbd4b7;
+  border: 1px solid #9fae8b;
+  border-radius: 18px 18px 8px 9px;
+}
+.field-panel .ha-container--storage {
+  background: #8f6e4d url("/assets/hearthwood/commission-wood-v1.webp")
+    center/cover;
+  border-color: #c8a36a;
+  border-radius: 5px;
+}
+.field-panel .ha-container h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 13px;
+  font-size: 20px;
+  color: var(--rq-ink);
+}
+.field-panel .ha-container--storage h3,
+.field-panel .ha-container--storage h3 small,
+.field-panel .ha-container--storage > p {
+  color: var(--rq-linen-raised);
+  text-shadow: 0 1px #382c20;
+}
+.field-panel .ha-container h3 > svg {
+  display: none;
+}
+.field-panel .ha-container-art {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.field-panel .ha-container h3 small {
+  font: 13px var(--rq-font-body);
+  margin-left: auto;
+}
+.field-panel .ha-item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+.field-panel .ha-item-slot {
+  height: auto;
+  min-height: 84px;
+  padding: 7px;
+  background: #fffbf0d9;
+  border: 1px solid #b2b69a;
+  border-radius: 9px;
+}
+.field-panel .ha-item-slot[data-empty="true"] {
+  opacity: 1;
+  background: #fffbf08c;
+  color: var(--rq-ink-muted);
+}
+.field-panel .ha-item-slot[aria-pressed="true"] {
+  background: var(--rq-linen-raised);
+  box-shadow: inset 0 -3px var(--rq-moss);
+  border-color: var(--rq-moss);
+}
+.field-panel .ha-item-slot .hp-item-icon {
+  width: 32px;
+  height: 32px;
+}
+.field-panel .ha-item-slot span {
+  font-size: 13px;
+}
+.field-panel .ha-container > p {
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+.field-panel .ha-transfer > .field-pager {
+  color: var(--rq-linen-raised);
+}
+.field-panel .ha-transfer-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 20px;
+  margin: 0;
+  background: var(--rq-linen);
+  border-radius: var(--rq-paper-radius);
+}
+.field-panel .ha-transfer-action h3 {
+  font-size: 18px;
+  margin: 0;
+}
+.field-panel .ha-transfer-action p {
+  margin: 3px 0 0;
+  font-size: 13px;
+}
+.field-panel .ha-transfer-action .button-row {
+  margin: 0;
+}
+.field-panel .ha-transfer .hp-footnote {
+  margin: 0;
+  color: #d2ddc6;
+  font-size: 12px;
+}
+
+/* The blue plan sits on a worktable; material tags sit alongside it. */
+.modal.rq-theme.field-panel.panel-building {
+  width: min(950px, calc(100vw - 32px));
+  height: min(620px, calc(100dvh - 32px));
+}
+.field-panel .hp-workorder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 12px;
+}
+.field-panel .field-workorder-main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0 22px;
+  align-items: center;
+  padding: 22px;
+  background: var(--rq-linen)
+    url("/assets/hearthwood/encounters/notice-paper.webp") center/100% 100%;
+}
+.field-panel .ha-blueprint {
+  grid-row: 1 / 3;
+  padding: 20px;
+  border: 1px solid #91a38b;
+  border-radius: 3px;
+  background-color: var(--rq-pine);
+  box-shadow: 3px 4px #8f6e4d30;
+}
+.field-panel .ha-blueprint-drawing {
+  height: 170px;
+}
+.field-panel .hp-house-sketch img {
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.field-panel .ha-stages {
+  gap: 9px;
+  font-size: 13px;
+}
+.field-panel .ha-stages strong {
+  font-size: 14px;
+}
+.field-panel .hp-materials {
+  align-self: end;
+  padding: 0 0 16px;
+}
+.field-panel .hp-materials h4 {
+  font-size: 19px;
+  margin: 0 0 16px;
+}
+.field-panel .hp-material-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.field-panel .hp-material {
+  gap: 13px;
+}
+.field-panel .hp-material .hp-item-icon {
+  width: 40px;
+  height: 40px;
+}
+.field-panel .hp-material b {
+  font-size: 15px;
+}
+.field-panel .hp-upgrade-action {
+  align-self: start;
+  margin: 0;
+  width: fit-content;
+  padding: 7px 16px;
+}
+.field-panel .hp-counter {
+  flex: 1;
+  min-height: 0;
+  padding: 28px;
+  margin: 0;
+  color: var(--rq-ink);
+  background: url("/assets/hearthwood/encounters/notice-paper.webp") center/100%
+    100%;
+}
+.field-panel .hp-counter h4 {
+  margin: 0 0 14px;
+  font-size: 23px;
+}
+.field-panel .shop-row {
+  padding: 12px 0;
+  border-bottom-style: dashed;
+}
+
+/* One route decision at a time, with a small traveler vignette. */
+.modal.rq-theme.field-panel.panel-travel {
+  width: min(1000px, calc(100vw - 32px));
+  height: min(620px, calc(100dvh - 32px));
+}
+.field-panel .travel-leaf {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 12px 24px;
+}
+.field-panel .travel-intro {
+  grid-row: 1 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 14px;
+  color: var(--rq-linen-raised);
+}
+.field-panel .travel-portrait {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 130px;
+  border: 0;
+  color: #cfdbbb;
+  background: none;
+}
+.field-panel .travel-portrait > svg {
+  display: none;
+}
+.field-panel .travel-portrait .npc-portrait {
+  width: 112px;
+  height: 112px;
+}
+.field-panel .travel-scene-art {
+  width: 224px;
+  max-width: 100%;
+  height: 112px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.field-panel .travel-intro h3 {
+  font-size: 24px;
+  margin: 8px 0;
+  color: var(--rq-linen-raised);
+}
+.field-panel .travel-intro small,
+.field-panel .travel-intro p {
+  color: #d2ddc6;
+  font-size: 13px;
+}
+.field-panel .travel-status {
+  grid-column: 2;
+  margin: 0;
+  padding: 0 0 10px;
+  border-top: 0;
+  border-color: #839276;
+  gap: 7px 14px;
+  color: var(--rq-linen-raised);
+  font-size: 12px;
+}
+.field-panel .travel-actions {
+  grid-column: 2;
+  min-height: 0;
+  padding: 22px 26px;
+  background: url("/assets/hearthwood/encounters/notice-paper.webp") center/100%
+    100%;
+}
+.field-panel .travel-actions > .field-pager {
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--rq-divider);
+}
+.field-panel .travel-action {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 18px 0 0;
+  border: 0;
+  border-radius: 0;
+}
+.field-panel .travel-action h4 {
+  font-size: 24px;
+}
+.field-panel .travel-action button {
+  justify-self: start;
+  min-width: 110px;
+  padding: 7px 20px;
+}
+.field-panel .travel-costs {
+  gap: 7px 14px;
+  padding: 9px 0;
+  font-size: 14px;
+}
+.field-panel .travel-footer {
+  grid-column: 2;
+  margin: 0;
+  color: #d2ddc6;
+  font-size: 12px;
+}
+.field-panel .travel-hint,
+.field-panel .travel-news {
+  grid-column: 2;
+  margin: 0;
+  padding: 8px 18px;
+  background: var(--rq-linen);
+  font-size: 13px;
+}
+.field-panel .travel-hint {
+  display: none;
+} /* The selected bridge option repeats the exact material and ferry costs. */
+.field-panel .travel-booked {
+  grid-column: 2;
+  margin: 0;
+  color: var(--rq-ink);
+  background: var(--rq-linen);
+  padding: 8px 12px;
+}
+.field-panel .travel-receipt {
+  grid-column: 2;
+  margin: 0;
+  background: var(--rq-linen-raised);
+}
+
+/* Small utilities use the same village frame with a readable paper interior. */
+.modal.rq-theme.field-panel:is(
+    .panel-menu,
+    .panel-guide,
+    .panel-settings,
+    .panel-ai
+  ) {
+  width: min(820px, calc(100vw - 32px));
+  height: min(720px, calc(100dvh - 32px));
+}
+.modal.rq-theme.field-panel:is(
+    .panel-menu,
+    .panel-guide,
+    .panel-settings,
+    .panel-ai
+  )
+  .modal-body {
+  margin: 0;
+  padding: 24px 32px;
+  background: var(--rq-linen)
+    url("/assets/hearthwood/encounters/notice-paper.webp") center/100% 100%;
+  overflow-y: auto;
+}
+.field-panel .journey-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.field-panel .journey-menu > p {
+  grid-column: 1/-1;
+  margin: 0 0 8px;
+}
+.field-panel .journey-menu button {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 5px 8px;
+  align-items: center;
+  justify-content: start;
+  text-align: left;
+  padding: 13px;
+  color: var(--rq-ink);
+  background: #fffbf0b8;
+  border-color: #b4b89c;
+}
+.field-panel .journey-menu button span {
+  grid-column: 2;
+  font-size: 12px;
+}
+.field-panel .preferences {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 30px;
+}
+.field-panel .preferences label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.field-panel .preferences input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+@media (max-height: 700px) and (min-height: 501px) {
+  .modal.rq-theme.field-panel {
+    height: calc(100dvh - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+  .modal.rq-theme.field-panel .modal-body {
+    padding: 12px;
+  }
+  .panel-armory .gear-intro {
+    margin-bottom: 2px;
+  }
+  .panel-armory .gear-heading {
+    min-height: 76px;
+  }
+  .panel-armory .gear-display {
+    width: 72px;
+    height: 76px;
+    flex-basis: 72px;
+  }
+  .panel-armory .gear-display img {
+    width: 60px;
+    height: 60px;
+  }
+  .panel-armory .gear-stats {
+    padding: 6px 0;
+    margin: 6px 0;
+  }
+  .panel-armory .gear-detail {
+    padding: 16px 22px;
+  }
+  .panel-armory .gear-supplies {
+    margin-top: 8px;
+    padding-top: 7px;
+  }
+  .field-panel .field-paper {
+    padding: 18px 22px;
+  }
+}
+@media (max-height: 500px) and (min-width: 700px) {
+  .modal.rq-theme.field-panel,
+  .modal.rq-theme.field-panel:is(
+      .panel-armory,
+      .panel-spellbook,
+      .panel-cave,
+      .panel-gate,
+      .panel-storage,
+      .panel-building,
+      .panel-travel,
+      .panel-menu,
+      .panel-guide,
+      .panel-settings,
+      .panel-ai
+    ) {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 16px);
+    border-width: 8px;
+    border-image-width: 8px;
+  }
+  .modal.rq-theme.field-panel .modal-head {
+    min-height: 44px;
+    padding: 0 2px 4px 8px;
+  }
+  .modal.rq-theme.field-panel .modal-head h2 {
+    font-size: 19px;
+  }
+  .modal.rq-theme.field-panel .modal-body {
+    padding: 7px 10px 9px;
+  }
+  .modal.rq-theme.field-panel p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .modal.rq-theme.field-panel button {
+    font-size: 12px;
+  }
+  .field-panel .field-paper,
+  .field-panel .gear-detail,
+  .field-panel .gear-handbook {
+    padding: 12px 18px;
+  }
+  .field-panel .field-paper > .field-tabs {
+    margin: 0 0 5px;
+  }
+  .field-panel .field-tabs button {
+    padding: 4px 12px;
+  }
+  .field-panel .field-page-content h3 {
+    font-size: 20px;
+    margin: 3px 0 5px;
+  }
+  .field-panel .field-page-content p {
+    margin: 5px 0;
+  }
+  .field-panel .field-page-content > small {
+    font-size: 11px;
+  }
+  .field-panel .field-page-content > button {
+    margin-top: 4px;
+    padding: 5px 10px;
+  }
+  .field-panel .button-row {
+    margin-top: 5px;
+    gap: 5px;
+  }
+  .field-panel .button-row button {
+    padding: 4px 9px;
+  }
+  .field-panel .intro-context p {
+    font-size: 12px;
+    margin: 6px 0;
+  }
+  .field-panel .intro-context h4 {
+    font-size: 18px;
+  }
+  .panel-armory .gear-intro {
+    display: none;
+  }
+  .panel-armory .gear-wallet {
+    min-height: 22px;
+    padding: 0 0 4px;
+    gap: 7px;
+    font-size: 13px;
+  }
+  .panel-armory .gear-wallet > span {
+    font-size: 11px;
+  }
+  .panel-armory .gear-tabs {
+    margin: 4px 0;
+  }
+  .panel-armory .gear-tabs button {
+    min-height: 44px;
+    padding: 4px 15px;
+  }
+  .panel-armory .gear-layout {
+    grid-template-columns: 235px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .panel-armory .gear-rack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 6px;
+  }
+  .panel-armory .gear-rack > button,
+  .panel-armory .gear-rack > button[aria-pressed="true"] {
+    min-height: 44px;
+    padding: 4px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    text-align: center;
+  }
+  .panel-armory .gear-rack > button img {
+    width: 27px;
+    height: 27px;
+  }
+  .panel-armory .gear-rack > button span {
+    gap: 1px;
+  }
+  .panel-armory .gear-rack > button b {
+    font-size: 12px;
+  }
+  .panel-armory .gear-rack > button small {
+    font-size: 11px;
+  }
+  .panel-armory .gear-detail {
+    display: grid;
+    grid-template-columns: 118px minmax(0, 1fr);
+    gap: 0 13px;
+    padding: 9px 17px;
+  }
+  .panel-armory .gear-heading {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    min-height: 0;
+    gap: 3px;
+  }
+  .panel-armory .gear-display {
+    width: 40px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-width: 1px;
+    border-radius: 45% 45% 4px 4px;
+  }
+  .panel-armory .gear-display img {
+    width: 34px;
+    height: 34px;
+  }
+  .panel-armory .gear-heading h3 {
+    font-size: 17px;
+    margin: 2px 0;
+  }
+  .panel-armory .gear-heading small,
+  .panel-armory .gear-heading span {
+    font-size: 11px;
+  }
+  .panel-armory .gear-stats {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    margin: 0;
+    gap: 4px 12px;
+    border: 0;
+    align-content: center;
+  }
+  .panel-armory .gear-stats dt {
+    font-size: 11px;
+  }
+  .panel-armory .gear-stats dd {
+    font-size: 15px;
+    margin-top: 1px;
+  }
+  .panel-armory .gear-workbench[data-page="craft"] .gear-stats {
+    display: none;
+  }
+  .panel-armory .gear-recipe {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
+  .panel-armory .gear-recipe h4 {
+    display: none;
+  }
+  .panel-armory .gear-recipe p,
+  .panel-armory .gear-recipe li {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .panel-armory .gear-recipe ul {
+    gap: 1px 8px;
+    margin: 3px 0;
+  }
+  .panel-armory .gear-recipe li {
+    flex-wrap: wrap;
+    gap: 0 4px;
+    padding: 0;
+  }
+  .panel-armory .gear-buttons {
+    grid-column: 1/-1;
+    align-self: end;
+    margin: 0;
+    padding-top: 4px;
+    gap: 5px;
+    flex-wrap: nowrap;
+  }
+  .panel-armory .gear-buttons button {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  .panel-armory .gear-supplies {
+    margin-top: 6px;
+    padding: 5px 4px 0;
+    gap: 9px;
+  }
+  .panel-armory .gear-supplies > svg {
+    width: 20px;
+    height: 20px;
+  }
+  .panel-armory .gear-supplies > div {
+    gap: 0;
+  }
+  .panel-armory .gear-supplies b {
+    font-size: 12px;
+  }
+  .panel-armory .gear-supplies small {
+    font-size: 11px;
+  }
+  .panel-armory .gear-supplies button {
+    padding: 4px 12px;
+  }
+  .field-panel :is(.spell-leaf, .stone-gate-panel, .cave-route-panel) {
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .field-magic-art {
+    width: 132px;
+  }
+  .field-book-art {
+    margin-top: 10px;
+  }
+  .field-stone-arch {
+    width: 110px;
+    height: 170px;
+    padding: 10px;
+  }
+  .field-stone-art {
+    width: 56px;
+    bottom: 10px;
+  }
+  .field-key-art {
+    width: 58px;
+    height: 58px;
+    left: calc(50% - 29px);
+  }
+  .field-panel .gear-stats {
+    margin: 7px 0;
+    padding: 6px 0;
+  }
+  .field-panel .gear-stats dt {
+    font-size: 11px;
+  }
+  .field-panel .gear-stats dd {
+    font-size: 15px;
+    margin-top: 3px;
+  }
+  .field-panel .gate-requirements {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 6px 0;
+  }
+  .field-panel .gate-requirements li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 0;
+    font-size: 12px;
+  }
+  .field-panel .gate-requirements li span {
+    width: 100%;
+    padding-left: 22px;
+    font-size: 11px;
+  }
+  .field-panel .cave-route-stages {
+    padding: 7px 0;
+    margin: 6px 0;
+  }
+  .field-panel .cave-route-stages span {
+    font-size: 11px;
+  }
+  .field-panel .ha-transfer {
+    gap: 5px;
+  }
+  .field-panel .ha-transfer-hint {
+    font-size: 11px;
+  }
+  .field-panel .ha-containers {
+    gap: 15px;
+  }
+  .field-panel .ha-container {
+    padding: 6px 10px;
+    border-radius: 10px 10px 5px 5px;
+  }
+  .field-panel .ha-container h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    gap: 7px;
+  }
+  .field-panel .ha-container h3 small {
+    font-size: 11px;
+  }
+  .field-panel .ha-container-art {
+    width: 30px;
+    height: 30px;
+  }
+  .field-panel .ha-item-grid {
+    gap: 4px;
+  }
+  .field-panel .ha-item-slot {
+    min-height: 54px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .field-panel .ha-item-slot .hp-item-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .field-panel .ha-item-slot span {
+    font-size: 11px;
+  }
+  .field-panel .ha-item-slot b {
+    font-size: 12px;
+  }
+  .field-panel .ha-container > p {
+    margin: 3px 0 0;
+    font-size: 10px;
+  }
+  .field-panel .ha-transfer-action {
+    padding: 5px 13px;
+  }
+  .field-panel .ha-transfer-item > .hp-item-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .field-panel .ha-transfer-action h3 {
+    font-size: 15px;
+  }
+  .field-panel .ha-transfer-action p {
+    font-size: 11px;
+    margin: 0;
+  }
+  .field-panel .ha-transfer .hp-footnote {
+    font-size: 10px;
+  }
+  .field-panel .hp-workorder {
+    gap: 5px;
+  }
+  .field-panel .field-workorder-main {
+    padding: 12px 18px;
+    gap: 0 20px;
+    grid-template-columns: 1.1fr 1fr;
+  }
+  .field-panel .ha-blueprint {
+    padding: 10px;
+  }
+  .field-panel .ha-blueprint-heading {
+    font-size: 12px;
+  }
+  .field-panel .ha-blueprint-heading small {
+    font-size: 11px;
+  }
+  .field-panel .ha-blueprint-drawing {
+    height: 85px;
+  }
+  .field-panel .hp-house-sketch img {
+    width: 72px;
+    height: 72px;
+  }
+  .field-panel .ha-stages {
+    padding-top: 5px;
+    font-size: 11px;
+  }
+  .field-panel .ha-stages strong,
+  .field-panel .ha-stages small {
+    font-size: 11px;
+  }
+  .field-panel .hp-materials {
+    padding-bottom: 6px;
+  }
+  .field-panel .hp-materials h4 {
+    font-size: 16px;
+    margin-bottom: 7px;
+  }
+  .field-panel .hp-material-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 7px 14px;
+  }
+  .field-panel .hp-material {
+    gap: 6px;
+  }
+  .field-panel .hp-material .hp-item-icon {
+    width: 26px;
+    height: 26px;
+  }
+  .field-panel .hp-material b {
+    font-size: 12px;
+  }
+  .field-panel .hp-material small,
+  .field-panel .ha-material-count {
+    font-size: 10px;
+  }
+  .field-panel .hp-counter {
+    padding: 14px 22px;
+  }
+  .field-panel .hp-counter h4 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .field-panel .shop-row {
+    padding: 5px 0;
+  }
+  .field-panel .travel-leaf {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 6px 16px;
+  }
+  .field-panel .travel-intro {
+    gap: 5px;
+  }
+  .field-panel .travel-portrait {
+    height: 75px;
+  }
+  .field-panel .travel-portrait .npc-portrait {
+    width: 72px;
+    height: 72px;
+  }
+  .field-panel .travel-scene-art {
+    width: 150px;
+    height: 75px;
+  }
+  .field-panel .travel-intro h3 {
+    font-size: 19px;
+    margin: 3px 0;
+  }
+  .field-panel .travel-intro small,
+  .field-panel .travel-intro p {
+    font-size: 11px;
+  }
+  .field-panel .travel-status {
+    padding-bottom: 4px;
+    font-size: 11px;
+    gap: 4px 10px;
+  }
+  .field-panel .travel-actions {
+    padding: 8px 16px;
+  }
+  .field-panel .travel-actions > .field-pager {
+    padding-bottom: 4px;
+  }
+  .field-panel .travel-action {
+    padding-top: 6px;
+    gap: 4px;
+  }
+  .field-panel .travel-action h4 {
+    font-size: 18px;
+  }
+  .field-panel .travel-action p,
+  .field-panel .travel-action .travel-reason {
+    font-size: 11px;
+    margin: 4px 0;
+  }
+  .field-panel .travel-costs {
+    padding: 0;
+    font-size: 11px;
+    gap: 4px 10px;
+  }
+  .field-panel .travel-footer {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .modal.rq-theme.field-panel:is(
+      .panel-menu,
+      .panel-guide,
+      .panel-settings,
+      .panel-ai
+    )
+    .modal-body {
+    padding: 14px 22px;
+  }
+  .field-panel .journey-menu {
+    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .field-panel .journey-menu button {
+    padding: 8px;
+    font-size: 12px;
+  }
+  .field-panel .journey-menu button span {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field-panel,
+  .field-panel * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.modal.rq-theme.field-panel .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modal.rq-theme.field-panel
+  .modal-body
+  > :is(
+    .gear-workbench,
+    .spell-leaf,
+    .cave-route-panel,
+    .stone-gate-panel,
+    .ha-transfer,
+    .hp-workorder,
+    .travel-leaf
+  ) {
+  flex: 1;
+  min-height: 0;
+}
+.modal.rq-theme.field-panel:is(
+    .panel-menu,
+    .panel-guide,
+    .panel-settings,
+    .panel-ai
+  )
+  .modal-body {
+  display: block;
+}
+.field-panel .field-guide {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 24px;
+}
+.field-guide > aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+.field-guide > aside > img:first-child {
+  width: 170px;
+  height: 190px;
+  object-fit: cover;
+  object-position: 50% 50%;
+  border-radius: 90px 90px 8px 8px;
+  border: 2px solid #8f6e4d;
+}
+.field-guide .field-guide-book {
+  width: 64px;
+  height: 39px;
+  image-rendering: pixelated;
+}
+.field-panel .field-guide .field-tabs {
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.field-panel .field-guide .field-tabs button {
+  padding: 5px 10px;
+}
+.field-panel .field-guide h3 {
+  font-size: 24px;
+  margin: 20px 0;
+}
+.field-panel .field-guide-lines {
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.field-panel .field-guide-lines li {
+  margin: 16px 0;
+  padding-left: 4px;
+}
+.field-panel .field-guide .intro-preference {
+  font-size: 13px;
+}
+.field-panel .field-guide .intro-preference button {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+.field-panel.panel-settings .field-tabs {
+  margin-bottom: 20px;
+}
+.field-panel .field-preferences {
+  min-height: 330px;
+  padding: 35px 15px;
+}
+.field-panel .field-preferences > img {
+  float: right;
+  width: 70px;
+  height: auto;
+  image-rendering: pixelated;
+  margin: 10px 40px;
+}
+.field-panel .field-preferences h3 {
+  font-size: 25px;
+  margin-bottom: 25px;
+}
+.field-panel .field-preferences .preferences {
+  flex-direction: column;
+}
+.field-panel .field-data > button {
+  margin: 12px 0;
+}
+.field-panel .field-data h3 {
+  font-size: 23px;
+}
+.field-panel.panel-settings .recovery-content h2 {
+  font: 600 24px/1.4 var(--rq-font-title);
+}
+.field-panel.panel-settings .recovery-content .recovery-emblem {
+  float: right;
+  width: 35px;
+  height: 35px;
+  margin-left: 20px;
+}
+.field-panel.panel-settings .recovery-content p {
+  font-size: 13px;
+}
+.field-panel.panel-settings .recovery-import {
+  margin-top: 20px;
+  padding-top: 16px;
+}
+@media (max-height: 500px) and (min-width: 700px) {
+  .field-panel .field-guide {
+    grid-template-columns: 125px minmax(0, 1fr);
+    gap: 18px;
+  }
+  .field-guide > aside {
+    gap: 10px;
+  }
+  .field-guide > aside > img:first-child {
+    width: 120px;
+    height: 130px;
+  }
+  .field-panel .field-guide h3 {
+    font-size: 19px;
+    margin: 8px 0;
+  }
+  .field-panel .field-guide-lines {
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 6px 0;
+  }
+  .field-panel .field-guide-lines li {
+    margin: 7px 0;
+  }
+  .field-panel .field-guide .intro-preference {
+    font-size: 11px;
+  }
+  .field-panel .field-guide .intro-preference button {
+    font-size: 11px;
+  }
+  .field-panel.panel-settings .field-tabs {
+    margin-bottom: 8px;
+  }
+  .field-panel .field-preferences {
+    min-height: 0;
+    padding: 0 15px;
+  }
+  .field-panel .field-preferences h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .field-panel .field-preferences > img {
+    width: 50px;
+    margin: 0 40px;
+  }
+  .field-panel .field-preferences .preferences {
+    flex-direction: row;
+    gap: 10px 25px;
+  }
+  .field-panel.panel-settings .recovery-content h2 {
+    font-size: 19px;
+    margin: 0 0 5px;
+  }
+  .field-panel.panel-settings .recovery-content p {
+    font-size: 11px;
+    margin: 5px 0;
+  }
+  .field-panel.panel-settings .recovery-import {
+    margin-top: 8px;
+    padding-top: 5px;
+  }
+  .field-panel.panel-settings .recovery-import h3 {
+    font-size: 15px;
+    margin: 5px 0;
+  }
+  .field-panel .field-data h3 {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  .field-panel .field-data hr {
+    margin: 9px 0;
+  }
+}
+
+.panel-armory .gear-heading {
+  min-height: 92px;
+  flex: 0 0 auto;
+}
+.panel-armory .gear-display {
+  width: 88px;
+  height: 92px;
+  flex-basis: 88px;
+}
+.panel-armory .gear-display img {
+  width: 72px;
+  height: 72px;
+}
+.panel-armory .gear-stats {
+  margin: 6px 0;
+  padding: 8px 0;
+  flex: 0 0 auto;
+}
+.panel-armory .gear-recipe {
+  min-height: 0;
+}
+.panel-armory .gear-buttons {
+  padding-top: 6px;
+  flex: 0 0 auto;
+}
+.field-panel .travel-intro .travel-hint {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: #d2ddc6;
+  font-size: 12px;
+}
+@media (max-height: 500px) and (min-width: 700px) {
+  .panel-armory .gear-detail {
+    grid-template-rows: minmax(0, 1fr) 44px;
+  }
+  .panel-armory .gear-heading {
+    min-height: 0;
+  }
+  .panel-armory .gear-display {
+    width: 40px;
+    height: 42px;
+    flex: 0 0 42px;
+  }
+  .panel-armory .gear-display img {
+    width: 34px;
+    height: 34px;
+  }
+  .panel-armory .gear-stats {
+    margin: 0;
+    padding: 0;
+  }
+  .panel-armory .gear-buttons {
+    padding: 0;
+    height: 44px;
+  }
+  .field-panel .ha-item-slot {
+    min-height: 44px;
+    height: 44px;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+  }
+  .field-panel .ha-item-slot > b {
+    top: 1px;
+    right: 3px;
+    font-size: 10px;
+  }
+  .field-panel .ha-item-slot > span {
+    line-height: 1.2;
+  }
+  .field-panel .ha-container > p {
+    display: none;
+  }
+  .field-panel .ha-container-art {
+    width: 26px;
+    height: 26px;
+  }
+  .field-panel .ha-container h3 {
+    min-height: 26px;
+  }
+  .field-panel
+    :is(.cave-route-panel, .stone-gate-panel)
+    .field-page-content
+    > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+  }
+  .field-panel :is(.cave-route-panel, .stone-gate-panel) .button-row {
+    display: inline-flex;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .field-panel .cave-route-panel .field-page-content > p {
+    margin: 3px 0;
+  }
+  .field-panel .cave-route-stages {
+    margin: 4px 0;
+    padding: 5px 0;
+  }
+  .field-panel .cave-route-panel .field-page-content h3 {
+    font-size: 18px;
+  }
+  .field-panel .spell-leaf .gear-stats {
+    padding: 4px 0;
+    margin: 6px 0;
+  }
+  .field-panel .spell-leaf .field-page-content > p {
+    margin: 4px 0;
+  }
+  .field-panel .spell-leaf .field-page-content .muted {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .field-panel .travel-intro .travel-hint {
+    font-size: 10px;
+  }
+}
+
+/* A receipt tag uses spare title-rail space; it never covers an action. */
+.modal.rq-theme.field-panel :is(.form-error, .panel-notice) {
+  position: absolute;
+  inset: 8px 76px auto auto;
+  z-index: 8;
+  max-width: calc(100% - 310px);
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.panel-armory .gear-layout {
+  grid-template-rows: minmax(0, 1fr);
+}
+.panel-armory .gear-rack {
+  min-height: 0;
+}
+@media (max-height: 500px) and (min-width: 700px) {
+  .panel-armory .gear-display {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+  }
+  .panel-armory .gear-display img {
+    width: 28px;
+    height: 28px;
+  }
+  .panel-armory .gear-heading {
+    gap: 2px;
+  }
+  .panel-armory .gear-heading h3 {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .panel-armory .gear-heading :is(small, span) {
+    line-height: 1.2;
+  }
+  .panel-armory .gear-stats :is(dt, dd) {
+    line-height: 1.2;
+  }
+  .modal.rq-theme.field-panel :is(.form-error, .panel-notice) {
+    top: 5px;
+    max-width: calc(100% - 260px);
+    font-size: 11px;
+    padding: 5px 9px;
+  }
+}
+
+@keyframes field-paper-arrive {
+  from {
+    opacity: 0.45;
+    translate: 0 5px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.field-panel :is(.gear-detail, .field-page-content) {
+  animation: field-paper-arrive 150ms ease-out;
+}
+.panel-armory .gear-rack > button img {
+  transition: translate 130ms ease-out;
+}
+@media (hover: hover) {
+  .panel-armory .gear-rack > button:hover:not(:disabled) img {
+    translate: 0 -2px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field-panel :is(.gear-detail, .field-page-content) {
+    animation: none;
+  }
+  .panel-armory .gear-rack > button img {
+    transition: none;
+    translate: none;
+  }
+}
+
+.field-panel .field-workorder-main {
+  background-color: transparent;
+}
+@media (min-height: 501px) {
+  .modal.rq-theme.field-panel:is(.panel-menu, .panel-guide) {
+    height: min(580px, calc(100dvh - 32px));
+  }
+  .modal.rq-theme.field-panel.panel-settings {
+    height: min(640px, calc(100dvh - 32px));
+  }
+  .modal.rq-theme.field-panel.panel-settings:has(.field-preferences) {
+    height: min(430px, calc(100dvh - 32px));
+  }
+  .modal.rq-theme.field-panel.panel-settings:has(.field-data) {
+    height: min(540px, calc(100dvh - 32px));
+  }
+  .modal.rq-theme.field-panel.panel-ai {
+    height: min(480px, calc(100dvh - 32px));
+  }
+  .field-panel .field-preferences {
+    min-height: 0;
+    padding: 15px;
+  }
+}
+@media (max-height: 500px) and (min-width: 700px) {
+  .panel-armory .gear-heading {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+  }
+  .panel-armory .gear-heading > div:last-child {
+    min-width: 0;
+  }
+  .field-panel.panel-ai .ai-emblem {
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin: 0 12px 0 0;
+  }
+  .field-panel.panel-ai h3 {
+    font-size: 20px;
+    margin: 6px 0;
+  }
+  .field-panel.panel-ai p {
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .field-panel.panel-ai .note {
+    padding: 10px 12px;
+    margin: 10px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .field-panel.panel-ai .primary {
+    margin-top: 5px;
+  }
+}

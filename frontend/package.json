@@ -35,7 +35,10 @@
     "test:departure": "node scripts/departure-smoke.mjs",
     "test:combat": "node scripts/village-combat-smoke.mjs && node scripts/village-combat-controls.mjs",
     "test:intro": "node scripts/village-intro-state.mjs && node scripts/village-intro-smoke.mjs",
-    "test:intro:controls": "node scripts/village-intro-controls.mjs"
+    "test:intro:controls": "node scripts/village-intro-controls.mjs",
+    "test:world-ui": "node scripts/world-ui-refinement.mjs",
+    "test:controls": "REALQUEST_UI_SUITE=living-controls node scripts/world-ui-refinement.mjs",
+    "test:field-panels": "node scripts/field-panels.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

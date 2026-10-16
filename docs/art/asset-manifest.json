@@ -1931,5 +1931,72 @@
     ],
     "status": "Implemented and browser-verified candidate; owner visual and gameplay acceptance pending",
     "report": "docs/tasks/29-first-expedition.md"
+  },
+  "world_ui_refinement": {
+    "source": "Native DOM/CSS and original Phaser marker geometry; existing project-owned timber, paper, bed, counter and item art reused unchanged.",
+    "new_runtime_assets": [],
+    "reuse": [
+      "frontend/public/assets/hearthwood/commission-wood-v1.webp",
+      "frontend/public/assets/hearthwood/encounters/notice-paper.webp",
+      "frontend/public/assets/hearthwood/detail/interiors/bed.png",
+      "frontend/public/assets/hearthwood/market/counter.png"
+    ],
+    "bindings": [
+      "frontend/src/world-ui-refinement.css",
+      "frontend/src/components/MarketPanel.tsx",
+      "frontend/src/components/SleepPanel.tsx",
+      "frontend/src/components/CombatPanels.tsx",
+      "frontend/src/components/Quests.tsx",
+      "frontend/src/game/WorldScene.ts",
+      "frontend/src/game/village.ts"
+    ],
+    "status": "Implemented candidate; actual owner visual acceptance pending",
+    "report": "docs/tasks/30-world-ui-refinement.md"
+  },
+  "living_controls": {
+    "source": "Native CSS/DOM using shared Hearthwood tokens, original CSS geometry/grain and installed Lucide; existing project-owned art reused unchanged.",
+    "new_runtime_assets": [],
+    "reuse": [
+      "frontend/public/assets/hearthwood/commission-wood-v1.webp"
+    ],
+    "bindings": [
+      "styles/realquest-tokens.css",
+      "frontend/src/living-controls.css",
+      "frontend/src/world-ui-refinement.css",
+      "frontend/src/components/MarketPanel.tsx",
+      "frontend/src/App.tsx"
+    ],
+    "status": "Implemented and browser-verified candidate; owner actual-render acceptance pending",
+    "report": "docs/tasks/31-living-controls.md"
+  },
+  "living_field_panels": {
+    "source": "Native React/CSS compositions with original CSS stonework, installed Lucide and unchanged project-owned Hearthwood art; no new generation, download or source modification.",
+    "new_runtime_assets": [],
+    "reuse": [
+      "frontend/public/assets/hearthwood/commission-wood-v1.webp",
+      "frontend/public/assets/hearthwood/encounters/notice-paper.webp",
+      "frontend/public/assets/hearthwood/character/magic.webp",
+      "frontend/public/assets/hearthwood/detail/interiors/book.png",
+      "frontend/public/assets/hearthwood/village/stone.png",
+      "frontend/public/assets/hearthwood/detail/items/backpack.png",
+      "frontend/public/assets/hearthwood/detail/interiors/chest-open.png",
+      "frontend/public/assets/hearthwood/journey/cliff-224.png",
+      "frontend/public/assets/hearthwood/arrival-village-v1.webp",
+      "frontend/public/assets/hearthwood/village/home.png",
+      "frontend/public/assets/hearthwood/village/workshop.png",
+      "frontend/public/assets/hearthwood/village/library.png"
+    ],
+    "bindings": [
+      "frontend/src/field-panels.css",
+      "frontend/src/components/FieldIllustration.tsx",
+      "frontend/src/components/VillageGuide.tsx",
+      "frontend/src/components/CombatPanels.tsx",
+      "frontend/src/components/WorldPanels.tsx",
+      "frontend/src/components/TravelPanel.tsx",
+      "frontend/src/App.tsx"
+    ],
+    "notes": "Full notice-paper bitmap is used as a textless background; no unmeasured new slice inset. Existing vector item symbols remain presentation-only. Unknown future assets are not introduced.",
+    "status": "Implemented and production-browser-verified candidate; owner actual-render acceptance pending",
+    "report": "docs/tasks/32-field-panels.md"
   }
 }

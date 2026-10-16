@@ -1,4 +1,4 @@
-import { BedDouble, Moon, Sun, Heart, Coffee, MapPin, X } from "lucide-react";
+import { Moon, Sun, Heart, Coffee, MapPin, X } from "lucide-react";
 import { useState } from "react";
 import { clockLabel, villageClock } from "../game/residents";
 import { staminaNow } from "../game/stamina";
@@ -16,14 +16,32 @@ export function SleepPanel() {
   const booked = !inn || state.departure?.booking_day === day;
   const bedTarget = inn ? "inn_bed" : "home_bed";
   return (
-    <section className="sleep-leaf" aria-label="床边休息选择">
+    <section
+      className="sleep-leaf"
+      aria-label="床边休息选择"
+      onKeyDown={(event) => {
+        const rules =
+          event.currentTarget.querySelector<HTMLDetailsElement>(
+            ".sleep-rules[open]",
+          );
+        if (event.key === "Escape" && rules) {
+          event.preventDefault();
+          event.stopPropagation();
+          rules.open = false;
+          rules.querySelector("summary")?.focus();
+        }
+      }}
+    >
       <div className="sleep-heading">
-        <BedDouble size={34} aria-hidden="true" />
+        <div className="sleep-bed-art" aria-hidden="true">
+          <img src="/assets/hearthwood/detail/interiors/bed.png" alt="" />
+        </div>
         <div>
           <small>
             第 {day} 天 · {clockLabel(clock.minute)} · 阅读时暂停
+            {noticePanel === "sleep" && notice && !error && " · 已休息"}
           </small>
-          <h3>把今天留在枕边</h3>
+          <h3>歇一会儿，再出发</h3>
           <p>
             {inn
               ? "灯穗旅店 · 今晚房费 8 金币，先向岚姨订房。"
@@ -102,11 +120,14 @@ export function SleepPanel() {
           {error}
         </p>
       )}
-      <p className="sleep-footnote">
-        {inn && "睡醒仍在旅店，房费按游戏夜计算；再次住宿需重新订房。"}
-        01:00 未睡会昏倒返家，生命 −{rules?.faint_damage ?? 10}（最低保留
-        1），体力不恢复。作物与现实委托仍按现实时间计算，睡觉不会刷新现实成长额度。
-      </p>
+      <details className="sleep-rules">
+        <summary>夜间与计时规则</summary>
+        <p className="sleep-footnote">
+          {inn && "睡醒仍在旅店，房费按游戏夜计算；再次住宿需重新订房。"}
+          01:00 未睡会昏倒返家，生命 −{rules?.faint_damage ?? 10}（最低保留
+          1），体力不恢复。作物与现实委托仍按现实时间计算，睡觉不会刷新现实成长额度。
+        </p>
+      </details>
     </section>
   );
 }

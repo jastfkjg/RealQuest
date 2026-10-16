@@ -13,6 +13,7 @@ import { useGame } from "../stores/game";
 import { clockLabel } from "../game/residents";
 import { NpcPerson } from "./NpcPerson";
 import { itemNames } from "../game/items";
+import { useState } from "react";
 const NPCS: Record<string, { name: string; role: string; line: string }> = {
   adu: {
     name: "阿渡",
@@ -26,6 +27,7 @@ const NPCS: Record<string, { name: string; role: string; line: string }> = {
   },
 };
 export function TravelPanel() {
+  const [page, turnPage] = useState(0);
   const { state, selected, command, busy, open, notice, noticePanel, error } =
     useGame();
   if (!state || !selected || !state.travel) return null;
@@ -37,6 +39,7 @@ export function TravelPanel() {
         !(state.departure?.rope_ready && o.id === "rope"),
     );
   const chapter = state.quest_log.find((q) => q.id === "leave_valley");
+  const index = Math.min(page, Math.max(0, options.length - 1));
   return (
     <section className="travel-leaf" aria-label="旅途安排">
       <header className="travel-intro">
@@ -50,6 +53,13 @@ export function TravelPanel() {
           ) : (
             <Compass size={52} />
           )}
+          {!npc && (
+            <img
+              className="travel-scene-art"
+              src="/assets/hearthwood/journey/cliff-224.png"
+              alt=""
+            />
+          )}
         </div>
         <div>
           <small>
@@ -61,6 +71,14 @@ export function TravelPanel() {
               "山水之间，每一段路都可以慢慢准备。先看清条件，再决定出发。"}
           </p>
         </div>
+        {selected.id === "river_bridge" && (
+          <p className="travel-hint">
+            旧桥
+            {state.departure?.bridge_repaired
+              ? "已经修复，双向免费通行。"
+              : "需要木板 6、石料 4。去木作工坊把木材制成木板；或找阿渡花 6 金币乘船。"}
+          </p>
+        )}
       </header>
       <div className="travel-status">
         <span>
@@ -84,79 +102,93 @@ export function TravelPanel() {
           <small>净水站尚未开放，本阶段没有战斗。</small>
         </div>
       )}
-      {selected.id === "river_bridge" && (
-        <p className="travel-hint">
-          旧桥
-          {state.departure?.bridge_repaired
-            ? "已经修复，双向免费通行。"
-            : "需要木板 6、石料 4。去木作工坊把木材制成木板；或找阿渡花 6 金币乘船。"}
-        </p>
-      )}
-      <div className="travel-actions">
-        {options.map((o) => (
-          <section key={o.id} className="travel-action" aria-label={o.label}>
-            <div>
-              <h4>
-                {o.label}
-                {o.id === "book" &&
-                  state.departure?.booking_day === state.travel?.day && (
-                    <Check size={16} />
+      {options.length > 0 && (
+        <div className="travel-actions">
+          {options.length > 1 && (
+            <nav className="field-pager" aria-label="旅途方案翻页">
+              <button
+                disabled={index === 0}
+                onClick={() => turnPage(index - 1)}
+              >
+                上一方案
+              </button>
+              <span>
+                方案 {index + 1} / {options.length}
+              </span>
+              <button
+                disabled={index + 1 >= options.length}
+                onClick={() => turnPage(index + 1)}
+              >
+                下一方案
+              </button>
+            </nav>
+          )}
+          {options.slice(index, index + 1).map((o) => (
+            <section key={o.id} className="travel-action" aria-label={o.label}>
+              <div>
+                <h4>
+                  {o.label}
+                  {o.id === "book" &&
+                    state.departure?.booking_day === state.travel?.day && (
+                      <Check size={16} />
+                    )}
+                </h4>
+                <p>{o.note}</p>
+                <div className="travel-costs">
+                  {Object.entries(o.costs).map(([id, n]) => (
+                    <span key={id} data-short={(state.inventory[id] || 0) < n}>
+                      {itemNames[id] || id} {state.inventory[id] || 0} / {n}
+                    </span>
+                  ))}
+                  {!!o.stamina && <span>体力 −{o.stamina}</span>}
+                  {!!o.minutes && (
+                    <span>
+                      {o.minutes} 游戏分钟 · 完成于{" "}
+                      {clockLabel(o.arrival_minute)}
+                    </span>
                   )}
-              </h4>
-              <p>{o.note}</p>
-              <div className="travel-costs">
-                {Object.entries(o.costs).map(([id, n]) => (
-                  <span key={id} data-short={(state.inventory[id] || 0) < n}>
-                    {itemNames[id] || id} {state.inventory[id] || 0} / {n}
-                  </span>
-                ))}
-                {!!o.stamina && <span>体力 −{o.stamina}</span>}
-                {!!o.minutes && (
-                  <span>
-                    {o.minutes} 游戏分钟 · 完成于 {clockLabel(o.arrival_minute)}
-                  </span>
+                </div>
+                {o.reasons.length > 0 && (
+                  <p
+                    className="travel-reason"
+                    data-completed={o.completed}
+                    id={`travel-${o.id}-reason`}
+                  >
+                    {o.reasons.join("；")}
+                  </p>
                 )}
               </div>
-              {o.reasons.length > 0 && (
-                <p
-                  className="travel-reason"
-                  data-completed={o.completed}
-                  id={`travel-${o.id}-reason`}
-                >
-                  {o.reasons.join("；")}
-                </p>
-              )}
-            </div>
-            <button
-              className={!o.reasons.length ? "primary" : ""}
-              disabled={busy || !!o.reasons.length}
-              aria-describedby={
-                o.reasons.length ? `travel-${o.id}-reason` : undefined
-              }
-              onClick={async () => {
-                const success = await command("travel", {
-                  target: selected.id,
-                  option: o.id,
-                  expected_day: state.travel!.day,
-                  expected_location: state.location,
-                });
-                if (success && o.destination) open(null);
-              }}
-            >
-              {busy ? (
-                "保存中…"
-              ) : o.destination ? (
-                <>
-                  <span>启程</span>
-                  <ArrowRight size={17} />
-                </>
-              ) : (
-                "确认"
-              )}
-            </button>
-          </section>
-        ))}
-      </div>
+              <button
+                className={!o.reasons.length ? "primary" : ""}
+                disabled={busy || !!o.reasons.length}
+                aria-describedby={
+                  o.reasons.length ? `travel-${o.id}-reason` : undefined
+                }
+                onClick={async () => {
+                  const success = await command("travel", {
+                    target: selected.id,
+                    option: o.id,
+                    expected_day: state.travel!.day,
+                    expected_location: state.location,
+                  });
+                  if (success && o.destination) open(null);
+                }}
+              >
+                {busy ? (
+                  "保存中…"
+                ) : o.destination ? (
+                  <>
+                    <span>启程</span>
+                    <ArrowRight size={17} />
+                  </>
+                ) : (
+                  "确认"
+                )}
+              </button>
+            </section>
+          ))}
+        </div>
+      )}
       {selected.id === "lanya" &&
         state.departure?.booking_day === state.travel.day && (
           <p className="travel-booked">

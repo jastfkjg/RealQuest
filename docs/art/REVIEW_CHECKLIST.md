@@ -1,5 +1,36 @@
 # Hearthwood Review Checklist
 
+## Functional popup compositions — 2026-10-16
+
+- [x] Armory rack/work order, illustrated spell/cave/gate, paged paired storage, blueprint/counter and quoted route pages replace the remaining generic utility compositions. Menu/guide/settings use matching materials with explicit native pages.
+- [x] Final production12 check groups/91 captures pass: desktop1440/1920,1024, landscape844/740, all captured bodies without vertical scrolling, no covered controls/content overflow. Default, selected, shortfall, ready, hover/focus/press, pending/error/retry, success and reload reviewed. Expected injected503 is separate from zero unexpected page/console errors.
+- [x] Exact server purchase/craft/spell/store/withdraw/upgrade/counter/ferry/gate actions and real cave entry/retreat pass; input ownership,44px primary action, DPR2 touch and reduced motion checked. Final screenshots inspected.
+- [x] Build,156-image preservation,7 solid contrast pairs(min4.96), supplied game frame client and format/diff checks pass. Test automation closes in finally; test services closed and manual preview identified in task32.
+- [ ] Owner render approval, physical devices/Safari/native zoom/screen readers, expanded imported-recovery forms and full combat/departure endurance remain unverified. Existing old broad mouse-HUD obstruction is outside this visual family.
+
+Files, commands, images, recording and cleanup: [task32](../tasks/32-field-panels.md).
+
+## Overall tactile controls — 2026-10-16
+
+- [x] Shared moss/linen actions, soft pockets and paper tabs applied across existing game and Life pages; market data cards replaced with small object shelves, rest actions made compact. Existing page archetypes and actual values retained.
+- [x] Production build and final10-group/99-capture browser flow pass. Desktop1440/1920,1024 and landscape844/740 target layouts, DPR2 touch, reduced motion, normal-motion hover/press, keyboard focus, failure/retry and disabled/pending checked; final captures inspected. No empty family capture or new page runtime error.
+- [x] Actual claim/trade/rest/equip/persistence, movement input ownership and five door enter/exits remain correct.156-image preservation audit,7 solid-color/gradient-endpoint contrast pairs(min4.96), skill frame client and formatting/diff checks pass.
+- [x] Test browsers/contexts use finally cleanup; isolated test services closed and retained manual preview identified in task31.
+- [ ] Existing long reading/menu surfaces may still scroll; this change refines their controls, while task30 board/shop/rest/gear fitted layouts keep explicit pages. Physical devices/Safari/native zoom/screen readers/endurance and owner render approval remain unverified.
+
+Files, commands, screenshots, recording and cleanup: [task31](../tasks/31-living-controls.md).
+
+## Requested world UI refinement — 2026-10-16
+
+- [x] Five real facade collisions/door enter-exits, quieter NPC/road cues and compact1.8s edge notices checked.
+- [x] Requested market, bedside, equipment and board layouts use existing Hearthwood art; fixed board title and explicit pages replace vertical scrolling.
+- [x] Final production49 captures at desktop and phone landscape sizes pass in-viewport, unobscured-control and non-scroll checks. Actual screenshots, DPR2 touch and reduced motion inspected.
+- [x] Claim rejection/retry grants exactly one reward; actual trades/rest/equip and reload/marker-only navigation pass. Relevant112 backend tests, production build,156-image audit,9 contrast pairs(min4.85) and skill frame client pass.
+- [ ] Legacy broad mouse smoke remains blocked by the existing HUD pickup overlap; full gameplay regression is not claimed.
+- [ ] Owner render approval, physical devices/Safari, native zoom and screen-reader/endurance checks remain unverified.
+
+Files, evidence, commands and cleanup: [task30](../tasks/30-world-ui-refinement.md).
+
 ## First expedition — 2026-10-16
 
 Status: implemented and browser-verified candidate; owner gameplay/visual acceptance pending.

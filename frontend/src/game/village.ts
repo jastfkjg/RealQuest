@@ -117,26 +117,15 @@ export function village(scene: Phaser.Scene, map: MapData) {
     scene.add
       .ellipse(x + w / 2 + 7, y + h, w + 10, 14, 0x2d4438, 0.2)
       .setDepth(-850);
-    sprite(scene, obj.id, x + w / 2, y + h, obj.y - 15).setData(
-      "building",
-      obj.id,
-    );
+    // Depth follows the solid facade, not the interaction anchor in front of it.
+    // An actor standing on the doorstep must render in front of the whole house.
+    sprite(scene, obj.id, x + w / 2, y + h, y + h).setData("building", obj.id);
   }
-  // A quiet sign and supplies connect the new shop to the village path.
+  // Supplies connect the shop to the village path without a floating text sign.
   const shop = map.objects.find((o) => o.id === "shop");
   if (shop) {
     sprite(scene, "crates", 904, 690, 676);
     sprite(scene, "lantern", 758, 690, 676);
-    scene.add
-      .text(958, 404, "杂货铺 ↓", {
-        fontFamily: "sans-serif",
-        fontSize: "11px",
-        color: "#27392f",
-        backgroundColor: "#f4efde",
-        padding: { x: 5, y: 4 },
-      })
-      .setOrigin(0.5)
-      .setDepth(405);
   }
   for (const obj of map.objects) {
     if (!["wood", "stone", "board", "chest", "event"].includes(obj.kind))

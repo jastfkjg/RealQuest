@@ -1,5 +1,17 @@
 # RealQuest Asset Plan and Provenance
 
+## Functional worktables and field pages — 2026-10-16
+
+No new image, font, audio, source processing or external pack is added. The armory and utility frames reuse `commission-wood-v1.webp` and the full textless `encounters/notice-paper.webp`; no new paper slice margin is claimed. Existing magic emblem, book, stone, backpack, chest, journey cliff and village vignette supply the scene props. The building sketch now uses the audited Hearthwood home/workshop/library PNGs rather than the old Ninja placeholder. Stone arches are original native CSS geometry; weapon/key art remains the existing item registry. Bindings and exact reuse are in `living_field_panels`;156-image preservation passes. Evidence and pending owner review: [task32](../tasks/32-field-panels.md).
+
+## Overall controls — 2026-10-16
+
+The requested overall control refinement adds no raster, font, audio, external pack or processing. Soft geometry, grain, bevel, shelf and selection treatments are native CSS using the shared Hearthwood tokens; short shelves reuse the existing `commission-wood-v1.webp`. Installed Lucide supplies market bookmark icons. All existing art is unchanged; bindings and the empty new-asset list are recorded under `living_controls` in the manifest. Actual browser evidence and pending owner review: [task31](../tasks/31-living-controls.md).
+
+## World UI refinement — 2026-10-16
+
+The requested doorway, cue, notification, market, bedside, equipment and board refinement adds no image, font, sound, external pack or processing. Existing timber, pinned paper, bed, counter and item assets are reused unchanged; compact punctuation is original Phaser geometry. All Chinese text and server actions stay native. Bindings/reuse are recorded under `world_ui_refinement` in the manifest; evidence and limitations: [task30](../tasks/30-world-ui-refinement.md). Actual render remains pending owner review.
+
 ## First expedition guidance — 2026-10-16
 
 No image, font, audio, external pack or source processing is added. The guide uses native Chinese DOM/CSS, shared Hearthwood tokens, installed Lucide and existing item identities within the board, armory, cave and tracker. Bindings and the empty new-asset list are recorded under `village_intro` in the manifest. Actual browser evidence and pending owner review: [task29](../tasks/29-first-expedition.md).

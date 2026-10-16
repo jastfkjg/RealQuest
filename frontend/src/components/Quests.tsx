@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { HudIcon } from "./HudIcon";
 import {
   Check,
@@ -60,7 +60,9 @@ export function QuestDetails({
       </ul>
       <QuestRewards quest={q} />
       <QuestActions quest={q} conversational={conversational} />
-      {["settle_in", "leave_valley"].includes(q.id) && <IntroContext place="board" />}
+      {["settle_in", "leave_valley"].includes(q.id) && (
+        <IntroContext place="board" />
+      )}
     </>
   );
 }
@@ -77,7 +79,6 @@ export function QuestList({ giver }: { giver?: string }) {
       )?.id || ""
     );
   });
-  const detailRef = useRef<HTMLElement>(null);
   const [page, setPage] = useState(0);
   if (!state) return null;
   const quests = state.quest_log.filter((q) => !giver || q.giver === giver);
@@ -101,14 +102,6 @@ export function QuestList({ giver }: { giver?: string }) {
             aria-pressed={selected.id === q.id}
             onClick={() => {
               setSelectedId(q.id);
-              if (window.matchMedia("(max-width: 750px)").matches)
-                requestAnimationFrame(() => {
-                  detailRef.current?.focus({ preventScroll: true });
-                  detailRef.current?.scrollIntoView({
-                    block: "start",
-                    behavior: "instant",
-                  });
-                });
             }}
           >
             <span className="ha-notice-pin" aria-hidden="true" />
@@ -149,23 +142,122 @@ export function QuestList({ giver }: { giver?: string }) {
         )}
       </nav>
       <article
-        ref={detailRef}
         className="ha-selected-notice"
         key={selected.id}
         aria-label="选中的委托"
         tabIndex={-1}
       >
-        <div className="ha-notice-seal" aria-hidden="true">
-          <Flag size={24} />
-        </div>
-        <small>
-          {selected.giver_name} · {questStatuses[selected.status]}
-        </small>
-        <h3>{selected.title}</h3>
-        <QuestIllustration quest={selected} />
-        <QuestDetails quest={selected} />
+        <BoardNotice quest={selected} />
       </article>
     </div>
+  );
+}
+
+function BoardNotice({ quest }: { quest: Quest }) {
+  const state = useGame((s) => s.state)!;
+  const [leaf, setLeaf] = useState("progress");
+  const [page, setPage] = useState(0);
+  const long = quest.objectives.length > 3;
+  const pageSize = long ? 2 : 3;
+  const briefing =
+    ["settle_in", "leave_valley"].includes(quest.id) &&
+    state.quests.settle_in?.status === "claimed" &&
+    state.village_intro &&
+    !state.village_intro.dismissed &&
+    !state.village_intro.reviewed &&
+    !state.combat?.gate_open &&
+    !state.village_intro.briefed;
+  const activeLeaf = leaf === "briefing" && !briefing ? "progress" : leaf;
+  return (
+    <>
+      <header className="board-sheet-heading">
+        <small>
+          {quest.giver_name} · {questStatuses[quest.status]}
+        </small>
+        <h3>{quest.title}</h3>
+      </header>
+      {(long || briefing) && (
+        <nav className="board-leaves" aria-label="委托书页">
+          <button
+            aria-pressed={activeLeaf === "progress"}
+            onClick={() => setLeaf("progress")}
+          >
+            目标进度
+          </button>
+          {long && (
+            <button
+              aria-pressed={activeLeaf === "description"}
+              onClick={() => setLeaf("description")}
+            >
+              委托说明
+            </button>
+          )}
+          {briefing && (
+            <button
+              aria-pressed={activeLeaf === "briefing"}
+              onClick={() => setLeaf("briefing")}
+            >
+              远行准备
+            </button>
+          )}
+        </nav>
+      )}
+      <div className="board-sheet-content" aria-live="polite">
+        {activeLeaf === "briefing" && briefing ? (
+          <IntroContext place="board" paged />
+        ) : activeLeaf === "description" && long ? (
+          <p className="ha-quest-description">{quest.description}</p>
+        ) : (
+          <>
+            <QuestIllustration quest={quest} />
+            {!long && (
+              <p className="ha-quest-description">{quest.description}</p>
+            )}
+            <ul className="ha-objectives" aria-label="委托目标">
+              {quest.objectives
+                .slice(page * pageSize, (page + 1) * pageSize)
+                .map((item, i) => (
+                  <li
+                    key={item}
+                    className={
+                      quest.checks[page * pageSize + i] ? "complete" : ""
+                    }
+                  >
+                    {quest.checks[page * pageSize + i] ? (
+                      <Check size={17} />
+                    ) : (
+                      <Circle size={15} />
+                    )}
+                    <span>{item}</span>
+                  </li>
+                ))}
+            </ul>
+            {long && (
+              <nav className="board-step-pages" aria-label="目标翻页">
+                <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+                  上一页
+                </button>
+                <span>
+                  {page + 1} / {Math.ceil(quest.objectives.length / pageSize)}
+                </span>
+                <button
+                  disabled={(page + 1) * pageSize >= quest.objectives.length}
+                  onClick={() => setPage(page + 1)}
+                >
+                  下一页
+                </button>
+              </nav>
+            )}
+          </>
+        )}
+      </div>
+      {activeLeaf !== "briefing" && (
+        <footer className="board-sheet-footer">
+          <QuestRewards quest={quest} />
+          <QuestActions quest={quest} />
+        </footer>
+      )}
+    </>
   );
 }
 
@@ -211,7 +303,10 @@ export function QuestActions({
   const { state, selected, command, busy, navigate, open } = useGame();
   if (!state) return null;
   const atGiver = selected?.id === q.giver;
-  const intro = q.id === "leave_valley" && q.status === "active" ? villageIntroStep(state) : null;
+  const intro =
+    q.id === "leave_valley" && q.status === "active"
+      ? villageIntroStep(state)
+      : null;
   return (
     <div className={`quest-actions ${journal ? "hj-actions" : ""}`}>
       {q.status === "locked" ? (
@@ -378,13 +473,15 @@ export function QuestCompass() {
     state.quest_log.find((q) =>
       ["ready", "active", "available"].includes(q.status),
     );
-  const next = intro ? intro.title : !quest
-    ? "照顾家园，或随心探索"
-    : quest.status === "ready"
-      ? `回到${quest.giver_name}交付`
-      : quest.status === "available"
-        ? `向${quest.giver_name}接取委托`
-        : quest.objectives[quest.checks.findIndex((v) => !v)];
+  const next = intro
+    ? intro.title
+    : !quest
+      ? "照顾家园，或随心探索"
+      : quest.status === "ready"
+        ? `回到${quest.giver_name}交付`
+        : quest.status === "available"
+          ? `向${quest.giver_name}接取委托`
+          : quest.objectives[quest.checks.findIndex((v) => !v)];
   return (
     <aside className="quest-compass rq-theme" aria-label="下一步引导">
       <button
@@ -405,9 +502,11 @@ export function QuestCompass() {
       >
         <span>
           <small>
-            {intro ? "第一次初探" : quest?.status === "ready"
-              ? "委托已就绪"
-              : quest?.title || "自由探索"}
+            {intro
+              ? "第一次初探"
+              : quest?.status === "ready"
+                ? "委托已就绪"
+                : quest?.title || "自由探索"}
           </small>
           <b>{next}</b>
         </span>

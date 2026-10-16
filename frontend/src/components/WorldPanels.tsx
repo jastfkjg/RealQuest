@@ -9,7 +9,6 @@ import {
   ArrowRight,
   Archive,
   Hammer,
-  Home,
   Leaf,
   Sparkles,
   Backpack,
@@ -35,9 +34,15 @@ export function MaterialIcon({ item }: { item: string }) {
 export function StoragePanel() {
   const { state, command, busy } = useGame();
   const [selectedItem, selectItem] = useState("seed");
+  const [page, turnPage] = useState(0);
   if (!state) return null;
   const items = Object.keys(state.storage);
   const item = items.includes(selectedItem) ? selectedItem : items[0];
+  const pages = Math.max(1, Math.ceil(items.length / 6));
+  const turn = (next: number) => {
+    turnPage(next);
+    selectItem(items[next * 6]);
+  };
   return (
     <div className="ha-transfer">
       <p className="ha-transfer-hint">选中物品，在背包与家中之间存取。</p>
@@ -49,6 +54,15 @@ export function StoragePanel() {
             aria-label={side === "inventory" ? "随身背包" : "家园箱子"}
           >
             <h3>
+              <img
+                className="ha-container-art"
+                src={
+                  side === "inventory"
+                    ? "/assets/hearthwood/detail/items/backpack.png"
+                    : "/assets/hearthwood/detail/interiors/chest-open.png"
+                }
+                alt=""
+              />
               {side === "inventory" ? (
                 <Backpack size={22} />
               ) : (
@@ -60,7 +74,7 @@ export function StoragePanel() {
               </small>
             </h3>
             <div className="ha-item-grid">
-              {items.map((id) => (
+              {items.slice(page * 6, page * 6 + 6).map((id) => (
                 <button
                   key={id}
                   className="ha-item-slot"
@@ -83,6 +97,19 @@ export function StoragePanel() {
           </section>
         ))}
       </div>
+      {pages > 1 && (
+        <nav className="field-pager" aria-label="储物物品翻页">
+          <button disabled={page === 0} onClick={() => turn(page - 1)}>
+            上一页
+          </button>
+          <span>
+            物品 {page + 1} / {pages}
+          </span>
+          <button disabled={page + 1 >= pages} onClick={() => turn(page + 1)}>
+            下一页
+          </button>
+        </nav>
+      )}
       {item && (
         <section className="ha-transfer-action" aria-label="选中物品存取">
           <div className="ha-transfer-item">
@@ -132,6 +159,7 @@ export function StoragePanel() {
 
 export function BuildingPanel() {
   const { selected, state, command, busy } = useGame();
+  const [page, turn] = useState("plan");
   if (!selected || !state) return null;
   const building = selected.building || selected.id || "home",
     level = state.buildings[building] || 1;
@@ -149,97 +177,112 @@ export function BuildingPanel() {
   const enough = materials.every(([id, cost]) => state.inventory[id] >= cost);
   return (
     <div className="hp-workorder">
-      <div className="ha-blueprint">
-        <div className="ha-blueprint-heading">
-          <Hammer size={18} />
-          <span>修缮蓝图</span>
-          <small>
-            {building === "home"
-              ? "林间小屋"
-              : building === "workshop"
-                ? "木作工坊"
-                : "回响图书馆"}
-          </small>
-        </div>
-        <div className="ha-blueprint-drawing" aria-hidden="true">
-          <span className="ha-dimension ha-dimension--top" />
-          <div className="hp-house-sketch">
-            {building === "home" || building === "library" ? (
-              <img
-                src={`/assets/ninja-adventure/house-${building}.png`}
-                width={80}
-                height={80}
-                alt=""
-              />
-            ) : (
-              <Home size={80} strokeWidth={1} />
-            )}
-          </div>
-          <span className="ha-dimension ha-dimension--bottom" />
-        </div>
-        <div className="ha-stages">
-          <div>
-            <small>当前 · Lv.{level}</small>
-            <strong>{effect(level)}</strong>
-          </div>
-          <ArrowRight size={22} />
-          <div>
-            <small>
-              {level < 3 ? `下一阶段 · Lv.${level + 1}` : "修缮完成"}
-            </small>
-            <strong>{level < 3 ? effect(level + 1) : "已达最高等级"}</strong>
-          </div>
-        </div>
-      </div>
-      <section className="hp-materials">
-        <h4>{level < 3 ? "备好这些材料" : "已达最高等级"}</h4>
-        {level < 3 && (
-          <div className="hp-material-list">
-            {materials.map(([id, cost]) => (
-              <div
-                key={id}
-                className="hp-material"
-                data-enough={state.inventory[id] >= cost}
-              >
-                <MaterialIcon item={id} />
-                <div>
-                  <b>
-                    {cost} {itemNames[id]}
-                  </b>
-                  <small>
-                    {state.inventory[id] >= cost ? (
-                      <>
-                        <Check size={13} />
-                        已备齐
-                      </>
-                    ) : (
-                      `还缺 ${cost - state.inventory[id]}`
-                    )}
-                  </small>
-                  <span className="ha-material-count">
-                    持有 {state.inventory[id]}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-      <button
-        className="primary hp-upgrade-action"
-        disabled={busy || level >= 3 || !enough}
-        onClick={() => void command("upgrade", { target: selected.id })}
-      >
-        {busy
-          ? "修缮中…"
-          : level >= 3
-            ? "修缮已完成"
-            : enough
-              ? "开始修缮"
-              : "材料尚未备齐"}
-        <ArrowRight size={16} />
-      </button>
       {building === "workshop" && (
+        <nav className="field-tabs" aria-label="工坊书页">
+          <button aria-pressed={page === "plan"} onClick={() => turn("plan")}>
+            修缮蓝图
+          </button>
+          <button
+            aria-pressed={page === "counter"}
+            onClick={() => turn("counter")}
+          >
+            加工与买卖
+          </button>
+        </nav>
+      )}
+      {page === "plan" && (
+        <div className="field-workorder-main">
+          <div className="ha-blueprint">
+            <div className="ha-blueprint-heading">
+              <Hammer size={18} />
+              <span>修缮蓝图</span>
+              <small>
+                {building === "home"
+                  ? "林间小屋"
+                  : building === "workshop"
+                    ? "木作工坊"
+                    : "回响图书馆"}
+              </small>
+            </div>
+            <div className="ha-blueprint-drawing" aria-hidden="true">
+              <span className="ha-dimension ha-dimension--top" />
+              <div className="hp-house-sketch">
+                <img
+                  src={`/assets/hearthwood/village/${building}.png`}
+                  width={128}
+                  height={128}
+                  alt=""
+                />
+              </div>
+              <span className="ha-dimension ha-dimension--bottom" />
+            </div>
+            <div className="ha-stages">
+              <div>
+                <small>当前 · Lv.{level}</small>
+                <strong>{effect(level)}</strong>
+              </div>
+              <ArrowRight size={22} />
+              <div>
+                <small>
+                  {level < 3 ? `下一阶段 · Lv.${level + 1}` : "修缮完成"}
+                </small>
+                <strong>
+                  {level < 3 ? effect(level + 1) : "已达最高等级"}
+                </strong>
+              </div>
+            </div>
+          </div>
+          <section className="hp-materials">
+            <h4>{level < 3 ? "备好这些材料" : "已达最高等级"}</h4>
+            {level < 3 && (
+              <div className="hp-material-list">
+                {materials.map(([id, cost]) => (
+                  <div
+                    key={id}
+                    className="hp-material"
+                    data-enough={state.inventory[id] >= cost}
+                  >
+                    <MaterialIcon item={id} />
+                    <div>
+                      <b>
+                        {cost} {itemNames[id]}
+                      </b>
+                      <small>
+                        {state.inventory[id] >= cost ? (
+                          <>
+                            <Check size={13} />
+                            已备齐
+                          </>
+                        ) : (
+                          `还缺 ${cost - state.inventory[id]}`
+                        )}
+                      </small>
+                      <span className="ha-material-count">
+                        持有 {state.inventory[id]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+          <button
+            className="primary hp-upgrade-action"
+            disabled={busy || level >= 3 || !enough}
+            onClick={() => void command("upgrade", { target: selected.id })}
+          >
+            {busy
+              ? "修缮中…"
+              : level >= 3
+                ? "修缮已完成"
+                : enough
+                  ? "开始修缮"
+                  : "材料尚未备齐"}
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      )}
+      {building === "workshop" && page === "counter" && (
         <section className="hp-counter">
           <h4>
             <Hammer size={18} />

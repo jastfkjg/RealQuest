@@ -3,7 +3,14 @@ import { serverNow } from "../stores/game";
 import { NpcPerson } from "./NpcPerson";
 import { NpcSocial } from "./Residents";
 import { useEffect, useState } from "react";
-import { Check, MapPin, ShoppingBasket, Sprout } from "lucide-react";
+import {
+  Check,
+  MapPin,
+  ShoppingBasket,
+  Sprout,
+  ClipboardList,
+  Heart,
+} from "lucide-react";
 import { useGame } from "../stores/game";
 import { api } from "../services/api";
 import { MaterialIcon } from "./WorldPanels";
@@ -27,6 +34,9 @@ export function MarketPanel() {
   const [side, setSide] = useState<"buy" | "sell">("sell");
   const [selected, select] = useState("crop");
   const [amount, setAmount] = useState(1);
+  const [orderPage, setOrderPage] = useState(0);
+  const [socialPage, setSocialPage] = useState("chat");
+  const [storyPage, setStoryPage] = useState("quest");
   // Refresh dated offers while open, including a midnight rollover. The server
   // still validates the date on every delivery; failed refresh never grants.
   useEffect(() => {
@@ -113,12 +123,35 @@ export function MarketPanel() {
               aria-pressed={tab === id}
               onClick={() => setTab(id)}
             >
+              {id === "trade" ? (
+                <ShoppingBasket size={16} aria-hidden="true" />
+              ) : id === "orders" ? (
+                <ClipboardList size={16} aria-hidden="true" />
+              ) : id === "story" ? (
+                <Sprout size={16} aria-hidden="true" />
+              ) : (
+                <Heart size={16} aria-hidden="true" />
+              )}
               {label}
             </button>
           ))}
         </nav>
         {tab === "social" && (
-          <div className="market-social">
+          <div className="market-social" data-page={socialPage}>
+            <nav className="market-subpages" aria-label="邻里书页">
+              <button
+                aria-pressed={socialPage === "chat"}
+                onClick={() => setSocialPage("chat")}
+              >
+                聊聊日常
+              </button>
+              <button
+                aria-pressed={socialPage === "kindness"}
+                onClick={() => setSocialPage("kindness")}
+              >
+                送礼与帮忙
+              </button>
+            </nav>
             <h3>柜台边，也聊聊生活</h3>
             <p className="npc-reply">
               {state.npc_encounter?.id === "mira"
@@ -128,6 +161,11 @@ export function MarketPanel() {
                   : "米拉正在外面忙自己的生活。柜台照常接收收获和村民订单。"}
             </p>
             <NpcSocial id="mira" />
+            {socialPage === "kindness" && (
+              <small className="market-reset-note">
+                每日限制按北京时间零点刷新。
+              </small>
+            )}
           </div>
         )}
         {tab === "trade" && (
@@ -246,7 +284,24 @@ export function MarketPanel() {
               <small>{market.date} · 北京时间</small>
             </div>
             <p>每份每天可交付一次，直接扣除所需物品；明天再来，也没关系。</p>
-            {market.orders.map((order) => (
+            <nav className="market-order-pages" aria-label="订单翻页">
+              <button
+                disabled={orderPage === 0}
+                onClick={() => setOrderPage(orderPage - 1)}
+              >
+                上一份
+              </button>
+              <span>
+                订单 {orderPage + 1} / {market.orders.length}
+              </span>
+              <button
+                disabled={orderPage + 1 >= market.orders.length}
+                onClick={() => setOrderPage(orderPage + 1)}
+              >
+                下一份
+              </button>
+            </nav>
+            {market.orders.slice(orderPage, orderPage + 1).map((order) => (
               <article
                 key={order.id}
                 className="market-order"
@@ -321,7 +376,21 @@ export function MarketPanel() {
           </div>
         )}
         {tab === "story" && (
-          <div className="market-story">
+          <div className="market-story" data-page={storyPage}>
+            <nav className="market-subpages" aria-label="安家书页">
+              <button
+                aria-pressed={storyPage === "quest"}
+                onClick={() => setStoryPage("quest")}
+              >
+                心愿委托
+              </button>
+              <button
+                aria-pressed={storyPage === "home"}
+                onClick={() => setStoryPage("home")}
+              >
+                小屋修缮
+              </button>
+            </nav>
             <span className="market-eyebrow">
               <Sprout size={17} />
               让小村庄，慢慢成为家

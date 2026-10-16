@@ -7,8 +7,6 @@ import {
   Footprints,
   Coins,
   Soup,
-  Mountain,
-  DoorOpen,
   Check,
 } from "lucide-react";
 import { useGame } from "../stores/game";
@@ -16,6 +14,7 @@ import { itemDefinitions, itemNames } from "../game/items";
 import { caveSight, combatInput } from "../game/cave";
 import { mapById } from "../game/navigation";
 import { IntroContext } from "./VillageIntro";
+import { FieldIllustration, FieldPage } from "./FieldIllustration";
 
 export function GearPanel() {
   const { state, panel, busy, command, navigate } = useGame();
@@ -41,13 +40,18 @@ export function GearPanel() {
         r,
       ),
     ) || [];
+  const handbook =
+    !equipment &&
+    state.quests.settle_in?.status === "claimed" &&
+    !!state.village_intro &&
+    !state.village_intro.dismissed &&
+    !c.gate_open;
   return (
-    <div className="gear-workbench">
-      {!equipment && <IntroContext place="gear" />}
+    <div className="gear-workbench" data-page={tab}>
       <p className="gear-intro">
         {equipment
           ? "选择随身武器并装备。洞内空格攻击，Q施法，R喝汤；点怪物可选择目标。"
-          : "买一件带走，或用你的建造与知识亲手完成。购买不要求制造等级。"}
+          : "挑一件趁手的武器。购买无需制造等级，带走后记得装备。"}
       </p>
       <div className="gear-wallet">
         <Coins size={18} />
@@ -69,9 +73,21 @@ export function GearPanel() {
           >
             图纸打造
           </button>
+          {handbook && (
+            <button
+              aria-pressed={tab === "notes"}
+              onClick={() => setTab("notes")}
+            >
+              初探手记
+            </button>
+          )}
         </div>
       )}
-      {ids.length ? (
+      {!equipment && tab === "notes" ? (
+        <section className="gear-handbook" aria-label="初探手记">
+          <IntroContext place="gear" />
+        </section>
+      ) : ids.length ? (
         <div className="gear-layout">
           <div
             className="gear-rack"
@@ -93,9 +109,13 @@ export function GearPanel() {
                   <b>{c.weapons[key].name}</b>
                   <small>
                     {equipment
-                      ? `持有 ${state.inventory[key]}`
+                      ? c.equipped === key
+                        ? "已装备"
+                        : `持有 ${state.inventory[key]}`
                       : `${c.weapons[key].price} 金币`}{" "}
-                    {c.equipped === key && state.inventory[key] > 0
+                    {!equipment &&
+                    c.equipped === key &&
+                    state.inventory[key] > 0
                       ? "· 已装备"
                       : ""}
                   </small>
@@ -103,14 +123,16 @@ export function GearPanel() {
               </button>
             ))}
           </div>
-          <section className="gear-detail" aria-label="选中武器详情">
+          <section key={id} className="gear-detail" aria-label="选中武器详情">
             <div className="gear-heading">
-              <img
-                src={itemDefinitions[id].icon}
-                alt=""
-                width="96"
-                height="96"
-              />
+              <div className="gear-display">
+                <img
+                  src={itemDefinitions[id].icon}
+                  alt=""
+                  width="96"
+                  height="96"
+                />
+              </div>
               <div>
                 <small>{weapon.magic ? "法器 · 远程" : "物理武器"}</small>
                 <h3>{weapon.name}</h3>
@@ -216,16 +238,25 @@ export function GearPanel() {
         </div>
       ) : (
         <div className="gear-empty">
-          <Swords size={40} />
-          <h3>还没有随身武器</h3>
-          <p>当前持有 {state.inventory.gold} 金币。工坊的石刃短剑售价 {c.weapons.stone_sword.price} 金币，购买不要求制造等级。</p>
-          <button
-            onClick={() =>
-              navigate({ mapId: "workshop", targetId: "armory_counter" })
-            }
-          >
-            标记工坊武备台
-          </button>
+          <div className="gear-empty-art" aria-hidden="true">
+            <Swords size={56} />
+            <span />
+          </div>
+          <div className="gear-empty-copy">
+            <small>行前准备</small>
+            <h3>武器架还是空的</h3>
+            <p>
+              工坊有售石刃短剑，{c.weapons.stone_sword.price}{" "}
+              金币即可带走，无需制造等级。
+            </p>
+            <button
+              onClick={() =>
+                navigate({ mapId: "workshop", targetId: "armory_counter" })
+              }
+            >
+              标记工坊武备台
+            </button>
+          </div>
         </div>
       )}
       {!equipment && (
@@ -257,43 +288,47 @@ export function SpellPanel() {
     level = state.knowledge_growth?.magic || 0;
   return (
     <div className="spell-leaf">
-      <Sparkles size={44} />
-      <small>入门术式 · 魔法1级</small>
-      <h3>火花术</h3>
-      <p>一道短促的微光，为近战提供一次远程选择。</p>
-      <dl className="gear-stats">
-        <div>
-          <dt>伤害</dt>
-          <dd>12 魔法</dd>
-        </div>
-        <div>
-          <dt>距离</dt>
-          <dd>96</dd>
-        </div>
-        <div>
-          <dt>体力</dt>
-          <dd>4</dd>
-        </div>
-        <div>
-          <dt>冷却</dt>
-          <dd>4 秒</dd>
-        </div>
-      </dl>
-      <p>
-        当前魔法 {level} 级 ·{" "}
-        {known ? "已学会" : `学习费8金币 · 当前${state.inventory.gold}金币`}
-      </p>
-      <button
-        className="primary"
-        disabled={busy || known || level < 1 || state.inventory.gold < 8}
-        onClick={() => void command("spark_learn", { target: "spell_desk" })}
-      >
-        {known ? "已学会 · 洞内按Q施放" : "学习火花术 · 8金币"}
-      </button>
-      {level < 1 && <button onClick={() => open("study")}>前往知识研修</button>}
-      <p className="muted">
-        魔法等级通过投入知识点提升；学会法术与持有短杖是两件事。施法占用动作，不能与武器同时命中。
-      </p>
+      <FieldIllustration kind="spell" />
+      <FieldPage label="火花术手册">
+        <small>入门术式 · 魔法1级</small>
+        <h3>火花术</h3>
+        <p>一道短促的微光，为近战提供一次远程选择。</p>
+        <dl className="gear-stats">
+          <div>
+            <dt>伤害</dt>
+            <dd>12 魔法</dd>
+          </div>
+          <div>
+            <dt>距离</dt>
+            <dd>96</dd>
+          </div>
+          <div>
+            <dt>体力</dt>
+            <dd>4</dd>
+          </div>
+          <div>
+            <dt>冷却</dt>
+            <dd>4 秒</dd>
+          </div>
+        </dl>
+        <p>
+          当前魔法 {level} 级 ·{" "}
+          {known ? "已学会" : `学习费8金币 · 当前${state.inventory.gold}金币`}
+        </p>
+        <button
+          className="primary"
+          disabled={busy || known || level < 1 || state.inventory.gold < 8}
+          onClick={() => void command("spark_learn", { target: "spell_desk" })}
+        >
+          {known ? "已学会 · 洞内按Q施放" : "学习火花术 · 8金币"}
+        </button>
+        {level < 1 && (
+          <button onClick={() => open("study")}>前往知识研修</button>
+        )}
+        <p className="muted">
+          魔法等级通过投入知识点提升；学会法术与持有短杖是两件事。施法占用动作，不能与武器同时命中。
+        </p>
+      </FieldPage>
     </div>
   );
 }
@@ -307,56 +342,67 @@ export function GatePanel() {
   const ready = c.boss_first && stone > 0 && magic >= 3;
   return (
     <div className="stone-gate-panel">
-      <IntroContext place="gate" />
-      <div className="gate-emblem">
-        <DoorOpen size={56} />
-      </div>
-      <small>村庄东行出口</small>
-      <h3>{c.gate_open ? "石门已永久开启" : "门心缺少一束回响"}</h3>
-      <p>
-        洞穴底层守卫保管着门钥魔法石。取得它，再以魔法3级唤醒石门，便能走向渡口。
-      </p>
-      <ul className="gate-requirements">
-        <li data-ready={c.boss_first}>
-          <Check />
-          击败石壳守卫<span>{c.boss_first ? "已完成" : "山洞第5层"}</span>
-        </li>
-        <li data-ready={stone > 0}>
-          <Shield />
-          门钥魔法石<span>{stone} / 1</span>
-        </li>
-        <li data-ready={magic >= 3}>
-          <Sparkles />
-          启门魔法等级<span>{magic} / 3</span>
-        </li>
-      </ul>
-      <button
-        className="primary"
-        disabled={busy || (!ready && !c.gate_open)}
-        onClick={async () => {
-          if (c.gate_open) {
-            open("travel", selected || undefined);
-            return;
-          }
-          if (await command("gate_open", {}))
-            open("travel", selected || undefined);
-        }}
+      <FieldIllustration kind="gate" />
+      <FieldPage
+        label="启门条件"
+        notes={
+          <>
+            <p>
+              科技主修也须满足启门魔法要求。魔法石只嵌入一次，回村与再次出发无需重新挑战。
+            </p>
+            {state.quests.settle_in?.status === "claimed" &&
+              state.village_intro &&
+              !state.village_intro.dismissed &&
+              !state.village_intro.reviewed &&
+              !state.village_intro.briefed &&
+              !c.gate_open && <IntroContext place="gate" paged />}
+          </>
+        }
       >
-        {c.gate_open ? "查看渡口旅途安排" : "嵌入魔法石 · 永久开门"}
-      </button>
-      <div className="button-row">
+        <small>村庄东行出口</small>
+        <h3>{c.gate_open ? "石门已永久开启" : "门心缺少一束回响"}</h3>
+        <p>
+          洞穴底层守卫保管着门钥魔法石。取得它，再以魔法3级唤醒石门，便能走向渡口。
+        </p>
+        <ul className="gate-requirements">
+          <li data-ready={c.boss_first}>
+            <Check />
+            击败石壳守卫<span>{c.boss_first ? "已完成" : "山洞第5层"}</span>
+          </li>
+          <li data-ready={stone > 0}>
+            <Shield />
+            门钥魔法石<span>{stone} / 1</span>
+          </li>
+          <li data-ready={magic >= 3}>
+            <Sparkles />
+            启门魔法等级<span>{magic} / 3</span>
+          </li>
+        </ul>
         <button
-          onClick={() =>
-            navigate({ mapId: "overworld", targetId: "cave_entry" })
-          }
+          className="primary"
+          disabled={busy || (!ready && !c.gate_open)}
+          onClick={async () => {
+            if (c.gate_open) {
+              open("travel", selected || undefined);
+              return;
+            }
+            if (await command("gate_open", {}))
+              open("travel", selected || undefined);
+          }}
         >
-          标记石根山洞
+          {c.gate_open ? "查看渡口旅途安排" : "嵌入魔法石 · 永久开门"}
         </button>
-        <button onClick={() => open("study")}>知识研修</button>
-      </div>
-      <p className="muted">
-        科技主修也须满足启门魔法要求。魔法石只嵌入一次，回村与再次出发无需重新挑战。
-      </p>
+        <div className="button-row">
+          <button
+            onClick={() =>
+              navigate({ mapId: "overworld", targetId: "cave_entry" })
+            }
+          >
+            标记石根山洞
+          </button>
+          <button onClick={() => open("study")}>知识研修</button>
+        </div>
+      </FieldPage>
     </div>
   );
 }
@@ -382,78 +428,91 @@ export function CavePanel() {
         : selected.name;
   return (
     <div className="cave-route-panel">
-      <IntroContext place="cave" />
-      <Mountain size={44} />
-      <small>石根山洞 · 5层</small>
-      <h3>{entry ? "石根之下，有微光在呼吸" : selected.name}</h3>
-      <p>
-        怪物只在洞穴内出现。普通移动不耗体力，随时可以撤离；未击败的Boss会恢复，已获材料与打通的通路保留。
-      </p>
-      <div className="cave-route-stages">
-        <span>
-          1–2层
-          <br />
-          苔团与洞穴蝠
-        </span>
-        <span>
-          3–4层
-          <br />
-          石壳虫与混合战斗
-        </span>
-        <span>
-          第5层
-          <br />
-          石壳守卫 · 魔法石
-        </span>
-      </div>
-      <p>
-        当前装备：
-        {c.equipped && state.inventory[c.equipped] > 0
-          ? itemNames[c.equipped]
-          : "未装备"}{" "}
-        · 生命 {state.vitality?.current}/{state.vitality?.max} · 体力{" "}
-        {state.stamina?.current}/{state.stamina?.max}
-      </p>
-      {!shortcut && <p role="status">先清理对应层数，才能使用这条通路。</p>}
-      {!allowed && (
-        <p role="status">本层还有怪物，清理后可继续向下；仍可从洞口撤离。</p>
-      )}
-      <button
-        className="primary"
-        disabled={busy || !shortcut || !allowed}
-        onClick={async () => {
-          if (await command("cave_interact", { target: selected.id }))
-            open(null);
-        }}
+      <FieldIllustration kind="cave" />
+      <FieldPage
+        label="路线与准备"
+        notes={
+          <>
+            <p>
+              怪物只在洞穴内出现。普通移动不耗体力，随时可以撤离；未击败的Boss会恢复，已获材料与打通的通路保留。
+            </p>
+            <p>
+              空格攻击当前目标，点怪选择目标。Q火花术，R菜汤。3层平台可免费短休，菜单与现实成长会暂停整场战斗。
+            </p>
+            {state.quests.settle_in?.status === "claimed" &&
+              state.village_intro &&
+              !state.village_intro.dismissed &&
+              !state.village_intro.reviewed &&
+              !c.gate_open && <IntroContext place="cave" />}
+          </>
+        }
       >
-        {label}
-      </button>
-      {entry && (
-        <div className="button-row">
-          <button onClick={() => open("equipment")}>检查装备</button>
-          <button
-            onClick={() =>
-              navigate({ mapId: "workshop", targetId: "armory_counter" })
-            }
-          >
-            标记武备台
-          </button>
-          <button
-            disabled={
-              busy ||
-              !c.boss_first ||
-              c.gate_open ||
-              !!state.inventory.gate_stone
-            }
-            onClick={() => void command("stone_recover", {})}
-          >
-            核实并补领魔法石
-          </button>
+        <small>石根山洞 · 5层</small>
+        <h3>{entry ? "石根之下，有微光在呼吸" : selected.name}</h3>
+        <p>怪物只在洞内出现，未准备好可以随时撤离。</p>
+        <div className="cave-route-stages">
+          <span>
+            1–2层
+            <br />
+            苔团与洞穴蝠
+          </span>
+          <span>
+            3–4层
+            <br />
+            石壳虫与混合战斗
+          </span>
+          <span>
+            第5层
+            <br />
+            石壳守卫 · 魔法石
+          </span>
         </div>
-      )}
-      <p className="muted">
-        空格攻击当前目标，点怪选择目标。Q火花术，R菜汤。3层平台可免费短休，菜单与现实成长会暂停整场战斗。
-      </p>
+        <p>
+          当前装备：
+          {c.equipped && state.inventory[c.equipped] > 0
+            ? itemNames[c.equipped]
+            : "未装备"}{" "}
+          · 生命 {state.vitality?.current}/{state.vitality?.max} · 体力{" "}
+          {state.stamina?.current}/{state.stamina?.max}
+        </p>
+        {!shortcut && <p role="status">先清理对应层数，才能使用这条通路。</p>}
+        {!allowed && (
+          <p role="status">本层还有怪物，清理后可继续向下；仍可从洞口撤离。</p>
+        )}
+        <button
+          className="primary"
+          disabled={busy || !shortcut || !allowed}
+          onClick={async () => {
+            if (await command("cave_interact", { target: selected.id }))
+              open(null);
+          }}
+        >
+          {label}
+        </button>
+        {entry && (
+          <div className="button-row">
+            <button onClick={() => open("equipment")}>检查装备</button>
+            <button
+              onClick={() =>
+                navigate({ mapId: "workshop", targetId: "armory_counter" })
+              }
+            >
+              标记武备台
+            </button>
+            <button
+              disabled={
+                busy ||
+                !c.boss_first ||
+                c.gate_open ||
+                !!state.inventory.gate_stone
+              }
+              onClick={() => void command("stone_recover", {})}
+            >
+              核实并补领魔法石
+            </button>
+          </div>
+        )}
+      </FieldPage>
     </div>
   );
 }
@@ -526,7 +585,15 @@ export function CombatHud() {
               : "可从路标离开或继续前进"}
         </p>
         <small role="status">{hint}</small>
-        {!state.village_intro?.dismissed && !state.village_intro?.reviewed && c.floor === 1 && <p className="intro-combat-hint">{c.cleared ? "首层初探完成 · 可带材料回工坊查看用途" : "首次目标：3只苔团 · 观察预兆，出手后退让"}</p>}
+        {!state.village_intro?.dismissed &&
+          !state.village_intro?.reviewed &&
+          c.floor === 1 && (
+            <p className="intro-combat-hint">
+              {c.cleared
+                ? "首层初探完成 · 可带材料回工坊查看用途"
+                : "首次目标：3只苔团 · 观察预兆，出手后退让"}
+            </p>
+          )}
       </div>
       {boss && (
         <div
@@ -602,7 +669,11 @@ export function CombatHud() {
           onClick={() => void command("cave_retreat", {})}
         >
           <Footprints />
-          {state.village_intro?.first_clear && !state.village_intro.reviewed && !state.village_intro.dismissed ? "带材料回洞口" : "撤至洞口"}
+          {state.village_intro?.first_clear &&
+          !state.village_intro.reviewed &&
+          !state.village_intro.dismissed
+            ? "带材料回洞口"
+            : "撤至洞口"}
         </button>
       </div>
     </>

@@ -55,7 +55,6 @@ export class WorldScene extends Phaser.Scene {
     sprite: Phaser.GameObjects.Sprite;
     direction: number;
     shadow: Phaser.GameObjects.Ellipse;
-    bubble: Phaser.GameObjects.Text;
   }[] = [];
   objectLayers = new Map<string, Phaser.GameObjects.Graphics>();
   smoke!: Phaser.GameObjects.Graphics;
@@ -131,17 +130,7 @@ export class WorldScene extends Phaser.Scene {
       const shadow = this.add
         .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
         .setDepth(obj.y - 1);
-      const bubble = this.add
-        .text(obj.x, obj.y - 46, "", {
-          fontFamily: "sans-serif",
-          fontSize: "12px",
-          color: "#27392f",
-          backgroundColor: "#f4efde",
-          padding: { x: 8, y: 5 },
-        })
-        .setOrigin(0.5, 1)
-        .setDepth(9000);
-      this.npcs.push({ obj, sprite, shadow, bubble, direction: 0 });
+      this.npcs.push({ obj, sprite, shadow, direction: 0 });
     }
     this.shadow = this.add.ellipse(
       state.position.x,
@@ -635,7 +624,7 @@ export class WorldScene extends Phaser.Scene {
     });
   }
   updateResidents() {
-    const { world, state, panel, selected } = useGame.getState();
+    const { world, state, selected } = useGame.getState();
     if (!world || !state) return;
     const live = residentPositions(world, state, serverNow());
     for (const npc of this.npcs) {
@@ -646,7 +635,6 @@ export class WorldScene extends Phaser.Scene {
       const visible = next.location === this.map.id;
       npc.sprite.setVisible(visible);
       npc.shadow.setVisible(visible);
-      npc.bubble.setVisible(false);
       if (!visible) continue;
       const dx = this.player.x - next.x,
         dy = this.player.y - next.y;
@@ -670,23 +658,6 @@ export class WorldScene extends Phaser.Scene {
               ),
         );
       npc.shadow.setPosition(next.x, next.y - 1).setDepth(next.y - 1);
-      const closest = live
-        .filter((r) => r.location === this.map.id)
-        .sort(
-          (a, b) =>
-            Math.hypot(a.x - this.player.x, a.y - this.player.y) -
-            Math.hypot(b.x - this.player.x, b.y - this.player.y),
-        )[0];
-      if (
-        !panel &&
-        next.kind !== "travel_npc" &&
-        closest?.id === next.id &&
-        Math.hypot(dx, dy) < 128
-      )
-        npc.bubble
-          .setPosition(next.x, next.y - 44)
-          .setText(next.activity)
-          .setVisible(true);
     }
     this.map.objects = [
       ...this.map.objects.filter(
@@ -1010,7 +981,7 @@ export class WorldScene extends Phaser.Scene {
         this.marker.strokeEllipse(near.x, near.y + 2, 44, 18);
       }
     }
-    for (const obj of this.map.objects) {
+    for (const obj of store.panel ? [] : this.map.objects) {
       const q = state.quest_log.filter(
         (q) => q.giver === obj.id && ["available", "ready"].includes(q.status),
       );
@@ -1020,12 +991,23 @@ export class WorldScene extends Phaser.Scene {
       )
         continue;
       const x = obj.x,
-        y = obj.y - (obj.kind === "npc" ? 49 : 48),
+        y = obj.y - 46,
         ready = q.some((q) => q.status === "ready");
-      box(this.marker, 0x66482f, x - 7, y - 12, 14, 18);
-      box(this.marker, ready ? 0x92b365 : 0xf1c671, x - 6, y - 13, 12, 16);
-      box(this.marker, 0x704a2f, x - 1, y - 10, 2, 7);
-      box(this.marker, 0x704a2f, x - 1, y, 2, 2);
+      // Transparent, outlined pixel punctuation; ready quests use a check.
+      const color = ready ? 0xd5edb7 : 0xffd77c;
+      if (ready) {
+        this.marker.lineStyle(5, 0x27392f, 1);
+        this.marker.beginPath()
+          .moveTo(x - 4, y - 3).lineTo(x - 1, y).lineTo(x + 5, y - 7).strokePath();
+        this.marker.lineStyle(2, color, 1);
+        this.marker.beginPath()
+          .moveTo(x - 4, y - 3).lineTo(x - 1, y).lineTo(x + 5, y - 7).strokePath();
+      } else {
+        box(this.marker, 0x27392f, x - 3, y - 11, 6, 10);
+        box(this.marker, 0x27392f, x - 3, y + 1, 6, 5);
+        box(this.marker, color, x - 1, y - 10, 2, 8);
+        box(this.marker, color, x - 1, y + 2, 2, 2);
+      }
     }
     const tracked = state.quest_log.find((q) => q.id === state.tracked_quest);
     const target =

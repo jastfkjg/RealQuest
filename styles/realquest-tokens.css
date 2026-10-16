@@ -27,6 +27,10 @@
   --rq-space-8: 32px;
   --rq-space-12: 48px;
   --rq-control-min: 44px;
+  --rq-action-radius: 13px 10px 14px 9px;
+  --rq-paper-radius: 9px 13px 8px 11px;
+  --rq-tab-radius: 13px 13px 4px 4px;
+  --rq-pocket-radius: 11px;
   --rq-slot-size: 60px;
   --rq-slot-gap: 8px;
 
@@ -67,7 +71,7 @@
   min-height: var(--rq-control-min);
   padding: 8px 16px;
   border: 2px solid var(--rq-control-border);
-  border-radius: 2px;
+  border-radius: var(--rq-paper-radius);
   font: inherit;
   font-weight: 600;
   background: var(--rq-linen-raised);

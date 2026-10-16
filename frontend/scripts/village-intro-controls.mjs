@@ -242,6 +242,7 @@ try {
   await page.goto(base);
   await ready();
   await page.getByRole("button", { name: /武备台 · 购买与打造/ }).tap();
+  await page.getByRole("button", { name: "初探手记", exact: true }).tap();
   await page
     .getByRole("button", { name: "记下这次初探", exact: true })
     .scrollIntoViewIfNeeded();

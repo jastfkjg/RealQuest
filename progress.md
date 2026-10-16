@@ -1,5 +1,25 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-16 In-world functional dialogs
+
+- User requested full redesign of generic popup pages illustrated by armory. Scope/plan: docs/tasks/32-field-panels.md. Previous task30/31 work and player DB/WAL preserved.
+- Rebuilt timber/cloth armory and selected paper order with purchase/craft/handbook tabs; illustrated spell/cave/gate sheets; six-type paired storage pages; blueprint/counter tabs; one actual route quote per page; matching menu/guide/settings/AI compositions. Existing art, values and authoritative actions retained. No backend, balance, dependency or new image changes.
+- Final production12 groups/91 captures pass with no body scroll, covered control or content overflow. Actual purchase failure/retry, exact craft/learn/transfer/upgrade/counter/ferry/gate mutations, cave enter/retreat, keyboard input ownership, normal hover/focus/press, DPR2 touch/reduced motion and reload checked. Build,156-image preservation,7 solid contrast pairs(min4.96), supplied game frame client and format/diff checks pass. Actual representative final screenshots inspected.
+- Native intro-review scripts updated to open the new handbook tab; their full first-expedition chain was not rerun in this visual task. Destructive data/restore actions not executed. Task32 records exact commands, evidence and remaining device/owner/endurance limits. Task test services cleaned, final manual preview restored at5411/API8111 using the original preview DB/cookie after former preview PIDs exited without a signal from this task.
+
+## 2026-10-16 Overall tactile controls
+
+- Owner requested overall softer game-like buttons and display surfaces after task30. Scope/plan: docs/tasks/31-living-controls.md. Preserved prior world/dialog changes and existing player DB/WAL files.
+- Added shared soft wood/paper/bookmark/pocket tokens and a final scoped control layer; market shelves and name tags replace data cards, market quantity/confirmation and compact rest choices share tactile actions. Reused primitives across inventory, journal/dossier, map/storage/blueprints, encounters/travel/preparation, Life/study/training and menu/guide/settings. Native prices/counts/actions and distinct page layouts retained. No new art, dependency, backend or balance change.
+- Final production build,10 browser check groups/99 captures,156-image audit,7 contrast pairs(min4.96), cleanup-wrapped supplied game frame client and formatting/diff checks pass. Normal hover/press, keyboard focus, disabled/pending, fail/retry resources, actual rest/equip/reload, five doors, desktop/landscape and DPR2 touch/reduced motion checked. Actual screenshots inspected; all family captures contain the intended dialog. Detailed evidence and limitations: task31. Cleanup is recorded there and in output/living-controls/cleanup.json; manual preview5411/API8111 retained with current production assets.
+
+
+## 2026-10-16 World UI refinement
+
+- Owner requested eight screenshot corrections spanning facade occlusion, quiet cues, notices and four dialog layouts. Scope, short plan and visual thesis: docs/tasks/30-world-ui-refinement.md. Existing user5175/8027 services and player DB preserved.
+- Implemented facade-edge sorting; transparent quest punctuation; removed activity/road text; compact1.8s edge notices; timber shelf/bedside/cloth-rack panels; fitted paged notice board. No new assets, dependencies, balance/save/backend changes.
+- Relevant112 backend tests, production build and156-image asset preservation audit pass. Dedicated actual-browser flows cover all five doors, claim rejection/retry, nine objectives, trade, rest, equip and persistence. Final production49-capture suite passes viewport/occlusion/non-scroll checks plus DPR2 touch/reduced motion;9 solid contrast pairs(min4.85) and final skill frame pass. Automation/browser processes and the old task dev server were cleaned; production preview5411/API8111 are retained for manual review. Initial user5175/8027 services exited independently; this task never stopped them. Exact identities/health/limits are in task30 and output/world-ui-refinement/cleanup.json. Legacy play-mode mouse smoke remains blocked at its old pickup coordinate by the existing interaction prompt, as previously documented in task21.
+
 ## 2026-10-16 First expedition — verified candidate
 
 - User authorized settle-in claim → departure briefing → weapon preparation → cave floor1 → return with materials. Plan and boundaries: docs/tasks/29-first-expedition.md. Clean starting Git tree; existing npm/Phaser3.90/React19/Python virtualenv reused.

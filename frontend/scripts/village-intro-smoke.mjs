@@ -334,6 +334,7 @@ try {
   await page.keyboard.press("KeyE");
   await until(async () => (await read()).mode === "armory", "review at armory");
   assert((await state()).village_intro.returned);
+  await page.getByRole("button", { name: "初探手记", exact: true }).click();
   await layouts("08-material-review", "记下这次初探");
   const before = (await state()).inventory;
   let reject = true;

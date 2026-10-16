@@ -4,9 +4,14 @@ import {
   WorldClockLifecycle,
 } from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
-import { IntroGuidePreference } from "./components/VillageIntro";
+import { VillageGuide } from "./components/VillageGuide";
 import { TravelPanel } from "./components/TravelPanel";
-import { GearPanel, SpellPanel, CavePanel, GatePanel } from "./components/CombatPanels";
+import {
+  GearPanel,
+  SpellPanel,
+  CavePanel,
+  GatePanel,
+} from "./components/CombatPanels";
 import { itemDefinitions } from "./game/items";
 import { SleepPanel } from "./components/SleepPanel";
 import { LifeQuestHistory } from "./components/LifeQuests";
@@ -53,8 +58,25 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
     open = useGame((s) => s.open);
   const panel = useGame((s) => s.panel);
   const state = useGame((s) => s.state);
+  const field = [
+    "armory",
+    "spellbook",
+    "cave",
+    "gate",
+    "storage",
+    "building",
+    "travel",
+    "menu",
+    "guide",
+    "settings",
+    "ai",
+  ].includes(panel || "");
   const tactile = [
-    "armory", "equipment", "spellbook", "cave", "gate",
+    "armory",
+    "equipment",
+    "spellbook",
+    "cave",
+    "gate",
     "travel",
     "sleep",
     "neighbors",
@@ -76,7 +98,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   return (
     <dialog
       ref={ref}
-      className={`modal ${tactile || ["inventory", "journal", "character"].includes(panel || "") ? "rq-theme" : ""} ${tactile ? "hp-panel" : ""} panel-${panel} ${panel === "npc" ? "dialogue-modal" : ""}`}
+      className={`modal rq-theme ${tactile ? "hp-panel" : ""} ${field ? "field-panel" : ""} panel-${panel} ${panel === "npc" ? "dialogue-modal" : ""}`}
       aria-labelledby="panel-title"
       onKeyDown={(event) => {
         if (
@@ -181,12 +203,17 @@ export function Panels() {
     open,
   } = useGame();
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [settingsPage, setSettingsPage] = useState("preferences");
   const preferences = usePreferences();
   if (!panel || !state) return null;
   if (panel === "study") return <StudyPage />;
   if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
-    armory: "工坊武备台", equipment: "远行装备", spellbook: "术式研习", cave: "石根山洞", gate: "东行石门",
+    armory: "工坊武备台",
+    equipment: "远行装备",
+    spellbook: "术式研习",
+    cave: "石根山洞",
+    gate: "东行石门",
     sleep: "林间小屋 · 安心休息",
     board: "委托告示板",
     map: "回响大陆 · 旅行地图",
@@ -210,9 +237,36 @@ export function Panels() {
       {panel === "menu" && (
         <div className="journey-menu">
           <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
-          <button onClick={()=>useGame.getState().navigate({mapId:"overworld",targetId:"cave_entry"})}><Compass size={18}/>石根山洞<span>标记方向 · 主动进入五层战斗区</span></button>
-          <button onClick={()=>useGame.getState().navigate({mapId:"workshop",targetId:"armory_counter"})}><Compass size={18}/>工坊武备台<span>标记方向 · 买武器、菜汤与等级打造</span></button>
-          <button onClick={()=>useGame.getState().navigate({mapId:"library",targetId:"spell_desk"})}><Sparkles size={18}/>术式研习<span>标记方向 · 学习火花术</span></button>
+          <button
+            onClick={() =>
+              useGame
+                .getState()
+                .navigate({ mapId: "overworld", targetId: "cave_entry" })
+            }
+          >
+            <Compass size={18} />
+            石根山洞<span>标记方向 · 主动进入五层战斗区</span>
+          </button>
+          <button
+            onClick={() =>
+              useGame
+                .getState()
+                .navigate({ mapId: "workshop", targetId: "armory_counter" })
+            }
+          >
+            <Compass size={18} />
+            工坊武备台<span>标记方向 · 买武器、菜汤与等级打造</span>
+          </button>
+          <button
+            onClick={() =>
+              useGame
+                .getState()
+                .navigate({ mapId: "library", targetId: "spell_desk" })
+            }
+          >
+            <Sparkles size={18} />
+            术式研习<span>标记方向 · 学习火花术</span>
+          </button>
           <button
             onClick={() =>
               useGame
@@ -266,53 +320,7 @@ export function Panels() {
         </ConversationPanel>
       )}
       {panel === "journal" && <JournalPanel />}
-      {panel === "guide" && (
-        <>
-          <IntroGuidePreference />
-          <p>
-            现实生活为角色带来成长；森林与家园为你提供物品。即使没有现实记录，也能自由游玩。
-          </p>
-          <ol className="guide-list">
-            <li>
-              使用 <kbd>WASD</kbd> 或方向键移动，靠近对象按 <kbd>E</kbd>
-              ，也可点击地图上的邻近对象。
-            </li>
-            <li>
-              新角色自动接取安家任务。村庄告示板、莉亚、诺亚和公会都有委托；按 E
-              互动后点击「接取任务」。
-            </li>
-            <li>
-              任务达成后回到发布者处「交付任务」，领取一次性奖励。右侧追踪可以标记下一步，M
-              打开全域地图。
-            </li>
-            <li>
-              走近建筑门口按 E 进入；室内家具和柜台可互动，走回地毯下方的门口按
-              E 离开。
-            </li>
-            <li>
-              点击地面自动寻路，点击远处对象会先走近再互动。Shift
-              可加快行走。落枝和矿石每 30 秒恢复一次。
-            </li>
-            <li>
-              走近小屋南侧农田种下种子，60 秒后回来收获。离线不会让作物枯萎。
-            </li>
-            <li>去工坊出售萝卜、制作木板，用材料升级建筑。武备台可购买武器与菜汤；打造武器需要建造1级和相应科学／魔法等级。</li>
-            <li>旧采石场旁可进入石根山洞。空格攻击、Q火花术、R喝汤，点击怪物切换目标；清理每层后继续向下，第3层可短休。底层守卫掉落门钥魔法石，搭配魔法3级永久开启离村石门。</li>
-            <li>
-              06:00 起床，01:00
-              前到家中床铺睡觉。未睡会被送回家，生命下降且体力不恢复；床边也可免费小憩。阅读面板、现实成长、后台与离线暂停游戏时间。
-            </li>
-            <li>
-              记录一次 25 分钟学习，获得符文解读能力，再去图书馆东侧寻找遗迹。
-            </li>
-          </ol>
-          <p className="muted">
-            移动端用左下方方向键移动，右下方按钮交互。<kbd>F</kbd> 切换全屏，
-            <kbd>Esc</kbd> 关闭面板或退出全屏。<kbd>I</kbd> 背包、<kbd>C</kbd>{" "}
-            角色、<kbd>J</kbd> 任务日志、<kbd>L</kbd> 现实成长。
-          </p>
-        </>
-      )}
+      {panel === "guide" && <VillageGuide />}
       {panel === "ai" && (
         <>
           <Sparkles className="ai-emblem" size={40} />
@@ -330,83 +338,109 @@ export function Panels() {
       )}
       {panel === "settings" && (
         <>
-          <div className="preferences">
-            <label>
-              <input
-                type="checkbox"
-                checked={preferences.sound}
-                onChange={(e) => {
-                  preferences.set({ sound: e.target.checked });
-                  unlockSound();
-                  chime();
-                }}
-              />{" "}
-              开启游戏音效
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={preferences.reducedMotion}
-                onChange={(e) =>
-                  preferences.set({ reducedMotion: e.target.checked })
-                }
-              />{" "}
-              减少动态效果
-            </label>
-          </div>
-          <hr />
-          <RecoveryPanel />
-          <hr />
-          <button
-            onClick={async () => {
-              try {
-                const data = await api<unknown>("export");
-                const url = URL.createObjectURL(
-                  new Blob([JSON.stringify(data, null, 2)], {
-                    type: "application/json",
-                  }),
-                );
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "realquest-save.json";
-                a.click();
-                URL.revokeObjectURL(url);
-              } catch (e) {
-                useGame.setState({ error: (e as Error).message });
-              }
-            }}
-          >
-            <Download size={17} /> 导出存档与结算记录
-          </button>
-          <p className="muted">
-            此导出用于查看完整数据；找回旅程请使用上方的旅程凭证。
-          </p>
-          <hr />
-          <h3>删除我的数据</h3>
-          <p>
-            会删除此游客的角色、行为记录、计时、世界状态与结算记录，无法撤销。
-          </p>
-          {!confirmDelete ? (
-            <button className="danger" onClick={() => setConfirmDelete(true)}>
-              删除数据…
-            </button>
-          ) : (
-            <div className="button-row">
-              <button onClick={() => setConfirmDelete(false)}>取消</button>
+          <nav className="field-tabs" aria-label="存档与数据书页">
+            {[
+              ["preferences", "旅途偏好"],
+              ["recovery", "旅程凭证"],
+              ["data", "数据管理"],
+            ].map(([id, label]) => (
               <button
-                className="danger"
+                key={id}
+                aria-pressed={settingsPage === id}
+                onClick={() => setSettingsPage(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+          {settingsPage === "preferences" && (
+            <section className="field-preferences">
+              <img src="/assets/hearthwood/detail/interiors/book.png" alt="" />
+              <h3>让旅途更合心意</h3>
+              <div className="preferences">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={preferences.sound}
+                    onChange={(e) => {
+                      preferences.set({ sound: e.target.checked });
+                      unlockSound();
+                      chime();
+                    }}
+                  />{" "}
+                  开启游戏音效
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={preferences.reducedMotion}
+                    onChange={(e) =>
+                      preferences.set({ reducedMotion: e.target.checked })
+                    }
+                  />{" "}
+                  减少动态效果
+                </label>
+              </div>
+            </section>
+          )}
+          {settingsPage === "recovery" && <RecoveryPanel />}
+          {settingsPage === "data" && (
+            <section className="field-data">
+              <button
                 onClick={async () => {
                   try {
-                    await api("session", "DELETE");
-                    window.location.reload();
+                    const data = await api<unknown>("export");
+                    const url = URL.createObjectURL(
+                      new Blob([JSON.stringify(data, null, 2)], {
+                        type: "application/json",
+                      }),
+                    );
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "realquest-save.json";
+                    a.click();
+                    URL.revokeObjectURL(url);
                   } catch (e) {
                     useGame.setState({ error: (e as Error).message });
                   }
                 }}
               >
-                确认永久删除
+                <Download size={17} /> 导出存档与结算记录
               </button>
-            </div>
+              <p className="muted">
+                此导出用于查看完整数据；找回旅程请使用上方的旅程凭证。
+              </p>
+              <hr />
+              <h3>删除我的数据</h3>
+              <p>
+                会删除此游客的角色、行为记录、计时、世界状态与结算记录，无法撤销。
+              </p>
+              {!confirmDelete ? (
+                <button
+                  className="danger"
+                  onClick={() => setConfirmDelete(true)}
+                >
+                  删除数据…
+                </button>
+              ) : (
+                <div className="button-row">
+                  <button onClick={() => setConfirmDelete(false)}>取消</button>
+                  <button
+                    className="danger"
+                    onClick={async () => {
+                      try {
+                        await api("session", "DELETE");
+                        window.location.reload();
+                      } catch (e) {
+                        useGame.setState({ error: (e as Error).message });
+                      }
+                    }}
+                  >
+                    确认永久删除
+                  </button>
+                </div>
+              )}
+            </section>
           )}
         </>
       )}
@@ -451,7 +485,7 @@ export default function App() {
   }, [boot]);
   useEffect(() => {
     if (!notice || panel) return;
-    const id = setTimeout(() => useGame.setState({ notice: "" }), 5500);
+    const id = setTimeout(() => useGame.setState({ notice: "" }), 1800);
     return () => clearTimeout(id);
   }, [notice, panel]);
   useEffect(() => {
@@ -624,7 +658,9 @@ export default function App() {
                   </span>
                 </div>
               </section>
-              {!panel && !tracking && !state.location.startsWith("cave_") && <QuestCompass />}
+              {!panel && !tracking && !state.location.startsWith("cave_") && (
+                <QuestCompass />
+              )}
               {!panel && tracking && !state.location.startsWith("cave_") && (
                 <aside className="sidebar">
                   <div className="sidebar-title">
@@ -659,7 +695,12 @@ export default function App() {
                     <kbd>{index + 1}</kbd>
                     <span
                       className={`item-icon ${item}`}
-                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.55, backgroundImage: itemDefinitions[item] ? `url("${itemDefinitions[item].icon}")` : undefined }}
+                      style={{
+                        opacity: state.inventory[item] > 0 ? 1 : 0.55,
+                        backgroundImage: itemDefinitions[item]
+                          ? `url("${itemDefinitions[item].icon}")`
+                          : undefined,
+                      }}
                     />
                     <b>{state.inventory[item] || 0}</b>
                   </button>

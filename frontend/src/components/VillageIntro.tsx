@@ -1,4 +1,5 @@
 import { ArrowRight, Check, MapPin } from "lucide-react";
+import { useState } from "react";
 import { useGame } from "../stores/game";
 import {
   trackedIntroStep,
@@ -68,9 +69,12 @@ export function IntroTracker() {
 
 export function IntroContext({
   place,
+  paged = false,
 }: {
   place: "board" | "gate" | "gear" | "cave";
+  paged?: boolean;
 }) {
+  const [briefPage, setBriefPage] = useState(0);
   const { state, selected, command, busy, navigate } = useGame();
   if (
     !state?.village_intro ||
@@ -99,36 +103,57 @@ export function IntroContext({
       <section className="intro-context" aria-label="第一次远行的条件">
         <small>安家之后 · 第一次远行</small>
         <h4>先试一次身手，再慢慢准备远行</h4>
-        <p>
-          离村石门需要：击败第5层守卫、取得门钥魔法石，以及魔法3级。科技主修也需要这项启门魔法。
-        </p>
-        <p>
-          魔法每级投入1知识点；诺亚的学习委托每现实小时结算1点，可离线计时。三类委托每日合计最多5点。从0级准备启门至少需3小时现实委托，游戏睡眠不会加速。
-        </p>
-        <p>
-          <strong>购买武器、探索首层不要求魔法等级。</strong>
-          这次先带一点材料回村，不必一次打到底。
-        </p>
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() =>
-            void command(
-              place === "board" && quest?.status === "available"
-                ? "quest_accept"
-                : "intro_brief",
-              place === "board" && quest?.status === "available"
-                ? { quest_id: "leave_valley" }
-                : { target: place === "board" ? "board" : "village_departure" },
-            )
-          }
-        >
-          {busy
-            ? "正在记下…"
-            : place === "board" && quest?.status === "available"
-              ? "接下远行来信，开始准备"
-              : "记下条件，先准备武器"}
-        </button>
+        {(!paged || briefPage === 0) && (
+          <p>
+            离村石门需要：击败第5层守卫、取得门钥魔法石，以及魔法3级。科技主修也需要这项启门魔法。
+          </p>
+        )}
+        {(!paged || briefPage === 1) && (
+          <p>
+            魔法每级投入1知识点；诺亚的学习委托每现实小时结算1点，可离线计时。三类委托每日合计最多5点。从0级准备启门至少需3小时现实委托，游戏睡眠不会加速。
+          </p>
+        )}
+        {(!paged || briefPage === 0) && (
+          <p>
+            <strong>购买武器、探索首层不要求魔法等级。</strong>
+            这次先带一点材料回村，不必一次打到底。
+          </p>
+        )}
+        {paged && (
+          <nav className="board-step-pages" aria-label="远行准备翻页">
+            <button disabled={briefPage === 0} onClick={() => setBriefPage(0)}>
+              上一页
+            </button>
+            <span>{briefPage + 1} / 2</span>
+            <button disabled={briefPage === 1} onClick={() => setBriefPage(1)}>
+              下一页
+            </button>
+          </nav>
+        )}
+        {(!paged || briefPage === 1) && (
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() =>
+              void command(
+                place === "board" && quest?.status === "available"
+                  ? "quest_accept"
+                  : "intro_brief",
+                place === "board" && quest?.status === "available"
+                  ? { quest_id: "leave_valley" }
+                  : {
+                      target: place === "board" ? "board" : "village_departure",
+                    },
+              )
+            }
+          >
+            {busy
+              ? "正在记下…"
+              : place === "board" && quest?.status === "available"
+                ? "接下远行来信，开始准备"
+                : "记下条件，先准备武器"}
+          </button>
+        )}
       </section>
     );
   if (place === "gate") return null;
