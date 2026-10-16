@@ -33,6 +33,8 @@ def initial_state():
 
 def upgrade_state(original):
     state = copy.deepcopy(original)
+    from .journey import ensure_departure
+    ensure_departure(state)
     state.setdefault('location', 'overworld')
     state.setdefault('market_orders', {})
     state.setdefault('npc_gifts', {})
@@ -74,6 +76,8 @@ def upgrade_state(original):
             candidates = ({'x': xx, 'y': yy} for xx in range(24, 1897, 16) for yy in range(40, 1257, 16))
             state['position'] = min((p for p in candidates if walkable(**p)), key=lambda p: math.hypot(p['x']-x, p['y']-y))
         state['save_version'] = 3
+    from .combat import ensure_combat
+    ensure_combat(state)
     return state
 
 
@@ -301,7 +305,10 @@ def apply(state, action, data, now):
         # Taking over from another view does not confirm its unseen final span.
         if action == 'world_resume' and state['world_clock'].get('owner') != owner:
             state['world_clock']['running_until'] = 0
+        changed_owner = state['world_clock'].get('owner') != owner
         message = settle_clock(state, now, action == "world_resume")
+        if action == 'world_pause' or changed_owner:
+            state['village_combat']['last_tick'] = 0.
         state['world_clock']['owner'] = owner
         if action == "world_resume": release_encounter(state, now)
         return message or ("继续村庄时光" if action == "world_resume" else "村庄稍等片刻")
@@ -312,6 +319,9 @@ def apply(state, action, data, now):
         return '已经是新的一天，请重新选择操作。'
     if state['npc_encounter'] and state['npc_encounter']['until'] <= now:
         release_encounter(state, now)
+    if action in ['cave_tick','gear_equip','gear_buy','gear_craft','gear_sell','spark_learn','gate_open','stone_recover','cave_retreat','cave_interact']:
+        from .combat import command
+        return command(state, action, data, now)
     if action in ['npc_release', 'npc_keep']:
         lease = state['npc_encounter']
         if not lease or data.get('token') != lease['token']:
@@ -325,6 +335,7 @@ def apply(state, action, data, now):
     if action in ['life_accept', 'life_claim', 'life_cancel']:
         return life_command(state, action, data, now)
     if action == 'move':
+        require(not location.startswith('cave_'), '洞内移动由战斗输入确认')
         x, y = data.get('x'), data.get('y')
         require(all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in [x,y]), '坐标无效')
         target = {'x': round(x, 2), 'y': round(y, 2)}
@@ -547,6 +558,9 @@ def apply(state, action, data, now):
     require(obj is not None, '交互对象不存在')
     require(math.hypot(state['position']['x']-obj['x'], state['position']['y']-obj['y']) <= 72, '请先走近这个对象')
     target = obj['id']
+    if action == 'travel':
+        from .journey import travel
+        return travel(state, data, now)
     if action in ['market_trade', 'market_deliver']:
         require(location == 'shop' and target in ['mira', 'shop_counter'], '请到风铃杂货铺的寄售柜台办理')
         market = market_view(state, now)
@@ -589,9 +603,15 @@ def apply(state, action, data, now):
         state['position']={'x':door['x'],'y':door['y']+12}
         return '回到了户外'
     if action in ['rest', 'short_rest']:
-        require(target == 'home_bed', '请走近家里的床')
+        require(target in ['home_bed','inn_bed'], '请走近床铺')
         day = integer(data.get('expected_day'), 1, 1000000000)
         require(day == clock_view(state, now)['day'], '日期已经变化，请重新打开床边面板。')
+        if target == 'inn_bed':
+            require(action == 'rest', '旅店客房只提供整夜住宿')
+            require(state['departure']['booking_day'] == day, '今晚还没有订房，请先找岚姨支付 8 金币')
+            settle_clock(state, now, False)
+            remember(state, 'slept_inn')
+            return finish_day(state, now, 'sleep', destination='inn')
         settle_clock(state, now, False)
         if action == 'rest':
             return finish_day(state, now, 'sleep')

@@ -12,6 +12,9 @@ export function SleepPanel() {
   const minute = clock.minute < 360 ? clock.minute + 1440 : clock.minute;
   const tooLate = minute + (rules?.short_rest_minutes ?? 30) >= 1500;
   const day = clock.day;
+  const inn = state.location === "inn";
+  const booked = !inn || state.departure?.booking_day === day;
+  const bedTarget = inn ? "inn_bed" : "home_bed";
   return (
     <section className="sleep-leaf" aria-label="床边休息选择">
       <div className="sleep-heading">
@@ -21,7 +24,11 @@ export function SleepPanel() {
             第 {day} 天 · {clockLabel(clock.minute)} · 阅读时暂停
           </small>
           <h3>把今天留在枕边</h3>
-          <p>家里的床，随时为你留着。</p>
+          <p>
+            {inn
+              ? "灯穗旅店 · 今晚房费 8 金币，先向岚姨订房。"
+              : "家里的床，随时为你留着。"}
+          </p>
         </div>
       </div>
       <div className="sleep-condition">
@@ -33,7 +40,7 @@ export function SleepPanel() {
           体力 {staminaNow(state, serverNow())} / {state.stamina?.max}
         </span>
       </div>
-      <div className="sleep-options">
+      <div className="sleep-options" data-inn={inn}>
         <section>
           <Moon size={24} aria-hidden="true" />
           <h4>睡到明早</h4>
@@ -43,10 +50,10 @@ export function SleepPanel() {
           </p>
           <button
             className="primary"
-            disabled={busy}
+            disabled={busy || !booked}
             onClick={async () => {
               if (
-                await command("rest", { target: "home_bed", expected_day: day })
+                await command("rest", { target: bedTarget, expected_day: day })
               ) {
                 open(null);
                 requestAnimationFrame(() =>
@@ -55,29 +62,37 @@ export function SleepPanel() {
               }
             }}
           >
-            {busy ? "正在保存…" : "睡到明早 · 免费"}
+            {busy
+              ? "正在保存…"
+              : !booked
+                ? "请先向岚姨订房"
+                : inn
+                  ? "睡到明早 · 房费已付"
+                  : "睡到明早 · 免费"}
           </button>
         </section>
-        <section>
-          <Coffee size={24} aria-hidden="true" />
-          <h4>稍微歇一会儿</h4>
-          <p>
-            经过 {rules?.short_rest_minutes ?? 30} 游戏分钟，体力 +
-            {rules?.short_rest_stamina ?? 20}、生命 +
-            {rules?.short_rest_health ?? 10}，不超过上限。
-          </p>
-          <button
-            disabled={busy || tooLate}
-            onClick={() =>
-              void command("short_rest", {
-                target: "home_bed",
-                expected_day: day,
-              })
-            }
-          >
-            {tooLate ? "临近 01:00，请睡到明早" : "小憩 30 分钟 · 免费"}
-          </button>
-        </section>
+        {!inn && (
+          <section>
+            <Coffee size={24} aria-hidden="true" />
+            <h4>稍微歇一会儿</h4>
+            <p>
+              经过 {rules?.short_rest_minutes ?? 30} 游戏分钟，体力 +
+              {rules?.short_rest_stamina ?? 20}、生命 +
+              {rules?.short_rest_health ?? 10}，不超过上限。
+            </p>
+            <button
+              disabled={busy || tooLate}
+              onClick={() =>
+                void command("short_rest", {
+                  target: "home_bed",
+                  expected_day: day,
+                })
+              }
+            >
+              {tooLate ? "临近 01:00，请睡到明早" : "小憩 30 分钟 · 免费"}
+            </button>
+          </section>
+        )}
       </div>
       {noticePanel === "sleep" && notice && !error && (
         <p role="status">{notice}</p>
@@ -88,6 +103,7 @@ export function SleepPanel() {
         </p>
       )}
       <p className="sleep-footnote">
+        {inn && "睡醒仍在旅店，房费按游戏夜计算；再次住宿需重新订房。"}
         01:00 未睡会昏倒返家，生命 −{rules?.faint_damage ?? 10}（最低保留
         1），体力不恢复。作物与现实委托仍按现实时间计算，睡觉不会刷新现实成长额度。
       </p>
@@ -146,6 +162,8 @@ export function DaybreakNotice() {
 
 export function BedtimeReminder({ minute }: { minute: number }) {
   const navigate = useGame((s) => s.navigate);
+  const location = useGame((s) => s.state?.location);
+  const nearCity = location === "city" || location === "inn";
   if (minute >= 60 && minute < 1380) return null;
   return (
     <aside
@@ -159,9 +177,16 @@ export function BedtimeReminder({ minute }: { minute: number }) {
           ? "已经过了午夜，01:00 前记得上床。"
           : "夜深了，准备回家休息吧。"}
       </span>
-      <button onClick={() => navigate({ mapId: "home", targetId: "home_bed" })}>
+      <button
+        onClick={() =>
+          navigate({
+            mapId: nearCity ? "inn" : "home",
+            targetId: nearCity ? "inn_bed" : "home_bed",
+          })
+        }
+      >
         <MapPin size={15} />
-        标记家中床铺
+        {nearCity ? "标记旅店床铺" : "标记家中床铺"}
       </button>
     </aside>
   );

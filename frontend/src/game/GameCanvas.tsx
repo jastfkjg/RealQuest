@@ -1,5 +1,7 @@
 import { residentPositions, villageClock } from "./residents";
 import { DaybreakNotice } from "../components/SleepPanel";
+import { CombatHud } from "../components/CombatPanels";
+import { combatInput } from "./cave";
 import { VillageClock } from "../components/Residents";
 import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
@@ -39,7 +41,7 @@ export function GameCanvas() {
   }, []);
   const region =
     state.location !== "overworld"
-      ? world.interiors[state.location]
+      ? world.areas?.[state.location] || world.interiors[state.location]
       : world.regions?.find(
           (r) =>
             state.position.x >= r.x &&
@@ -136,6 +138,10 @@ export function GameCanvas() {
         quests: s.state?.quest_log,
         storage: s.state?.storage,
         market: s.state?.market,
+        departure: s.state?.departure,
+        travel: s.state?.travel,
+        combat: s.state?.combat,
+        combatTarget: combatInput.target,
         worldClock: s.state?.world_clock,
         gameTime: s.state ? villageClock(s.state, serverNow()) : null,
         residentEncounter: s.state?.npc_encounter,
@@ -250,15 +256,18 @@ export function GameCanvas() {
         <div>
           <b>{region?.name || "回响大陆"}</b>
           <small>
-            {state.location === "overworld"
+            {state.location.startsWith("cave_") ? "战斗区 · 空格攻击 · Q法术 · R菜汤" : state.location === "overworld"
               ? "REALQUEST · 回响大陆"
-              : state.location === "home"
-                ? "收纳 · 休息 · 窗边研习"
-                : "室内 · 门口按 E 返回户外"}
+              : world.areas?.[state.location]
+                ? "远行途中 · 走近路牌或旅人按 E"
+                : state.location === "home"
+                  ? "收纳 · 休息 · 窗边研习"
+                  : "室内 · 门口按 E 返回户外"}
           </small>
         </div>
       </div>
       <VillageClock />
+      <CombatHud />
       {!panel && <DaybreakNotice />}
       {target && (
         <button

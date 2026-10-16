@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { caveLandscape, CaveController, clearCombatInput, combatInput, combatObjectArt } from "./cave";
+import { journeyLandscape, updateJourney, preloadJourney } from "./journey";
 import { serverNow, useGame } from "../stores/game";
 import type { MapData, WorldObject } from "../types";
 import { box, objectArt } from "./art";
@@ -59,6 +61,7 @@ export class WorldScene extends Phaser.Scene {
   villageLight!: Phaser.GameObjects.Graphics;
   lastXp = 0;
   lastFootstep = 0;
+  cave: CaveController | null = null;
   hovered: WorldObject | null = null;
   response: {
     id: string;
@@ -75,6 +78,7 @@ export class WorldScene extends Phaser.Scene {
   preload() {
     preloadVillage(this);
     preloadInteriors(this);
+    preloadJourney(this);
   }
   create() {
     const { world, state } = useGame.getState();
@@ -93,14 +97,16 @@ export class WorldScene extends Phaser.Scene {
     this.lastXp = state.xp;
     this.lastMorning = state.world_clock?.last_night?.at || 0;
     this.lastFootstep = this.elapsed;
-    if (state.location === "overworld") village(this, this.map);
+    if (state.location.startsWith("cave_")) caveLandscape(this, this.map);
+    else if (state.location === "overworld") village(this, this.map);
+    else if (this.map.outdoor) journeyLandscape(this, this.map);
     else fineRoom(this, this.map);
     this.water = this.add.graphics().setDepth(-800);
     this.smoke = this.add.graphics().setDepth(2000);
     this.villageLight = this.add.graphics().setDepth(8500);
     this.marker = this.add.graphics().setDepth(9999);
     for (const obj of this.map.objects) {
-      if (obj.kind !== "npc") {
+      if (!["npc", "travel_npc"].includes(obj.kind)) {
         this.objectLayers.set(
           obj.id,
           this.add
@@ -115,7 +121,7 @@ export class WorldScene extends Phaser.Scene {
         );
       }
     }
-    for (const obj of residentPositions(world, state, serverNow())) {
+    for (const obj of residentPositions(world, state, serverNow()).filter(o => !state.location.startsWith("cave_") || o.location === state.location)) {
       const sprite = this.add
         .sprite(obj.x, obj.y, `villager-${obj.id}`, 0)
         .setOrigin(0.5, 1)
@@ -155,7 +161,7 @@ export class WorldScene extends Phaser.Scene {
       .setScale(ACTOR_FRAME.scale);
     this.synced = { ...state.position };
     this.keys = this.input.keyboard!.addKeys(
-      "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,I,C,L,SHIFT",
+      "W,A,S,D,UP,DOWN,LEFT,RIGHT,E,F,M,J,I,C,L,SHIFT,SPACE,Q,R",
     ) as Record<string, Phaser.Input.Keyboard.Key>;
     this.input.keyboard!.removeCapture([
       "W",
@@ -174,18 +180,19 @@ export class WorldScene extends Phaser.Scene {
       "C",
       "L",
       "SHIFT",
+      "SPACE", "Q", "R",
     ]);
     this.cameras.main.setBackgroundColor(
-      state.location === "overworld"
+      state.location === "overworld" || this.map.outdoor
         ? "#78955e"
         : state.location === "home"
           ? "#27352d"
           : "#3c3930",
     );
-    if (state.location === "overworld")
+    if (state.location === "overworld" || this.map.outdoor)
       this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
     else this.cameras.main.removeBounds();
-    if (state.location === "overworld")
+    if (state.location === "overworld" || this.map.outdoor)
       this.cameras.main.startFollow(
         this.player,
         true,
@@ -195,6 +202,11 @@ export class WorldScene extends Phaser.Scene {
     else this.cameras.main.stopFollow();
     this.fitCamera();
     if (!this.reduced) this.cameras.main.fadeIn(220, 40, 35, 27);
+    for (const [key, intention] of [["SPACE", "pulse"], ["Q", "spark"], ["R", "soup"]] as const)
+      this.input.keyboard!.on(`keydown-${key}`, (event: KeyboardEvent) => {
+        if (this.cave && !this.isTyping() && !event.repeat && !event.isComposing)
+          combatInput[intention] = true;
+      });
     this.input.keyboard!.on("keydown-E", (event: KeyboardEvent) => {
       if (!this.isTyping() && !event.repeat) {
         unlockSound();
@@ -247,6 +259,7 @@ export class WorldScene extends Phaser.Scene {
       )
         return;
       unlockSound();
+      if (this.cave?.pick(pointer.worldX, pointer.worldY)) return;
       const obj = this.objectAt(pointer.worldX, pointer.worldY);
       if (
         obj &&
@@ -342,11 +355,13 @@ export class WorldScene extends Phaser.Scene {
       document.removeEventListener("focusin", this.focusChanged);
       document.removeEventListener("focusout", this.focusChanged);
       unsubscribe();
+      this.cave?.destroy(); this.cave = null;
       this.input.keyboard?.removeAllListeners();
       this.input.removeAllListeners();
       this.npcs = [];
       this.objectLayers.clear();
     });
+    if (state.location.startsWith("cave_")) this.cave = new CaveController(this);
     this.focusChanged();
     this.drawState();
   }
@@ -354,7 +369,7 @@ export class WorldScene extends Phaser.Scene {
     if (!this.map) return;
     const width = Number(this.scale.width),
       height = Number(this.scale.height);
-    const outdoor = this.map.id === "overworld";
+    const outdoor = this.map.id === "overworld" || this.map.outdoor;
     // Review a useful amount of village around the refined actors. DPR never
     // controls zoom; scenery has two native art pixels per world unit.
     const zoom = outdoor
@@ -421,6 +436,7 @@ export class WorldScene extends Phaser.Scene {
     });
   };
   resetInput = () => {
+    clearCombatInput();
     this.touch = { x: 0, y: 0 };
     this.path = [];
     this.clickTarget = null;
@@ -446,6 +462,7 @@ export class WorldScene extends Phaser.Scene {
     );
   }
   sync(): Promise<void> {
+    if (this.cave) return Promise.resolve();
     if (this.syncTask) return this.syncTask;
     if (
       Math.hypot(this.player.x - this.synced.x, this.player.y - this.synced.y) <
@@ -642,12 +659,14 @@ export class WorldScene extends Phaser.Scene {
         .setPosition(next.x, next.y)
         .setDepth(next.y)
         .setFrame(
-          personFrame(
-            npc.direction,
-            next.walking && !this.reduced
-              ? Math.floor(this.elapsed / 180) % 4
-              : 0,
-          ),
+          next.kind === "travel_npc"
+            ? 0
+            : personFrame(
+                npc.direction,
+                next.walking && !this.reduced
+                  ? Math.floor(this.elapsed / 180) % 4
+                  : 0,
+              ),
         );
       npc.shadow.setPosition(next.x, next.y - 1).setDepth(next.y - 1);
       const closest = live
@@ -657,14 +676,21 @@ export class WorldScene extends Phaser.Scene {
             Math.hypot(a.x - this.player.x, a.y - this.player.y) -
             Math.hypot(b.x - this.player.x, b.y - this.player.y),
         )[0];
-      if (!panel && closest?.id === next.id && Math.hypot(dx, dy) < 128)
+      if (
+        !panel &&
+        next.kind !== "travel_npc" &&
+        closest?.id === next.id &&
+        Math.hypot(dx, dy) < 128
+      )
         npc.bubble
           .setPosition(next.x, next.y - 44)
           .setText(next.activity)
           .setVisible(true);
     }
     this.map.objects = [
-      ...this.map.objects.filter((o) => o.kind !== "npc"),
+      ...this.map.objects.filter(
+        (o) => !["npc", "travel_npc"].includes(o.kind),
+      ),
       ...this.npcs
         .filter((n) => n.obj.location === this.map.id)
         .map((n) => n.obj),
@@ -719,8 +745,10 @@ export class WorldScene extends Phaser.Scene {
       useGame.getState().busy ||
       this.interacting ||
       document.hidden ||
+      (this.cave !== null && !document.hasFocus()) ||
       !navigator.onLine ||
       villageClock(useGame.getState().state!, serverNow()).minute === 60;
+    if (this.cave) { this.cave.step(delta, blocked); return; }
     let dx =
       Number(this.keys.D.isDown || this.keys.RIGHT.isDown) -
       Number(this.keys.A.isDown || this.keys.LEFT.isDown) +
@@ -842,6 +870,16 @@ export class WorldScene extends Phaser.Scene {
             .fillEllipse(door.x, door.y - 4, 64, 30);
       updateVillageObjects(this, state, now);
       updateVillageCanopies(this, this.player.x, this.player.y);
+    } else if (this.map.outdoor) {
+      const hour = villageClock(state, now).minute / 60;
+      const night =
+        hour >= 20 || hour < 6 ? 0.32 : hour >= 18 ? (hour - 18) * 0.16 : 0;
+      this.villageLight
+        .clear()
+        .fillStyle(0x293e50, night)
+        .fillRect(0, 0, this.map.width, this.map.height);
+      updateJourney(this, this.map, state);
+      updateVillageCanopies(this, this.player.x, this.player.y);
     } else
       updateInteriorPresentation(
         this,
@@ -855,7 +893,9 @@ export class WorldScene extends Phaser.Scene {
       const layer = this.objectLayers.get(obj.id);
       if (layer) {
         layer.clear();
-        if (
+        if (obj.kind === "cave" || obj.kind === "spellbook" || obj.id === "village_departure")
+          combatObjectArt(layer, obj, state);
+        else if (
           (this.map.id !== "overworld" || !hasVillageObjectArt(obj)) &&
           obj.id !== "guild_board"
         )

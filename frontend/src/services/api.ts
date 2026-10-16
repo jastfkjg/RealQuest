@@ -1,5 +1,6 @@
 import type { Reply } from "../types";
 let worldDay: number | undefined;
+export const worldViewOwner = crypto.randomUUID();
 export function setWorldDay(day: number) {
   worldDay = day;
 }
@@ -38,6 +39,7 @@ export function sendCommand(
     action,
     data:
       [
+        "travel",
         "move",
         "enter",
         "exit",

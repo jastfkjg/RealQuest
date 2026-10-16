@@ -4,6 +4,9 @@ import {
   WorldClockLifecycle,
 } from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
+import { TravelPanel } from "./components/TravelPanel";
+import { GearPanel, SpellPanel, CavePanel, GatePanel } from "./components/CombatPanels";
+import { itemDefinitions } from "./game/items";
 import { SleepPanel } from "./components/SleepPanel";
 import { LifeQuestHistory } from "./components/LifeQuests";
 import { RecoveryPanel } from "./components/RecoveryPanel";
@@ -50,6 +53,8 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   const panel = useGame((s) => s.panel);
   const state = useGame((s) => s.state);
   const tactile = [
+    "armory", "equipment", "spellbook", "cave", "gate",
+    "travel",
     "sleep",
     "neighbors",
     "board",
@@ -180,6 +185,7 @@ export function Panels() {
   if (panel === "study") return <StudyPage />;
   if (panel === "training") return <TrainingPage />;
   const titles: Record<string, string> = {
+    armory: "工坊武备台", equipment: "远行装备", spellbook: "术式研习", cave: "石根山洞", gate: "东行石门",
     sleep: "林间小屋 · 安心休息",
     board: "委托告示板",
     map: "回响大陆 · 旅行地图",
@@ -192,6 +198,7 @@ export function Panels() {
     settings: "存档与数据",
     ai: "AI 旅途伙伴",
     menu: "旅途菜单",
+    travel: selected?.name || "旅途安排",
     shop: "风铃杂货铺",
     neighbors: "村民近况 · 邻里簿",
     building: selected?.name || "建筑",
@@ -202,6 +209,9 @@ export function Panels() {
       {panel === "menu" && (
         <div className="journey-menu">
           <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
+          <button onClick={()=>useGame.getState().navigate({mapId:"overworld",targetId:"cave_entry"})}><Compass size={18}/>石根山洞<span>标记方向 · 主动进入五层战斗区</span></button>
+          <button onClick={()=>useGame.getState().navigate({mapId:"workshop",targetId:"armory_counter"})}><Compass size={18}/>工坊武备台<span>标记方向 · 买武器、菜汤与等级打造</span></button>
+          <button onClick={()=>useGame.getState().navigate({mapId:"library",targetId:"spell_desk"})}><Sparkles size={18}/>术式研习<span>标记方向 · 学习火花术</span></button>
           <button
             onClick={() =>
               useGame
@@ -231,6 +241,10 @@ export function Panels() {
         </div>
       )}
       {panel === "activity" && <LifeQuestHistory />}
+      {(panel === "armory" || panel === "equipment") && <GearPanel />}
+      {panel === "spellbook" && <SpellPanel />}
+      {panel === "cave" && <CavePanel />}
+      {panel === "gate" && <GatePanel />}
       {panel === "map" && <Atlas />}
       {panel === "board" && (
         <>
@@ -243,6 +257,7 @@ export function Panels() {
       {panel === "building" && <BuildingPanel />}
       {panel === "neighbors" && <ResidentsPanel />}
       {panel === "sleep" && <SleepPanel />}
+      {panel === "travel" && <TravelPanel />}
       {panel === "shop" && <MarketPanel />}
       {panel === "npc" && selected && (
         <ConversationPanel>
@@ -279,7 +294,8 @@ export function Panels() {
             <li>
               走近小屋南侧农田种下种子，60 秒后回来收获。离线不会让作物枯萎。
             </li>
-            <li>去工坊出售萝卜、制作木板，用材料升级建筑。</li>
+            <li>去工坊出售萝卜、制作木板，用材料升级建筑。武备台可购买武器与菜汤；打造武器需要建造1级和相应科学／魔法等级。</li>
+            <li>旧采石场旁可进入石根山洞。空格攻击、Q火花术、R喝汤，点击怪物切换目标；清理每层后继续向下，第3层可短休。底层守卫掉落门钥魔法石，搭配魔法3级永久开启离村石门。</li>
             <li>
               06:00 起床，01:00
               前到家中床铺睡觉。未睡会被送回家，生命下降且体力不恢复；床边也可免费小憩。阅读面板、现实成长、后台与离线暂停游戏时间。
@@ -606,8 +622,8 @@ export default function App() {
                   </span>
                 </div>
               </section>
-              {!panel && !tracking && <QuestCompass />}
-              {!panel && tracking && (
+              {!panel && !tracking && !state.location.startsWith("cave_") && <QuestCompass />}
+              {!panel && tracking && !state.location.startsWith("cave_") && (
                 <aside className="sidebar">
                   <div className="sidebar-title">
                     <span>
@@ -641,7 +657,7 @@ export default function App() {
                     <kbd>{index + 1}</kbd>
                     <span
                       className={`item-icon ${item}`}
-                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.55 }}
+                      style={{ opacity: state.inventory[item] > 0 ? 1 : 0.55, backgroundImage: itemDefinitions[item] ? `url("${itemDefinitions[item].icon}")` : undefined }}
                     />
                     <b>{state.inventory[item] || 0}</b>
                   </button>

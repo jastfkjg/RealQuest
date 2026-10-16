@@ -48,7 +48,7 @@ export function preloadVillage(scene: Phaser.Scene) {
       frameWidth: ACTOR_FRAME.width,
       frameHeight: ACTOR_FRAME.height,
     });
-  for (const id of ["noah", "lia", "mira"])
+  for (const id of ["noah", "lia", "mira", "adu", "lanya"])
     scene.load.spritesheet(
       `villager-${id}`,
       `/assets/hearthwood/residents/${id}-actor.png`,
@@ -85,6 +85,7 @@ export function village(scene: Phaser.Scene, map: MapData) {
   for (const y of [320, 872]) {
     sprite(scene, "bridge", 480, y + 68, -900);
   }
+  sprite(scene, "board", 1816, 352);
   // Curated existing prop clusters. Only five small flower clumps in the
   // settlement; paths and resource anchors remain unplanted and readable.
   for (const [name, x, y] of [
@@ -126,7 +127,16 @@ export function village(scene: Phaser.Scene, map: MapData) {
   if (shop) {
     sprite(scene, "crates", 904, 690, 676);
     sprite(scene, "lantern", 758, 690, 676);
-    scene.add.text(958, 404, "杂货铺 ↓", { fontFamily: "sans-serif", fontSize: "11px", color: "#27392f", backgroundColor: "#f4efde", padding: { x: 5, y: 4 } }).setOrigin(0.5).setDepth(405);
+    scene.add
+      .text(958, 404, "杂货铺 ↓", {
+        fontFamily: "sans-serif",
+        fontSize: "11px",
+        color: "#27392f",
+        backgroundColor: "#f4efde",
+        padding: { x: 5, y: 4 },
+      })
+      .setOrigin(0.5)
+      .setDepth(405);
   }
   for (const obj of map.objects) {
     if (!["wood", "stone", "board", "chest", "event"].includes(obj.kind))

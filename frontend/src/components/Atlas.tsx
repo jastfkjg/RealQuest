@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useGame } from "../stores/game";
 import { questTarget } from "../game/navigation";
+import { JourneyAtlas } from "./JourneyAtlas";
 import { NpcPerson } from "./NpcPerson";
 import { serverNow } from "../stores/game";
 import { atlasObjects, residentPlace } from "../game/residents";
@@ -715,5 +716,22 @@ function AdventureAtlas() {
   );
 }
 export function Atlas({ mini = false }: { mini?: boolean }) {
-  return mini ? <MiniAtlas /> : <AdventureAtlas />;
+  const location = useGame((s) => s.state?.location);
+  const outside =
+    !!location && (location.startsWith("cave_") || ["crossing", "mountain", "city", "inn"].includes(location));
+  const [far, setFar] = useState(outside);
+  if (mini) return outside ? <JourneyAtlas mini /> : <MiniAtlas />;
+  return (
+    <>
+      <nav className="atlas-tabs" aria-label="地图范围">
+        <button aria-pressed={!far} onClick={() => setFar(false)}>
+          村庄全域
+        </button>
+        <button aria-pressed={far} onClick={() => setFar(true)}>
+          离村远行
+        </button>
+      </nav>
+      {far ? <JourneyAtlas /> : <AdventureAtlas />}
+    </>
+  );
 }

@@ -1,5 +1,9 @@
 """Authoritative geography shared with the Phaser renderer."""
 from math import hypot
+from .journey_world import AREAS, TRAVEL_NPCS, passage
+from .combat_world import CAVE_MAPS, CAVE_ENTRY
+
+AREAS.update(CAVE_MAPS)
 
 OBJECTS = [
     {'id': 'home', 'kind': 'building', 'name': '林间小屋', 'x': 160, 'y': 232, 'rect': [96, 128, 128, 80]},
@@ -74,10 +78,21 @@ INTERIORS = {
         {'id':'guild_board','kind':'board','name':'公会委托台','x':240,'y':184},
     ],[{'kind':'notice','rect':[168,72,144,64]},{'kind':'desk','rect':[72,216,88,40]},{'kind':'chest','rect':[352,88,48,28]},{'kind':'rug','rect':[192,224,96,80],'solid':False}]),
 }
-WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS}
+INTERIORS['inn'] = interior('inn','灯穗旅店',[
+    *[n for n in TRAVEL_NPCS if n['location']=='inn'],
+    {'id':'inn_bed','kind':'rest','name':'客房床铺 · 付费住宿','x':336,'y':112},
+],[{'kind':'bed','rect':[304,72,72,80]},{'kind':'desk','rect':[96,128,96,40]},
+   {'kind':'fireplace','rect':[208,64,72,32]},{'kind':'plant','rect':[64,80,24,28]},
+   {'kind':'rug','rect':[176,240,128,64],'solid':False}])
+INTERIORS['inn']['objects'][0] = passage('inn_exit','返回南门街',240,328,'city')
+OBJECTS.append(passage('village_departure','东行路牌 · 苇风渡口',1816,352,'crossing'))
+OBJECTS.append(CAVE_ENTRY)
+INTERIORS['workshop']['objects'].append({'id':'armory_counter','kind':'armory','name':'武备台 · 购买与打造','x':376,'y':280,'hitbox':[352,224,48,32]})
+INTERIORS['library']['objects'].append({'id':'spell_desk','kind':'spellbook','name':'术式研习 · 火花术','x':112,'y':232})
+WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS}
 
 def map_for(location='overworld', state=None, now=None):
-    base = WORLD if location == 'overworld' else INTERIORS[location]
+    base = WORLD if location == 'overworld' else (AREAS[location] if location in AREAS else INTERIORS[location])
     if state is None or now is None:
         return base
     from .residents import resident_objects

@@ -363,3 +363,25 @@ Status: implemented/browser-verified candidate; actual owner render approval pen
 - [ ] Physical devices/Safari/native zoom/screen readers, full-day/endurance and owner render acceptance remain unverified. Portrait phone review is outside current scope. Sleep/fainting/lodging/weather/seasonal schedules remain future work.
 
 Exact scope, files, source prompts/provenance, commands, fixtures, screenshots/recordings and cleanup: [resident report](../tasks/25-village-residents.md).
+
+## Departure and city lodging — 2026-10-16
+
+Status: independent travel/lodging implementation verified candidate; owner visual approval pending. These historical task27 checks do not certify the village combat prerequisite; its later implementation and evidence are recorded separately in task28.
+
+- [x] Existing save can accept the new chapter, choose bridge/ferry, prepare rope/current stamina, cross the mountain, deliver the letter, pay for a valid night, wake in the inn, return and claim once. Map navigation only marks direction.
+- [x] Server quotes/rechecks arrival before01:00, shortfalls, daily work, permanent bridge/rope, proximity and day/location;15 new tests and174 retained tests pass, including rejected/concurrent/replayed mutations, old save conservation and reachable interaction/arrival points.
+- [x] Original static Adu/Lanya are distinct from the existing cast; matching actors/figures/portraits and cliff/boat have immutable sources/prompts and reproducible hashes.10 runtime PNGs/599,517bytes;156-image audit passes. Old player/resident art retained.
+- [x] Final production14-flow/23-capture browser suite and9-flow/16-capture prior sleep regression pass, zero unexpected browser errors. Desktop and landscape, keyboard/focus/held input, scrollable actions, DPR2 touch/reduced motion and morning-dismiss HUD behavior checked; actual images inspected. Supplied frame client passes2 iterations; TypeScript/build, formatting and diff checks pass.
+- [ ] Owner render/gameplay balance, physical devices/Safari/native zoom/screen readers, multi-day endurance and production PostgreSQL load remain unverified. No combat, technology/magic effects or home expansion added. Combat-first integration awaits its own slice.
+
+Source paths, exact commands, screenshots/recordings and cleanup: [task27](../tasks/27-departure-city.md).
+
+
+## Village combat — 2026-10-16
+
+Status: playable implementation candidate; owner visual and balance acceptance pending.
+
+- [x] Four distinct weapon data/recipes, armory/equipment/spell panels, five-floor cave, original enemy geometry/telegraphs and unique boss key; no new third-party, raster, font or audio assets. Existing156-image audit passes.
+- [x] Actual production keyboard run clears all five floors, collects the boss key and permanently opens the gate only at magic3; purchase retry, crafting shortages, menu pause and reload checked. Screenshots were inspected.
+- [x] Control6-flow/7-capture suite checks initial sword/Boss phase2, defeat, DPR2 touch landscape, paused inputs, injected blur/resume and retreat; final cave frame client2 captures inspected. Task28 records exact scope and cleanup.
+- [ ] Owner art/balance acceptance, native tab/OS focus, physical devices and long-run/production-load verification remain pending; build/test passes do not establish them.

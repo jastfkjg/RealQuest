@@ -6,6 +6,8 @@ export interface WorldObject {
   name: string;
   x: number;
   y: number;
+  destination?: string;
+  phase?: number;
   rect?: number[];
   hitbox?: number[];
   building?: string;
@@ -13,8 +15,34 @@ export interface WorldObject {
   activity?: string;
   walking?: boolean;
 }
+export interface WeaponDefinition {
+  name: string; price: number; damage: number; interval: number; reach: number; stamina: number;
+  magic: boolean; science: number; magic_level: number; either: boolean;
+  costs: Record<string, number>; craft_reasons: string[];
+}
+export interface CaveEnemy {
+  id: string; kind: string; name: string; x: number; y: number; hp: number; max_hp: number;
+  phase: string; until: number; tx: number; ty: number; style?: string;
+}
+export interface CombatView {
+  encounter: string; input_seq: number;
+  projectiles: { x:number; y:number; angle:number; until:number; wave:string }[];
+  weapons: Record<string, WeaponDefinition>; enemies: CaveEnemy[]; floor: number; time: number;
+  effects: { x: number; y: number; text: string; until: number; kind: string }[];
+  cast: { kind: string; angle?: number; reach?: number; until: number; started: number } | null;
+  message: string; cleared: boolean; unlocked: number; equipped: string | null;
+  gate_open: boolean; legacy_passage: boolean; boss_first: boolean; spark_learned: boolean;
+  soups_used: number; attack_at: number; spark_at: number; soup_at: number;
+}
 export interface World extends MapData {
   interiors: Record<string, MapData>;
+  areas?: Record<string, MapData>;
+  travel_npcs?: (WorldObject & {
+    phase: number;
+    location: string;
+    walking: boolean;
+    activity: string;
+  })[];
   residents?: Resident[];
 }
 export interface Resident {
@@ -90,7 +118,29 @@ export interface Market {
     completed: boolean;
   }[];
 }
+export interface TravelOption {
+  completed: boolean;
+  id: string;
+  target: string;
+  label: string;
+  note: string;
+  minutes: number;
+  costs: Record<string, number>;
+  stamina: number;
+  destination: string | null;
+  arrival_minute: number;
+  reasons: string[];
+}
 export interface GameState {
+  village_combat?: { gate_open: boolean; legacy_passage: boolean; boss_first: boolean; equipped: string | null };
+  combat?: CombatView;
+  departure?: {
+    bridge_repaired: boolean;
+    rope_ready: boolean;
+    letter_delivered: boolean;
+    booking_day: number;
+  };
+  travel?: { day: number; options: TravelOption[] };
   world_clock?: {
     version?: number;
     start_minute?: number;
@@ -203,6 +253,8 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
+  | "armory" | "equipment" | "spellbook" | "cave" | "gate"
+  | "travel"
   | "sleep"
   | "neighbors"
   | "training"
@@ -278,6 +330,7 @@ export interface MapData {
   width: number;
   height: number;
   tile: number;
+  outdoor?: boolean;
   objects: WorldObject[];
   trees: number[][];
   obstacles: number[][];

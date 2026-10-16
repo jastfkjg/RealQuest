@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Clock3, Gift, Heart, MapPin, Users, HandHeart } from "lucide-react";
-import { sendCommand, getSessionIdentity } from "../services/api";
+import { sendCommand, getSessionIdentity, worldViewOwner } from "../services/api";
 import { serverNow, useGame } from "../stores/game";
 import {
   clockLabel,
@@ -51,17 +51,22 @@ export function VillageClock() {
 /** Server counts bounded real intervals only while this world view is active. */
 export function WorldClockLifecycle() {
   const panel = useGame((s) => s.panel);
-  const owner = useRef(crypto.randomUUID()).current;
-  const [visible, setVisible] = useState(!document.hidden && navigator.onLine);
+  const owner = useRef(worldViewOwner).current;
+  const [visible, setVisible] = useState(!document.hidden && document.hasFocus() && navigator.onLine);
   useEffect(() => {
-    const visibility = () => setVisible(!document.hidden && navigator.onLine);
+    const visibility = () => setVisible(!document.hidden && document.hasFocus() && navigator.onLine);
+    const blur = () => setVisible(false);
     document.addEventListener("visibilitychange", visibility);
     window.addEventListener("online", visibility);
     window.addEventListener("offline", visibility);
+    window.addEventListener("blur", blur);
+    window.addEventListener("focus", visibility);
     return () => {
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("online", visibility);
       window.removeEventListener("offline", visibility);
+      window.removeEventListener("blur", blur);
+      window.removeEventListener("focus", visibility);
     };
   }, []);
   useEffect(() => {

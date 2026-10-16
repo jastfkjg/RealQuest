@@ -54,7 +54,7 @@ def night_due(state, now):
     return total >= (day - 1) * 1440 + 1500 - 1e-7
 
 
-def finish_day(state, now, kind):
+def finish_day(state, now, kind, destination='home'):
     clock = state['world_clock']
     day = int(clock['elapsed'] / DAY_SECONDS) + 1
     before_hp, before_stamina = state['vitality']['current'], state['stamina']['current']
@@ -67,11 +67,11 @@ def finish_day(state, now, kind):
     clock['last_night'] = {'day': day, 'kind': kind, 'health_delta': state['vitality']['current'] - before_hp,
         'stamina_delta': state['stamina']['current'] - before_stamina, 'at': now}
     state['stamina']['updated_at'] = now
-    state['location'], state['position'] = 'home', {'x': 288, 'y': 152}
+    state['location'], state['position'] = (destination if kind == 'sleep' else 'home'), {'x': 288, 'y': 152}
     state['npc_encounter'] = None
     state['last_rest'] = now
     if kind == 'sleep':
-        if 'rested_home' not in state['events']:
+        if destination == 'home' and 'rested_home' not in state['events']:
             state['events'].append('rested_home')
         return f'睡到第 {day + 1} 天 06:00，体力已补满，生命恢复 {state["vitality"]["current"] - before_hp} 点。'
     return f'凌晨 01:00 体力不支，被送回家中。生命 −{before_hp - state["vitality"]["current"]}，体力未恢复；现在是第 {day + 1} 天 06:00。'

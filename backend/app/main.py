@@ -75,6 +75,10 @@ def snapshot(state, **extra):
     view['market'] = market_view(view, now)
     view['npc_social'] = social_view(view, view['market']['date'])
     view['sleep_rules'] = sleep_rules()
+    from .journey import quotes
+    view['travel'] = quotes(view, now)
+    from .combat import combat_view
+    view['combat'] = combat_view(view, now)
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)
@@ -130,12 +134,21 @@ def command(body: Command, request: Request):
                 raise HTTPException(409, '请求标识已经用于不同操作')
             return snapshot(player.state, message=previous.changes['message'], replayed=True, save_id=player.id)
         before = upgrade_state(player.state)
+        tick_receipt = before['village_combat'].get('tick_receipt', {})
+        if body.action == 'cave_tick' and tick_receipt.get('request_id') == body.request_id:
+            if tick_receipt['fingerprint'] != fingerprint:
+                raise HTTPException(409, '请求标识已经用于不同操作')
+            return snapshot(player.state, message='', replayed=True, save_id=player.id)
         updated = copy.deepcopy(before)
         try:
             message = apply(updated, body.action, body.data, time.time())
         except RuleError as error:
             raise HTTPException(422, str(error))
         updated['revision'] += 1
+        if body.action == 'cave_tick':
+            # The ordered encounter sequence rejects old inputs; retain only the
+            # latest retry receipt instead of a ledger row for every network tick.
+            updated['village_combat']['tick_receipt'] = {'request_id': body.request_id, 'fingerprint': fingerprint}
         player.state = updated
         changes = {'message': message, 'xp': updated['xp'] - before['xp'], 'inventory': {key: value-before['inventory'].get(key,0) for key,value in updated['inventory'].items() if value != before['inventory'].get(key,0)}, 'revision': updated['revision']}
         changes.update(health_points=updated['health_points'] - before['health_points'],
@@ -148,7 +161,8 @@ def command(body: Command, request: Request):
         changes.update(vitality_max=updated['vitality']['max'] - before['vitality']['max'],
                        skill_growth={key: value - before['skill_growth'][key]
                                      for key, value in updated['skill_growth'].items()})
-        db.add(Receipt(id=str(uuid.uuid4()), player_id=player.id, request_id=body.request_id, fingerprint=fingerprint, action=body.action, changes=changes, created_at=time.time()))
+        if body.action != 'cave_tick' or changes['inventory']:
+            db.add(Receipt(id=str(uuid.uuid4()), player_id=player.id, request_id=body.request_id, fingerprint=fingerprint, action=body.action, changes=changes, created_at=time.time()))
         return snapshot(updated, message=message, replayed=False, save_id=player.id)
 
 class RecoveryInput(BaseModel):

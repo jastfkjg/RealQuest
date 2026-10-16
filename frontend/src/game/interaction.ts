@@ -14,6 +14,18 @@ export function interactionFor(
   reason?: string;
 } {
   switch (obj.kind) {
+    case "armory": return { label: "购买 / 打造武器", panel: "armory" };
+    case "spellbook": return { label: "研习火花术", panel: "spellbook" };
+    case "cave": return { label: obj.id === "cave_entry" ? "查看山洞 / 准备进入" : "查看洞内路标", panel: "cave" };
+    case "passage":
+    case "travel":
+    case "travel_npc":
+      if (obj.id === "village_departure" && !state.combat?.gate_open)
+        return { label: "查看封路石门", panel: "gate" };
+      return {
+        label: obj.kind === "travel_npc" ? "交谈 / 旅途安排" : "查看旅途安排",
+        panel: "travel",
+      };
     case "building":
       return { label: "进入", command: "enter" };
     case "exit":

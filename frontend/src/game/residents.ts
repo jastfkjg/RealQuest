@@ -81,11 +81,16 @@ export const residentPositions = (
   world: World,
   state: GameState,
   now: number,
-) => (world.residents || []).map((r) => residentPosition(r, state, now));
+) => [
+  ...(world.residents || []).map((r) => residentPosition(r, state, now)),
+  ...(world.travel_npcs || []),
+];
 export const residentPlace = (world: World, location: string) =>
   location === "overworld"
     ? "村庄户外"
-    : world.interiors[location]?.name || location;
+    : world.areas?.[location]?.name ||
+      world.interiors[location]?.name ||
+      location;
 export function atlasObjects(
   world: World,
   state: GameState,
@@ -93,11 +98,15 @@ export function atlasObjects(
 ): WorldObject[] {
   return [
     ...world.objects.filter((o) => o.kind !== "npc"),
-    ...residentPositions(world, state, now).map((r) => {
-      const door =
-        r.location !== "overworld" &&
-        world.objects.find((o) => o.id === r.location);
-      return door ? { ...r, x: door.x, y: door.y } : r;
-    }),
+    ...residentPositions(world, state, now)
+      .filter(
+        (r) => !["crossing", "mountain", "city", "inn"].includes(r.location),
+      )
+      .map((r) => {
+        const door =
+          r.location !== "overworld" &&
+          world.objects.find((o) => o.id === r.location);
+        return door ? { ...r, x: door.x, y: door.y } : r;
+      }),
   ];
 }

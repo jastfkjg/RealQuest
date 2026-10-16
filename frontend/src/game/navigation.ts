@@ -8,13 +8,14 @@ import type {
 import { serverNow } from "../stores/game";
 import { residentPositions } from "./residents";
 
+export const mapById = (world: World, id: string): MapData =>
+  id === "overworld" ? world : world.areas?.[id] || world.interiors[id];
 export const currentMap = (world: World, state: GameState): MapData => ({
-  ...(state.location === "overworld" ? world : world.interiors[state.location]),
+  ...mapById(world, state.location),
   objects: [
-    ...(state.location === "overworld"
-      ? world
-      : world.interiors[state.location]
-    ).objects.filter((o) => o.kind !== "npc"),
+    ...mapById(world, state.location).objects.filter(
+      (o) => !["npc", "travel_npc"].includes(o.kind),
+    ),
     ...residentPositions(world, state, serverNow()).filter(
       (r) => r.location === state.location,
     ),
@@ -32,9 +33,30 @@ export function accessibleTarget(
   const map = currentMap(world, state);
   if (state.location === target.mapId)
     return map.objects.find((o) => o.id === target.targetId) || null;
-  if (state.location !== "overworld")
-    return map.objects.find((o) => o.kind === "exit") || null;
-  return world.objects.find((o) => o.id === target.mapId) || null;
+  // Search the actual connected doors. This only selects a bearing, never moves
+  // the player or bypasses a fare / mountain requirement.
+  const queue = [
+    { id: state.location, first: null as (typeof map.objects)[number] | null },
+  ];
+  const seen = new Set([state.location]);
+  while (queue.length) {
+    const node = queue.shift()!;
+    for (const obj of mapById(world, node.id).objects) {
+      const destination =
+        obj.destination ||
+        (obj.kind === "building"
+          ? obj.id
+          : obj.kind === "exit"
+            ? "overworld"
+            : null);
+      if (!destination || seen.has(destination)) continue;
+      const first = node.first || obj;
+      if (destination === target.mapId) return first;
+      seen.add(destination);
+      queue.push({ id: destination, first });
+    }
+  }
+  return null;
 }
 export function questTarget(
   quest: Quest,
@@ -52,6 +74,17 @@ export function questTarget(
     };
   const step = quest.checks.findIndex((v) => !v);
   const targets: Record<string, NavigationTarget[]> = {
+    leave_valley: [
+      { mapId: "overworld", targetId: "cave_entry" },
+      { mapId: "overworld", targetId: "library" },
+      { mapId: "overworld", targetId: "village_departure" },
+      { mapId: "overworld", targetId: "village_departure" },
+      { mapId: "crossing", targetId: "river_bridge" },
+      { mapId: "mountain", targetId: "mountain_pass" },
+      { mapId: "inn", targetId: "lanya" },
+      { mapId: "inn", targetId: "inn_bed" },
+      { mapId: "overworld", targetId: "board" },
+    ],
     market_neighbor: [
       { mapId: "overworld", targetId: "shop" },
       { mapId: "shop", targetId: "mira" },

@@ -61,7 +61,7 @@ function readQuickItems(): string[] {
       saved.length === 4 &&
       new Set(saved).size === 4 &&
       saved.every((item) =>
-        ["seed", "wood", "stone", "crop", "plank"].includes(item),
+        Object.hasOwn(itemNames, item) && item !== "gold",
       )
     )
       return saved;
@@ -185,6 +185,13 @@ export const useGame = create<Store>((set, get) => ({
     try {
       const reply = await sendCommand(action, data);
       get().accept(reply);
+      // Combat polling stays quiet; an actual defeat needs an outcome after
+      // the cave HUD disappears. Morning outcomes retain their own UI owner.
+      if (
+        silent && action === "cave_tick" && reply.message &&
+        reply.state.location !== data.location &&
+        reply.state.world_clock?.last_night?.day === previousMorning
+      ) set({ notice: reply.message, noticePanel: null });
       if (["track_quest", "quest_accept", "quest_claim"].includes(action))
         set({ navigation: null });
       if (!silent)
@@ -225,7 +232,12 @@ export const useGame = create<Store>((set, get) => ({
               ? "#training"
               : ""),
       );
-    set({ panel, selected: selected || null, error: "" });
+    set({
+      panel,
+      selected: selected || null,
+      error: "",
+      ...(panel === "travel" ? { notice: "", noticePanel: null } : {}),
+    });
   },
   setNearest: (nearest) => {
     if (get().nearest?.id !== nearest?.id) set({ nearest });

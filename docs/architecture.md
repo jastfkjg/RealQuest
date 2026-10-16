@@ -1,5 +1,11 @@
 # 架构
 
+## 村庄战斗（2026-10-16）
+
+`combat.py` 保存追加式 `village_combat` 状态与5层遭遇；`combat_world.py` 提供固定碰撞和锚点。客户端只发送单位方向、瞄准、动作意图与世界视图owner／遭遇epoch／连续seq，服务端按实际接收间隔（单次最多0.25秒、断流丢弃）子步推进移动、攻击预兆、伤害、掉落和冷却。不同地图、旧遭遇、乱序或错误owner的输入被拒绝，非战斗移动命令不可在洞内改位置。菜单、失焦、Life Mode与后台暂停同一世界和战斗时钟。
+
+武器、配方、学习、补给与永久石门复用事务和幂等请求；洞内普通tick仅保存最后一张重试凭证，产生物品变化的tick仍写入Receipt，避免每秒多条完整流水。已处理seq不能重放；首胜魔法石与开门各只结算一次。掉落不产生现实成长点数。旧旅行记录仅兼容通行，不伪造Boss或魔法石。正式实现与证据见[任务28](tasks/28-village-combat.md)。
+
 ## 日夜与睡眠（2026-10-16）
 
 `backend/app/daynight.py` 维护唯一的世界时钟与跨夜结算；村民作息从同一时钟读数。`world_clock.version=2` 增补06:00起点、游戏日与最近一次跨夜结果，沿用累计有效秒数和有主视图标识的10秒租期。每3秒确认一次活跃时间；过期租期的未确认尾段直接丢弃，不在重连时补算离线昏倒。新视图接管也不结算旧视图尾段，旧视图不能暂停新的视图。阅读、Life Mode、后台、离页和断联停止世界推进，现实委托／专注计时保持原语义。
@@ -90,3 +96,9 @@ Legacy study/exercise completion helpers retain progress and provenance without 
 ## Character point allocation — 2026-10-14
 
 Additive `vitality` (current/max) and `skill_growth` (planting/ranching/building) live in the JSON save; no SQL schema migration. `character_growth_options` is a snapshot-only server quote containing currency, current/next value, exact cost and expected investment count. Health spending accepts an optional vitality/stamina target (defaults to stamina for existing callers); skills spend target-level points. Transaction locks, expected investment counts and existing idempotent receipts guard concurrency/retries. Receipt deltas include vitality capacity and skill levels. No XP conversion, new reward source or skill effect is introduced. See task 14 for evidence.
+
+## Departure and city lodging — 2026-10-16
+
+`journey_world.py` adds three exterior areas and two static service NPCs without changing old bridge colliders, resident schedules or semantic IDs. `world.py` publishes these as `areas` / `travel_npcs` and adds the inn interior. `journey.py` derives travel quotes from authoritative inventory, current stamina, game day and progress; actions revalidate target proximity, expected location/day, costs and arrival before01:00 inside the existing receipt/player transaction. Route navigation traverses real door destinations to choose the next bearing; it never performs a mutation.
+
+Additive `departure` JSON fields retain bridge/rope/letter flags, game-day work limits and the paid booking day. No SQL migration is needed. Bookings remain valid for their game night; inn sleep requires the booked day and wakes in the inn. Fainting always returns home under the existing rules. Game-hour travel never advances real-world crop, recovery, commission or reward-quota timestamps. The current independently verified travel slice unlocks after settling in; the later-planned village combat prerequisite is not implemented or certified by this change. See task27 for that integration boundary.

@@ -1887,5 +1887,38 @@
     "status": "implemented_candidate_owner_render_review_pending",
     "binding": "Independent npc-id sheets/figures/portraits; never indexed through player appearance IDs",
     "report": "docs/tasks/25-village-residents.md"
+  },
+  "departure_art": {
+    "manifest": "docs/art/departure-art-v1.json",
+    "source": "Four original built-in imagegen cutouts; exact prompts under docs/art/generated/departure-v1",
+    "binding": "Two independent static NPC front frames, matching figures/portraits; original cliff variants and rowboat; all controls are DOM/CSS with existing Hearthwood tokens.",
+    "status": "implemented_candidate_owner_render_review_pending",
+    "report": "docs/tasks/27-departure-city.md"
+  },
+  "village_combat": {
+    "source": "Original project-authored procedural canvas/Phaser geometry and inline SVG; no external source pack or generation service",
+    "new_runtime_assets": [],
+    "bindings": [
+      "frontend/src/game/cave.ts",
+      "frontend/src/game/items.ts",
+      "frontend/src/components/CombatPanels.tsx",
+      "frontend/src/combat.css"
+    ],
+    "dimensions": {
+      "cave_world": [
+        640,
+        448
+      ],
+      "procedural_canvas": [
+        1280,
+        896
+      ],
+      "item_symbol_viewbox": [
+        64,
+        64
+      ]
+    },
+    "status": "Playable candidate; owner art and balance acceptance pending. No raster monster animation sheet is claimed.",
+    "report": "docs/tasks/28-village-combat.md"
   }
 }

@@ -1,0 +1,146 @@
+{
+  "provenance": "Original project assets generated with built-in imagegen; no third-party references supplied.",
+  "processing": "tools/build_departure_art.py; nearest neighbour packing; alpha threshold 160; actors 54px tall / 63px baseline, front frame only; geography sprites two source pixels per world unit",
+  "rebuild": "tools/build_departure_art.py",
+  "rebuild_sha256": "f9b78ae0e0d8bd2471cb1af44816a85a5c6f8cdd4c2487cc1921e4ef22e31940",
+  "prompts": [
+    {
+      "path": "docs/art/generated/departure-v1/prompts.json",
+      "sha256": "23b17b0115a22e694a9d733a8e7522876f06c9f334e6c48bbdd4bf2f8c1b308a"
+    },
+    {
+      "path": "docs/art/generated/departure-v1/scenery-prompts.json",
+      "sha256": "57d097c44fd850100433720490f40abd236447becf160b1bd43b5d3adba00632"
+    }
+  ],
+  "assets": [
+    {
+      "path": "frontend/public/assets/hearthwood/residents/adu-figure.png",
+      "dimensions": [
+        48,
+        64
+      ],
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "source": "docs/art/generated/departure-v1/adu-source.png",
+      "frames": null
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "dimensions": [
+        48,
+        64
+      ],
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "source": "docs/art/generated/departure-v1/adu-source.png",
+      "frames": 1
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/adu-portrait.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "sha256": "dafecf5f7086cd418a93e1b313a4633490b58bd65e90486670e816623c9aab47",
+      "source": "docs/art/generated/departure-v1/adu-source.png",
+      "frames": null
+    },
+    {
+      "path": "docs/art/generated/departure-v1/adu-source.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "c0cc3df02fd8e660fa4fdc8a582eca978137d0ff11e57949011acce5f6219c90"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/lanya-figure.png",
+      "dimensions": [
+        48,
+        64
+      ],
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "source": "docs/art/generated/departure-v1/lanya-source.png",
+      "frames": null
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/lanya-actor.png",
+      "dimensions": [
+        48,
+        64
+      ],
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "source": "docs/art/generated/departure-v1/lanya-source.png",
+      "frames": 1
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/lanya-portrait.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "sha256": "fa32e86fa7307d72903195359aab3252d2c9f60e0617ee69a79d8744ca140877",
+      "source": "docs/art/generated/departure-v1/lanya-source.png",
+      "frames": null
+    },
+    {
+      "path": "docs/art/generated/departure-v1/lanya-source.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "fdf5d69fc7d28d18a3f79ad00a4271538b11f976d665fe725956c1013e0244e0"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/journey/cliff-448.png",
+      "dimensions": [
+        448,
+        224
+      ],
+      "sha256": "e49ceaef40e95d7936c59f1c32bff960a56b24cf80b75bdc2b3a3384bd6550f7",
+      "source": "docs/art/generated/departure-v1/cliff-source.png"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/journey/cliff-576.png",
+      "dimensions": [
+        576,
+        256
+      ],
+      "sha256": "9f893b591e10768fe21830a584f13fd4473764d62b63d830344960ee7c88d7d8",
+      "source": "docs/art/generated/departure-v1/cliff-source.png"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/journey/cliff-224.png",
+      "dimensions": [
+        224,
+        144
+      ],
+      "sha256": "8e62174ea443539f9a583277d12425be64d1a4805aea7f53e4f429c4e8024a4e",
+      "source": "docs/art/generated/departure-v1/cliff-source.png"
+    },
+    {
+      "path": "docs/art/generated/departure-v1/cliff-source.png",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "sha256": "4528ca27bf8cc51254eeef1c0b8214b724adcba0768c5f986818b01e84054a49"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/journey/boat-72.png",
+      "dimensions": [
+        72,
+        176
+      ],
+      "sha256": "534f95555e786c39936380ad7547f352fe7a00bffa403376d0d5eb29c11e5c2e",
+      "source": "docs/art/generated/departure-v1/boat-source.png"
+    },
+    {
+      "path": "docs/art/generated/departure-v1/boat-source.png",
+      "dimensions": [
+        887,
+        1774
+      ],
+      "sha256": "143579f22ff323889b9a44d0707514f00f6efff84c5cfae694f0d659b1d495eb"
+    }
+  ]
+}

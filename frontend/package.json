@@ -31,7 +31,9 @@
     "test:market": "node scripts/market-smoke.mjs",
     "test:residents": "node scripts/residents-smoke.mjs",
     "test:sleep": "node scripts/day-night-smoke.mjs",
-    "test:residents:visual": "node scripts/residents-visual.mjs"
+    "test:residents:visual": "node scripts/residents-visual.mjs",
+    "test:departure": "node scripts/departure-smoke.mjs",
+    "test:combat": "node scripts/village-combat-smoke.mjs && node scripts/village-combat-controls.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

@@ -45,7 +45,16 @@ export function InventoryPanel() {
   let actionLabel = "查看相关委托",
     action = () => open("journal"),
     disabled = false;
-  if (item === "seed") {
+  if (state.combat?.weapons[item]) {
+    actionLabel = "检查并切换装备";
+    action = () => open("equipment");
+  } else if (item === "gate_stone") {
+    actionLabel = "标记东行石门";
+    action = () => navigate({ mapId: "overworld", targetId: "village_departure" });
+  } else if (["gel","shell","crystal","soup"].includes(item)) {
+    actionLabel = "标记工坊武备台";
+    action = () => navigate({ mapId: "workshop", targetId: "armory_counter" });
+  } else if (item === "seed") {
     actionLabel = plot && nearby(plot.id) ? "种下一颗种子" : "标记家园农田";
     disabled = !count || !plot;
     action = () => {

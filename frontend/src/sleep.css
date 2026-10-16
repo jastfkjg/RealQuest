@@ -180,3 +180,13 @@
     font-size: 14px;
   }
 }
+/* The morning result owns the short-screen HUD until dismissed. */
+@media (max-height: 550px) {
+  .daybreak-note {
+    z-index: 30;
+  }
+  .playing:has(.daybreak-note) .quest-compass,
+  .playing:has(.daybreak-note) .navigation-hint {
+    visibility: hidden;
+  }
+}

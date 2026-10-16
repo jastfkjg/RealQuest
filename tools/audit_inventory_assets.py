@@ -75,6 +75,19 @@ for art_group in ('village_art', 'detail_art', 'encounter_art', 'market_art', 'c
                     assert all(p.getbbox() and p.getbbox()[3] < 64 for p in poses), path
                     assert poses[1].tobytes() != poses[3].tobytes(), path
         village_entries.append(path)
+# Departure characters are intentionally static single-frame actors, rather
+# than claiming the four-direction walk cycles required of village residents.
+if manifest.get('departure_art'):
+    departure=json.loads((ROOT/manifest['departure_art']['manifest']).read_text())
+    assert hashlib.sha256((ROOT/departure['rebuild']).read_bytes()).hexdigest()==departure['rebuild_sha256']
+    for entry in departure['prompts']+departure['assets']:
+        path=ROOT/entry['path']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'],path
+        if 'dimensions' in entry:
+            with Image.open(path) as image:assert list(image.size)==entry['dimensions'],path
+            village_entries.append(path)
+    figures=[ROOT/f'frontend/public/assets/hearthwood/residents/{id}-figure.png' for id in ['lia','noah','mira','adu','lanya']]
+    assert len({hashlib.sha256(p.read_bytes()).hexdigest() for p in figures})==5,'NPC figures must remain unique'
 for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', []) + manifest.get('original_item_assets', [])] + village_entries:
     with Image.open(path) as source:
         rgba = source.convert('RGBA')
