@@ -1,5 +1,13 @@
 # RealQuest Asset Plan and Provenance
 
+## Cocos shared-world migration — phases2–3
+
+The current binding manifest supersedes the initial prototype counts:9 canonical code modules from `shared/game`,52 unchanged PNGs totaling2,199,403 bytes. Added bindings reuse existing room furniture, market facade/counter and five remaining actor sheets; provenance stays in this manifest and exact bytes/paths/hashes are in `clients/cocos/asset-bindings.json`. No new raster, font, upstream download or source-pack redistribution. Rooms use the unchanged480×368 footprints/collisions and furniture source pixels. Native Cocos ground/plank drawing, landmark markers and two simple travel-resident shapes are provisional presentation gaps; full Web art parity is not certified. See [task35](../tasks/35-cocos-shared-world.md).
+
+## Cocos local migration prototype — 2026-10-16
+
+No new artwork, font, source processing or external pack. The independent `clients/cocos/` project copies 28 existing PNGs (1,130,268 bytes) and 7 protocol/logic source files through `clients/cocos/tools/sync.mjs`; exact source/output hashes and destinations are in `clients/cocos/asset-bindings.json`. SpriteFrames use explicit untrimmed nearest-neighbor importer metadata. Static source images are unchanged; no source packs enter the Cocos bundle. The initial village ground and simple farm patches are native Cocos Graphics using existing world coordinates, not a claim of finished world-art parity. The bootstrap scene derives from the official Creator 3.8.8 bundled 2D template. Local desktop/landscape renders are candidates; platform/device and owner acceptance are tracked in task34.
+
 ## Next departure journal — 2026-10-16
 
 No new raster, font, audio, downloaded pack or generated source. A scoped native React/CSS journal reuses the original village arrival vignette, backpack/book PNGs, magic emblem and registry item symbols unchanged. Cloth stitching, book binding, route knots, paper bookmarks and the return slip are CSS/DOM; Chinese text remains native. Bindings and the empty new-asset list are recorded under `next_departure_journal` in the manifest. Actual render approval is pending; evidence and limits: [task33](../tasks/33-next-departure.md).

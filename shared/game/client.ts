@@ -1,0 +1,156 @@
+import type { Reply, GameState, World } from './protocol';
+import { acceptClock } from './clock';
+export type Session = { token: string; saveId: string };
+export type Pending = { version: 1; saveId: string; body: { action: string; data: Record<string, unknown>; request_id: string; save_id: string } };
+export type RecoveryFile = { format: 'realquest-recovery'; version: 1; recovery_key: string; character_name?: string };
+export interface Transport {
+  request(path: string, method: string, body?: unknown, token?: string): Promise<any>;
+  getSession(): Session | null;
+  setSession(session: Session): void;
+  getPending(saveId: string): Pending | null;
+  setPending(saveId: string, pending: Pending | null, requestId?: string): void;
+  uuid(): string;
+}
+export class TransportError extends Error {}
+export class ApiError extends Error { constructor(public status: number, message: string) { super(message); } }
+export function readRecovery(text: string): RecoveryFile {
+  let value: any;
+  try { value = JSON.parse(text); } catch { throw new Error('请选择原版导出的旅程凭证 JSON 文件'); }
+  if (value?.format !== 'realquest-recovery' || value.version !== 1 || !/^[A-Za-z0-9_-]{43}$/.test(value.recovery_key || ''))
+    throw new Error('这不是兼容的旅程凭证；数值存档不能用于恢复');
+  return value;
+}
+export class Client {
+  state: GameState | null = null;
+  world: World | null = null;
+  saveId = '';
+  token = '';
+  status: 'disconnected' | 'connecting' | 'ready' | 'saving' | 'uncertain' | 'unauthorized' | 'offline' = 'disconnected';
+  pending: Pending | null = null;
+  private queue: Promise<unknown> = Promise.resolve();
+  private queued = 0;
+  constructor(private transport: Transport, private changed: () => void) {}
+  private validate(reply: Reply) {
+    if (!reply?.save_id || !reply.state || !Number.isFinite(reply.state.revision) || !Number.isFinite(reply.server_time)) throw new TransportError('服务器响应不完整，请重连确认');
+  }
+  private accept(reply: Reply) {
+    this.validate(reply);
+    if (this.saveId && reply.save_id !== this.saveId) throw new Error('存档已切换，请重新连接。');
+    this.saveId = reply.save_id!;
+    if (!this.state || reply.state.revision >= this.state.revision) {
+      this.state = reply.state;
+      acceptClock(reply.server_time);
+    }
+    this.world = reply.world || this.world;
+    this.changed(); return reply;
+  }
+  private failed(error: unknown) {
+    this.status = error instanceof ApiError && error.status === 401 ? 'unauthorized' : this.pending ? 'uncertain' : 'offline';
+    this.changed();
+  }
+  async boot() {
+    this.status = 'connecting'; this.changed();
+    try {
+      const session = this.transport.getSession();
+      this.token = session?.token || ''; this.saveId = session?.saveId || '';
+      const reply = await this.transport.request('client-session', 'POST', undefined, this.token);
+      this.validate(reply);
+      if (this.saveId && reply.save_id !== this.saveId) throw new Error('会话与本机存档标识不一致，已停止连接');
+      // Atomic credential record, including migration from the phase-1 token key.
+      this.transport.setSession({ token: reply.session_token || this.token, saveId: reply.save_id });
+      this.token = reply.session_token || this.token;
+      this.accept(reply);
+      this.loadPending();
+      while(this.pending)await this.sendPending();
+      this.status = this.pending?'uncertain':'ready'; this.changed(); return reply;
+    } catch (e) { this.failed(e); throw e; }
+  }
+  private checkSession() {
+    const session=this.transport.getSession();
+    if(!session || (session.saveId && session.saveId!==this.saveId))throw new ApiError(401,'此页旅程已在另一页面切换，请刷新后继续');
+  }
+  private loadPending() {
+    this.pending=this.transport.getPending(this.saveId);
+    const p=this.pending;
+    if(p && (p.version!==1||p.saveId!==this.saveId||p.body?.save_id!==this.saveId||typeof p.body?.request_id!=='string'||!p.body.request_id))throw new Error('待确认操作格式异常，请保留本机数据并检查');
+  }
+  private async sendPending() {
+    const pending = this.pending!;
+    this.status = 'saving'; this.changed();
+    try {
+      let reply: Reply;
+      try { reply = await this.transport.request('command', 'POST', pending.body, this.token); }
+      catch (e) {
+        if (!(e instanceof TransportError) && !(e instanceof ApiError && e.status >= 500)) throw e;
+        reply = await this.transport.request('command', 'POST', pending.body, this.token);
+      }
+      this.accept(reply);
+      this.transport.setPending(this.saveId, null, pending.body.request_id); this.loadPending();
+      this.status = 'ready'; this.changed(); return reply;
+    } catch (e) {
+      if (e instanceof ApiError && e.status >= 400 && e.status < 500 && e.status !== 401) {
+        this.transport.setPending(this.saveId, null, pending.body.request_id); this.loadPending();
+        this.status = 'ready'; this.changed();
+      } else this.failed(e);
+      throw e;
+    }
+  }
+  command(action: string, data: Record<string, unknown> = {}) {
+    if (!this.state || !this.token || !['ready','saving'].includes(this.status)) return Promise.reject(new Error('尚未连接存档'));
+    const saveId = this.saveId;
+    this.queued++;
+    const run = async () => {
+      try{this.checkSession();}catch(e){this.failed(e);throw e;}
+      this.loadPending();
+      if (this.pending) {this.status='uncertain';this.changed();throw new Error('上一操作结果待确认，请先重连');}
+      if (saveId !== this.saveId) throw new Error('存档已切换，已取消旧操作');
+      const clock = this.state!.world_clock;
+      const day = clock ? Math.floor(clock.elapsed / clock.day_seconds) + 1 : undefined;
+      const pending: Pending = { version: 1, saveId, body: { action, data: ['move','gather','plant','harvest'].includes(action) ? { world_day: day, ...data } : data, request_id: this.transport.uuid(), save_id: saveId } };
+      // No mutation may leave this device before its retry identity is durable.
+      this.transport.setPending(saveId, pending); this.pending = pending;
+      return this.sendPending();
+    };
+    const result = this.queue.then(run).finally(() => { this.queued--; });
+    this.queue = result.catch(() => undefined); return result;
+  }
+  async reconnect() {
+    await this.queue;
+    try {
+      this.loadPending();
+      while(this.pending)await this.sendPending();
+      return await this.refresh();
+    } catch (e) { this.failed(e); throw e; }
+  }
+  async refresh() {
+    try {
+      this.checkSession();
+      const reply = this.accept(await this.transport.request('state', 'GET', undefined, this.token));
+      if (!this.pending && !this.queued) this.status = 'ready'; this.changed(); return reply;
+    } catch (e) { this.failed(e); throw e; }
+  }
+  async previewRecovery(file: RecoveryFile) {
+    if(this.saveId)this.loadPending();
+    if (this.queued) throw new Error('请等待当前保存完成');
+    return this.transport.request('recovery-preview', 'POST', { recovery_key: file.recovery_key });
+  }
+  async restore(file: RecoveryFile) {
+    if(this.saveId)this.loadPending();
+    if (this.queued) throw new Error('请等待当前保存完成');
+    const reply = await this.transport.request('client-recover', 'POST', { recovery_key: file.recovery_key });
+    this.validate(reply);
+    if(this.pending && reply.save_id !== this.saveId)throw new Error('请先用当前旅程的凭证确认待保存操作，再切换旅程');
+    // If storage rejects, keep the current journey fully intact.
+    this.transport.setSession({ token: reply.session_token, saveId: reply.save_id });
+    this.token = reply.session_token; this.saveId = reply.save_id!;
+    this.state = null; this.world = null;
+    this.accept(reply);
+    while(this.pending)await this.sendPending();
+    this.status = 'ready'; this.changed(); return reply;
+  }
+  async recoveryFile(): Promise<RecoveryFile> {
+    this.checkSession();this.loadPending();
+    if (this.pending || this.queued) throw new Error('请先确认当前旅程的待保存操作');
+    return this.transport.request('recovery-file', 'POST', undefined, this.token);
+  }
+}

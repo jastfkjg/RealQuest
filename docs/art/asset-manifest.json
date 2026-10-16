@@ -2016,5 +2016,28 @@
     ],
     "status": "Implemented candidate; final evidence and owner actual-render acceptance tracked separately",
     "report": "docs/tasks/33-next-departure.md"
+  },
+  "cocos_local_spike": {
+    "status": "local_prototype_candidate_pending_owner_and_platform_review",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "source_images_modified": false,
+    "new_artwork": [],
+    "runtime_png_count": 28,
+    "runtime_png_bytes": 1130268,
+    "processing": "byte-identical copies; explicit untrimmed nearest-neighbor SpriteFrame metadata",
+    "scene_template": "official Creator 3.8.8 bundled scene-2d template",
+    "scope": "scoped Cocos Graphics ground, not full visual parity"
+  },
+  "cocos_phase23": {
+    "status": "candidate_local_verified",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "canonical_logic": "shared/game",
+    "code_bindings": 9,
+    "png_bindings": 52,
+    "png_bytes": 2199403,
+    "source_images_modified": false,
+    "new_raster_or_font_assets": false,
+    "presentation": "Existing artwork at source pixel ratios, native Cocos grounds/room planks and temporary travel-resident shapes. World art parity and owner render approval remain open.",
+    "task": "docs/tasks/35-cocos-shared-world.md"
   }
 }

@@ -1,5 +1,26 @@
 # Hearthwood Review Checklist
 
+## Cocos shared core and world — phases2–3
+
+- [x] Original Web compatible helper entry points/build retained; extracted protocol/helpers checked against original source semantics. Server rules, migrations and source art preserved.229 backend tests and11 shared-core groups pass.
+- [x] Original Web native character creation and credential restoration interoperate with Cocos preview/cancel/confirm/export; indoor saves, appearance IDs, resource counts, storage and timers remain server-authoritative.
+- [x] Browser verification includes five real door enter/exits, home storage/rest, ferry fare/return, city/inn, locked departure, two lost responses + reload replay, failed/retried planting, modal ownership, blur and real DPR2 touch.
+- [x] Actual desktop1440×900, landscape844×390/740×360 and resize-to1920×1080 captures inspected. Fixed both Canvas alignment and bottom-level render-window resize; control coordinates alone did not prove correct rendering.
+- [x]52 unchanged PNGs/9 generated code modules have61 checked bindings. No source-image modification, numerical save import, real player reset, deployment or fake platform login.
+- [ ] Full combat/advanced feature panels/Life editing, world-art parity, owner render/feel acceptance, platform accounts/SDK/file adapters, physical devices, Safari/screen readers/text scaling/safe areas/endurance and release performance remain open.
+
+Commands, screenshots, runtime ownership and limitations: [task35](../tasks/35-cocos-shared-world.md).
+
+## Cocos local migration prototype — 2026-10-16
+
+- [x] Independent actual Creator3.8.8 project imports/builds for Web; original Web production build and227 backend tests pass. Explicit bearer guests preserve original cookies and saves; malformed credentials cannot silently replace a journey.
+- [x] Browser flow: actual movement, rejected gathering, committed/lost-response replay, exact3wood/4stamina, inventory selection and non-consuming quick assignment, real planting, reload preservation and actual NPC greeting. NPC schedule test uses only the explicitly asserted isolated test DB.
+- [x] Desktop1440×900 and landscape844×390 layout, DPR2 real touch start/release/selection/return, keyboard ownership and direct read-only Life access pass. Latest representative screenshots inspected. Full original-village visual parity is not claimed.
+- [x] Existing source images remain unchanged;35 deterministic source bindings include28 PNGs and7 code files. No new raster/font/external pack, no player-data reset or deployment.
+- [ ] Platform AppIDs/account verification, developer-tool and physical-device tests, Android packaging, Safari, screen-reader semantics, native text scaling, safe-area and endurance acceptance remain unverified. Owner render/feel review pending.
+
+Scope, reproducible commands, evidence and cleanup: [task34](../tasks/34-cocos-local-spike.md).
+
 ## Next departure and return guidance — 2026-10-16
 
 - [x] Actual workshop recap connects to a distinct cloth/linen journal with equipment, cave and growth bookmarks. State-aware tracker/manual menu access, dismissed guidance and manually tracked side quests checked. Existing art/asset bytes, rewards and server rules preserved.

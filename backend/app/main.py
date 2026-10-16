@@ -2,6 +2,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import secrets
 import time
 import uuid
@@ -41,7 +42,16 @@ class Command(BaseModel):
     save_id: str | None = Field(default=None, min_length=36, max_length=36)
 
 def token_hash(request):
-    token = request.cookies.get(COOKIE)
+    # Explicit client credentials take precedence; never fall back to another
+    # player's browser cookie after a malformed/expired Authorization header.
+    authorization = request.headers.get('authorization')
+    if authorization is not None:
+        match = re.fullmatch(r'Bearer ([A-Za-z0-9_-]{43})', authorization)
+        if not match:
+            raise HTTPException(401, '客户端会话格式无效，请重新连接原存档')
+        token = match.group(1)
+    else:
+        token = request.cookies.get(COOKIE)
     if not token:
         raise HTTPException(401, '游客会话已失效，请刷新页面重新进入')
     return hashlib.sha256(token.encode()).hexdigest()
@@ -113,6 +123,29 @@ def state(request: Request):
     with Session() as db:
         player = player_for(db, request)
         return snapshot(player.state, save_id=player.id)
+
+@app.post('/api/client-session')
+def client_session(request: Request):
+    """Opt-in guest transport for Cocos. Does not replace the Web cookie.
+
+    This is not WeChat/Douyin/Bilibili account verification. Platform account
+    exchange and explicit account linking remain separate migration work.
+    """
+    with Session.begin() as db:
+        lock_sqlite(db)
+        extra = {}
+        if request.headers.get('authorization') is not None:
+            player = player_for(db, request, lock=True)
+        else:
+            token = secrets.token_urlsafe(32)
+            player = Player(id=str(uuid.uuid4()), token_hash=hashlib.sha256(token.encode()).hexdigest(), state=initial_state())
+            db.add(player)
+            extra['session_token'] = token
+        if player.state.get('character') and (player.state.get('world_clock') or {}).get('version') != 2:
+            updated = copy.deepcopy(player.state)
+            ensure_clock(updated, time.time())
+            player.state = updated
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()}, save_id=player.id, **extra)
 
 @app.post('/api/command')
 def command(body: Command, request: Request):
@@ -193,7 +226,7 @@ def recovery_preview(body: RecoveryInput):
     with Session() as db:
         player = recovery_player(db, body)
         state = upgrade_state(player.state)
-        return {'character': state['character'], 'plan_count': len(state['study_plans']),
+        return {'save_id': player.id, 'character': state['character'], 'plan_count': len(state['study_plans']),
                 'record_count': len(state['activities']), 'timer': state['timer'], 'revision': state['revision']}
 
 @app.post('/api/recover')
@@ -205,6 +238,17 @@ def recover(body: RecoveryInput, response: Response):
         db.add(GuestSession(token_hash=hashlib.sha256(token.encode()).hexdigest(), player_id=player.id))
         response.set_cookie(COOKIE, token, httponly=True, samesite='strict', secure=SECURE_COOKIE, max_age=31536000)
         return {'restored': True}
+
+@app.post('/api/client-recover')
+def client_recover(body: RecoveryInput):
+    """Exchange the existing v1 recovery credential without replacing Web cookies."""
+    with Session.begin() as db:
+        lock_sqlite(db)
+        player = recovery_player(db, body)
+        token = secrets.token_urlsafe(32)
+        db.add(GuestSession(token_hash=hashlib.sha256(token.encode()).hexdigest(), player_id=player.id))
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()},
+                        save_id=player.id, session_token=token)
 
 @app.get('/api/export')
 def export(request: Request):

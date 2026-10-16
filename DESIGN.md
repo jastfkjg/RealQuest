@@ -6,6 +6,8 @@
 
 ## 1. Purpose and boundaries
 
+The owner authorized an independent Cocos migration prototype on 2026-10-16 and permits UI/design improvements rather than reproducing the current pages exactly. Keep the existing Web implementation available. The prototype may simplify the travel HUD, inventory composition and dialogue while retaining Hearthwood materials, readable Chinese, truthful actions and direct Life access. Its render/feel remains a new checkpoint, not inherited owner approval; broad migration follows that checkpoint. Local scope and evidence: `docs/tasks/34-cocos-local-spike.md`. Phases2–3 are subsequently authorized: shared core, durable network/session/recovery and existing room/travel rendering. Keep this as a scoped candidate; see `docs/tasks/35-cocos-shared-world.md`.
+
 RealQuest combines a playable RPG world with real-life growth. It must feel like a place to inhabit, not a beige task dashboard with a tilemap behind it.
 
 This specification was prepared from product discussion and screenshots, not a repository audit. Treat descriptions of current code as hypotheses until inspected. Preserve working systems, player saves, identifiers, and balance rules. This document does not authorize a framework migration, full map replacement, or new progression economy.
