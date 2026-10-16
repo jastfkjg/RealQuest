@@ -1850,7 +1850,7 @@
         "sha256": "a2249a7321dbc925607c1ec576c33a0ad403bafc7ce2ca699107877c7e28082f"
       }
     ],
-    "actor": "Mira temporarily reuses audited appearance5 sprite and portrait; no unique NPC art claimed"
+    "actor": "Mira now uses unique residents/mira-{actor,figure,portrait}.png; the earlier appearance5 fallback is superseded by resident_art"
   },
   "character_dossier_v2": {
     "concept": "docs/art/references/character-dossier-concept-v2.png",
@@ -1873,5 +1873,12 @@
     "binding": "CharacterView.tsx and character.css; all values, text, levels, circles, selection and controls are DOM/CSS.",
     "status": "implemented_candidate_owner_review_pending",
     "report": "docs/tasks/23-character-dossier.md"
+  },
+  "resident_art": {
+    "manifest": "docs/art/resident-art-v1.json",
+    "source": "Three original built-in image_gen character sheets with exact adjacent prompts",
+    "status": "implemented_candidate_owner_render_review_pending",
+    "binding": "Independent npc-id sheets/figures/portraits; never indexed through player appearance IDs",
+    "report": "docs/tasks/25-village-residents.md"
   }
 }

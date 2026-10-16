@@ -1,0 +1,478 @@
+{
+  "creator": "OpenAI built-in image_gen",
+  "license": "Original generated project artwork; no third-party input",
+  "status": "candidate_owner_render_review_pending",
+  "rebuild": "tools/build_resident_art.py",
+  "rebuild_sha256": "b96bb4c6271d109a4f8ea931e8f826dbcab49143a5ebb9d5888abaf7add9f0ea",
+  "player_assets_preserved": [
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-5.png",
+      "sha256": "1d5b964a6622724c8bf2584897a98195e1aba11832f0887d8f3e4bb9fbd4e23e"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-4.png",
+      "sha256": "1013c27c3018300a14ead56695af486f0284a4acbb1a9f95ab71e16f6ea4cffd"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-0.png",
+      "sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-1.png",
+      "sha256": "99dfa0cbfa0b2536c7a9ebbf09ce993d2d7b0ba2ed0d42d8f4ac01b410ba9f95"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-3.png",
+      "sha256": "c5fca3c46a8453d9594a3b3656edb933a3594d1ab5dd182af30cf487f8f16953"
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/village/actor-2.png",
+      "sha256": "2a08d5ca4502168e87dd4c0bd7412f21f2a6dfd3736c35adbe1ee0369a963b55"
+    }
+  ],
+  "records": [
+    {
+      "id": "actor-lia",
+      "path": "frontend/public/assets/hearthwood/residents/lia-actor.png",
+      "width": 192,
+      "height": 256,
+      "sha256": "d58498f929d8a8357c591a7adf8754fbf5052e150b0faf7715566dc7affaa815",
+      "size_bytes": 43966,
+      "source": "assets/generated/hearthwood/npc-life/lia-v1.png",
+      "source_sha256": "0642a9c8d29d874a1b2da897bd7072df94d762da884c5f589437238d23d2c4a0",
+      "crop": [
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          512,
+          256,
+          1024
+        ],
+        [
+          256,
+          512,
+          512,
+          1024
+        ],
+        [
+          512,
+          512,
+          768,
+          1024
+        ],
+        [
+          768,
+          512,
+          1024,
+          1024
+        ],
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          1024,
+          256,
+          1536
+        ],
+        [
+          256,
+          1024,
+          512,
+          1536
+        ],
+        [
+          512,
+          1024,
+          768,
+          1536
+        ],
+        [
+          768,
+          1024,
+          1024,
+          1536
+        ]
+      ],
+      "processing": "alpha>=160; inspected 4x3 cells repacked idle/A/idle/B; nearest-neighbor 48x64 feet-aligned frames"
+    },
+    {
+      "id": "portrait-lia",
+      "path": "frontend/public/assets/hearthwood/residents/lia-portrait.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "6258894fec9609dc0a4d980b598134797a8c94ccec0c0283ee8447e3943896bc",
+      "size_bytes": 19703,
+      "source": "assets/generated/hearthwood/npc-life/lia-v1.png",
+      "source_sha256": "0642a9c8d29d874a1b2da897bd7072df94d762da884c5f589437238d23d2c4a0",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "alpha>=160; front-cell visible bounds, upper48%; proportional nearest-neighbor to128px"
+    },
+    {
+      "id": "figure-lia",
+      "path": "frontend/public/assets/hearthwood/residents/lia-figure.png",
+      "width": 48,
+      "height": 64,
+      "sha256": "36928a54949ea4335913231671ffcefc9acb823e99f3d8b65ff5b0812245b3e3",
+      "size_bytes": 2915,
+      "source": "assets/generated/hearthwood/npc-life/lia-v1.png",
+      "source_sha256": "0642a9c8d29d874a1b2da897bd7072df94d762da884c5f589437238d23d2c4a0",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "byte-exact first runtime frame; 48x64"
+    },
+    {
+      "id": "actor-noah",
+      "path": "frontend/public/assets/hearthwood/residents/noah-actor.png",
+      "width": 192,
+      "height": 256,
+      "sha256": "ef2931079f4c3421deb18f4c5a989e8e0023b4f2045ecbff61b2ca5175443f8c",
+      "size_bytes": 46603,
+      "source": "assets/generated/hearthwood/npc-life/noah-v1.png",
+      "source_sha256": "950b8af1f0cfbc1f60b89a970f82be64cd237c9b64ed5206d4f4e39549938d25",
+      "crop": [
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          512,
+          256,
+          1024
+        ],
+        [
+          256,
+          512,
+          512,
+          1024
+        ],
+        [
+          512,
+          512,
+          768,
+          1024
+        ],
+        [
+          768,
+          512,
+          1024,
+          1024
+        ],
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          1024,
+          256,
+          1536
+        ],
+        [
+          256,
+          1024,
+          512,
+          1536
+        ],
+        [
+          512,
+          1024,
+          768,
+          1536
+        ],
+        [
+          768,
+          1024,
+          1024,
+          1536
+        ]
+      ],
+      "processing": "alpha>=160; inspected 4x3 cells repacked idle/A/idle/B; nearest-neighbor 48x64 feet-aligned frames"
+    },
+    {
+      "id": "portrait-noah",
+      "path": "frontend/public/assets/hearthwood/residents/noah-portrait.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "5aab8791b6abaf3807ef4ddfadd8b925d08aae4a761fc04d7e859c64c1ac9a00",
+      "size_bytes": 21071,
+      "source": "assets/generated/hearthwood/npc-life/noah-v1.png",
+      "source_sha256": "950b8af1f0cfbc1f60b89a970f82be64cd237c9b64ed5206d4f4e39549938d25",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "alpha>=160; front-cell visible bounds, upper48%; proportional nearest-neighbor to128px"
+    },
+    {
+      "id": "figure-noah",
+      "path": "frontend/public/assets/hearthwood/residents/noah-figure.png",
+      "width": 48,
+      "height": 64,
+      "sha256": "aa43328869eade73cad55ef18d7ac676b545b8f7b83781bd1a6f5e5c0adc5159",
+      "size_bytes": 3196,
+      "source": "assets/generated/hearthwood/npc-life/noah-v1.png",
+      "source_sha256": "950b8af1f0cfbc1f60b89a970f82be64cd237c9b64ed5206d4f4e39549938d25",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "byte-exact first runtime frame; 48x64"
+    },
+    {
+      "id": "actor-mira",
+      "path": "frontend/public/assets/hearthwood/residents/mira-actor.png",
+      "width": 192,
+      "height": 256,
+      "sha256": "cc826a2323dd7f0782bafb3b96ffabd10afa28f22e3a3d5a993cf6501df6b672",
+      "size_bytes": 47862,
+      "source": "assets/generated/hearthwood/npc-life/mira-v1.png",
+      "source_sha256": "dd4f71cb9d5e7837c77f1dda87a2ad8740ceb62f8b3b6eb6c915898b75254be9",
+      "crop": [
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          512,
+          256,
+          1024
+        ],
+        [
+          256,
+          512,
+          512,
+          1024
+        ],
+        [
+          512,
+          512,
+          768,
+          1024
+        ],
+        [
+          768,
+          512,
+          1024,
+          1024
+        ],
+        [
+          0,
+          0,
+          256,
+          512
+        ],
+        [
+          256,
+          0,
+          512,
+          512
+        ],
+        [
+          512,
+          0,
+          768,
+          512
+        ],
+        [
+          768,
+          0,
+          1024,
+          512
+        ],
+        [
+          0,
+          1024,
+          256,
+          1536
+        ],
+        [
+          256,
+          1024,
+          488,
+          1536
+        ],
+        [
+          488,
+          1024,
+          768,
+          1536
+        ],
+        [
+          768,
+          1024,
+          1024,
+          1536
+        ]
+      ],
+      "processing": "alpha>=160; inspected 4x3 cells repacked idle/A/idle/B; nearest-neighbor 48x64 feet-aligned frames"
+    },
+    {
+      "id": "portrait-mira",
+      "path": "frontend/public/assets/hearthwood/residents/mira-portrait.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "15c57ac0d796fccca26d9a3f84af682b98802aea1cf0634d59ace1f7b8d588fa",
+      "size_bytes": 22245,
+      "source": "assets/generated/hearthwood/npc-life/mira-v1.png",
+      "source_sha256": "dd4f71cb9d5e7837c77f1dda87a2ad8740ceb62f8b3b6eb6c915898b75254be9",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "alpha>=160; front-cell visible bounds, upper48%; proportional nearest-neighbor to128px"
+    },
+    {
+      "id": "figure-mira",
+      "path": "frontend/public/assets/hearthwood/residents/mira-figure.png",
+      "width": 48,
+      "height": 64,
+      "sha256": "bcc87d28ec4270e469a777737ca3220952a7e73bd3151f672832c9a7a9fd7375",
+      "size_bytes": 3053,
+      "source": "assets/generated/hearthwood/npc-life/mira-v1.png",
+      "source_sha256": "dd4f71cb9d5e7837c77f1dda87a2ad8740ceb62f8b3b6eb6c915898b75254be9",
+      "crop": [
+        0,
+        0,
+        256,
+        512
+      ],
+      "processing": "byte-exact first runtime frame; 48x64"
+    }
+  ],
+  "prompts": [
+    {
+      "path": "assets/generated/hearthwood/npc-life/lia-v1.prompt.txt",
+      "sha256": "22056fb54028ded4531af540fded7842103e57dc9c0bff4c72b638b4e6e9af0a"
+    },
+    {
+      "path": "assets/generated/hearthwood/npc-life/noah-v1.prompt.txt",
+      "sha256": "c317fc313aa25aff795b0b7e85419dead06028e9a443a65d237712874506a50a"
+    },
+    {
+      "path": "assets/generated/hearthwood/npc-life/mira-v1.prompt.txt",
+      "sha256": "3ff079653094e1e6ec38aa580f65b6f2e09f8e29da73ac1b8a04f7d86e324453"
+    }
+  ]
+}

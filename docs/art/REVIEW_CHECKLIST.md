@@ -339,3 +339,16 @@ Status: implemented and browser-verified candidate; owner visual approval pendin
 - [ ] Owner render acceptance, physical devices/Safari, native zoom, screen readers and multi-day economy/endurance unverified. Existing distant-exit HUD pointer overlap remains documented; keyboard door flow passes.
 
 Exact files, commands, captures, fixtures, provenance, remaining scope and cleanup: [market report](../tasks/22-village-market.md).
+
+## Village residents — 2026-10-16
+
+Status: implemented/browser-verified candidate; actual owner render approval pending.
+
+- [x] Three independent NPC identities across world/portrait/map/dialogue; six player sheets unchanged. Nine runtime PNGs/210,614bytes, exact prompts/crops/hash/rebuild and original alpha sources recorded;142-image audit passes.
+- [x] Walkable daily routes, door transitions, midday gathering, evening whereabouts, neighbor book and marker-only navigation. Shared active world clock pauses for reading/background/leave; real deadlines and quotas remain separate.
+- [x] Contextual topics, finite gifts/help, familiarity story gate, remote/stock/stamina rejection, concurrency, idempotent retry and preservation covered;140 backend tests pass. Shop counter remains usable while Mira is out; Noah's indoor quest/commission access verified.
+- [x]20-capture actual browser flow,36 final desktop/landscape layout states,1061 actual-texture text runs/min4.79:1,44px controls, focus/world ownership, scrolling/close, DPR2 touch/reduced motion, build/frame-client/format/diff checks pass. Screenshots inspected.
+- [x] Owned browsers/runners/fixture services closed; fixed5295 preview and normal8095 API intentionally retained/healthy. No player-data reset or commit/push/deploy.
+- [ ] Physical devices/Safari/native zoom/screen readers, full-day/endurance and owner render acceptance remain unverified. Portrait phone review is outside current scope. Sleep/fainting/lodging/weather/seasonal schedules remain future work.
+
+Exact scope, files, source prompts/provenance, commands, fixtures, screenshots/recordings and cleanup: [resident report](../tasks/25-village-residents.md).

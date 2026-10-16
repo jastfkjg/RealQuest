@@ -158,7 +158,11 @@ export const useGame = create<Store>((set, get) => ({
         set({
           notice: reply.message || "",
           noticePanel: get().panel,
-          dialogue: action === "talk" ? reply.message || "" : get().dialogue,
+          dialogue: ["talk", "npc_topic", "npc_gift", "npc_help"].includes(
+            action,
+          )
+            ? reply.message || ""
+            : get().dialogue,
         });
       return true;
     } catch (e) {

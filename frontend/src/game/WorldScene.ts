@@ -18,6 +18,7 @@ import {
   ACTOR_FRAME,
 } from "./village";
 import { chime, personFrame, unlockSound, usePreferences } from "./feel";
+import { residentPositions, villageClock } from "./residents";
 import { hitObject, interactionFor, INTERACTION_RADIUS } from "./interaction";
 import {
   accessibleTarget,
@@ -49,9 +50,12 @@ export class WorldScene extends Phaser.Scene {
     obj: WorldObject;
     sprite: Phaser.GameObjects.Sprite;
     direction: number;
+    shadow: Phaser.GameObjects.Ellipse;
+    bubble: Phaser.GameObjects.Text;
   }[] = [];
   objectLayers = new Map<string, Phaser.GameObjects.Graphics>();
   smoke!: Phaser.GameObjects.Graphics;
+  villageLight!: Phaser.GameObjects.Graphics;
   lastXp = 0;
   lastFootstep = 0;
   hovered: WorldObject | null = null;
@@ -91,19 +95,10 @@ export class WorldScene extends Phaser.Scene {
     else fineRoom(this, this.map);
     this.water = this.add.graphics().setDepth(-800);
     this.smoke = this.add.graphics().setDepth(2000);
+    this.villageLight = this.add.graphics().setDepth(8500);
     this.marker = this.add.graphics().setDepth(9999);
     for (const obj of this.map.objects) {
-      if (obj.kind === "npc") {
-        this.add
-          .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
-          .setDepth(obj.y - 1);
-        const sprite = this.add
-          .sprite(obj.x, obj.y, `villager-${obj.id === "mira" ? 5 : obj.id}`, 0)
-          .setOrigin(0.5, 1)
-          .setScale(ACTOR_FRAME.scale)
-          .setDepth(obj.y);
-        this.npcs.push({ obj, sprite, direction: 0 });
-      } else {
+      if (obj.kind !== "npc") {
         this.objectLayers.set(
           obj.id,
           this.add
@@ -117,6 +112,27 @@ export class WorldScene extends Phaser.Scene {
             ),
         );
       }
+    }
+    for (const obj of residentPositions(world, state, serverNow())) {
+      const sprite = this.add
+        .sprite(obj.x, obj.y, `villager-${obj.id}`, 0)
+        .setOrigin(0.5, 1)
+        .setScale(ACTOR_FRAME.scale)
+        .setDepth(obj.y);
+      const shadow = this.add
+        .ellipse(obj.x, obj.y - 1, 22, 8, 0x243e30, 0.2)
+        .setDepth(obj.y - 1);
+      const bubble = this.add
+        .text(obj.x, obj.y - 46, "", {
+          fontFamily: "sans-serif",
+          fontSize: "12px",
+          color: "#27392f",
+          backgroundColor: "#f4efde",
+          padding: { x: 8, y: 5 },
+        })
+        .setOrigin(0.5, 1)
+        .setDepth(9000);
+      this.npcs.push({ obj, sprite, shadow, bubble, direction: 0 });
     }
     this.shadow = this.add.ellipse(
       state.position.x,
@@ -482,8 +498,8 @@ export class WorldScene extends Phaser.Scene {
       await this.sync();
       const store = useGame.getState();
       if (
-        store.navigation?.mapId === this.map.id &&
-        store.navigation.targetId === obj.id
+        (store.navigation?.mapId === this.map.id || obj.kind === "npc") &&
+        store.navigation?.targetId === obj.id
       )
         useGame.setState({ navigation: null });
       // A panel may open while the position request is in flight.
@@ -598,6 +614,76 @@ export class WorldScene extends Phaser.Scene {
       onComplete: () => label.destroy(),
     });
   }
+  updateResidents() {
+    const { world, state, panel, selected } = useGame.getState();
+    if (!world || !state) return;
+    const live = residentPositions(world, state, serverNow());
+    for (const npc of this.npcs) {
+      const next = live.find((r) => r.id === npc.obj.id)!;
+      const vx = next.x - npc.sprite.x,
+        vy = next.y - npc.sprite.y;
+      Object.assign(npc.obj, next);
+      const visible = next.location === this.map.id;
+      npc.sprite.setVisible(visible);
+      npc.shadow.setVisible(visible);
+      npc.bubble.setVisible(false);
+      if (!visible) continue;
+      const dx = this.player.x - next.x,
+        dy = this.player.y - next.y;
+      if (next.walking && Math.hypot(vx, vy) > 0.01)
+        npc.direction =
+          Math.abs(vx) > Math.abs(vy) ? (vx > 0 ? 2 : 1) : vy > 0 ? 0 : 3;
+      else if (Math.hypot(dx, dy) < 140 || selected?.id === next.id)
+        npc.direction =
+          Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 2 : 1) : dy > 0 ? 0 : 3;
+      npc.sprite
+        .setPosition(next.x, next.y)
+        .setDepth(next.y)
+        .setFrame(
+          personFrame(
+            npc.direction,
+            next.walking && !this.reduced
+              ? Math.floor(this.elapsed / 180) % 4
+              : 0,
+          ),
+        );
+      npc.shadow.setPosition(next.x, next.y - 1).setDepth(next.y - 1);
+      const closest = live
+        .filter((r) => r.location === this.map.id)
+        .sort(
+          (a, b) =>
+            Math.hypot(a.x - this.player.x, a.y - this.player.y) -
+            Math.hypot(b.x - this.player.x, b.y - this.player.y),
+        )[0];
+      if (!panel && closest?.id === next.id && Math.hypot(dx, dy) < 128)
+        npc.bubble
+          .setPosition(next.x, next.y - 44)
+          .setText(next.activity)
+          .setVisible(true);
+    }
+    this.map.objects = [
+      ...this.map.objects.filter((o) => o.kind !== "npc"),
+      ...this.npcs
+        .filter((n) => n.obj.location === this.map.id)
+        .map((n) => n.obj),
+    ];
+    if (this.clickTarget?.kind === "npc") {
+      const npc = this.npcs.find((n) => n.obj.id === this.clickTarget?.id);
+      if (npc && npc.obj.location !== this.map.id) {
+        this.clickTarget = null;
+        this.path = [];
+      } else if (
+        npc &&
+        this.path.length &&
+        Math.hypot(
+          this.path[this.path.length - 1].x - npc.obj.x,
+          this.path[this.path.length - 1].y - npc.obj.y,
+        ) > 48 &&
+        this.elapsed % 500 < 40
+      )
+        this.path = pathfind(this.map, this.player, npc.obj);
+    }
+  }
   step(delta: number) {
     if (!this.player || this.transitioning) return;
     if (useGame.getState().state?.location !== this.map.id) {
@@ -678,23 +764,7 @@ export class WorldScene extends Phaser.Scene {
       this.lastFootstep = this.elapsed;
       chime("step");
     }
-    const selected = useGame.getState().selected;
-    for (const npc of this.npcs) {
-      const dx = this.player.x - npc.obj.x,
-        dy = this.player.y - npc.obj.y;
-      if (Math.hypot(dx, dy) < 140 || selected?.id === npc.obj.id)
-        npc.direction =
-          Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 2 : 1) : dy > 0 ? 0 : 3;
-      else npc.direction = [0, 1, 0, 2][Math.floor(this.elapsed / 3800) % 4];
-      npc.sprite
-        .setFrame(personFrame(npc.direction))
-        .setY(
-          npc.obj.y -
-            (!this.reduced && !blocked && Math.sin(this.elapsed / 480) > 0.5
-              ? 1
-              : 0),
-        );
-    }
+    this.updateResidents();
     if (this.elapsed - this.lastSync > 120 && !this.pending) {
       this.lastSync = this.elapsed;
       void this.sync();
@@ -704,7 +774,10 @@ export class WorldScene extends Phaser.Scene {
         o,
         d: Math.hypot(o.x - this.player.x, o.y - this.player.y),
       }))
-      .sort((a, b) => a.d - b.d)[0];
+      .sort(
+        (a, b) =>
+          a.d - b.d || Number(b.o.kind === "npc") - Number(a.o.kind === "npc"),
+      )[0];
     useGame
       .getState()
       .setNearest(
@@ -734,6 +807,20 @@ export class WorldScene extends Phaser.Scene {
     if (this.response && this.response.until < this.elapsed)
       this.response = null;
     if (this.map.id === "overworld") {
+      const hour = villageClock(state, now).minute / 60;
+      const night =
+        hour >= 20 || hour < 6 ? 0.16 : hour >= 18 ? (hour - 18) * 0.08 : 0;
+      this.villageLight
+        .clear()
+        .fillStyle(0x293e50, night)
+        .fillRect(0, 0, this.map.width, this.map.height);
+      if (night > 0)
+        for (const door of this.map.objects.filter(
+          (o) => o.kind === "building",
+        ))
+          this.villageLight
+            .fillStyle(0xffd894, night * 0.9)
+            .fillEllipse(door.x, door.y - 4, 64, 30);
       updateVillageObjects(this, state, now);
       updateVillageCanopies(this, this.player.x, this.player.y);
     } else

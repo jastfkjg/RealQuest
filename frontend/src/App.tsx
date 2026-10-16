@@ -1,3 +1,8 @@
+import {
+  ResidentsPanel,
+  NpcEncounterLifecycle,
+  WorldClockLifecycle,
+} from "./components/Residents";
 import { MarketPanel } from "./components/MarketPanel";
 import { LifeQuestHistory } from "./components/LifeQuests";
 import { RecoveryPanel } from "./components/RecoveryPanel";
@@ -44,6 +49,7 @@ function Modal({ title, children }: { title: string; children: ReactNode }) {
   const panel = useGame((s) => s.panel);
   const state = useGame((s) => s.state);
   const tactile = [
+    "neighbors",
     "board",
     "map",
     "storage",
@@ -184,6 +190,7 @@ export function Panels() {
     ai: "AI 旅途伙伴",
     menu: "旅途菜单",
     shop: "风铃杂货铺",
+    neighbors: "村民近况 · 邻里簿",
     building: selected?.name || "建筑",
     npc: selected?.id === "noah" ? "林间委托" : "林间相逢",
   };
@@ -192,8 +199,19 @@ export function Panels() {
       {panel === "menu" && (
         <div className="journey-menu">
           <p>在这里经营家园，也为现实中的每一步成长留下回响。</p>
-          <button onClick={() => useGame.getState().navigate({ mapId: "overworld", targetId: "shop" })}>
-            <Compass size={18} />风铃杂货铺<span>标记方向 · 买卖与村民订单</span>
+          <button
+            onClick={() =>
+              useGame
+                .getState()
+                .navigate({ mapId: "overworld", targetId: "shop" })
+            }
+          >
+            <Compass size={18} />
+            风铃杂货铺<span>标记方向 · 买卖与村民订单</span>
+          </button>
+          <button onClick={() => open("neighbors")}>
+            <User size={18} />
+            村民近况<span>大家在哪儿 · 喜好与日常作息</span>
           </button>
           <button onClick={() => open("guide")}>
             <CircleHelp size={18} />
@@ -220,6 +238,7 @@ export function Panels() {
       {panel === "character" && <CharacterPanel />}
       {panel === "inventory" && <InventoryPanel />}
       {panel === "building" && <BuildingPanel />}
+      {panel === "neighbors" && <ResidentsPanel />}
       {panel === "shop" && <MarketPanel />}
       {panel === "npc" && selected && (
         <ConversationPanel>
@@ -510,6 +529,8 @@ export default function App() {
         <Welcome />
       ) : (
         <>
+          <WorldClockLifecycle />
+          <NpcEncounterLifecycle />
           <main className="app-main">
             <div className="game-layout">
               <section className="game-section" aria-label="游戏世界">

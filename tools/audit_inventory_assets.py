@@ -52,12 +52,16 @@ for entry in manifest.get('generated_runtime_assets', []):
     with Image.open(source) as image:
         assert image.size == (entry['width'], entry['height']) and image.mode == entry['mode'], source
 village_entries = []
-for art_group in ('village_art', 'detail_art', 'encounter_art', 'market_art', 'character_dossier_v2'):
+for art_group in ('village_art', 'detail_art', 'encounter_art', 'market_art', 'character_dossier_v2', 'resident_art'):
     if not manifest.get(art_group):
         continue
     record = manifest[art_group]
     village = json.loads((ROOT / record['manifest']).read_text())
     assert hashlib.sha256((ROOT / village['rebuild']).read_bytes()).hexdigest() == village['rebuild_sha256']
+    for preserved in village.get('player_assets_preserved', []):
+        assert hashlib.sha256((ROOT / preserved['path']).read_bytes()).hexdigest() == preserved['sha256']
+    for prompt in village.get('prompts', []):
+        assert hashlib.sha256((ROOT / prompt['path']).read_bytes()).hexdigest() == prompt['sha256']
     for entry in village['records']:
         path = ROOT / entry.get('path', entry.get('runtime_path'))
         assert hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], path

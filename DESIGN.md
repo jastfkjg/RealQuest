@@ -12,6 +12,8 @@ This specification was prepared from product discussion and screenshots, not a r
 
 Use this file as the visual and interaction specification. Read `AGENTS.md` for implementation rules and `docs/art/ASSET_PLAN.md` for asset acquisition and provenance. Implementation values below are project defaults, not claims about a third-party asset's dimensions or an external standard. An approved, recorded exception may refine a default; it must not silently create a second design system.
 
+The owner confirmed the next gameplay direction on 2026-10-16: a remote starting village, a river-and-mountain departure chapter, game days and sleep, technology/magic progression, and an expandable home. Gameplay rules and provisional values live in [docs/game-design.md](docs/game-design.md); implementation order lives in [TODO.md](TODO.md). This is a documented future direction, not implemented functionality or visual approval. Current runtime rules remain in effect until their scoped replacements are implemented and verified.
+
 ## 2. The selected art direction
 
 ### 2.1 Hearthwood in one sentence
@@ -312,6 +314,18 @@ World-event notifications may be marked as viewed separately from the underlying
 
 No penalty for missing a day should be introduced by this visual pass. Demo fixtures are isolated and visibly labeled. Deleting or editing a real activity requires a defined reconciliation policy before implementation, not a client-only subtraction of arbitrary XP.
 
+### 9.1 Departure, daily life and home — future interaction contracts (2026-10-16)
+
+These contracts apply to future scoped work; they do not describe existing controls or assets. Prioritize desktop web and reasonable phone-landscape support. Follow the gameplay document for conditions and settlement rather than duplicating balance values here.
+
+- **Departure and travel:** show distant destinations, the actual exit route and known requirements. River crossings distinguish bridge work from boat passage; mountain preparation distinguishes current stamina, capacity, equipment and expected arrival time. Show exact shortfalls before commitment. Existing village bridges and accessible destinations remain usable. Map selection marks a direction; explicit travel happens at a usable crossing or exit with authoritative conditions, costs and outcome.
+- **Day and night:** keep the 24-hour clock and game-day label legible within the shared HUD. Night lighting must preserve readable paths, characters and interaction cues. Use staged bedtime reminders with a route to home or a valid lodging place; avoid flashing or color-only warnings. Life Mode retains its direct entry and pauses the game world while real commissions continue. Reading pauses, input ownership and focus restoration follow the gameplay contract.
+- **Sleep and lodging:** distinguish free home sleep, paid lodging and an already booked bed. Display the price and applicable night before payment, and the next morning's actual recovery or fainting loss afterward. Pending, failure and retry cannot charge twice. Label vitality as “生命值”, stamina as “体力” and reality-growth currency as “健康点”; do not imply a real health diagnosis.
+- **Technology and magic:** keep the character dossier's actual levels separate from learned spells, owned equipment and known blueprints. Blueprint crafting, spell learning and combat targeting need their own appropriate interaction structures using shared primitives. Do not display future weapons, spells or mechs as usable without implemented effects and valid ownership. Preserve the village's Hearthwood materials and atmosphere as these disciplines appear.
+- **Home:** show the current building, the next real stage, precise costs and resulting effects. Furnishing has a reversible placement preview, clear invalid-placement feedback and an explicit save/cancel action. Keep doors, beds and required workstations reachable; restore focus and clear held keys when leaving placement. Preserve stored items, upgrade levels and stable object identities.
+
+Each new composed screen or world treatment needs its own actual-render checkpoint before spreading to unrelated screens. Chapter art, city assets, changed home stages and animations remain production gaps until audited and recorded; this design update adds no assets and approves no reference image. The historical inventory-first rollout below remains its original checkpoint, while the next gameplay sequence is maintained in TODO.md.
+
 ## 10. Asset production and acquisition rules
 
 Read `docs/art/ASSET_PLAN.md` and `asset-manifest.json`. They distinguish source files actually supplied from selected external packs and missing project-specific assets. The supplied source PNGs are not finished RealQuest components.
@@ -365,4 +379,10 @@ Village small talk has a nameplate and dialogue parchment, with an actual story-
 
 ### Village market livelihood — 2026-10-15
 
-Authorized connected slice: the general store, Mira, real inventory trading, dated material orders and home goals. Shop uses existing Hearthwood linen/moss controls and a small illustrated keeper beside one transactional surface; native text shows quantities, price and resulting balance before commitment. Orders display actual needs, owned quantities and confirmed completion. Navigation marks locations without teleportation. Original shop/counter sprites retain two native pixels per world unit; Mira temporarily uses appearance5. Other screens keep their contracts. Actual rendered acceptance remains pending; see task22.
+Authorized connected slice: the general store, Mira, real inventory trading, dated material orders and home goals. Shop uses existing Hearthwood linen/moss controls and a small illustrated keeper beside one transactional surface; native text shows quantities, price and resulting balance before commitment. Orders display actual needs, owned quantities and confirmed completion. Navigation marks locations without teleportation. Original shop/counter sprites retain two native pixels per world unit; Mira's former appearance5 fallback is superseded by the unique resident art in task25. Other screens keep their contracts. Actual rendered acceptance remains pending; see task22.
+
+### Resident life checkpoint — 2026-10-16
+
+The three current residents have independent NPC-id character sheets, figures and portraits, separate from all player appearance IDs. Existing encounter structures remain recognizable: Lia's library conversation, Noah's timber commission desk with a separate daily-life tab, and Mira's store with a social tab. The neighbor book exposes current whereabouts, preferences and a readable routine; navigation follows a resident through door transitions without teleporting the player.
+
+Routines use the shared server-owned `world_clock`: active world play advances it, reading and background/leave events pause it, and a bounded heartbeat freezes it after disconnection. Reality deadlines/quotas and current production rules stay in their real-time domain. The first resident-clock implementation is a foundation for the planned day/sleep slice, not completion of sleep, lodging or fainting. Native Chinese text, minimum44px controls, visible focus, reduced motion, server-confirmed social mutations and preserved player assets are required. Actual render is a candidate; evidence/provenance/limits are in task25.

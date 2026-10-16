@@ -56,6 +56,7 @@ def interior(key, name, objects, furniture):
 INTERIORS = {
     'shop': interior('shop','风铃杂货铺',[
         {'id':'mira','kind':'npc','name':'米拉 · 杂货铺店主','x':240,'y':188},
+        {'id':'shop_counter','kind':'market','name':'寄售柜台 · 买卖与订单','x':240,'y':188},
     ],[{'kind':'workbench','rect':[136,112,208,40]},{'kind':'shelf','rect':[64,64,112,40]},{'kind':'shelf','rect':[296,64,112,40]},{'kind':'barrel','rect':[64,216,32,40]},{'kind':'chest','rect':[352,216,48,28]},{'kind':'plant','rect':[64,288,24,28]},{'kind':'rug','rect':[176,240,128,64],'solid':False}]),
     'home': interior('home','林间小屋',[
         {'id':'home_chest','kind':'storage','name':'家园储物箱','x':360,'y':192,'hitbox':[336,160,48,32]},
@@ -75,8 +76,12 @@ INTERIORS = {
 }
 WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS}
 
-def map_for(location='overworld'):
-    return WORLD if location == 'overworld' else INTERIORS[location]
+def map_for(location='overworld', state=None, now=None):
+    base = WORLD if location == 'overworld' else INTERIORS[location]
+    if state is None or now is None:
+        return base
+    from .residents import resident_objects
+    return {**base, 'objects': [o for o in base['objects'] if o['kind'] != 'npc'] + resident_objects(state, now, location)}
 
 def walkable(x,y,location='overworld'):
     world=map_for(location)

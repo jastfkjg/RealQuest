@@ -21,7 +21,9 @@ import {
 } from "lucide-react";
 import { useGame } from "../stores/game";
 import { questTarget } from "../game/navigation";
-import { PixelPerson } from "./PixelPerson";
+import { NpcPerson } from "./NpcPerson";
+import { serverNow } from "../stores/game";
+import { atlasObjects, residentPlace } from "../game/residents";
 import type { WorldObject } from "../types";
 
 function MiniAtlas() {
@@ -32,7 +34,7 @@ function MiniAtlas() {
     state.location === "overworld"
       ? state.position
       : world.objects.find((o) => o.id === state.location) || state.position;
-  const landmarks = world.objects.filter((o) =>
+  const landmarks = atlasObjects(world, state, serverNow()).filter((o) =>
     ["building", "npc", "board", "landmark", "event"].includes(o.kind),
   );
   const selected = navigation
@@ -151,7 +153,7 @@ function LandmarkArt({ object: o }: { object: WorldObject }) {
         draggable={false}
       />
     );
-  if (o.kind === "npc") return <PixelPerson variant={o.id === "lia" ? 0 : 2} />;
+  if (o.kind === "npc") return <NpcPerson id={o.id} portrait />;
   if (o.kind === "board")
     return (
       <img
@@ -180,7 +182,10 @@ function LandmarkArt({ object: o }: { object: WorldObject }) {
 const placeNotes: Record<string, [string, string]> = {
   home: ["旅途从这间小屋开始。", "回到家中整理背包，照看家园。"],
   workshop: ["木料与石材在这里派上用场。", "可在工坊交易、制作或升级。"],
-  library: ["在书页之间，寻找新的线索。", "可在此与莉娅交谈。"],
+  library: [
+    "在书页之间，寻找新的线索。",
+    "莉亚会整理书籍，也会外出；村民近况可查看她的位置。",
+  ],
   guild: ["旅人来往的集会之处。", "看看公会告示，寻找下一段委托。"],
   shop: ["米拉经营的村庄杂货铺。", "买种子、出售收获，或查看邻居订单。"],
   grove: ["林木深处还有未记录的发现。", "抵达后与地标互动，记下这次探索。"],
@@ -193,10 +198,16 @@ const placeNotes: Record<string, [string, string]> = {
 };
 
 function AdventureAtlas() {
+  const [, tickResidents] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => tickResidents((n) => n + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
   const { world, state, navigation, navigate } = useGame();
   const [selectedId, select] = useState(
     navigation
-      ? navigation.mapId === "overworld"
+      ? world?.residents?.some((r) => r.id === navigation.targetId) ||
+        navigation.mapId === "overworld"
         ? navigation.targetId
         : navigation.mapId
       : "library",
@@ -214,7 +225,12 @@ function AdventureAtlas() {
   useLayoutEffect(() => {
     const frame = requestAnimationFrame(() => {
       const el = viewport.current;
-      const place = world?.objects.find((o) => o.id === selectedId);
+      const place =
+        world &&
+        state &&
+        atlasObjects(world, state, serverNow()).find(
+          (o) => o.id === selectedId,
+        );
       if (el && place && world && el.scrollWidth > el.clientWidth)
         el.scrollTo({
           left: (place.x / world.width) * el.scrollWidth - el.clientWidth / 2,
@@ -261,7 +277,7 @@ function AdventureAtlas() {
       ? target.targetId
       : target.mapId
     : null;
-  const landmarks = world.objects.filter(
+  const landmarks = atlasObjects(world, state, serverNow()).filter(
     (o) =>
       ["building", "npc", "board", "landmark", "event"].includes(o.kind) ||
       o.id === targetId,
@@ -286,7 +302,7 @@ function AdventureAtlas() {
             ? "已到访"
             : "尚未进入"
           : o.kind === "npc"
-            ? "可以交谈"
+            ? `${residentPlace(world, o.location || "overworld")} · ${o.activity}`
             : o.kind === "board"
               ? "委托发布处"
               : "任务所需资源";
@@ -339,8 +355,15 @@ function AdventureAtlas() {
     library: [14, -12],
     ruins: [42, -16],
     shop: [6, 10],
+    mira: [34, 58],
   };
-  const notes = selected && placeNotes[selected.id];
+  const notes =
+    selected?.kind === "npc"
+      ? [
+          selected.activity,
+          residentPlace(world, selected.location || "overworld"),
+        ]
+      : selected && placeNotes[selected.id];
   const runeRead = state.events.includes("rune_awakened");
   const runeReady = state.attributes.wisdom >= 25;
   const heroImage =
@@ -647,7 +670,7 @@ function AdventureAtlas() {
                 <MapPin size={20} />
               )}
               <span>
-                {selected.id === "library" ? "图书与交谈" : status(selected)}
+                {selected.id === "library" ? "图书与研究" : status(selected)}
               </span>
             </div>
           )}
@@ -678,7 +701,10 @@ function AdventureAtlas() {
             disabled={!selected}
             onClick={() =>
               selected &&
-              navigate({ mapId: "overworld", targetId: selected.id })
+              navigate({
+                mapId: selected.location || "overworld",
+                targetId: selected.id,
+              })
             }
           >
             <Navigation size={18} /> 标记方向并返回

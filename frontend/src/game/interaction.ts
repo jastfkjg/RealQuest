@@ -19,9 +19,11 @@ export function interactionFor(
     case "exit":
       return { label: "回到户外", command: "exit" };
     case "npc":
-      return obj.id === "mira"
+      return obj.id === "mira" && state.location === "shop"
         ? { label: "逛小铺 / 村民订单", command: "talk", panel: "shop" }
         : { label: "交谈 / 委托", command: "talk", panel: "npc" };
+    case "market":
+      return { label: "寄售 / 买种子 / 订单", panel: "shop" };
     case "board":
       return { label: "查看委托", panel: "board" };
     case "station":

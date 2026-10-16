@@ -392,7 +392,7 @@ export function CharacterView({
                   </button>
                 </div>
                 <p>
-                  到河岸与诺亚交谈，选择{currency.kind}
+                  找到诺亚并交谈，选择{currency.kind}
                   委托；计时结束后，回到诺亚身边结算。
                 </p>
                 {active ? (

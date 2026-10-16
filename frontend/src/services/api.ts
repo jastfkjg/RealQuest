@@ -21,6 +21,7 @@ export async function api<T = Reply>(
 }
 let queue = Promise.resolve();
 let saveIdentity: string | undefined;
+export const getSessionIdentity = () => saveIdentity;
 export function setSessionIdentity(id: string) {
   saveIdentity = id;
 }

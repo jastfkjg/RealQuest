@@ -14,6 +14,7 @@ from .rules import initial_state, upgrade_state, apply, RuleError, study_task_vi
 from .quests import quest_views
 from .world import WORLD
 from .market import market_view
+from .residents import routine_definitions, ensure_clock, social_view
 
 app = FastAPI(title='RealQuest API', version='0.1.0')
 COOKIE = os.getenv('SESSION_COOKIE_NAME', 'realquest_session')
@@ -69,6 +70,7 @@ def snapshot(state, **extra):
     view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': HEALTH_CAPACITY_GAIN}
     view['character_growth_options'] = character_growth_options(view)
     view['market'] = market_view(view, now)
+    view['npc_social'] = social_view(view, view['market']['date'])
     view['quest_log']=quest_views(view)
     view['study_task_log']=study_task_views(view)
     view['study_plan_log']=sorted(view['study_plans'].values(), key=lambda p: p['created_at'], reverse=True)
@@ -90,7 +92,11 @@ def session(request: Request, response: Response):
             player = Player(id=str(uuid.uuid4()), token_hash=hashlib.sha256(token.encode()).hexdigest(), state=initial_state())
             db.add(player)
             response.set_cookie(COOKIE, token, httponly=True, samesite='strict', secure=SECURE_COOKIE, max_age=31536000)
-        return snapshot(player.state, world=WORLD, save_id=player.id)
+        if player.state.get('character') and player.state.get('world_clock') is None:
+            updated = copy.deepcopy(player.state)
+            ensure_clock(updated, time.time())
+            player.state = updated
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()}, save_id=player.id)
 
 @app.get('/api/state')
 def state(request: Request):

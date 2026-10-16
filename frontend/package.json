@@ -28,7 +28,9 @@
     "test:knowledge": "node scripts/knowledge-smoke.mjs",
     "test:life": "node scripts/life-commissions-smoke.mjs",
     "test:life-journal": "node scripts/life-journal-dates.mjs && node scripts/life-journal-smoke.mjs",
-    "test:market": "node scripts/market-smoke.mjs"
+    "test:market": "node scripts/market-smoke.mjs",
+    "test:residents": "node scripts/residents-smoke.mjs",
+    "test:residents:visual": "node scripts/residents-visual.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

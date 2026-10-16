@@ -250,3 +250,9 @@ Owner approved the three acceptance/receipt/small-talk concepts. Reuse the exist
 ## Village market — 2026-10-15
 
 Two original built-in image_gen assets: `assets/generated/hearthwood/market-{shop,counter}-v1.png`, with exact adjacent prompts. No reference upload, external pack, font or sound. `tools/build_market_art.py` crops transparent bounds and packs nearest-neighbor sprites with alpha retained, preserving immutable sources. Shop272×232 and counter416×169 use two native pixels/world unit; total211,708 bytes. Exact source/runtime hashes, dimensions and crop bounds are in `market-art-v1.json`, covered by the main asset audit. Mira reuses audited appearance5; a unique NPC sprite remains a recorded gap. Actual render is a candidate, not owner-approved.
+
+## Independent residents — 2026-10-16
+
+Three original built-in image_gen character sheets, exact prompts in `assets/generated/hearthwood/npc-life/{lia,noah,mira}-v1.{png,prompt.txt}`. No reference upload, third-party pack, font or sound. The reviewed 4-direction ×3-pose sheets provide twelve actual poses each; `tools/build_resident_art.py` packs the existing 48×64 runtime frame contract (idle/A/idle/B) and makes matching figures/128px portraits. Alpha threshold160 and nearest-neighbor normalization are reproducible; Mira's lower row uses a measured488px boundary to exclude a neighboring boot. Sources remain unchanged.
+
+Nine runtime PNGs under `frontend/public/assets/hearthwood/residents/` total210,614bytes. Exact source/prompt/runtime/rebuild hashes and crops are in `resident-art-v1.json`, covered by the main audit along with all six preserved player sheets. NPC IDs never use the player's appearance registry. Previous reused Lia/Noah/appearance5 NPC bindings are superseded but their original audited files remain intact. Actual render approval pending; desktop and landscape evidence in task25.

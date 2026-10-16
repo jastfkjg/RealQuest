@@ -1,15 +1,29 @@
+import { residentPositions } from "../game/residents";
+import { serverNow } from "../stores/game";
+import { NpcPerson } from "./NpcPerson";
+import { NpcSocial } from "./Residents";
 import { useEffect, useState } from "react";
 import { Check, MapPin, ShoppingBasket, Sprout } from "lucide-react";
 import { useGame } from "../stores/game";
 import { api } from "../services/api";
 import { MaterialIcon } from "./WorldPanels";
-import { PixelPerson } from "./PixelPerson";
 import { QuestDetails } from "./Quests";
 import { itemNames } from "../game/items";
 
 export function MarketPanel() {
-  const { state, command, busy, navigate, accept } = useGame();
-  const [tab, setTab] = useState<"trade" | "orders" | "story">("trade");
+  const {
+    state,
+    world,
+    selected: selectedObject,
+    dialogue,
+    command,
+    busy,
+    navigate,
+    accept,
+  } = useGame();
+  const [tab, setTab] = useState<"trade" | "orders" | "story" | "social">(
+    "trade",
+  );
   const [side, setSide] = useState<"buy" | "sell">("sell");
   const [selected, select] = useState("crop");
   const [amount, setAmount] = useState(1);
@@ -31,6 +45,13 @@ export function MarketPanel() {
   }, [accept]);
   if (!state?.market) return <p>小铺正在整理货架，请稍后重新打开。</p>;
   const market = state.market;
+  const mira =
+    world &&
+    residentPositions(world, state, serverNow()).find((r) => r.id === "mira");
+  const miraNear =
+    !!mira &&
+    mira.location === state.location &&
+    Math.hypot(mira.x - state.position.x, mira.y - state.position.y) <= 72;
   const item = side === "buy" ? "seed" : selected;
   const price = market[side][item];
   const maximum =
@@ -38,8 +59,9 @@ export function MarketPanel() {
       ? Math.floor(state.inventory.gold / price)
       : state.inventory[item];
   const enough = maximum >= amount;
+  const target = selectedObject?.id === "mira" ? "mira" : "shop_counter";
   const trade = () =>
-    void command("market_trade", { target: "mira", side, item, amount });
+    void command("market_trade", { target, side, item, amount });
   const quests = state.quest_log.filter((q) => q.giver === "mira");
   const quest =
     quests.find((q) => q.status !== "claimed") || quests[quests.length - 1];
@@ -48,7 +70,7 @@ export function MarketPanel() {
       <aside className="market-keeper">
         <div className="market-vignette" aria-hidden="true">
           <img src="/assets/hearthwood/detail/interiors/bookcase.png" alt="" />
-          <PixelPerson variant={5} />
+          <NpcPerson id="mira" />
           <img
             className="market-counter-art"
             src="/assets/hearthwood/market/counter.png"
@@ -57,7 +79,7 @@ export function MarketPanel() {
         </div>
         <span className="market-eyebrow">村里的小生意</span>
         <h3>米拉</h3>
-        <p>杂货铺店主 · 关系 {state.relationships.mira || 0}</p>
+        <p>杂货铺店主 · 熟悉度 {state.relationships.mira || 0}</p>
         <blockquote>
           {tab === "orders"
             ? "村里的需要，都写在这些纸条上。慢慢备齐，不着急。"
@@ -74,7 +96,7 @@ export function MarketPanel() {
             </strong>
           </span>
         </div>
-        <small>每天都开门 · 预设角色对话</small>
+        <small>柜台全天可用 · 预设角色对话</small>
       </aside>
       <section className="market-content">
         <nav className="market-tabs" aria-label="小铺服务">
@@ -83,6 +105,7 @@ export function MarketPanel() {
               ["trade", "买卖物品"],
               ["orders", "村民订单"],
               ["story", "安家心愿"],
+              ["social", "邻里日常"],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -94,6 +117,19 @@ export function MarketPanel() {
             </button>
           ))}
         </nav>
+        {tab === "social" && (
+          <div className="market-social">
+            <h3>柜台边，也聊聊生活</h3>
+            <p className="npc-reply">
+              {state.npc_encounter?.id === "mira"
+                ? dialogue
+                : miraNear
+                  ? "米拉就在柜台边，先打个招呼吧。"
+                  : "米拉正在外面忙自己的生活。柜台照常接收收获和村民订单。"}
+            </p>
+            <NpcSocial id="mira" />
+          </div>
+        )}
         {tab === "trade" && (
           <div className="market-trade">
             <div className="market-heading">
@@ -237,7 +273,7 @@ export function MarketPanel() {
                     }
                     onClick={() =>
                       void command("market_deliver", {
-                        target: "mira",
+                        target,
                         order_id: order.id,
                         date: market.date,
                       })
@@ -290,10 +326,27 @@ export function MarketPanel() {
               <Sprout size={17} />
               让小村庄，慢慢成为家
             </span>
+            {!miraNear && (
+              <p className="market-note">
+                米拉外出时，剧情委托需要找到她当面聊。
+                <button
+                  onClick={() =>
+                    navigate({
+                      mapId: mira?.location || "shop",
+                      targetId: "mira",
+                    })
+                  }
+                >
+                  标记米拉当前位置
+                </button>
+              </p>
+            )}
             {quest && (
               <article>
                 <h3>{quest.title}</h3>
-                <QuestDetails quest={quest} conversational />
+                <fieldset disabled={!miraNear} className="market-story-actions">
+                  <QuestDetails quest={quest} conversational />
+                </fieldset>
               </article>
             )}
             <div className="market-home-goal">

@@ -1,3 +1,5 @@
+import { residentPositions } from "./residents";
+import { VillageClock } from "../components/Residents";
 import { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import { unlockSound } from "./feel";
@@ -101,12 +103,17 @@ export function GameCanvas() {
             ACTOR_FRAME.scale * (instance.cameras.main?.zoom || 1),
           visibleActorHeight: ACTOR_FRAME.visibleHeight,
         },
-        npcs: instance.npcs.map((n) => ({
-          id: n.obj.id,
-          x: n.sprite.x,
-          y: n.sprite.y,
-          direction: n.direction,
-        })),
+        npcs: instance.npcs
+          .filter((n) => n.sprite.visible)
+          .map((n) => ({
+            id: n.obj.id,
+            x: n.sprite.x,
+            y: n.sprite.y,
+            direction: n.direction,
+            texture: n.sprite.texture.key,
+            activity: n.obj.activity,
+            walking: n.obj.walking,
+          })),
         walking: instance.path,
         clickTarget: instance.clickTarget?.id,
         hovered: instance.hovered?.id,
@@ -127,6 +134,13 @@ export function GameCanvas() {
         quests: s.state?.quest_log,
         storage: s.state?.storage,
         market: s.state?.market,
+        worldClock: s.state?.world_clock,
+        residentEncounter: s.state?.npc_encounter,
+        residentSocial: s.state?.npc_social,
+        residentLocations:
+          s.world && s.state
+            ? residentPositions(s.world, s.state, serverNow())
+            : [],
         mode: s.panel || "explore",
         player: instance.player
           ? {
@@ -241,6 +255,7 @@ export function GameCanvas() {
           </small>
         </div>
       </div>
+      <VillageClock />
       {target && (
         <button
           className="navigation-hint"

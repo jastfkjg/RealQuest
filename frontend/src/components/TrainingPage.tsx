@@ -160,7 +160,7 @@ export function TrainingPage() {
           </h2>
           <section className="training-progress">
             <p>
-              到河岸找诺亚，领取运动委托。每小时结算 1
+              找到诺亚，领取运动委托。每小时结算 1
               健康点；学习、运动、工作每日合计最多 5 点。
             </p>
             <NoahMarker />

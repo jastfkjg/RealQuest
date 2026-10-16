@@ -3,11 +3,13 @@ import { ArrowRight, Leaf, MapPin, Sparkles } from "lucide-react";
 import { useGame } from "../stores/game";
 import { questStatuses } from "../game/questPresentation";
 import { QuestDetails } from "./Quests";
+import { residentPlace } from "../game/residents";
+import { NpcSocial } from "./Residents";
 import { PixelPerson } from "./PixelPerson";
 
 /** Lia's encounter is a place and a conversation, with an optional quest letter. */
 export function LibraryEncounter({ children }: { children: ReactNode }) {
-  const { selected, state, open } = useGame();
+  const { selected, state, world, open } = useGame();
   const [showRequest, setShowRequest] = useState(false);
   const requestRef = useRef<HTMLElement>(null);
   const speechRef = useRef<HTMLDivElement>(null);
@@ -38,25 +40,36 @@ export function LibraryEncounter({ children }: { children: ReactNode }) {
         }
       }}
     >
-      <div className="library-stage" aria-hidden="true">
+      <div
+        className="library-stage"
+        data-away={selected.location === "overworld" && selected.y > 700}
+        aria-hidden="true"
+      >
         <div className="library-actors">
           <div className="library-traveler">
             <PixelPerson variant={state.character?.appearance || 0} />
           </div>
           <img
             className="library-lia"
-            src="/assets/hearthwood/village/character-lia.png"
+            src="/assets/hearthwood/residents/lia-figure.png"
             alt=""
           />
         </div>
       </div>
       <div className="library-place">
-        <Leaf size={18} aria-hidden="true" /> 回响图书馆前
+        <Leaf size={18} aria-hidden="true" />{" "}
+        {selected.location === "overworld"
+          ? selected.y > 700
+            ? "风铃湖畔"
+            : "图书馆前"
+          : world
+            ? residentPlace(world, selected.location || state.location)
+            : "莉亚的日常相逢"}
       </div>
       <div className="library-dialogue">
         <header className="library-speaker">
           <img
-            src="/assets/hearthwood/encounters/lia-portrait.webp"
+            src="/assets/hearthwood/residents/lia-portrait.png"
             alt=""
             className="library-portrait"
           />
@@ -66,12 +79,13 @@ export function LibraryEncounter({ children }: { children: ReactNode }) {
           </div>
           <span className="library-relationship">
             <MapPin size={15} aria-hidden="true" />
-            关系值 {state.relationships[selected.id] || 0}
+            熟悉度 {state.relationships[selected.id] || 0}
           </span>
         </header>
         <div className="hp-speech library-speech" ref={speechRef}>
           {children}
         </div>
+        <NpcSocial id="lia" />
         {quest && !showRequest && (
           <div className="library-request-teaser" aria-label="莉亚的剧情委托">
             <Sparkles size={22} aria-hidden="true" />

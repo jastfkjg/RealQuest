@@ -9,9 +9,39 @@ export interface WorldObject {
   rect?: number[];
   hitbox?: number[];
   building?: string;
+  location?: string;
+  activity?: string;
+  walking?: boolean;
 }
 export interface World extends MapData {
   interiors: Record<string, MapData>;
+  residents?: Resident[];
+}
+export interface Resident {
+  id: string;
+  name: string;
+  role: string;
+  signature: string;
+  favorite: string;
+  liked: string;
+  help: string;
+  schedule: {
+    minute: number;
+    location: string;
+    x: number;
+    y: number;
+    activity: string;
+    legs: { location: string; seconds: number; points: number[][] }[];
+  }[];
+}
+export interface NpcEncounter {
+  id: string;
+  token: string;
+  location: string;
+  x: number;
+  y: number;
+  started_at: number;
+  until: number;
 }
 export interface LifeTask {
   id: string;
@@ -28,8 +58,16 @@ export interface LifeTask {
   source: "npc_elapsed";
   verified: false;
 }
-export type GrowthTarget = "vitality" | "stamina" | "science" | "magic" | "planting" | "ranching" | "building";
-export type GrowthCurrency = "health_points" | "knowledge_points" | "skill_points";
+export type GrowthTarget =
+  | "vitality"
+  | "stamina"
+  | "science"
+  | "magic"
+  | "planting"
+  | "ranching"
+  | "building";
+export type GrowthCurrency =
+  "health_points" | "knowledge_points" | "skill_points";
 export interface GrowthOption {
   currency: GrowthCurrency;
   cost: number;
@@ -42,9 +80,34 @@ export interface Market {
   timezone: string;
   buy: Record<string, number>;
   sell: Record<string, number>;
-  orders: { id: string; title: string; item: string; amount: number; gold: number; note: string; completed: boolean }[];
+  orders: {
+    id: string;
+    title: string;
+    item: string;
+    amount: number;
+    gold: number;
+    note: string;
+    completed: boolean;
+  }[];
 }
 export interface GameState {
+  world_clock?: {
+    elapsed: number;
+    updated_at: number;
+    running_until: number;
+    day_seconds: number;
+  };
+  npc_encounter?: NpcEncounter | null;
+  npc_social?: Record<
+    string,
+    {
+      greeted: boolean;
+      gifted: boolean;
+      helped: boolean;
+      memory_unlocked: boolean;
+    }
+  >;
+
   market?: Market;
   vitality?: { current: number; max: number };
   skill_growth?: { planting: number; ranching: number; building: number };
@@ -122,6 +185,7 @@ export interface Reply {
   message?: string;
 }
 export type Panel =
+  | "neighbors"
   | "training"
   | "menu"
   | "map"

@@ -48,10 +48,10 @@ export function preloadVillage(scene: Phaser.Scene) {
       frameWidth: ACTOR_FRAME.width,
       frameHeight: ACTOR_FRAME.height,
     });
-  for (const id of ["noah", "lia"])
+  for (const id of ["noah", "lia", "mira"])
     scene.load.spritesheet(
       `villager-${id}`,
-      `/assets/hearthwood/village/actor-${id}.png`,
+      `/assets/hearthwood/residents/${id}-actor.png`,
       {
         frameWidth: ACTOR_FRAME.width,
         frameHeight: ACTOR_FRAME.height,

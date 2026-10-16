@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
 from .quests import QUESTS, progress, quest_views
 from .market import market_view
+from .residents import RESIDENTS, ensure_clock, resident_position, near_resident, greeting, release_encounter, LEASE_SECONDS, settle_clock
 
 ATTRIBUTES = ['strength', 'wisdom', 'craft', 'stewardship', 'bond']
 ZONE = ZoneInfo('Asia/Shanghai')
@@ -33,6 +34,9 @@ def upgrade_state(original):
     state = copy.deepcopy(original)
     state.setdefault('location', 'overworld')
     state.setdefault('market_orders', {})
+    state.setdefault('npc_gifts', {})
+    state.setdefault('npc_helped', {})
+    state.setdefault('npc_encounter', None)
     state['relationships'].setdefault('mira', 0)
     state.setdefault('quests', {'settle_in': {'status':'active','accepted_at':0}} if state['character'] else {})
     state.setdefault('tracked_quest', 'settle_in')
@@ -194,10 +198,8 @@ def life_task_views(state, now):
 
 def life_command(state, action, data, now):
     if action != 'life_cancel':
-        npc = next(o for o in OBJECTS if o['id'] == 'noah')
-        require(data.get('target') == 'noah' and state['location'] == 'overworld'
-                and math.hypot(state['position']['x'] - npc['x'], state['position']['y'] - npc['y']) <= 72,
-                '请到河岸的诺亚身边，交谈后领取或结算现实委托')
+        require(data.get('target') == 'noah' and near_resident(state, 'noah', now),
+                '请到诺亚当前所在的位置，交谈后领取或结算现实委托；地图可查看行踪')
     if action == 'life_accept':
         task_id = study_uuid(data.get('task_id'))
         kind = data.get('kind')
@@ -286,9 +288,32 @@ def apply(state, action, data, now):
         # Append-only appearance IDs; 0–2 retain their original sprite bindings.
         appearance = integer(data.get('appearance', 0), 0, 5)
         state['character'] = {'name': name, 'appearance': appearance}
+        settle_clock(state, now, True)
         state['quests']['settle_in']={'status':'active','accepted_at':now}
         return '新任务：给新生活一个落脚点。走近小屋门口按 E 进入，再收集 3 份木材。'
     require(state['character'] is not None, '请先创建角色')
+    ensure_clock(state, now)
+    if action in ["world_resume", "world_pause"]:
+        owner = data.get('owner')
+        require(isinstance(owner,str) and len(owner) <= 64 and len(owner) >= 8, '世界视图标识无效')
+        if action == 'world_pause' and state['world_clock'].get('owner') != owner:
+            return '当前由另一个世界视图管理时间'
+        settle_clock(state, now, action == "world_resume")
+        state['world_clock']['owner'] = owner
+        if action == "world_resume": release_encounter(state, now)
+        return "继续村庄时光" if action == "world_resume" else "村庄稍等片刻"
+    if state['npc_encounter'] and state['npc_encounter']['until'] <= now:
+        release_encounter(state, now)
+    if action in ['npc_release', 'npc_keep']:
+        lease = state['npc_encounter']
+        if not lease or data.get('token') != lease['token']:
+            return '对话已经结束'
+        if action == 'npc_release':
+            release_encounter(state, now)
+            return '村民继续了自己的行程'
+        require(near_resident(state, lease['id'], now), '请走近村民再继续交谈')
+        lease['until'] = min(now + LEASE_SECONDS, lease['started_at'] + 300)
+        return '继续交谈'
     if action in ['life_accept', 'life_claim', 'life_cancel']:
         return life_command(state, action, data, now)
     if action == 'move':
@@ -493,7 +518,7 @@ def apply(state, action, data, now):
     if action in ['quest_accept', 'quest_claim']:
         quest = next((q for q in QUESTS if q['id'] == data.get('quest_id')), None)
         require(quest is not None, '任务不存在')
-        giver = next((o for o in map_for(location)['objects'] if o['id'] == quest['giver']), None)
+        giver = next((o for o in map_for(location, state, now)['objects'] if o['id'] == quest['giver']), None)
         require(giver is not None and math.hypot(state['position']['x']-giver['x'],state['position']['y']-giver['y']) <= 72, '请到发布任务的 NPC 或告示板旁接取、交付')
         view = next(q for q in quest_views(state) if q['id'] == quest['id'])
         if action == 'quest_accept':
@@ -510,12 +535,12 @@ def apply(state, action, data, now):
         if state['tracked_quest']==quest['id']:
             state['tracked_quest']=next((q['id'] for q in quest_views(state) if q['status'] in ['active','ready']),None)
         return f'任务完成：{quest["title"]}。奖励已放入背包'
-    obj = next((o for o in map_for(location)['objects'] if o['id'] == data.get('target')), None)
+    obj = next((o for o in map_for(location, state, now)['objects'] if o['id'] == data.get('target')), None)
     require(obj is not None, '交互对象不存在')
     require(math.hypot(state['position']['x']-obj['x'], state['position']['y']-obj['y']) <= 72, '请先走近这个对象')
     target = obj['id']
     if action in ['market_trade', 'market_deliver']:
-        require(location == 'shop' and target == 'mira', '请到风铃杂货铺，和米拉当面交易')
+        require(location == 'shop' and target in ['mira', 'shop_counter'], '请到风铃杂货铺的寄售柜台办理')
         market = market_view(state, now)
         if action == 'market_trade':
             side, item = data.get('side'), data.get('item')
@@ -606,11 +631,42 @@ def apply(state, action, data, now):
             state['relationships'][target] += 1
             state['npc_days'][target] = today
             grant_xp(state, 'bond', 5)
-        if target == 'mira':
-            return '欢迎来到风铃杂货铺！种子在左边，收获可以卖给我。货架上还贴着村里的订单，备齐材料再来，每份都有额外酬谢。'
-        if target == 'lia':
-            return '你的知识已经唤醒了符文。去图书馆东边的遗迹看看吧。' if state['attributes']['wisdom'] >= 25 else '每一次学习，都会在大陆留下回响。积累 25 点学识经验，就能读懂东边遗迹的符文。'
-        return '沿着村道向东，微光林地里藏着新的风景。想一起探索吗？下面可以接取我的委托。资源每 30 秒恢复，别忘了带上地图。'
+        line = greeting(state, target, now)
+        settle_clock(state, now, False)
+        release_encounter(state, now)
+        state['npc_encounter'] = {'id':target,'token':str(uuid.uuid4()),'location':location,
+                                  'x':obj['x'],'y':obj['y'],'started_at':now,'until':now+LEASE_SECONDS}
+        return line
+    if action in ['npc_topic', 'npc_gift', 'npc_help']:
+        require(target in RESIDENTS, '这不是村里的居民')
+        resident = RESIDENTS[target]
+        if action == 'npc_topic':
+            topic = data.get('topic')
+            require(topic in ['today','interest','memory','routine'], '这个话题还没有准备好')
+            if topic == 'today': return greeting(state, target, now)
+            if topic == 'memory':
+                require(state['relationships'].get(target,0) >= 5, '熟悉度达到 5 后，可以聊聊心里的故事')
+                return resident['memory']
+            if topic == 'routine':
+                return '我会按自己的节奏工作、散步、歇脚。村民近况里记着我的安排，地图也能找到我。和你聊天时，我会多停一会儿。'
+            return resident['interest']
+        if action == 'npc_gift':
+            require(state['npc_gifts'].get(target) != today, '今天已经送过心意，明天再来吧')
+            item = data.get('item')
+            require(isinstance(item,str) and item in ['wood','stone','plank','crop','seed'], '请选择一份背包里的物品')
+            spend(state, {item:1})
+            gain = 2 if item == resident['favorite'] else 1
+            state['npc_gifts'][target] = today
+            state['relationships'][target] = state['relationships'].get(target,0)+gain
+            reaction = '这正是我最喜欢的，谢谢你记得！' if gain == 2 else '谢谢你想着我，这份心意我收下了。'
+            return f'{resident["name"]}：{reaction} 熟悉度 +{gain}。'
+        require(state['npc_helped'].get(target) != today, '今天已经一起忙过了，明天再来吧')
+        recover_stamina(state, now)
+        require(state['stamina']['current'] >= 4, '帮忙需要 4 点体力，先歇一会儿吧')
+        state['stamina']['current'] -= 4
+        state['npc_helped'][target] = today
+        state['relationships'][target] = state['relationships'].get(target,0)+1
+        return f'{resident["name"]}：{resident["help_reply"]} 体力 −4，熟悉度 +1。'
     if action in ['plant', 'harvest']:
         require(obj['kind'] == 'plot', '这里不是农田')
         if action == 'plant':

@@ -1,4 +1,7 @@
 import type { LifeTask } from "../types";
+import { residentPlace } from "../game/residents";
+import { NpcPerson } from "./NpcPerson";
+import { NpcSocial } from "./Residents";
 import { LifeQuestDialogue, LifeQuota } from "./LifeQuests";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
@@ -15,7 +18,6 @@ import {
 } from "lucide-react";
 import { useGame } from "../stores/game";
 import { itemDefinitions, itemNames } from "../game/items";
-import { PixelPerson } from "./PixelPerson";
 import { QuestDetails } from "./Quests";
 import { questStatuses } from "../game/questPresentation";
 import { LibraryEncounter } from "./LibraryEncounter";
@@ -301,10 +303,11 @@ export function ConversationPanel({ children }: { children: ReactNode }) {
 }
 
 function OtherConversationPanel({ children }: { children: ReactNode }) {
-  const { selected, state, open } = useGame();
+  const { selected, state, world, open, navigate } = useGame();
   const [showRequest, setShowRequest] = useState(false);
   const [receipt, setReceipt] = useState<LifeTask | null>(null);
   const [life, setLife] = useState(selected?.id === "noah");
+  const [social, setSocial] = useState(false);
   const requestRef = useRef<HTMLDivElement>(null);
   const replyRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -330,13 +333,15 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
       data-contract={noah && life && activeCommission ? "true" : undefined}
       data-commission-phase={
         noah
-          ? !life
-            ? "talk"
-            : activeCommission
-              ? "active"
-              : receipt
-                ? "receipt"
-                : "offer"
+          ? social
+            ? "daily"
+            : !life
+              ? "talk"
+              : activeCommission
+                ? "active"
+                : receipt
+                  ? "receipt"
+                  : "offer"
           : undefined
       }
     >
@@ -348,8 +353,12 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
       )}
       {noah ? (
         <aside className="commission-host" aria-label="森林向导诺亚">
-          <div className="commission-riverside" aria-hidden="true">
-            <PixelPerson variant={2} />
+          <div
+            className="commission-riverside"
+            data-indoor={selected.location !== "overworld"}
+            aria-hidden="true"
+          >
+            <NpcPerson id="noah" />
           </div>
           <div className="commission-host-paper">
             <h3>{selected.name}</h3>
@@ -382,7 +391,10 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
             </blockquote>
             <small>
               <MapPin size={13} aria-hidden="true" />
-              河岸 · 关系值 {state.relationships[selected.id] || 0}
+              {world
+                ? residentPlace(world, selected.location || state.location)
+                : "今日相逢"}{" "}
+              · 熟悉度 {state.relationships[selected.id] || 0}
             </small>
           </div>
         </aside>
@@ -390,16 +402,18 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
         <aside className="ha-npc-identity">
           <span className="ha-eyebrow">林间相逢</span>
           <div className="ha-npc-vignette">
-            <PixelPerson variant={librarian ? 1 : 2} />
+            <NpcPerson id={selected.id} />
             <Leaf size={24} />
           </div>
           <h3>{selected.name}</h3>
-          <p>{librarian ? "图书管理员" : "森林向导"}</p>
+          <p>{librarian ? "图书管理员" : noah ? "森林向导" : "杂货铺店主"}</p>
           <span className="ha-npc-place">
             <MapPin size={14} />
-            {librarian ? "回响图书馆前" : "回响村庄 · 河岸"}
+            {world
+              ? residentPlace(world, selected.location || state.location)
+              : "村庄相逢"}
           </span>
-          <small>关系值 {state.relationships[selected.id] || 0}</small>
+          <small>熟悉度 {state.relationships[selected.id] || 0}</small>
         </aside>
       )}
       <div className="ha-dialogue-scene">
@@ -410,11 +424,32 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
               role="group"
               aria-label="对话话题"
             >
-              <button aria-pressed={life} onClick={() => setLife(true)}>
+              <button
+                aria-pressed={life && !social}
+                onClick={() => {
+                  setLife(true);
+                  setSocial(false);
+                }}
+              >
                 现实委托
               </button>
-              <button aria-pressed={!life} onClick={() => setLife(false)}>
+              <button
+                aria-pressed={!life && !social}
+                onClick={() => {
+                  setLife(false);
+                  setSocial(false);
+                }}
+              >
                 村庄闲谈
+              </button>
+              <button
+                aria-pressed={social}
+                onClick={() => {
+                  setSocial(true);
+                  setLife(false);
+                }}
+              >
+                邻里日常
               </button>
             </div>
             {life ? (
@@ -422,12 +457,30 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
             ) : (
               <span className="commission-place">
                 <MapPin size={16} aria-hidden="true" />
-                回响村庄 · 河岸
+                诺亚的村庄日常
               </span>
             )}
           </div>
         )}
-        {life && selected.id === "noah" ? (
+        {social && noah ? (
+          <section className="noah-daily-paper" aria-label="诺亚的日常相逢">
+            <header>
+              <NpcPerson id="noah" portrait />
+              <div>
+                <small>森林向导 · 邻里日常</small>
+                <h3>路上的事，生活的事</h3>
+              </div>
+            </header>
+            <div className="npc-reply">{children}</div>
+            <NpcSocial id="noah" />
+            <small className="npc-social-footnote">
+              预设村庄对话 · 游戏内互动
+            </small>
+            <button className="talk-farewell" onClick={() => open(null)}>
+              改天再聊
+            </button>
+          </section>
+        ) : life && selected.id === "noah" ? (
           <LifeQuestDialogue receipt={receipt} onReceipt={setReceipt} />
         ) : noah ? (
           <section className="noah-talk" aria-label="与诺亚闲谈">
@@ -497,6 +550,16 @@ function OtherConversationPanel({ children }: { children: ReactNode }) {
         ) : (
           <>
             <div className="ha-dialogue-label">{selected.name}说</div>
+            <NpcSocial id={selected.id} />
+            {!noah && !librarian && (
+              <button
+                onClick={() =>
+                  navigate({ mapId: "overworld", targetId: "shop" })
+                }
+              >
+                标记风铃杂货铺
+              </button>
+            )}
             <div className="hp-speech">
               {children}
               <small className="hp-story-label">预设剧情对话</small>

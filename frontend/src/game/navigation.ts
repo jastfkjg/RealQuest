@@ -5,13 +5,30 @@ import type {
   Quest,
   World,
 } from "../types";
-export const currentMap = (world: World, state: GameState): MapData =>
-  state.location === "overworld" ? world : world.interiors[state.location];
+import { serverNow } from "../stores/game";
+import { residentPositions } from "./residents";
+
+export const currentMap = (world: World, state: GameState): MapData => ({
+  ...(state.location === "overworld" ? world : world.interiors[state.location]),
+  objects: [
+    ...(state.location === "overworld"
+      ? world
+      : world.interiors[state.location]
+    ).objects.filter((o) => o.kind !== "npc"),
+    ...residentPositions(world, state, serverNow()).filter(
+      (r) => r.location === state.location,
+    ),
+  ],
+});
 export function accessibleTarget(
   target: NavigationTarget,
   world: World,
   state: GameState,
 ) {
+  const resident = residentPositions(world, state, serverNow()).find(
+    (r) => r.id === target.targetId,
+  );
+  if (resident) target = { ...target, mapId: resident.location };
   const map = currentMap(world, state);
   if (state.location === target.mapId)
     return map.objects.find((o) => o.id === target.targetId) || null;
@@ -25,7 +42,12 @@ export function questTarget(
 ): NavigationTarget | null {
   if (quest.status === "ready" || quest.status === "available")
     return {
-      mapId: quest.giver === "mira" ? "shop" : quest.giver === "guild_board" ? "guild" : "overworld",
+      mapId:
+        quest.giver === "mira"
+          ? "shop"
+          : quest.giver === "guild_board"
+            ? "guild"
+            : "overworld",
       targetId: quest.giver,
     };
   const step = quest.checks.findIndex((v) => !v);
