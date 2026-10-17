@@ -10,7 +10,7 @@
 
 ## 本地开发
 
-另有独立的 [Cocos Creator 本地迁移小样](clients/cocos/README.md)，可通过根目录 `start-cocos.command` 启动已构建的小样。它使用独立游客会话和独立数据库，原 Web 版与本节启动方式继续保留；阶段 4–5 继续接入任务、交易制作、村民、装备成长、研习与手动记录，以及原有五层洞穴战斗；功能迁移证据见[任务36](docs/tasks/36-cocos-features-combat.md)。洞穴美术、战斗 HUD、选目标/按住攻击和多指操作的本地打磨见[任务37](docs/tasks/37-cave-polish.md)；构建后用 `./start-cocos.command --web-port 5430` 同时预览 Web（5430）与 Cocos（5431），使用独立 API8130 和本地小样数据库。
+另有独立的 [Cocos Creator 本地迁移小样](clients/cocos/README.md)，可通过根目录 `start-cocos.command` 启动已构建的小样。它使用独立游客会话和独立数据库，原 Web 版与本节启动方式继续保留；阶段 4–5 继续接入任务、交易制作、村民、装备成长、研习与手动记录，以及原有五层洞穴战斗；功能迁移证据见[任务36](docs/tasks/36-cocos-features-combat.md)。洞穴美术、战斗 HUD、选目标/按住攻击和多指操作的本地打磨见[任务37](docs/tasks/37-cave-polish.md)；构建后用 `./start-cocos.command --web-port 5430` 同时预览 Web（5430）与 Cocos（5431），使用独立 API8130 和本地小样数据库。村庄细路、同源室内材质、储物箱选择与存取、自动走近及停步反馈的最新打磨见[任务38](docs/tasks/38-village-interior-polish.md)；刷新上述预览即可体验，沿用原本地小样存档。
 
 安家交付后会接上「第一次初探」引导：了解离村条件、准备并装备武器、清理山洞首层，再带材料回工坊查看用途。引导可在追踪栏收起、在「主菜单 → 旅人指南」继续，刷新保留进度；不另发奖励，也不要求初探前提升魔法。实现与验收见[任务29](docs/tasks/29-first-expedition.md)。
 

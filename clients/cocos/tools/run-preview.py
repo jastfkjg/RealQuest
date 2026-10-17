@@ -14,11 +14,12 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--port',type=int,default=5431)
 parser.add_argument('--api-port',type=int,default=8130)
 parser.add_argument('--web-port',type=int,help='Also serve the existing Web build against this isolated API')
+parser.add_argument('--database',default='output/cave-polish/local-preview.db',help='Preview database; default preserves the previous local sample')
 args=parser.parse_args()
-database = root / 'output/cave-polish/local-preview.db'
+database = (root / args.database).resolve()
 if not python.is_file():
     raise SystemExit('Prepare backend/.venv using the existing README first.')
-if not (root / 'clients/cocos/web-cave-polish/web-desktop/index.html').is_file():
+if not (root / 'clients/cocos/web-village-polish/web-desktop/index.html').is_file():
     raise SystemExit('Run the Cocos Web build first; see clients/cocos/README.md.')
 ports=[args.port,args.api_port]+([args.web_port] if args.web_port else [])
 if len(set(ports)) != len(ports):
@@ -49,7 +50,7 @@ signal.signal(signal.SIGTERM, stop)
 signal.signal(signal.SIGINT, stop)
 try:
     children.append(subprocess.Popen([str(python), '-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', str(args.api_port)], cwd=root / 'backend', env=env))
-    children.append(subprocess.Popen([sys.executable, str(root / 'clients/cocos/tools/serve.py'), '--port', str(args.port), '--api-port', str(args.api_port), '--build', 'web-cave-polish/web-desktop'], cwd=root, env=env))
+    children.append(subprocess.Popen([sys.executable, str(root / 'clients/cocos/tools/serve.py'), '--port', str(args.port), '--api-port', str(args.api_port), '--build', 'web-village-polish/web-desktop'], cwd=root, env=env))
     if args.web_port:
         children.append(subprocess.Popen([sys.executable, str(root / 'clients/cocos/tools/serve.py'), '--port', str(args.web_port), '--api-port', str(args.api_port), '--build', '../../frontend/dist'], cwd=root, env=env))
         print(f'Web: http://127.0.0.1:{args.web_port}',flush=True)

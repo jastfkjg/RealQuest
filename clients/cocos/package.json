@@ -18,6 +18,9 @@
     "test:phase45": "node tools/smoke-phase45.mjs",
     "test:depths": "node tools/smoke-depths.mjs",
     "test:landscape": "node tools/smoke-landscape.mjs",
-    "test:cave-view": "node tools/test-cave-view.mjs"
+    "test:cave-view": "node tools/test-cave-view.mjs",
+    "test:local-scene": "node tools/test-local-scene.mjs",
+    "art:local": "node ../../tools/build_local_scene_art.mjs",
+    "art:local:check": "node ../../tools/build_local_scene_art.mjs --check"
   }
 }

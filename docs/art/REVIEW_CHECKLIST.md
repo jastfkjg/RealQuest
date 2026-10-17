@@ -486,3 +486,16 @@ Status: implemented/browser-verified candidate; owner render/feel approval pendi
 - [ ] Owner actual render/feel, physical devices/Safari/native focus/IME/text scaling/screen readers, production weak-network and long-session checks remain open. Non-cave temporary artwork and platform release/account gates remain separate work.
 
 Files, commands, fixture limits, art provenance, screenshots/recordings and cleanup: [task37](../tasks/37-cave-polish.md).
+
+
+## Web/Cocos village and home — 2026-10-17
+
+Status: implemented/browser-verified candidate; owner render/feel approval pending.
+
+- [x] Reused existing fine-village/room family, independent source-scale furniture, correct open-chest dimensions, real facade/furniture hit areas and readable route/focus cues. Seven byte-reproducible terrain/floor/rug derivatives; existing source art unchanged.64 Cocos PNGs/78 total bindings;163-image audit passes.
+- [x] Actual village→home→storage/reading/short-rest→doorway return/reload works. Rejection/lost-reply replay preserves exact6/0→5/1→6/0 seed totals and request IDs. Escape/manual input/blur cancels routes, and Escape during delayed position sync prevents a late panel opening.
+- [x] Two-engine20-group suite plus updated11-group Cocos rerun and six final targeted checks pass with zero unexpected errors.21 distinct core flow groups/41 unique captures; four supplied frame-client captures. Desktop and landscape, DPR2 touch, reduced motion, real scheduled NPC poses, idle release, canopy visibility, native storage44px targets and cave spacing reviewed in actual images.
+- [x] Both genuine builds/actual Creator declarations, pure scene/helper/core checks,395 protected originals+7 extraction checks,87 game/daynight backend tests, reproducible art/preserved metadata, formatting and diff checks pass.
+- [ ] Owner actual render/feel, physical devices/Safari/native focus/IME/accessibility/text scaling, miniature-platform payload/VRAM and long sessions remain open. Farming/advanced item/travel/night gaps remain separate work.
+
+Exact files, commands, fixture/provenance limits, recordings and cleanup: [task38](../tasks/38-village-interior-polish.md).

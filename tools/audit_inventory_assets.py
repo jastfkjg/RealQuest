@@ -88,6 +88,17 @@ if manifest.get('departure_art'):
             village_entries.append(path)
     figures=[ROOT/f'frontend/public/assets/hearthwood/residents/{id}-figure.png' for id in ['lia','noah','mira','adu','lanya']]
     assert len({hashlib.sha256(p.read_bytes()).hexdigest() for p in figures})==5,'NPC figures must remain unique'
+# Local Cocos scene derivatives retain the original Web code and sprite inputs.
+if manifest.get('local_scene_art'):
+    local=json.loads((ROOT/manifest['local_scene_art']['manifest']).read_text())
+    for entry in local['inputs']+[local['layout']]:
+        path=ROOT/entry['path']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'],path
+    for entry in local['records']:
+        path=ROOT/entry['path']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'],path
+        with Image.open(path) as image:assert image.size==(entry['width'],entry['height']),path
+        village_entries.append(path)
 for path in sorted((ROOT / 'assets/vendor/ninja-adventure/ui').glob('*.png')) + sorted((ROOT / 'frontend/public/assets/ninja-adventure').rglob('*.png')) + [ROOT / entry['runtime_path'] for entry in manifest.get('generated_runtime_assets', []) + manifest.get('original_item_assets', [])] + village_entries:
     with Image.open(path) as source:
         rgba = source.convert('RGBA')

@@ -1827,7 +1827,8 @@
     "frontend/src/game/cave.ts",
     "frontend/src/game/GameCanvas.tsx",
     "frontend/src/components/CombatPanels.tsx",
-    "frontend/src/main.tsx"
+    "frontend/src/main.tsx",
+    "frontend/src/game/WorldScene.ts"
   ],
   "allowed_extension_reason": "Optional bearer guest transport; existing rules and migrations preserved.",
   "phase23_extraction": "Only compatible Web entry points change; canonical source moved verbatim except explicit clock injection. See task35.",
@@ -1840,5 +1841,13 @@
     ],
     "reason": "User-authorized cave art/HUD and input polish in both clients; server rules, saves and canonical extraction semantics stay protected.",
     "report": "docs/tasks/37-cave-polish.md"
+  },
+  "phase38_presentation": {
+    "files": [
+      "frontend/src/game/WorldScene.ts",
+      "frontend/src/main.tsx"
+    ],
+    "reason": "User-authorized village/home route cues and scoped field HUD. Existing scene source art, geography and authoritative rules remain protected.",
+    "report": "docs/tasks/38-village-interior-polish.md"
   }
 }

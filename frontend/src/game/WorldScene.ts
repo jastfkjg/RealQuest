@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import {routeMarks} from "../../../shared/game/localScene";
+import {paintGraphics} from "./cavePaint";
 import { trackedIntroStep } from "./villageIntro";
 import { caveLandscape, CaveController, clearCombatInput, combatInput, combatObjectArt } from "./cave";
 import { journeyLandscape, updateJourney, preloadJourney } from "./journey";
@@ -934,6 +936,7 @@ export class WorldScene extends Phaser.Scene {
       }
     }
     this.marker.clear();
+    if(!store.panel&&(this.map.id==="overworld"||this.map.id==="home"))paintGraphics(this.marker,routeMarks(this.path,this.reduced,this.elapsed/1000));
     const near = this.hovered || store.nearest;
     const highlighted = near && !store.panel;
     for (const npc of this.npcs) {

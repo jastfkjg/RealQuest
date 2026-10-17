@@ -2077,5 +2077,20 @@
     "runtime_png_bytes": 2199403,
     "generated_code_modules": 12,
     "task": "docs/tasks/37-cave-polish.md"
+  },
+  "local_scene_art": {
+    "status": "candidate_local_verified_pending_owner_review",
+    "manifest": "docs/art/local-scene-art-v1.json",
+    "source": "Reproducible derivatives of the existing original Web village terrain and fine room/rug renderers; existing unmodified generated sprites reused",
+    "scope": "Cocos material/layout parity across village and six existing rooms; scoped village/home UI and input refinement in both clients",
+    "new_raster_files": 7,
+    "raster_bytes": 3940084,
+    "source_images_modified": false,
+    "new_external_pack_font_audio_or_generation": false,
+    "world_collision_save_rules_changed": false,
+    "rebuild": "node tools/build_local_scene_art.mjs",
+    "check": "node tools/build_local_scene_art.mjs --check",
+    "runtime": "Cocos assets/resources/scenes; not included in Web bundle",
+    "task": "docs/tasks/38-village-interior-polish.md"
   }
 }
