@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Cocos functional panels and combat — phases4–5
+
+The binding manifest now records10 canonical code modules and the same52 unchanged PNGs/2,199,403bytes. No new raster, font, download or source processing. Linen/timber panels, selection/target indicators and cave ground are native Cocos Graphics. Monster silhouettes and authoritative telegraphs port existing `frontend/src/game/cave.ts` shapes; no new combat asset pack or animation is claimed. Equipment/loot entries without approved icons use explicit native text glyphs. These and prior provisional world/travel shapes remain art gaps before release. Owner actual-render approval stays open; see [task36](../tasks/36-cocos-features-combat.md).
+
 ## Cocos shared-world migration — phases2–3
 
 The current binding manifest supersedes the initial prototype counts:9 canonical code modules from `shared/game`,52 unchanged PNGs totaling2,199,403 bytes. Added bindings reuse existing room furniture, market facade/counter and five remaining actor sheets; provenance stays in this manifest and exact bytes/paths/hashes are in `clients/cocos/asset-bindings.json`. No new raster, font, upstream download or source-pack redistribution. Rooms use the unchanged480×368 footprints/collisions and furniture source pixels. Native Cocos ground/plank drawing, landmark markers and two simple travel-resident shapes are provisional presentation gaps; full Web art parity is not certified. See [task35](../tasks/35-cocos-shared-world.md).
@@ -296,3 +300,7 @@ Nine runtime PNGs under `frontend/public/assets/hearthwood/residents/` total210,
 ## Departure and first city — 2026-10-16
 
 Four original cutouts were generated with the built-in imagegen tool: boatman Adu, innkeeper Lanya, a mossy cliff and a rowboat. Immutable sources and exact prompts live in `docs/art/generated/departure-v1/`; reproducible packing and hashes live in `tools/build_departure_art.py` and `departure-art-v1.json`. Ten runtime PNGs provide two unique single-frame NPC actors, matching figures and portraits, three cliff footprints and a boat. Static NPCs do not claim walking cycles or village schedules. All five NPC figures have distinct hashes; prior player and village art remains unchanged. No third-party input, download, font, audio or pack was added. Source images stay outside the runtime bundle. Geography uses two source pixels per world unit, shared scenery, code-native terrain and installed Lucide icons. Actual render remains a candidate; evidence and the separately planned combat prerequisite are recorded in task27.
+
+## Shared cave presentation — 2026-10-17
+
+Original code-native artwork in `shared/game/caveArt.ts`: deterministic stone slabs/moss/safe shelter/lamp niches, actual entrance/gate/stairs/ladder bindings, and four distinct monster families. Both engines consume the same world-coordinate mark lists; Web's cached ground uses two source pixels per world unit, and native Graphics renders the remaining marks. Four discrete creature poses run at6Hz and freeze under reduced motion. No new bitmap, font, sound, download, image-generation input or third-party pack. Existing52 Cocos PNGs remain byte-identical (2,199,403bytes);12 generated code modules have exact bindings/hashes. The156-image source/runtime audit remains applicable. Owner approval and broader non-cave art parity remain open; see task37.

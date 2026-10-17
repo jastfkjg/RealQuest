@@ -1823,8 +1823,22 @@
     "frontend/src/game/residents.ts",
     "frontend/src/game/villageIntro.ts",
     "frontend/src/game/navigation.ts",
-    "frontend/src/game/appearances.ts"
+    "frontend/src/game/appearances.ts",
+    "frontend/src/game/cave.ts",
+    "frontend/src/game/GameCanvas.tsx",
+    "frontend/src/components/CombatPanels.tsx",
+    "frontend/src/main.tsx"
   ],
   "allowed_extension_reason": "Optional bearer guest transport; existing rules and migrations preserved.",
-  "phase23_extraction": "Only compatible Web entry points change; canonical source moved verbatim except explicit clock injection. See task35."
+  "phase23_extraction": "Only compatible Web entry points change; canonical source moved verbatim except explicit clock injection. See task35.",
+  "phase37_presentation": {
+    "files": [
+      "frontend/src/game/cave.ts",
+      "frontend/src/game/GameCanvas.tsx",
+      "frontend/src/components/CombatPanels.tsx",
+      "frontend/src/main.tsx"
+    ],
+    "reason": "User-authorized cave art/HUD and input polish in both clients; server rules, saves and canonical extraction semantics stay protected.",
+    "report": "docs/tasks/37-cave-polish.md"
+  }
 }

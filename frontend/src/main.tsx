@@ -31,6 +31,7 @@ import "./world-ui-refinement.css";
 import "./living-controls.css";
 import "./field-panels.css";
 import "./next-departure.css";
+import "./cave-polish.css";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 if (import.meta.env.DEV && window.location.pathname === "/dev/ui") {
   void import("./dev/InventoryPreview").then(({ default: InventoryPreview }) =>

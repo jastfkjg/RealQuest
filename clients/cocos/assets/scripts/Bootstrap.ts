@@ -5,14 +5,22 @@ import {
   game, Game, sys, UIOpacity, profiler, Canvas, Widget, director, screen,
 } from 'cc';
 import { Client, readRecovery, type RecoveryFile } from './core/client';
-import { transport, platformName, viewportSize, subscribeViewport, subscribeFocus, textOwnsInput, chooseRecovery, downloadRecovery } from './platform';
+import { transport, platformName, viewportSize, subscribeViewport, subscribeFocus, subscribeTextEscape, reducedMotion, textOwnsInput, chooseRecovery, downloadRecovery } from './platform';
 import { serverNow } from './core/clock';
-import { pathfind, walkable, currentMap, mapById } from './core/navigation';
+import { pathfind, walkable, currentMap, mapById, accessibleTarget } from './core/navigation';
 import { interactionFor } from './core/interaction';
 import { residentPositions, villageClock, clockLabel } from './core/residents';
-import type { WorldObject } from './core/protocol';
+import type { WorldObject, NavigationTarget } from './core/protocol';
 const { ccclass } = _decorator;
-const C = { ink: '#27392f', muted: '#56614f', paper: '#f4efde', raised: '#fffbf0', moss: '#3f6348', amber: '#d3a450', line: '#b4b89c', wood: '#8f6e4d', danger: '#934537' };
+import {C} from './ui/theme';
+import {FeaturePanels,type PanelHost} from './ui/panels';
+import {CombatRenderer} from './combatView';
+import {combatIntention,itemNames} from './core/features';
+import {caveGround,caveRouteArt} from './core/caveArt';
+import {caveStatus,nextTarget} from './core/caveView';
+import {paintGraphics} from './cavePaint';
+import {CombatDock} from './ui/combatDock';
+
 type Control = { id: string; label: string; x: number; y: number; w: number; h: number; disabled: boolean };
 
 @ccclass('RealQuestSpike')
@@ -20,6 +28,9 @@ export class RealQuestSpike extends Component {
   private client = new Client(transport, () => { this.dirty = true; });
   private world = new Node('World');
   private hud = new Node('HUD');
+  private touchPad = new Node('TouchPad');
+  private padSize='';private padControls:Control[]=[];
+  private unsubscribeText=()=>{};
   private panel = new Node('Panel');
   private actor = new Node('Player');
   private objects = new Map<string, Node>();
@@ -27,11 +38,13 @@ export class RealQuestSpike extends Component {
   private frames = new Map<string, SpriteFrame>();
   private actorFrames = new Map<string, SpriteFrame>();
   private keys = new Set<number>();
+  private touches=new Map<number,number>();
   private controls: Control[] = [];
   private p = { x: 240, y: 320 };
   private route: { x: number; y: number }[] = [];
   private mode = 'welcome';
   private selected = 'seed';
+  private inventoryGroup=0;private inventoryPage=0;private storagePage=0;
   private quick = ['seed', 'wood', 'stone', 'crop'];
   private busy = false;
   private error = '';
@@ -63,6 +76,16 @@ export class RealQuestSpike extends Component {
   private focusId = '';
   private lastNearby = '';
   private depths = new Map<Node, number>();
+  private features=new FeaturePanels();
+  private combatRenderer=new CombatRenderer(this.world,this.depths);
+  private combatDock:CombatDock|null=null;
+  private combatPending:Promise<unknown>|null=null;
+  private combatLastTick=0;
+  private targetId:string|null=null;
+  private attackPulse=false;private sparkPulse=false;private soupPulse=false;
+  private marker:NavigationTarget|null=null;private markerLabel='';
+  private panelHistory:{mode:string;focus:string}[]=[];
+  private lastSecond=-1;private lastNpcKeep=0;
   private actorArt() { return 'actor-' + (this.client.state?.character?.appearance || 0); }
   private map() { return currentMap(this.client.world!, this.client.state!, serverNow()); }
   private canPlay() { return ['ready','saving'].includes(this.client.status); }
@@ -70,7 +93,7 @@ export class RealQuestSpike extends Component {
 
   onLoad() {
     profiler.hideStats();
-    for (const n of [this.world, this.hud, this.panel]) { n.layer = this.node.layer; this.node.addChild(n); }
+    for (const n of [this.world, this.hud, this.touchPad, this.panel]) { n.layer = this.node.layer; this.node.addChild(n); }
     this.world.addComponent(UITransform);
     this.world.getComponent(UITransform)!.setAnchorPoint(0, 1);
     this.world.on(Node.EventType.TOUCH_END, this.worldTouch, this);
@@ -83,6 +106,10 @@ export class RealQuestSpike extends Component {
     view.on('canvas-resize', this.resize, this);
     this.unsubscribeViewport=subscribeViewport(()=>this.resize());
     this.unsubscribeFocus=subscribeFocus(()=>this.hide(),()=>this.show());
+    this.unsubscribeText=subscribeTextEscape(()=>{this.clearInput();this.dirty=true;});
+    this.combatRenderer.attachFeedback(this.node);
+    this.combatDock=new CombatDock(this.node,id=>{if(id==='next-target')this.targetId=nextTarget(this.client.state!,this.targetId);else if(id==='attack')this.attackPulse=true;else if(id==='spark')this.sparkPulse=true;else this.soupPulse=true;this.dirty=true;});
+    this.panel.setSiblingIndex(this.node.children.length-1);
     this.resize();
     const host = globalThis as unknown as Record<string, any>;
     host.render_game_to_text = () => JSON.stringify(this.snapshot());
@@ -93,6 +120,7 @@ export class RealQuestSpike extends Component {
   onDestroy() {
     this.unsubscribeViewport();
     this.unsubscribeFocus();
+    this.unsubscribeText();
     for (const frame of this.actorFrames.values()) frame.destroy();
     input.off(Input.EventType.KEY_DOWN, this.keyDown, this);
     input.off(Input.EventType.KEY_UP, this.keyUp, this);
@@ -164,6 +192,8 @@ export class RealQuestSpike extends Component {
     if(!disabled)this.actions.set(id,action);
     if(this.focusId===id){const g=n.getComponent(Graphics)!;g.strokeColor=new Color(C.amber);g.lineWidth=3;g.roundRect(-w/2-2,-h/2-2,w+4,h+4,10);g.stroke();}
     const opacity = n.addComponent(UIOpacity);
+    n.on(Node.EventType.MOUSE_ENTER,()=>{if(!disabled)opacity.opacity=225;});
+    n.on(Node.EventType.MOUSE_LEAVE,()=>{opacity.opacity=255;});
     n.on(Node.EventType.TOUCH_START, () => { if (!disabled) opacity.opacity=195; });
     n.on(Node.EventType.TOUCH_CANCEL, () => { opacity.opacity=255; });
     n.on(Node.EventType.TOUCH_END, () => { opacity.opacity=255; });
@@ -196,6 +226,7 @@ export class RealQuestSpike extends Component {
     finally { this.busy = false; this.dirty = true; }
   }
   private buildWorld() {
+    this.combatRenderer.reset();this.targetId=null;
     this.clearInput(); this.clear(this.world); this.objects.clear(); this.plotVisuals.clear(); this.depths.clear();
     const map = this.map(); this.sceneId=map.id;
     this.world.getComponent(UITransform)!.setContentSize(map.width, map.height);
@@ -210,6 +241,8 @@ export class RealQuestSpike extends Component {
     rect(1184,864,224,176,'#689e9b');rect(1232,816,128,48,'#689e9b');rect(1232,1040,128,32,'#689e9b');
     rect(448,0,64,1280,'#689e9b'); rect(456,0,12,1280,'#7eb0a7');
     for (const y of [320,872]) this.image(this.world,'village/bridge',480,y+20,104,76);
+    } else if(map.id.startsWith('cave_')){
+      paintGraphics(g,caveGround(map));
     } else if(map.outdoor){
       rect(0,0,map.width,map.height,map.id==='city'?'#a5a47e':'#8da878');
       rect(48,map.height*0.6,map.width-96,44,'#c8bc8b');
@@ -240,6 +273,9 @@ export class RealQuestSpike extends Component {
       const node=this.image(this.world,'village/'+art,x,y-h/2,w,h)!; this.objects.set(obj.id,node);this.depths.set(node,y);
     }
     for(const obj of map.objects.filter(o=>!this.objects.has(o.id)&&!['plot','npc','travel_npc'].includes(o.kind))){
+      if(obj.kind==='cave'||obj.id==='village_departure'){
+        const n=this.make(this.world,obj.id,0,0,128,128);paintGraphics(n.addComponent(Graphics),caveRouteArt(obj,this.client.state!));this.objects.set(obj.id,n);this.depths.set(n,obj.y);continue;
+      }
       const color=['building','exit','passage','cave'].includes(obj.kind)?C.wood:C.moss;
       const n=this.box(this.world,obj.id,obj.x-8,obj.y-10,16,18,color,2);this.objects.set(obj.id,n);this.depths.set(n,obj.y);
       if(!map.outdoor&&map.id!=='overworld'&&obj.kind!=='exit'&&obj.kind!=='cave')n.active=false;
@@ -267,38 +303,46 @@ export class RealQuestSpike extends Component {
     if (!this.client.world || !this.client.state) return [];
     return this.map().objects;
   }
-  private nearest() { return this.supportedObjects().filter(o=>Math.hypot(o.x-this.p.x,o.y-this.p.y)<65).sort((a,b)=>Math.hypot(a.x-this.p.x,a.y-this.p.y)-Math.hypot(b.x-this.p.x,b.y-this.p.y))[0]; }
+  private nearest() { return this.supportedObjects().filter(o=>Math.hypot(o.x-this.p.x,o.y-this.p.y)<65).sort((a,b)=>Math.hypot(a.x-this.p.x,a.y-this.p.y)-Math.hypot(b.x-this.p.x,b.y-this.p.y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0]; }
   private keyDown(e: EventKeyboard) {
     if(textOwnsInput() || (e as any).isComposing)return;
     if(e.keyCode===KeyCode.TAB){const ids=this.controls.filter(c=>!c.disabled&&this.actions.has(c.id)).map(c=>c.id);const i=ids.indexOf(this.focusId);this.focusId=ids[(i+1)%ids.length]||'';this.dirty=true;return;}
     if((e.keyCode===KeyCode.ENTER||e.keyCode===KeyCode.SPACE)&&this.focusId){this.actions.get(this.focusId)?.();return;}
     if (this.mode==='welcome') return;
-    if(e.keyCode===KeyCode.ESCAPE){if(!this.busy){this.recovery=null;this.recoveryPreview=null;this.open(this.client.state?.character?'world':'welcome');}return;}
+    if(e.keyCode===KeyCode.ESCAPE){if(!this.busy){this.recovery=null;this.recoveryPreview=null;this.closePanel();}return;}
     if(e.keyCode===KeyCode.KEY_I){ this.open(this.mode==='inventory'?'world':'inventory'); return; }
+    if(e.keyCode===KeyCode.KEY_J){this.navigate('journal');return;}
+    if(e.keyCode===KeyCode.KEY_M){this.navigate('map');return;}
     if(e.keyCode===KeyCode.KEY_L){ this.open(this.mode==='life'?'world':'life'); return; }
     if(this.mode!=='world') return;
+    if(e.keyCode>=KeyCode.DIGIT_1&&e.keyCode<=KeyCode.DIGIT_4){this.selected=this.quick[e.keyCode-KeyCode.DIGIT_1];this.open('inventory');return;}
+    if(e.keyCode===KeyCode.KEY_T&&this.client.state?.location.startsWith('cave_')){this.targetId=nextTarget(this.client.state,this.targetId);this.dirty=true;return;}
     if(e.keyCode===KeyCode.KEY_E) { void this.interact(); return; }
-    this.route=[]; this.keys.add(e.keyCode);
+    if([KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].includes(e.keyCode))this.route=[]; this.keys.add(e.keyCode);
   }
-  private touchRelease(){this.keys.clear();}
+  private touchRelease(event:EventTouch){this.touches.delete((event.getID()??0));}
   private keyUp(e: EventKeyboard) { this.keys.delete(e.keyCode); }
-  private clearInput() { this.keys.clear(); this.route=[]; }
+  private clearInput() { this.keys.clear();this.touches.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=false;this.combatDock?.release(); }
   private hide() { this.shown=false; this.clearInput(); if(this.client.state&&this.canPlay()) void this.client.command('world_pause',{owner:this.owner}).catch(()=>{}); }
   private show() { this.shown=true; this.clearInput(); if(this.client.state) void this.client.refresh().then(()=>{this.p={...this.client.state!.position};this.dirty=true;}).catch(e=>{this.error=e.message;this.dirty=true;}); this.lastHeartbeat=-5; }
   private open(mode: string) {
-    this.mode=mode; this.page=0;this.focusId=''; this.clearInput(); this.error=''; this.dirty=true;
+    if(mode==='world'){this.panelHistory=[];const lease=this.client.state?.npc_encounter;if(lease&&this.canPlay())void this.client.command('npc_release',{token:lease.token}).catch(()=>{});}
+    this.features.reset();this.mode=mode; this.page=0;this.focusId=''; this.clearInput(); this.error=''; this.dirty=true;
     if(this.client.state?.character&&this.canPlay()) void this.client.command(mode==='world'?'world_resume':'world_pause',{owner:this.owner}).catch(e=>{this.error=e.message;this.dirty=true;});
   }
   private worldTouch(e: EventTouch) {
     if(this.mode!=='world'||this.busy||!this.client.world||!this.canPlay())return;
     const u=e.getUILocation(), local=this.node.getComponent(UITransform)!.convertToNodeSpaceAR(new Vec3(u.x,u.y));
     const x=(local.x-this.world.position.x)/this.zoom, y=-(local.y-this.world.position.y)/this.zoom;
-    const obj=this.supportedObjects().find(o=>Math.hypot(o.x-x,o.y-y)<28);
+    const enemy=this.client.state?.combat?.enemies.find(enemy=>enemy.hp>0&&Math.hypot(enemy.x-x,enemy.y-y)<(enemy.kind==='boss'?36:26));
+    if(this.client.state?.location.startsWith('cave_')&&enemy){this.targetId=enemy.id;this.dirty=true;return;}
+    const obj=this.supportedObjects().filter(o=>Math.hypot(o.x-x,o.y-y)<28).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0];
     if(obj&&Math.hypot(obj.x-this.p.x,obj.y-this.p.y)<65) { void this.interact(obj); return; }
     this.keys.clear(); this.route=pathfind(this.map(),this.p,{x,y});
   }
   private async syncMove() {
     if(this.movePromise) await this.movePromise;
+    if(this.client.state?.location.startsWith('cave_')){if(this.combatPending)await this.combatPending;return;}
     if(!this.canPlay()||!this.client.state||Math.hypot(this.p.x-this.client.state.position.x,this.p.y-this.client.state.position.y)<0.5)return;
     this.movePromise=this.client.command('move',{x:this.p.x,y:this.p.y,location:this.client.state.location});
     try { await this.movePromise; }
@@ -312,9 +356,9 @@ export class RealQuestSpike extends Component {
       await this.syncMove();
       this.context=obj;
       if(obj.kind==='npc') {
-        const reply=await this.client.command('talk',{target:obj.id}); this.npc=obj; this.notice=reply.message||''; this.open('dialogue');
+        const reply=await this.client.command('talk',{target:obj.id}); this.npc=obj;this.features.npcTab='talk'; this.notice=reply.message||''; this.open('dialogue');
       } else if(['passage','travel','travel_npc','rest','storage','cave','station','study','market','board','armory','spellbook'].includes(obj.kind)){
-        this.open(obj.kind==='rest'?'sleep':obj.kind==='storage'?'storage':['passage','travel','travel_npc'].includes(obj.kind)?'travel':'context');
+        this.open(({rest:'sleep',storage:'storage',station:'building',study:'life',market:'shop',board:'quests',armory:'armory',spellbook:'spellbook',cave:'cave'} as Record<string,string>)[obj.kind]||(['passage','travel','travel_npc'].includes(obj.kind)?(obj.id==='village_departure'&&!this.client.state!.combat?.gate_open?'gate':'travel'):'context'));
       } else {
         const action=interactionFor(obj,this.client.state!,serverNow());
         if(action.reason)throw new Error(action.reason);
@@ -327,21 +371,26 @@ export class RealQuestSpike extends Component {
     this.elapsed+=dt;
     if(this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
     if(this.client.state&&this.mode==='world'&&this.shown&&this.canPlay()) {
-      let dx=Number(this.keys.has(KeyCode.KEY_D)||this.keys.has(KeyCode.ARROW_RIGHT))-Number(this.keys.has(KeyCode.KEY_A)||this.keys.has(KeyCode.ARROW_LEFT));
-      let dy=Number(this.keys.has(KeyCode.KEY_S)||this.keys.has(KeyCode.ARROW_DOWN))-Number(this.keys.has(KeyCode.KEY_W)||this.keys.has(KeyCode.ARROW_UP));
-      if(this.route.length){const to=this.route[0],d=Math.hypot(to.x-this.p.x,to.y-this.p.y);if(d<5)this.route.shift();else{dx=(to.x-this.p.x)/d;dy=(to.y-this.p.y)/d;}}
+      // Creator's array-spread transform assumes arrays, not Map iterators.
+      const touchKeys=Array.from(this.touches.values());
+      let dx=Number(this.keys.has(KeyCode.KEY_D)||this.keys.has(KeyCode.ARROW_RIGHT)||touchKeys.includes(KeyCode.ARROW_RIGHT))-Number(this.keys.has(KeyCode.KEY_A)||this.keys.has(KeyCode.ARROW_LEFT)||touchKeys.includes(KeyCode.ARROW_LEFT));
+      let dy=Number(this.keys.has(KeyCode.KEY_S)||this.keys.has(KeyCode.ARROW_DOWN)||touchKeys.includes(KeyCode.ARROW_DOWN))-Number(this.keys.has(KeyCode.KEY_W)||this.keys.has(KeyCode.ARROW_UP)||touchKeys.includes(KeyCode.ARROW_UP));
+      if(this.route.length){const to=this.route[0],from=this.client.state.location.startsWith('cave_')?this.client.state.position:this.p,d=Math.hypot(to.x-from.x,to.y-from.y);if(d<8)this.route.shift();else{const scale=this.client.state.location.startsWith('cave_')?Math.min(1,d/40):1;dx=(to.x-from.x)/d*scale;dy=(to.y-from.y)/d*scale;}}
       const length=Math.max(1,Math.hypot(dx,dy)), step=Math.min(dt,0.05)*120;
+      const cave=this.client.state.location.startsWith('cave_');
       const next={x:this.p.x+dx/length*step,y:this.p.y+dy/length*step};
-      if(!this.busy&&walkable(this.map(),next.x,this.p.y))this.p.x=next.x;
-      if(!this.busy&&walkable(this.map(),this.p.x,next.y))this.p.y=next.y;
+      if(cave){this.updateCombat(dx,dy);const to=this.client.state.position,factor=Math.min(1,dt*18);this.p.x+=(to.x-this.p.x)*factor;this.p.y+=(to.y-this.p.y)*factor;}
+      if(!cave&&!this.busy&&walkable(this.map(),next.x,this.p.y))this.p.x=next.x;
+      if(!cave&&!this.busy&&walkable(this.map(),this.p.x,next.y))this.p.y=next.y;
       this.actor.setPosition(this.p.x,-this.p.y+15);
       if(dx||dy)this.setActor(this.actor,this.actorArt(),(Math.floor(this.elapsed*7)%4)*4+(dx>0?3:dx<0?2:dy<0?1:0));
-      if(!this.movePromise&&this.elapsed-this.lastMove>0.18){this.lastMove=this.elapsed;void this.syncMove();}
+      if(!cave&&!this.movePromise&&this.elapsed-this.lastMove>0.18){this.lastMove=this.elapsed;void this.syncMove();}
       if(this.elapsed-this.lastHeartbeat>3){this.lastHeartbeat=this.elapsed;void this.client.command('world_resume',{owner:this.owner}).catch(()=>{});}
       if(this.elapsed-this.lastRefresh>5){this.lastRefresh=this.elapsed;void this.client.refresh().catch(()=>{});}
       const map=this.map(), halfW=this.width/this.zoom/2, halfH=this.height/this.zoom/2;
       this.world.setScale(this.zoom,this.zoom,1);
       this.world.setPosition(-(map.width<halfW*2?map.width/2:Math.max(halfW,Math.min(map.width-halfW,this.p.x)))*this.zoom,(map.height<halfH*2?map.height/2:Math.max(halfH,Math.min(map.height-halfH,this.p.y)))*this.zoom);
+      this.combatRenderer.draw(this.client.state,this.targetId,reducedMotion(),{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height});
       for(const [id,node] of this.objects)if(['lia','noah','mira'].includes(id))node.active=false;
       for(const obj of this.supportedObjects()){
         let n=this.objects.get(obj.id);
@@ -364,31 +413,55 @@ export class RealQuestSpike extends Component {
     [...this.world.children].sort((a,b)=>(this.depths.get(a)||-1000)-(this.depths.get(b)||-1000)).forEach((n,i)=>n.setSiblingIndex(i));
     const nearby=this.nearest(), signature=(nearby?.id||'')+JSON.stringify(nearby&&this.client.state?interactionFor(nearby,this.client.state,serverNow()):null);
     if(signature!==this.lastNearby){this.lastNearby=signature;this.dirty=true;}
-    if(this.dirty){this.dirty=false;this.drawUI();}
+    if(this.client.state&&this.mode!=='world'&&this.mode!=='welcome'&&Math.floor(this.elapsed)!==this.lastSecond){this.lastSecond=Math.floor(this.elapsed);this.dirty=true;}
+    if(this.shown&&this.mode!=='world'&&this.context?.kind==='npc'&&this.client.state?.npc_encounter&&this.elapsed-this.lastNpcKeep>10&&this.canPlay()){
+      this.lastNpcKeep=this.elapsed;void this.client.command('npc_keep',{token:this.client.state.npc_encounter.token}).catch(()=>{});
+    }
+    if(this.dirty&&(!textOwnsInput()||this.busy)){this.dirty=false;this.drawUI();}
   }
   private drawUI() {
     this.clear(this.hud); this.clear(this.panel); this.controls=[];this.actions.clear();
     this.hud.setPosition(-this.width/2,this.height/2); this.panel.setPosition(-this.width/2,this.height/2);
+    this.touchPad.active=this.mode==='world'&&this.width<1000;
+    if(this.mode!=='world')this.combatRenderer.hide();
+    if(this.mode!=='world'||!this.client.state?.location.startsWith('cave_'))this.combatDock?.hide();
     if(this.mode==='welcome'){this.welcome();return;}
     if(this.mode==='session'){this.drawSession();return;}
     const s=this.client.state!;
+    if(!s.location.startsWith('cave_')){
     this.box(this.hud,'Brand',20,20,270,74,C.paper);
     this.text(this.hud,'BrandTitle','RealQuest · 林间旅程',36,28,235,28,20);
     this.text(this.hud,'SaveStatus',this.busy?'正在保存…':this.map().name+' · '+this.connectionLabel(),36,58,235,24,14,C.muted);
+    }
+    this.button(this.hud,'menu','旅程',this.width-392,20,72,48,()=>this.navigate('menu'));
     this.button(this.hud,'session','存档',this.width-308,20,72,48,()=>this.open('session'));
     this.button(this.hud,'inventory','行囊  I',this.width-224,20,96,48,()=>this.open('inventory'));
-    this.button(this.hud,'life','成长  L',this.width-116,20,96,48,()=>this.open('life'));
+    this.button(this.hud,'life','成长  L',this.width-116,20,96,48,()=>this.navigate('life'));
     const n=this.nearest(), action=n?interactionFor(n,s,serverNow()):null;
-    this.button(this.hud,'interact',this.busy?'保存中…':n?action!.reason||`${action!.label}  E`:'走近门口、家具或村民',this.width-272,this.height-76,252,56,()=>this.interact(),!n||this.busy||!this.canPlay()||!!action?.reason,true);
-    this.text(this.hud,'MovementHint','WASD / 方向键移动 · 点击地面寻路',24,this.height-38,350,24,14,C.paper);
-    if(this.width<1000){for(const [id,label,x,y,key] of [['up','↑',76,this.height-174,KeyCode.ARROW_UP],['left','←',24,this.height-122,KeyCode.ARROW_LEFT],['down','↓',76,this.height-122,KeyCode.ARROW_DOWN],['right','→',128,this.height-122,KeyCode.ARROW_RIGHT]] as const){this.button(this.hud,id,label,x,y,48,48,()=>{});const b=this.hud.getChildByName(id)!;b.on(Node.EventType.TOUCH_START,()=>{this.route=[];this.keys.add(key);});b.on(Node.EventType.TOUCH_END,()=>this.keys.delete(key));b.on(Node.EventType.TOUCH_CANCEL,()=>this.keys.delete(key));}}
+    this.button(this.hud,'interact',this.busy?'保存中…':n?action!.reason||`${action!.label}  E`:s.location.startsWith('cave_')?'走近阶梯或休息平台':'走近门口、家具或村民',this.width-272,this.height-76,252,56,()=>this.interact(),!n||this.busy||!this.canPlay()||!!action?.reason,true);
+    if(!s.location.startsWith('cave_'))this.text(this.hud,'MovementHint','WASD / 方向键移动 · 点击地面寻路',24,this.height-38,350,24,14,C.paper);
+    this.drawTouchPad();
     if(!this.canPlay()&&!this.busy)this.button(this.hud,'reconnect','重连并确认待保存操作',20,106,270,44,()=>this.reconnect(),false,true);
-    if((this.error||this.notice)&&this.mode==='world'){
-      const x=Math.max(200,(this.width-480)/2),w=Math.min(480,this.width-x-20);
-      this.box(this.hud,'FeedbackPaper',x,this.height-134,w,52,C.paper,8);
-      this.text(this.hud,'Feedback',this.error||this.notice,x+12,this.height-130,w-24,44,15,this.error?C.danger:C.ink,true);
+    if((this.error||this.notice)&&this.mode==='world'&&!s.location.startsWith('cave_')){
+      const x=Math.max(200,(this.width-480)/2),w=Math.min(480,this.width-x-20),yy=this.height-(s.location.startsWith('cave_')&&this.width<1000?198:134);
+      this.box(this.hud,'FeedbackPaper',x,yy,w,52,C.paper,8);
+      this.text(this.hud,'Feedback',this.error||this.notice,x+12,yy+4,w-24,44,15,this.error?C.danger:C.ink,true);
     }
+    this.drawStatus();
     if(this.mode!=='world')this.drawPanel();
+  }
+  private drawTouchPad(){
+    this.touchPad.active=this.mode==='world'&&this.width<1000;if(!this.touchPad.active)return;
+    this.touchPad.setPosition(-this.width/2,this.height/2);const size=this.width+':'+this.height;
+    // Keep touch targets alive while network receipts rebuild the surrounding HUD.
+    if(this.padSize===size){this.controls.push(...this.padControls);return;}
+    this.clear(this.touchPad);this.touches.clear();this.padSize=size;const start=this.controls.length;
+    for(const [id,label,x,y,key] of [['up','↑',76,this.height-174,KeyCode.ARROW_UP],['left','←',24,this.height-122,KeyCode.ARROW_LEFT],['down','↓',76,this.height-122,KeyCode.ARROW_DOWN],['right','→',128,this.height-122,KeyCode.ARROW_RIGHT]] as const){
+      this.button(this.touchPad,id,label,x,y,48,48,()=>{});const b=this.touchPad.getChildByName(id)!;
+      b.on(Node.EventType.TOUCH_START,(event:EventTouch)=>{this.route=[];this.touches.set(event.getID()??0,key);});
+      b.on(Node.EventType.TOUCH_END,this.touchRelease,this);b.on(Node.EventType.TOUCH_CANCEL,this.touchRelease,this);
+    }
+    this.padControls=this.controls.slice(start);
   }
   private welcome() {
     this.box(this.panel,'Backdrop',0,0,this.width,this.height,'#dee3cf',0);
@@ -414,16 +487,19 @@ export class RealQuestSpike extends Component {
   private drawPanel() {
     this.controls=[];this.actions.clear();
     const overlay=this.box(this.panel,'ModalScrim',0,0,this.width,this.height,'#263b32b8',0);overlay.addComponent(BlockInputEvents);
-    const w=Math.min(880,this.width-40),h=Math.min(this.mode==='inventory'?430:this.mode==='life'?390:['travel','storage','sleep','context'].includes(this.mode)?440:320,this.height-32),x=(this.width-w)/2,y=(this.height-h)/2;
+    if(this.features.handles(this.mode)){this.features.draw(this.panelHost());return;}
+    const w=Math.min(880,this.width-40),h=Math.min(this.mode==='inventory'?430:['travel','storage','sleep','context'].includes(this.mode)?440:320,this.height-32),x=(this.width-w)/2,y=(this.height-h)/2;
     this.box(this.panel,'ReadingLeaf',x,y,w,h,C.paper,16);
-    const title=this.mode==='inventory'?'旅人的行囊':this.mode==='life'?'现实成长':this.mode==='dialogue'?(this.npc?.name||'村民对话'):(this.context?.name||'旅途安排');
+    const title=this.mode==='inventory'?'旅人的行囊':(this.context?.name||'旅途安排');
     this.text(this.panel,'PanelTitle',title,x+28,y+16,w-110,40,24);
-    this.button(this.panel,'close','返回',x+w-96,y+14,72,44,()=>this.open('world'));
+    this.button(this.panel,'close','返回',x+w-96,y+14,72,44,()=>this.closePanel(),this.busy);
     const s=this.client.state!;
     if(this.mode==='inventory'){
-      const names:Record<string,string>={seed:'种子',wood:'木材',stone:'石料',crop:'萝卜',plank:'木板'};
-      const ids=Object.keys(names), slot=64,gap=12,columns=this.width<700?2:3;
-      ids.forEach((id,i)=>{const sx=x+28+(i%columns)*(slot+gap),sy=y+80+Math.floor(i/columns)*(slot+gap);this.button(this.panel,'item-'+id,'',sx,sy,slot,slot,()=>{this.selected=id;this.dirty=true;},false,this.selected===id);this.image(this.panel,'items/'+id,sx+32,sy+24,32,32);this.text(this.panel,'Count-'+id,String(s.inventory[id]||0),sx+4,sy+42,slot-8,22,14,this.selected===id?C.raised:C.ink,true);});
+      const names=itemNames,base=['seed','wood','stone','crop','plank'];
+      this.button(this.panel,'inventory-group',this.inventoryGroup?'装备与战利品':'农田与材料',x+w-316,y+14,200,44,()=>{this.inventoryGroup=1-this.inventoryGroup;this.inventoryPage=0;this.dirty=true;});
+      const all=this.inventoryGroup?Object.keys(names).filter(id=>id!=='gold'&&!base.includes(id)):base,ids=all.slice(this.inventoryPage*5,this.inventoryPage*5+5),slot=64,gap=12,columns=this.width<700?2:3;
+      ids.forEach((id,i)=>{const sx=x+28+(i%columns)*(slot+gap),sy=y+80+Math.floor(i/columns)*(slot+gap);this.button(this.panel,'item-'+id,'',sx,sy,slot,slot,()=>{this.selected=id;this.dirty=true;},false,this.selected===id);if(this.frames.has('items/'+id))this.image(this.panel,'items/'+id,sx+32,sy+24,32,32);else this.text(this.panel,'ItemGlyph-'+id,names[id],sx+4,sy+4,slot-8,38,12,this.selected===id?C.raised:C.ink,true);this.text(this.panel,'Count-'+id,String(s.inventory[id]||0),sx+4,sy+42,slot-8,22,14,this.selected===id?C.raised:C.ink,true);});
+      if(all.length>5)this.button(this.panel,'inventory-next',`${this.inventoryPage+1}/${Math.ceil(all.length/5)}\n下一页`,x+28+2*(slot+gap),y+80+slot+gap,slot,slot,()=>{this.inventoryPage=(this.inventoryPage+1)%Math.ceil(all.length/5);this.dirty=true;});
       const dx=x+Math.max(210,w*0.43),dw=w-(dx-x)-28;
       this.text(this.panel,'ItemName',names[this.selected],dx,y+80,dw,36,24);
       this.text(this.panel,'ItemAmount',`持有 ${s.inventory[this.selected]||0} 份`,dx,y+124,dw,28,16,C.muted);
@@ -431,19 +507,80 @@ export class RealQuestSpike extends Component {
       this.text(this.panel,'QuickTitle','快捷查看',x+28,y+h-106,w-56,24,14,C.muted);
       this.quick.forEach((id,i)=>this.button(this.panel,'quick-'+i,`${i+1} · ${names[id]||id}`,x+28+i*(w-56)/4,y+h-70,(w-80)/4,44,()=>{this.selected=id;this.dirty=true;}));
       this.button(this.panel,'assign','放入快捷位 1',dx,y+h-134,dw,44,()=>{const old=this.quick.indexOf(this.selected);if(old>=0)this.quick[old]=this.quick[0];this.quick[0]=this.selected;sys.localStorage.setItem('realquest-cocos-quick-v1',JSON.stringify(this.quick));this.dirty=true;},!(s.inventory[this.selected]>0),true);
-    }else if(this.mode==='life'){
-      const c=villageClock(s,serverNow());
-      this.text(this.panel,'LifeIntro','成长手记，随时可以翻开。',x+28,y+76,w-56,40,22);
-      this.text(this.panel,'Points',`知识 ${s.knowledge_points}     健康 ${s.health_points}     技能 ${s.skill_points}`,x+28,y+126,w-56,40,20);
-      this.text(this.panel,'LifeTasks',s.life_journal?.tasks.find(t=>t.status==='active')?'当前现实约定保留中，按服务器时间计时。':'当前没有进行中的现实约定。',x+28,y+182,w-56,40,16,C.muted);
-      this.text(this.panel,'LifeScope',`村庄时间已暂停 · 第 ${c.day} 天 ${clockLabel(c.minute)}\n本阶段支持查看；领取与结算继续在原 Web 版使用。`,x+28,y+h-116,w-56,80,16,C.muted);
-    }else if(this.mode!=='dialogue'){this.drawContext(x,y,w,h);
-    }else{
-      this.text(this.panel,'DialogueText',this.notice||'很高兴在村里见到你。',x+28,y+88,w-56,110,20);
-      this.text(this.panel,'DialogueSource','预设剧情 · 本地小样暂不承载完整委托面板',x+28,y+h-94,w-56,32,14,C.muted);
-      this.button(this.panel,'goodbye','继续旅程',x+w-208,y+h-64,180,44,()=>this.open('world'),false,true);
+    }else this.drawContext(x,y,w,h);
+  }
+
+  private navigate(mode:string,replace=false){
+    if(mode===this.mode)return;
+    if(replace&&this.panelHistory.at(-1)?.mode===mode)this.panelHistory.pop();
+    if(!replace&&mode!=='world'&&this.mode!=='world'&&this.mode!=='welcome')this.panelHistory.push({mode:this.mode,focus:this.focusId});
+    this.open(mode);
+  }
+  private closePanel(){const previous=this.panelHistory.pop();this.open(previous?.mode||(this.client.state?.character?'world':'welcome'));if(previous)this.focusId=previous.focus;}
+  private mark(target:NavigationTarget,label:string){this.marker=target;this.markerLabel=label;this.notice='已标记 '+label+' · 标记不会移动角色';this.open('world');}
+  private panelHost():PanelHost{
+    const self=this;
+    return {
+      get state(){return self.client.state!;},get world(){return self.client.world!;},get context(){return self.context;},
+      get mode(){return self.mode;},get width(){return self.width;},get height(){return self.height;},get busy(){return self.busy||!self.canPlay();},get error(){return self.error;},get notice(){return self.notice;},get now(){return serverNow();},
+      box:(...args)=>{self.box(self.panel,...args);},text:(...args)=>{self.text(self.panel,...args);},button:(...args)=>{self.button(self.panel,...args);},image:(...args)=>{self.image(self.panel,...args);},
+      person:(name,x,y,w,h)=>{const n=self.make(self.panel,name,x,-y,w,h);n.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;self.setActor(n,name,0);n.getComponent(UITransform)!.setContentSize(w,h);},
+      field:(...args)=>self.field(...args),send:(action,data={})=>self.sendFeature(action,data),go:(mode,replace)=>self.navigate(mode,replace),close:()=>self.closePanel(),redraw:()=>{self.dirty=true;},mark:(target,label)=>self.mark(target,label),uuid:()=>transport.uuid(),
+    };
+  }
+  private field(id:string,label:string,value:string,x:number,y:number,w:number,change:(v:string)=>void,numeric=false,maxLength=80){
+    this.text(this.panel,'Label-'+id,label,x,y,w,22,14,C.muted);
+    const n=this.make(this.panel,id,x+w/2,-y-44,w,44),g=n.addComponent(Graphics);g.fillColor=new Color(C.raised);g.roundRect(-w/2,-22,w,44,8);g.fill();g.strokeColor=new Color('#687455');g.lineWidth=1;g.roundRect(-w/2,-22,w,44,8);g.stroke();
+    const edit=n.addComponent(EditBox);for(const child of [...n.children])child.destroy();
+    edit.maxLength=maxLength;edit.inputMode=numeric?EditBox.InputMode.NUMERIC:EditBox.InputMode.ANY;
+    edit.textLabel=this.text(n,'Value',value,-w/2+12,-22,w-24,44,16);edit.placeholderLabel=this.text(n,'Placeholder','',-w/2+12,-22,w-24,44,16,C.muted);edit.string=value;
+    n.on(EditBox.EventType.TEXT_CHANGED,()=>change(edit.string));n.on(EditBox.EventType.EDITING_DID_ENDED,()=>{change(edit.string);this.dirty=true;});
+    const wp=n.worldPosition;this.controls.push({id,label,x:wp.x,y:this.height-wp.y,w,h:44,disabled:this.busy});
+  }
+  private async sendFeature(action:string,data:Record<string,unknown>={}){
+    let success=false;
+    await this.work(async()=>{const location=this.client.state!.location;const reply=await this.client.command(action,data);this.notice=reply.message||'';success=true;
+      if(this.client.state!.location!==location){this.p={...this.client.state!.position};this.buildWorld();this.open('world');}
+    });return success;
+  }
+  private updateCombat(dx:number,dy:number){
+    if(this.busy||this.combatPending||this.elapsed-this.combatLastTick<0.11)return;
+    const intention=combatIntention(this.client.state!,this.owner,{dx,dy},this.targetId,{attack:this.keys.has(KeyCode.SPACE)||!!this.combatDock?.held||this.attackPulse,spark:this.keys.has(KeyCode.KEY_Q)||this.sparkPulse,soup:this.keys.has(KeyCode.KEY_R)||this.soupPulse});
+    if(!intention)return;
+    this.targetId=intention.targetId;this.combatLastTick=this.elapsed;this.attackPulse=this.sparkPulse=this.soupPulse=false;
+    this.combatPending=this.client.command('cave_tick',intention.data).then(reply=>{if(reply.state.combat?.message)this.notice=reply.state.combat.message;}).catch(e=>{this.error=e.message;this.clearInput();}).finally(()=>{this.combatPending=null;this.dirty=true;});
+  }
+  private drawStatus(){
+    const s=this.client.state!;
+    if(this.mode!=='world')return;
+    if(this.canPlay()&&!s.location.startsWith('cave_')){
+      this.box(this.hud,'VitalsPaper',20,102,270,44,C.paper,8);
+      this.text(this.hud,'Vitals',`生命 ${s.vitality?.current??100}  体力 ${s.stamina?.current??100}  金币 ${s.inventory.gold||0}`,32,108,246,32,14);
+    }
+    if(this.marker&&this.client.world){
+      const target=accessibleTarget(this.marker,this.client.world,s,serverNow());
+      if(target){const sx=this.width/2+this.world.position.x+target.x*this.zoom,sy=this.height/2-this.world.position.y+target.y*this.zoom;
+        const x=Math.max(24,Math.min(this.width-24,sx)),y=Math.max(170,Math.min(this.height-154,sy));
+        this.box(this.hud,'TargetMarker',x-8,y-8,16,16,C.amber,4);
+        if(this.width>=1000)this.text(this.hud,'TargetLabel',`${this.markerLabel} · ${target.name}`,20,154,300,56,15,C.paper);
+      }
+    }
+    if(s.location.startsWith('cave_')){
+      const c=s.combat!,v=caveStatus(s,this.targetId,this.map()),compact=this.width<1000;
+      this.box(this.hud,'CaveStatus',20,20,compact?284:310,compact?94:108,'#233d31',8);
+      this.text(this.hud,'CaveTitle',`石根山洞 · 第 ${c.floor} 层${c.cleared?' · 已清理':''}`,32,26,270,26,18,C.raised);
+      this.text(this.hud,'CaveVitals',`生命 ${s.vitality?.current}/${s.vitality?.max}    体力 ${Math.floor(s.stamina?.current||0)}/${s.stamina?.max}`,32,54,270,24,14,C.paper);
+      this.text(this.hud,'CaveTarget',c.cast?`${v.castLabel} · ${Math.round(v.castProgress*100)}%`:v.target?`${v.target.name}  ${v.target.hp}/${v.target.max_hp} · 剩余 ${v.remaining}`:'可从路标继续或撤离',32,compact?80:82,270,24,14,'#e5d8ad');
+      if(!compact)this.text(this.hud,'CaveWeapon',v.weapon?.name||'尚未持有已装备武器',32,106,270,20,12,'#d5d9bd');
+      const hintX=compact?192:20,hintW=compact?this.width-192-284:610;
+      this.box(this.hud,'CaveHintPaper',hintX,this.height-72,hintW,48,C.paper,6);
+      this.text(this.hud,'CaveHint',this.error||v.hint,hintX+10,this.height-68,hintW-20,40,14,this.error?C.danger:C.ink);
+      if(c.cast){const barX=compact?192:20,barY=this.height-94,barW=compact?hintW:240;this.box(this.hud,'CastTrack',barX,barY,barW,5,'#415a41',0);this.box(this.hud,'CastProgress',barX,barY,Math.max(1,barW*v.castProgress),5,'#dbc18a',0);}
+      this.combatDock?.draw(this.width,this.height,s,!this.canPlay()||this.busy,this.controls,this.actions);
+
     }
   }
+
   private connectionLabel() {
     return ({ready:'已连接',saving:'保存中',uncertain:'操作待确认',unauthorized:'会话失效',offline:'网络未连接',connecting:'连接中',disconnected:'尚未连接'})[this.client.status];
   }
@@ -492,8 +629,9 @@ export class RealQuestSpike extends Component {
       if(this.sceneId!==this.client.state!.location){this.buildWorld();this.open('world');}
     });
     if(this.mode==='storage'){
-      const names:Record<string,string>={wood:'木材',stone:'石料',seed:'种子',crop:'萝卜',plank:'木板'};
-      Object.entries(names).forEach(([id,name],i)=>{const yy=y+74+i*44;
+      const names=itemNames,entries=Object.keys(s.storage),perPage=Math.max(1,Math.min(5,Math.floor((h-140)/44))),pages=Math.max(1,Math.ceil(entries.length/perPage));this.storagePage%=pages;
+      if(pages>1)this.button(this.panel,'storage-next',`${this.storagePage+1}/${pages} · 下一页`,x+28,y+h-54,180,40,()=>{this.storagePage=(this.storagePage+1)%pages;this.dirty=true;});
+      entries.slice(this.storagePage*perPage,this.storagePage*perPage+perPage).map(id=>[id,names[id]||id]).forEach(([id,name],i)=>{const yy=y+74+i*44;
         this.text(this.panel,'Storage-'+id,`${name}  行囊 ${s.inventory[id]||0}  /  箱中 ${s.storage[id]||0}`,x+28,yy,w-300,42,16);
         this.button(this.panel,'store-'+id,'存 1',x+w-258,yy,100,40,()=>mutate('store',{item:id,amount:1}),this.busy||!s.inventory[id]);
         this.button(this.panel,'withdraw-'+id,'取 1',x+w-146,yy,100,40,()=>mutate('withdraw',{item:id,amount:1}),this.busy||!s.storage[id]);
@@ -514,7 +652,7 @@ export class RealQuestSpike extends Component {
       if(pages>1)this.button(this.panel,'travel-next','下一页',x+w-180,y+h-54,140,40,()=>{this.page=(this.page+1)%pages;this.dirty=true;});
     } else {
       const cave=s.location.startsWith('cave_');
-      this.text(this.panel,'ContextScope',cave?'当前存档位于山洞，战斗迁移将在后续阶段完成。\n可安全撤离，或回到原 Web 继续战斗。':obj.kind==='study'?'现实成长可直接从右上角进入。完整研习与结算继续在原 Web 版使用。':'此处的完整功能面板将在后续阶段迁移。\n原 Web 版可继续使用同一份旅程。',x+28,y+88,w-56,120,19);
+      this.text(this.panel,'ContextScope',cave?'可从洞内路标查看通路或安全撤离。':obj.kind==='study'?'现实成长可直接从右上角进入。':'此处没有额外操作。可从旅程页查看任务与地图。',x+28,y+88,w-56,120,19);
       if(cave)this.button(this.panel,'cave-retreat','安全撤离',x+28,y+h-80,220,48,()=>mutate('cave_retreat'),this.busy,true);
     }
     if(this.error||this.notice)this.text(this.panel,'ContextFeedback',this.error||this.notice,x+28,y+h-48,w-230,32,14,this.error?C.danger:C.muted);
@@ -523,12 +661,12 @@ export class RealQuestSpike extends Component {
   private snapshot() {
     const s=this.client.state;
     return { engine:'Cocos Creator 3.8.8', platform:platformName, mode:this.mode, loaded:this.loaded, busy:this.busy, error:this.error, notice:this.notice,
-      coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
-      player:this.p, savedPosition:s?.position, saveId:this.client.saveId, connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
-      plots:s?.plots, camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height},
+      combatTarget:this.targetId,coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
+      player:this.p, savedPosition:s?.position, saveId:this.client.saveId, revision:s?.revision, vitality:s?.vitality, combat:s?.combat, questLog:s?.quest_log, lifeJournal:s?.life_journal, timer:s?.timer, studyTasks:s?.study_task_log, plans:s?.study_plan_log, growth:s?.character_growth_options, storage:s?.storage, features:this.features.snapshot(),marker:this.marker,connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
+      plots:s?.plots, activities:s?.activities.slice(-10), camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height},
       plotPresentation:Object.fromEntries(this.plotVisuals),
       interactables:this.supportedObjects(),
       selected:this.selected, quick:this.quick, nearby:this.nearest()||null, controls:this.controls,
-      serverTimeIsReal:true, scope:'phase-2-3-local' };
+      serverTimeIsReal:true, scope:'cave-polish-local', presentation:{family:'stone-root-v1',confirmedFeedback:this.combatRenderer.visibleFeedbackCount,reducedMotion:reducedMotion()} };
   }
 }

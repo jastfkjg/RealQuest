@@ -25,7 +25,7 @@ async function bind(source, target, transform = x => x) {
   records.push({ source, target, sha256: crypto.createHash('sha256').update(bytes).digest('hex'), output_sha256: crypto.createHash('sha256').update(result).digest('hex') });
 }
 await bind('shared/game/protocol.ts', 'assets/scripts/core/protocol.ts');
-for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock']) {
+for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock', 'features', 'caveArt', 'caveView']) {
   await bind(`shared/game/${name}.ts`, `assets/scripts/core/${name}.ts`, b => b.toString().replaceAll('"../types"', '"./protocol"').replace('"../stores/game"', '"./clock"'));
 }
 const art = ['home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0'];
@@ -36,5 +36,5 @@ for (const id of ['lia','noah','mira']) await bind(`frontend/public/assets/heart
 for (const id of ['wood','stone','seed','crop','plank']) await bind(`frontend/public/assets/hearthwood/detail/items/${id}.png`, `assets/resources/items/${id}.png`);
 for (const id of ['notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed']) await bind(`frontend/public/assets/hearthwood/detail/interiors/${id}.png`, `assets/resources/interiors/${id}.png`);
 for (let i=1;i<6;i++) await bind(`frontend/public/assets/hearthwood/village/actor-${i}.png`, `assets/resources/village/actor-${i}.png`);
-await fs.writeFile(path.join(project, 'asset-bindings.json'), JSON.stringify({schema_version:1,note:'Canonical shared/game modules; unchanged approved artwork, see task35.',records},null,2)+'\n');
+await fs.writeFile(path.join(project, 'asset-bindings.json'), JSON.stringify({schema_version:1,note:'Canonical shared/game logic and cave presentation; unchanged PNG artwork, see tasks35–37.',records},null,2)+'\n');
 console.log(`Bound ${records.length} canonical sources and unchanged art files.`);

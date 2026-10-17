@@ -1,8 +1,8 @@
 # RealQuest Cocos local prototype
 
-Independent **Cocos Creator 3.8.8** project. Original React/Phaser Web pages, launcher, server rules and player databases remain available. Current implementation/evidence: [phases2–3](../../docs/tasks/35-cocos-shared-world.md); initial baseline: [phases0–1](../../docs/tasks/34-cocos-local-spike.md).
+Independent **Cocos Creator 3.8.8** project. Original React/Phaser Web pages, launcher, server rules and player databases remain available. Current cave art/UI/feel evidence: [task37](../../docs/tasks/37-cave-polish.md); functional implementation: [phases4–5](../../docs/tasks/36-cocos-features-combat.md); network/shared-world baseline: [phases2–3](../../docs/tasks/35-cocos-shared-world.md); initial baseline: [phases0–1](../../docs/tasks/34-cocos-local-spike.md).
 
-Supports village movement/collision and click-to-walk; five original building enter/exits and inn; existing crossing/mountain/city locations and server-quoted travel; gather/plant/harvest; storage/rest; scheduled NPC greetings; inventory/quick viewing; direct read-only Life summary. Full combat, advanced NPC/quest/economy panels and Life editing remain in the original Web. Cave saves can safely retreat without pretending combat has migrated.
+Supports village movement/collision and click-to-walk; five original building enter/exits and inn; existing crossing/mountain/city locations and server-quoted travel; gather/plant/harvest; storage/rest; scheduled NPC dialogue/topics/gifts/help; story quests/marker navigation; server-priced trades/orders; crafting/building upgrades; weapons/equipment/spark; inventory/quick viewing; direct Life study tasks/plans/timer/manual records/history/Noah commissions and explicit growth. Five-floor combat uses server-sequenced intentions, targeting/attacks/spark/soup, real telegraphs, stairs/platform rest/safe retreat and permanent gate opening. No client-authored damage, rewards or accelerated real time. Advanced Web-only AI/calendar/training conveniences and full visual parity are not claimed.
 
 ## Build and run
 
@@ -14,12 +14,14 @@ export COCOS_CREATOR="$PWD/output/cocos-tools/CocosCreator.app/Contents/MacOS/Co
 node clients/cocos/tools/sync.mjs
 node clients/cocos/tools/check.mjs
 node clients/cocos/tools/build.mjs web-desktop
-./start-cocos.command
+./start-cocos.command --web-port 5430
 ```
 
-Open `http://127.0.0.1:5422`. The launcher owns API8122 and proxy5422, refuses occupied ports and terminates its own children on Ctrl+C. Optional `--port 5424 --api-port 8124` uses different ports without touching existing processes. It uses **only `output/cocos-phase23/local-preview.db`**, with existing Alembic migrations. Original `start.command` stays unchanged. The current handoff runtime and cleanup are recorded in task35.
+Open Cocos at `http://127.0.0.1:5431` and Web at `http://127.0.0.1:5430` (run `npm run build` in `frontend/` first). Both use isolated API8130; each client keeps its own guest unless you explicitly continue the same journey using a recovery credential. The launcher refuses occupied ports and terminates only its own children on Ctrl+C. Optional `--port 5433 --api-port 8133 --web-port 5432` selects different ports. Without `--web-port`, it serves Cocos only.
 
-Builds go to `web-phase23/web-desktop/` (ignored), controlled by `REALQUEST_COCOS_BUILD` for the output root. Creator's `name` option does not select the output directory; the build script sets `buildPath` explicitly. Creator exit36 means success. Do not rebuild a directory while someone is using that served preview.
+The launcher uses **only `output/cave-polish/local-preview.db`** with existing Alembic migrations, separate from the automated fixture database and original owner data. Original `start.command` stays unchanged. Current handoff/cleanup: task37.
+
+Builds go to `web-cave-polish/web-desktop/` (ignored), controlled by `REALQUEST_COCOS_BUILD`. The build script sets `buildPath` explicitly; Creator exit36 means success. Do not rebuild a directory while someone uses that served preview.
 
 ## Sessions and save compatibility
 
@@ -31,30 +33,35 @@ Commands are serialized and persisted before sending. Each operation has its own
 
 Both clients must connect to **the same backend/database**. A credential from another local database or server cannot move that server's records. The default local sample deliberately does not attach to `backend/realquest.db`. Numerical `/api/export` JSON remains read-only. No schema migration, balance import or automatic player merge was introduced.
 
-For development against an already-updated API, `tools/serve.py --port 5422 --api-port <port> --build web-phase23/web-desktop` can proxy it. Configure its allowed origin explicitly. Point only to a backend/database you intend to use; this configuration was tested with the isolated shared test database, not the owner's real save.
+For development against an already-updated API, `tools/serve.py --port 5431 --api-port <port> --build web-cave-polish/web-desktop` can proxy it. Configure its allowed origin explicitly. Point only to a backend/database you intend to use; this configuration was tested with the isolated shared test database, not the owner's real save.
 
 ## Shared sources and artwork
 
 Canonical engine-independent modules live in [`shared/game`](../../shared/game/README.md); Web entry points stay compatible. Cocos copies are generated because Creator's importer needs assets-local scripts. `sync.mjs` and `asset-bindings.json` record exact source/output hashes. No hand-maintained parallel rules.
 
-All52 PNGs are existing art copied byte-for-byte with nearest-neighbor metadata;9 code modules are generated. No new raster art, fonts or external source packs. Room furniture/actors retain their source pixel ratios; scenery uses the existing world coordinates. Procedural grounds, landmark markers and the two travel residents' temporary native shapes are provisional; full original Web artwork parity is not claimed.
+All52 PNGs are existing art copied byte-for-byte with nearest-neighbor metadata;12 code modules are generated. No new raster art, fonts or external source packs. Room furniture/actors retain their source pixel ratios; scenery uses the existing world coordinates. The cave has a shared original stone/moss material, route-object and four-monster treatment (task37). Other grounds, landmark markers and the two travel residents' temporary native shapes remain provisional; full original Web artwork parity is not claimed.
 
 ## Verification
 
+Current cave presentation suite: `node clients/cocos/tools/test-cave-view.mjs` and `node frontend/scripts/cave-polish.mjs`. The browser suite requires a separately migrated API8130 using **only `output/cave-polish/test.db`**, cookie`realquest_cave_polish`, origins`http://127.0.0.1:5430,http://127.0.0.1:5431`, Web5430 (`../../frontend/dist`) and Cocos5431 (`web-cave-polish/web-desktop`) proxies. Stop the manual preview before using those ports. Never point the fixture suite at `local-preview.db` or owner data. Commands, prepared fixtures,16 groups/42 captures and cleanup: task37.
+
+The following phase4–5 suites retain their historical build/ports/database; build with `REALQUEST_COCOS_BUILD=web-phase45` before rerunning them. They are not the current launcher defaults.
+
 ```sh
 node clients/cocos/tools/test-core.mjs
+node clients/cocos/tools/test-features.mjs
 node clients/cocos/tools/check-baseline.mjs
-# With the isolated test API8122 pointing ONLY at output/cocos-phase23/test.db:
-python3 clients/cocos/tools/serve.py --port 5422 --api-port 8122 --build web-phase23/web-desktop
-python3 clients/cocos/tools/serve.py --port 5423 --api-port 8122 --build ../../frontend/dist
-node clients/cocos/tools/smoke-phase23.mjs
-node clients/cocos/tools/smoke-session.mjs
-node clients/cocos/tools/probe-resize.mjs
+# Start a separate API8126 using ONLY output/cocos-phase45/test.db, distinct cookie and allowed origin5426.
+# Never run these SQLite fixture tests against your normal preview or player database.
+python3 clients/cocos/tools/serve.py --port 5426 --api-port 8126 --build web-phase45/web-desktop
+node clients/cocos/tools/smoke-phase45.mjs
+node clients/cocos/tools/smoke-depths.mjs
+node clients/cocos/tools/smoke-landscape.mjs
 # Existing checks: frontend/: npm run build
 # backend/: .venv/bin/python -m pytest -q
 ```
 
-The browser suite creates fresh guests. Historical indoor/travel fixtures update **only their own save IDs** inside the asserted test.db. It checks native original-Web create/recovery, actual Cocos controls, idempotent lost-response/reload, server mutations, room/travel transitions, viewport resize and DPR2 touch. Browsers close in finally. Phase1's older smoke script is historical evidence for its older API contract; it is not the current acceptance command.
+These browser suites create fresh guests and update only their own save IDs in the asserted test.db. The main suite covers actual first-story/first-cave progression, lost claim/rejected purchase, Noah settlement and direct Life. Depths uses explicitly prepared grown-character200 HP/stamina/resources/abilities/position and ready deadlines, then real UI trades/upgrades/gear/storage/spell, five full-health floors and gate opening. It never seeds hits, monster deaths or combat rewards. Landscape checks desktop/short-landscape geometry and DPR2 real multi-touch/input ownership. Browsers close in finally; screenshots/results stay ignored under `output/cocos-phase45`. Earlier phase23/session scripts retain their original ports/build expectations and historical evidence; do not point them at a handoff database.
 
 ## Platform gates
 

@@ -2039,5 +2039,43 @@
     "new_raster_or_font_assets": false,
     "presentation": "Existing artwork at source pixel ratios, native Cocos grounds/room planks and temporary travel-resident shapes. World art parity and owner render approval remain open.",
     "task": "docs/tasks/35-cocos-shared-world.md"
+  },
+  "cocos_phase45": {
+    "status": "candidate_local_verified",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "canonical_logic": "shared/game",
+    "code_bindings": 10,
+    "png_bindings": 52,
+    "png_bytes": 2199403,
+    "source_images_modified": false,
+    "new_raster_or_font_assets": false,
+    "presentation": "Native linen/timber functional panels; same Cocos source-scale art. Monsters/telegraphs are native Graphics ports of frontend/src/game/cave.ts. Advanced item text glyphs, cave/ground and travel residents are provisional. Owner render approval pending.",
+    "task": "docs/tasks/36-cocos-features-combat.md"
+  },
+  "cave_presentation_v1": {
+    "status": "candidate_local_verified_pending_owner_review",
+    "authors": "Original RealQuest code-native artwork authored in this task; no third-party inputs or image generation",
+    "canonical_art": "shared/game/caveArt.ts",
+    "canonical_view": "shared/game/caveView.ts",
+    "bindings": [
+      "frontend/src/game/cave.ts",
+      "frontend/src/game/cavePaint.ts",
+      "clients/cocos/assets/scripts/Bootstrap.ts",
+      "clients/cocos/assets/scripts/combatView.ts",
+      "clients/cocos/assets/scripts/cavePaint.ts"
+    ],
+    "processing": "Deterministic immutable world-coordinate mark lists. Web ground is rendered at 2 source pixels/world unit; other marks are native Phaser/Cocos Graphics. Enemy poses use four discrete frames at 6Hz, static under reduced motion. Existing maps/collisions/IDs stay authoritative. Cocos generated code hashes are in asset-bindings.json.",
+    "content": [
+      "chipped stone slabs, moss, worn safe shelter and lamp niches",
+      "cave entrance, locked/unlocked ladder and deep route, stair platform, stone gate",
+      "distinct moss slime, cave bat, armored beetle and stone-root guardian silhouettes",
+      "server-confirmed hit marks and native damage text; server-timed telegraphs/cast progress"
+    ],
+    "new_raster_font_audio_assets": false,
+    "source_images_modified": false,
+    "runtime_png_count": 52,
+    "runtime_png_bytes": 2199403,
+    "generated_code_modules": 12,
+    "task": "docs/tasks/37-cave-polish.md"
   }
 }

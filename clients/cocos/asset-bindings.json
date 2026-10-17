@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "Canonical shared/game modules; unchanged approved artwork, see task35.",
+  "note": "Canonical shared/game logic and cave presentation; unchanged PNG artwork, see tasks35–37.",
   "records": [
     {
       "source": "shared/game/protocol.ts",
@@ -55,6 +55,24 @@
       "target": "assets/scripts/core/clock.ts",
       "sha256": "583028a27921b336d1cfc8631aaaf6cfb5f866721d093722a6a35a8c0dd183b1",
       "output_sha256": "583028a27921b336d1cfc8631aaaf6cfb5f866721d093722a6a35a8c0dd183b1"
+    },
+    {
+      "source": "shared/game/features.ts",
+      "target": "assets/scripts/core/features.ts",
+      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0",
+      "output_sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0"
+    },
+    {
+      "source": "shared/game/caveArt.ts",
+      "target": "assets/scripts/core/caveArt.ts",
+      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c",
+      "output_sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c"
+    },
+    {
+      "source": "shared/game/caveView.ts",
+      "target": "assets/scripts/core/caveView.ts",
+      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e",
+      "output_sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e"
     },
     {
       "source": "frontend/public/assets/hearthwood/village/home.png",

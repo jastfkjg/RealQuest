@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Hammer,
   Swords,
@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 import { useGame } from "../stores/game";
 import { itemDefinitions, itemNames } from "../game/items";
-import { caveSight, combatInput } from "../game/cave";
+import { combatInput } from "../game/cave";
+import { caveStatus, nextTarget } from "../../../shared/game/caveView";
 import { mapById } from "../game/navigation";
 import { IntroContext } from "./VillageIntro";
 import { FieldIllustration, FieldPage } from "./FieldIllustration";
@@ -518,7 +519,27 @@ export function CavePanel() {
 }
 
 export function CombatHud() {
+  const attackPointers = useRef(new Set<number>());
+  useEffect(() => {
+    const clear = () => {
+      attackPointers.current.clear();
+      combatInput.attack = false;
+    };
+    window.addEventListener("blur", clear);
+    document.addEventListener("visibilitychange", clear);
+    return () => {
+      clear();
+      window.removeEventListener("blur", clear);
+      document.removeEventListener("visibilitychange", clear);
+    };
+  }, []);
   const { state, world, panel, open, command, busy } = useGame();
+  useEffect(() => {
+    if (panel) {
+      attackPointers.current.clear();
+      combatInput.attack = false;
+    }
+  }, [panel]);
   if (!state?.combat || !world || panel) return null;
   const c = state.combat,
     inside = c.floor > 0,
@@ -538,26 +559,18 @@ export function CombatHud() {
     );
   const boss = c.enemies.find((e) => e.kind === "boss" && e.hp > 0),
     target = c.enemies.find((e) => e.id === combatInput.target && e.hp > 0);
-  const blocked =
-    target &&
-    !caveSight(mapById(world, state.location), state.position, target);
-  const far =
-    target &&
-    w &&
-    Math.hypot(target.x - state.position.x, target.y - state.position.y) >
-      w.reach + (target.kind === "boss" ? 20 : 10);
-  const hint =
-    state.position.x < 166
-      ? "安全入口 · 向右走入战斗区"
-      : blocked
-        ? "石柱挡住目标 · 绕行后再攻击"
-        : far
-          ? "目标超出武器射程 · 再走近一些"
-          : c.message || "攻击后退让，观察金色预兆";
+  const view = caveStatus(
+      state,
+      combatInput.target,
+      mapById(world, state.location),
+    ),
+    hint = view.hint;
   const next = () => {
-    const alive = c.enemies.filter((e) => e.hp > 0),
-      i = alive.findIndex((e) => e.id === combatInput.target);
-    combatInput.target = alive[(i + 1) % alive.length]?.id || null;
+    combatInput.target = nextTarget(state, combatInput.target);
+  };
+  const releaseAttack = (e: React.PointerEvent<HTMLButtonElement>) => {
+    attackPointers.current.delete(e.pointerId);
+    combatInput.attack = attackPointers.current.size > 0;
   };
   return (
     <>
@@ -571,29 +584,28 @@ export function CombatHud() {
             体力 {Math.floor(state.stamina?.current || 0)}/{state.stamina?.max}
           </span>
         </div>
-        <small>
-          {w?.name || "尚未装备"} ·{" "}
-          {c.cleared
-            ? "本层已清理"
-            : `剩余 ${c.enemies.filter((e) => e.hp > 0).length} 只`}
+        <small className="cave-loadout">
+          第 {c.floor} 层 · {w?.name || "尚未持有已装备武器"} ·{" "}
+          {c.cleared ? "已清理" : `剩余 ${view.remaining} 只`}
         </small>
-        <p>
-          {c.cast?.kind === "soup"
-            ? "正在喝汤，受击会中断…"
+        <p className="cave-target">
+          {c.cast
+            ? `${view.castLabel} · ${Math.round(view.castProgress * 100)}%`
             : target
-              ? `当前目标：${target.name} ${target.hp}/${target.max_hp}`
-              : "可从路标离开或继续前进"}
+              ? `目标 ${target.name} · ${target.hp}/${target.max_hp}`
+              : "从路标继续或返回洞口"}
         </p>
-        <small role="status">{hint}</small>
-        {!state.village_intro?.dismissed &&
-          !state.village_intro?.reviewed &&
-          c.floor === 1 && (
-            <p className="intro-combat-hint">
-              {c.cleared
-                ? "首层初探完成 · 可带材料回工坊查看用途"
-                : "首次目标：3只苔团 · 观察预兆，出手后退让"}
-            </p>
-          )}
+        {c.cast && (
+          <progress
+            className="cave-cast"
+            aria-label={view.castLabel}
+            max={1}
+            value={view.castProgress}
+          />
+        )}
+      </div>
+      <div className="cave-hint rq-theme" role="status">
+        {hint}
       </div>
       {boss && (
         <div
@@ -623,19 +635,25 @@ export function CombatHud() {
       >
         <button
           className="attack-action"
-          disabled={!w}
-          onClick={() => (combatInput.pulse = true)}
+          disabled={!w || (state.stamina?.current || 0) < w.stamina}
+          onClick={(e) => {
+            if (e.detail === 0) combatInput.pulse = true;
+          }}
           onPointerDown={(e) => {
             e.preventDefault();
             e.currentTarget.setPointerCapture(e.pointerId);
+            attackPointers.current.add(e.pointerId);
             combatInput.attack = true;
           }}
-          onPointerUp={() => (combatInput.attack = false)}
-          onPointerCancel={() => (combatInput.attack = false)}
-          onLostPointerCapture={() => (combatInput.attack = false)}
+          onPointerUp={releaseAttack}
+          onPointerCancel={releaseAttack}
+          onLostPointerCapture={releaseAttack}
         >
           <Swords />
-          攻击 <kbd>空格</kbd>
+          <span>
+            攻击<small>按住连击</small>
+          </span>{" "}
+          <kbd>空格</kbd>
         </button>
         <button
           disabled={
@@ -647,7 +665,17 @@ export function CombatHud() {
           onClick={() => (combatInput.spark = true)}
         >
           <Sparkles />
-          火花术 <kbd>Q</kbd>
+          <span>
+            火花术
+            <small>
+              {view.sparkWait
+                ? `${view.sparkWait} 秒冷却`
+                : c.spark_learned
+                  ? "4 体力"
+                  : "尚未研习"}
+            </small>
+          </span>{" "}
+          <kbd>Q</kbd>
         </button>
         <button
           disabled={
@@ -659,10 +687,19 @@ export function CombatHud() {
           onClick={() => (combatInput.soup = true)}
         >
           <Soup />
-          菜汤 {state.inventory.soup}
+          <span>
+            菜汤
+            <small>
+              {view.soupWait
+                ? `${view.soupWait} 秒冷却`
+                : `${state.inventory.soup} 份`}
+            </small>
+          </span>
           <kbd>R</kbd>
         </button>
-        <button onClick={next}>切换目标</button>
+        <button onClick={next} disabled={!view.remaining}>
+          切换目标 <kbd>T</kbd>
+        </button>
         <button onClick={() => open("equipment")}>装备 / 暂停</button>
         <button
           disabled={busy}

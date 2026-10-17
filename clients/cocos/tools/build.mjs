@@ -8,7 +8,7 @@ if (!editor || !fs.existsSync(editor)) throw new Error('Set COCOS_CREATOR to the
 const platform = process.argv[2] || 'web-desktop';
 if (!['web-desktop','web-mobile','wechatgame','bytedance-mini-game'].includes(platform)) throw new Error('Unsupported spike target');
 const scene = 'b4a89a48-8464-46a4-bb61-d59590eebc27';
-const buildName=process.env.REALQUEST_COCOS_BUILD || 'web-phase23';
+const buildName=process.env.REALQUEST_COCOS_BUILD || 'web-cave-polish';
 if(!/^[a-z0-9-]+$/.test(buildName))throw new Error('Invalid build name');
 const options = { platform, debug: true, buildPath: 'project://'+buildName, name: platform.startsWith('web-') ? buildName : platform, startScene: scene, scenes: [{ url: 'db://assets/scenes/Bootstrap.scene', uuid: scene }], sourceMaps: true };
 if (['wechatgame','bytedance-mini-game'].includes(platform)) {

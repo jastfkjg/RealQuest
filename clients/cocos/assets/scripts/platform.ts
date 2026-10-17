@@ -88,6 +88,16 @@ export function textOwnsInput(): boolean {
   const element = host.document?.activeElement;
   return !!element && (['INPUT','TEXTAREA'].includes(element.tagName) || element.isContentEditable);
 }
+// Native Web EditBox inputs consume keyboard events before Cocos receives them.
+// Escape dismisses editing first; the next Escape returns from the panel.
+export function subscribeTextEscape(dismiss:()=>void):()=>void {
+  const key=(event:any)=>{if(event.key==='Escape'&&!event.isComposing&&textOwnsInput()){
+    event.preventDefault();event.stopPropagation();host.document.activeElement.blur();
+    host.document.querySelector('canvas')?.focus({preventScroll:true});dismiss();
+  }};
+  host.document?.addEventListener('keydown',key,true);
+  return ()=>host.document?.removeEventListener('keydown',key,true);
+}
 export async function chooseRecovery(): Promise<string | null> {
   if (platformName !== 'web' || !host.document) throw new Error('此平台的凭证文件选择尚未接入，请先使用 Web 版');
   return new Promise((resolve, reject) => {
@@ -104,3 +114,6 @@ export function downloadRecovery(value: unknown): void {
   const link=host.document.createElement('a');link.href=url;link.download='realquest-recovery.json';host.document.body.appendChild(link);
   try{link.click();}finally{link.remove();setTimeout(()=>host.URL.revokeObjectURL(url),1000);}
 }
+
+const motionPreference=host.matchMedia?.('(prefers-reduced-motion: reduce)');
+export const reducedMotion=()=>!!motionPreference?.matches;

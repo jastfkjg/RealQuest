@@ -1,5 +1,17 @@
 # Hearthwood Review Checklist
 
+## Cocos functional panels and combat — phases4–5
+
+- [x] Distinct linen/timber quest, trade/order, blueprint, resident, equipment/growth/spell, map and direct Life task/plan/timer/manual-history panels use native Chinese text and real server state. No fake possessions, teleport navigation or minted growth points.
+- [x] Real first-story/first-floor progression, same-ID lost reward replay, rejected/retried purchase, Noah settlement, explicit point spending, study/plan/manual persistence and original cookie/recovery readback pass. Original Web source/launcher and owner saves preserved.
+- [x] Real five-floor full-health combat, sequenced lost-tick replay, telegraphs, rest/soup, exact loot, safe/defeated retreat and one-time permanent gate use the unchanged rules. Full-depth QA uses an explicitly grown200 HP/stamina fixture; no naturally earned whole-chapter claim.
+- [x] Desktop/short-landscape layouts and DPR2 real multi-touch/one-pointer release/input ownership/native touch attack/spark/soup/cooldown pass. Persistent direction targets and press intentions survive HUD receipts; Escape dismisses text editing before returning. Final representative actual screenshots inspected.
+- [x] Genuine Creator3.8.8 build/types,62 source bindings, original Web build,229 backend tests,11 core groups +feature behavior,400 protected originals/7 extraction checks,156-image audit and supplied frame client pass. No new raster/font/external pack.
+- [ ] Owner actual-render/feel approval; final art parity/icons; advanced AI/calendar/training conveniences; platform AppIDs/account/SDK/domain/developer-tool/device/Android package; Safari/accessibility/text scaling/safe areas/endurance remain open.
+
+Commands, explicit fixture limits, screenshots, outcomes and cleanup: [task36](../tasks/36-cocos-features-combat.md).
+
+
 ## Cocos shared core and world — phases2–3
 
 - [x] Original Web compatible helper entry points/build retained; extracted protocol/helpers checked against original source semantics. Server rules, migrations and source art preserved.229 backend tests and11 shared-core groups pass.
@@ -461,3 +473,16 @@ Status: playable implementation candidate; owner visual and balance acceptance p
 - [x] Actual production keyboard run clears all five floors, collects the boss key and permanently opens the gate only at magic3; purchase retry, crafting shortages, menu pause and reload checked. Screenshots were inspected.
 - [x] Control6-flow/7-capture suite checks initial sword/Boss phase2, defeat, DPR2 touch landscape, paused inputs, injected blur/resume and retreat; final cave frame client2 captures inspected. Task28 records exact scope and cleanup.
 - [ ] Owner art/balance acceptance, native tab/OS focus, physical devices and long-run/production-load verification remain pending; build/test passes do not establish them.
+
+
+## Web/Cocos cave polish — 2026-10-17
+
+Status: implemented/browser-verified candidate; owner render/feel approval pending.
+
+- [x] Shared original stone/moss/shelter/route art and four creature silhouettes in both engines, same world/collision/actor scale. No new raster/font/audio/third-party pack;52 Cocos PNGs byte-identical,156-image audit passes.
+- [x] Pure click/T targeting, stable held attack across receipts, release without extra hit, same-ID/sequence lost-reply replay with exact one loot, actual spell/cast/cooldown/safe soup, menu/blur pause and safe retreat preserve server authority.26 retained combat tests include soup interruption; original data/rules untouched.
+- [x]16 browser groups/42 captures, desktop1920/1440/1024 and landscape844/740, real DPR2 multi-touch/release/held attack and reduced motion pass with no unexpected errors. Before/after renders, four families, confirmed damage text, cast progress, short layouts and four supplied frame-client captures personally inspected. Native feedback-layer ordering is asserted.
+- [x] Both genuine builds,64 bindings/actual Creator types,11 core groups, pure cave tests,396 preserved original sources+7 extraction checks and formatting/diff checks pass. Test resources close normally; manual isolated dual preview is intentionally retained (identities in task37).
+- [ ] Owner actual render/feel, physical devices/Safari/native focus/IME/text scaling/screen readers, production weak-network and long-session checks remain open. Non-cave temporary artwork and platform release/account gates remain separate work.
+
+Files, commands, fixture limits, art provenance, screenshots/recordings and cleanup: [task37](../tasks/37-cave-polish.md).

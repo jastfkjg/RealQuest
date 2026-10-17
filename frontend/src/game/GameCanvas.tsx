@@ -29,6 +29,7 @@ declare global {
 export function GameCanvas() {
   const container = useRef<HTMLDivElement>(null),
     scene = useRef<WorldScene | null>(null);
+  const touchPointers = useRef(new Map<number, { x: number; y: number }>());
   const nearest = useGame((s) => s.nearest),
     panel = useGame((s) => s.panel);
   const busy = useGame((s) => s.busy);
@@ -146,6 +147,13 @@ export function GameCanvas() {
         nextDeparture: s.state ? nextDeparture(s.state, serverNow()) : null,
         returnCue: s.returnCue,
         combatTarget: combatInput.target,
+        cavePresentation: instance.cave
+          ? {
+              family: "stone-root-v1",
+              confirmedFeedback: instance.cave.feedback.size,
+              reducedMotion: instance.reduced,
+            }
+          : null,
         worldClock: s.state?.world_clock,
         gameTime: s.state ? villageClock(s.state, serverNow()) : null,
         residentEncounter: s.state?.npc_encounter,
@@ -229,24 +237,58 @@ export function GameCanvas() {
       delete (window as Partial<Window>).advanceTime;
     };
   }, []);
-  const control = (x: number, y: number) => ({
-    onPointerDown: (event: React.PointerEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      unlockSound();
-      event.currentTarget.setPointerCapture(event.pointerId);
-      if (scene.current && !useGame.getState().panel)
-        scene.current.touch = { x, y };
-    },
-    onPointerUp: () => {
+  const syncTouch = () => {
+    if (!scene.current) return;
+    let x = 0,
+      y = 0;
+    for (const v of touchPointers.current.values()) {
+      x += v.x;
+      y += v.y;
+    }
+    scene.current.touch = {
+      x: Math.max(-1, Math.min(1, x)),
+      y: Math.max(-1, Math.min(1, y)),
+    };
+  };
+  useEffect(() => {
+    const clear = () => {
+      touchPointers.current.clear();
       if (scene.current) scene.current.touch = { x: 0, y: 0 };
-    },
-    onPointerCancel: () => {
+    };
+    window.addEventListener("blur", clear);
+    document.addEventListener("visibilitychange", clear);
+    return () => {
+      clear();
+      window.removeEventListener("blur", clear);
+      document.removeEventListener("visibilitychange", clear);
+    };
+  }, []);
+  useEffect(() => {
+    if (panel) {
+      touchPointers.current.clear();
       if (scene.current) scene.current.touch = { x: 0, y: 0 };
-    },
-    onLostPointerCapture: () => {
-      if (scene.current) scene.current.touch = { x: 0, y: 0 };
-    },
-  });
+    }
+  }, [panel]);
+  const control = (x: number, y: number) => {
+    const release = (event: React.PointerEvent<HTMLButtonElement>) => {
+      touchPointers.current.delete(event.pointerId);
+      syncTouch();
+    };
+    return {
+      onPointerDown: (event: React.PointerEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        unlockSound();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        if (scene.current && !useGame.getState().panel) {
+          touchPointers.current.set(event.pointerId, { x, y });
+          syncTouch();
+        }
+      },
+      onPointerUp: release,
+      onPointerCancel: release,
+      onLostPointerCapture: release,
+    };
+  };
   return (
     <div className="world-wrap">
       <div

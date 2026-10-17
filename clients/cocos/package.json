@@ -2,7 +2,9 @@
   "name": "realquest-cocos-spike",
   "uuid": "7d239fee-f858-4dc6-a770-589c53c88673",
   "version": "0.1.0",
-  "creator": { "version": "3.8.8" },
+  "creator": {
+    "version": "3.8.8"
+  },
   "scripts": {
     "sync": "node tools/sync.mjs",
     "check": "node tools/check.mjs",
@@ -11,6 +13,11 @@
     "test:phase23": "node tools/smoke-phase23.mjs",
     "build:web": "node tools/build.mjs web-desktop",
     "build:wechat": "node tools/build.mjs wechatgame",
-    "build:douyin": "node tools/build.mjs bytedance-mini-game"
+    "build:douyin": "node tools/build.mjs bytedance-mini-game",
+    "test:features": "node tools/test-features.mjs",
+    "test:phase45": "node tools/smoke-phase45.mjs",
+    "test:depths": "node tools/smoke-depths.mjs",
+    "test:landscape": "node tools/smoke-landscape.mjs",
+    "test:cave-view": "node tools/test-cave-view.mjs"
   }
 }
