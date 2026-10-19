@@ -1,5 +1,9 @@
 # Cocos 生产候选与交付
 
+2026-10-19 用户决定基础迁移完成即可停止，本轮已收尾。本文更完整的SDK CI/生产交付范围保留为后续资料，不继续触发、注册运行器、部署或要求授权；任务106的未提交方案仅为草稿。当前原Web代码/发布入口与候选产物均保留，未把后续未验证项登记为通过。
+
+[任务106](tasks/106-cocos-one-time-sdk-ci.md)补限定候选分支的专用单次SDK CI路由，保留原完整构建/27浏览器/交付/网络命令；72静态策略与13控制器检查通过。准备补丁尚未提交，临时运行器未注册、SDK CI未执行；既有真实基础CI和本地SDK重建各自保留证据，未扩大为生产发布。
+
 当前整体候选见[统一交付说明](cocos-handoff.md)。本地封存目录为 `output/cocos-final-candidate/static`，11个保留版本，内容身份与任务88–93实际验证的包一致；5443只提供独立新档的本地试玩，不是生产Nginx部署。原5442及其存档继续保留。
 
 [任务100](tasks/100-cocos-linux-base-checks.md)已用独立Debian13 arm64容器完成根/后端有锁安装、24模块及232后端项，927输入前后SHA一致、28依赖匹配；原Git历史只读供保护检查，原Web未安装/构建。Docker恢复停止、18旧容器/卷/网络保持。这是本机Linux证据，Ubuntu托管/干净提交检出/实际CI和SDK层仍未验证。
@@ -64,6 +68,8 @@ npm run cocos:package -- --build web-next/web-desktop --output output/cocos-next
 旧版本按相同路径逐字节保留。新入口和旧资源必须一起交付，不能只复制活动目录覆盖原站点。此工具不自动删除历史版本；保留期、下载预算和旧标签更新策略仍须完成V6/V7后确定。相同内容身份下的资源不能原地改写。
 
 ## 独立生产重建
+
+[任务105](tasks/105-cocos-signed-sdk-input.md)另以严格验签的官方资源输入重建当前J3：906源/107绑定和真实类型、独立依赖及269产物一致。SDK输入在 `output/cocos-sdk-ci-preparation/pristine.json`，执行应使用其独立工作副本；旧SDK路径已缺失，不能只复用旧绝对路径。后续旧/工作包字节审计的缺口独立记录，不冒称实际SDK CI通过。
 
 重复封包只证明封包确定性。要核验引擎重建，应在原仓先运行 `node tools/cocos-clean-source.mjs`，使用其JSON输出的全新 `destination`；它排除原Web安装/构建、数据库、依赖目录、Creator缓存和旧产物。进入该副本后独立 `npm ci`，保留外部既有官方 `COCOS_CREATOR` 路径，指定新的专属 `COCOS_USER_DATA`，再运行：
 

@@ -1,5 +1,11 @@
 # Cocos 整体候选
 
+2026-10-19 用户明确要求以基础迁移完成为终点，当前基础迁移已完成并收尾。Cocos核心功能/数据管理/旧档接续/现实成长与学习记录已补齐，真实托管基础CI已通过；无需继续任务106 SDK CI授权。下方完整SDK/系统实机/生产与整体验收仍是未完成的后续清单，不冒称通过，也不再阻塞本轮结束；原Web及正式入口保留。
+
+[任务106](tasks/106-cocos-one-time-sdk-ci.md)已准备候选分支的单次SDK CI入口、官方运行器与自动注销控制器，72策略/13生命周期检查及SDK验签通过；未提交、注册或执行SDK CI。精确10文件补丁与操作边界已封存，等待该部分Git/账号操作授权，不要求逐屏反馈。当前远端仍是任务104基础CI通过的提交；16/22完成状态保持。
+
+[任务105](tasks/105-cocos-signed-sdk-input.md)已准备签名有效的Creator3.8.8输入副本，并在独立工作SDK/906源码/新依赖中实际重建；107绑定和真实类型通过，269产物与当前J3完全一致。当前输入由 `output/cocos-sdk-ci-preparation/pristine.json` 定位，旧SDK和本轮工作包后来已缺失，相关后续字节复核明确未完成。SDK CI仍未注册/执行；本轮文档未提交，T2和其余五项继续。
+
 [任务104](tasks/104-cocos-hosted-ci.md)已按明确授权在 `codex/cocos-ci-bootstrap` 提交并推送候选，修复首次CI上下文错误；[真实托管基础CI](https://github.com/jastfkjg/RealQuest/actions/runs/39249855662)通过24模块、232后端、来源保护及干净检出，下载回执已核验。T3完成，现16/22项完成；SDK作业skipped，T2和其余五项门槛继续开放。下文任务102/103的等待Git授权为历史阶段，main与原发布保持。
 
 2026-10-19，现有功能与已完成的本地验证已汇总为一个整体候选，后续验收证据继续补入本页。按用户要求，画面、手感与完整节奏集中留到整体反馈，不再逐屏请求确认。本页是当前交付入口；历史任务中“等待逐屏反馈/保留专项服务”的描述以本页为准。原Web退役仍按[任务39](tasks/39-cocos-primary-retirement.md)，本次没有删除代码或切换正式入口。
@@ -70,7 +76,7 @@ npm run cocos:package -- --verify output/cocos-final-candidate/static
 
 可核验的静态生产候选在 `output/cocos-final-candidate/static`，11个保留版本、2946站点文件，整体SHA256为 `77709984d30470abdf03af1e64937112a6e929ae580a4383994cd33a8f3a350d`，与任务88–93所验证封包相同。当前活动版本 `260b75754510b58e843ffacb41fddc61a7f9f58c6e79ec97068c06103af065cf`。打包及传输后可用上方 `--verify` 校验；候选不包含玩家数据库。生产Nginx/镜像/回退复现方法见[交付说明](cocos-delivery.md)。
 
-独立Cocos CI分为普通Ubuntu `verify` 和显式勾选的SDK `candidate`。用户已授权候选分支提交/推送，基础层已在GitHub实际通过；SDK层仍仅main手动勾选，尚未执行。原CI、部署工作流、main及默认Web入口保持，真实SDK/生产门槛继续。
+独立Cocos CI分为普通Ubuntu `verify` 和显式勾选的SDK `candidate`。用户已授权候选分支提交/推送，基础层已在GitHub实际通过；SDK层当前本地补丁已准备精确候选分支/专用单次标签的手动入口，尚未提交或执行；远端已提交版本仍仅main手动勾选。原CI、部署工作流、main及默认Web入口保持，真实SDK/生产门槛继续。
 
 最近设备只读核对识别到一台已配对iPhone，但通道unavailable，USB没有移动设备项，本机无可用ADB；专用SDK运行器最近查询仍0。没有更改配对/信任/系统设置、注册运行器或启动设备应用，详见任务102/104。设备与SDK限制不需要用逐屏反馈来替代。
 

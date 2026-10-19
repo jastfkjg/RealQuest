@@ -1,5 +1,9 @@
 # Cocos 本地启动与存档
 
+2026-10-19 用户已将本轮范围收口为基础迁移并要求停止。基础迁移与本地预览可用，现有5443整体预览和5442原档预览保留；不再继续任务106的SDK CI授权/执行。其草稿和历史验证供以后按需接续，不代表SDK CI或正式发布已完成。
+
+[任务106](tasks/106-cocos-one-time-sdk-ci.md)准备一次性SDK CI：使用已有本机工具、独立SDK工作副本和私有单job运行器，结束后注销清理；13生命周期检查及实际工具预检通过。它尚未注册或执行，不替代当前本地启动命令；SDK CI新增Git/账号操作仍需单独授权。
+
 [任务95](tasks/95-cocos-native-chrome-zoom.md)的Chrome原生缩放代表链已完成并恢复原值100%；60199/API60200测试服务、专用标签均已关闭，QA库仅保留作证据。借用用户已有Chrome但只操作新测试标签，没有新建/清理用户profile。精确运行版本页因URL策略未核验，不绕过限制；下述两份人工试玩继续保留。
 
 当前整体试玩见[统一交付说明](cocos-handoff.md)：[5443](http://127.0.0.1:5443/)加载当前J3，API8143，独立新库 `output/cocos-final-preview/local-preview.db`、cookie `realquest_cocos_final`，已验证欢迎页正常且未登记。原5442/I3/原玩家档继续保留。此前任务94取景53136/53137和任务97读屏50230/50231专项主机已正常关闭，原QA库/证据保留；统一入口替代逐屏验收。原凭证不能将旧库角色搬进5443空库。
@@ -16,6 +20,8 @@
 Cocos 的人工入口是根目录 `start-cocos.command` 或 `npm run cocos:preview -- ...`，两者复用同一个启动器。原 `start.command` 继续启动 React/Phaser 开发服务，默认发布也继续保留；最终切换须先完成[任务39](tasks/39-cocos-primary-retirement.md)的其余门槛。
 
 ## 启动、构建与自动化
+
+当前SDK来源补充见[任务105](tasks/105-cocos-signed-sdk-input.md)：旧 `output/cocos-tools/CocosCreator.app` 路径在复核时已缺失，不能继续当作可执行配置。签名有效的本地输入由 `output/cocos-sdk-ci-preparation/pristine.json` 定位；先创建独立工作副本，再把 `COCOS_CREATOR` 指向该工作副本。现有I3/J3预览无需SDK，保存/重启方法不变。该准备不是全局SDK安装或实际SDK CI。
 
 已有包的预览需要准备好的 Python3.14 `backend/.venv` 和 `backend/requirements.lock.txt` 对应依赖；不会自动安装依赖。构建/工具使用根 Node22/npm10、有锁安装和官方 Creator3.8.8，具体准备见根README。
 
