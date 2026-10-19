@@ -1,5 +1,52 @@
 # RealQuest · 现实副本
 
+后续[任务99](docs/tasks/99-cocos-keyboard-coverage.md)补现有键盘回归：11检查、15轮正反向Tab/142个可用控件位置及草稿恢复通过，含740×360；游戏包/试玩不变，系统输入和完整V5仍按清单验收。
+
+当前可整体试玩的Cocos候选已统一为 [5443](http://127.0.0.1:5443/)（独立新档）；原 [5442](http://127.0.0.1:5442/) 保留已有存档，仍是I3。功能、启动/测试命令、封包和剩余验收见[整体候选交付](docs/cocos-handoff.md)。本轮24组单元/232项后端通过，基础CI与真实SDK构建已拆开，未提交或执行远端CI。按用户要求整体反馈，不再逐屏等待；原Web代码、默认启动与发布保持。
+
+<details>
+<summary>此前工程与验证记录（按各任务当时范围，当前入口以上方交付页为准）</summary>
+
+[任务93](docs/tasks/93-cocos-canonical-firefox-network.md)已把Firefox弱网接入仓库命令，修复代理半关闭截断并补保序/取消回归。五相关单元、Firefox158/实际默认156/同字节私有Chrome155各七样本及两个中断合同通过；原系统Chrome未改，私有副本严格验签和全字节核对。测试资源清理，原5442/I3、原Web及其余验收保持。
+
+[任务92](docs/tasks/92-cocos-native-firefox-network.md)完成原生Firefox158的七份本机HTTP弱网专项：共享双向限速经校准，10Mbps冷13.57–13.81秒、1.6Mbps58.76–59.00秒，热缓存与同档唯一书页通过。仅工程参考；所属资源清理，原5442/I3、原Web及其余发布/系统/实机条件保留。
+
+[任务91](docs/tasks/91-cocos-native-firefox-session.md)完成原生Firefox158的单次45分钟长会话，94采样/7图、同档与会话后移动保存通过。全部所属临时资源已退出；Firefox弱网、实机/系统及完整发布预算等继续，原5442/I3和原Web保留。
+
+[任务90](docs/tasks/90-cocos-firefox-container-profile.md)已补原生Firefox158的同包容器/HTTPS七项及中断清理，修复Firefox自动化profile追踪，并通过相关单元与Chromium生命周期。Docker和测试资源已收尾，5442/I3与原Web保留；完整V6仍开放。
+
+[任务89](docs/tasks/89-cocos-edge-container-network.md)已补任务88新交付包的真实Edge容器/HTTPS七项与独立七份固定网络样本；新本地arm64镜像、同档接续和中断清理均通过，Docker恢复停止。5442/I3和原Web保留，正式生产/CI/实机及其余验收继续。
+
+[原生Edge更新与回退](docs/tasks/88-cocos-native-edge-delivery.md)已通过九项交付和六种生命周期；补齐旧页面图标兼容及取消清理，保留全部旧版本/存档。新配置尚待容器/HTTPS/网络复验，5442/I3试玩与原Web保持。
+
+[原生Edge弱网验收](docs/tasks/87-cocos-native-edge-network.md)已通过固定七样本/10PNG：冷启动10Mbps约13.5秒、1.6Mbps约58.1秒，刷新同档与唯一学习书页保持。公共网络工具现支持严格Edge产品版本核验，原预算未调宽；测试资源已退出，5442/I3试玩保留，完整V6仍开放。
+
+当前J3桌面品牌代表流程已补：[Edge八组/17PNG](docs/tasks/83-cocos-native-edge.md)、[原生Firefox七组/15PNG](docs/tasks/84-cocos-native-firefox.md)，含中文研习保存与刷新、五尺寸检查。[Edge独立45分钟](docs/tasks/86-cocos-native-edge-session.md)另通过94采样/7PNG及固定本机工程参考。测试浏览器/profile/服务均退出，5442原试玩保留；Safari、物理设备及完整V6/系统要求继续。
+
+[V3数据一致性逐项验收](docs/tasks/82-cocos-consistency-acceptance.md)完成：常规consistency已补时钟/旧响应/断网，共9组/13PNG；四相关单元与194后端项通过。保留失败证据，27套登记数不变；人工5442/I3、原Web及其他未完成门槛保持。
+
+[固定PostgreSQL镜像恢复](docs/tasks/81-cocos-pinned-postgres-restore.md)已通过当前Linux API/J3七项/12PNG，V1按清单允许的隔离夹具要求关闭；不等于真实生产迁移。Docker已恢复停止，原试玩/18旧容器和两份QA数据卷保留，原Web保持。
+
+[当前J3容器与回环HTTPS](docs/tasks/80-cocos-j3-container-https.md)已通过七项实际检查与独立中断清理验证，全部测试资源退出，Docker恢复原停止状态；原5442/I3供复核，原Web保留。正式生产、CI/系统/设备和玩家门槛继续按清单。
+
+[J3独立重建与交付](docs/tasks/79-cocos-j3-independent-delivery.md)已完成：新源码副本269产物逐字节相同、独立包19组、Nginx9组及固定网络七样本通过；原人工5442/I3继续保留，实际CI/系统/设备/目标部署和玩家门槛未全部关闭。
+
+[当前J3原生长会话](docs/tasks/78-cocos-j3-native-session.md)已通过单次真实45分钟：同档记录保持、94份采样、7PNG、固定工程限值与进程清理核验通过。只补本机Chrome/M4证据，其余退役门槛仍按清单。
+
+工作区[首领取景J3候选](docs/tasks/76-cocos-combat-framing.md)已完成[当前27套全量回归](docs/tasks/77-cocos-j3-full-regression.md)：一次172组/702份PNG，源与构建一致，所属自动化已退出。5442仍保留I3供原复核；预览更新被自动审批拒绝，尚未中断或切换，待明确允许。实际CI/系统/实机/生产和其余验收仍开放。
+
+网络预算已有正式入口：`npm run cocos:test:network -- --artifact output/<release封包>`。固定七样本的启动/缓存/同档/唯一学习记录必须全部通过，已接到候选工作流上传前；默认Chromium和900输入独立源码副本的Chrome各七样本、取消清理及默认runner生命周期通过。命令与本轮范围见[任务72](docs/tasks/72-cocos-network-regression.md)，尚未触发远端CI；5442游戏I3和原存档保持。
+
+2026-10-18当前试玩为I3：地表逐像素无损编码使首屏HTTP下载约减少23%，原固定预算的七次冷/热/同档链通过；重连刷新期间误提交旧坐标的竞态已修复。三测试引擎纹理/回退、规范会话、真实Nginx交付和独立重建通过，5442已同库更新。详见[任务70](docs/tasks/70-cocos-network-budget.md)、[任务71](docs/tasks/71-cocos-reconnect-position.md)。最新[任务75](docs/tasks/75-cocos-current-full-regression.md)当前I3一次26套Cocos浏览器回归通过（165组/674份PNG），源/后端/构建一致、所属测试资源已退出；可选原Web比较单独登记。实机、实际CI/生产和其余退役门槛仍开放。
+
+SQLite整库备份/核验/新路径恢复工具与隔离恢复演练已提供；原Web/Cocos接续、旧模式升级及未版本化角色7组通过。命令见[备份与恢复](docs/cocos-backup.md)，结果与目标生产库待验范围见[任务56](docs/tasks/56-cocos-save-backup-restore.md)。
+
+当前I3生产候选已在原项目与全新896输入源码副本独立重建，269文件逐字节一致，原PNG保留作回退；最新结果见[任务70](docs/tasks/70-cocos-network-budget.md)。复现方法与实际CI/目标部署边界见[交付说明](docs/cocos-delivery.md#独立生产重建)，历史工具链验证见[任务57](docs/tasks/57-cocos-independent-production-rebuild.md)。
+
+历史任务58验证：该阶段真实生产候选完成22套/150组/655PNG及Nginx9组，修复横屏反馈遮挡；5442已同库更新，六表/模式指纹一致。435原文件/18封闭例外的过渡保护继续生效。原Web代码/默认启动和发布保留，实际CI/目标部署、设备及其余验收见[任务39](docs/tasks/39-cocos-primary-retirement.md)、[任务58](docs/tasks/58-cocos-world-feedback-layout.md)。
+
+</details>
+
 **Real Life is the Game.** 一个将现实成长与家园经营、探索相连接的中文像素 RPG 基础版本。
 
 当前可以探索 1920×1280 户外世界，进入小屋、工坊、图书馆、旅人公会和杂货铺，接取与交付九个剧情委托，采集、种植、交易、制作与升级，通过 NPC 现实委托积累知识、健康和技能点，保留学习手札与计时。位置、任务、储物箱和资源会保存，兼容旧版存档。**AI 尚未接入；NPC 对话为明确标注的预设剧情。完整 MVP 的剩余工作统一维护在 [TODO.md](TODO.md)。**
@@ -10,13 +57,52 @@
 
 ## 本地开发
 
+客户端方向已确定为 **Cocos 为主**。原 React / Phaser Web 保留用于迁移对照、存档接续与回退，暂不删除代码；当前默认启动和发布链尚未切换。两端实际功能差距、必须补齐与验证的条件，以及工具链依赖，统一见 [Cocos 主客户端与原 Web 退役清单](docs/tasks/39-cocos-primary-retirement.md)。
+
+Cocos 工具现在从仓库根目录安装，使用 Node 22（`.nvmrc` 为22.23.2）和 npm 10；无需安装或构建 `frontend/`。先按下文准备 Python 3.14 的 `backend/.venv`，并使用官方 Creator 3.8.8；根目录执行：
+
+```sh
+nvm use
+npm ci
+# 首次浏览器测试需要下载锁定版本的 Chromium
+npm exec -- playwright install chromium
+export COCOS_CREATOR="/你的路径/CocosCreator.app/Contents/MacOS/CocosCreator"
+npm run cocos:doctor -- --browser
+npm run cocos:sync
+npm run cocos:sources
+npm run cocos:check
+npm run cocos:test:unit
+REALQUEST_COCOS_BUILD=web-local npm run cocos:build
+# 自动化：每个套件自动创建独立测试库、分配端口并关闭浏览器/服务
+npm run cocos:test:browser -- --build web-local/web-desktop
+# 人工预览：先只读检查，再启动固定地址和自己的预览库
+npm run cocos:preview -- --check --build web-local/web-desktop --port 5448 --api-port 8148 --database output/cocos-local/local-preview.db
+npm run cocos:preview -- --build web-local/web-desktop --port 5448 --api-port 8148 --database output/cocos-local/local-preview.db
+```
+
+打开 `http://127.0.0.1:5448/`，Ctrl+C 停止这组服务。预览只服务已有构建，没有源码热更新；重建时使用另一个构建名。当前人工试玩使用5442/API8142、`web-release-network-i3/web-desktop`和同一 `output/cocos-data/local-preview.db`，勿把自动化测试指向该库。`cocos:sources` 可单独核对来源，`cocos:check` 已包含该检查；素材与冻结输入归属见[任务51](docs/tasks/51-cocos-source-ownership.md)。单元检查不启动浏览器。统一浏览器入口默认执行27个当前Cocos套件（含无损纹理、暂停请求故障、启动恢复、存储故障与原生语义键盘链），`--suite session,inventory`可选择子集，`--list`列出登记项；结果与清理证明保存在新的`output/cocos-regression/run-*`中。当前包必须带真实构建产生的`realquest-build.json`且源码/产物哈希匹配。可用`--port`/`--api-port`指定测试端口；不接收人工库路径。原Web UI兼容单列为`--suite compatibility --web-build <独立Web产物路径>`，常规Cocos回归无需先构建Web。最新I3全部26套在同次运行通过，165组/674份PNG，详见[任务75](docs/tasks/75-cocos-current-full-regression.md)。此前各版本、独立重建、三测试引擎、恢复与交付证据保留各自范围，不合并为本次26套结果；独立入口基础见[任务52](docs/tasks/52-cocos-unified-regression.md)和[任务50](docs/tasks/50-cocos-independent-tooling.md)。实际CI仍缺运行器，品牌浏览器/实机、系统输入与其余发布门槛开放。`start.command` 和生产部署入口仍按原 Web 运行。
+
+Cocos 人工主入口、只读预检、构建/预览/自动化的区别、可配置端口与数据库、原Cookie/凭证的同库接续条件见[本地启动与存档说明](docs/cocos-local.md)。启动器只在API和代理实际可用后报告ready，同库启动锁覆盖迁移与退出清理；原 `start.command` 默认Web入口继续保留。启动链的11项单元、9组真实进程及会话/生命周期证据见[任务53](docs/tasks/53-cocos-startup-save-paths.md)。
+
+生产候选另有显式 `cocos:build:release`（关闭debug/sourceMaps、启用MD5）和 `cocos:package`，默认开发构建不变。版本目录、静态Nginx/API/cache配置、独立候选CI与验证范围见[生产候选与交付](docs/cocos-delivery.md)及[任务54](docs/tasks/54-cocos-production-delivery.md)。原Web默认CI/镜像/部署仍保留，当前工作流文件不是实际CI或上线证明。
+
+Cocos 数据管理与旧旅程接续已实现候选：完整数据导出、明确删除/丢失响应重试，以及凭证导入或同浏览器原Web旅程接续。独立构建、预览方式和验证范围见[任务40](docs/tasks/40-cocos-data-management.md)；接续需要同一服务器数据库，不会自动搬运独立预览库或玩家库。
+
+Cocos 现实成长历史与学习整理已接入：按日/月和状态查看现实约定，整理今天/历史/归档书页、长期计划与同日记录关联，读取旧锻炼记录。构建、同一手工存档的预览命令及验证边界见[任务41](docs/tasks/41-cocos-life-records.md)。
+
+Cocos 六种外观登记与旅人档案已有本地候选，包含容量/累计经验/能力概览和按服务端报价主动培养；既有角色接续不会被欢迎页选择覆盖。验证、预览命令与后续范围见[任务42](docs/tasks/42-cocos-registration-dossier.md)。
+
+Cocos 当前目标、可重开的旅人指南、初探回顾与再出发手记见[任务43](docs/tasks/43-cocos-journey-guidance.md)。成长书签直达原现实约定或魔法报价；标记、阅读和归来提示不自动领取、消费或开启石门。
+
+Cocos 地点索引与邻里名录已覆盖全部15张现有地图、完整旅行报价、作息/关系/喜好，以及横屏全部话题、五种心意选择和帮助。实际渡口→旅店→睡眠→返乡和一次扣费验证见[任务44](docs/tasks/44-cocos-places-neighbors.md)，标记不传送。 玩家反馈修正候选现提供真实地形地图、建筑/人物路标、附图手记和头像对话；5442手工地址沿用原存档，当前地图/找村民已获玩家确认。 本轮[任务45](docs/tasks/45-cocos-neighbor-encounter.md)补世界头像/N找村民、门口提示、真实走近交谈和物件赠礼，保留实际场景与原存档；同5442预览；玩家已确认当前地图与找村民、底部交谈回答、行囊四格可以保留，此前偏好页确认有效。其余视觉/实机/退役门槛保留。
+
 另有独立的 [Cocos Creator 本地迁移小样](clients/cocos/README.md)，可通过根目录 `start-cocos.command` 启动已构建的小样。它使用独立游客会话和独立数据库，原 Web 版与本节启动方式继续保留；阶段 4–5 继续接入任务、交易制作、村民、装备成长、研习与手动记录，以及原有五层洞穴战斗；功能迁移证据见[任务36](docs/tasks/36-cocos-features-combat.md)。洞穴美术、战斗 HUD、选目标/按住攻击和多指操作的本地打磨见[任务37](docs/tasks/37-cave-polish.md)；构建后用 `./start-cocos.command --web-port 5430` 同时预览 Web（5430）与 Cocos（5431），使用独立 API8130 和本地小样数据库。村庄细路、同源室内材质、储物箱选择与存取、自动走近及停步反馈的最新打磨见[任务38](docs/tasks/38-village-interior-polish.md)；刷新上述预览即可体验，沿用原本地小样存档。
 
 安家交付后会接上「第一次初探」引导：了解离村条件、准备并装备武器、清理山洞首层，再带材料回工坊查看用途。引导可在追踪栏收起、在「主菜单 → 旅人指南」继续，刷新保留进度；不另发奖励，也不要求初探前提升魔法。实现与验收见[任务29](docs/tasks/29-first-expedition.md)。
 
 完成工坊初探回顾后，会翻开「再出发手记」，连接装备改善、永久洞穴通路与现实成长；之后可从主菜单再次打开。下一步按真实准备更新，学习计时期间仍可探洞，到期后需找诺亚结算，再主动投入研修。同一设备离开至少5分钟后，成功同步存档会显示可收起的归来提示；手动追踪支线或收起引导时不打扰。不增加奖励或改变成长规则，见[任务33](docs/tasks/33-next-departure.md)。
 
-需要 Node.js 22+、Python 3.14。使用 SQLite，无须先安装 PostgreSQL。
+以下为保留的原 React/Phaser Web 开发入口；Cocos人工入口使用上文 `start-cocos.command` / `cocos:preview`。需要 Node.js 22+、Python 3.14。使用 SQLite，无须先安装 PostgreSQL。
 
 一键启动：在 macOS Finder 中双击根目录的 `start.command`，或在终端运行：
 
@@ -107,7 +193,7 @@ docker compose up -d --build
 
 旅程凭证相当于进入存档的钥匙，请自行保管；服务端仅保存其哈希。凭证不能重建已删除或丢失的服务器数据库，也不是任意 JSON 数值导入。普通「导出存档与结算记录」仍供查看，不能用于恢复。删除游客数据会同时撤销其全部凭证与会话。
 
-本次新增 Alembic `002` 恢复凭证/会话表，保留旧存档 JSON 和奖励回执。一键启动会自动迁移；手动启动前在 `backend/` 执行 `.venv/bin/alembic upgrade head`。
+当前 Alembic head 为 `003`：`002` 增加恢复凭证/会话表，`003` 增加Cocos删除确认回执表；保留旧存档 JSON、奖励回执、凭证与会话。一键启动会升级指定数据库；手动启动前在 `backend/` 执行 `.venv/bin/alembic upgrade head`。
 
 ## 检查
 

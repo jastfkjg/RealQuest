@@ -18,10 +18,15 @@ def test_recovery_migration_preserves_existing_save(tmp_path):
     with sqlite3.connect(database) as db:
         db.execute('INSERT INTO players (id, token_hash, state) VALUES (?, ?, ?)', ('legacy-player', 'a' * 64, saved))
         db.execute('INSERT INTO receipts VALUES (?, ?, ?, ?, ?, ?, ?)', ('receipt', 'legacy-player', 'original-request', 'b' * 64, 'timer_finish', '{"xp":25}', 10))
+    upgrade('002')
+    with sqlite3.connect(database) as db:
+        db.execute('INSERT INTO recovery_keys VALUES (?, ?, ?)', ('c' * 64, 'legacy-player', 10))
+        db.execute('INSERT INTO guest_sessions VALUES (?, ?)', ('d' * 64, 'legacy-player'))
     upgrade('head'); upgrade('head')
     with sqlite3.connect(database) as db:
         assert db.execute('SELECT state FROM players').fetchone()[0] == saved
         assert db.execute('SELECT count(*) FROM receipts').fetchone()[0] == 1
-        assert db.execute('SELECT version_num FROM alembic_version').fetchone()[0] == '002'
-        assert db.execute('SELECT count(*) FROM recovery_keys').fetchone()[0] == 0
-        assert db.execute('SELECT count(*) FROM guest_sessions').fetchone()[0] == 0
+        assert db.execute('SELECT version_num FROM alembic_version').fetchone()[0] == '003'
+        assert db.execute('SELECT count(*) FROM recovery_keys').fetchone()[0] == 1
+        assert db.execute('SELECT count(*) FROM guest_sessions').fetchone()[0] == 1
+        assert db.execute('SELECT count(*) FROM client_deletions').fetchone()[0] == 0

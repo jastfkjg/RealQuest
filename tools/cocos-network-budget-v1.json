@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-18T06:46:00.385219+00:00",
+  "status": "candidate engineering budgets fixed before sampling; not owner acceptance or production/SLA evidence",
+  "scope": "Installed desktop Chrome155, headless1440x900, real native Nginx gzip/cache and isolated same-origin API over loopback; CDP fixed limits only. No TLS/DNS/packetloss/mobile/CPU emulation.",
+  "maxColdHttpBytes": 12582912,
+  "resourceTimingBuffer": 5000,
+  "profiles": [
+    {
+      "id": "reference",
+      "samples": 1,
+      "latencyMs": 0,
+      "downloadBytesPerSec": -1,
+      "uploadBytesPerSec": -1,
+      "coldReadyMs": null,
+      "warmReadyMs": null
+    },
+    {
+      "id": "desktop-10mbps",
+      "samples": 3,
+      "latencyMs": 80,
+      "downloadBytesPerSec": 1250000,
+      "uploadBytesPerSec": 250000,
+      "coldReadyMs": 15000,
+      "warmReadyMs": 5000
+    },
+    {
+      "id": "constrained-1.6mbps",
+      "samples": 3,
+      "latencyMs": 150,
+      "downloadBytesPerSec": 200000,
+      "uploadBytesPerSec": 93750,
+      "coldReadyMs": 60000,
+      "warmReadyMs": 8000
+    }
+  ],
+  "definitions": {
+    "cold": "Fresh browser context and empty HTTP cache; root entry to loaded welcome and usable controls.",
+    "warm": "Same context/save/credential/book, native navigation back through root with HTTP cache enabled; root to welcome. Resume same guest and verify once.",
+    "httpBytes": "Sum CDP loadingFinished encodedDataLength plus observed redirect bytes; HTTP-level browser counter, not physical TLS/IP bandwidth.",
+    "sampleStatistics": "Raw samples and min/max only. Seven samples are not a p95 population or real-device performance proof."
+  }
+}

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import ts from "typescript";
 const source = await fs.readFile(
-  new URL("../src/game/nextDeparture.ts", import.meta.url),
+  new URL("../../shared/game/nextDeparture.ts", import.meta.url),
   "utf8",
 );
 const js = ts.transpileModule(source, {

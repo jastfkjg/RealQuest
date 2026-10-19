@@ -1,0 +1,126 @@
+name: Cocos checks and production candidate
+on:
+  push:
+    branches: ['codex/cocos-ci-*']
+  workflow_dispatch:
+    inputs:
+      build_candidate:
+        description: Build and verify a real Creator production candidate on the configured SDK runner
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: realquest-cocos-candidate
+  cancel-in-progress: false
+jobs:
+  verify:
+    name: Source, behavior and backend checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: backend/requirements.lock.txt
+      - name: Prepare locked tools
+        run: |
+          set -euo pipefail
+          npm ci
+          python -m venv backend/.venv
+          backend/.venv/bin/python -m pip install -r backend/requirements.lock.txt
+          npm run cocos:doctor
+      - name: Verify sources and behavior without the editor
+        run: |
+          set -euo pipefail
+          npm run cocos:sync
+          npm run cocos:sources
+          npm run cocos:baseline
+          npm run cocos:test:unit
+      - name: Verify backend
+        working-directory: backend
+        run: .venv/bin/python -m pytest -q --junitxml=../output/cocos-unit/backend.xml
+      - name: Verify checkout stays clean
+        run: test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: realquest-cocos-check-results
+          path: output/cocos-unit/
+          retention-days: 14
+          if-no-files-found: ignore
+  candidate:
+    needs: verify
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_candidate && github.ref == 'refs/heads/main' }}
+    runs-on: [self-hosted, cocos-3.8.8]
+    timeout-minutes: 45
+    env:
+      COCOS_CREATOR: ${{ vars.COCOS_CREATOR }}
+      COCOS_USER_DATA: ${{ runner.temp }}/realquest-cocos-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: backend/requirements.lock.txt
+      - name: Prepare locked Cocos and backend tools
+        run: |
+          set -euo pipefail
+          npm ci
+          python -m venv backend/.venv
+          backend/.venv/bin/python -m pip install -r backend/requirements.lock.txt
+          npm exec -- playwright install chromium
+          nginx -v
+          npm run cocos:doctor -- --browser
+      - name: Verify canonical sources and behavior
+        run: |
+          set -euo pipefail
+          npm run cocos:sync
+          npm run cocos:sources
+          npm run cocos:check
+          npm run cocos:baseline
+          npm run cocos:test:unit
+          test -z "$(git status --porcelain)"
+      - name: Verify backend
+        working-directory: backend
+        run: .venv/bin/python -m pytest -q
+      - name: Build real production package
+        env:
+          REALQUEST_COCOS_BUILD: web-release-ci
+        run: |
+          set -euo pipefail
+          npm run cocos:build:release
+          npm run cocos:package -- --build web-release-ci/web-desktop --output output/cocos-delivery
+      - name: Verify production engine and Nginx delivery
+        run: |
+          set -euo pipefail
+          npm run cocos:test:delivery -- --artifact output/cocos-delivery
+          npm run cocos:test:delivery:lifecycle -- --artifact output/cocos-delivery
+          npm run cocos:test:browser -- --build web-release-ci/web-desktop
+          npm run cocos:test:network -- --artifact output/cocos-delivery
+          npm run cocos:package -- --verify output/cocos-delivery
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: realquest-cocos-candidate
+          path: output/cocos-delivery/
+          retention-days: 30
+          if-no-files-found: error

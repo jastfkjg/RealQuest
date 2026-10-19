@@ -1,6 +1,6 @@
 import {createRequire} from 'node:module';
 import assert from 'node:assert/strict';
-const require=createRequire(new URL('../../../frontend/package.json',import.meta.url));const {chromium}=require('playwright');
+const require=createRequire(new URL('../../../package.json',import.meta.url));const {chromium}=require('playwright');
 const browser=await chromium.launch({headless:true});
 try{
  const p=await browser.newPage({viewport:{width:1440,height:900}});await p.goto('http://127.0.0.1:5422');await p.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded);

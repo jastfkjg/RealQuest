@@ -7,7 +7,7 @@ import {
   LabelOutline,
   UIOpacity,
 } from "cc";
-import type { GameState } from "./core/protocol";
+import type { GameState, CaveEnemy } from "./core/protocol";
 import { monsterArt } from "./core/caveArt";
 import { combatMarks, confirmedFeedback } from "./core/caveView";
 import { paintGraphics } from "./cavePaint";
@@ -24,6 +24,7 @@ export class CombatRenderer {
   private poses = new Map<string, string>();
   private feedbackRoot: Node | null = null;
   private feedback = new Map<string, Node>();
+  private extents = new Map<string, {x:number;y:number;w:number;h:number}>();
   constructor(
     private parent: Node,
     private depths: Map<Node, number>,
@@ -39,6 +40,20 @@ export class CombatRenderer {
   }
   get visibleFeedbackCount() {
     return this.feedbackRoot?.active ? this.feedback.size : 0;
+  }
+  bounds(enemy: CaveEnemy) {
+    const key=enemy.kind+':'+(enemy.phase==='windup');let box=this.extents.get(key);
+    if(!box){
+      const points=Array.from({length:4},(_,pose)=>monsterArt(enemy,pose/6)).flat().flatMap(m=>{
+        const pad=(m.line||0)/2;
+        if('points' in m)return m.points.flatMap(p=>[{x:p.x-pad,y:p.y-pad},{x:p.x+pad,y:p.y+pad}]);
+        const x=m.kind==='ellipse'?m.x-m.w/2:m.x,y=m.kind==='ellipse'?m.y-m.h/2:m.y;
+        return [{x:x-pad,y:y-pad},{x:x+m.w+pad,y:y+m.h+pad}];
+      });
+      const x=Math.min(...points.map(p=>p.x)),y=Math.min(...points.map(p=>p.y));
+      box={x,y,w:Math.max(...points.map(p=>p.x))-x,h:Math.max(...points.map(p=>p.y))-y};this.extents.set(key,box);
+    }
+    return {x:enemy.x+box.x,y:enemy.y+box.y,w:box.w,h:box.h};
   }
   reset() {
     this.enemies.clear();

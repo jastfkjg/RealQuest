@@ -5,6 +5,9 @@ __pycache__/
 .pytest_cache/
 *.pyc
 *.db
+*.db.preview.lock
+*.sqlite.preview.lock
+*.sqlite3.preview.lock
 .env
 output/
 .DS_Store

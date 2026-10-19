@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+const require=createRequire(new URL('../../../package.json',import.meta.url)),ts=require('typescript'),cache=new Map();
+async function module(name){if(cache.has(name))return cache.get(name);let code=ts.transpileModule(await fs.readFile(new URL('../../../shared/game/'+name+'.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;for(const m of [...code.matchAll(/from ['"]\.\/(\w+)['"]/g)])code=code.replace(m[0],'from '+JSON.stringify(await module(m[1])));const url='data:text/javascript;base64,'+Buffer.from(code).toString('base64');cache.set(name,url);return url;}
+const {InventoryPreferences,inventoryPreferenceKey,cleanQuick,itemIntent}=await import(await module('inventory'));
+const entries=new Map(),storage={getItem:k=>entries.get(k)||null,setItem:(k,v)=>entries.set(k,v),removeItem:k=>entries.delete(k)};
+entries.set('realquest-cocos-quick-v1',JSON.stringify(['plank','plank','gold','unknown','wood']));entries.set('realquest-quick-items',JSON.stringify(['crop',null,'wood','seed']));
+const p=new InventoryPreferences(storage);p.enter('a');assert.deepEqual(p.value.quick,['seed','wood','stone','crop'],'global preferences never silently attributed');assert(p.bind(0,'wood',{wood:3}));assert.deepEqual(p.value.quick,['wood','seed','stone','crop']);assert(!p.bind(1,'plank',{plank:0}));p.clear(2);p.select('wood');const a=JSON.stringify(p.value);p.enter('b');assert.deepEqual(p.value.quick,['seed','wood','stone','crop']);p.select('stone');const b=entries.get(inventoryPreferenceKey('b'));p.enter('a');assert.equal(JSON.stringify(p.value),a);assert.equal(new InventoryPreferences(storage).enter('a').selected,'wood');
+assert.deepEqual(cleanQuick(['wood','wood','gold','missing']),['wood',null,null,null]);assert.equal(p.legacy().length,2);assert(p.importLegacy('realquest-cocos-quick-v1'));assert.deepEqual(p.value.quick,['plank',null,null,null]);assert.equal(entries.get(inventoryPreferenceKey('b')),b);assert(entries.has('realquest-cocos-quick-v1'));p.deleted('a');assert(!entries.has(inventoryPreferenceKey('a')));assert.equal(entries.get(inventoryPreferenceKey('b')),b);assert(entries.has('realquest-quick-items'));
+entries.set(inventoryPreferenceKey('wrong'),JSON.stringify({version:2,saveId:'another',selected:'gold',quick:['gold']}));assert.deepEqual(p.enter('wrong').quick,['seed','wood','stone','crop']);
+const blocked=new InventoryPreferences({getItem(){throw Error('blocked');},setItem(){throw Error('blocked');},removeItem(){throw Error('blocked');}});blocked.enter('a');blocked.bind(3,'wood',{wood:1});assert(blocked.warning);const ram=JSON.stringify(blocked.value);blocked.enter('b');blocked.enter('a');assert.equal(JSON.stringify(blocked.value),ram);
+console.log('PASS four-pocket swap/clear, per-save persistence/isolation, explicit legacy import, stale/unknown sanitization, scoped deletion and storage-failure RAM continuity.');
+const root=fileURLToPath(new URL('../../../',import.meta.url)),fixture=JSON.parse(execFileSync(root+'backend/.venv/bin/python',['-c',`import json
+from app.main import snapshot
+from app.rules import initial_state
+from app.world import WORLD
+from app.residents import routine_definitions
+s=initial_state();s['character']={'name':'物品夹具','appearance':0}
+print(json.dumps(snapshot(s,world={**WORLD,'residents':routine_definitions()})))`],{cwd:root+'backend',encoding:'utf8'}));
+const {world,state:s,server_time:now}=fixture,plot=world.objects.find(o=>o.kind==='plot');s.position={x:plot.x,y:plot.y+20};s.inventory.seed=3;let i=itemIntent(world,s,now,'seed');assert.equal(i.command,'plant');assert.equal(i.data.target,plot.id);const before=JSON.stringify(s);const signature=i.signature;s.plots[plot.id]={planted_at:now,ready_at:now+60};assert.notEqual(itemIntent(world,s,now,'seed').signature,signature,'filled plot cannot silently reuse draft');s.plots={};s.location='home';assert(!itemIntent(world,s,now,'seed').command);assert.equal(itemIntent(world,s,now,'seed').target.mapId,'overworld');
+s.location='workshop';const counter=world.interiors.workshop.objects.find(o=>o.id==='workshop_counter');s.position={x:counter.x,y:counter.y};s.inventory.wood=2;i=itemIntent(world,s,now,'wood');assert(i.reason);s.inventory.wood=3;i=itemIntent(world,s,now,'wood');assert.equal(i.reason,'');assert.deepEqual(i.costs,{wood:3});assert.deepEqual(i.gains,{plank:1});s.inventory.crop=1;assert.equal(itemIntent(world,s,now,'crop').gains.gold,7+s.buildings.workshop);
+s.location='shop';const shop=world.interiors.shop.objects.find(o=>o.id==='shop_counter');s.position={x:shop.x,y:shop.y};s.market.sell.crop=99;i=itemIntent(world,s,now,'crop');assert.equal(i.gains.gold,99,'market quote comes from snapshot');const quote=i.signature;s.market.sell.crop=100;assert.notEqual(itemIntent(world,s,now,'crop').signature,quote);s.inventory.crop=0;assert(itemIntent(world,s,now,'crop').reason);assert(itemIntent(world,s,now,'gold').reason);
+const readOnly=JSON.stringify(s);for(const id of ['seed','wood','stone','crop','plank','stone_sword','gate_stone','soup'])itemIntent(world,s,now,id);assert.equal(JSON.stringify(s),readOnly);
+assert(before);console.log('PASS actual empty-plot/proximity intent, stale target/price invalidation, original craft/counter and market quote, zero/unknown guards and read-only derivation.');

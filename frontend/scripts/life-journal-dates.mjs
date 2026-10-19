@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { transform } from "esbuild";
 import { readFile } from "node:fs/promises";
 const source = await readFile(
-  new URL("../src/game/lifeJournalDates.ts", import.meta.url),
+  new URL("../../shared/game/lifeJournalDates.ts", import.meta.url),
   "utf8",
 );
 const compiled = await transform(source, { loader: "ts", format: "esm" });

@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request, Response, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select, delete, text, or_
 from .db import Session, engine
-from .models import Player, Receipt, RecoveryKey, GuestSession
+from .models import Player, Receipt, RecoveryKey, GuestSession, ClientDeletion
 from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS, life_task_views, character_growth_options, HEALTH_CAPACITY_GAIN
 from .quests import quest_views
 from .world import WORLD
@@ -256,6 +256,65 @@ def export(request: Request):
         player = player_for(db, request)
         ledger = db.scalars(select(Receipt).where(Receipt.player_id == player.id).order_by(Receipt.created_at)).all()
         return {'state': player.state, 'ledger': [{'action': item.action, 'created_at': item.created_at, 'changes': item.changes} for item in ledger]}
+
+
+class WebJourneyInput(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    save_id: str = Field(min_length=36, max_length=36)
+
+
+@app.post('/api/client-from-web')
+def client_from_web(body: WebJourneyInput, request: Request):
+    """Explicitly continue an existing cookie journey, never create a player."""
+    if request.headers.get('authorization') is not None:
+        raise HTTPException(400, '接续原网页旅程需使用此浏览器的原会话')
+    with Session.begin() as db:
+        lock_sqlite(db)
+        player = player_for(db, request, lock=True)
+        if player.id != body.save_id:
+            raise HTTPException(409, '原网页旅程已变化，请重新查找并核对')
+        if not player.state.get('character'):
+            raise HTTPException(422, '此浏览器尚无已登记的原网页旅程')
+        token = secrets.token_urlsafe(32)
+        db.add(GuestSession(token_hash=hashlib.sha256(token.encode()).hexdigest(), player_id=player.id))
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()},
+                        save_id=player.id, session_token=token)
+
+
+class ClientDeletionInput(WebJourneyInput):
+    request_id: str = Field(min_length=8, max_length=80)
+
+
+@app.post('/api/client-delete')
+def client_delete(body: ClientDeletionInput, request: Request):
+    # A cookie may belong to a different journey. Never use it for this action.
+    if request.headers.get('authorization') is None:
+        raise HTTPException(401, '请先连接要删除的旅程')
+    hashed = token_hash(request)
+    with Session.begin() as db:
+        lock_sqlite(db)
+        receipt = db.get(ClientDeletion, (hashed, body.request_id))
+        if receipt:
+            if receipt.save_id != body.save_id:
+                raise HTTPException(409, '删除请求与旅程不一致')
+            return {'deleted': True, 'save_id': receipt.save_id}
+        player = db.scalar(player_query(hashed).with_for_update())
+        if not player:
+            # A concurrent committed deletion may have won the player lock.
+            receipt = db.get(ClientDeletion, (hashed, body.request_id))
+            if receipt and receipt.save_id == body.save_id:
+                return {'deleted': True, 'save_id': receipt.save_id}
+            raise HTTPException(401, '旅程会话已失效，请核对删除结果')
+        if player.id != body.save_id:
+            raise HTTPException(409, '旅程已变化，请重新核对后操作')
+        db.execute(delete(Receipt).where(Receipt.player_id == player.id))
+        db.execute(delete(RecoveryKey).where(RecoveryKey.player_id == player.id))
+        db.execute(delete(GuestSession).where(GuestSession.player_id == player.id))
+        db.delete(player)
+        db.add(ClientDeletion(token_hash=hashed, request_id=body.request_id,
+                              save_id=body.save_id, created_at=time.time()))
+        # Deliberately leave any other journey's Web cookie untouched.
+        return {'deleted': True, 'save_id': body.save_id}
 
 @app.delete('/api/session')
 def delete_session(request: Request, response: Response):

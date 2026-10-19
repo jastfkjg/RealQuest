@@ -29,3 +29,14 @@ class GuestSession(Base):
     __tablename__ = 'guest_sessions'
     token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
     player_id: Mapped[str] = mapped_column(ForeignKey('players.id', ondelete='CASCADE'), index=True)
+
+class ClientDeletion(Base):
+    """Minimal receipt for confirming a committed deletion after a lost reply.
+
+    No plaintext credentials or gameplay data survive in this table.
+    """
+    __tablename__ = 'client_deletions'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    request_id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    save_id: Mapped[str] = mapped_column(String(36))
+    created_at: Mapped[float] = mapped_column(Float)

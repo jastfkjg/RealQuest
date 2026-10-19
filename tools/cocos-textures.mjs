@@ -1,0 +1,10 @@
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
+const root=fileURLToPath(new URL('../',import.meta.url));
+if(process.argv.slice(2).some(a=>a!=='--check')||process.argv.length>3)throw Error('Usage: cocos:art:textures [-- --check]');
+const python=process.env.REALQUEST_ART_PYTHON;
+if(!python)throw Error('Set REALQUEST_ART_PYTHON to the separate locked art Python; see cocos:doctor --art.');
+const result=spawnSync(python,['-B',path.join(root,'tools/build_cocos_textures.py'),...process.argv.slice(2)],{cwd:root,stdio:'inherit'});
+if(result.error)throw result.error;
+process.exitCode=result.status??1;

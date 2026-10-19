@@ -6,6 +6,10 @@
 
 ## 1. Purpose and boundaries
 
+On 2026-10-17, the owner selected Cocos as the primary client direction and requested a source-based feature-gap and retirement checklist. Keep the original React/Phaser implementation for comparison, save continuity and rollback during transition; do not delete code or switch deployment as part of this audit. Required functional, validation and tooling gates live in [task39](docs/tasks/39-cocos-primary-retirement.md). This direction does not imply visual approval of the current Cocos candidate or completion of migration.
+
+On 2026-10-19, the owner asked for the overall candidate to be completed before providing further feedback. Continue independently within the authorized development and verification scope, collect the remaining visual/gameplay review into one final handoff, and do not block engineering on per-screen replies. Existing scoped approvals remain valid; deferred owner acceptance is not recorded as passed. System/account changes, external Git/publication actions and original Web retirement retain their separate authorization requirements.
+
 The owner authorized an independent Cocos migration prototype on 2026-10-16 and permits UI/design improvements rather than reproducing the current pages exactly. Keep the existing Web implementation available. The prototype may simplify the travel HUD, inventory composition and dialogue while retaining Hearthwood materials, readable Chinese, truthful actions and direct Life access. Its render/feel remains a new checkpoint, not inherited owner approval; broad migration follows that checkpoint. Local scope and evidence: `docs/tasks/34-cocos-local-spike.md`. Phases2–3 are subsequently authorized: shared core, durable network/session/recovery and existing room/travel rendering. Keep this as a scoped candidate; see `docs/tasks/35-cocos-shared-world.md`. The owner subsequently authorized phases4–5: functional quest/economy/NPC/equipment/Life panels and the existing five-floor combat loop. Preserve the same server rules and original Web. Native layouts remain scoped candidates; actual render/feel approval is still open. See `docs/tasks/36-cocos-features-combat.md`.
 
 RealQuest combines a playable RPG world with real-life growth. It must feel like a place to inhabit, not a beige task dashboard with a tilemap behind it.
@@ -202,6 +206,8 @@ Current archetype candidate (2026-10-13): the adventure map is the primary surfa
 **Approved map concept checkpoint (2026-10-15):** `docs/art/references/world-map-concept-v1.png` is approved for implementation. The map uses a textless fine-pixel terrain illustration and existing village silhouettes. A selected place is presented on an attached linen leaf with one explicit direction action. Map labels, place details, discovery/visit/quest/rune indicators, player position, zoom, pan, and navigation remain live DOM/state. The decorative terrain does not claim a verified walkable route; the action marks direction and returns to world play. Default selection may show the library as an example without changing navigation or save state.
 
 ### 7.4a Interaction archetypes
+
+**Cocos conversation correction (2026-10-17, task46, candidate):** owner rejected the prior fixed-column dialogue as data/PPT-like. Actual actors/room now frame the encounter; one compact low speech surface reveals phrases, explicit continuation opens separate replies, and confirmed numeric social outcomes remain outside spoken words. Camera/facing are cosmetic; original positions, routines, commands and saves remain authoritative. Reduced motion reveals immediately. This does not approve other native panels or retirement of the original Web.
 
 **Requested refinement (2026-10-16, task30):** keep the board title outside its content layout and fit the pinned index and selected sheet within the desktop/landscape viewport. Use explicit pages for long objectives and preparation notes. The market uses shelves plus a checkout strip, bedside rest uses the existing bed illustration and two choices, and equipment uses moss cloth with a truthful empty rack. These four requested surfaces share a thin timber edge. The square control geometry is superseded by task31 below. World NPC activity/road placards are removed; the existing interaction prompt and neighbor book retain their information. Buildings sort at the solid facade edge so a traveler at the door is visible. Ordinary world notices sit at the lower edge for about1.8s; persistent errors remain dismissible. Actual-render acceptance is separate.
 
@@ -419,3 +425,44 @@ Cave status is compact; short landscape uses the target line for boss HP rather 
 Authorized coherent flow: village road → home doorway → storage/reading/rest → return in Web and Cocos. Retain the existing fine-village/fine-interior family. Cocos consumes reproducible derivatives of the existing Web terrain, plaster/oak floor and measured nine-patch rugs, with furniture/props still independently sorted. Reuse real facade/furniture hit areas and reachable approaches; no teleport, new house tier or furnishing progression. Existing source sprites, coordinates and collisions remain unchanged.
 
 The player, selected route and usable object lead. Keep native labels and a compact identity/time/action surface; short landscape must leave the doorway/action area free. Route marks indicate intent, not guaranteed arrival. Escape/manual movement/blur cancels it. Cocos chest/books respond to the actual interaction; count transfers reconcile with the server. Village walking uses existing directional frames and returns to idle on release; reduced motion uses stable direction poses and marks. Storage has two actual containers and one selected item/transfer direction, truthful zero counts and explicit paging. This is a scoped candidate, not owner render approval or full Cocos world-art parity. Evidence: `docs/tasks/38-village-interior-polish.md`.
+
+### Cocos Life history and study organization — 2026-10-17
+
+Authorized task39 M3 slice: direct Life entry preserves the separate practical experience. Native Hearthwood paper/list/detail views expose dated reality commissions separately from activities, and today/history/archive study pages with their original linked records and plan context. Desktop and short landscape must retain editing, archive/restore and explicit current-timer ownership. Keep provenance, complete Chinese text and server-owned identities/rewards; reading/linking never reissues rewards. No new visual family or assets. This is a browser-verified candidate, pending owner render acceptance; evidence and broader accessibility/device limits are in `docs/tasks/41-cocos-life-records.md`.
+
+### Cocos registration and read-only dossier — 2026-10-17
+
+Task39 M1/M8 connects existing six appearance IDs and preserved Chinese/blank-name drafts with an authoritative dossier and explicit quoted point allocation. Retain original actors/home art and Hearthwood native primitives. The later M8 checklist explicitly requires level/experience visibility: the read-only Cocos dossier may show the original Web HUD level and cumulative journey EXP as historical accumulation, without an EXP progress bar/countdown or conversion into points. Allocation remains a separate context showing only current capacities/levels, server quotes, balances and confirmed results. No new economic rule or asset; owner render acceptance remains open. Scope/evidence: `docs/tasks/42-cocos-registration-dossier.md`.
+
+Task39 M4 keeps a compact, foldable current-goal HUD and reopenable native paper guide. Reuse original intro/preparation decisions and manual quest ownership; only guide-owned markers expire with their step. Board/gate briefing and workshop review require original service proximity and explicit confirmation. Preparation links to existing equipment, reality history, Noah and quoted magic allocation; reading/navigation never settles, purchases, invests or opens a gate. Optional per-save return cues occupy the HUD without stealing modal/input focus and require a confirmed foreground read. Existing legacy passages remain open without repeated intro or investment. No new art family or assets; scope and environment-specific focus limitations: `docs/tasks/43-cocos-journey-guidance.md`.
+
+
+Task39 M5/M6 uses the explicitly allowed native place-index alternative: all authoritative maps/objects and server travel quotes remain queryable with current location, locks and marker-only bearings. Stable duplicate-place labels and moving-person keys keep choices distinguishable. Neighbor pages expose real familiarity, preferences and all routine phases. Actual encounter replies are paginated presets, and topics/gift/help stay reachable in short landscape with original proximity/daily/receipt guards. No new visual family/assets or travel permissions. Successful rest returns to world with a confirmed result; inn sleep requires current-day booking. Candidate evidence and remaining owner/device/remote-art gates: `docs/tasks/44-cocos-places-neighbors.md`.
+
+
+### Cocos map/encounter feedback correction — 2026-10-17
+
+The owner rejected the index-only map candidate: M must open spatial geography with actual landmark positions and a selected destination leaf; the complete place index remains secondary. Reuse existing terrain/building/portrait art, distinguish the low encounter composition from the map and illustrated neighbor handbooks, and use scoped linen/painted-moss timber controls. Preserve44px targets, explicit marker-only action and original social/receipt rules. This correction applies to the map→place/neighbors→encounter chain; broader propagation still requires its own visual checkpoint. Task44 records the new candidate and evidence.
+
+
+### Cocos resident discovery and scene conversation — 2026-10-17
+
+Owner feedback after the map correction: NPCs were hard to find, and interactions still felt like data reports. Task45 adds visible resident portraits/N, truthful room/door bearings, fixed-screen-size world names and actual same-room walking into conversation. The scene stays dominant behind a low speaker surface and unboxed response choices; gifts use a real item tray. Relationships/routines stay opt-in reference material; direct practical Life access remains. This is a new scoped candidate, not approval of prior maps or permission to propagate it across other screens.
+
+
+**Cocos行囊候选（2026-10-17，task47）：**沿用获准原Web布袋/短物品签/四格口袋方向，实际Cocos画面另行复核。四格是按旅程隔离的引用，安排/交换/清空/选择不消费；未知或重复ID应被净化，耗尽引用显示名称/0且不可伪装持有。旧全局配置只预览，玩家选择来源后主动带入。桌面24展示格与短横屏12格分页不表示容量上限，图鉴明确区分未持有。金币/能量/知识碎片可查看完整余额。
+
+播种、工坊制作和出售先预览固定现场目标、费用、收益或成熟时长，确认才调用原命令；远处只标记。预览时画面必须同时保留实际目标与旅人，侧签不能遮住对象。目标/地点/报价变化使原预览失效，拒绝与不确定结果可核对重试。直接Life入口不受阻，离开预览后迟到的结果仅更新权威状态，不抢回页面。物品图标、数量、口袋作为一个对象响应按压，沿用共享木/纸/苔布状态，减动态仍保留明确反馈。任务47记录本地验证与玩家检查点；不据此认定原Web可退役。
+
+
+**Cocos旅途偏好与提醒候选（2026-10-17，task49）：**菜单中的声音、动态、画面和提醒分为四张短书页，复用原木/纸/书本素材和按钮状态，不推广行囊/聊天布局。声音默认关闭，只在用户操作后启用；静音、失焦与销毁停止并释放节点。已确认物品/XP或成长点变化才有对应提示音，拒绝/刷新不冒充收获。动态可跟随系统或总是减少，系统要求减少时优先。F/按钮展示实际浏览器全屏与等待/失败/不可用，Esc先退出全屏，重开不自动进入。
+
+提醒只读派生真实夜晚时间、当前可恢复体力和未结算约定时段；可标记真实床或打开原约定列表，不自动移动/休息/核验/结算。桌面提醒使用顶部状态与菜单间空位，横屏远行复用紧凑状态、洞穴使用右上空位，均避开任务/触控与玩家。画面与音色/音量仍需玩家复核；系统IME/实机/跨浏览器和环境昼夜美术仍由开放V项验收。
+
+**Cocos世界反馈布局（2026-10-18，task58）：**确认/错误纸签在控件、四格说明等固定HUD之外显示，文字绘制优先于世界指路标记。短横屏保留四格及其实际用途，重复说明可收为“1–4 查看”；方向键使用固定位置，不随提示的出现/消失移动。重连待确认期间使用原已收起目标的位置提供明确操作；成功后目标恢复，同文案的再次确认仍应显示，村庄结果纸按原显示期收起。反馈不改变世界坐标、请求身份或结算规则。此项只修正HUD链，既有三处画面/task49偏好确认继续有效，新增位置与其余场景仍按task39验收，证据见[任务58](docs/tasks/58-cocos-world-feedback-layout.md)。
+
+
+**Cocos网页启动恢复（2026-10-18，task63）：**准备阶段由一张原生Hearthwood纸面拥有输入；正常首帧与语义控件完成后移除。真实12秒未完成显示“仍在准备”，允许继续等待或重载；明确脚本/资源失败与WebGL不可用显示原因和原生重新载入按钮。不展示伪造百分比。重载保留本机凭证与待确认操作，不能清除或替换玩家数据。无脚本使用浏览器原生GET表单回到当前文档；以实际构建/导航结果验证，不能仅凭按钮可见。所有者已确认保留本轮故障页，范围不推广到其他画面或原Web退役。
+
+
+**Cocos首领取景候选（task76，2026-10-18）：**短横屏近距离首领以同一整体相机保留玩家与首领原绘制/血条，避开实际HUD控件；横向覆盖原房间，较窄房间居中留边，外沿使用现有深苔底色。世界坐标、碰撞、人物/怪物源比例、按钮与输入语义不变，远处/非当前首领和其他界面仍用普通镜头。四姿态图形边界覆盖减少动态，固定几何可缓存，不能用假状态或单个sprite缩放掩盖取景问题。仅是当前洞内候选，需实际画面/手感复核后才考虑其他屏幕；证据与预览尚未切换原因见[任务76](docs/tasks/76-cocos-combat-framing.md)。

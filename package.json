@@ -1,0 +1,39 @@
+{
+  "name": "realquest-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22 <23",
+    "npm": ">=10 <11"
+  },
+  "packageManager": "npm@10.9.8",
+  "scripts": {
+    "cocos:doctor": "node tools/cocos-doctor.mjs",
+    "cocos:sync": "node clients/cocos/tools/sync.mjs",
+    "cocos:check": "node clients/cocos/tools/check.mjs",
+    "cocos:baseline": "node clients/cocos/tools/check-baseline.mjs",
+    "cocos:sources": "node tools/cocos-sources.mjs --check",
+    "cocos:sources:write": "node tools/cocos-sources.mjs --write",
+    "cocos:test:unit": "node tools/cocos-unit.mjs",
+    "cocos:test:browser": "node tools/cocos-browser.mjs",
+    "cocos:build": "node clients/cocos/tools/build.mjs web-desktop",
+    "cocos:preview": "python3 clients/cocos/tools/run-preview.py",
+    "cocos:art:check": "node tools/build_local_scene_art.mjs --check && node tools/build_inventory_art.mjs --check",
+    "cocos:art:textures": "node tools/cocos-textures.mjs",
+    "cocos:test:runner": "node tools/test-cocos-runner.mjs",
+    "cocos:test:startup": "node tools/test-cocos-preview.mjs",
+    "cocos:build:release": "node clients/cocos/tools/build.mjs web-desktop --release",
+    "cocos:package": "node tools/cocos-release.mjs",
+    "cocos:test:delivery": "node tools/test-cocos-delivery.mjs",
+    "cocos:backup": "node tools/cocos-backup.mjs",
+    "cocos:test:restore": "node tools/test-cocos-restore-browser.mjs",
+    "cocos:test:network": "node tools/test-cocos-network.mjs",
+    "cocos:test:delivery:lifecycle": "node tools/test-cocos-delivery-lifecycle.mjs",
+    "cocos:test:restore:lifecycle": "node tools/test-cocos-restore-lifecycle.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "playwright": "1.64.0",
+    "typescript": "5.8.3"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "decision": "Keep original Web source. Stopping its publication must not remove the frozen inputs owned by the Cocos/shared art pipeline. Relocation requires a separate byte-preserving change and regression evidence before archive/delete authorization.",
+  "owners": [
+    {
+      "id": "shared-game",
+      "prefix": "shared/game/",
+      "responsibility": "Canonical engine-independent behavior and descriptive records; edit here, sync generated Cocos core. Keep in shared/game long term."
+    },
+    {
+      "id": "server-world",
+      "prefix": "backend/app/",
+      "responsibility": "Authoritative geography and its imported modules. Remain in backend; offline art reads these without modifying rules."
+    },
+    {
+      "id": "original-project-art",
+      "prefix": "assets/generated/",
+      "responsibility": "Immutable original project-generated artwork and exact prompts/layouts. Remain in project art archive; never bundle source packs."
+    },
+    {
+      "id": "derived-project-art",
+      "prefix": "assets/derived/",
+      "responsibility": "Reproducible runtime-sized PNG and pixel-identical lossless WebP derivatives. Root art tools own regeneration; preserve source/processing evidence."
+    },
+    {
+      "id": "departure-source-art",
+      "prefix": "docs/art/generated/",
+      "responsibility": "Existing immutable original generated departure cutouts/prompts. Retain as provenance source; never infer third-party licensing."
+    },
+    {
+      "id": "art-provenance",
+      "prefix": "docs/art/",
+      "responsibility": "Existing provenance and reference records; approval scope belongs to its task, not a successful byte check."
+    },
+    {
+      "id": "frozen-web-art",
+      "prefix": "frontend/public/assets/hearthwood/",
+      "responsibility": "Project art inputs owned by shared/Cocos art tooling despite the legacy directory name. Retain in place during transition; before any frontend archive/delete move exact bytes and provenance to a shared project asset source and update both consumers."
+    },
+    {
+      "id": "frozen-web-scene",
+      "paths": [
+        "frontend/src/game/village.ts",
+        "frontend/src/game/villageGround.ts",
+        "frontend/src/game/interiors.ts",
+        "frontend/src/game/appearances.ts",
+        "frontend/src/game/detailAssets.json"
+      ],
+      "responsibility": "Frozen project-authored offline paint sources and import/data closure. Root bake tool owns their continued availability. No React build or installed Phaser is required; before archive/delete extract exact sources into shared offline art tooling, preserve Web wrappers/behavior and rerun pixel/layout checks."
+    },
+    {
+      "id": "preserved-web-tests",
+      "paths": [
+        "frontend/scripts/life-journal-dates.mjs",
+        "frontend/scripts/next-departure-state.mjs",
+        "frontend/scripts/village-polish.mjs",
+        "frontend/scripts/cave-polish.mjs"
+      ],
+      "responsibility": "Retain original assertions against canonical shared helpers. Before frontend archive/delete relocate test ownership to shared tooling while preserving the original assertions and preservation evidence."
+    },
+    {
+      "id": "cocos-adapter",
+      "prefix": "clients/cocos/",
+      "responsibility": "Native Cocos adapters, templates, explicit source bindings and generated copies. Generated core/resources are owned by their canonical source, never hand-maintained game rules."
+    },
+    {
+      "id": "root-tooling",
+      "prefix": "tools/",
+      "responsibility": "Project-owned export, inventory and validation tools using root locked dependencies; retain independently of publishing Web."
+    },
+    {
+      "id": "toolchain-config",
+      "paths": [
+        "package.json",
+        "package-lock.json",
+        ".nvmrc",
+        ".npmrc"
+      ],
+      "responsibility": "Pinned root tooling; version and install checks remain T3/T2 evidence."
+    },
+    {
+      "id": "ownership-policy",
+      "paths": [
+        "docs/migration/cocos-source-policy.json",
+        "docs/migration/cocos-baseline.json",
+        "docs/migration/cocos-transition-policy.json"
+      ],
+      "responsibility": "Explicit ownership and preserved-source contracts; review changes instead of weakening guards to hide drift."
+    },
+    {
+      "id": "cocos-delivery",
+      "prefix": "deploy/cocos/",
+      "responsibility": "Cocos-only static runtime packaging templates and pinned official base provenance. Independent of original Web image or deployment switch."
+    },
+    {
+      "id": "cocos-candidate-ci",
+      "paths": [
+        ".github/workflows/cocos.yml"
+      ],
+      "responsibility": "Explicit Cocos-only candidate CI; actual committed runner execution remains T2/T3 evidence, no production publishing."
+    }
+  ],
+  "reference_roles": {
+    "clients/cocos/tools/sync.mjs": "frozen-art-binding",
+    "tools/build_local_scene_art.mjs": "offline-scene-input",
+    "tools/cocos-unit.mjs": "preserved-test-entry",
+    "clients/cocos/tools/check-baseline.mjs": "preservation-only",
+    "clients/cocos/tools/run-preview.py": "optional-web-comparison-only",
+    "tools/cocos-clean-source.mjs": "snapshot-selection-or-exclusion",
+    "tools/cocos-sources.mjs": "ownership-inventory-implementation",
+    "tools/test-cocos-sources.mjs": "isolated-negative-reference-fixtures",
+    "tools/cocos-browser-suites.mjs": "current-Cocos-and-explicit-Web-compatibility-suite-registry",
+    "tools/cocos-transition.mjs": "preservation-only",
+    "tools/test-cocos-transition.mjs": "isolated-preservation-fixtures"
+  },
+  "descriptive_web_url_modules": [
+    "shared/game/appearances.ts",
+    "shared/game/items.ts",
+    "clients/cocos/assets/scripts/core/appearances.ts",
+    "clients/cocos/assets/scripts/core/items.ts"
+  ],
+  "reference_scope": "All TS/MJS/PY files in shared/game, clients/cocos/assets/scripts and clients/cocos/tools; root cocos-*.mjs/test-cocos-*.mjs; every producer recorded by the consumed art provenance. Static strings/template prefixes and real bake module input closure are checked. This is not an arbitrary-JavaScript data-flow proof.",
+  "scope_limits": "Optional two-client Web comparison and historical Git preservation guards remain separate. No engine change, source deletion, default publication switch, new license or owner visual approval follows from this inventory."
+}

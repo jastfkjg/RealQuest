@@ -1,70 +1,109 @@
+import type { Label } from 'cc';
 import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} from '../core/protocol';
 import {C} from './theme';
-import {itemNames,growthNames,questStatuses,costText,shortages,growthCommand,timerSeconds,timeText,entityId,plankRecipe,upgradeCosts} from '../core/features';
-import {questTarget,currentMap,mapById} from '../core/navigation';
-import {residentPositions,residentPlace} from '../core/residents';
+import {LifePanels} from './life';
+import {DossierPanels} from './dossier';
+import {GuidancePanels} from './guidance';
+import {PlacesPanels} from './places';
+import {PreferencePanels} from './preferences';
+import type {GuidanceAction} from '../core/guidance';
+import {itemNames,growthNames,questStatuses,costText,shortages,growthCommand,timeText,entityId,plankRecipe,upgradeCosts} from '../core/features';
+import {questTarget,currentMap} from '../core/navigation';
+import {residentPositions} from '../core/residents';
+import {textPages} from '../core/lifeRecords';
 
 export interface PanelHost {
- readonly state:GameState; readonly world:World; readonly context:WorldObject|null;
- readonly mode:string;readonly width:number;readonly height:number;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
+ readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
+ readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
  box(id:string,x:number,y:number,w:number,h:number,color:string,radius?:number):void;
- text(id:string,value:string,x:number,y:number,w:number,h:number,size?:number,color?:string,center?:boolean):void;
- button(id:string,label:string,x:number,y:number,w:number,h:number,action:()=>unknown,disabled?:boolean,primary?:boolean):void;
- image(path:string,x:number,y:number,w:number,h:number):void;
+ text(id:string,value:string,x:number,y:number,w:number,h:number,size?:number,color?:string,center?:boolean):Label;
+ button(id:string,label:string,x:number,y:number,w:number,h:number,action:()=>unknown,disabled?:boolean,primary?:boolean,skin?:'game'|'reply'|'portrait'|'answer'|'pocket',semantic?:{label:string;pressed?:boolean}):Label;
+ line(id:string,points:{x:number;y:number}[],color:string,width?:number):void;
+ itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number):void;
+ image(path:string,x:number,y:number,w:number,h:number,sliced?:boolean):void;
  person(name:string,x:number,y:number,w:number,h:number):void;
  field(id:string,label:string,value:string,x:number,y:number,w:number,change:(value:string)=>void,numeric?:boolean,maxLength?:number):void;
  send(action:string,data?:Record<string,unknown>):Promise<boolean>;
- go(mode:string,replace?:boolean):void; close():void; redraw():void; mark(target:NavigationTarget,label:string):void; uuid():string;
+ follow(action:GuidanceAction):void; go(mode:string,replace?:boolean):void; close():void; redraw(clearFeedback?:boolean):void; mark(target:NavigationTarget,label:string):void; uuid():string;
+ meet(id:string):void; focus(id:string):void; reconnect():void;
 }
 type Frame={x:number;y:number;w:number;h:number;compact:boolean;top:number;bottom:number};
 const lifeNames={study:'学习',exercise:'运动',work:'工作'};
 export class FeaturePanels {
- lifeTab='study'; npcTab='talk'; page=0; detailPage=0;
- questId=''; weaponId='stone_sword'; growth:GrowthTarget='magic'; taskId=''; planId='';
- title=''; minutes='25'; amount='1'; note=''; activityKind='study'; orderId=''; tradeItem='seed'; tradeSide='buy';
+ private lifePanels=new LifePanels();
+ private dossier=new DossierPanels();
+ private guidance=new GuidancePanels();
+ private places=new PlacesPanels();
+ private preferences=new PreferencePanels();
+ openNotices(){this.preferences.openNotices();}
+ contractNotices(){this.lifePanels.lifeTab='contracts';return 'life';}
+ prepare(){this.guidance.prepare();}
+ get dialogueChoices(){return this.places.dialogueChoices;}
+ tick(dt:number){this.places.tick(dt);}
+ advanceDialogue(h:PanelHost){return this.npcTab==='talk'&&this.places.advance(h);}
+ focusLife(view:'study'|'contracts',state:GameState){return this.lifePanels.focus(view,state);}
+ inspectPlace(h:PanelHost,id:string){this.places.inspect(h,id);}
+ findNeighbor(h:PanelHost,id:string){this.places.find(h,id);}
+ get growth(){return this.dossier.growth;}
+ set growth(value:GrowthTarget){this.dossier.growth=value;}
+ get lifeTab(){return this.lifePanels.lifeTab;}
+ npcTab='talk'; page=0; detailPage=0;
+ questId=''; weaponId='stone_sword'; taskId='';
+ amount='1'; orderId=''; tradeItem='seed'; tradeSide='buy';
  lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';shopTab='trade';gearTab='obtain';
- private modes=['menu','journal','quests','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
- handles(mode:string){return this.modes.includes(mode);}
- reset(){this.page=0;this.detailPage=0;this.confirm='';}
- snapshot(){return {lifeTab:this.lifeTab,npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,growth:this.growth,taskId:this.taskId,planId:this.planId,page:this.page,detailPage:this.detailPage};}
+ private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
+ handles(mode:string){return mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
+ guideMode(mode:string){return this.guidance.handles(mode);}
+ lifeMode(mode:string){return this.lifePanels.handles(mode);}
+ reset(){this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
+ snapshot(){return {npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
  draw(h:PanelHost){
-  const titles:Record<string,string>={menu:'旅程随身页',journal:'旅途委托',quests:h.context?.name||'村庄告示板',shop:'风铃杂货铺',building:h.context?.name||'工坊蓝图',dialogue:h.context?.name||'村民对话',life:'现实成长',growth:'旅人成长',equipment:'随行装备',armory:'工坊武备台',spellbook:'火花术研习',cave:'石根山洞',gate:'村东石门',map:'旅途地图','study-new':'写下今日研习','study-edit':'修改研习书页','plan-new':'装订长期计划','plan-edit':'修改长期计划'};
-  const ideal=h.mode.startsWith('study-')||h.mode.startsWith('plan-')?400:({menu:480,shop:520,building:480,growth:560,equipment:520,armory:520,spellbook:480,cave:480,gate:480,map:500,life:560} as Record<string,number>)[h.mode]||620;
+  if(h.mode==='preferences'){this.preferences.draw(h);return;}
+  if(h.mode==='dialogue'&&this.npcTab==='talk'){this.places.encounter(h,id=>{if(id==='shop')h.go('shop');else{this.npcTab=id;this.page=0;h.redraw();}});return;}
+  if(this.places.handles(h.mode)){this.places.draw(h);return;}
+  if(this.guidance.handles(h.mode)){this.guidance.draw(h);return;}
+  if(this.dossier.handles(h.mode)){this.dossier.draw(h);return;}
+  if(this.lifePanels.handles(h.mode)){this.lifePanels.draw(h);return;}
+  const titles:Record<string,string>={menu:'旅程随身页',journal:'旅途委托',quests:h.context?.name||'村庄告示板','quest-story':'委托原文',shop:'风铃杂货铺',building:h.context?.name||'工坊蓝图',dialogue:h.context?.name||'村民对话',life:'现实成长',growth:'旅人成长',equipment:'随行装备',armory:'工坊武备台',spellbook:'火花术研习',cave:'石根山洞',gate:'村东石门',map:'旅途地图','study-new':'写下今日研习','study-edit':'修改研习书页','plan-new':'装订长期计划','plan-edit':'修改长期计划'};
+  const ideal=h.mode.startsWith('study-')||h.mode.startsWith('plan-')?400:({menu:520,shop:520,building:480,growth:560,equipment:520,armory:520,spellbook:480,cave:480,gate:480,map:500,life:560} as Record<string,number>)[h.mode]||620;
   const w=Math.min(1040,h.width-32),height=Math.min(ideal,h.height-24);
   const f:Frame={x:(h.width-w)/2,y:(h.height-height)/2,w,h:height,compact:height<460,top:(h.height-height)/2+80,bottom:(h.height+height)/2-114};
   h.box('FeaturePaper',f.x,f.y,w,height,C.paper,16);
-  h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,w-160,42,24);
+  const expedition=['armory','cave','gate'].includes(h.mode)||(h.mode==='quests'&&h.context?.id==='board');
+  h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,expedition?(h.mode==='armory'?w-512:w-360):w-160,42,24);
+  if(expedition)h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
   h.button('close','返回',f.x+w-100,f.y+12,76,44,()=>h.close(),h.busy);
   const money=`金币 ${h.state.inventory.gold||0}`;
-  if(['shop','building','armory','equipment','spellbook'].includes(h.mode))h.text('FeatureBalance',money,f.x+w-280,f.y+20,160,28,16,C.muted);
+  if(['shop','building','armory','equipment','spellbook'].includes(h.mode))h.text('FeatureBalance',money,f.x+w-(expedition?464:280),f.y+20,160,28,16,C.muted);
   if(h.mode==='menu')this.menu(h,f);
   else if(h.mode==='journal'||h.mode==='quests')this.quests(h,f,h.mode==='quests'?h.context?.id:undefined);
   else if(h.mode==='shop')this.shop(h,f);
   else if(h.mode==='building')this.building(h,f);
+  else if(h.mode==='quest-story')this.questStory(h,f);
   else if(h.mode==='dialogue')this.npc(h,f);
-  else if(h.mode==='growth')this.growthView(h,f);
+
   else if(h.mode==='armory'||h.mode==='equipment')this.gear(h,f);
   else if(h.mode==='spellbook')this.spell(h,f);
   else if(h.mode==='cave'||h.mode==='gate')this.cave(h,f);
-  else if(h.mode==='map')this.map(h,f);
-  else if(h.mode.startsWith('study-')||h.mode.startsWith('plan-'))this.studyForm(h,f);
-  else this.life(h,f);
+
   if(h.error||h.notice&&!(h.mode==='dialogue'&&this.npcTab==='talk'))h.text('FeatureFeedback',h.error||h.notice,f.x+24,f.y+f.h-108,f.w-48,42,15,h.error?C.danger:C.muted);
  }
  private tabs(h:PanelHost,f:Frame,entries:[string,string][],selected:string,change:(id:string)=>void){const width=(f.w-48)/entries.length;
-  entries.forEach(([id,label],i)=>h.button('tab-'+id,label,f.x+24+i*width,f.y+68,width-8,44,()=>{change(id);this.page=0;this.confirm='';h.redraw();},h.busy,selected===id));
+  entries.forEach(([id,label],i)=>h.button('tab-'+id,label,f.x+24+i*width,f.y+68,width-8,44,()=>{change(id);this.page=0;this.confirm='';h.redraw();},h.busy,selected===id,undefined,{label,pressed:selected===id}));
   f.top=f.y+126;
  }
  private list(h:PanelHost,f:Frame,entries:{id:string;label:string}[],selected:string,choose:(id:string)=>void,width:number){
-  const per=Math.max(1,Math.floor((f.bottom-f.top-36)/52)),pages=Math.max(1,Math.ceil(entries.length/per));this.page=Math.min(this.page,pages-1);
+  const per=Math.max(1,Math.floor((f.bottom-f.top-52)/52)),pages=Math.max(1,Math.ceil(entries.length/per));this.page=Math.min(this.page,pages-1);
   entries.slice(this.page*per,(this.page+1)*per).forEach((e,i)=>h.button('select-'+e.id,e.label,f.x+24,f.top+i*52,width,44,()=>{choose(e.id);this.detailPage=0;this.confirm='';h.redraw();},h.busy,selected===e.id));
   if(!entries.length)h.text('EmptyList','这里还没有记录',f.x+24,f.top,width,48,16,C.muted);
-  if(pages>1)h.button('list-next',`${this.page+1}/${pages} · 下一页`,f.x+24,f.bottom-36,width,36,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy);
+  if(pages>1)h.button('list-next',`${this.page+1}/${pages} · 下一页`,f.x+24,f.bottom-44,width,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy);
  }
- private menu(h:PanelHost,f:Frame){const entries=[['journal','旅途委托'],['map','地图与村民'],['growth','培养能力'],['equipment','随行装备'],['life','现实成长'],['session','旅程凭证']];
-  const columns=3,ww=(f.w-64)/columns;
-  entries.forEach(([mode,label],i)=>h.button('menu-'+mode,label,f.x+24+(i%columns)*(ww+8),f.top+Math.floor(i/columns)*64,ww,52,()=>h.go(mode),h.busy));
-  h.text('MenuHint','WASD 移动 · E 交互 · I 行囊 · L 成长 · J 委托 · M 地图',f.x+24,f.y+f.h-156,f.w-48,40,16,C.muted);
+ private menu(h:PanelHost,f:Frame){
+  const entries=[['character','旅人档案'],['growth','培养能力'],['equipment','随行装备'],['journal','旅途委托'],['map','地点与邻里'],['life','现实成长'],['preferences','旅途偏好'],['session','旅程凭证'],['guide','旅人指南'],['preparation','再出发手记']];
+  const per=f.compact?6:12,pages=Math.ceil(entries.length/per);this.page=Math.min(this.page,pages-1);const ww=(f.w-64)/3;
+  entries.slice(this.page*per,(this.page+1)*per).forEach(([mode,label],i)=>h.button('menu-'+mode,label,f.x+24+(i%3)*(ww+8),f.top+Math.floor(i/3)*64,ww,52,()=>{if(mode==='preparation')this.prepare();h.go(mode);},h.busy));
+  if(!f.compact)h.text('MenuHint','WASD 移动 · E 交互 · C 档案 · I 行囊 · L 成长 · J 委托 · M 地图',f.x+24,f.y+f.h-156,f.w-48,40,16,C.muted);
+  if(pages>1){h.button('menu-prev','上一页',f.x+24,f.y+f.h-62,160,44,()=>{this.page--;h.redraw();},h.busy||!this.page);h.button('menu-next','下一页 '+(this.page+1)+'/'+pages,f.x+f.w-184,f.y+f.h-62,160,44,()=>{this.page++;h.redraw();},h.busy||this.page>=pages-1);}
  }
  private quests(h:PanelHost,f:Frame,giver?:string){
   const entries=h.state.quest_log.filter(q=>!giver||q.giver===giver),q=entries.find(q=>q.id===this.questId)||entries.find(q=>['ready','active','available'].includes(q.status))||entries[0];
@@ -73,15 +112,29 @@ export class FeaturePanels {
   h.box('NoticeTimber',f.x+16,f.top-8,lw+16,f.bottom-f.top+18,C.wood,8);
   this.list(h,f,entries.map(q=>({id:q.id,label:`${questStatuses[q.status]} · ${q.title}`})),q.id,id=>this.questId=id,lw);
   h.text('QuestName',q.title,dx,f.top,dw,36,22);
-  if(!f.compact)h.text('QuestDescription',q.description,dx,f.top+42,dw,64,16,C.muted);
-  const start=f.top+(f.compact?42:116),per=f.compact?1:Math.max(2,Math.floor((f.bottom-start-62)/26)),pages=Math.max(1,Math.ceil(q.objectives.length/per));this.detailPage%=pages;
+  if(!f.compact){const pages=textPages(q.description,Math.max(12,Math.floor(dw/16)-2),2);h.text('QuestDescription',pages[0]+(pages.length>1?'…':''),dx,f.top+42,dw,64,16,C.muted);}
+  const start=f.top+(f.compact?36:116),per=f.compact?1:Math.max(1,Math.floor((f.bottom-start-84)/26)),pages=Math.max(1,Math.ceil(q.objectives.length/per));this.detailPage%=pages;
   q.objectives.slice(this.detailPage*per,(this.detailPage+1)*per).forEach((text,i)=>{const n=this.detailPage*per+i;h.text('Objective-'+n,`${q.checks[n]?'✓':'○'} ${text}`,dx,start+i*26,dw,26,15,q.checks[n]?C.moss:C.ink);});
   h.text('QuestReward','回礼 · '+costText(q.reward)+` · ${q.xp} EXP`,dx,f.bottom-30,dw,28,14,C.muted);
-  if(pages>1)h.button('objectives-next',`目标 ${this.detailPage+1}/${pages}`,dx,f.bottom-68,160,36,()=>{this.detailPage=(this.detailPage+1)%pages;h.redraw();});
+  if(pages>1)h.button('objectives-next',`目标 ${this.detailPage+1}/${pages}`,dx,f.bottom-76,Math.min(160,dw),44,()=>{this.detailPage=(this.detailPage+1)%pages;h.redraw();});
   const giverObject=currentMap(h.world,h.state,h.now).objects.find(o=>o.id===q.giver),near=!!giverObject&&Math.hypot(giverObject.x-h.state.position.x,giverObject.y-h.state.position.y)<=72;
   const action=q.status==='available'?'quest_accept':q.status==='ready'?'quest_claim':q.status==='active'?'track_quest':null;
-  h.button('quest-action',q.status==='available'?'接取委托':q.status==='ready'?'交付并领取回礼':q.status==='active'?'追踪此委托':questStatuses[q.status],dx,f.y+f.h-62,220,44,()=>action&&h.send(action,{quest_id:q.id}),h.busy||!action||(action!=='track_quest'&&!near),true);
-  const target=questTarget(q,h.state);h.button('quest-mark',near?'标记下一目标':'标记目标 / 委托人',dx+232,f.y+f.h-62,Math.max(160,dw-232),44,()=>target&&h.mark(target,q.title),!target||h.busy);
+  const actionWidth=(dw-16)/3,footer=f.y+f.h-62;
+  h.button('quest-action',q.status==='available'?'接取委托':q.status==='ready'?'交付领取':q.status==='active'?'追踪委托':questStatuses[q.status],dx,footer,actionWidth,44,()=>action&&h.send(action,{quest_id:q.id}),h.busy||!action||(action!=='track_quest'&&!near),true);
+  const target=questTarget(q,h.state);h.button('quest-mark',near?'标记目标':'标记委托人',dx+actionWidth+8,footer,actionWidth,44,()=>target&&h.mark(target,q.title),!target||h.busy);
+  h.button('quest-read','阅读原文',dx+(actionWidth+8)*2,footer,actionWidth,44,()=>h.go('quest-story'),h.busy);
+ }
+ private questStory(h:PanelHost,f:Frame){
+  const q=h.state.quest_log.find(q=>q.id===this.questId);
+  if(!q){h.text('QuestStoryMissing','这份委托暂不可用，请返回重新选择。',f.x+24,f.top,f.w-48,60);return;}
+  const width=f.w-48,bodyY=f.top+44,rows=Math.max(1,Math.floor((f.bottom-bodyY)/24));
+  const pages=textPages(q.description,Math.max(12,Math.floor(width/16)-2),rows);this.detailPage=Math.min(this.detailPage,pages.length-1);
+  h.text('QuestStoryName',q.title,f.x+24,f.top,width,34,20);
+  h.text('QuestStoryBody',pages[this.detailPage],f.x+24,bodyY,width,rows*24,16);
+  const buttonWidth=(width-16)/3,y=f.y+f.h-62;
+  h.button('quest-story-prev','上一页',f.x+24,y,buttonWidth,44,()=>{this.detailPage--;h.redraw();},h.busy||!this.detailPage);
+  h.button('quest-story-back',`${this.detailPage+1}/${pages.length} · 返回委托`,f.x+32+buttonWidth,y,buttonWidth,44,()=>h.close(),h.busy);
+  h.button('quest-story-next','下一页',f.x+40+buttonWidth*2,y,buttonWidth,44,()=>{this.detailPage++;h.redraw();},h.busy||this.detailPage>=pages.length-1);
  }
  private shop(h:PanelHost,f:Frame){
   this.tabs(h,f,[['trade','柜台交易'],['orders','今日订单']],this.shopTab,id=>this.shopTab=id);
@@ -126,29 +179,7 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
   this.tabs(h,f,obj.id==='noah'?[['talk','聊一聊'],['quests','剧情委托'],['contracts','现实约定']]:[['talk','聊一聊'],['quests','剧情委托'],...(obj.id==='mira'?[['shop','逛小铺'] as [string,string]]:[])],this.npcTab,id=>{if(id==='shop')h.go('shop');else this.npcTab=id;});
   if(this.npcTab==='quests'){this.quests(h,f,obj.id);return;}
   if(this.npcTab==='contracts'){this.contracts(h,f,true);return;}
-  const social=h.state.npc_social?.[obj.id],resident=h.world.residents?.find(r=>r.id===obj.id),dx=f.x+f.w*.31,dw=f.w*.69-24;
-  h.person(obj.id+'-actor',f.x+f.w*.16,f.top+(f.compact?42:70),f.compact?48:72,f.compact?64:96);
-  h.text('ResidentRole',resident?.role||'村庄居民',f.x+24,f.top+(f.compact?78:160),f.w*.27,32,16,C.muted,true);
-  h.text('ResidentWords',h.notice||'很高兴在村里见到你。',dx,f.top,dw,f.compact?82:138,19);
-  h.text('DialogueSource','预设剧情 · 非 AI 对话',dx,f.top+(f.compact?78:144),dw,22,14,C.muted);
-  if(!f.compact){
-   h.button('npc-interest','兴趣与近况',dx,f.top+190,(dw-12)/2,44,()=>h.send('npc_topic',{target:obj.id,topic:'interest'}),h.busy);
-   h.button('npc-memory','聊聊往事',dx+(dw+12)/2,f.top+190,(dw-12)/2,44,()=>h.send('npc_topic',{target:obj.id,topic:'memory'}),h.busy||(h.state.relationships[obj.id]||0)<5);
-  }
-  const favorite=resident?.favorite||'crop',canGift=(h.state.inventory[favorite]||0)>0&&!social?.gifted;
-  h.button('npc-gift',`送 ${itemNames[favorite]||favorite} 1 份`,dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send('npc_gift',{target:obj.id,item:favorite}),h.busy||!canGift);
-  h.button('npc-help','搭把手 · 4 体力',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>h.send('npc_help',{target:obj.id}),h.busy||!!social?.helped||(h.state.stamina?.current||0)<4,true);
- }
- private growthView(h:PanelHost,f:Frame){
-  const ids=Object.keys(growthNames) as GrowthTarget[],lw=Math.floor(f.w*.28),dx=f.x+lw+48,dw=f.w-lw-72;
-  this.list(h,f,ids.map(id=>({id,label:`${growthNames[id]} · ${h.state.character_growth_options?.[id]?.current??0}`})),this.growth,id=>this.growth=id as GrowthTarget,lw);
-  const quote=h.state.character_growth_options?.[this.growth];if(!quote)return;const command=growthCommand(h.state,this.growth),currency={health_points:'健康点',knowledge_points:'知识点',skill_points:'技能点'}[quote.currency];
-  h.text('GrowthName',growthNames[this.growth],dx,f.top,dw,36,24);
-  h.text('GrowthLevels',`${quote.current} → ${quote.next}`,dx,f.top+42,dw,42,28);
-  h.text('GrowthCost',`持有 ${h.state[quote.currency]||0} ${currency} · 本次消耗 ${quote.cost}`,dx,f.top+96,dw,36,17,C.muted);
-  if(!f.compact)h.text('GrowthSource','点数来自诺亚的现实委托。手动记录与研习计时不直接发放这些点数。\n只有确认培养才会消耗；服务器会检查最新等级。',dx,f.top+148,dw,90,17,C.muted);
-  h.button('growth-spend',command.shortfall?`还差 ${command.shortfall} ${currency}`:'确认培养',dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send(command.action,command.data),h.busy||command.shortfall>0,true);
-  h.button('growth-noah','标记诺亚',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>this.markNoah(h),h.busy);
+  this.npcTab='talk';h.redraw();
  }
  private gear(h:PanelHost,f:Frame){
   if(h.mode==='armory')this.tabs(h,f,[['obtain','购买与打造'],['sell','出售武器']],this.gearTab,id=>this.gearTab=id);
@@ -201,65 +232,6 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
   const recover=!inCave&&c.boss_first&&!c.gate_open&&!(h.state.inventory.gate_stone||0);
   h.button(inCave?'cave-retreat':recover?'stone-recover':'cave-equipment',inCave?'安全撤离':recover?'核实并补领门钥石':'查看装备',dx+Math.min(372,dw/2),f.y+f.h-62,Math.min(300,dw/2-8),44,()=>inCave?h.send('cave_retreat').then(ok=>{if(ok)h.go('world');}):recover?h.send('stone_recover'):h.go('equipment'),h.busy);
  }
- private map(h:PanelHost,f:Frame){
-  const places=[h.world,...Object.values(h.world.interiors),...Object.values(h.world.areas||{})].filter(m=>!m.id.startsWith('cave_'));
-  const entries=residentPositions(h.world,h.state,h.now),lw=Math.floor(f.w*.35),dx=f.x+lw+48,dw=f.w-lw-72;
-  this.list(h,f,entries.map(r=>({id:r.id,label:`${r.name} · ${residentPlace(h.world,r.location!)}`})),this.taskId,id=>this.taskId=id,lw);
-  const resident=entries.find(r=>r.id===this.taskId)||entries[0];
-  h.text('MapPlace',`${mapById(h.world,h.state.location)?.name||h.state.location}\n${places.length} 处村庄与旅途地点`,dx,f.top,dw,70,22);
-  if(resident){h.text('MapResident',`${resident.name} · ${residentPlace(h.world,resident.location!)}\n${resident.activity||'在这里等候旅人'}`,dx,f.top+84,dw,f.compact?60:70,18,C.muted);h.button('map-mark-resident','标记此人所在位置',dx,f.y+f.h-62,dw,44,()=>h.mark({mapId:resident.location!,targetId:resident.id},resident.name),h.busy,true);}
- }
- private life(h:PanelHost,f:Frame){
-  this.tabs(h,f,[['study','今日研习'],['plans','长期计划'],['record','手动记录'],['contracts','现实约定'],['history','成长历史']],this.lifeTab,id=>this.lifeTab=id);
-  if(this.lifeTab==='record'){this.manual(h,f);return;}if(this.lifeTab==='contracts'){this.contracts(h,f,false);return;}if(this.lifeTab==='history'){this.history(h,f);return;}
-  const plans=this.lifeTab==='plans',list=plans?(h.state.study_plan_log||[]):(h.state.study_task_log||[]),lw=Math.floor(f.w*.32),dx=f.x+lw+48,dw=f.w-lw-72;
-  let selected=list.find(t=>t.id===(plans?this.planId:this.taskId))||list.find(t=>!t.archived_at)||list[0];
-  if(selected){if(plans)this.planId=selected.id;else this.taskId=selected.id;}
-  this.list(h,f,list.map(t=>({id:t.id,label:`${t.archived_at?'已归档 · ':''}${t.title}`})),selected?.id||'',id=>{if(plans)this.planId=id;else this.taskId=id;},lw);
-  if(!selected){
-   h.text('StudyEmpty',plans?'留下一本长期计划':'今天想学点什么？',dx,f.top,dw,40,24);
-   h.text('StudyEmptyHint',f.compact?'写下主题和目标时长，再按自己的节奏计时。':'主题与时长由你决定，记录和计时都会保存到服务器。',dx,f.top+46,dw,f.compact?40:68,17,C.muted);
-   h.button('study-create',plans?'新建长期计划':'写下研习主题',dx,f.y+f.h-62,dw,44,()=>{this.title='';this.minutes='25';h.go(plans?'plan-new':'study-new');},h.busy,true);return;
-  }
-  h.text('StudyTitle',selected.title,dx,f.top,dw,f.compact?30:38,22);
-  if(plans){
-   const p=h.state.study_plan_log!.find(p=>p.id===selected!.id)!;
-   h.text('PlanGoal',`每天 ${p.daily_minutes} 分钟 · ${p.archived_at?'已归档':'进行中'}`,dx,f.top+44,dw,32,17,C.muted);
-   if(!f.compact){h.button('plan-edit','修改计划',dx,f.top+106,(dw-12)/2,44,()=>{this.title=p.title;this.minutes=String(p.daily_minutes);h.go('plan-edit');},h.busy||!!p.archived_at);h.button('plan-archive',p.archived_at?'放回书架':'归档计划',dx+(dw+12)/2,f.top+106,(dw-12)/2,44,()=>h.send('study_plan_archive',{plan_id:p.id,archived:!p.archived_at}),h.busy);}
-   h.button('plan-today',p.archived_at?'取回此计划':'翻开今天一页',dx,f.y+f.h-62,(dw-12)/2,44,()=>p.archived_at?h.send('study_plan_archive',{plan_id:p.id,archived:false}):h.send('study_plan_today',{plan_id:p.id}).then(ok=>{if(!ok)return;this.lifeTab='study';this.taskId=h.state.study_task_log?.find(t=>t.plan_id===p.id&&t.date===h.state.life_journal?.date)?.id||'';h.redraw();}),h.busy,true);
-   h.button('plan-new','新增计划',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>{this.title='';this.minutes='25';h.go('plan-new');},h.busy);return;
-  }
-  const task=h.state.study_task_log!.find(t=>t.id===selected!.id)!,timer=h.state.timer,own=timer?.study_task_id===task.id;
-  h.text('StudyProgress',`${task.minutes} / ${task.target_minutes} 分钟 · ${task.date}`,dx,f.top+(f.compact?34:42),dw,26,16,C.muted);
-  const timerLabel=timer?`${own?'本页':'另一项'}计时 ${timeText(timerSeconds(h.state,h.now))} · ${timer.running?'进行中':'已暂停'}`:task.completed_at?'这一页已经完成':'计时尚未开始';
-  h.text('TimerLabel',timerLabel,dx,f.top+(f.compact?66:80),dw,f.compact?32:40,f.compact?20:28,C.moss);
-  if(!f.compact){
-   h.text('StudyProvenance','计时记录经过的时间，不能证明学习行为。知识点需通过诺亚的现实委托领取。',dx,f.top+136,dw,64,16,C.muted);
-   h.button('study-edit','修改书页',dx,f.top+218,(dw-12)/2,44,()=>{this.title=task.title;this.minutes=String(task.target_minutes);h.go('study-edit');},h.busy||!!task.completed_at||own);
-   h.button('study-archive',task.archived_at?'取回书页':'归档书页',dx+(dw+12)/2,f.top+218,(dw-12)/2,44,()=>h.send('study_archive',{task_id:task.id,archived:!task.archived_at}),h.busy||own);
-  }
-  const bw=(dw-16)/3;
-  h.button('timer-toggle',timer?(timer.running?'暂停计时':'继续计时'):'开始计时',dx,f.y+f.h-62,bw,44,()=>h.send(timer?(timer.running?'timer_pause':'timer_resume'):'timer_start',timer?{timer_id:timer.id}:{task_id:task.id}),h.busy||(!timer&&(!!task.completed_at||!!task.archived_at)),true);
-  h.button('timer-finish','结束并记录',dx+bw+8,f.y+f.h-62,bw,44,()=>h.send('timer_finish',{timer_id:timer?.id}),h.busy||!timer);
-  h.button('study-new','新增研习',dx+2*(bw+8),f.y+f.h-62,bw,44,()=>{this.title='';this.minutes='25';h.go('study-new');},h.busy);
- }
- private studyForm(h:PanelHost,f:Frame){
-  const plan=h.mode.startsWith('plan-'),edit=h.mode.endsWith('-edit'),titleWidth=Math.floor((f.w-72)*.7);
-  h.field('study-title',plan?'计划名称':'研习主题',this.title,f.x+24,f.top,titleWidth,v=>this.title=v,false,80);
-  h.field('study-minutes',plan?'每日分钟（1–120）':'目标分钟（1–120）',this.minutes,f.x+titleWidth+48,f.top,f.w-titleWidth-72,v=>this.minutes=v,true,3);
-  h.text('StudyFormHint',plan?'长期计划可以每天翻开一页，历史记录保持独立。':'按自己的节奏完成；暂停与切换模式不会丢失服务器计时。',f.x+24,f.top+82,f.w-48,54,17,C.muted);
-  h.button('save-study',edit?'保存修改':plan?'装订计划':'写下这一页',f.x+24,f.y+f.h-62,f.w-48,44,()=>h.send(plan?(edit?'study_plan_edit':'study_plan_create'):(edit?'study_edit':'study_create'),{[plan?'plan_id':'task_id']:edit?(plan?this.planId:this.taskId):entityId(h.uuid()),title:this.title.trim(),[plan?'daily_minutes':'target_minutes']:Number(this.minutes)}).then(ok=>{if(!ok)return;this.lifeTab=plan?'plans':'study';if(!edit){const entries=plan?h.state.study_plan_log:h.state.study_task_log;const id=entries?.find(t=>t.title===this.title.trim())?.id;if(plan)this.planId=id||'';else this.taskId=id||'';}h.go('life',true);}),h.busy,true);
- }
- private manual(h:PanelHost,f:Frame){
-  const kinds=[['study','学习分钟'],['exercise','运动分钟'],['creative','创作分钟'],['steps','步数'],['management','日常管理']];
-  const name=kinds.find(([id])=>id===this.activityKind)?.[1]||'学习分钟',amountX=f.x+202,noteX=f.x+342;
-  h.text('ActivityKindLabel','记录类型',f.x+24,f.top,164,22,14,C.muted);
-  h.button('activity-kind',name,f.x+24,f.top+24,160,44,()=>{const i=kinds.findIndex(([id])=>id===this.activityKind);this.activityKind=kinds[(i+1)%kinds.length][0];this.amount='1';h.redraw();},h.busy);
-  h.field('activity-amount','数量',this.amount,amountX,f.top,120,v=>this.amount=v,true,6);
-  h.field('activity-note','备注（选填）',this.note,noteX,f.top,f.w-(noteX-f.x)-24,v=>this.note=v,false,160);
-  h.text('ManualProvenance','手动记录 · 未核验。不会直接发放知识、健康或技能点。',f.x+24,f.top+(f.compact?72:82),f.w-48,f.compact?30:48,16,C.muted);
-  h.button('save-activity','保存这条手动记录',f.x+24,f.y+f.h-62,f.w-48,44,()=>h.send('activity',{kind:this.activityKind,amount:Number(this.amount),note:this.note}).then(ok=>{if(!ok)return;this.lifeTab='history';h.redraw();}),h.busy,true);
- }
  private markNoah(h:PanelHost){const r=residentPositions(h.world,h.state,h.now).find(r=>r.id==='noah');if(r)h.mark({mapId:r.location!,targetId:r.id},r.name);}
  private contracts(h:PanelHost,f:Frame,atNoah:boolean){
   const journal=h.state.life_journal;if(!journal)return;const active=journal.tasks.find(t=>t.status==='active');
@@ -282,14 +254,5 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
   h.text('ContractHours',`${this.hours} 小时 → ${this.hours} 点${{study:'知识',exercise:'健康',work:'技能'}[this.lifeKind]}成长`,f.x+(f.compact?304:92),yy,f.w-(f.compact?396:208),44,18);
   h.button('hours-more','＋',f.x+f.w-76,yy,52,44,()=>{this.hours=Math.min(5,journal.remaining,this.hours+1);h.redraw();},h.busy||this.hours>=journal.remaining);
   h.button('accept-life','确认这份现实约定',f.x+24,f.y+f.h-62,f.w-48,44,()=>h.send('life_accept',{target:'noah',task_id:entityId(h.uuid()),kind:this.lifeKind,hours:this.hours}),h.busy||journal.remaining<this.hours,true);
- }
- private history(h:PanelHost,f:Frame){
-  const records=[...h.state.activities].reverse(),per=f.compact?2:5,pages=Math.max(1,Math.ceil(records.length/per));this.page%=pages;
-  if(!records.length)h.text('HistoryEmpty','还没有成长记录。手动记录或完成研习计时后，会在这里留下足迹。',f.x+24,f.top,f.w-48,90,20,C.muted);
-  records.slice(this.page*per,(this.page+1)*per).forEach((r,i)=>{const yy=f.top+i*(f.compact?58:62),source=r.source==='timer'?'计时':r.source==='manual'?'手动':r.source;
-   h.text('Record-'+i,`${r.date} · ${source} · 未核验`,f.x+24,yy,260,28,14,C.muted);
-   h.text('RecordText-'+i,`${r.note||({study:'学习',exercise:'运动',creative:'创作',steps:'步数',management:'日常管理'} as Record<string,string>)[r.kind]||r.kind} · ${r.amount}${r.kind==='steps'?' 步':r.kind==='management'?' 次':' 分钟'}`,f.x+300,yy,f.w-324,48,17);
-  });
-  h.button('history-next',`第 ${this.page+1}/${pages} 页 · 下一页`,f.x+24,f.y+f.h-62,f.w-48,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy||pages===1);
  }
 }

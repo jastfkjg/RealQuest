@@ -1,13 +1,16 @@
+import {browserConfig,launchBrowser,closeBrowser} from "../../tools/cocos-browser-config.mjs";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import crypto from "node:crypto";
-const root = new URL("../../", import.meta.url).pathname,
-  out = root + "output/cave-polish",
-  db = out + "/test.db";
+const root = new URL("../../", import.meta.url).pathname;
+const test = await browserConfig("cave-art", {baseURL:"http://127.0.0.1:5431",directory:"output/cave-polish"});
+const out=test.directory, db=test.database;
+const requestedEngine=process.argv.find(a=>a.startsWith("--engine="))?.split("=")[1];
+assert(!requestedEngine || ["web","cocos"].includes(requestedEngine));
 const baseline = process.argv.includes("--baseline");
-const browser = await chromium.launch({ headless: true });
+const browser = await launchBrowser(chromium,{ headless: true });
 const checks = [],
   errors = [],
   shots = [],
@@ -43,7 +46,7 @@ async function ccClick(id) {
   await page.waitForTimeout(100);
 }
 async function load() {
-  await page.goto("http://127.0.0.1:" + (engine === "web" ? 5430 : 5431));
+  await page.goto(engine === "web" ? "http://127.0.0.1:5430" : test.baseURL);
   await page.waitForFunction(() => window.render_game_to_text);
   if (engine === "cocos") {
     await until((s) => s.loaded, "loaded");
@@ -68,7 +71,7 @@ async function seed(
   execFileSync(root + "backend/.venv/bin/python", [
     "-c",
     `import sqlite3,json,sys,time,uuid
-p,key,loc,pos=sys.argv[1:];assert p.endswith('/output/cave-polish/test.db')
+p,key,loc,pos=sys.argv[1:];sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture;assert_fixture(p,['output/cave-polish/test.db'])
 c=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['inventory'].update(glow_staff=1,soup=3);s['vitality'].update(current=100,max=100);s['stamina'].update(current=100,max=100,updated_at=time.time());s['village_combat'].update(equipped='glow_staff',spark_learned=True,encounter=str(uuid.uuid4()),input_seq=0,floors={},time=0,last_tick=0,cast=None,effects=[],projectiles=[]);s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=187.5)
 ${extra}
 c.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,
@@ -247,6 +250,17 @@ async function actualFlow() {
     "held attack survives receipts/lost reply, exact two hits/one loot; release adds no attack",
   );
   await walk(368, 240);
+  if(engine==='cocos'){
+    // Aimed spells resolve after a windup; choose a stationary enemy phase,
+    // then leave a real gap instead of casting at overlapping moving centers.
+    const tell=await until(s=>s.combat.enemies[1].phase==='windup'&&s.combat.enemies[1].until-s.combat.time>=.6,'fresh slime telegraph before aimed spell');
+    const enemy=tell.combat.enemies[1],player=tell.savedPosition||tell.player;
+    const dx=player.x-enemy.x,dy=player.y-enemy.y;
+    const away=Math.abs(dx)>=Math.abs(dy)?(dx>0?'d':'a'):(dy>0?'s':'w');
+    await page.keyboard.down(away);await page.waitForTimeout(220);await page.keyboard.up(away);
+    const separated=await until(s=>Math.hypot(s.player.x-s.combat.enemies[1].x,s.player.y-s.combat.enemies[1].y)>=20,'real movement makes an aiming gap');
+    await fs.writeFile(out+'/spell-aim-preparation.json',JSON.stringify({freshTell:tell.combat.enemies[1],tellTime:tell.combat.time,away,player:separated.player,enemy:separated.combat.enemies[1],combatTime:separated.combat.time},null,2));
+  }
   const before = (await read()).combat.enemies[1].hp;
   await worldClick(
     (await read()).combat.enemies[1].x,
@@ -484,7 +498,7 @@ async function touchFlow() {
   await cdp.detach();
 }
 try {
-  for (const which of ["web", "cocos"]) {
+  for (const which of requestedEngine ? [requestedEngine] : ["web", "cocos"]) {
     await setup(which);
     await shot(which + (baseline ? "-before-entry" : "-entry"));
     await seed("cave_1", { x: 208, y: 344 });
@@ -520,5 +534,5 @@ try {
   );
   throw e;
 } finally {
-  await browser.close();
+  await closeBrowser(browser);
 }

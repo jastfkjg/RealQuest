@@ -1,17 +1,18 @@
+import {browserConfig,launchBrowser,closeBrowser} from "../../tools/cocos-browser-config.mjs";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import crypto from "node:crypto";
-const root = new URL("../../", import.meta.url).pathname,
-  out = root + "output/village-polish",
-  db = out + "/test.db";
+const root = new URL("../../", import.meta.url).pathname;
+const test = await browserConfig("village-art", {baseURL:"http://127.0.0.1:5435",directory:"output/village-polish"});
+const out=test.directory, db=test.database;
 const requestedEngine = process.argv
   .find((a) => a.startsWith("--engine="))
   ?.split("=")[1];
 assert(!requestedEngine || ["web", "cocos"].includes(requestedEngine));
 const baseline = process.argv.includes("--baseline"),
-  browser = await chromium.launch({ headless: true });
+  browser = await launchBrowser(chromium,{ headless: true });
 const checks = [],
   shots = [],
   errors = [],
@@ -47,7 +48,7 @@ async function ccClick(id) {
   await page.waitForTimeout(150);
 }
 async function load() {
-  await page.goto("http://127.0.0.1:" + (engine === "web" ? 5434 : 5435));
+  await page.goto(engine === "web" ? "http://127.0.0.1:5434" : test.baseURL);
   if (engine === "cocos") {
     await until((s) => s.loaded, "loaded");
     await ccClick("start");
@@ -68,7 +69,7 @@ async function seed(location, position, minute = 510) {
   execFileSync(root + "backend/.venv/bin/python", [
     "-c",
     `import sqlite3,json,sys,time
-p,key,loc,pos,minute=sys.argv[1:];assert p.endswith('/output/village-polish/test.db')
+p,key,loc,pos,minute=sys.argv[1:];sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture;assert_fixture(p,['output/village-polish/test.db'])
 c=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=(float(minute)-s['world_clock'].get('start_minute',360))*s['world_clock'].get('day_seconds',1800)/1440)
 if s.get('village_intro'):s['village_intro']['dismissed']=True
 c.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,
@@ -183,7 +184,8 @@ async function transfer(which, touch = false) {
 }
 async function actualFlow() {
   await seed("overworld", { x: 160, y: 352 });
-  await worldClick(160, 208);
+  // Aim inside the real facade rather than its floating-point lower edge.
+  await worldClick(160, 192);
   await until((s) => routeOf(s).length > 0, "route starts");
   await shot(engine + "-route");
   await page.keyboard.press("Escape");
@@ -196,7 +198,8 @@ async function actualFlow() {
   );
   assert.equal((await read()).location, "overworld");
   check("selected route is visible and Escape stops without entering");
-  await worldClick(160, 208);
+  // Aim inside the real facade rather than its floating-point lower edge.
+  await worldClick(160, 192);
   await until(
     (s) => s.location === "home" && ["world", "explore"].includes(s.mode),
     "actual walk/enter",
@@ -313,7 +316,7 @@ async function actualFlow() {
   await until((s) => clockOf(s).elapsed >= before + 37, "actual short rest");
   assert.equal((await read()).inventory.seed, 6);
   await shot(engine + "-rest");
-  await close();
+  if(engine==='cocos')await until(s=>s.mode==='world','rest returns to world');else await close();
   check(
     "bed action uses actual short-rest settlement without changing possessions",
   );
@@ -542,5 +545,5 @@ try {
   );
   throw e;
 } finally {
-  await browser.close();
+  await closeBrowser(browser);
 }

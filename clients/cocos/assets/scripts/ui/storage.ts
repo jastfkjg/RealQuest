@@ -77,6 +77,8 @@ export class StorageView {
           },
           h.busy,
           selected,
+          undefined,
+          {label: '选择'+(side==='inventory'?'背包':'箱子')+'中的'+(itemNames[id]||id)+'，'+count+'份',pressed:selected},
         );
         if (["wood", "stone", "seed", "crop", "plank"].includes(id))
           h.image(

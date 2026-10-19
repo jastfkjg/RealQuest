@@ -2092,5 +2092,114 @@
     "check": "node tools/build_local_scene_art.mjs --check",
     "runtime": "Cocos assets/resources/scenes; not included in Web bundle",
     "task": "docs/tasks/38-village-interior-polish.md"
+  },
+  "cocos_places_refinement": {
+    "status": "owner_requested_further_adjustment_see_task45",
+    "task": "docs/tasks/44-cocos-places-neighbors.md",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "existing_png_rebindings": 6,
+    "source_images_modified": false,
+    "new_artwork": [],
+    "processing": "Byte-identical copies of existing world-map illustration and five resident portraits; native Cocos labels/pins and low dialogue surface over the current real gameplay scene. Exact source/target SHA256 in bindings_manifest.",
+    "source_paths": [
+      "frontend/public/assets/hearthwood/world-map-terrain-v1.png",
+      "frontend/public/assets/hearthwood/residents/lia-portrait.png",
+      "frontend/public/assets/hearthwood/residents/noah-portrait.png",
+      "frontend/public/assets/hearthwood/residents/mira-portrait.png",
+      "frontend/public/assets/hearthwood/residents/adu-portrait.png",
+      "frontend/public/assets/hearthwood/residents/lanya-portrait.png"
+    ]
+  },
+  "cocos_neighbor_encounter": {
+    "status": "candidate_locally_verified_awaiting_owner_review",
+    "task": "docs/tasks/45-cocos-neighbor-encounter.md",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "new_artwork": [],
+    "source_images_modified": false,
+    "note": "Existing portraits/item PNGs and actual world scene. Native labels, answer choices and gift tray; no new raster/font/audio/download or processing."
+  },
+  "cocos_inventory_continuity": {
+    "status": "candidate_locally_verified_pending_owner_render_review",
+    "task": "docs/tasks/47-cocos-inventory-continuity.md",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "reused": [
+      {
+        "source": "assets/generated/hearthwood/satchel-shell-v1.png",
+        "target": "clients/cocos/assets/resources/ui/satchel.png",
+        "sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
+        "source_images_modified": false
+      },
+      {
+        "source": "frontend/public/assets/hearthwood/detail/items/gold.png",
+        "target": "clients/cocos/assets/resources/items/gold.png",
+        "sha256": "bb04bccdf92ead66281025bc214b3083ca28b8b7d9cdd5eb8de8a1bee7c8cfb1",
+        "source_images_modified": false
+      }
+    ],
+    "derived_icons_manifest": "docs/art/cocos-inventory-icons-v1.json",
+    "new_raster_files": 9,
+    "raster_bytes": 24855,
+    "processing": "Existing original SVG symbols from the byte-preserved shared item registry rendered at64px with Chromium canvas; reproducible script and exact source/PNG hashes in derived_icons_manifest. Satchel PNG and gold are unchanged copies. Native nine-slice uses original220/180/200/180 source-pixel insets; icons/counts/text/buttons stay native.",
+    "provenance": "Original project symbols and existing original generated project satchel/gold; no new AI generation, third-party artwork, fonts, audio or downloads. The original Web satchel approval does not approve this Cocos render.",
+    "rebuild": "node tools/build_inventory_art.mjs",
+    "check": "node tools/build_inventory_art.mjs --check",
+    "source_images_modified": false
+  },
+  "cocos_preferences_notices": {
+    "status": "owner_accepted_preferences_controls_and_audio_2026-10-17",
+    "task": "docs/tasks/49-cocos-preferences-notices.md",
+    "bindings_manifest": "clients/cocos/asset-bindings.json",
+    "new_bitmap_files": 0,
+    "new_audio_files": 0,
+    "new_fonts_or_external_assets": false,
+    "source_images_modified": false,
+    "original_sound_code": "frontend/src/game/feel.ts",
+    "original_sound_code_sha256": "fd867a339e299f922f59a997b34710aaf5dc66f139ded586e8742ca4be66cfbc",
+    "implementation": "Native shared timber/paper/book settings leaves and game-button states; existing book PNG bound unchanged. WebAudio oscillator frequencies and short envelopes follow original RealQuest feel.ts cues; no downloaded or generated sound recordings. Device preference and fullscreen code adds no art input or modifications. Owner accepted this candidate preference page/controls/volume/timbre on 2026-10-17; other scenes/devices remain separate checks.",
+    "owner_acceptance_scope": "Preference page, controls, volume and timbre only. Does not approve other screens, physical devices or original Web retirement."
+  },
+  "cocos_tooling_ownership": {
+    "task": "docs/tasks/50-cocos-independent-tooling.md",
+    "status": "local_source_snapshot_verified_ci_checkout_pending",
+    "dependencies": "Root locked TypeScript5.8.3/esbuild0.25.12/Playwright1.64.0, unchanged existing versions/integrities.",
+    "exporters": [
+      "tools/build_local_scene_art.mjs",
+      "tools/build_inventory_art.mjs"
+    ],
+    "source_images_modified": false,
+    "new_assets_fonts_or_audio": false,
+    "reproduction": "7 existing scene PNGs/43 bindings/7 layouts plus9 original item icons byte-identical without frontend installation. Only exporter script hashes updated in derivative provenance manifests.",
+    "remaining": "Frozen Web drawing/source asset ownership is T4; no source deletion or new visual approval."
+  },
+  "cocos_source_ownership": {
+    "task": "docs/tasks/51-cocos-source-ownership.md",
+    "policy": "docs/migration/cocos-source-policy.json",
+    "inventory": "docs/migration/cocos-source-inventory.json",
+    "status": "registered_frozen_input_ownership_no_source_retirement",
+    "bindings": 106,
+    "runtime_pngs": 81,
+    "shared_modules": 25,
+    "scene_bake_complete_input_files": 79,
+    "source_images_modified": false,
+    "new_assets_or_visual_approval": false,
+    "decision": "Frozen Web art/paint/test inputs remain project-owned inputs in place; retain exact bytes, provenance, prompts and original packers independently of Web publication. No frontend archive/delete is authorized.",
+    "toolchain": "Root locked Node tools plus optional tools/requirements-art.lock.txt for original PNG packers. Backend runtime unchanged."
+  },
+  "cocos_lossless_textures": {
+    "manifest": "docs/art/cocos-lossless-textures-v1.json",
+    "source": "Existing reproducibly baked village terrain PNG; original RGBA pixels, dimensions and PNG fallback retained",
+    "scope": "Cocos Web capability-selected lossless WebP binding; no original Web/source-image edits",
+    "new_artwork": false,
+    "new_external_pack_font_audio_or_generation": false,
+    "world_collision_save_rules_changed": false,
+    "rebuild": "REALQUEST_ART_PYTHON=<locked art Python> npm run cocos:art:textures",
+    "check": "REALQUEST_ART_PYTHON=<locked art Python> npm run cocos:art:textures -- --check",
+    "status": "pixel-identical candidate; latest build, behavior, budget and approval limits live in task70",
+    "task": "docs/tasks/70-cocos-network-budget.md",
+    "decoded_rgba_verified_engines": [
+      "Chromium156.0.8078.4",
+      "Firefox157.0",
+      "Playwright WebKit27.2"
+    ]
   }
 }

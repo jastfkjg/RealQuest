@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-19T03:40:14.044100+00:00",
+  "status": "Prospective Firefox engineering reference, not owner-approved production/SLA/device budget; original numeric caps unchanged.",
+  "scope": "Official nativeFirefox158 BiDi/headless1440x900, real Nginx/versioned release and isolated same-origin API over a calibrated loopback TCP proxy. Separate shared downstream/upstream serialization clocks across all connections, half latency each direction. HTTP only; no TLS/DNS/packet loss/kernel link/physical device emulation. Same numeric caps as task70 applied prospectively, not identical CDP measurement semantics.",
+  "maxColdHttpBytes": 12582912,
+  "resourceTimingBuffer": 5000,
+  "profiles": [
+    {
+      "id": "reference",
+      "samples": 1,
+      "latencyMs": 0,
+      "downloadBytesPerSec": -1,
+      "uploadBytesPerSec": -1,
+      "coldReadyMs": null,
+      "warmReadyMs": null
+    },
+    {
+      "id": "desktop-10mbps",
+      "samples": 3,
+      "latencyMs": 80,
+      "downloadBytesPerSec": 1250000,
+      "uploadBytesPerSec": 250000,
+      "coldReadyMs": 15000,
+      "warmReadyMs": 5000
+    },
+    {
+      "id": "constrained-1.6mbps",
+      "samples": 3,
+      "latencyMs": 150,
+      "downloadBytesPerSec": 200000,
+      "uploadBytesPerSec": 93750,
+      "coldReadyMs": 60000,
+      "warmReadyMs": 8000
+    }
+  ],
+  "definitions": {
+    "cold": "Fresh browser context and empty HTTP cache; root entry to loaded welcome and usable controls.",
+    "warm": "Same context/save/credential/book, native navigation back through root with HTTP cache enabled; root to welcome. Resume same guest and verify once.",
+    "httpBytes": "Actual proxy downstream TCP payload bytes written during isolated cold/warm navigation, including HTTP headers/redirects. No TLS/TCP/IP frame overhead; Firefox native cache bypasses proxy and is separately observed via ResourceTiming.",
+    "sampleStatistics": "Raw samples and min/max only. Seven samples are not a p95 population or real-device performance proof.",
+    "latency": "Each input buffer has half configured minimum delay per direction before globally serialized writes; no TCP handshake/ACK/kernel link emulation."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "note": "Original project SVG item symbols, rendered without design changes. Existing five bitmap icons and satchel remain unchanged.",
+  "renderer": "Playwright Chromium 156.0.8078.4",
+  "script": "tools/build_inventory_art.mjs",
+  "script_sha256": "679488d57a1bd4519457a4582379cbe999c968cf1c833930bccd8a2ff41aa59b",
+  "records": [
+    {
+      "id": "stone_sword",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "db6712bf7432a50b0a569b991f5654451217fdfb88151cee1db5fce1cb088fe6",
+      "path": "assets/derived/inventory-icons/stone_sword.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 2874,
+      "sha256": "e31c0d1d40fa77c26320ef43ee33f5af05fbd2df8ad075c7fea4f92d2ce38105"
+    },
+    {
+      "id": "reinforced_sword",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "e9148e39335c144d83b4a790f6ffdeaa6f019192fd3f9a41461fdacbae409313",
+      "path": "assets/derived/inventory-icons/reinforced_sword.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 3029,
+      "sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d"
+    },
+    {
+      "id": "spring_spear",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "e4a291848f1393284e27ed05809842f7de6e6bcaacadab33c1eb65d14889e330",
+      "path": "assets/derived/inventory-icons/spring_spear.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 2511,
+      "sha256": "ef5751ed4e7d5a62a7fc087bf2f557447184f05a899306b357e40065bf6a35a5"
+    },
+    {
+      "id": "glow_staff",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "fbb052546810786ee11d307b305088a972e55c303d19923e6bbe3e522a46d49a",
+      "path": "assets/derived/inventory-icons/glow_staff.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 1969,
+      "sha256": "9d7712e4a846ad74fa4e5bd6c3a376f09632cfb7e27eb700af1b8ae29782985a"
+    },
+    {
+      "id": "gel",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "2e51d5a85637cd23578b7787fe1ad7e33cc249221b1e5929b910595e451c66aa",
+      "path": "assets/derived/inventory-icons/gel.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 2591,
+      "sha256": "fd27cdec84500ca8d45eec631d60c98bb979f741f220b85002e4530f8e6439e6"
+    },
+    {
+      "id": "shell",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "af95258b8c1ed2d31ce0519fd76b68116bc94622e3a0c867f2b03640b6b9dd23",
+      "path": "assets/derived/inventory-icons/shell.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 3121,
+      "sha256": "892aad9662afbb1c68792493f43ddbb38de371aef4ed0f9fbbd3b276ab04ccf9"
+    },
+    {
+      "id": "crystal",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "077a94851a5893e4c7b675086565509c34ef7bf693e19d5f43912c9bfa012477",
+      "path": "assets/derived/inventory-icons/crystal.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 3094,
+      "sha256": "8e4b9e072fdc228c4d5eed476fcd9156d62a18627f2be319c8162f79305df2f5"
+    },
+    {
+      "id": "gate_stone",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "b79a4b8d76c54a51ef457350c01919226047d32e70a7d1dd3461236fb726032e",
+      "path": "assets/derived/inventory-icons/gate_stone.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 2808,
+      "sha256": "a4d25ff7d810d5864c7665039ce6c124a9f2a6a447c1df454559846776a5da21"
+    },
+    {
+      "id": "soup",
+      "source": "shared/game/items.ts",
+      "source_svg_sha256": "b438cab4d00d4652fe1062e10e1389289953f162e2298402aeb924b8f6121cbb",
+      "path": "assets/derived/inventory-icons/soup.png",
+      "width": 64,
+      "height": 64,
+      "size_bytes": 2858,
+      "sha256": "14760f4ae03d4a5479f745a17a569551550c7a4aa0a426b0f022d51dc796b612"
+    }
+  ]
+}

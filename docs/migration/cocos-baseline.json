@@ -1828,7 +1828,12 @@
     "frontend/src/game/GameCanvas.tsx",
     "frontend/src/components/CombatPanels.tsx",
     "frontend/src/main.tsx",
-    "frontend/src/game/WorldScene.ts"
+    "frontend/src/game/WorldScene.ts",
+    "frontend/src/game/lifeJournalDates.ts",
+    "frontend/scripts/life-journal-dates.mjs",
+    "frontend/src/game/nextDeparture.ts",
+    "frontend/scripts/next-departure-state.mjs",
+    "frontend/src/game/items.ts"
   ],
   "allowed_extension_reason": "Optional bearer guest transport; existing rules and migrations preserved.",
   "phase23_extraction": "Only compatible Web entry points change; canonical source moved verbatim except explicit clock injection. See task35.",
@@ -1849,5 +1854,38 @@
     ],
     "reason": "User-authorized village/home route cues and scoped field HUD. Existing scene source art, geography and authoritative rules remain protected.",
     "report": "docs/tasks/38-village-interior-polish.md"
-  }
+  },
+  "append_only_extensions": [
+    "backend/app/models.py"
+  ],
+  "phase40_data": {
+    "files": [
+      "backend/app/main.py",
+      "backend/app/models.py",
+      "backend/migrations/versions/003_client_deletions.py"
+    ],
+    "reason": "User-authorized Cocos data management and legacy journey continuity. New explicit cookie-to-client continuation and idempotent deletion endpoints; existing models must remain an identical prefix and original migrations/rules/Web code remain protected.",
+    "report": "docs/tasks/40-cocos-data-management.md"
+  },
+  "phase41_life": {
+    "files": [
+      "frontend/src/game/lifeJournalDates.ts",
+      "frontend/scripts/life-journal-dates.mjs",
+      "shared/game/lifeJournalDates.ts",
+      "shared/game/lifeRecords.ts",
+      "clients/cocos/assets/scripts/ui/life.ts"
+    ],
+    "reason": "User-authorized Cocos life-history/learning slice: extract existing date/quota helper verbatim with only its type import adjusted; original Web re-export stays compatible. No rules or migrations changed. Original Web date-test assertions are byte-preserved with only their input path adjusted.",
+    "report": "docs/tasks/41-cocos-life-records.md"
+  },
+  "phase43_guidance": {
+    "files": [
+      "frontend/src/game/nextDeparture.ts",
+      "frontend/scripts/next-departure-state.mjs",
+      "shared/game/nextDeparture.ts"
+    ],
+    "reason": "User-authorized M4: verbatim preparation/return helper extraction with only type import adjusted; original Web path re-exports and all original decision assertions stay intact except source input path. No server rule/migration/asset changes.",
+    "report": "docs/tasks/43-cocos-journey-guidance.md"
+  },
+  "items_extraction": "Task47: exact shared registry extraction; original Web wrapper and canonical content verified against baseline by check-baseline.mjs."
 }

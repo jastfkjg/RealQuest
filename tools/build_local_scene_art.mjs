@@ -5,18 +5,21 @@ import crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 const root = new URL("../", import.meta.url).pathname,
-  require = createRequire(root + "frontend/package.json");
+  require = createRequire(root + "package.json");
 const { build } = require("esbuild"),
   { chromium } = require("playwright");
 const check = process.argv.includes("--check"),
+  refreshManifest = process.argv.includes("--refresh-manifest"),
+  verifyPixels = check || refreshManifest,
   hash = (b) => crypto.createHash("sha256").update(b).digest("hex");
-const world = JSON.parse(
+const geography = JSON.parse(
   execFileSync(
     root + "backend/.venv/bin/python",
-    ["-c", "import json;from app.world import WORLD;print(json.dumps(WORLD))"],
+    ["-c", "import json,sys;from pathlib import Path;from app.world import WORLD;root=Path.cwd().parent;inputs=sorted(str(Path(m.__file__).resolve().relative_to(root)) for k,m in sys.modules.copy().items() if k.startswith('app') and getattr(m,'__file__',None) and Path(m.__file__).resolve().is_relative_to(root/'backend/app'));print(json.dumps({'world':WORLD,'inputs':inputs}))"],
     { cwd: root + "backend", encoding: "utf8" },
   ),
 );
+const world = geography.world;
 const inputMaps = {
   overworld: { ...world, interiors: undefined, areas: undefined },
   ...world.interiors,
@@ -54,13 +57,15 @@ for (const info of Object.values(images))
     info.data =
       "data:image/png;base64," +
       (await fs.readFile(root + info.file)).toString("base64");
-const bundles = {};
+const bundles = {}, moduleInputs = new Set();
 for (const name of ["village", "interiors"])
-  bundles[name] = (
-    await build({
+  {
+    const result = await build({
+      absWorkingDir: root,
       entryPoints: [root + "frontend/src/game/" + name + ".ts"],
       bundle: true,
       write: false,
+      metafile: true,
       format: "iife",
       globalName: "SceneSource",
       plugins: [
@@ -77,8 +82,11 @@ for (const name of ["village", "interiors"])
           },
         },
       ],
-    })
-  ).outputFiles[0].text;
+    });
+    bundles[name] = result.outputFiles[0].text;
+    for (const file of Object.keys(result.metafile.inputs))
+      if (!file.startsWith('stub:')) moduleInputs.add(file);
+  }
 const browser = await chromium.launch({ headless: true });
 let rendered;
 try {
@@ -222,7 +230,7 @@ for (const [key, item] of Object.entries(rendered.baked)) {
           : key.replace("fine-", "");
     dedup.set(sha, name);
     const file = folder + "/" + name + ".png";
-    if (check) {
+    if (verifyPixels) {
       if (hash(await fs.readFile(root + file)) !== sha)
         throw Error("Raster drift " + file);
     } else await fs.writeFile(root + file, bytes);
@@ -255,6 +263,9 @@ for (const nodes of Object.values(rendered.layouts))
 const allInputs = [
   ...new Set([
     ...inputs,
+    ...geography.inputs,
+    ...moduleInputs,
+    ...Object.values(images).map(info => info.file),
     ...used,
     "tools/build_local_scene_art.mjs",
     ...["grass", "grass-patch", "bank-stones", "step"].map(
@@ -284,7 +295,7 @@ const script =
   JSON.stringify(artPaths) +
   ";\n";
 const target = "shared/game/sceneLayout.ts";
-if (check) {
+if (verifyPixels) {
   if ((await fs.readFile(root + target, "utf8")) !== script)
     throw Error("Layout drift");
 } else await fs.writeFile(root + target, script);
@@ -312,5 +323,5 @@ if (check) {
 } else
   await fs.writeFile(root + dest, JSON.stringify(manifest, null, 2) + "\n");
 console.log(
-  `${check ? "Verified" : "Baked"} ${records.length} unique terrain/floor/rug PNGs (${records.reduce((sum, r) => sum + r.bytes, 0)} bytes), ${artPaths.length} actual sprite bindings and ${Object.keys(rendered.layouts).length} scene layouts.`,
+  `${verifyPixels ? "Verified" : "Baked"} ${records.length} unique terrain/floor/rug PNGs (${records.reduce((sum, r) => sum + r.bytes, 0)} bytes), ${artPaths.length} actual sprite bindings and ${Object.keys(rendered.layouts).length} scene layouts; ${sourceHashes.length} complete file inputs${refreshManifest ? ' (provenance refreshed only)' : ''}.`,
 );

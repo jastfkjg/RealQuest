@@ -16,6 +16,11 @@ if not (root / 'index.html').is_file():
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        if not self.path.startswith('/api/'):
+            self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
+
     def do_GET(self):
         if self.path.startswith('/api/'):
             self.proxy()

@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "stage": "cocos-primary-preserve-original-web",
+  "reference": "5e9d97d5a987b54b2a14587fb5793c51de924294",
+  "baselineIdentitySHA256": "d2fc0a31198d891f3a059b72773cd15170de0690fa3c14a46331817cfd1e8723",
+  "allowedExtensions": [
+    "backend/app/main.py",
+    "frontend/src/types.ts",
+    "frontend/src/game/interaction.ts",
+    "frontend/src/game/stamina.ts",
+    "frontend/src/game/residents.ts",
+    "frontend/src/game/villageIntro.ts",
+    "frontend/src/game/navigation.ts",
+    "frontend/src/game/appearances.ts",
+    "frontend/src/game/cave.ts",
+    "frontend/src/game/GameCanvas.tsx",
+    "frontend/src/components/CombatPanels.tsx",
+    "frontend/src/main.tsx",
+    "frontend/src/game/WorldScene.ts",
+    "frontend/src/game/lifeJournalDates.ts",
+    "frontend/scripts/life-journal-dates.mjs",
+    "frontend/src/game/nextDeparture.ts",
+    "frontend/scripts/next-departure-state.mjs",
+    "frontend/src/game/items.ts"
+  ],
+  "appendOnlyExtensions": [
+    "backend/app/models.py"
+  ],
+  "retainedPrefixes": [
+    "frontend/",
+    "styles/",
+    "assets/",
+    "backend/app/",
+    "backend/migrations/",
+    "deploy/",
+    ".github/workflows/"
+  ],
+  "retainedFiles": [
+    "start.command",
+    "scripts/start.py",
+    "backend/Dockerfile",
+    "backend/requirements.txt",
+    "backend/requirements.lock.txt"
+  ],
+  "wrappers": {
+    "frontend/src/game/lifeJournalDates.ts": "// Canonical China Standard Time date/quotas shared with Cocos; behavior preserved.\nexport * from \"../../../shared/game/lifeJournalDates\";\n",
+    "frontend/src/game/nextDeparture.ts": "// Canonical shared preparation/return decisions; original Web API remains compatible.\nexport * from \"../../../shared/game/nextDeparture\";\n",
+    "frontend/src/game/items.ts": "export { itemDefinitions, itemNames, inventoryTraySlots } from \"../../../shared/game/items\";\nexport type { ItemDefinition } from \"../../../shared/game/items\";\n"
+  },
+  "rewrittenTests": [
+    {
+      "path": "frontend/scripts/life-journal-dates.mjs",
+      "from": "../src/game/lifeJournalDates.ts",
+      "to": "../../shared/game/lifeJournalDates.ts"
+    },
+    {
+      "path": "frontend/scripts/next-departure-state.mjs",
+      "from": "../src/game/nextDeparture.ts",
+      "to": "../../shared/game/nextDeparture.ts"
+    }
+  ],
+  "backendExtension": {
+    "path": "backend/app/main.py",
+    "importBefore": "from .models import Player, Receipt, RecoveryKey, GuestSession\n",
+    "importAfter": "from .models import Player, Receipt, RecoveryKey, GuestSession, ClientDeletion\n",
+    "start": "\nclass WebJourneyInput(",
+    "end": "@app.delete('/api/session')",
+    "additionSHA256": "20f3acbffa170636d896cbfa33cc9d26c3f522b181862c33fe5012eb9db72c4d",
+    "reason": "Task40 additive client-from-web and idempotent client-delete endpoints. Original committed API bytes outside the explicit import/addition remain exact."
+  },
+  "modelsExtension": {
+    "path": "backend/app/models.py",
+    "appendSHA256": "57ceb112bde37d27485e95f070fd6751ff18b9a8846ac87d52c6b242c91e1d39",
+    "reason": "Task40 appended ClientDeletion model; original committed definitions stay byte-identical."
+  },
+  "additionalFiles": [
+    {
+      "path": "backend/migrations/versions/003_client_deletions.py",
+      "sha256": "fcad89deaebc9962bf6bd823f72e13d9a21f3adcdc8f88cc89045a660ed4a7a2",
+      "reason": "Only authorized additive client-deletion migration; original migration history stays exact."
+    }
+  ],
+  "adapters": [
+    {
+      "path": "frontend/scripts/cave-polish.mjs",
+      "reason": "Preserved original assertions with managed fixture/browser ownership and explicit Cocos engine adaptations; reviewed exact diff in task55.",
+      "edits": [
+        {
+          "before": "import { chromium } from \"playwright\";\nimport assert from \"node:assert/strict\";\nimport fs from \"node:fs/promises\";\nimport { execFileSync } from \"node:child_process\";\nimport crypto from \"node:crypto\";\nconst root = new URL(\"../../\", import.meta.url).pathname,\n  out = root + \"output/cave-polish\",\n  db = out + \"/test.db\";\nconst baseline = process.argv.includes(\"--baseline\");\nconst browser = await chromium.launch({ headless: true });\nconst checks = [],\n  errors = [],\n  shots = [],\n",
+          "after": "import {browserConfig,launchBrowser,closeBrowser} from \"../../tools/cocos-browser-config.mjs\";\nimport { chromium } from \"playwright\";\nimport assert from \"node:assert/strict\";\nimport fs from \"node:fs/promises\";\nimport { execFileSync } from \"node:child_process\";\nimport crypto from \"node:crypto\";\nconst root = new URL(\"../../\", import.meta.url).pathname;\nconst test = await browserConfig(\"cave-art\", {baseURL:\"http://127.0.0.1:5431\",directory:\"output/cave-polish\"});\nconst out=test.directory, db=test.database;\nconst requestedEngine=process.argv.find(a=>a.startsWith(\"--engine=\"))?.split(\"=\")[1];\nassert(!requestedEngine || [\"web\",\"cocos\"].includes(requestedEngine));\nconst baseline = process.argv.includes(\"--baseline\");\nconst browser = await launchBrowser(chromium,{ headless: true });\nconst checks = [],\n  errors = [],\n  shots = [],\n"
+        },
+        {
+          "before": "  await page.waitForTimeout(100);\n}\nasync function load() {\n  await page.goto(\"http://127.0.0.1:\" + (engine === \"web\" ? 5430 : 5431));\n  await page.waitForFunction(() => window.render_game_to_text);\n  if (engine === \"cocos\") {\n    await until((s) => s.loaded, \"loaded\");\n",
+          "after": "  await page.waitForTimeout(100);\n}\nasync function load() {\n  await page.goto(engine === \"web\" ? \"http://127.0.0.1:5430\" : test.baseURL);\n  await page.waitForFunction(() => window.render_game_to_text);\n  if (engine === \"cocos\") {\n    await until((s) => s.loaded, \"loaded\");\n"
+        },
+        {
+          "before": "  execFileSync(root + \"backend/.venv/bin/python\", [\n    \"-c\",\n    `import sqlite3,json,sys,time,uuid\np,key,loc,pos=sys.argv[1:];assert p.endswith('/output/cave-polish/test.db')\nc=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['inventory'].update(glow_staff=1,soup=3);s['vitality'].update(current=100,max=100);s['stamina'].update(current=100,max=100,updated_at=time.time());s['village_combat'].update(equipped='glow_staff',spark_learned=True,encounter=str(uuid.uuid4()),input_seq=0,floors={},time=0,last_tick=0,cast=None,effects=[],projectiles=[]);s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=187.5)\n${extra}\nc.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,\n",
+          "after": "  execFileSync(root + \"backend/.venv/bin/python\", [\n    \"-c\",\n    `import sqlite3,json,sys,time,uuid\np,key,loc,pos=sys.argv[1:];sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture;assert_fixture(p,['output/cave-polish/test.db'])\nc=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['inventory'].update(glow_staff=1,soup=3);s['vitality'].update(current=100,max=100);s['stamina'].update(current=100,max=100,updated_at=time.time());s['village_combat'].update(equipped='glow_staff',spark_learned=True,encounter=str(uuid.uuid4()),input_seq=0,floors={},time=0,last_tick=0,cast=None,effects=[],projectiles=[]);s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=187.5)\n${extra}\nc.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,\n"
+        },
+        {
+          "before": "    \"held attack survives receipts/lost reply, exact two hits/one loot; release adds no attack\",\n  );\n  await walk(368, 240);\n  const before = (await read()).combat.enemies[1].hp;\n  await worldClick(\n    (await read()).combat.enemies[1].x,\n",
+          "after": "    \"held attack survives receipts/lost reply, exact two hits/one loot; release adds no attack\",\n  );\n  await walk(368, 240);\n  if(engine==='cocos'){\n    // Aimed spells resolve after a windup; choose a stationary enemy phase,\n    // then leave a real gap instead of casting at overlapping moving centers.\n    const tell=await until(s=>s.combat.enemies[1].phase==='windup'&&s.combat.enemies[1].until-s.combat.time>=.6,'fresh slime telegraph before aimed spell');\n    const enemy=tell.combat.enemies[1],player=tell.savedPosition||tell.player;\n    const dx=player.x-enemy.x,dy=player.y-enemy.y;\n    const away=Math.abs(dx)>=Math.abs(dy)?(dx>0?'d':'a'):(dy>0?'s':'w');\n    await page.keyboard.down(away);await page.waitForTimeout(220);await page.keyboard.up(away);\n    const separated=await until(s=>Math.hypot(s.player.x-s.combat.enemies[1].x,s.player.y-s.combat.enemies[1].y)>=20,'real movement makes an aiming gap');\n    await fs.writeFile(out+'/spell-aim-preparation.json',JSON.stringify({freshTell:tell.combat.enemies[1],tellTime:tell.combat.time,away,player:separated.player,enemy:separated.combat.enemies[1],combatTime:separated.combat.time},null,2));\n  }\n  const before = (await read()).combat.enemies[1].hp;\n  await worldClick(\n    (await read()).combat.enemies[1].x,\n"
+        },
+        {
+          "before": "  await cdp.detach();\n}\ntry {\n  for (const which of [\"web\", \"cocos\"]) {\n    await setup(which);\n    await shot(which + (baseline ? \"-before-entry\" : \"-entry\"));\n    await seed(\"cave_1\", { x: 208, y: 344 });\n",
+          "after": "  await cdp.detach();\n}\ntry {\n  for (const which of requestedEngine ? [requestedEngine] : [\"web\", \"cocos\"]) {\n    await setup(which);\n    await shot(which + (baseline ? \"-before-entry\" : \"-entry\"));\n    await seed(\"cave_1\", { x: 208, y: 344 });\n"
+        },
+        {
+          "before": "  );\n  throw e;\n} finally {\n  await browser.close();\n}\n",
+          "after": "  );\n  throw e;\n} finally {\n  await closeBrowser(browser);\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "frontend/scripts/village-polish.mjs",
+      "reason": "Preserved original assertions with managed fixture/browser ownership and explicit Cocos engine adaptations; reviewed exact diff in task55.",
+      "edits": [
+        {
+          "before": "import { chromium } from \"playwright\";\nimport assert from \"node:assert/strict\";\nimport fs from \"node:fs/promises\";\nimport { execFileSync } from \"node:child_process\";\nimport crypto from \"node:crypto\";\nconst root = new URL(\"../../\", import.meta.url).pathname,\n  out = root + \"output/village-polish\",\n  db = out + \"/test.db\";\nconst requestedEngine = process.argv\n  .find((a) => a.startsWith(\"--engine=\"))\n  ?.split(\"=\")[1];\nassert(!requestedEngine || [\"web\", \"cocos\"].includes(requestedEngine));\nconst baseline = process.argv.includes(\"--baseline\"),\n  browser = await chromium.launch({ headless: true });\nconst checks = [],\n  shots = [],\n  errors = [],\n",
+          "after": "import {browserConfig,launchBrowser,closeBrowser} from \"../../tools/cocos-browser-config.mjs\";\nimport { chromium } from \"playwright\";\nimport assert from \"node:assert/strict\";\nimport fs from \"node:fs/promises\";\nimport { execFileSync } from \"node:child_process\";\nimport crypto from \"node:crypto\";\nconst root = new URL(\"../../\", import.meta.url).pathname;\nconst test = await browserConfig(\"village-art\", {baseURL:\"http://127.0.0.1:5435\",directory:\"output/village-polish\"});\nconst out=test.directory, db=test.database;\nconst requestedEngine = process.argv\n  .find((a) => a.startsWith(\"--engine=\"))\n  ?.split(\"=\")[1];\nassert(!requestedEngine || [\"web\", \"cocos\"].includes(requestedEngine));\nconst baseline = process.argv.includes(\"--baseline\"),\n  browser = await launchBrowser(chromium,{ headless: true });\nconst checks = [],\n  shots = [],\n  errors = [],\n"
+        },
+        {
+          "before": "  await page.waitForTimeout(150);\n}\nasync function load() {\n  await page.goto(\"http://127.0.0.1:\" + (engine === \"web\" ? 5434 : 5435));\n  if (engine === \"cocos\") {\n    await until((s) => s.loaded, \"loaded\");\n    await ccClick(\"start\");\n",
+          "after": "  await page.waitForTimeout(150);\n}\nasync function load() {\n  await page.goto(engine === \"web\" ? \"http://127.0.0.1:5434\" : test.baseURL);\n  if (engine === \"cocos\") {\n    await until((s) => s.loaded, \"loaded\");\n    await ccClick(\"start\");\n"
+        },
+        {
+          "before": "  execFileSync(root + \"backend/.venv/bin/python\", [\n    \"-c\",\n    `import sqlite3,json,sys,time\np,key,loc,pos,minute=sys.argv[1:];assert p.endswith('/output/village-polish/test.db')\nc=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=(float(minute)-s['world_clock'].get('start_minute',360))*s['world_clock'].get('day_seconds',1800)/1440)\nif s.get('village_intro'):s['village_intro']['dismissed']=True\nc.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,\n",
+          "after": "  execFileSync(root + \"backend/.venv/bin/python\", [\n    \"-c\",\n    `import sqlite3,json,sys,time\np,key,loc,pos,minute=sys.argv[1:];sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture;assert_fixture(p,['output/village-polish/test.db'])\nc=sqlite3.connect(p);s=json.loads(c.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']=loc;s['position']=json.loads(pos);s['revision']+=1;s['world_clock'].update(updated_at=time.time(),running_until=0,elapsed=(float(minute)-s['world_clock'].get('start_minute',360))*s['world_clock'].get('day_seconds',1800)/1440)\nif s.get('village_intro'):s['village_intro']['dismissed']=True\nc.execute('update players set state=? where id=?',(json.dumps(s),key));c.commit();c.close()`,\n"
+        },
+        {
+          "before": "}\nasync function actualFlow() {\n  await seed(\"overworld\", { x: 160, y: 352 });\n  await worldClick(160, 208);\n  await until((s) => routeOf(s).length > 0, \"route starts\");\n  await shot(engine + \"-route\");\n  await page.keyboard.press(\"Escape\");\n",
+          "after": "}\nasync function actualFlow() {\n  await seed(\"overworld\", { x: 160, y: 352 });\n  // Aim inside the real facade rather than its floating-point lower edge.\n  await worldClick(160, 192);\n  await until((s) => routeOf(s).length > 0, \"route starts\");\n  await shot(engine + \"-route\");\n  await page.keyboard.press(\"Escape\");\n"
+        },
+        {
+          "before": "  );\n  assert.equal((await read()).location, \"overworld\");\n  check(\"selected route is visible and Escape stops without entering\");\n  await worldClick(160, 208);\n  await until(\n    (s) => s.location === \"home\" && [\"world\", \"explore\"].includes(s.mode),\n    \"actual walk/enter\",\n",
+          "after": "  );\n  assert.equal((await read()).location, \"overworld\");\n  check(\"selected route is visible and Escape stops without entering\");\n  // Aim inside the real facade rather than its floating-point lower edge.\n  await worldClick(160, 192);\n  await until(\n    (s) => s.location === \"home\" && [\"world\", \"explore\"].includes(s.mode),\n    \"actual walk/enter\",\n"
+        },
+        {
+          "before": "  await until((s) => clockOf(s).elapsed >= before + 37, \"actual short rest\");\n  assert.equal((await read()).inventory.seed, 6);\n  await shot(engine + \"-rest\");\n  await close();\n  check(\n    \"bed action uses actual short-rest settlement without changing possessions\",\n  );\n",
+          "after": "  await until((s) => clockOf(s).elapsed >= before + 37, \"actual short rest\");\n  assert.equal((await read()).inventory.seed, 6);\n  await shot(engine + \"-rest\");\n  if(engine==='cocos')await until(s=>s.mode==='world','rest returns to world');else await close();\n  check(\n    \"bed action uses actual short-rest settlement without changing possessions\",\n  );\n"
+        },
+        {
+          "before": "  );\n  throw e;\n} finally {\n  await browser.close();\n}\n",
+          "after": "  );\n  throw e;\n} finally {\n  await closeBrowser(browser);\n}\n"
+        }
+      ]
+    }
+  ],
+  "scope": "Preservation checks require original Git history, independently of the Cocos runtime. No archive/delete/default cutover or new visual approval is implied."
+}

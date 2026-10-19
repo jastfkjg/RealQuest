@@ -1,5 +1,11 @@
 # RealQuest Asset Plan and Provenance
 
+## Cocos lossless terrain delivery — 2026-10-18
+
+The original3840×2560 terrain PNG remains unchanged. A separately generated lossless/exact WebP reduces its file from3,358,715 to338,120 bytes with every decoded RGBA byte identical. `tools/build_cocos_textures.py` pins Pillow12.3.0/libwebp1.6.0, verifies source provenance and pixels, and supports a read-only check. Full paths, hashes, dimensions and processing settings are in `cocos-lossless-textures-v1.json`; `asset-manifest.json` records the binding. No new artwork, font, source-pack download, image resizing or palette change.
+
+Only Web with actual WebP capability loads this derivative under the existing terrain presentation key; other platforms/capability-negative fixtures use the retained PNG. Both files are shipped, so startup HTTP bytes decrease while total package bytes increase. GPU texture memory is unchanged. Actual three-engine decode/fallback/fault checks and fixed network-budget evidence, including failed baseline and current candidate limits, live in [task70](../tasks/70-cocos-network-budget.md). This codec change adds no owner visual approval or device/browser certification.
+
 ## Cocos functional panels and combat — phases4–5
 
 The binding manifest now records10 canonical code modules and the same52 unchanged PNGs/2,199,403bytes. No new raster, font, download or source processing. Linen/timber panels, selection/target indicators and cave ground are native Cocos Graphics. Monster silhouettes and authoritative telegraphs port existing `frontend/src/game/cave.ts` shapes; no new combat asset pack or animation is claimed. Equipment/loot entries without approved icons use explicit native text glyphs. These and prior provisional world/travel shapes remain art gaps before release. Owner actual-render approval stays open; see [task36](../tasks/36-cocos-features-combat.md).
@@ -310,3 +316,35 @@ Original code-native artwork in `shared/game/caveArt.ts`: deterministic stone sl
 Reuses original `villageGround.ts`, `village.ts`, `interiors.ts` and existing generated village/interior/market sprites. `tools/build_local_scene_art.mjs` executes their actual drawing functions offline with real image dimensions; no screenshot crops, new AI input, external pack, font, audio or source-image edits. Seven unique PNG derivatives (3,940,084bytes) under `assets/derived/local-scenes/` provide one3840×2560 village ground, one960×736 room floor and five measured rug sizes. Matching sprite-placement data preserves separate furniture, original anchors/depths and actual map geometry. Exact source/script/layout/PNG hashes and dimensions are in `local-scene-art-v1.json`; `--check` reproduces every byte.
 
 Cocos copies these derivatives plus the existing previously omitted crates/flowers/chest/rune and backpack UI icon. Total64 runtime PNGs/6,200,961bytes and14 code bindings. Old52 PNGs remain byte-identical. The Web retains its original code-rendered scene artwork; Cocos-only derivatives do not enter its bundle. The expanded163-image audit and genuine Creator binding checks pass. Candidate render/feel approval, mobile payload/VRAM/performance and remaining farming/travel/advanced-item artwork remain separate work. Evidence: task38.
+
+
+## Cocos map/encounter feedback refinement — 2026-10-17
+
+The owner requested an actual map and more game-like popups/controls after the M5/M6 index candidate. Reuse the unchanged original world-map terrain PNG and all five existing resident portraits. Six byte-identical PNG bindings are recorded in clients/cocos/asset-bindings.json; sources retain their existing prompts/licenses/hashes in this manifest. No new generation, source edits, purchase, font, sound or dependency. Native coordinate projection, labels, leader lines and scoped tactile controls are code. Actual render remains a new checkpoint; task44 records review evidence.
+
+
+## Cocos resident encounter feedback — 2026-10-17
+
+Task45 reuses the exact existing Cocos portrait, item and playable scene bindings. No PNG binding, source modification, generated input, font, sound, dependency or vendor acquisition was added. World name labels, native answer choices, gift tray and pointer states are code. Owner review is a new checkpoint; previous map/encounter revisions remain explicitly unapproved.
+
+
+## Cocos 行囊与快捷栏 — 2026-10-17
+
+Task47复用已批准原Web行囊的原始1254×1254透明PNG（source SHA256见manifest），以原220/180/200/180源像素九宫格装饰原生行囊；此次Cocos实际画面仍是新检查点。原金币64px PNG原样绑定。九个原工程SVG物品符号从原样抽取的shared/game/items.ts离线渲染为64×64 PNG，未改变设计；tools/build_inventory_art.mjs在finally关闭浏览器，--check复现全部字节，源SVG/PNG/脚本哈希在cocos-inventory-icons-v1.json。五个既有物品图仍不变；共105条Cocos源/素材绑定。没有新生成、外部素材、字体、音效或源PNG修改，不把完整源包送入运行时。原生文字、图标、数量、口袋、按钮状态与确认引用真实数据，不烘焙中文或物品到布袋里。
+
+
+## Cocos 旅途偏好与提醒 — 2026-10-17
+
+Task49只复用已有book PNG、原木/纸/苔色令牌与原生按钮，不新增/修改位图、字体或音频文件。轻量WebAudio合成音沿用原工程frontend/src/game/feel.ts的脚步/交互/物品/奖励频率与短包络；完整原文件哈希在asset-manifest.json。声音节点结束、静音/失焦和销毁均释放；玩家已确认本轮偏好页/操作/音量音色；确认仅限本次检查点，节点运行测试不等于其他设备听觉批准。只读重要提醒和全屏状态是代码，文字不烘焙进美术。106条Cocos绑定包括新增共用偏好/提醒纯逻辑，原图字节保持不变。
+
+
+## Cocos 工具依赖归属 — 2026-10-17
+
+Task50将两个离线导出器的TypeScript/esbuild/Playwright归属改为根有锁工具，版本和已有前端锁相同。local-scene-art-v1.json的对应inputs脚本SHA与cocos-inventory-icons-v1.json的script_sha256据此更新；7张场景PNG/7布局/43绑定、9张物品PNG在无frontend安装的源码副本中逐字节复现。没有修改源PNG、SVG设计、尺寸、切片或运行时图像，也无新外部资产/字体/音频。源Web绘制器和素材仍保留，长期归属继续按T4梳理，不能删除这些输入目录。
+
+
+## Cocos 输入归属与完整读取集合 — 2026-10-17
+
+Task51按当前106绑定（81PNG/25共享模块）登记长期归属、逐文件哈希/PNG尺寸、既有来源和消费者。策略在docs/migration/cocos-source-policy.json，生成记录在cocos-source-inventory.json；旧frontend/public/assets/hearthwood中的素材仍是共享/Cocos美术工具的冻结输入，停止发布原Web不能删除它们。5个旧Web绘制/数据模块、2个原共享行为测试均单独归属，不将前端应用构建视为其依赖。真正归档/删除前必须迁出并验证原字节/来源与双端行为。
+
+场景导出器以实际esbuild模块输入和Python app模块读取补齐传递导入，全部实际读入图片也进入清单；输入从47扩至79项。--refresh-manifest只允许在7PNG/7布局/43绑定逐字节一致时补来源记录，不重写PNG/布局。Pillow12.3.0是现有原PNG整理工具运行时，单独固定在tools/requirements-art.lock.txt，未安装或升级后端依赖。无新素材、外部下载、字体、声音或视觉批准。
