@@ -2,7 +2,7 @@
 
 后续[任务99](docs/tasks/99-cocos-keyboard-coverage.md)补现有键盘回归：11检查、15轮正反向Tab/142个可用控件位置及草稿恢复通过，含740×360；游戏包/试玩不变，系统输入和完整V5仍按清单验收。
 
-当前可整体试玩的Cocos候选已统一为 [5443](http://127.0.0.1:5443/)（独立新档）；原 [5442](http://127.0.0.1:5442/) 保留已有存档，仍是I3。功能、启动/测试命令、封包和剩余验收见[整体候选交付](docs/cocos-handoff.md)。本轮24组单元/232项后端通过，基础CI与真实SDK构建已拆开，未提交或执行远端CI。按用户要求整体反馈，不再逐屏等待；原Web代码、默认启动与发布保持。
+当前可整体试玩的Cocos候选已统一为 [5443](http://127.0.0.1:5443/)（独立新档）；原 [5442](http://127.0.0.1:5442/) 保留已有存档，仍是I3。功能、启动/测试命令、封包和剩余验收见[整体候选交付](docs/cocos-handoff.md)。[任务104](docs/tasks/104-cocos-hosted-ci.md)已获授权提交/推送候选分支，真实GitHub托管基础CI通过24模块/232后端及干净检出，T3完成；SDK构建CI仍未执行。按用户要求整体反馈，不再逐屏等待；main、原Web代码、默认启动与发布保持。
 
 <details>
 <summary>此前工程与验证记录（按各任务当时范围，当前入口以上方交付页为准）</summary>
@@ -35,7 +35,7 @@
 
 工作区[首领取景J3候选](docs/tasks/76-cocos-combat-framing.md)已完成[当前27套全量回归](docs/tasks/77-cocos-j3-full-regression.md)：一次172组/702份PNG，源与构建一致，所属自动化已退出。5442仍保留I3供原复核；预览更新被自动审批拒绝，尚未中断或切换，待明确允许。实际CI/系统/实机/生产和其余验收仍开放。
 
-网络预算已有正式入口：`npm run cocos:test:network -- --artifact output/<release封包>`。固定七样本的启动/缓存/同档/唯一学习记录必须全部通过，已接到候选工作流上传前；默认Chromium和900输入独立源码副本的Chrome各七样本、取消清理及默认runner生命周期通过。命令与本轮范围见[任务72](docs/tasks/72-cocos-network-regression.md)，尚未触发远端CI；5442游戏I3和原存档保持。
+网络预算已有正式入口：`npm run cocos:test:network -- --artifact output/<release封包>`。固定七样本的启动/缓存/同档/唯一学习记录必须全部通过，已接到SDK候选工作流上传前；默认Chromium和900输入独立源码副本的Chrome各七样本、取消清理及默认runner生命周期通过。命令与本轮范围见[任务72](docs/tasks/72-cocos-network-regression.md)，该SDK远端层仍未执行，任务104普通基础CI不含网络矩阵；5442游戏I3和原存档保持。
 
 2026-10-18当前试玩为I3：地表逐像素无损编码使首屏HTTP下载约减少23%，原固定预算的七次冷/热/同档链通过；重连刷新期间误提交旧坐标的竞态已修复。三测试引擎纹理/回退、规范会话、真实Nginx交付和独立重建通过，5442已同库更新。详见[任务70](docs/tasks/70-cocos-network-budget.md)、[任务71](docs/tasks/71-cocos-reconnect-position.md)。最新[任务75](docs/tasks/75-cocos-current-full-regression.md)当前I3一次26套Cocos浏览器回归通过（165组/674份PNG），源/后端/构建一致、所属测试资源已退出；可选原Web比较单独登记。实机、实际CI/生产和其余退役门槛仍开放。
 

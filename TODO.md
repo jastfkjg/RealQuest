@@ -1,5 +1,7 @@
 # RealQuest 后续待完成事项
 
+[任务104](docs/tasks/104-cocos-hosted-ci.md)按明确授权提交并推送候选分支，修复真实CI发现的runner上下文错误，GitHub托管Ubuntu24.04通过24模块/232后端/来源保护/干净检出，回执已核验。T3完成，现16/22项完成；T2、V2、V4、V5、V6、V7继续，SDK作业未执行、main和原Web发布保持。
+
 [任务103](docs/tasks/103-cocos-ci-bootstrap.md)修补首次候选分支CI入口：限定 `codex/cocos-ci-*` push只运行基础verify，SDK仍仅main显式手动。十个静态事件/条件、九shell、来源/原保护通过，当前补丁重新封存。真实CI需Git提交/推送授权；原Web、默认分支/发布和玩家库保持。
 
 [任务102](docs/tasks/102-cocos-source-review.md)已准备当前候选的限定范围提交前补丁，基准归档应用、正常同步、原Web保护与J3指纹核验通过；真实Git工作树/暂存区/配置保持，无提交推送。真实CI、可连接物理设备和生产条件仍缺，整体玩家反馈集中到最后；交付材料见整体候选与 `output/cocos-source-review/latest.json`。

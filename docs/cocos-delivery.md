@@ -120,13 +120,15 @@ npm run cocos:test:delivery -- --artifact output/cocos-candidate
 
 `.github/workflows/cocos.yml` 是独立Cocos工作流，权限只读，不改原 `ci.yml` 或正式部署。[任务98](tasks/98-cocos-overall-candidate.md)将其分成两层：普通 `verify` 在GitHub托管Ubuntu24.04上执行有锁安装、基础工具诊断、同步/来源/保护、24组单元和后端测试，不要求Creator、Nginx或浏览器二进制。它始终上传本轮单元日志与后端JUnit报告（若已生成）。
 
-[任务103](tasks/103-cocos-ci-bootstrap.md)补首次接入入口：获授权推送 `codex/cocos-ci-*` 分支后可直接触发基础verify，无需先合并默认分支。[首次手动触发限制](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch)仍适用，只把新的纯手动文件推到候选分支不足以首次dispatch。main/其他分支/tag push不属于新入口，没有新增PR或发布触发。实际提交推送尚未获授权，也没有远端执行结果。
+[任务103](tasks/103-cocos-ci-bootstrap.md)补首次接入入口：推送 `codex/cocos-ci-*` 分支可直接触发基础verify，无需先合并默认分支。[首次手动触发限制](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch)仍适用，只把新的纯手动文件推到候选分支不足以首次dispatch。main/其他分支/tag push不属于新入口，没有新增PR或发布触发。后续任务104已获明确Git授权，并完成候选分支和基础CI验证，详见下文。
 
 真实引擎 `candidate` 必须等 `verify` 成功，且仅在main手动勾选 `build_candidate` 时执行，默认不勾选。它仍要求明确注册的 `self-hosted,cocos-3.8.8` 运行器、有效官方Creator安装/使用条件、Python/Node、已安装Nginx与Chromium系统依赖，以及仓库变量 `COCOS_CREATOR` 路径；不会安装SDK、修改账号/许可证或启动宿主Docker。
 
 两层均检出完整历史并检查工作树干净。真实候选层保留源/真实类型/单元/后端、release构建、封包、Nginx交付及生命周期、当前27套浏览器回归和七样本网络预算；全部成功后才上传独立 `realquest-cocos-candidate`，不推送镜像、不调用原发布器、不上传测试库或个人资料。
 
-文件已准备不等于CI已运行。任务98的YAML/9段shell语法、本机24组单元及232项后端通过，只证明本机结果；当前工作树尚未提交，未触发远端工作流，Ubuntu托管执行与真实SDK运行器均未验证，T2/T3实际CI门槛保留。原生产发布器仍只接受原 `ci.yml` 的受核验镜像artifact，不会误接纳此静态候选。后续接入应保留repo/revision/run/attempt与不可变镜像校验，不能靠改一个artifact名称跳过来源检查。
+任务98的原本地结果仍对应其快照。[任务104](tasks/104-cocos-hosted-ci.md)获明确授权后，候选分支f584685已在真实GitHub托管Ubuntu24.04通过24模块、232后端、来源保护和工作树干净断言，回执已下载核验；T3实际干净检出基础链完成。首轮job env误用runner导致无job失败，已将该变量移到实际构建step env并通过actionlint及实际基础CI。SDK job仍skipped，不作为真实Creator构建CI或生产通过，T2继续开放。
+
+原生产发布器仍只接受原 `ci.yml` 的受核验镜像artifact，不会误接纳此静态候选。后续接入应保留repo/revision/run/attempt与不可变镜像校验，不能靠改一个artifact名称跳过来源检查。没有main合并、正式部署或SDK运行器注册。
 
 入口回退只切静态站点/镜像与已保留资源，不能删除Cookie/localStorage、创建替代旅程或倒灌数据库。生产库、迁移、HTTPS/Caddy缓存、多架构容器、外部切换和备份恢复演练继续由V1/V6/V7验收；本轮Nginx/SQLite夹具不替代真实部署。没有自动清库、downgrade或 `down -v` 操作。
 
@@ -143,7 +145,7 @@ REALQUEST_FIREFOX_EXECUTABLE="/absolute/path/to/firefox" npm run cocos:test:netw
 
 `--browser firefox`要求显式原生Firefox二进制，使用BiDi并记录实际UA/版本。每次先自动校准共享双向回环代理，再使用`tools/cocos-firefox-network-budget-v1.json`的相同数字参考；缓存来自原生ResourceTiming，HTTP有效载荷来自代理实际write。它与CDP的条件/字节语义分开，不模拟TLS/DNS/丢包/内核链路或手机。校准、来源检查、数据、性能或清理失败均不能通过；不依赖忽略的output实验脚本。实现与本轮复验证据见[任务93](tasks/93-cocos-canonical-firefox-network.md)。
 
-报告/截图位于新的`output/cocos-regression/run-*/suites/network/`；finally关闭所属浏览器、API与Nginx组，取消/错误/清理失败均不能给出通过。候选工作流在上传前调用相同命令，当前尚未提交/运行远端CI。实现、真实结果和边界见[任务72](tasks/72-cocos-network-regression.md)，原测量与失败基线见[任务70](tasks/70-cocos-network-budget.md)。
+报告/截图位于新的`output/cocos-regression/run-*/suites/network/`；finally关闭所属浏览器、API与Nginx组，取消/错误/清理失败均不能给出通过。SDK候选工作流在上传前调用相同命令，该远端SDK层仍未执行；任务104通过的普通基础CI不包含网络矩阵。实现、真实结果和边界见[任务72](tasks/72-cocos-network-regression.md)，原测量与失败基线见[任务70](tasks/70-cocos-network-budget.md)。
 
 [任务87](tasks/87-cocos-native-edge-network.md)补当前J3官方Edge155的七份固定网络样本，10Mbps冷启动13.46–13.58秒、1.6Mbps58.09–58.16秒、warm2.53–2.59秒，HTTP10,264,103/301字节；同档/首次移动/唯一学习结算全部通过。原预算SHA不变，实际官方包/前后签名、三相关单元、426冻结输入/QA库/截图/清理均有证据。它只补本机Edge工程参考，不将其他目标、正式生产预算或实际CI变为已验收。
 
