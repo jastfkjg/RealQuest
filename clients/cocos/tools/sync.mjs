@@ -47,7 +47,7 @@ const art = ['home','workshop','library','guild','oak','oak-alt','fir','birch','
 for (const name of art) await bind(`frontend/public/assets/hearthwood/village/${name}.png`, `assets/resources/village/${name}.png`);
 await bind('frontend/public/assets/hearthwood/market/shop.png','assets/resources/village/shop.png');
 await bind('frontend/public/assets/hearthwood/market/counter.png','assets/resources/interiors/market-counter.png');
-for (const id of ['lia','noah','mira']) await bind(`frontend/public/assets/hearthwood/residents/${id}-actor.png`, `assets/resources/village/${id}-actor.png`);
+for (const id of ['lia','noah','mira','adu','lanya']) await bind(`frontend/public/assets/hearthwood/residents/${id}-actor.png`, `assets/resources/village/${id}-actor.png`);
 for (const id of ['wood','stone','seed','crop','plank','backpack','gold']) await bind(`frontend/public/assets/hearthwood/detail/items/${id}.png`, `assets/resources/items/${id}.png`);
 for (const id of ['notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed']) await bind(`frontend/public/assets/hearthwood/detail/interiors/${id}.png`, `assets/resources/interiors/${id}.png`);
 for (let i=1;i<6;i++) await bind(`frontend/public/assets/hearthwood/village/actor-${i}.png`, `assets/resources/village/actor-${i}.png`);

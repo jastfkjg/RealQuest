@@ -2,6 +2,8 @@
 
 ## Scope and source of truth
 
+From 2026-10-20 onward, Cocos is the sole client source of truth for implementation, playtesting, and acceptance. Do not add React/Phaser work or legacy-client compatibility gates to new tasks; shared backend and game rules remain in scope.
+
 RealQuest has two connected experiences: a playable cozy pixel RPG and a practical real-life growth interface. Preserve both. Do not turn the world into a dashboard or force life recording through in-world navigation.
 
 Before changing visual or interaction code, read:
@@ -15,7 +17,7 @@ These documents describe intended behavior; they do not establish that any imple
 
 ## Establish the actual environment
 
-Inspect the Git status, README, package manifests, lockfiles, Python configuration, database migrations, frontend entry points, and Phaser version. Reuse the established package manager, scripts, ports, and dependency versions. Do not assume `npm`, `pnpm`, or a particular test command exists.
+Inspect the Git status, README, package manifests, lockfiles, Python configuration, database migrations, Cocos entry points, build provenance, and Creator version. Reuse the established package manager, scripts, ports, and dependency versions. Do not assume `npm`, `pnpm`, or a particular test command exists.
 
 Find the real development and test commands and record them in the task report. Start services in the authorized environment when possible. A URL on the owner's localhost is not automatically reachable from another runtime. Report unavailable services accurately; do not claim browser testing when only a build ran.
 
@@ -55,7 +57,7 @@ Keep source packs out of runtime bundles. Changes to sprites, palettes, or atlas
 
 Use explicit input ownership for world play, dialogs, targeting, and Life Mode. Ignore gameplay shortcuts while text inputs, editable content, or IME composition own focus. Clear held keys on blur and mode change. Escape should dismiss the topmost relevant context and return focus appropriately.
 
-Avoid duplicate Phaser instances and listeners, but do not mandate keeping the same instance alive. A clean remount is acceptable if state, focus, timers, and performance remain correct. Do not synchronize every frame of player movement through React state.
+Avoid duplicate Cocos instances and listeners, but do not mandate keeping the same instance alive. A clean remount is acceptable if state, focus, timers, and performance remain correct. Do not synchronize every frame of player movement through UI state.
 
 Preserve authoritative inventory, quest, reward, and world-state transitions. UI selection can be immediate; resource mutations must reconcile with the server. Handle pending actions, retries, and rejection without duplicate rewards or item consumption. Keep saves and stable identifiers compatible.
 

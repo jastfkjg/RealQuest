@@ -10,6 +10,7 @@ export const browserSuites=[
  module('session','clients/cocos/tools/smoke-session.mjs','session-result.json'),
  module('world','clients/cocos/tools/smoke.mjs','smoke-result.json'),
  module('story','clients/cocos/tools/smoke-phase45.mjs','smoke-result.json'),
+ module('chapter-friction','clients/cocos/tools/smoke-chapter-friction.mjs'),
  module('depths','clients/cocos/tools/smoke-depths.mjs','depths-result.json',{timeoutMs:420000}),
  module('landscape','clients/cocos/tools/smoke-landscape.mjs','landscape-result.json'),
  module('life','clients/cocos/tools/smoke-life-records.mjs'),

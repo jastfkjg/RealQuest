@@ -49,6 +49,7 @@ export class FeaturePanels {
  get lifeTab(){return this.lifePanels.lifeTab;}
  npcTab='talk'; page=0; detailPage=0;
  questId=''; weaponId='stone_sword'; taskId='';
+ private questListPer=0;
  amount='1'; orderId=''; tradeItem='seed'; tradeSide='buy';
  lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';shopTab='trade';gearTab='obtain';
  private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
@@ -94,7 +95,7 @@ export class FeaturePanels {
  }
  private list(h:PanelHost,f:Frame,entries:{id:string;label:string}[],selected:string,choose:(id:string)=>void,width:number){
   const per=Math.max(1,Math.floor((f.bottom-f.top-52)/52)),pages=Math.max(1,Math.ceil(entries.length/per));this.page=Math.min(this.page,pages-1);
-  entries.slice(this.page*per,(this.page+1)*per).forEach((e,i)=>h.button('select-'+e.id,e.label,f.x+24,f.top+i*52,width,44,()=>{choose(e.id);this.detailPage=0;this.confirm='';h.redraw();},h.busy,selected===e.id));
+  entries.slice(this.page*per,(this.page+1)*per).forEach((e,i)=>{const label=h.button('select-'+e.id,e.label,f.x+24,f.top+i*52,width,44,()=>{choose(e.id);this.detailPage=0;this.confirm='';h.redraw();},h.busy,selected===e.id);if(e.label.includes('\n'))label.lineHeight=20;});
   if(!entries.length)h.text('EmptyList','这里还没有记录',f.x+24,f.top,width,48,16,C.muted);
   if(pages>1)h.button('list-next',`${this.page+1}/${pages} · 下一页`,f.x+24,f.bottom-44,width,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy);
  }
@@ -110,17 +111,23 @@ export class FeaturePanels {
   if(!q){h.text('NoQuests','这里暂时没有剧情委托。',f.x+24,f.top,f.w-48,60);return;}this.questId=q.id;
   const lw=Math.round(f.w*.30),dx=f.x+lw+48,dw=f.w-lw-72;
   h.box('NoticeTimber',f.x+16,f.top-8,lw+16,f.bottom-f.top+18,C.wood,8);
-  this.list(h,f,entries.map(q=>({id:q.id,label:`${questStatuses[q.status]} · ${q.title}`})),q.id,id=>this.questId=id,lw);
-  h.text('QuestName',q.title,dx,f.top,dw,36,22);
-  if(!f.compact){const pages=textPages(q.description,Math.max(12,Math.floor(dw/16)-2),2);h.text('QuestDescription',pages[0]+(pages.length>1?'…':''),dx,f.top+42,dw,64,16,C.muted);}
-  const start=f.top+(f.compact?36:116),per=f.compact?1:Math.max(1,Math.floor((f.bottom-start-84)/26)),pages=Math.max(1,Math.ceil(q.objectives.length/per));this.detailPage%=pages;
-  q.objectives.slice(this.detailPage*per,(this.detailPage+1)*per).forEach((text,i)=>{const n=this.detailPage*per+i;h.text('Objective-'+n,`${q.checks[n]?'✓':'○'} ${text}`,dx,start+i*26,dw,26,15,q.checks[n]?C.moss:C.ink);});
+  const category=(q:Quest)=>q.kind==='main'?'主线':'支线';
+  const tracked=h.state.tracked_quest===q.id,trackable=['active','ready'].includes(q.status);
+  const perPage=Math.max(1,Math.floor((f.bottom-f.top-52)/52));
+  if(this.questListPer!==perPage){this.page=Math.floor(entries.indexOf(q)/perPage);this.questListPer=perPage;}
+  this.list(h,f,entries.map(q=>({id:q.id,label:`${category(q)} · ${h.state.tracked_quest===q.id?'追踪中':questStatuses[q.status]}\n${q.title}`})),q.id,id=>this.questId=id,lw);
+  h.text('QuestName',`${category(q)} · ${q.title}`,dx,f.top,dw,36,22);
+  h.text('QuestTracking',`${questStatuses[q.status]} · ${tracked?'当前追踪':q.status==='available'?'接取后保留当前追踪':trackable?'尚未追踪，可手动切换':q.kind==='side'?'可选事项':'旅程主线'}`,dx,f.top+36,dw,26,14,tracked?C.moss:C.muted);
+  if(!f.compact){const pages=textPages(q.description,Math.max(12,Math.floor(dw/16)-2),2);h.text('QuestDescription',pages[0]+(pages.length>1?'…':''),dx,f.top+68,dw,64,16,C.muted);}
+  const start=f.top+(f.compact?64:138),per=f.compact?1:Math.max(1,Math.floor((f.bottom-start-84)/26)),pages=Math.max(1,Math.ceil(q.objectives.length/per));this.detailPage%=pages;
+  if(f.compact){const i=this.detailPage;h.button('objectives-next',`${q.checks[i]?'✓':'○'} ${q.objectives[i]}${pages>1?` · ${i+1}/${pages}`:''}`,dx,start,dw,44,()=>{this.detailPage=(this.detailPage+1)%pages;h.redraw();},h.busy||pages===1);}
+  else q.objectives.slice(this.detailPage*per,(this.detailPage+1)*per).forEach((text,i)=>{const n=this.detailPage*per+i;h.text('Objective-'+n,`${q.checks[n]?'✓':'○'} ${text}`,dx,start+i*26,dw,26,15,q.checks[n]?C.moss:C.ink);});
   h.text('QuestReward','回礼 · '+costText(q.reward)+` · ${q.xp} EXP`,dx,f.bottom-30,dw,28,14,C.muted);
-  if(pages>1)h.button('objectives-next',`目标 ${this.detailPage+1}/${pages}`,dx,f.bottom-76,Math.min(160,dw),44,()=>{this.detailPage=(this.detailPage+1)%pages;h.redraw();});
+  if(pages>1&&!f.compact)h.button('objectives-next',`目标 ${this.detailPage+1}/${pages}`,dx,f.bottom-76,Math.min(160,dw),44,()=>{this.detailPage=(this.detailPage+1)%pages;h.redraw();});
   const giverObject=currentMap(h.world,h.state,h.now).objects.find(o=>o.id===q.giver),near=!!giverObject&&Math.hypot(giverObject.x-h.state.position.x,giverObject.y-h.state.position.y)<=72;
   const action=q.status==='available'?'quest_accept':q.status==='ready'?'quest_claim':q.status==='active'?'track_quest':null;
   const actionWidth=(dw-16)/3,footer=f.y+f.h-62;
-  h.button('quest-action',q.status==='available'?'接取委托':q.status==='ready'?'交付领取':q.status==='active'?'追踪委托':questStatuses[q.status],dx,footer,actionWidth,44,()=>action&&h.send(action,{quest_id:q.id}),h.busy||!action||(action!=='track_quest'&&!near),true);
+  h.button('quest-action',q.status==='available'?`接取${category(q)}`:q.status==='ready'?'交付领取':q.status==='active'?(tracked?'正在追踪':'追踪此委托'):questStatuses[q.status],dx,footer,actionWidth,44,()=>action&&h.send(action,{quest_id:q.id}),h.busy||!action||(action==='track_quest'?tracked:!near),true);
   const target=questTarget(q,h.state);h.button('quest-mark',near?'标记目标':'标记委托人',dx+actionWidth+8,footer,actionWidth,44,()=>target&&h.mark(target,q.title),!target||h.busy);
   h.button('quest-read','阅读原文',dx+(actionWidth+8)*2,footer,actionWidth,44,()=>h.go('quest-story'),h.busy);
  }
@@ -201,10 +208,14 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
    h.button('sell-gear',this.confirm===this.weaponId?'确认出售这一件':`出售一件 · +${price} 金币`,dx,f.y+f.h-62,dw,44,()=>{if(this.confirm===this.weaponId)void h.send('gear_sell',{target:'armory_counter',item:this.weaponId}).then(ok=>{if(ok){this.confirm='';h.redraw();}});else{this.confirm=this.weaponId;h.redraw();}},h.busy||soup||owned<1,true);return;
   }
   const price=soup?8:weapon.price;
+  const canEquip=!soup&&owned>0;
   if(f.compact&&!soup)h.text('CraftShortfall',weapon.craft_reasons[0]||'蓝图条件已满足',dx,f.top+86,dw,26,14,C.muted);
-  if(!f.compact)h.text('CraftRequirements',soup?'购买后放入行囊，按 R 或恢复按钮饮用。':`打造材料 · ${costText(weapon.costs)}\n${weapon.craft_reasons.join('；')||'材料与能力已满足，可制作。'}`,dx,f.top+132,dw,100,16,C.muted);
-  h.button('buy-gear',`购买 · ${price} 金币`,dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send('gear_buy',{target:'armory_counter',item:this.weaponId}),h.busy||(h.state.inventory.gold||0)<price,true);
-  h.button(soup?'gear-equipment':'craft-gear',soup?'查看装备':'按蓝图打造',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>soup?h.go('equipment'):h.send('gear_craft',{target:'armory_counter',item:this.weaponId}),h.busy||(!soup&&weapon.craft_reasons.length>0));
+  if(!f.compact)h.text('CraftRequirements',soup?'购买后放入行囊，按 R 或恢复按钮饮用。':`打造材料 · ${costText(weapon.costs)}\n${weapon.craft_reasons.join('；')||'材料与能力已满足，可制作。'}`,dx,f.top+112,dw,72,16,C.muted);
+  if(canEquip&&!f.compact)h.text('ArmoryEquippedState',equipped===this.weaponId?'这件武器已装备':`持有 ${owned} 件 · 当前装备：${equipped?itemNames[equipped]:'尚未装备'}`,dx,f.top+190,dw,28,16,C.muted);
+  const bw=(dw-(canEquip?24:12))/(canEquip?3:2),footer=f.y+f.h-62;
+  h.button('buy-gear',`购买 · ${price} 金币`,dx,footer,bw,44,()=>h.send('gear_buy',{target:'armory_counter',item:this.weaponId}),h.busy||(h.state.inventory.gold||0)<price,!canEquip);
+  h.button(soup?'gear-equipment':'craft-gear',soup?'查看装备':'按蓝图打造',dx+bw+12,footer,bw,44,()=>soup?h.go('equipment'):h.send('gear_craft',{target:'armory_counter',item:this.weaponId}),h.busy||(!soup&&weapon.craft_reasons.length>0));
+  if(canEquip)h.button('armory-equip',equipped===this.weaponId?'已装备':'装备此武器',dx+(bw+12)*2,footer,bw,44,()=>h.send('gear_equip',{item:this.weaponId}),h.busy||equipped===this.weaponId,true);
  }
  private spell(h:PanelHost,f:Frame){
   const learned=!!h.state.combat?.spark_learned,magic=h.state.knowledge_growth?.magic||0;

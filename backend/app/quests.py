@@ -14,6 +14,8 @@ QUESTS = [
     {'id': 'wide_world', 'title': '小路之外的风景', 'giver': 'guild_board', 'giver_name': '公会委托台', 'description': '去南方看看湖泊与采石场。新世界就在地图的边缘之外。', 'objectives': ['发现风铃湖', '发现旧采石场'], 'reward': {'gold': 40, 'seed': 5}, 'xp': 20, 'attribute': 'strength', 'requires': None},
 ]
 
+MAIN_QUESTS = {'settle_in', 'leave_valley'}
+
 def progress(state, quest_id):
     stats = state.get('stats', {})
     events = state['events']
@@ -45,6 +47,7 @@ def quest_views(state):
         status = stored.get('status', 'available' if unlocked else 'locked')
         if status == 'active' and all(checks):
             status = 'ready'
-        entry.update(status=status, checks=checks, accepted_at=stored.get('accepted_at'))
+        entry.update(kind='main' if entry['id'] in MAIN_QUESTS else 'side',
+                     status=status, checks=checks, accepted_at=stored.get('accepted_at'))
         result.append(entry)
     return result

@@ -2201,5 +2201,32 @@
       "Firefox157.0",
       "Playwright WebKit27.2"
     ]
+  },
+  "cocos_chapter1_arrival": {
+    "date": "2026-10-20",
+    "scope": "Cocos South Gate Street, inn entry and existing travel residents",
+    "new_raster_assets": [],
+    "new_fonts_audio_downloads": [],
+    "reused_unchanged": [
+      "frontend/public/assets/hearthwood/village/home.png",
+      "frontend/public/assets/hearthwood/market/shop.png",
+      "frontend/public/assets/hearthwood/market/counter.png",
+      "frontend/public/assets/hearthwood/village/board.png",
+      "frontend/public/assets/hearthwood/village/fence.png",
+      "frontend/public/assets/hearthwood/village/lantern.png",
+      "frontend/public/assets/hearthwood/detail/interiors/planter.png",
+      "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "frontend/public/assets/hearthwood/residents/lanya-actor.png"
+    ],
+    "provenance_manifests": [
+      "docs/art/village-art-v2.json",
+      "docs/art/market-art-v1.json",
+      "docs/art/detail-art-v3.json",
+      "docs/art/departure-art-v1.json"
+    ],
+    "native_geometry": "Street paving, masonry, gate piers, door step and sign boards in clients/cocos/assets/scripts/arrivalScene.ts; Chinese remains native labels. No collision, position, map or object identifier changes.",
+    "bindings": "clients/cocos/asset-bindings.json",
+    "report": "docs/tasks/108-cocos-chapter1-friction.md",
+    "status": "implementation candidate; owner visual approval pending"
   }
 }

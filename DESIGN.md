@@ -355,6 +355,8 @@ Each new composed screen or world treatment needs its own actual-render checkpoi
 
 ## 10. Asset production and acquisition rules
 
+Task108 scopes the Cocos first-city candidate to the existing South Gate Street and inn arrival chain: a recognizable inn facade and doorway, city gate, supply counter, noticeboard, native directional signs and the existing Lanya/Adu actors. No map, collision, travel price or growth requirement changes. A purchased weapon has an explicit equip action at the armory; buying alone preserves the currently equipped weapon. Quest acceptance preserves explicit tracking, and quest pages distinguish main quests from optional side quests. This scoped treatment is pending actual-render owner review before expansion to other areas.
+
 Read `docs/art/ASSET_PLAN.md` and `asset-manifest.json`. They distinguish source files actually supplied from selected external packs and missing project-specific assets. The supplied source PNGs are not finished RealQuest components.
 
 Use an audited asset registry with semantic ID, source pack, upstream path, local path, license, checksum, dimensions, frame geometry, visible bounds, pivot, animation mapping, and status. Store actual values after inspection. Never fabricate atlas coordinates or slice margins from a screenshot.

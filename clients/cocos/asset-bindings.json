@@ -65,8 +65,8 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4",
-      "output_sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4"
+      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
+      "output_sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
     },
     {
       "source": "frontend/public/assets/hearthwood/world-map-terrain-v1.png",
@@ -397,6 +397,18 @@
       "target": "assets/resources/village/mira-actor.png",
       "sha256": "cc826a2323dd7f0782bafb3b96ffabd10afa28f22e3a3d5a993cf6501df6b672",
       "output_sha256": "cc826a2323dd7f0782bafb3b96ffabd10afa28f22e3a3d5a993cf6501df6b672"
+    },
+    {
+      "source": "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "target": "assets/resources/village/adu-actor.png",
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "output_sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c"
+    },
+    {
+      "source": "frontend/public/assets/hearthwood/residents/lanya-actor.png",
+      "target": "assets/resources/village/lanya-actor.png",
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "output_sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc"
     },
     {
       "source": "frontend/public/assets/hearthwood/detail/items/wood.png",

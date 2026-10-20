@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Cocos first-city arrival — 2026-10-20
+
+South Gate Street reuses the unchanged project-owned cottage, shop, counter, noticeboard, fence, lamp and planter PNGs. The existing original Adu and Lanya single-frame actors are now bound to Cocos; they do not claim walking cycles. Street paving, masonry, gate piers, doorstep and sign boards are native Cocos geometry; Chinese signs remain native labels. No raster, font, sound, external download or generated source was added. Existing collision geometry, semantic object IDs and travel rules are preserved. Bindings and provenance are recorded under `cocos_chapter1_arrival` in the manifest; implementation evidence belongs to task108. Actual render remains a candidate pending owner review.
+
 ## Cocos lossless terrain delivery — 2026-10-18
 
 The original3840×2560 terrain PNG remains unchanged. A separately generated lossless/exact WebP reduces its file from3,358,715 to338,120 bytes with every decoded RGBA byte identical. `tools/build_cocos_textures.py` pins Pillow12.3.0/libwebp1.6.0, verifies source provenance and pixels, and supports a read-only check. Full paths, hashes, dimensions and processing settings are in `cocos-lossless-textures-v1.json`; `asset-manifest.json` records the binding. No new artwork, font, source-pack download, image resizing or palette change.

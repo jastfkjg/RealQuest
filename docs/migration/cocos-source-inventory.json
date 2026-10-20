@@ -9,13 +9,13 @@
     "scope": "Preservation-only; original full Web source contract remains T6, not a Cocos runtime bundle input."
   },
   "counts": {
-    "bindings": 107,
-    "runtimePNGs": 81,
+    "bindings": 109,
+    "runtimePNGs": 83,
     "runtimeWebPs": 1,
     "sharedModules": 25,
     "sceneInputs": 79,
-    "files": 404,
-    "frozenWebFiles": 93,
+    "files": 410,
+    "frozenWebFiles": 95,
     "references": 107
   },
   "bindings": [
@@ -192,7 +192,7 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "clients/cocos/assets/scripts/core/protocol.ts",
-      "sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4"
+      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
     },
     {
       "source": "frontend/public/assets/hearthwood/world-map-terrain-v1.png",
@@ -835,6 +835,40 @@
         "dimensions": [
           192,
           256
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "target": "clients/cocos/assets/resources/village/adu-actor.png",
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "importer": {
+        "uuid": "f6154067-9501-7156-691d-02ae99760b71",
+        "frame": "f6154067-9501-7156-691d-02ae99760b71@f9941",
+        "texture": "f6154067-9501-7156-691d-02ae99760b71@6c48a",
+        "dimensions": [
+          48,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "frontend/public/assets/hearthwood/residents/lanya-actor.png",
+      "target": "clients/cocos/assets/resources/village/lanya-actor.png",
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "importer": {
+        "uuid": "13514d00-93d8-8bfd-fa7e-86a72c3e610a",
+        "frame": "13514d00-93d8-8bfd-fa7e-86a72c3e610a@f9941",
+        "texture": "13514d00-93d8-8bfd-fa7e-86a72c3e610a@6c48a",
+        "dimensions": [
+          48,
+          64
         ],
         "filter": "nearest",
         "trim": "none",
@@ -2587,8 +2621,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "ac118fd108d1bfcac46c3388d7321fb80dd344be28fc290db1f3ddd31dab9f2d",
-      "bytes": 33143,
+      "sha256": "b17b2b773d3db369b4c5c0b304f60ad478b48c1e31d8b3e430dc5afd80e3cf71",
+      "bytes": 33791,
       "roles": [
         "binding-contract"
       ],
@@ -3589,6 +3623,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/village/adu-actor.png",
+      "owner": "cocos-adapter",
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "bytes": 3524,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "frontend/public/assets/hearthwood/residents/adu-actor.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        48,
+        64
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/village/bank-stones.png",
       "owner": "cocos-adapter",
       "sha256": "ce6eec9b914c35fe6f75ae31c3541f7f52dbb5bf89729b00917814a37aa22ad8",
@@ -3859,6 +3911,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/village/lanya-actor.png",
+      "owner": "cocos-adapter",
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "bytes": 3372,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "frontend/public/assets/hearthwood/residents/lanya-actor.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        48,
+        64
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/village/lia-actor.png",
       "owner": "cocos-adapter",
       "sha256": "d58498f929d8a8357c591a7adf8754fbf5052e150b0faf7715566dc7affaa815",
@@ -4077,8 +4147,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "421efc4e466f8e76f69953d392ea7cd1b8a79b532093d76b2cbfcce99a6a5587",
-      "bytes": 95572,
+      "sha256": "a50e00992b540705dd2f7a7cad1fe4862272597a2dfec271171dd8214bb2f62c",
+      "bytes": 96660,
       "roles": [
         "inspected-source"
       ],
@@ -4093,6 +4163,20 @@
       "owner": "cocos-adapter",
       "sha256": "422d8a0df9e2f3cc48c671f1f7966d7966228ccbd8836df48420fc15b9ada581",
       "bytes": 10901,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/arrivalScene.ts",
+      "owner": "cocos-adapter",
+      "sha256": "db4ffe8a8a4801d672af16528fc113a285c8957619eb211d91eead06714efda7",
+      "bytes": 4417,
       "roles": [
         "inspected-source"
       ],
@@ -4453,8 +4537,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/protocol.ts",
       "owner": "cocos-adapter",
-      "sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4",
-      "bytes": 8944,
+      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
+      "bytes": 8969,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -4659,8 +4743,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "444c2347da9f8dda05a8afceee20dd0e871862e7b122eaaf18887d4d7b3f510a",
-      "bytes": 28314,
+      "sha256": "d503a8ae38155f6679ba49fb7565f91cddd5c618746baa51f05fa98ca18b57b6",
+      "bytes": 29895,
       "roles": [
         "inspected-source"
       ],
@@ -4871,6 +4955,20 @@
       "owner": "cocos-adapter",
       "sha256": "9ae69a6344d487c9da4672d159bbefe7d9155196d3ea8f0637f8bf3d4f77c1d4",
       "bytes": 12216,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/smoke-chapter-friction.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "99d6b0777da0163602fb38ee40f783f39e42d2d1842725b09f3204e550463590",
+      "bytes": 9564,
       "roles": [
         "inspected-source"
       ],
@@ -5219,8 +5317,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "b4903f060baf75721934c3d0fb1001a06b3f1d2618e9396b5c908ddd60b62e40",
-      "bytes": 7220,
+      "sha256": "d90d37b9e72b2a50e8e83c9a704fea2b489cdb6ba19687004ddfed1fc1605cd1",
+      "bytes": 7234,
       "roles": [
         "inspected-source"
       ],
@@ -5471,8 +5569,8 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "118d3ad4be0d9ed8ddb0474e71b6817fa9f79d89a68e14b0651d2191d9a8a97e",
-      "bytes": 98036,
+      "sha256": "1a030e4f842b5a8dcba7d94aacb5a0971effb350eb654c367defc36608ac0be3",
+      "bytes": 99448,
       "roles": [
         "provenance"
       ],
@@ -5549,6 +5647,7 @@
       ],
       "consumers": [
         "docs/art/departure-art-v1.json",
+        "frontend/public/assets/hearthwood/residents/adu-actor.png",
         "frontend/public/assets/hearthwood/residents/adu-portrait.png"
       ],
       "provenance": [
@@ -5617,6 +5716,7 @@
       ],
       "consumers": [
         "docs/art/departure-art-v1.json",
+        "frontend/public/assets/hearthwood/residents/lanya-actor.png",
         "frontend/public/assets/hearthwood/residents/lanya-portrait.png"
       ],
       "provenance": [
@@ -6416,6 +6516,29 @@
       ]
     },
     {
+      "path": "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "owner": "frozen-web-art",
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "bytes": 3524,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/village/adu-actor.png"
+      ],
+      "provenance": [
+        "docs/art/departure-art-v1.json#/assets/1"
+      ],
+      "inputs": [
+        "docs/art/generated/departure-v1/adu-source.png",
+        "tools/build_departure_art.py"
+      ],
+      "dimensions": [
+        48,
+        64
+      ]
+    },
+    {
       "path": "frontend/public/assets/hearthwood/residents/adu-portrait.png",
       "owner": "frozen-web-art",
       "sha256": "dafecf5f7086cd418a93e1b313a4633490b58bd65e90486670e816623c9aab47",
@@ -6436,6 +6559,29 @@
       "dimensions": [
         128,
         128
+      ]
+    },
+    {
+      "path": "frontend/public/assets/hearthwood/residents/lanya-actor.png",
+      "owner": "frozen-web-art",
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "bytes": 3372,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/village/lanya-actor.png"
+      ],
+      "provenance": [
+        "docs/art/departure-art-v1.json#/assets/5"
+      ],
+      "inputs": [
+        "docs/art/generated/departure-v1/lanya-source.png",
+        "tools/build_departure_art.py"
+      ],
+      "dimensions": [
+        48,
+        64
       ]
     },
     {
@@ -8297,8 +8443,8 @@
     {
       "path": "shared/game/protocol.ts",
       "owner": "shared-game",
-      "sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4",
-      "bytes": 8944,
+      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
+      "bytes": 8969,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -8551,8 +8697,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "c392312fd73903e7872677a10856dbae13a95e37518a2f726ed003c65d30ca0d",
-      "bytes": 2988,
+      "sha256": "bf1c6f052f27c66f021d5c630eb175dd970c622897004c965046780a94b40c6d",
+      "bytes": 3066,
       "roles": [
         "inspected-source"
       ],
@@ -8803,8 +8949,8 @@
     {
       "path": "tools/test-cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "7a267b06515fd140c2c716e6fe21951cc17aa76eb5e21ffad00f34e2c0307867",
-      "bytes": 4425,
+      "sha256": "da6991f36b16f39f9a1eb32092ede450f7184c06e491e356f58845c3ef80887b",
+      "bytes": 4542,
       "roles": [
         "inspected-source"
       ],
@@ -9388,13 +9534,13 @@
     },
     {
       "file": "tools/cocos-browser-suites.mjs",
-      "line": 28,
+      "line": 29,
       "literal": "frontend/scripts/village-polish.mjs",
       "role": "current-Cocos-and-explicit-Web-compatibility-suite-registry"
     },
     {
       "file": "tools/cocos-browser-suites.mjs",
-      "line": 29,
+      "line": 30,
       "literal": "frontend/scripts/cave-polish.mjs",
       "role": "current-Cocos-and-explicit-Web-compatibility-suite-registry"
     },

@@ -22,6 +22,7 @@ import {caveStatus,nextTarget,liveTarget} from './core/caveView';
 import {paintGraphics} from './cavePaint';
 import {CombatDock} from './ui/combatDock';
 import {LocalSceneRenderer} from './localSceneView';
+import {ArrivalScene} from './arrivalScene';
 import {StorageView} from './ui/storage';
 import {InventoryView} from './ui/inventory';
 import {appearances,getAppearance} from './core/appearances';
@@ -106,6 +107,7 @@ export class RealQuestSpike extends Component {
   private combatRenderer=new CombatRenderer(this.world,this.depths);
   private combatDock:CombatDock|null=null;
   private localScene=new LocalSceneRenderer(this.world,this.frames,this.objects,this.depths);
+  private arrivalScene=new ArrivalScene(this.world,this.frames,this.objects,this.depths);
   private approach:{id:string;map:string}|null=null;
   private inputEpoch=0;private responseObject="";private responseUntil=0;
   private combatPending:Promise<unknown>|null=null;
@@ -197,7 +199,7 @@ export class RealQuestSpike extends Component {
   private async loadArt() {
     const names = ['actor-1','actor-2','actor-3','actor-4','actor-5','shop','home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0','lia-actor','noah-actor','mira-actor'];
     try {
-      await Promise.all(Array.from(new Set([...sceneArtPaths,'ui/satchel',...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
+      await Promise.all(Array.from(new Set([...sceneArtPaths,'ui/satchel',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
         // Keep one presentation key and the original PNG for unsupported platforms.
         const asset=path==='scenes/terrain'&&platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?'scenes/terrain-web':path;
         resources.load(asset + '/spriteFrame', SpriteFrame, (error, frame) => {
@@ -311,13 +313,16 @@ export class RealQuestSpike extends Component {
     const map = this.map(); this.sceneId=map.id;
     this.world.getComponent(UITransform)!.setContentSize(map.width, map.height);
     this.zoom=localCamera(map,this.width,this.height);
+    const arrivalScene=this.arrivalScene.build(map);
     const fineScene=this.localScene.build(map);
     const camera=this.node.getComponent(Canvas)?.cameraComponent;if(camera)camera.clearColor=new Color(map.id==='overworld'?'#78955e':fineScene||map.id.startsWith('cave_')?'#27352d':'#000000');
     if(!fineScene){
     const ground = new Node('Ground'); ground.layer = this.node.layer; this.world.addChild(ground);
     const g = ground.addComponent(Graphics);
     const rect = (x: number, y: number, w: number, h: number, c: string) => { g.fillColor = new Color(c); g.rect(x,-y-h,w,h); g.fill(); };
-    if(map.id==='overworld'){
+    if(arrivalScene){
+      // The city renderer owns its existing landmarks and terrain.
+    } else if(map.id==='overworld'){
     rect(0,0,map.width,map.height,'#8da878');
     for (let i=0;i<1000;i++) { const x=(i*173)%1920, y=(i*317)%1280; rect(x,y,4+(i%3)*3,2,i%2?'#9bb684':'#809d6f'); }
     rect(32,324,1784,52,'#c8bc8b'); rect(124,210,56,380,'#c8bc8b'); rect(310,210,48,170,'#c8bc8b');
@@ -367,8 +372,8 @@ export class RealQuestSpike extends Component {
       if(!map.outdoor&&map.id!=='overworld'&&obj.kind!=='exit'&&obj.kind!=='cave')n.active=false;
     }
     for(const obj of map.objects.filter(o=>o.kind==='travel_npc')){
-      const n=this.make(this.world,obj.id,obj.x,-obj.y,24,32),g=n.addComponent(Graphics);
-      g.fillColor=new Color(C.wood);g.roundRect(-7,0,14,18,3);g.fill();g.fillColor=new Color(C.paper);g.circle(0,23,6);g.fill();g.strokeColor=new Color(C.ink);g.lineWidth=2;g.moveTo(-4,0);g.lineTo(-4,-6);g.moveTo(4,0);g.lineTo(4,-6);g.stroke();
+      const n=this.image(this.world,'village/'+obj.id+'-actor',obj.x,obj.y-64/3,32,128/3);
+      if(!n)throw Error('Unbound travel resident '+obj.id);
       this.objects.set(obj.id,n);this.depths.set(n,obj.y);
     }
     for (const obj of map.objects.filter(o=>o.kind==='plot')) {
@@ -472,7 +477,7 @@ export class RealQuestSpike extends Component {
     const x=(local.x-this.world.position.x)/this.zoom, y=-(local.y-this.world.position.y)/this.zoom;
     const enemy=this.client.state?.combat?.enemies.find(enemy=>enemy.hp>0&&Math.hypot(enemy.x-x,enemy.y-y)<(enemy.kind==='boss'?36:26));
     if(this.client.state?.location.startsWith('cave_')&&enemy){this.targetId=enemy.id;this.dirty=true;return;}
-    const obj=this.supportedObjects().filter(o=>this.localScene.hit(o,x,y)).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0];
+    const obj=this.supportedObjects().filter(o=>this.arrivalScene.hit(this.map(),o,x,y)||this.localScene.hit(o,x,y)).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0];
     if(obj&&Math.hypot(obj.x-this.p.x,obj.y-this.p.y)<65) { void this.interact(obj); return; }
     this.clearInput();
     this.route=obj?approachRoute(this.map(),this.p,obj):pathfind(this.map(),this.p,{x,y});
@@ -663,6 +668,20 @@ export class RealQuestSpike extends Component {
     if(this.mode==='welcome'){this.welcome();return;}
     if(this.mode==='session'){this.drawSession();return;}
     const s=this.client.state!;
+    if(this.mode==='world'){
+      // Place names remain screen-sized native text, independent of camera zoom.
+      const project=(x:number,y:number)=>({x:this.width/2+this.world.position.x+x*this.zoom,y:this.height/2-this.world.position.y+y*this.zoom});
+      for(const sign of this.arrivalScene.signs){
+        const p=project(sign.x,sign.y),w=sign.width*this.zoom-8,h=20*this.zoom;
+        if(p.x+w/2<0||p.x-w/2>this.width||p.y+h/2<0||p.y-h/2>this.height)continue;
+        this.text(this.hud,sign.id+'Text',sign.text,p.x-w/2,p.y-h/2,w,h,this.height<500?14:18,C.ink,true);
+      }
+      for(const npc of this.supportedObjects().filter(o=>o.kind==='travel_npc')){
+        const p=project(npc.x,npc.y-53);
+        this.box(this.hud,'TravelResidentName',p.x-28,p.y-12,56,24,C.moss,3);
+        this.text(this.hud,'TravelResidentNameText',npc.name,p.x-26,p.y-11,52,22,14,C.paper,true);
+      }
+    }
     if(this.mode==='item-confirm'){this.drawItemPreviewMarker();this.drawPanel();return;}
     if(this.conversationScene()){
       const short=this.height<500;if(!short){this.box(this.hud,'ConversationPlace',20,short?8:20,short?190:260,short?32:40,C.moss,5);this.text(this.hud,'ConversationPlaceName',this.map().name+(short?'':' · Esc 离开'),32,short?9:24,short?166:236,30,16,C.paper);}

@@ -548,10 +548,9 @@ def apply(state, action, data, now):
         if action == 'quest_accept':
             require(view['status'] == 'available', '任务尚未开放或已经接取')
             state['quests'][quest['id']]={'status':'active','accepted_at':now}
-            state['tracked_quest']=quest['id']
             if quest['id'] == 'leave_valley':
                 state['village_intro']['briefed'] = True
-            return f'已接取：{quest["title"]}。下一步已加入旅程追踪'
+            return f'已接取：{quest["title"]}。当前追踪保持不变，可在委托页选择追踪'
         require(view['status'] == 'ready', '请先完成任务目标，奖励只能领取一次')
         for item, amount in quest['reward'].items():
             state['inventory'][item] += amount

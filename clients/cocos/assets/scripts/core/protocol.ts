@@ -408,6 +408,7 @@ export interface MapData {
 }
 export interface Quest {
   id: string;
+  kind: 'main' | 'side';
   title: string;
   giver: string;
   giver_name: string;
