@@ -9,17 +9,15 @@ if (Number(process.versions.node.split('.')[0]) !== 22) throw Error('Use Node22 
 const args = process.argv.slice(2);
 const options = {};
 for (let i = 0; i < args.length; i++) {
-  if (!['--build', '--web-build'].includes(args[i]) || !args[i + 1]) {
-    throw Error('Usage: test-cocos-preview.mjs [--build <candidate>/web-desktop [--web-build <package>]]');
+  if (!['--build'].includes(args[i]) || !args[i + 1]) {
+    throw Error('Usage: test-cocos-preview.mjs [--build <candidate>/web-desktop]');
   }
   options[args[i].slice(2)] = args[++i];
 }
-if (options['web-build'] && !options.build) throw Error('--web-build requires --build.');
 const command = [path.join(root, 'clients/cocos/tools/test-preview.py')];
 if (options.build) {
   const build = await verifyBuild(path.resolve(root, 'clients/cocos', options.build));
   command.push('--build', build.directory);
-  if (options['web-build']) command.push('--web-build', path.resolve(root, options['web-build']));
 } else command.push('--unit');
 const output = path.join(root, 'output/cocos-startup');
 await fs.mkdir(output, {recursive: true});

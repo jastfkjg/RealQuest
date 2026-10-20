@@ -1,4 +1,4 @@
-"""Authoritative geography shared with the Phaser renderer."""
+"""Authoritative geography used by the Cocos client and offline art tools."""
 from math import hypot
 from .journey_world import AREAS, TRAVEL_NPCS, passage
 from .combat_world import CAVE_MAPS, CAVE_ENTRY

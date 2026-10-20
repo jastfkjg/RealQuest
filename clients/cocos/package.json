@@ -1,5 +1,5 @@
 {
-  "name": "realquest-cocos-spike",
+  "name": "realquest-cocos",
   "uuid": "7d239fee-f858-4dc6-a770-589c53c88673",
   "version": "0.1.0",
   "creator": {
@@ -8,9 +8,7 @@
   "scripts": {
     "sync": "node tools/sync.mjs",
     "check": "node tools/check.mjs",
-    "check:baseline": "node tools/check-baseline.mjs",
     "test:core": "node tools/test-core.mjs",
-    "test:phase23": "node ../../tools/cocos-browser.mjs --suite compatibility",
     "build:web": "node tools/build.mjs web-desktop",
     "build:wechat": "node tools/build.mjs wechatgame",
     "build:douyin": "node tools/build.mjs bytedance-mini-game",
@@ -22,11 +20,11 @@
     "test:local-scene": "node tools/test-local-scene.mjs",
     "art:local": "node ../../tools/build_local_scene_art.mjs",
     "art:local:check": "node ../../tools/build_local_scene_art.mjs --check",
-    "test:life-records": "node tools/test-life-records.mjs && node ../../frontend/scripts/life-journal-dates.mjs",
+    "test:life-records": "node tools/test-life-records.mjs && node ../../tools/test-life-journal-dates.mjs",
     "test:life-browser": "node ../../tools/cocos-browser.mjs --suite life",
     "test:dossier": "node tools/test-dossier.mjs",
     "test:dossier-browser": "node ../../tools/cocos-browser.mjs --suite dossier",
-    "test:guidance": "node tools/test-guidance.mjs && node ../../frontend/scripts/next-departure-state.mjs",
+    "test:guidance": "node tools/test-guidance.mjs && node ../../tools/test-next-departure-state.mjs",
     "test:guidance-browser": "node ../../tools/cocos-browser.mjs --suite guidance",
     "test:places": "node tools/test-places.mjs",
     "test:places-browser": "node ../../tools/cocos-browser.mjs --suite places,travel,rest",

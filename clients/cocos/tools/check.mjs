@@ -18,7 +18,7 @@ for(const record of bindings.records){
 const editor=process.env.COCOS_CREATOR;
 if(!editor)throw new Error('COCOS_CREATOR is required; check uses actual bundled Cocos declarations.');
 const declarations=path.resolve(path.dirname(editor),'../Resources/resources/3d/engine/bin/.declarations/cc.d.ts');
-const config={compilerOptions:{target:'ES2022',module:'ESNext',moduleResolution:'bundler',strict:true,skipLibCheck:true,noEmit:true,experimentalDecorators:true,useDefineForClassFields:false},files:[declarations],include:[path.join(project,'assets/scripts/**/*.ts')]};
+const config={compilerOptions:{target:'ES2022',module:'ESNext',moduleResolution:'bundler',strict:true,skipLibCheck:true,noEmit:true,experimentalDecorators:true,useDefineForClassFields:false},files:[declarations],include:[path.join(project,'assets/scripts/**/*.ts'),path.join(root,'tools/scene-art/**/*.ts')]};
 const target=path.join(root,'output/cocos-migration/typecheck.json');await fs.mkdir(path.dirname(target),{recursive:true});await fs.writeFile(target,JSON.stringify(config));
 const result=spawnSync(process.execPath,[createRequire(new URL('../../../package.json',import.meta.url)).resolve('typescript/bin/tsc'),'--project',target],{stdio:'inherit'});
 if(result.status!==0)process.exit(result.status||1);

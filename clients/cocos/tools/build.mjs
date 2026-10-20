@@ -9,10 +9,10 @@ if (!editor || !fs.existsSync(editor)) throw new Error('Set COCOS_CREATOR to the
 const platform = process.argv[2] || 'web-desktop';
 const release = process.argv[3] === '--release';
 if (process.argv.length > 4 || (process.argv[3] && !release)) throw Error('Usage: build.mjs <platform> [--release]');
-if (!['web-desktop','web-mobile','wechatgame','bytedance-mini-game'].includes(platform)) throw new Error('Unsupported spike target');
+if (!['web-desktop','web-mobile','wechatgame','bytedance-mini-game'].includes(platform)) throw new Error('Unsupported build target');
 if (release && platform !== 'web-desktop') throw Error('Release validation currently targets web-desktop.');
 const scene = 'b4a89a48-8464-46a4-bb61-d59590eebc27';
-const buildName=process.env.REALQUEST_COCOS_BUILD || 'web-village-polish';
+const buildName=process.env.REALQUEST_COCOS_BUILD || 'web-current';
 if(!/^[a-z0-9-]+$/.test(buildName))throw new Error('Invalid build name');
 const options = { platform, debug: !release, buildPath: 'project://'+buildName, name: platform.startsWith('web-') ? buildName : platform, startScene: scene, scenes: [{ url: 'db://assets/scenes/Bootstrap.scene', uuid: scene }], sourceMaps: !release };
 if (release) options.md5Cache = true;

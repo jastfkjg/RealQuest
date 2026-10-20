@@ -6,7 +6,7 @@
 
 ## 1. Purpose and boundaries
 
-On 2026-10-17, the owner selected Cocos as the primary client direction and requested a source-based feature-gap and retirement checklist. Keep the original React/Phaser implementation for comparison, save continuity and rollback during transition; do not delete code or switch deployment as part of this audit. Required functional, validation and tooling gates live in [task39](docs/tasks/39-cocos-primary-retirement.md). This direction does not imply visual approval of the current Cocos candidate or completion of migration.
+As of 2026-10-20, Cocos is the sole implementation, playtesting and acceptance client. The owner authorized removing the React/Phaser application and local historical player/test data after relocating the shared art and test inputs. Preserve both the playable world and directly accessible life-recording experience in Cocos; shared backend rules and migrations remain authoritative. Historical migration checkpoints below are records of their original stage, not new legacy-client gates.
 
 On 2026-10-19, the owner asked for the overall candidate to be completed before providing further feedback. Continue independently within the authorized development and verification scope, collect the remaining visual/gameplay review into one final handoff, and do not block engineering on per-screen replies. Existing scoped approvals remain valid; deferred owner acceptance is not recorded as passed. System/account changes, external Git/publication actions and original Web retirement retain their separate authorization requirements.
 
@@ -59,7 +59,7 @@ Retain the480×368 room footprints, furniture collisions, object anchors and sav
 
 ## 3. Palette, materials, and typography
 
-The companion `styles/realquest-tokens.css` supplies initial implementation values. Scope the theme to RealQuest; do not overwrite unrelated global application styles.
+The companion `docs/design/realquest-tokens.css` supplies initial implementation values. Scope the theme to RealQuest; do not overwrite unrelated global application styles.
 
 | Token | Value | Use |
 |---|---|---|

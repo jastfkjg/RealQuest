@@ -8,10 +8,15 @@
   },
   "packageManager": "npm@10.9.8",
   "scripts": {
+    "start": "python3 clients/cocos/tools/run-preview.py",
+    "build": "npm run cocos:sync && npm run cocos:check && npm run cocos:build:release",
+    "check": "npm run cocos:sources && npm run cocos:check",
+    "test": "npm run cocos:test:unit && npm run test:backend",
+    "test:backend": "cd backend && .venv/bin/python -m pytest -q",
+    "test:browser": "npm run cocos:test:browser -- --build web-current/web-desktop",
     "cocos:doctor": "node tools/cocos-doctor.mjs",
     "cocos:sync": "node clients/cocos/tools/sync.mjs",
     "cocos:check": "node clients/cocos/tools/check.mjs",
-    "cocos:baseline": "node clients/cocos/tools/check-baseline.mjs",
     "cocos:sources": "node tools/cocos-sources.mjs --check",
     "cocos:sources:write": "node tools/cocos-sources.mjs --write",
     "cocos:test:unit": "node tools/cocos-unit.mjs",
@@ -26,10 +31,8 @@
     "cocos:package": "node tools/cocos-release.mjs",
     "cocos:test:delivery": "node tools/test-cocos-delivery.mjs",
     "cocos:backup": "node tools/cocos-backup.mjs",
-    "cocos:test:restore": "node tools/test-cocos-restore-browser.mjs",
     "cocos:test:network": "node tools/test-cocos-network.mjs",
-    "cocos:test:delivery:lifecycle": "node tools/test-cocos-delivery-lifecycle.mjs",
-    "cocos:test:restore:lifecycle": "node tools/test-cocos-restore-lifecycle.mjs"
+    "cocos:test:delivery:lifecycle": "node tools/test-cocos-delivery-lifecycle.mjs"
   },
   "devDependencies": {
     "esbuild": "0.25.12",

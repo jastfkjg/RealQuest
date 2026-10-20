@@ -8,7 +8,6 @@ if(Number(process.versions.node.split('.')[0])!==22)throw Error('Cocos unit tool
 const modules=[
  ['tool-lifecycle','tools/test-cocos-child.mjs'],
  ['source-ownership','tools/test-cocos-sources.mjs'],
- ['transition-protection','tools/test-cocos-transition.mjs'],
  ['sqlite-backup','tools/test-cocos-backup.mjs'],
  ['browser-configuration','tools/test-cocos-browser.mjs'],
  ['build-receipts','tools/test-cocos-build-info.mjs'],
@@ -18,9 +17,9 @@ const modules=[
  ['network-proxy','tools/test-cocos-network-proxy.mjs'],
  ['core','clients/cocos/tools/test-core.mjs'],['features','clients/cocos/tools/test-features.mjs'],
  ['cave-view','clients/cocos/tools/test-cave-view.mjs'],['local-scene','clients/cocos/tools/test-local-scene.mjs'],
- ['life-records','clients/cocos/tools/test-life-records.mjs'],['life-dates','frontend/scripts/life-journal-dates.mjs'],
+ ['life-records','clients/cocos/tools/test-life-records.mjs'],['life-dates','tools/test-life-journal-dates.mjs'],
  ['dossier','clients/cocos/tools/test-dossier.mjs'],['guidance','clients/cocos/tools/test-guidance.mjs'],
- ['departure-decisions','frontend/scripts/next-departure-state.mjs'],['places','clients/cocos/tools/test-places.mjs'],
+ ['departure-decisions','tools/test-next-departure-state.mjs'],['places','clients/cocos/tools/test-places.mjs'],
  ['atlas','clients/cocos/tools/test-atlas.mjs'],['dialogue','clients/cocos/tools/test-dialogue.mjs'],
  ['inventory','clients/cocos/tools/test-inventory.mjs'],['preferences','clients/cocos/tools/test-preferences.mjs'],
 ];

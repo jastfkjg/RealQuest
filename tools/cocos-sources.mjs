@@ -13,7 +13,7 @@ const compare=(a,b)=>a<b?-1:a>b?1:0;
 const policyFile='docs/migration/cocos-source-policy.json';
 const inventoryFile='docs/migration/cocos-source-inventory.json';
 const provenanceFiles=['docs/art/asset-manifest.json','docs/art/village-art-v2.json','docs/art/detail-art-v3.json','docs/art/resident-art-v1.json','docs/art/market-art-v1.json','docs/art/departure-art-v1.json','docs/art/local-scene-art-v1.json','docs/art/cocos-inventory-icons-v1.json','docs/art/cocos-lossless-textures-v1.json'];
-const isFilePath=value=>typeof value==='string'&&/^(?:assets|docs|frontend|shared|tools|backend)\/[\w./-]+\.[\w-]+$/.test(value);
+const isFilePath=value=>typeof value==='string'&&/^(?:assets|docs|clients|shared|tools|backend)\/[\w./-]+\.[\w-]+$/.test(value);
 
 export function sourceOwner(file,policy){
  const owner=policy.owners.find(o=>o.paths?.includes(file)||o.prefix&&file.startsWith(o.prefix));
@@ -51,7 +51,7 @@ export function referenceRole(reference,policy,producers=[]){
  }
  if(policy.reference_roles[file])return policy.reference_roles[file];
  if(producers.includes(file))return 'original-art-producer-input-or-output';
- if(sourceOwner(file,policy)==='frozen-web-scene'&&!literal.includes('frontend/'))return 'offline-original-scene-url';
+ if(sourceOwner(file,policy)==='offline-scene-art'&&!literal.includes('frontend/'))return 'offline-original-scene-url';
  throw Error('Unregistered Web reference: '+file+':'+reference.line+' '+literal);
 }
 
@@ -97,13 +97,11 @@ export async function inspectSources(root=projectRoot){
  }
  await add(policyFile,'ownership-policy','source-inventory');
  await add('clients/cocos/asset-bindings.json','binding-contract','source-inventory');
- const preservationFile='docs/migration/cocos-baseline.json',preservation=await read(preservationFile);
- await add(preservationFile,'historical-source-contract','clients/cocos/tools/check-baseline.mjs');
- await add('docs/migration/cocos-transition-policy.json','current-transition-contract','tools/cocos-transition.mjs');
+ await add('docs/migration/cocos-client-retirement.json','relocation-provenance','source-inventory');
  for(const file of ['package.json','package-lock.json','.nvmrc','.npmrc'])await add(file,'locked-toolchain','source-inventory');
  await add('tools/requirements-art.lock.txt','optional-packer-toolchain','source-inventory');
  for(const file of ['tools/cocos_sqlite_backup.py','tools/test_cocos_sqlite_backup.py','tools/cocos_restore_fixture.py'])await add(file,'sqlite-backup-and-isolated-recovery-tool','tools/cocos-backup.mjs');
- for(const file of ['deploy/cocos/nginx.conf.template','deploy/cocos/Dockerfile.template','deploy/cocos/base-image.json','.github/workflows/cocos.yml'])await add(file,'cocos-delivery-input','tools/cocos-release.mjs');
+ for(const file of ['deploy/cocos/nginx.conf.template','deploy/cocos/Dockerfile.template','deploy/cocos/base-image.json','.github/workflows/ci.yml'])await add(file,'cocos-delivery-input','tools/cocos-release.mjs');
  const copied=[];
  for(const binding of bindings.records){
   const source=await add(binding.source,'canonical-binding-source',binding.target,binding.sha256);
@@ -158,18 +156,18 @@ export async function inspectSources(root=projectRoot){
  for(const folder of ['shared/game','clients/cocos/assets/scripts','clients/cocos/tools'])for(const file of await walk(root,folder))if(/\.(ts|mjs|py)$/.test(file))scope.add(file);
  for(const file of await walk(root,'tools'))if(/^tools\/(?:cocos-|test-cocos-)[^/]+\.mjs$/.test(file))scope.add(file);
  for(const file of producerFiles)scope.add(file);
- for(const file of policy.owners.find(o=>o.id==='frozen-web-scene').paths)scope.add(file);
- for(const file of policy.owners.find(o=>o.id==='preserved-web-tests').paths)scope.add(file);
+ for(const file of policy.owners.find(o=>o.id==='offline-scene-art').paths)scope.add(file);
+ for(const file of policy.owners.find(o=>o.id==='shared-tests').paths)scope.add(file);
  const references=[];
  for(const file of [...scope].sort()){
   await add(file,'inspected-source','source-inventory');
   for(const reference of webReferences(file,await fs.readFile(path.join(root,file),'utf8')))references.push({...reference,role:referenceRole(reference,policy,[...producerFiles])});
  }
  // Legacy descriptive symbols must resolve to the native sprites actually used.
- for(let i=0;i<6;i++)if(!copied.some(r=>r.source==='frontend/public/assets/hearthwood/village/actor-'+i+'.png'&&r.target==='clients/cocos/assets/resources/village/actor-'+i+'.png'))throw Error('Unbound descriptive appearance '+i);
- for(const id of ['wood','stone','seed','crop','plank','backpack','gold'])if(!copied.some(r=>r.source==='frontend/public/assets/hearthwood/detail/items/'+id+'.png'&&r.target==='clients/cocos/assets/resources/items/'+id+'.png'))throw Error('Unbound descriptive item '+id);
+ for(let i=0;i<6;i++)if(!copied.some(r=>r.source==='assets/runtime/hearthwood/village/actor-'+i+'.png'&&r.target==='clients/cocos/assets/resources/village/actor-'+i+'.png'))throw Error('Unbound descriptive appearance '+i);
+ for(const id of ['wood','stone','seed','crop','plank','backpack','gold'])if(!copied.some(r=>r.source==='assets/runtime/hearthwood/detail/items/'+id+'.png'&&r.target==='clients/cocos/assets/resources/items/'+id+'.png'))throw Error('Unbound descriptive item '+id);
  const records=[...nodes.values()].map(n=>({...n,roles:[...n.roles].sort(),consumers:[...n.consumers].sort(),provenance:[...n.provenance].sort(),inputs:[...n.inputs].sort()})).sort((a,b)=>compare(a.path,b.path));
- return {schema_version:1,policy:policyFile,note:'Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. No source deletion or visual approval.',preservation:{manifest:preservationFile,revision:preservation.revision,requiresGitHistory:true,scope:'Preservation-only; original full Web source contract remains T6, not a Cocos runtime bundle input.'},counts:{bindings:copied.length,runtimePNGs:copied.filter(r=>r.target.endsWith('.png')).length,runtimeWebPs:copied.filter(r=>r.target.endsWith('.webp')).length,sharedModules:copied.filter(r=>r.target.endsWith('.ts')).length,sceneInputs:scene.inputs.length,files:records.length,frozenWebFiles:records.filter(r=>r.owner.startsWith('frozen-web')||r.owner==='preserved-web-tests').length,references:references.length},bindings:copied,records,references};
+ return {schema_version:1,policy:policyFile,note:'Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.',counts:{bindings:copied.length,runtimePNGs:copied.filter(r=>r.target.endsWith('.png')).length,runtimeWebPs:copied.filter(r=>r.target.endsWith('.webp')).length,sharedModules:copied.filter(r=>r.target.endsWith('.ts')).length,sceneInputs:scene.inputs.length,files:records.length,references:references.length},bindings:copied,records,references};
 }
 
 async function main(){

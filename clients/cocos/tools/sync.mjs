@@ -38,23 +38,23 @@ await bind('assets/generated/hearthwood/satchel-shell-v1.png','assets/resources/
 const inventoryArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/cocos-inventory-icons-v1.json'),'utf8'));
 for(const record of inventoryArt.records)await bind(record.path,'assets/resources/items/'+record.id+'.png');
 await bind('shared/game/protocol.ts', 'assets/scripts/core/protocol.ts');
-await bind('frontend/public/assets/hearthwood/world-map-terrain-v1.png','assets/resources/atlas/terrain.png');
-for(const id of ['lia','noah','mira','adu','lanya'])await bind(`frontend/public/assets/hearthwood/residents/${id}-portrait.png`,`assets/resources/atlas/${id}.png`);
+await bind('assets/runtime/hearthwood/world-map-terrain-v1.png','assets/resources/atlas/terrain.png');
+for(const id of ['lia','noah','mira','adu','lanya'])await bind(`assets/runtime/hearthwood/residents/${id}-portrait.png`,`assets/resources/atlas/${id}.png`);
 for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock', 'features', 'caveArt', 'caveView', 'localScene', 'sceneLayout', 'lifeJournalDates', 'lifeRecords', 'dossier', 'nextDeparture', 'guidance', 'continuation', 'places', 'atlas', 'items', 'inventory', 'preferences']) {
   await bind(`shared/game/${name}.ts`, `assets/scripts/core/${name}.ts`, b => b.toString().replaceAll('"../types"', '"./protocol"').replace('"../stores/game"', '"./clock"'));
 }
 const art = ['home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0'];
-for (const name of art) await bind(`frontend/public/assets/hearthwood/village/${name}.png`, `assets/resources/village/${name}.png`);
-await bind('frontend/public/assets/hearthwood/market/shop.png','assets/resources/village/shop.png');
-await bind('frontend/public/assets/hearthwood/market/counter.png','assets/resources/interiors/market-counter.png');
-for (const id of ['lia','noah','mira','adu','lanya']) await bind(`frontend/public/assets/hearthwood/residents/${id}-actor.png`, `assets/resources/village/${id}-actor.png`);
-for (const id of ['wood','stone','seed','crop','plank','backpack','gold']) await bind(`frontend/public/assets/hearthwood/detail/items/${id}.png`, `assets/resources/items/${id}.png`);
-for (const id of ['notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed']) await bind(`frontend/public/assets/hearthwood/detail/interiors/${id}.png`, `assets/resources/interiors/${id}.png`);
-for (let i=1;i<6;i++) await bind(`frontend/public/assets/hearthwood/village/actor-${i}.png`, `assets/resources/village/actor-${i}.png`);
+for (const name of art) await bind(`assets/runtime/hearthwood/village/${name}.png`, `assets/resources/village/${name}.png`);
+await bind('assets/runtime/hearthwood/market/shop.png','assets/resources/village/shop.png');
+await bind('assets/runtime/hearthwood/market/counter.png','assets/resources/interiors/market-counter.png');
+for (const id of ['lia','noah','mira','adu','lanya']) await bind(`assets/runtime/hearthwood/residents/${id}-actor.png`, `assets/resources/village/${id}-actor.png`);
+for (const id of ['wood','stone','seed','crop','plank','backpack','gold']) await bind(`assets/runtime/hearthwood/detail/items/${id}.png`, `assets/resources/items/${id}.png`);
+for (const id of ['notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed']) await bind(`assets/runtime/hearthwood/detail/interiors/${id}.png`, `assets/resources/interiors/${id}.png`);
+for (let i=1;i<6;i++) await bind(`assets/runtime/hearthwood/village/actor-${i}.png`, `assets/resources/village/actor-${i}.png`);
 // Reuse actual scene sprite inputs and reproducibly baked Web terrain/rugs.
 const sceneArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/local-scene-art-v1.json'),'utf8'));
 for(const source of [...sceneArt.existing_sprite_inputs,...sceneArt.records.map(r=>r.path)]){
- const relative=source.startsWith('assets/derived/local-scenes/')?'local-scenes/'+path.basename(source):source.split('frontend/public/assets/hearthwood/')[1];
+ const relative=source.startsWith('assets/derived/local-scenes/')?'local-scenes/'+path.basename(source):source.split('assets/runtime/hearthwood/')[1];
  const target='assets/resources/'+(relative.startsWith('local-scenes/')?'scenes/'+path.basename(relative):relative.startsWith('detail/interiors/')?'interiors/'+path.basename(relative):relative==='market/counter.png'?'interiors/market-counter.png':relative==='market/shop.png'?'village/shop.png':relative);
  if(!records.some(r=>r.target===target))await bind(source,target);
 }

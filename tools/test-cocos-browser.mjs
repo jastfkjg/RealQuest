@@ -34,9 +34,9 @@ for(const change of [
  {apiURL:'http://127.0.0.1:12346/wrong'},
 ])assert.throws(()=>validateBrowserConfig({...config,...change},owner,file));
 console.log('PASS fixture configuration rejects player/preview/outside DB paths, ownership mismatches and non-loopback/mismatched endpoints.');
-assert.equal(selectSuites('current').length,28);assert.equal(selectSuites('all').length,29);
+assert.equal(selectSuites('current').length,28);assert.equal(selectSuites('all').length,28);
 assert.equal(selectSuites('chapter-friction')[0].file,'clients/cocos/tools/smoke-chapter-friction.mjs');
-assert.equal(selectSuites('compatibility').length,1);
+assert.throws(()=>selectSuites('compatibility'));
 assert.equal(selectSuites('consistency')[0].file,'clients/cocos/tools/smoke-consistency.mjs');
 assert.equal(selectSuites('pause')[0].file,'clients/cocos/tools/smoke-pause.mjs');
 assert.equal(selectSuites('textures')[0].file,'clients/cocos/tools/smoke-textures.mjs');
@@ -48,4 +48,4 @@ assert.throws(()=>selectSuites('preferences,preferences'));assert.throws(()=>sel
 assert.throws(()=>parseBrowserArgs([]));assert.throws(()=>parseBrowserArgs(['--build','sample','--port','0']));
 assert.equal(parseBrowserArgs(['--list']).list,true);
 assert.equal(parseBrowserArgs(['--build','sample/web-desktop','--port','5450']).port,5450);
-console.log('PASS suite selection includes28 current with chapter friction, actual combat framing, lossless terrain/fallback, keepalive pause faults, native semantics and startup recovery plus separate Web compatibility; CLI requires an explicit build and valid configurable ports.');
+console.log('PASS suite selection includes28 current with chapter friction, actual combat framing, lossless terrain/fallback, keepalive pause faults, native semantics and startup recovery without legacy client gates; CLI requires an explicit build and valid configurable ports.');

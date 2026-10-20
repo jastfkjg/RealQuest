@@ -26,13 +26,12 @@ export const browserSuites=[
  module('inventory-preview','clients/cocos/tools/smoke-inventory-preview.mjs','preview-result.json'),
  module('preferences','clients/cocos/tools/smoke-preferences.mjs'),
  module('preference-layout','clients/cocos/tools/smoke-preference-layout.mjs','layout-result.json'),
- module('village-art','frontend/scripts/village-polish.mjs','result-cocos.json',{args:['--engine=cocos']}),
- module('cave-art','frontend/scripts/cave-polish.mjs',undefined,{args:['--engine=cocos']}),
- module('compatibility','clients/cocos/tools/smoke-phase23.mjs','smoke-result.json',{group:'compatibility',timeoutMs:420000}),
+ module('village-art','clients/cocos/tools/smoke-village-art.mjs','result.json'),
+ module('cave-art','clients/cocos/tools/smoke-cave-art.mjs',undefined),
 ];
 export function selectSuites(selection='current'){
  if(selection==='all')return browserSuites;
- if(selection==='current'||selection==='compatibility')return browserSuites.filter(s=>s.group===selection);
+ if(selection==='current')return browserSuites.filter(s=>s.group===selection);
  const names=selection.split(',');
  if(names.some(name=>!browserSuites.some(s=>s.id===name))||new Set(names).size!==names.length)throw Error('Unknown or duplicate suite. Use --list.');
  return names.map(name=>browserSuites.find(s=>s.id===name));

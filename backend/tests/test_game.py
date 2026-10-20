@@ -1,3 +1,4 @@
+import atexit
 import copy
 import os
 import tempfile
@@ -7,13 +8,25 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import pytest
 
-os.environ['DATABASE_URL'] = 'sqlite:///' + os.path.join(tempfile.mkdtemp(prefix='realquest-tests-'), 'tests.db')
+_test_storage = tempfile.TemporaryDirectory(prefix='realquest-tests-')
+os.environ['DATABASE_URL'] = 'sqlite:///' + os.path.join(_test_storage.name, 'tests.db')
 from fastapi.testclient import TestClient
 from app.db import Base, engine, Session
 from app.main import app
 from app.models import Player, Receipt
 from app.rules import initial_state, apply, RuleError
 from sqlalchemy import select, func
+
+
+def _close_test_storage():
+    # Dispose SQLite/WAL handles before removing this test run's temporary data.
+    try:
+        engine.dispose()
+    finally:
+        _test_storage.cleanup()
+
+
+atexit.register(_close_test_storage)
 
 @pytest.fixture()
 def client():

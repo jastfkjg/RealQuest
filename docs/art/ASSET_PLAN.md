@@ -1,5 +1,9 @@
 # RealQuest Asset Plan and Provenance
 
+## Cocos 唯一客户端 — 2026-10-20
+
+原 runtime 资源已逐字节迁至 `assets/runtime/`；离线地表/室内绘制迁至 `tools/scene-art/`，使用独立 Canvas 合同，无 Phaser 依赖。原始源图、许可、裁切和像素哈希保留；原客户端代码的历史来源记入 manifest 的 retired_client_provenance，不再要求存在旧应用。迁移清单见 `docs/migration/cocos-client-retirement.json`，本轮没有新美术或视觉处理。
+
 ## Cocos first-city arrival — 2026-10-20
 
 South Gate Street reuses the unchanged project-owned cottage, shop, counter, noticeboard, fence, lamp and planter PNGs. The existing original Adu and Lanya single-frame actors are now bound to Cocos; they do not claim walking cycles. Street paving, masonry, gate piers, doorstep and sign boards are native Cocos geometry; Chinese signs remain native labels. No raster, font, sound, external download or generated source was added. Existing collision geometry, semantic object IDs and travel rules are preserved. Bindings and provenance are recorded under `cocos_chapter1_arrival` in the manifest; implementation evidence belongs to task108. Actual render remains a candidate pending owner review.

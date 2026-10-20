@@ -1,5 +1,7 @@
 # RealQuest 腾讯云部署
 
+> 2026-10-20：旧 React/Phaser 客户端已按用户授权退役，历史本地存档和QA数据已清理。旧版保护/兼容门槛和本文历史路径不再适用于新任务。当前入口与验证见 [任务109](tasks/109-cocos-only-client.md)；共享后端、备份能力和服务器部署规则仍保留。
+
 ## 当前范围
 
 生产目标为 `tencent-prod`，主机为 infra 的 `tencent-shanghai-01`（上海轻量服务器，`124.220.81.113`），域名 `realquest.jastcraft.com`。本次只准备代码、配置和检查，没有初始化服务器、设置 GitHub Secrets、购买或修改云资源、发布镜像或部署应用。
@@ -23,7 +25,7 @@ RealQuest 仓库级 Variables：
 
 创建业务 GitHub Environment `tencent-prod`，限制部署分支为 main。Variable 设置 `DEPLOY_TARGET=tencent-prod`；Secrets 设置 `SSH_HOST=124.220.81.113`、`SSH_PORT=22`、`SSH_USER=deploy`、`SSH_KEY`、经可信连接核验的 `SSH_KNOWN_HOSTS`。infra 使用它自己的 Environment `tencent-shanghai-01` 和 `GATEWAY_TARGET`，两仓库分别配置。
 
-**Container CI and build** 在 PR 上只验证；main push/手动运行在验证成功后构建、推送镜像，保存 `realquest-release` artifact（90天）并在 Summary 给出 Build run ID。推送代码不会部署服务器。
+**Container CI and build** 在push/PR上执行Cocos来源、共享单元和后端检查。手动勾选 `build_candidate` 后，预置的 `cocos-3.8.8` runner真实构建、测试并封装Cocos；还需main上显式勾选 `publish_images` 才发布Cocos静态站点/API双架构镜像，保存 `realquest-release` artifact（90天）与Build run ID。普通源码验证不产生可部署镜像；推送代码不会部署服务器。
 
 **Deploy tested images** 仅手动触发，选择 `tencent-prod` 和成功的 Build run ID。工作流核验构建来自本仓库 `.github/workflows/ci.yml`、main、已完成且成功，校验 artifact 的 repository、revision、run ID/attempt 和两个不可变镜像，然后检出同一源提交，发布时不重新构建。PR、fork、失败构建、其他工作流或不匹配 artifact 都会被拒绝。artifact 过期时需重新运行 CI。
 
@@ -53,7 +55,7 @@ PostgreSQL 镜像固定到已核验的17系列多架构 digest。数据库升级
 
 ## 发布与失败处理
 
-1. CI 验证通过，取得对应 Build run ID。
+1. 在main手动选择SDK构建和镜像发布，两者全部验证通过并产生 `realquest-release` 后，取得对应Build run ID。
 2. 首次先完成 infra **Deploy gateway**；随后 RealQuest **Deploy tested images** 选择 `tencent-prod` 和该编号。
 3. 服务器校验主机标记、env 权限、HTTPS 来源、不可变镜像、网络/卷和端口，再取得 `/opt/realquest/deploy.lock`。
 4. 拉取镜像。已有数据库时，先用 `pg_dump --format=custom` 生成权限600的一致快照，并用 `pg_restore --list` 验证；成功路径写入候选 release 的 `predeploy-backup`。备份失败不会停止旧应用。
@@ -75,8 +77,9 @@ infra 已提供 `host/backup-realquest.env.example` 和 `jastcraft-backup@realqu
 ```bash
 # backend/，使用 Python 3.14 环境
 .venv/bin/python -m pytest -q
-# frontend/，Node 22
+# 仓库根目录，Node22，配置官方Creator3.8.8的COCOS_CREATOR
 npm run build
+npm run cocos:package -- --build web-current/web-desktop --output output/cocos-delivery
 # 仓库根目录
 python3 -m unittest discover -s tests/deployment
 for script in deploy/*.sh; do bash -n "$script"; done

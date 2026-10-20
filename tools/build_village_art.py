@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'assets/generated/hearthwood'
-OUT = ROOT / 'frontend/public/assets/hearthwood/village'
+OUT = ROOT / 'assets/runtime/hearthwood/village'
 OUT.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--scenery-only', action='store_true')

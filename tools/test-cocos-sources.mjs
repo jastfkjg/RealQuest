@@ -24,12 +24,11 @@ for(const file of ['shared/game/appearances.ts','clients/cocos/assets/scripts/co
 assert.equal(referenceRole({file:'shared/game/items.ts',literal:'/assets/hearthwood/detail/items/'},policy),'descriptive-id-url-native-binding-used');
 console.log('PASS only the existing descriptive appearance/item URL shapes are accepted; new URL families require review.');
 
-const file='clients/cocos/tools/run-preview.py',references=webReferences(file,'# "frontend/comment-only"\npath = root / "frontend/dist/index.html"\nother = f"../../frontend/{target}"');
-assert.equal(references.length,2);for(const reference of references)assert.equal(referenceRole(reference,policy),'optional-web-comparison-only');
 assert.equal(sourceOwner('shared/game/items.ts',policy),'shared-game');
-assert.equal(sourceOwner('frontend/src/game/village.ts',policy),'frozen-web-scene');
+assert.equal(sourceOwner('tools/scene-art/village.ts',policy),'offline-scene-art');
 assert.throws(()=>sourceOwner('frontend/src/App.tsx',policy),/Unowned Cocos source/);
-console.log('PASS optional Web comparison is classified separately; unowned frontend code cannot enter the frozen source set.');
+assert.throws(()=>referenceRole({file:'clients/cocos/tools/run-preview.py',literal:'frontend/dist'},policy),/Unregistered Web reference/);
+console.log('PASS Cocos owns its independent art sources; legacy client imports are rejected.');
 
 const png=await fs.readFile(new URL('../assets/derived/local-scenes/terrain.png',import.meta.url));
 const webp=await fs.readFile(new URL('../assets/derived/cocos-textures/terrain-lossless.webp',import.meta.url));

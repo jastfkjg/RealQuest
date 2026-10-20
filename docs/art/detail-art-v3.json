@@ -2,12 +2,12 @@
   "version": 3,
   "source": "Original built-in image_gen outputs; exact prompts adjacent",
   "rebuild": "tools/build_detail_art.py",
-  "rebuild_sha256": "5ae8f318a115caf28d76effbae9e5bc3fe6cbfc966f3061173c7a54a4799ff50",
+  "rebuild_sha256": "c35a96e9e9ef84e5c6043ca2ef09669ae04038a19590043b0355758d264f703d",
   "records": [
     {
       "id": "seed",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/seed.png",
+      "path": "assets/runtime/hearthwood/detail/items/seed.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -31,7 +31,7 @@
     {
       "id": "wood",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/wood.png",
+      "path": "assets/runtime/hearthwood/detail/items/wood.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -55,7 +55,7 @@
     {
       "id": "stone",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/stone.png",
+      "path": "assets/runtime/hearthwood/detail/items/stone.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -79,7 +79,7 @@
     {
       "id": "crop",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/crop.png",
+      "path": "assets/runtime/hearthwood/detail/items/crop.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -103,7 +103,7 @@
     {
       "id": "plank",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/plank.png",
+      "path": "assets/runtime/hearthwood/detail/items/plank.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -127,7 +127,7 @@
     {
       "id": "gold",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/gold.png",
+      "path": "assets/runtime/hearthwood/detail/items/gold.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -151,7 +151,7 @@
     {
       "id": "backpack",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/backpack.png",
+      "path": "assets/runtime/hearthwood/detail/items/backpack.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -175,7 +175,7 @@
     {
       "id": "journal",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/journal.png",
+      "path": "assets/runtime/hearthwood/detail/items/journal.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -199,7 +199,7 @@
     {
       "id": "sprout",
       "category": "items",
-      "path": "frontend/public/assets/hearthwood/detail/items/sprout.png",
+      "path": "assets/runtime/hearthwood/detail/items/sprout.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -223,7 +223,7 @@
     {
       "id": "character-0",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-0.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-0.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -247,7 +247,7 @@
     {
       "id": "character-1",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-1.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-1.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -271,7 +271,7 @@
     {
       "id": "character-2",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-2.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-2.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -295,7 +295,7 @@
     {
       "id": "character-3",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-3.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-3.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -319,7 +319,7 @@
     {
       "id": "character-4",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-4.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-4.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -343,7 +343,7 @@
     {
       "id": "character-5",
       "category": "portraits",
-      "path": "frontend/public/assets/hearthwood/detail/portraits/character-5.png",
+      "path": "assets/runtime/hearthwood/detail/portraits/character-5.png",
       "width": 64,
       "height": 64,
       "visible_bounds": [
@@ -367,7 +367,7 @@
     {
       "id": "notice",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/notice.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/notice.png",
       "width": 288,
       "height": 177,
       "visible_bounds": [
@@ -391,7 +391,7 @@
     {
       "id": "bookcase",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/bookcase.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/bookcase.png",
       "width": 224,
       "height": 184,
       "visible_bounds": [
@@ -415,7 +415,7 @@
     {
       "id": "workbench",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/workbench.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/workbench.png",
       "width": 416,
       "height": 122,
       "visible_bounds": [
@@ -439,7 +439,7 @@
     {
       "id": "desk-88",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/desk-88.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/desk-88.png",
       "width": 176,
       "height": 109,
       "visible_bounds": [
@@ -463,7 +463,7 @@
     {
       "id": "desk-96",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/desk-96.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/desk-96.png",
       "width": 192,
       "height": 119,
       "visible_bounds": [
@@ -487,7 +487,7 @@
     {
       "id": "bed",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/bed.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/bed.png",
       "width": 144,
       "height": 203,
       "visible_bounds": [
@@ -511,7 +511,7 @@
     {
       "id": "hearth",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/hearth.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/hearth.png",
       "width": 144,
       "height": 112,
       "visible_bounds": [
@@ -535,7 +535,7 @@
     {
       "id": "planter",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/planter.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/planter.png",
       "width": 48,
       "height": 54,
       "visible_bounds": [
@@ -559,7 +559,7 @@
     {
       "id": "barrel",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/barrel.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/barrel.png",
       "width": 64,
       "height": 90,
       "visible_bounds": [
@@ -583,7 +583,7 @@
     {
       "id": "anvil",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/anvil.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/anvil.png",
       "width": 96,
       "height": 80,
       "visible_bounds": [
@@ -607,7 +607,7 @@
     {
       "id": "rug",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/rug.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/rug.png",
       "width": 288,
       "height": 157,
       "visible_bounds": [
@@ -631,7 +631,7 @@
     {
       "id": "window",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/window.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/window.png",
       "width": 80,
       "height": 66,
       "visible_bounds": [
@@ -655,7 +655,7 @@
     {
       "id": "chest-open",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/chest-open.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/chest-open.png",
       "width": 96,
       "height": 94,
       "visible_bounds": [
@@ -679,7 +679,7 @@
     {
       "id": "manual",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/manual.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/manual.png",
       "width": 36,
       "height": 37,
       "visible_bounds": [
@@ -703,7 +703,7 @@
     {
       "id": "book",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/book.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/book.png",
       "width": 64,
       "height": 39,
       "visible_bounds": [
@@ -727,7 +727,7 @@
     {
       "id": "lantern",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/lantern.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/lantern.png",
       "width": 28,
       "height": 29,
       "visible_bounds": [
@@ -751,7 +751,7 @@
     {
       "id": "wall",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/wall.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/wall.png",
       "width": 256,
       "height": 145,
       "visible_bounds": [
@@ -775,7 +775,7 @@
     {
       "id": "chest-closed",
       "category": "interiors",
-      "path": "frontend/public/assets/hearthwood/detail/interiors/chest-closed.png",
+      "path": "assets/runtime/hearthwood/detail/interiors/chest-closed.png",
       "width": 96,
       "height": 71,
       "visible_bounds": [

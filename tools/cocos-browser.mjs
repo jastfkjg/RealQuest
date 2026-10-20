@@ -3,7 +3,7 @@ import path from 'node:path';
 import net from 'node:net';
 import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {verifyBuild,buildPayload} from './cocos-build-info.mjs';
+import {verifyBuild} from './cocos-build-info.mjs';
 import {runOwned} from './cocos-child.mjs';
 import {browserSuites,selectSuites} from './cocos-browser-suites.mjs';
 import {finishBrowserProcesses} from './cocos-browser-cleanup.mjs';
@@ -27,14 +27,14 @@ async function health(url,signal){
 }
 export function parseBrowserArgs(args){
  const options={selection:'current',continueOnFailure:false};
- const values={'--build':'build','--suite':'selection','--port':'port','--api-port':'apiPort','--web-port':'webPort','--web-build':'webBuild'};
+ const values={'--build':'build','--suite':'selection','--port':'port','--api-port':'apiPort'};
  for(let i=0;i<args.length;i++){
   if(args[i]==='--list')options.list=true;
   else if(args[i]==='--continue-on-failure')options.continueOnFailure=true;
   else if(values[args[i]]&&args[i+1])options[values[args[i]]]=args[++i];
-  else throw Error('Usage: cocos:test:browser -- --build <candidate>/web-desktop [--suite current|all|compatibility|id,id] [--port N --api-port N] [--web-build path --web-port N] [--continue-on-failure] [--list]');
+  else throw Error('Usage: cocos:test:browser -- --build <candidate>/web-desktop [--suite current|all|id,id] [--port N --api-port N] [--continue-on-failure] [--list]');
  }
- for(const key of ['port','apiPort','webPort'])if(options[key]!==undefined){options[key]=Number(options[key]);if(!Number.isInteger(options[key])||options[key]<1||options[key]>65535)throw Error('Invalid test port.');}
+ for(const key of ['port','apiPort'])if(options[key]!==undefined){options[key]=Number(options[key]);if(!Number.isInteger(options[key])||options[key]<1||options[key]>65535)throw Error('Invalid test port.');}
  if(!options.list&&!options.build)throw Error('Choose an explicit separately built Cocos candidate with --build.');
  return options;
 }
@@ -42,16 +42,11 @@ export function parseBrowserArgs(args){
 export async function runRegression(options,suites=selectSuites(options.selection)){
  if(Number(process.versions.node.split('.')[0])!==22)throw Error('Browser regression requires Node22.');
  const build=await verifyBuild(path.resolve(root,'clients/cocos',options.build));
- const needsWeb=suites.some(s=>s.group==='compatibility');
- if(needsWeb&&!options.webBuild)throw Error('Compatibility suite requires an explicit existing --web-build package; current Cocos suites do not.');
- const webBuild=options.webBuild?await fs.realpath(path.resolve(root,options.webBuild)):null;
- if(webBuild){if(!webBuild.startsWith(root+path.sep))throw Error('Web comparison package must be inside this repository.');await fs.access(path.join(webBuild,'index.html'));}
- const webComparison=webBuild?{directory:webBuild,...await buildPayload(webBuild)}:null;
  const parent=path.join(root,'output/cocos-regression');await fs.mkdir(parent,{recursive:true});
  if(await fs.realpath(parent)!==parent)throw Error('Regression output directory must not be a symlink.');
  const runDirectory=await fs.mkdtemp(path.join(parent,'run-')),runId=crypto.randomUUID(),nonce=crypto.randomBytes(16).toString('hex');
  const inventory=await fs.readFile(path.join(root,'docs/migration/cocos-source-inventory.json'));
- const owner={schema_version:1,runId,nonce,controllerPID:process.pid,createdAt:new Date().toISOString(),repository:root,build,webComparison,selected:suites.map(s=>s.id),sourceInventorySHA256:hash(inventory),backend:await backendSources(),runtime:{node:process.version,nodeExecutable:process.execPath,platform:process.platform,arch:process.arch}};
+ const owner={schema_version:1,runId,nonce,controllerPID:process.pid,createdAt:new Date().toISOString(),repository:root,build,selected:suites.map(s=>s.id),sourceInventorySHA256:hash(inventory),backend:await backendSources(),runtime:{node:process.version,nodeExecutable:process.execPath,platform:process.platform,arch:process.arch}};
  await fs.writeFile(path.join(runDirectory,'run.json'),JSON.stringify(owner,null,2)+'\n',{flag:'wx'});
  await fs.writeFile(path.join(runDirectory,'source-inventory.json'),inventory,{flag:'wx'});
  console.log('Run: '+runDirectory);
@@ -64,9 +59,8 @@ export async function runRegression(options,suites=selectSuites(options.selectio
    if(controller.signal.aborted)break;
    const directory=path.join(runDirectory,'suites',suite.id);await fs.mkdir(directory,{recursive:true});
    const port=options.port||await freePort();let apiPort=options.apiPort||await freePort();while(!options.apiPort&&apiPort===port)apiPort=await freePort();
-   const webPort=needsWeb&&(suite.group==='compatibility')?(options.webPort||await freePort()):null;
-   if(new Set([port,apiPort,...(webPort?[webPort]:[])]).size!==(webPort?3:2))throw Error('Test proxy/API/Web ports must differ.');
-   const config={schema_version:1,repository:root,runDirectory,runId,nonce,controllerPID:process.pid,suite:suite.id,directory,database:path.join(directory,'test.db'),baseURL:'http://127.0.0.1:'+port,apiURL:'http://127.0.0.1:'+apiPort,oldURL:webPort?'http://127.0.0.1:'+webPort:null,cookie:'rq_test_'+runId.replaceAll('-',''),build};
+   if(new Set([port,apiPort]).size!==2)throw Error('Test proxy/API ports must differ.');
+   const config={schema_version:1,repository:root,runDirectory,runId,nonce,controllerPID:process.pid,suite:suite.id,directory,database:path.join(directory,'test.db'),baseURL:'http://127.0.0.1:'+port,apiURL:'http://127.0.0.1:'+apiPort,cookie:'rq_test_'+runId.replaceAll('-',''),build};
    const configFile=path.join(directory,'config.json');await fs.writeFile(configFile,JSON.stringify(config,null,2)+'\n',{flag:'wx'});
    try{await fs.access(config.database);throw Error('Refusing an existing test DB.');}catch(error){if(error.code!=='ENOENT')throw error;}
    const env={...process.env,REALQUEST_COCOS_TEST_CONFIG:configFile,REALQUEST_TEST_RUN_ID:runId,DATABASE_URL:'sqlite:///'+config.database};
@@ -76,7 +70,7 @@ export async function runRegression(options,suites=selectSuites(options.selectio
    const serviceController=new AbortController(),testController=new AbortController(),cancelService=()=>serviceController.abort(),cancelTest=()=>testController.abort();
    controller.signal.addEventListener('abort',cancelService,{once:true});controller.signal.addEventListener('abort',cancelTest,{once:true});
    const serviceArgs=[path.join(root,'clients/cocos/tools/run-preview.py'),'--port',String(port),'--api-port',String(apiPort),'--build',build.directory,'--database',config.database,'--cookie-name',config.cookie,'--ready-file',path.join(directory,'ready.json')];
-   if(webPort)serviceArgs.push('--web-port',String(webPort),'--web-build',webBuild);
+
    let serviceDone=false,serviceOutcome,serviceError;
    const service=runOwned(path.join(root,'backend/.venv/bin/python'),serviceArgs,{cwd:root,env,log:path.join(directory,'service.log'),timeoutMs:suite.timeoutMs+45000,signal:serviceController.signal}).then(r=>{serviceDone=true;serviceOutcome=r;},e=>{serviceDone=true;serviceError=e;});
    void service.then(()=>{if(!serviceController.signal.aborted)testController.abort();});
@@ -112,7 +106,6 @@ export async function runRegression(options,suites=selectSuites(options.selectio
    if(!result.success&&!options.continueOnFailure)break;
   }
   await verifyBuild(build.directory);
-  if(webComparison&&(await buildPayload(webBuild)).sha256!==webComparison.sha256)throw Error('Web comparison payload changed during the run.');
   const postflight=await runOwned(process.execPath,[path.join(root,'tools/cocos-sources.mjs'),'--check'],{cwd:root,log:path.join(runDirectory,'sources-after.log'),signal:controller.signal});
   if(postflight.code!==0)throw Error('Source ownership changed during the run; inspect sources-after.log.');
   if(hash(await fs.readFile(path.join(root,'docs/migration/cocos-source-inventory.json')))!==owner.sourceInventorySHA256||(await backendSources()).sha256!==owner.backend.sha256)throw Error('Test/source/backend inputs changed during the run; results cannot be marked current.');
@@ -121,7 +114,7 @@ export async function runRegression(options,suites=selectSuites(options.selectio
  finally{
   process.removeListener('SIGINT',stop);process.removeListener('SIGTERM',stop);
   const complete=!failure&&!controller.signal.aborted&&results.length===suites.length&&results.every(r=>r.success);
-  const report={kind:'browser-regression',runId,runDirectory,started:owner.createdAt,finished:new Date().toISOString(),build,webComparison,sourceInventorySHA256:owner.sourceInventorySHA256,backend:owner.backend,runtime:owner.runtime,expected:suites.length,results,unexecuted:suites.filter(s=>!results.some(r=>r.id===s.id)).map(s=>s.id),cancelled:controller.signal.aborted,error:failure,complete,unitTestsIncluded:false};
+  const report={kind:'browser-regression',runId,runDirectory,started:owner.createdAt,finished:new Date().toISOString(),build,sourceInventorySHA256:owner.sourceInventorySHA256,backend:owner.backend,runtime:owner.runtime,expected:suites.length,results,unexecuted:suites.filter(s=>!results.some(r=>r.id===s.id)).map(s=>s.id),cancelled:controller.signal.aborted,error:failure,complete,unitTestsIncluded:false};
   await fs.writeFile(path.join(runDirectory,'result.json'),JSON.stringify(report,null,2)+'\n');console.log('Report: '+path.join(runDirectory,'result.json'));
   if(!complete)process.exitCode=controller.signal.aborted?130:1;
   return report;

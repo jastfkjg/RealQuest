@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT/'frontend/public/assets/hearthwood/residents'
+OUT = ROOT/'assets/runtime/hearthwood/residents'
 OUT.mkdir(parents=True,exist_ok=True)
 sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 records=[]
@@ -54,7 +54,7 @@ for index,npc in enumerate(['lia','noah','mira']):
         contact.alpha_composite(frames[i].resize((72,96),Image.Resampling.NEAREST),(index*240+(i%2)*100+12,175+(i//2)*110))
 contact.convert('RGB').save(ROOT/'output/npc-life/identities.png')
 # Preserve and compare every player binding. NPC files must not duplicate any.
-players=list((ROOT/'frontend/public/assets/hearthwood/village').glob('actor-[0-5].png'))
+players=list((ROOT/'assets/runtime/hearthwood/village').glob('actor-[0-5].png'))
 assert len(players)==6
 for p in OUT.glob('*-actor.png'):
     assert all(p.read_bytes()!=q.read_bytes() for q in players)

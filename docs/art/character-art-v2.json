@@ -5,7 +5,7 @@
   "reference": "docs/art/references/character-dossier-concept-v2.png",
   "prompt": "assets/generated/hearthwood/character-emblems-v2.prompt.txt",
   "rebuild": "tools/build_character_art.py",
-  "rebuild_sha256": "cc5bdfe64fa21fe93c2d6cbfcd20cc62aa7e5d79ca05f22e423c295e99913d86",
+  "rebuild_sha256": "85f2342c2f5602166a2bd3197eac5fbb758a6be12a5cbb1ce842416a10c3eaeb",
   "records": [
     {
       "id": "science",
@@ -17,7 +17,7 @@
         512,
         512
       ],
-      "runtime_path": "frontend/public/assets/hearthwood/character/science.webp",
+      "runtime_path": "assets/runtime/hearthwood/character/science.webp",
       "sha256": "282fc417c8e1bcad0bd4ab243ed262a0e92a314d884e4ddb123f5f77460830d3",
       "width": 512,
       "height": 512,
@@ -34,7 +34,7 @@
         1024,
         512
       ],
-      "runtime_path": "frontend/public/assets/hearthwood/character/magic.webp",
+      "runtime_path": "assets/runtime/hearthwood/character/magic.webp",
       "sha256": "cba698c29de040ea6c17330ce3626764a484bf3bc2c6a4e1e7dd886516593510",
       "width": 512,
       "height": 512,
@@ -51,7 +51,7 @@
         1536,
         512
       ],
-      "runtime_path": "frontend/public/assets/hearthwood/character/planting.webp",
+      "runtime_path": "assets/runtime/hearthwood/character/planting.webp",
       "sha256": "271bc887651b482a5dc5bdf2ab3165da1ab2d6b34d28e90f2c503b7719221a47",
       "width": 512,
       "height": 512,
@@ -68,7 +68,7 @@
         512,
         1024
       ],
-      "runtime_path": "frontend/public/assets/hearthwood/character/ranching.webp",
+      "runtime_path": "assets/runtime/hearthwood/character/ranching.webp",
       "sha256": "8c19e6109ac7e4980507200c73a078e10e3a5c104cad785cec59b6d96df6a794",
       "width": 512,
       "height": 512,
@@ -85,7 +85,7 @@
         1024,
         1024
       ],
-      "runtime_path": "frontend/public/assets/hearthwood/character/building.webp",
+      "runtime_path": "assets/runtime/hearthwood/character/building.webp",
       "sha256": "18eb33cf87fa8ebd7da77fe7965f8ac3d04ed1b435a2f8d983885090e08a4f86",
       "width": 512,
       "height": 512,

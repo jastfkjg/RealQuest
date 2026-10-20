@@ -206,7 +206,7 @@ def fingerprint(database):
     return hashlib.sha256('\n'.join(rows).encode()).hexdigest()
 
 
-def integration(build, web_build):
+def integration(build):
     OUTPUT.mkdir(parents=True, exist_ok=True)
     directory = Path(tempfile.mkdtemp(prefix='run-', dir=OUTPUT))
     report = {'kind': 'launcher-real-process-not-game-coverage', 'directory': str(directory), 'complete': False, 'checks': [], 'launchers': [], 'children': []}
@@ -221,8 +221,6 @@ def integration(build, web_build):
         args = [str(ROOT / 'start-cocos.command'), '--build', str(build), '--database', str(database), '--port', str(ports[0]), '--api-port', str(ports[1]), '--cookie-name', cookie]
         if ready:
             args += ['--ready-file', str(ready)]
-        if web_build:
-            args += ['--web-port', str(ports[2]), '--web-build', str(web_build)]
         return args + list(extra)
 
     def start(database, ports, name, extra=(), env=None):
@@ -291,7 +289,7 @@ def integration(build, web_build):
         current, ready = start(database, ports, 'normal')
         info = wait_for(current, ready)
         assert info['database'] == str(database) and info['cookie'] == cookie
-        origin = f'http://127.0.0.1:{ports[2] if web_build else ports[0]}'
+        origin = f'http://127.0.0.1:{ports[0]}'
         cocos = f'http://127.0.0.1:{ports[0]}'
         assert request(cocos, '/api/health')['status'] == 'ok'
         web = request(origin, '/api/session', {})
@@ -303,7 +301,7 @@ def integration(build, web_build):
         assert continued['save_id'] == save_id
         bearer = {'Authorization': 'Bearer ' + continued['session_token']}
         assert request(cocos, '/api/export', headers=bearer) == old_export
-        record('actual-readiness-original-cookie-to-cocos-same-save-and-full-export', saveID=save_id, sameAPI=bool(web_build))
+        record('actual-readiness-cookie-and-bearer-same-save-and-full-export', saveID=save_id, sameAPI=True)
 
         lease_before = preview.lease_path(database).read_bytes()
         other_ports = free_ports(3)
@@ -387,7 +385,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--unit', action='store_true')
     parser.add_argument('--build')
-    parser.add_argument('--web-build')
     args = parser.parse_args()
     if args.unit:
         unittest.main(argv=[sys.argv[0]])
@@ -398,4 +395,4 @@ if __name__ == '__main__':
             raise KeyboardInterrupt
         signal.signal(signal.SIGINT, interrupt)
         signal.signal(signal.SIGTERM, interrupt)
-        raise SystemExit(integration(Path(args.build).resolve(), Path(args.web_build).resolve() if args.web_build else None))
+        raise SystemExit(integration(Path(args.build).resolve()))

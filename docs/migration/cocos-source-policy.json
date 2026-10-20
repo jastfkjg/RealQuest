@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "decision": "Keep original Web source. Stopping its publication must not remove the frozen inputs owned by the Cocos/shared art pipeline. Relocation requires a separate byte-preserving change and regression evidence before archive/delete authorization.",
+  "decision": "Cocos is the sole client. Runtime art belongs to assets/runtime; engine-independent scene paint belongs to tools/scene-art. Legacy React/Phaser source and compatibility gates are retired by owner authorization on 2026-10-20.",
   "owners": [
     {
       "id": "shared-game",
@@ -33,30 +33,28 @@
       "responsibility": "Existing provenance and reference records; approval scope belongs to its task, not a successful byte check."
     },
     {
-      "id": "frozen-web-art",
-      "prefix": "frontend/public/assets/hearthwood/",
-      "responsibility": "Project art inputs owned by shared/Cocos art tooling despite the legacy directory name. Retain in place during transition; before any frontend archive/delete move exact bytes and provenance to a shared project asset source and update both consumers."
+      "id": "runtime-art",
+      "prefix": "assets/runtime/",
+      "responsibility": "Canonical packed artwork with unchanged pixel bytes and provenance, owned by Cocos art tools."
     },
     {
-      "id": "frozen-web-scene",
+      "id": "offline-scene-art",
       "paths": [
-        "frontend/src/game/village.ts",
-        "frontend/src/game/villageGround.ts",
-        "frontend/src/game/interiors.ts",
-        "frontend/src/game/appearances.ts",
-        "frontend/src/game/detailAssets.json"
+        "tools/scene-art/village.ts",
+        "tools/scene-art/villageGround.ts",
+        "tools/scene-art/interiors.ts",
+        "tools/scene-art/types.ts",
+        "tools/scene-art/detailAssets.json"
       ],
-      "responsibility": "Frozen project-authored offline paint sources and import/data closure. Root bake tool owns their continued availability. No React build or installed Phaser is required; before archive/delete extract exact sources into shared offline art tooling, preserve Web wrappers/behavior and rerun pixel/layout checks."
+      "responsibility": "Engine-independent offline canvas and placement sources; no live legacy client."
     },
     {
-      "id": "preserved-web-tests",
+      "id": "shared-tests",
       "paths": [
-        "frontend/scripts/life-journal-dates.mjs",
-        "frontend/scripts/next-departure-state.mjs",
-        "frontend/scripts/village-polish.mjs",
-        "frontend/scripts/cave-polish.mjs"
+        "tools/test-life-journal-dates.mjs",
+        "tools/test-next-departure-state.mjs"
       ],
-      "responsibility": "Retain original assertions against canonical shared helpers. Before frontend archive/delete relocate test ownership to shared tooling while preserving the original assertions and preservation evidence."
+      "responsibility": "Behavior assertions against canonical shared game rules."
     },
     {
       "id": "cocos-adapter",
@@ -82,10 +80,9 @@
       "id": "ownership-policy",
       "paths": [
         "docs/migration/cocos-source-policy.json",
-        "docs/migration/cocos-baseline.json",
-        "docs/migration/cocos-transition-policy.json"
+        "docs/migration/cocos-client-retirement.json"
       ],
-      "responsibility": "Explicit ownership and preserved-source contracts; review changes instead of weakening guards to hide drift."
+      "responsibility": "Current ownership and exact-byte art relocation evidence."
     },
     {
       "id": "cocos-delivery",
@@ -95,7 +92,7 @@
     {
       "id": "cocos-candidate-ci",
       "paths": [
-        ".github/workflows/cocos.yml"
+        ".github/workflows/ci.yml"
       ],
       "responsibility": "Explicit Cocos-only candidate CI; actual committed runner execution remains T2/T3 evidence, no production publishing."
     }
@@ -104,14 +101,10 @@
     "clients/cocos/tools/sync.mjs": "frozen-art-binding",
     "tools/build_local_scene_art.mjs": "offline-scene-input",
     "tools/cocos-unit.mjs": "preserved-test-entry",
-    "clients/cocos/tools/check-baseline.mjs": "preservation-only",
-    "clients/cocos/tools/run-preview.py": "optional-web-comparison-only",
     "tools/cocos-clean-source.mjs": "snapshot-selection-or-exclusion",
     "tools/cocos-sources.mjs": "ownership-inventory-implementation",
     "tools/test-cocos-sources.mjs": "isolated-negative-reference-fixtures",
-    "tools/cocos-browser-suites.mjs": "current-Cocos-and-explicit-Web-compatibility-suite-registry",
-    "tools/cocos-transition.mjs": "preservation-only",
-    "tools/test-cocos-transition.mjs": "isolated-preservation-fixtures"
+    "tools/cocos-browser-suites.mjs": "Cocos-only-regression-registry"
   },
   "descriptive_web_url_modules": [
     "shared/game/appearances.ts",
@@ -120,5 +113,5 @@
     "clients/cocos/assets/scripts/core/items.ts"
   ],
   "reference_scope": "All TS/MJS/PY files in shared/game, clients/cocos/assets/scripts and clients/cocos/tools; root cocos-*.mjs/test-cocos-*.mjs; every producer recorded by the consumed art provenance. Static strings/template prefixes and real bake module input closure are checked. This is not an arbitrary-JavaScript data-flow proof.",
-  "scope_limits": "Optional two-client Web comparison and historical Git preservation guards remain separate. No engine change, source deletion, default publication switch, new license or owner visual approval follows from this inventory."
+  "scope_limits": "Checks current Cocos/shared/art source ownership and provenance; no legacy-client compatibility or Git-history preservation gate. Historical task reports are not current requirements."
 }

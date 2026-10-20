@@ -26,13 +26,13 @@ const inputMaps = {
 };
 const images = {};
 const directories = [
-  ["village", "frontend/public/assets/hearthwood/village"],
-  ["interior", "frontend/public/assets/hearthwood/detail/interiors"],
+  ["village", "assets/runtime/hearthwood/village"],
+  ["interior", "assets/runtime/hearthwood/detail/interiors"],
 ];
 const inputs = [
-  "frontend/src/game/village.ts",
-  "frontend/src/game/villageGround.ts",
-  "frontend/src/game/interiors.ts",
+  "tools/scene-art/village.ts",
+  "tools/scene-art/villageGround.ts",
+  "tools/scene-art/interiors.ts",
   "backend/app/world.py",
 ];
 for (const [prefix, folder] of directories)
@@ -47,10 +47,10 @@ for (const [prefix, folder] of directories)
     };
   }
 images["village-shop"] = {
-  file: "frontend/public/assets/hearthwood/market/shop.png",
+  file: "assets/runtime/hearthwood/market/shop.png",
 };
 images["interior-market-counter"] = {
-  file: "frontend/public/assets/hearthwood/market/counter.png",
+  file: "assets/runtime/hearthwood/market/counter.png",
 };
 for (const info of Object.values(images))
   if (!info.data)
@@ -62,26 +62,13 @@ for (const name of ["village", "interiors"])
   {
     const result = await build({
       absWorkingDir: root,
-      entryPoints: [root + "frontend/src/game/" + name + ".ts"],
+      entryPoints: [root + "tools/scene-art/" + name + ".ts"],
       bundle: true,
       write: false,
       metafile: true,
       format: "iife",
       globalName: "SceneSource",
-      plugins: [
-        {
-          name: "unused-engine-types",
-          setup(b) {
-            b.onResolve({ filter: /^phaser$/ }, () => ({
-              path: "phaser",
-              namespace: "stub",
-            }));
-            b.onLoad({ filter: /.*/, namespace: "stub" }, () => ({
-              contents: "export default {GameObjects:{Image:class {}}};",
-            }));
-          },
-        },
-      ],
+
     });
     bundles[name] = result.outputFiles[0].text;
     for (const file of Object.keys(result.metafile.inputs))
@@ -269,10 +256,10 @@ const allInputs = [
     ...used,
     "tools/build_local_scene_art.mjs",
     ...["grass", "grass-patch", "bank-stones", "step"].map(
-      (n) => "frontend/public/assets/hearthwood/village/" + n + ".png",
+      (n) => "assets/runtime/hearthwood/village/" + n + ".png",
     ),
-    "frontend/public/assets/hearthwood/detail/interiors/wall.png",
-    "frontend/public/assets/hearthwood/detail/interiors/rug.png",
+    "assets/runtime/hearthwood/detail/interiors/wall.png",
+    "assets/runtime/hearthwood/detail/interiors/rug.png",
   ]),
 ].sort();
 const sourceHashes = [];

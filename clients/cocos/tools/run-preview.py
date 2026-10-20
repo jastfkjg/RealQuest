@@ -32,13 +32,11 @@ def positive_seconds(value):
 def arguments(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Read-only preflight; do not install, migrate, create files or start services')
-    parser.add_argument('--port', type=int, default=os.environ.get('REALQUEST_COCOS_PORT', '5431'))
-    parser.add_argument('--api-port', type=int, default=os.environ.get('REALQUEST_COCOS_API_PORT', '8130'))
-    parser.add_argument('--build', default=os.environ.get('REALQUEST_COCOS_PREVIEW_BUILD', 'web-village-polish/web-desktop'), help='Existing build relative to clients/cocos (historical default retained); no build or hot reload')
-    parser.add_argument('--database', default=os.environ.get('REALQUEST_COCOS_DATABASE', 'output/cave-polish/local-preview.db'), help='SQLite path relative to repository or absolute; historical sample default retained')
-    parser.add_argument('--web-port', type=int, help='Optional original Web comparison against the same selected database/API')
-    parser.add_argument('--web-build', default='frontend/dist', help='Existing Web package relative to repository; used only with --web-port')
-    parser.add_argument('--cookie-name', default=os.environ.get('REALQUEST_COCOS_COOKIE', 'realquest_polish_local'))
+    parser.add_argument('--port', type=int, default=os.environ.get('REALQUEST_COCOS_PORT', '5443'))
+    parser.add_argument('--api-port', type=int, default=os.environ.get('REALQUEST_COCOS_API_PORT', '8143'))
+    parser.add_argument('--build', default=os.environ.get('REALQUEST_COCOS_PREVIEW_BUILD', 'web-current/web-desktop'), help='Existing build relative to clients/cocos (default current build); no build or hot reload')
+    parser.add_argument('--database', default=os.environ.get('REALQUEST_COCOS_DATABASE', 'output/cocos-local/local-preview.db'), help='SQLite path relative to repository or absolute; local development save')
+    parser.add_argument('--cookie-name', default=os.environ.get('REALQUEST_COCOS_COOKIE', 'realquest_cocos'))
     parser.add_argument('--ready-file', help='New JSON file inside output; written only after all services respond')
     parser.add_argument('--startup-timeout', type=positive_seconds, default=45)
     parser.add_argument('--migration-timeout', type=positive_seconds, default=90)
@@ -89,12 +87,9 @@ def preflight(args):
     build = (ROOT / 'clients/cocos' / args.build).resolve()
     if not build.is_relative_to(ROOT / 'clients/cocos') or not (build / 'index.html').is_file():
         raise PreviewError('Build must be an existing Cocos Web package inside clients/cocos; run cocos:build first.')
-    ports = [args.port, args.api_port] + ([args.web_port] if args.web_port is not None else [])
+    ports = [args.port, args.api_port]
     if len(set(ports)) != len(ports):
         raise PreviewError('Preview ports must be distinct.')
-    web = (ROOT / args.web_build).resolve()
-    if args.web_port is not None and (not web.is_relative_to(ROOT) or not (web / 'index.html').is_file()):
-        raise PreviewError('Optional Web comparison needs an existing --web-build inside this repository.')
     if not args.cookie_name or not args.cookie_name.isascii() or not args.cookie_name.replace('_', '').isalnum():
         raise PreviewError('Cookie name must contain only ASCII letters, numbers or underscores.')
     selected = ROOT / args.database
@@ -115,7 +110,7 @@ def preflight(args):
     ready = (ROOT / args.ready_file).resolve() if args.ready_file else None
     if ready and (not ready.is_relative_to(ROOT / 'output') or ready.exists()):
         raise PreviewError('Ready file must be a new file inside output.')
-    for package in [build] + ([web] if args.web_port is not None else []):
+    for package in [build]:
         if database.is_relative_to(package):
             raise PreviewError('Database must not be inside a publicly served package.')
     if os.environ.get('REALQUEST_COCOS_TEST_CONFIG'):
@@ -128,8 +123,7 @@ def preflight(args):
     return {'kind': 'cocos-local-preview', 'build': str(build), 'database': str(database),
             'databaseExists': database.exists(), 'backendPython': str(BACKEND_PYTHON),
             'port': args.port, 'api_port': args.api_port, 'cookie': args.cookie_name,
-            'web_port': args.web_port, 'web_build': str(web) if args.web_port is not None else None,
-            'origins': [f'http://127.0.0.1:{port}' for port in [args.port, args.web_port] if port is not None],
+            'origins': [f'http://127.0.0.1:{port}' for port in [args.port]],
             'ready_file': str(ready) if ready else None,
             'inheritedDatabaseURLIgnored': 'DATABASE_URL' in os.environ}
 
@@ -235,9 +229,6 @@ def main(argv=None):
                 proxy = ROOT / 'clients/cocos/tools/serve.py'
                 services.append(owned.start([sys.executable, str(proxy), '--port', str(args.port), '--api-port', str(args.api_port), '--build', plan['build']], cwd=ROOT, env=env))
                 urls = [f'http://127.0.0.1:{args.api_port}/api/health', f'http://127.0.0.1:{args.port}/', f'http://127.0.0.1:{args.port}/api/health']
-                if args.web_port is not None:
-                    services.append(owned.start([sys.executable, str(proxy), '--port', str(args.web_port), '--api-port', str(args.api_port), '--build', plan['web_build']], cwd=ROOT, env=env))
-                    urls.extend([f'http://127.0.0.1:{args.web_port}/', f'http://127.0.0.1:{args.web_port}/api/health'])
                 wait_ready(services, urls, args.startup_timeout)
                 if plan['ready_file']:
                     ready = Path(plan['ready_file'])
@@ -247,8 +238,6 @@ def main(argv=None):
                         json.dump({**plan, 'state': 'ready', 'pid': os.getpid(), 'parent_pid': os.getppid(),
                                    'children': [p.pid for p in services], 'run_id': os.environ.get('REALQUEST_TEST_RUN_ID')}, output)
                 print(f'Cocos ready: http://127.0.0.1:{args.port} — database: {database}; Ctrl+C stops owned services.', flush=True)
-                if args.web_port is not None:
-                    print(f'Web comparison ready: http://127.0.0.1:{args.web_port} — same API/database.', flush=True)
                 while all(child.poll() is None for child in services):
                     time.sleep(0.25)
                 raise PreviewError('An owned service exited; stopping its siblings.')

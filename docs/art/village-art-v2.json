@@ -1,7 +1,7 @@
 {
   "version": 2,
   "rebuild": "tools/build_village_art.py",
-  "rebuild_sha256": "3271019437899072de5796b1aa662ab162e69e3be4e0f81087ccf923bab97afa",
+  "rebuild_sha256": "cae0be2fd391780babfaf975f3a86b6b7306506e3af3fa2ba924f174ebd525e1",
   "style_reference": "docs/art/references/village-fine-concept-v1.png",
   "source": "Original built-in image_gen output; exact prompts adjacent to source PNGs",
   "scenery_world_scale": 0.5,
@@ -11,7 +11,7 @@
   "records": [
     {
       "id": "home",
-      "path": "frontend/public/assets/hearthwood/village/home.png",
+      "path": "assets/runtime/hearthwood/village/home.png",
       "width": 288,
       "height": 348,
       "sha256": "ec1c7cafc3bbe10996560d5c8eab4548010de4c6c3728465ef4d907e95e17e8c",
@@ -34,7 +34,7 @@
     },
     {
       "id": "workshop",
-      "path": "frontend/public/assets/hearthwood/village/workshop.png",
+      "path": "assets/runtime/hearthwood/village/workshop.png",
       "width": 240,
       "height": 211,
       "sha256": "c83867db9f7673de0edf678ec1a10de51cf133dec4c01390304af146e36c64b1",
@@ -57,7 +57,7 @@
     },
     {
       "id": "library",
-      "path": "frontend/public/assets/hearthwood/village/library.png",
+      "path": "assets/runtime/hearthwood/village/library.png",
       "width": 288,
       "height": 377,
       "sha256": "25a82883eb21e2164d19f547836c23652d20c9d7ec7560d54fc33d9555604586",
@@ -80,7 +80,7 @@
     },
     {
       "id": "guild",
-      "path": "frontend/public/assets/hearthwood/village/guild.png",
+      "path": "assets/runtime/hearthwood/village/guild.png",
       "width": 320,
       "height": 364,
       "sha256": "4c116b706e36027e6a297fd85499eb92478743631e1267b099b9f62d9c691738",
@@ -103,7 +103,7 @@
     },
     {
       "id": "oak",
-      "path": "frontend/public/assets/hearthwood/village/oak.png",
+      "path": "assets/runtime/hearthwood/village/oak.png",
       "width": 152,
       "height": 173,
       "sha256": "8e724f448ce1e1167761c23a33a6dcc333199289d304e373135b7184a2d33adc",
@@ -126,7 +126,7 @@
     },
     {
       "id": "oak-alt",
-      "path": "frontend/public/assets/hearthwood/village/oak-alt.png",
+      "path": "assets/runtime/hearthwood/village/oak-alt.png",
       "width": 152,
       "height": 170,
       "sha256": "78065d1254f8279f087ef5db09ebfb3aa31c58380fd5e31ee53672b309c79da8",
@@ -149,7 +149,7 @@
     },
     {
       "id": "fir",
-      "path": "frontend/public/assets/hearthwood/village/fir.png",
+      "path": "assets/runtime/hearthwood/village/fir.png",
       "width": 136,
       "height": 160,
       "sha256": "6e12c818f79e6506420e90cf6e5f3a7de77336e96d605ba04cc95166075b7a6d",
@@ -172,7 +172,7 @@
     },
     {
       "id": "birch",
-      "path": "frontend/public/assets/hearthwood/village/birch.png",
+      "path": "assets/runtime/hearthwood/village/birch.png",
       "width": 128,
       "height": 180,
       "sha256": "03f2e6099e2efb93012e06118f67f9b3f81762e989e4fbe9e18da152e6a46281",
@@ -195,7 +195,7 @@
     },
     {
       "id": "shrub",
-      "path": "frontend/public/assets/hearthwood/village/shrub.png",
+      "path": "assets/runtime/hearthwood/village/shrub.png",
       "width": 60,
       "height": 38,
       "sha256": "7301da0b6ebb3844df83193bf6a0ec2a0cf226a36487a48239c6f634c4ed0bdb",
@@ -218,7 +218,7 @@
     },
     {
       "id": "flowers",
-      "path": "frontend/public/assets/hearthwood/village/flowers.png",
+      "path": "assets/runtime/hearthwood/village/flowers.png",
       "width": 40,
       "height": 30,
       "sha256": "02fe8c36028adb8bd96fd19ca1b5fc9d607bb46028f2a9c36f6186b3ec64ec4d",
@@ -241,7 +241,7 @@
     },
     {
       "id": "crates",
-      "path": "frontend/public/assets/hearthwood/village/crates.png",
+      "path": "assets/runtime/hearthwood/village/crates.png",
       "width": 88,
       "height": 88,
       "sha256": "76a4839ef3b24addfe8a380452c34ddf11b1b4282006f16fd5e50d0d98e80fce",
@@ -264,7 +264,7 @@
     },
     {
       "id": "bench",
-      "path": "frontend/public/assets/hearthwood/village/bench.png",
+      "path": "assets/runtime/hearthwood/village/bench.png",
       "width": 148,
       "height": 74,
       "sha256": "78f3d45e0c949abae2c720565377e183eeca7925969a2d0fbc999b3ae3354e1b",
@@ -287,7 +287,7 @@
     },
     {
       "id": "board",
-      "path": "frontend/public/assets/hearthwood/village/board.png",
+      "path": "assets/runtime/hearthwood/village/board.png",
       "width": 96,
       "height": 97,
       "sha256": "b73db527151f5da06c5c567331e1ef62007c9a0f462eb6a111c55becb8274467",
@@ -310,7 +310,7 @@
     },
     {
       "id": "wood",
-      "path": "frontend/public/assets/hearthwood/village/wood.png",
+      "path": "assets/runtime/hearthwood/village/wood.png",
       "width": 72,
       "height": 41,
       "sha256": "5a50dbb896644da6d9669e15fb148ca904057df68e321a991b4451d462eff128",
@@ -333,7 +333,7 @@
     },
     {
       "id": "stone",
-      "path": "frontend/public/assets/hearthwood/village/stone.png",
+      "path": "assets/runtime/hearthwood/village/stone.png",
       "width": 64,
       "height": 48,
       "sha256": "ebcef8e7cf7f2e7a9de53693e0bc7cef5b0e7402ebbc4ccdd69330c1143028cf",
@@ -356,7 +356,7 @@
     },
     {
       "id": "bridge",
-      "path": "frontend/public/assets/hearthwood/village/bridge.png",
+      "path": "assets/runtime/hearthwood/village/bridge.png",
       "width": 208,
       "height": 152,
       "sha256": "b784fe1cdbf648d5cb5b4bd7ef89841c88546c72a1ab0380a74c4089cb2ab65d",
@@ -379,7 +379,7 @@
     },
     {
       "id": "grass",
-      "path": "frontend/public/assets/hearthwood/village/grass.png",
+      "path": "assets/runtime/hearthwood/village/grass.png",
       "width": 40,
       "height": 32,
       "sha256": "d6d041deca7631e86ed2cd8a928ffc403eb3b132e797e8a7d33f4d4a86ecbbcf",
@@ -402,7 +402,7 @@
     },
     {
       "id": "grass-patch",
-      "path": "frontend/public/assets/hearthwood/village/grass-patch.png",
+      "path": "assets/runtime/hearthwood/village/grass-patch.png",
       "width": 84,
       "height": 42,
       "sha256": "b60f2ea04d7ed25bcde61a0722f30cbcc4aa05e8ec265e7f8543b0fcbb266b0a",
@@ -425,7 +425,7 @@
     },
     {
       "id": "bank-stones",
-      "path": "frontend/public/assets/hearthwood/village/bank-stones.png",
+      "path": "assets/runtime/hearthwood/village/bank-stones.png",
       "width": 48,
       "height": 26,
       "sha256": "ce6eec9b914c35fe6f75ae31c3541f7f52dbb5bf89729b00917814a37aa22ad8",
@@ -448,7 +448,7 @@
     },
     {
       "id": "step",
-      "path": "frontend/public/assets/hearthwood/village/step.png",
+      "path": "assets/runtime/hearthwood/village/step.png",
       "width": 86,
       "height": 36,
       "sha256": "fab25170344d47c05f12c379ff8f316b5247a3f200e7b456f2b8b88c08e40fe4",
@@ -471,7 +471,7 @@
     },
     {
       "id": "fence",
-      "path": "frontend/public/assets/hearthwood/village/fence.png",
+      "path": "assets/runtime/hearthwood/village/fence.png",
       "width": 168,
       "height": 93,
       "sha256": "9972003b056633b582a9593096ad9383314f1558a750acd73d42aed69f900bca",
@@ -494,7 +494,7 @@
     },
     {
       "id": "lantern",
-      "path": "frontend/public/assets/hearthwood/village/lantern.png",
+      "path": "assets/runtime/hearthwood/village/lantern.png",
       "width": 36,
       "height": 79,
       "sha256": "03cd3941855d10b76a4d9e4f02cee16c30945b5b3ab2c6ece883f39aa8a222e9",
@@ -517,7 +517,7 @@
     },
     {
       "id": "chest",
-      "path": "frontend/public/assets/hearthwood/village/chest.png",
+      "path": "assets/runtime/hearthwood/village/chest.png",
       "width": 72,
       "height": 53,
       "sha256": "9ff2f1a90a5fbfd3f1d3c0a13d35dd3699eb3f78e0e2958162f3316c2bafa8b7",
@@ -540,7 +540,7 @@
     },
     {
       "id": "rune",
-      "path": "frontend/public/assets/hearthwood/village/rune.png",
+      "path": "assets/runtime/hearthwood/village/rune.png",
       "width": 124,
       "height": 117,
       "sha256": "7fce745d5e96c9bd17450298981ec3a1572108da33aef9b95aea9621d2dec286",
@@ -563,7 +563,7 @@
     },
     {
       "id": "actor-0",
-      "path": "frontend/public/assets/hearthwood/village/actor-0.png",
+      "path": "assets/runtime/hearthwood/village/actor-0.png",
       "width": 192,
       "height": 256,
       "sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0",
@@ -678,7 +678,7 @@
     },
     {
       "id": "character-0",
-      "path": "frontend/public/assets/hearthwood/village/character-0.png",
+      "path": "assets/runtime/hearthwood/village/character-0.png",
       "width": 64,
       "height": 64,
       "sha256": "ca7a66c47944c248cf5af35aed863fce4cf313dbd93ae1b8e7ed5117a3fa39fd",
@@ -701,7 +701,7 @@
     },
     {
       "id": "portrait-0",
-      "path": "frontend/public/assets/hearthwood/village/portrait-0.png",
+      "path": "assets/runtime/hearthwood/village/portrait-0.png",
       "width": 40,
       "height": 40,
       "sha256": "83d4c9d3ca014200be0e06892209adfb43a80d169bb10d9707e90d63481f1eea",
@@ -724,7 +724,7 @@
     },
     {
       "id": "actor-1",
-      "path": "frontend/public/assets/hearthwood/village/actor-1.png",
+      "path": "assets/runtime/hearthwood/village/actor-1.png",
       "width": 192,
       "height": 256,
       "sha256": "99dfa0cbfa0b2536c7a9ebbf09ce993d2d7b0ba2ed0d42d8f4ac01b410ba9f95",
@@ -839,7 +839,7 @@
     },
     {
       "id": "character-1",
-      "path": "frontend/public/assets/hearthwood/village/character-1.png",
+      "path": "assets/runtime/hearthwood/village/character-1.png",
       "width": 64,
       "height": 64,
       "sha256": "c08b903143ef284e0dd7f67a900e82812cb827b997aadc5f7d4e45dfb56498fc",
@@ -862,7 +862,7 @@
     },
     {
       "id": "portrait-1",
-      "path": "frontend/public/assets/hearthwood/village/portrait-1.png",
+      "path": "assets/runtime/hearthwood/village/portrait-1.png",
       "width": 40,
       "height": 40,
       "sha256": "edcd7aa757ba101a71fd7c09d49d20c029e01ce19a7af227184d76cffd6a9c34",
@@ -885,7 +885,7 @@
     },
     {
       "id": "actor-2",
-      "path": "frontend/public/assets/hearthwood/village/actor-2.png",
+      "path": "assets/runtime/hearthwood/village/actor-2.png",
       "width": 192,
       "height": 256,
       "sha256": "2a08d5ca4502168e87dd4c0bd7412f21f2a6dfd3736c35adbe1ee0369a963b55",
@@ -1000,7 +1000,7 @@
     },
     {
       "id": "character-2",
-      "path": "frontend/public/assets/hearthwood/village/character-2.png",
+      "path": "assets/runtime/hearthwood/village/character-2.png",
       "width": 64,
       "height": 64,
       "sha256": "6354c0905da00eae7a060be8a518d2535f135abd26e06d62dd09311e145b7b21",
@@ -1023,7 +1023,7 @@
     },
     {
       "id": "portrait-2",
-      "path": "frontend/public/assets/hearthwood/village/portrait-2.png",
+      "path": "assets/runtime/hearthwood/village/portrait-2.png",
       "width": 40,
       "height": 40,
       "sha256": "5dbed27b6620feb421b9e4f52f93cd58a7304b9cf618684799c7f55584df0101",
@@ -1046,7 +1046,7 @@
     },
     {
       "id": "actor-3",
-      "path": "frontend/public/assets/hearthwood/village/actor-3.png",
+      "path": "assets/runtime/hearthwood/village/actor-3.png",
       "width": 192,
       "height": 256,
       "sha256": "c5fca3c46a8453d9594a3b3656edb933a3594d1ab5dd182af30cf487f8f16953",
@@ -1161,7 +1161,7 @@
     },
     {
       "id": "character-3",
-      "path": "frontend/public/assets/hearthwood/village/character-3.png",
+      "path": "assets/runtime/hearthwood/village/character-3.png",
       "width": 64,
       "height": 64,
       "sha256": "4f5dd09dfcabb7cf80d6340e3e5d517241a74259c3f70627780ef7d7084ed428",
@@ -1184,7 +1184,7 @@
     },
     {
       "id": "portrait-3",
-      "path": "frontend/public/assets/hearthwood/village/portrait-3.png",
+      "path": "assets/runtime/hearthwood/village/portrait-3.png",
       "width": 40,
       "height": 40,
       "sha256": "583ec00580af0403b9f5c355ad049e14ed8fa8e2e115be4c78ad9df3e5209bb0",
@@ -1207,7 +1207,7 @@
     },
     {
       "id": "actor-4",
-      "path": "frontend/public/assets/hearthwood/village/actor-4.png",
+      "path": "assets/runtime/hearthwood/village/actor-4.png",
       "width": 192,
       "height": 256,
       "sha256": "1013c27c3018300a14ead56695af486f0284a4acbb1a9f95ab71e16f6ea4cffd",
@@ -1322,7 +1322,7 @@
     },
     {
       "id": "character-4",
-      "path": "frontend/public/assets/hearthwood/village/character-4.png",
+      "path": "assets/runtime/hearthwood/village/character-4.png",
       "width": 64,
       "height": 64,
       "sha256": "4844a8bc8181847f1528fd1180481b58b747d25f6cc0afcb28936757722f2831",
@@ -1345,7 +1345,7 @@
     },
     {
       "id": "portrait-4",
-      "path": "frontend/public/assets/hearthwood/village/portrait-4.png",
+      "path": "assets/runtime/hearthwood/village/portrait-4.png",
       "width": 40,
       "height": 40,
       "sha256": "a5982a39c746424fd7c4325bde1fa8ae5ff9fe36c58bd5b7559420e6708bcbb6",
@@ -1368,7 +1368,7 @@
     },
     {
       "id": "actor-5",
-      "path": "frontend/public/assets/hearthwood/village/actor-5.png",
+      "path": "assets/runtime/hearthwood/village/actor-5.png",
       "width": 192,
       "height": 256,
       "sha256": "1d5b964a6622724c8bf2584897a98195e1aba11832f0887d8f3e4bb9fbd4e23e",
@@ -1483,7 +1483,7 @@
     },
     {
       "id": "character-5",
-      "path": "frontend/public/assets/hearthwood/village/character-5.png",
+      "path": "assets/runtime/hearthwood/village/character-5.png",
       "width": 64,
       "height": 64,
       "sha256": "3936cb9e9a4d17acfcad575d515b8287d9df8716274e702eb1e92467eb3f9316",
@@ -1506,7 +1506,7 @@
     },
     {
       "id": "portrait-5",
-      "path": "frontend/public/assets/hearthwood/village/portrait-5.png",
+      "path": "assets/runtime/hearthwood/village/portrait-5.png",
       "width": 40,
       "height": 40,
       "sha256": "7889bd6673368ce99ed742739b0f685b2bc3428101434c7bc770219c73a208e4",
@@ -1529,7 +1529,7 @@
     },
     {
       "id": "actor-noah",
-      "path": "frontend/public/assets/hearthwood/village/actor-noah.png",
+      "path": "assets/runtime/hearthwood/village/actor-noah.png",
       "width": 192,
       "height": 256,
       "sha256": "2a08d5ca4502168e87dd4c0bd7412f21f2a6dfd3736c35adbe1ee0369a963b55",
@@ -1644,7 +1644,7 @@
     },
     {
       "id": "character-noah",
-      "path": "frontend/public/assets/hearthwood/village/character-noah.png",
+      "path": "assets/runtime/hearthwood/village/character-noah.png",
       "width": 64,
       "height": 64,
       "sha256": "6354c0905da00eae7a060be8a518d2535f135abd26e06d62dd09311e145b7b21",
@@ -1667,7 +1667,7 @@
     },
     {
       "id": "portrait-noah",
-      "path": "frontend/public/assets/hearthwood/village/portrait-noah.png",
+      "path": "assets/runtime/hearthwood/village/portrait-noah.png",
       "width": 40,
       "height": 40,
       "sha256": "5dbed27b6620feb421b9e4f52f93cd58a7304b9cf618684799c7f55584df0101",
@@ -1690,7 +1690,7 @@
     },
     {
       "id": "actor-lia",
-      "path": "frontend/public/assets/hearthwood/village/actor-lia.png",
+      "path": "assets/runtime/hearthwood/village/actor-lia.png",
       "width": 192,
       "height": 256,
       "sha256": "99dfa0cbfa0b2536c7a9ebbf09ce993d2d7b0ba2ed0d42d8f4ac01b410ba9f95",
@@ -1805,7 +1805,7 @@
     },
     {
       "id": "character-lia",
-      "path": "frontend/public/assets/hearthwood/village/character-lia.png",
+      "path": "assets/runtime/hearthwood/village/character-lia.png",
       "width": 64,
       "height": 64,
       "sha256": "c08b903143ef284e0dd7f67a900e82812cb827b997aadc5f7d4e45dfb56498fc",
@@ -1828,7 +1828,7 @@
     },
     {
       "id": "portrait-lia",
-      "path": "frontend/public/assets/hearthwood/village/portrait-lia.png",
+      "path": "assets/runtime/hearthwood/village/portrait-lia.png",
       "width": 40,
       "height": 40,
       "sha256": "edcd7aa757ba101a71fd7c09d49d20c029e01ce19a7af227184d76cffd6a9c34",

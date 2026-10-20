@@ -4,7 +4,7 @@ import argparse
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'frontend/public/assets/hearthwood/items'
+OUT = ROOT / 'assets/runtime/hearthwood/items'
 OUT.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--check', action='store_true')

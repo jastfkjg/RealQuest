@@ -2,7 +2,7 @@
   "provenance": "Original project assets generated with built-in imagegen; no third-party references supplied.",
   "processing": "tools/build_departure_art.py; nearest neighbour packing; alpha threshold 160; actors 54px tall / 63px baseline, front frame only; geography sprites two source pixels per world unit",
   "rebuild": "tools/build_departure_art.py",
-  "rebuild_sha256": "f9b78ae0e0d8bd2471cb1af44816a85a5c6f8cdd4c2487cc1921e4ef22e31940",
+  "rebuild_sha256": "c00977f9da26e93a4afe5f8fb24371fcab6e3cde9541c1eccfd8d19f6f7c8d4b",
   "prompts": [
     {
       "path": "docs/art/generated/departure-v1/prompts.json",
@@ -15,7 +15,7 @@
   ],
   "assets": [
     {
-      "path": "frontend/public/assets/hearthwood/residents/adu-figure.png",
+      "path": "assets/runtime/hearthwood/residents/adu-figure.png",
       "dimensions": [
         48,
         64
@@ -25,7 +25,7 @@
       "frames": null
     },
     {
-      "path": "frontend/public/assets/hearthwood/residents/adu-actor.png",
+      "path": "assets/runtime/hearthwood/residents/adu-actor.png",
       "dimensions": [
         48,
         64
@@ -35,7 +35,7 @@
       "frames": 1
     },
     {
-      "path": "frontend/public/assets/hearthwood/residents/adu-portrait.png",
+      "path": "assets/runtime/hearthwood/residents/adu-portrait.png",
       "dimensions": [
         128,
         128
@@ -53,7 +53,7 @@
       "sha256": "c0cc3df02fd8e660fa4fdc8a582eca978137d0ff11e57949011acce5f6219c90"
     },
     {
-      "path": "frontend/public/assets/hearthwood/residents/lanya-figure.png",
+      "path": "assets/runtime/hearthwood/residents/lanya-figure.png",
       "dimensions": [
         48,
         64
@@ -63,7 +63,7 @@
       "frames": null
     },
     {
-      "path": "frontend/public/assets/hearthwood/residents/lanya-actor.png",
+      "path": "assets/runtime/hearthwood/residents/lanya-actor.png",
       "dimensions": [
         48,
         64
@@ -73,7 +73,7 @@
       "frames": 1
     },
     {
-      "path": "frontend/public/assets/hearthwood/residents/lanya-portrait.png",
+      "path": "assets/runtime/hearthwood/residents/lanya-portrait.png",
       "dimensions": [
         128,
         128
@@ -91,7 +91,7 @@
       "sha256": "fdf5d69fc7d28d18a3f79ad00a4271538b11f976d665fe725956c1013e0244e0"
     },
     {
-      "path": "frontend/public/assets/hearthwood/journey/cliff-448.png",
+      "path": "assets/runtime/hearthwood/journey/cliff-448.png",
       "dimensions": [
         448,
         224
@@ -100,7 +100,7 @@
       "source": "docs/art/generated/departure-v1/cliff-source.png"
     },
     {
-      "path": "frontend/public/assets/hearthwood/journey/cliff-576.png",
+      "path": "assets/runtime/hearthwood/journey/cliff-576.png",
       "dimensions": [
         576,
         256
@@ -109,7 +109,7 @@
       "source": "docs/art/generated/departure-v1/cliff-source.png"
     },
     {
-      "path": "frontend/public/assets/hearthwood/journey/cliff-224.png",
+      "path": "assets/runtime/hearthwood/journey/cliff-224.png",
       "dimensions": [
         224,
         144
@@ -126,7 +126,7 @@
       "sha256": "4528ca27bf8cc51254eeef1c0b8214b724adcba0768c5f986818b01e84054a49"
     },
     {
-      "path": "frontend/public/assets/hearthwood/journey/boat-72.png",
+      "path": "assets/runtime/hearthwood/journey/boat-72.png",
       "dimensions": [
         72,
         176
