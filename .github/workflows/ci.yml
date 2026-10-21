@@ -10,6 +10,10 @@ on:
         description: Build and test Cocos using the provisioned Creator 3.8.8 runner
         type: boolean
         default: false
+      browser_acceptance:
+        description: Run browser gameplay, delivery lifecycle and network acceptance
+        type: boolean
+        default: true
       publish_images:
         description: Publish tested Cocos/API images from main (also requires build_candidate)
         type: boolean
@@ -118,14 +122,19 @@ jobs:
           npm run cocos:build:release
           npm run cocos:package -- --build web-release-ci/web-desktop --output output/cocos-delivery
       - name: Verify production engine and Nginx delivery
+        if: inputs.browser_acceptance
         run: |
           set -euo pipefail
           npm run cocos:test:delivery -- --artifact output/cocos-delivery
           npm run cocos:test:delivery:lifecycle -- --artifact output/cocos-delivery
           npm run cocos:test:browser -- --build web-release-ci/web-desktop
           npm run cocos:test:network -- --artifact output/cocos-delivery
+      - name: Verify release artifact integrity
+        run: |
+          set -euo pipefail
           npm run cocos:package -- --verify output/cocos-delivery
           test -z "$(git status --porcelain)"
+          printf 'Browser acceptance enabled: `%s`\n' "${{ inputs.browser_acceptance }}" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
           name: realquest-cocos-candidate
