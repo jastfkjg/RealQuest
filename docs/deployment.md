@@ -27,6 +27,8 @@ RealQuest 仓库级 Variables：
 
 **Container CI and build** 在push/PR上执行Cocos来源、共享单元和后端检查。手动勾选 `build_candidate` 后，预置的 `cocos-3.8.8` runner真实构建、测试并封装Cocos；还需main上显式勾选 `publish_images` 才发布Cocos静态站点/API双架构镜像，保存 `realquest-release` artifact（90天）与Build run ID。普通源码验证不产生可部署镜像；推送代码不会部署服务器。
 
+手动构建默认启用 `browser_acceptance`。仅执行部署时可取消该选项，跳过游戏浏览器交互、交付生命周期与网络验收；SDK真实构建、产物完整性、来源及镜像 digest 校验仍保留。候选构建摘要记录是否启用了浏览器验收，跳过时不得把该次构建报告为完整游戏验收通过。
+
 **Deploy tested images** 仅手动触发，选择 `tencent-prod` 和成功的 Build run ID。工作流核验构建来自本仓库 `.github/workflows/ci.yml`、main、已完成且成功，校验 artifact 的 repository、revision、run ID/attempt 和两个不可变镜像，然后检出同一源提交，发布时不重新构建。PR、fork、失败构建、其他工作流或不匹配 artifact 都会被拒绝。artifact 过期时需重新运行 CI。
 
 ## 主机与环境文件（后续执行）

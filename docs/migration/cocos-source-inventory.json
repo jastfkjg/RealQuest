@@ -1808,8 +1808,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "owner": "cocos-candidate-ci",
-      "sha256": "d8b869a6b5999d5739a68a6fb29ba04142f03d34893d379f2ed6b33c5b41ea23",
-      "bytes": 9032,
+      "sha256": "f9696804414bb3c7d1d9d1a7a4a2cb9a50cf6ededbae0fb6a83ff3ada863bf77",
+      "bytes": 9431,
       "roles": [
         "cocos-delivery-input"
       ],
