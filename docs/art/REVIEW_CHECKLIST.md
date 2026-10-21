@@ -866,3 +866,19 @@ Owner answered “可以保留” for this startup fault page only: readable cau
 - [x] Original PNG, dimensions, palette and complete decoded RGBA bytes remain unchanged; derivative has independent provenance and importer UUID, nearest sampling and no trim. Browser decoders and capability-negative PNG fixture checked in three test engines.
 - [x] Actual world/map/satchel and resource503/reload/same-save flows captured; WebKit fallback and fault images inspected. Startup downloads are measured separately from the larger package retaining both formats and unchanged GPU texture memory.
 - [ ] Brand browser/physical device and production network evidence remain open. Existing owner approvals keep their original scope; no new artwork or broader visual approval is inferred. Exact versioned results and failures: [task70](../tasks/70-cocos-network-budget.md).
+
+### Cocos 出发准备链 — 2026-10-21
+
+- [x] 世界目标与实际附近服务相连，购买/打造/装备分开，出发只标记；洞口真实准备状态与主动入洞，未加入伪门槛。
+- [x] 最终专项5组/33图/1录像：5种桌面及横屏尺寸，44px目标/边界/不重叠、完整条件分页、拒绝/处理中/同请求重试、装备持久化、真实步行入洞撤离、真实材料消耗。控制台错误0，实际截图已检查。
+- [x] 真实引擎类型/release构建、23组工具单元和236后端用例通过；相关既有引导、章节、界面、横屏和键盘语义回归通过。精确版本与中间失败见[任务112](../tasks/112-cocos-expedition-chain.md)，未声称全31套通过。
+- [x] 原试玩库备份及全表一致，最终候选与默认预览构建一致；自有测试浏览器/服务退出已核验，仅保留人工试玩。
+- [ ] 用户实际画面/手感检查、物理设备及系统IME/读屏体验仍待验证；手机竖屏不在范围。
+
+
+### 世界、行囊与页面可用性 — 2026-10-21
+
+- [x] 常驻世界信息收敛，实际行走后教学隐藏；直接成长入口保留，存档经旅程访问，村民按需找。
+- [x] 新/旧快捷偏好、耗尽引用、空位整理、实际种植/制作/出售、失败重试、跨存档恢复和隔离删除通过；短横屏角色避让操作区。
+- [x] 容器控件边界与实际Cocos文字换行高度分别检查；长中文姓名、成长说明、纸条与翻页对比已在真实截图检查。对应注册/菜单/成长/凭证/商店/工坊/研习/储物/休息/档案/地图/指南/武备/洞穴覆盖详见[任务113](../tasks/113-cocos-world-and-panel-usability.md)。
+- [ ] 用户观感/手感、物理设备、系统读屏与完整系统IME仍未验收；未声称31套全部复测。

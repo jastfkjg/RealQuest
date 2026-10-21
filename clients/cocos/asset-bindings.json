@@ -323,8 +323,8 @@
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f",
-      "output_sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f"
+      "sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6",
+      "output_sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6"
     },
     {
       "source": "shared/game/preferences.ts",

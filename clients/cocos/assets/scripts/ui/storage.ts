@@ -12,12 +12,14 @@ export class StorageView {
       x = (h.width - w) / 2,
       y = (h.height - height) / 2,
       compact = height < 380;
-    const all = Object.keys(h.state.storage),
+    const held = Object.keys(h.state.storage).filter(id=>(h.state.storage[id]||0)+(h.state.inventory[id]||0)>0);
+    const all = held.length?held:[this.item],
       pages = Math.max(1, Math.ceil(all.length / 6));
     this.page = Math.min(this.page, pages - 1);
     if (!all.includes(this.item)) this.item = all[0];
     const ids = all.slice(this.page * 6, this.page * 6 + 6);
     paperSurface(h,{x,y,w,h:height},true);
+    h.region('storage-paper',x+20,y+12,w-40,height-24);
     h.text("StorageTitle", "家园储物箱", x + 24, y + 12, w - 140, 40, 24);
     h.button(
       "close",
@@ -141,7 +143,7 @@ export class StorageView {
       h.error ? C.danger : C.ink,
     );
     const bottom = y + height - 60;
-    h.button(
+    if(pages>1)h.button(
       "storage-prev",
       "‹",
       x + 28,
@@ -155,7 +157,7 @@ export class StorageView {
       },
       h.busy || !this.page,
     );
-    h.text(
+    if(pages>1)h.text(
       "StoragePage",
       `${this.page + 1}/${pages}`,
       x + 76,
@@ -166,7 +168,7 @@ export class StorageView {
       C.muted,
       true,
     );
-    h.button(
+    if(pages>1)h.button(
       "storage-next",
       "›",
       x + 124,
@@ -182,6 +184,7 @@ export class StorageView {
     );
     const send = (action: string) =>
       h.send(action, { target: "home_chest", item: id, amount: 1 });
+    if(pages===1)h.text('StorageHint',held.length?'选中物品，再存入或取回。':'背包和箱子都空着，去村庄收集一些物品吧。',x+28,bottom,w-336,44,14,C.muted);
     h.button(
       "store-" + id,
       h.busy ? "正在存取…" : "存入 1",

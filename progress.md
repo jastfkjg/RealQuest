@@ -903,3 +903,13 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - User explicitly changed the finish line: “差不多就行了；基础迁移完就可以停了”. Basic migration is complete; stop work here. M1–M9 and existing local startup, save continuity, data/growth/study features plus actual hosted base CI meet this revised scope. Full22-item Web-retirement acceptance remains16/22; V2/V4/V5/V6/V7/T2 are unverified future work, not falsely passed or active blockers for this closed basic scope.
 - Task106 SDK CI permission request is superseded and no response is needed. No new commit/push/token/runner/dispatch/deploy or originalWeb deletion. Frozen task106 patch remains an immutable historical draft; subsequent local scope/progress notes are separate and must not be silently included under the earlier sealed authorization. Existing uncommitted documents/workflow draft remain local; future SDK/system/physical/production work needs a new request.
 - Preserve signed Creator input, current J3 and existing original5442/overall5443 previews for optional use. Native Safari/probe and all owned automated test processes already ended; shared/unrelated hosts are not task cleanup targets. Final scoped verification is output/cocos-basic-completion/verification.json.
+
+## 2026-10-21 task112 — expedition preparation chain
+
+- User authorized world goal → armory preparation → explicit equip → cave entry, with actual Cocos preview. Scope preserves existing economy, server mutations, saves and art. Implementing compact actionable goal, grouped purchase/craft quotes, explicit equip/departure and cave readiness. Validation uses owned QA databases and a separate Creator release before handoff.
+2026-10-21 task112收尾：最终出发准备专项run-YIJc2J完整通过5组/33截图/连续录像，方向键实际从工坊走到洞口并入洞/撤离。相关章节3/引导8/界面5/横屏3/语义11组通过；真实引擎类型、两份相同release、23工具单元与236后端通过。新版5443/API8143保留人工试玩，原库已备份且全表一致；测试服务/浏览器退出及临时SDK移除已核验。实际画面待用户确认，证据与失败迭代见docs/tasks/112-cocos-expedition-chain.md。
+
+
+## 2026-10-21 task113 — world and panel usability
+
+按用户两条批注继续收敛世界HUD和快捷栏，并排查各页/弹窗。保留task112改动；新快捷偏好只预填种子，旧偏好保留，空位可整理，耗尽语义明确。动态行囊/实际储物、数量加减/缺额、真实打造研习条件、长名字及多行文本修复；短横屏整体镜头避免角色被快捷栏遮挡。中间失败与最终证据集中在docs/tasks/113-cocos-world-and-panel-usability.md，原库备份且切换后全表一致。界面5/行囊12、相关横屏3/语义11/对话3/播种4/记录8/档案8/存档6/出发5组分别通过；最终run-vvMEFw两套17组/161图通过，最后翻页底签已检查，121个自有测试/旧试玩PID退出；新版5443/API8143保留，整体观感等待用户检查。

@@ -1,3 +1,4 @@
+import {openSession} from './ui-navigation.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -9,7 +10,7 @@ const browser=await launchBrowser(chromium,{headless:true}),contexts=[],checks=[
 const report={kind:'cocos-browser-consistency-time-faults',checks,captures,errors,observations,complete:false,scope:'Own QA storage/network and browser Date()/Date.now +/-7-day faults. Performance, server and system clocks unchanged; no SQL/deadline/schema edits, naturally earned progression or verified learning claim.'};let page,stage='normal';
 const read=()=>page.evaluate(()=>JSON.parse(window.render_game_to_text()));
 async function until(predicate,label='state',timeout=25000){for(const start=Date.now();Date.now()-start<timeout;){const s=await read();if(predicate(s))return s;await page.waitForTimeout(80);}throw Error(label+': '+JSON.stringify(await read()));}
-async function action(id){const c=(await until(s=>s.controls.some(c=>c.id===id&&!c.disabled),id)).controls.find(c=>c.id===id);await page.getByRole('button',{name:c.accessibleName||c.label,exact:true}).focus();await page.keyboard.press('Enter');await page.waitForTimeout(140);}
+async function action(id){if(id==='session'&&(await read()).mode==='world')return openSession(page);const c=(await until(s=>s.controls.some(c=>c.id===id&&!c.disabled),id)).controls.find(c=>c.id===id);await page.getByRole('button',{name:c.accessibleName||c.label,exact:true}).focus();await page.keyboard.press('Enter');await page.waitForTimeout(140);}
 async function field(id,value){const c=(await until(s=>s.controls.some(c=>c.id===id&&!c.disabled),id)).controls.find(c=>c.id===id);await page.getByRole('button',{name:'编辑 '+c.label,exact:true}).focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>['INPUT','TEXTAREA'].includes(document.activeElement?.tagName));await page.keyboard.press('ControlOrMeta+A');await page.keyboard.insertText(value);await page.keyboard.press('Escape');await page.waitForTimeout(100);}
 async function start(){await page.goto(test.baseURL);await page.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded);await action('start');return until(s=>s.mode==='world'&&s.connection==='ready'&&!s.busy&&!s.pendingAction);}
 async function createPage(){const c=await browser.newContext({viewport:{width:1440,height:900}});contexts.push(c);page=await c.newPage();stage='normal';page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'){

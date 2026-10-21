@@ -58,8 +58,8 @@ export class DossierPanels {
     } else {
       const portrait=f.x+28, pw=244, detail=f.x+310, dw=f.w-346;
       h.person('actor-'+c.appearance,portrait+pw/2,f.y+236,84,112);
-      h.text('DossierName',c.name,portrait,f.y+302,pw,44,24,C.ink,true);
-      h.text('DossierOutfit',outfit.name,portrait,f.y+348,pw,28,15,C.muted,true);
+      h.text('DossierName',c.name,portrait,f.y+302,pw,56,20,C.ink,true).lineHeight=26;
+      h.text('DossierOutfit',outfit.name,portrait,f.y+362,pw,28,15,C.muted,true);
       h.text('DossierLevel','旅人 · 等级 '+summary.level,portrait,f.y+390,pw,32,18,C.wood,true);
       inkRule(h,'DossierIdentityRule',portrait+32,f.y+438,pw-64);
       const gap=28,mw=(dw-gap)/2;

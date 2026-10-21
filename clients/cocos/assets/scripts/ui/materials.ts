@@ -24,6 +24,7 @@ export function gameControls(h:PanelHost):PanelHost{
  return styled;
 }
 export function paperSurface(h:PanelHost,f:SurfaceBounds,binding=false){
+ h.region('paper-surface',f.x+12,f.y+8,f.w-24,f.h-16);
  h.box('LeafShadow',f.x+3,f.y+5,f.w,f.h,'#15291d66',3);
  h.image('ui/notice-paper',f.x+f.w/2,f.y+f.h/2,f.w,f.h,true);
  if(binding){h.box('ClothBinding',f.x+8,f.y+18,5,f.h-36,C.moss,2);for(let i=0;i<3;i++)h.box('BindingStitch'+i,f.x+7,f.y+32+i*10,7,2,C.amber,0);}

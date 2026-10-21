@@ -8,7 +8,7 @@ export const inventoryPreferenceKey=(id:string)=>'realquest-cocos-inventory-v2:'
 export function cleanQuick(value:unknown):(string|null)[]{
  const seen=new Set<string>();return Array.from({length:4},(_,i)=>{const id=Array.isArray(value)?value[i]:null;if(!known(id)||seen.has(id))return null;seen.add(id);return id;});
 }
-function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'seed',quick:['seed','wood','stone','crop']};}
+function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'seed',quick:['seed',null,null,null]};}
 /** Optional presentation preferences; never authoritative possessions. */
 export class InventoryPreferences {
  private memory=new Map<string,InventoryPreference>(); private active=''; warning='';

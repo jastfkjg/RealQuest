@@ -20,25 +20,28 @@ export class InventoryView {
  dismiss(h:PanelHost){if(h.mode==='item-confirm'){this.cancel(h);return true;}if(h.mode==='inventory'&&this.view!=='main'){const focus=this.view==='quick'?'item-pockets':this.view==='uses'?'item-uses':this.view==='wallet'?'inventory-wallet':'item-legacy';this.view='main';h.focus(focus);return true;}return false;}
  private cancel(h:PanelHost){const d=this.draft;this.draft=null;h.go(d?.back||'inventory',true);}
  private select(h:PanelHost,id:string){this.feedback='';this.preferences.select(id);this.view='main';this.leaf=0;h.redraw(true);}
- activate(h:PanelHost,slot:number){this.init(h);const id=this.quick[slot];if(!id)return;this.preferences.select(id);this.feedback='';const intent=itemIntent(h.world,h.state,h.now,id);if(id==='seed'&&intent.command&&!intent.reason)this.preview(h,intent,'world');else{this.view='main';h.go('inventory');}}
+ activate(h:PanelHost,slot:number){this.init(h);const id=this.quick[slot];this.feedback='';if(!id){h.go('inventory');this.pocket=slot;this.view='quick';return;}this.preferences.select(id);const intent=itemIntent(h.world,h.state,h.now,id);if(id==='seed'&&intent.command&&!intent.reason)this.preview(h,intent,'world');else{h.go('inventory');this.view='main';}}
  private preview(h:PanelHost,intent:ItemIntent,back='inventory'){this.feedback='';this.draft={saveId:h.saveId,intent,back,location:h.state.location};h.go('item-confirm');}
  draw(h:PanelHost){this.init(h);this.detailText='';this.detailPages=1;if(h.mode==='item-confirm'){this.confirm(h);return;}
-  const hasLegacy=this.preferences.legacy().length>0,short=h.height<500,w=Math.min(936,h.width-32),height=Math.min(520,h.height-24),x=(h.width-w)/2,y=(h.height-height)/2,tw=short?304:312,bw=w-tw-16,tx=x+bw+16,th=Math.min(this.view==='main'?(hasLegacy?336:284):this.view==='uses'?420:336,height),ty=y+(height-th)/2;
+  const ids=Object.keys(itemDefinitions).filter(id=>this.all||h.state.inventory[id]>0);
+  const hasLegacy=this.preferences.legacy().length>0,short=h.height<500,w=Math.min(936,h.width-32),height=Math.min(this.all||ids.length>12?520:420,h.height-24),x=(h.width-w)/2,y=(h.height-height)/2,tw=short?304:312,bw=w-tw-16,tx=x+bw+16,th=Math.min(this.view==='main'?(hasLegacy?336:284):this.view==='uses'?420:336,height),ty=y+(height-th)/2;
+  h.region('inventory-bag',x+20,y+12,bw-40,height-24);h.region('inventory-tag',tx,ty,tw,th);
   h.image('ui/satchel',x+bw/2,y+height/2,bw,height,true);
   const titleW=Math.min(260,bw-120);h.box('SatchelTitle',x+(bw-titleW)/2,y+4,titleW,40,C.wood,5);h.text('InventoryTitle','旅人的行囊',x+(bw-titleW)/2+4,y+4,titleW-8,40,22,C.paper,true);
   const walletW=Math.min(212,bw-152),gold='金币 '+(h.state.inventory.gold||0),extras=[h.state.energy>0?'能量 '+h.state.energy:'',h.state.knowledge_shard>0?'碎片 '+h.state.knowledge_shard:''].filter(Boolean).join(' · '),caption=gold+(extras?'\n'+extras:'');
   const wallet=h.button('inventory-wallet',caption,x+28,y+48,walletW,44,()=>{this.view='wallet';h.redraw(true);},h.busy,false,'game');wallet.fontSize=extras?14:16;wallet.lineHeight=20;wallet.string=shortText(gold,Math.floor((walletW-16)/14))+(extras?'\n'+shortText(extras,Math.floor((walletW-16)/14)):'');
   h.button('inventory-group',this.all?'物品图鉴':'随身物品',x+bw-112,y+48,88,44,()=>{this.all=!this.all;this.page=0;h.redraw();},h.busy,false,'game');
-  const ids=Object.keys(itemDefinitions).filter(id=>this.all||h.state.inventory[id]>0),per=short?12:24,pages=Math.max(1,Math.ceil(ids.length/per));this.page=Math.min(this.page,pages-1);
-  const cell=short?48:56,gap=8,columns=6,rows=short?2:4,gridW=columns*(cell+gap)-gap,gx=x+(bw-gridW)/2,gy=y+(short?100:106);
-  h.box('InventoryTray',gx-7,gy-7,gridW+14,rows*(cell+gap)+6,C.canvas,6);
+  const cell=short?48:56,gap=8,columns=Math.min(6,Math.floor((bw-56+gap)/(cell+gap))),rows=Math.max(1,Math.floor((height-208)/(cell+gap))),per=columns*rows,pages=Math.max(1,Math.ceil(ids.length/per));this.page=Math.min(this.page,pages-1);
+  const gridW=columns*(cell+gap)-gap,gx=x+(bw-gridW)/2,gy=y+(short?100:106),occupiedRows=Math.max(1,Math.ceil(Math.min(ids.length-this.page*per,per)/columns));
+  h.box('InventoryTray',gx-7,gy-7,gridW+14,occupiedRows*(cell+gap)+6,C.canvas,6);
   for(let i=0;i<per;i++){
-   const id=ids[this.page*per+i],xx=gx+(i%columns)*(cell+gap),yy=gy+Math.floor(i/columns)*(cell+gap);if(!id){h.box('EmptyPocket',xx,yy,cell,cell,'#e3dfc8',4);continue;}
+   const id=ids[this.page*per+i],xx=gx+(i%columns)*(cell+gap),yy=gy+Math.floor(i/columns)*(cell+gap);if(!id)continue;
    const count=h.state.inventory[id]||0,selected=this.selected===id;
    h.itemSlot('item-'+id,id,xx,yy,cell,cell,count,selected,()=>this.select(h,id));
   }
-  if(pages>1)h.button('inventory-next','翻页 '+(this.page+1)+'/'+pages,x+bw-112,y+height-116,88,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy,false,'game');
-  h.text('PocketsTitle','四格快捷栏',x+28,y+height-(pages>1?104:88),bw-144,24,14,C.paper);
+  if(pages>1){h.box('InventoryPagerPaper',x+bw-112,y+height-116,88,44,C.paper,4);h.button('inventory-next','翻页 '+(this.page+1)+'/'+pages,x+bw-112,y+height-116,88,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy,false,'page');}
+  if(!ids.length)h.text('EmptyInventory','行囊暂时空着，沿途收集的物品会放在这里。',gx+8,gy,gridW-16,48,15,C.muted);
+  h.text('PocketsTitle','随手口袋 · 1–4',x+28,y+height-(pages>1?104:88),bw-144,24,14,C.paper);
   const qw=(bw-64)/4;this.quick.forEach((id,i)=>h.itemSlot('quick-'+i,id,x+24+i*(qw+5),y+height-58,qw,44,id?h.state.inventory[id]||0:0,false,()=>{this.pocket=i;if(id)this.select(h,id);else{this.view='quick';h.redraw();}},true,i+1));
   h.box('InventoryTagShadow',tx-3,ty+4,tw+6,th,C.wood,8);h.box('InventoryTag',tx,ty,tw,th,C.paper,7);
   h.button('close','收起',tx+tw-72,ty+10,60,44,()=>h.close(),h.busy,false,'game');
@@ -65,8 +68,8 @@ export class InventoryView {
  }
  private pockets(h:PanelHost,x:number,y:number,w:number,height:number){
   const ww=(w-64)/4;this.quick.forEach((id,i)=>h.button('pocket-select-'+i,String(i+1),x+20+i*(ww+8),y+92,ww,44,()=>{this.pocket=i;h.redraw();},h.busy,this.pocket===i,'game'));
-  const id=this.quick[this.pocket],note=this.preferences.warning||'第'+(this.pocket+1)+'格：'+(id?itemNames[id]+' · '+(h.state.inventory[id]||0)+'份':'空口袋')+'\n安排不会消耗物品，已有同类会交换位置。';
-  h.text('PocketInstruction',textPages(note,Math.floor((w-40)/15),3)[0],x+20,y+140,w-40,64,15);
+  const id=this.quick[this.pocket],note=this.preferences.warning||'第'+(this.pocket+1)+'格：'+(id?itemNames[id]+' · '+(h.state.inventory[id]||0)+'份':'空口袋')+'\n安排不消耗物品；同类会交换位置。';
+  h.text('PocketInstruction',textPages(note,Math.floor((w-40)/15),3)[0],x+20,y+140,w-40,64,15).lineHeight=21;
   const ww2=(w-48)/2,yy=y+height-112;
   h.button('pocket-bind','装入此格',x+20,yy,ww2,44,()=>{this.preferences.bind(this.pocket,this.selected,h.state.inventory);h.redraw(true);},h.busy||!(h.state.inventory[this.selected]>0),true,'game');
   h.button('pocket-clear','清空此格',x+28+ww2,yy,ww2,44,()=>{this.preferences.clear(this.pocket);h.redraw(true);},h.busy||!id,false,'game');

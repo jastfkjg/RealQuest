@@ -3,6 +3,7 @@ import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} fr
 import {C} from './theme';
 import {drawQuestBoard,drawQuestStory} from './questBoard';
 import {drawJourneyMenu} from './journeyMenu';
+import {drawExpeditionGear} from './expeditionGear';
 import {gameControls,paperSurface,timberSurface} from './materials';
 import {LifePanels} from './life';
 import {DossierPanels} from './dossier';
@@ -60,13 +61,14 @@ export class FeaturePanels {
  amount='1'; orderId=''; tradeItem='seed'; tradeSide='buy';
  lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';shopTab='trade';gearTab='obtain';
  private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
- handles(mode:string){return mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
+ handles(mode:string){return mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
  guideMode(mode:string){return this.guidance.handles(mode);}
  lifeMode(mode:string){return this.lifePanels.handles(mode);}
  reset(){this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
  snapshot(){return {npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
  draw(original:PanelHost){
   const h=gameControls(original);
+  if(['armory','equipment','gear-recipe'].includes(h.mode)){drawExpeditionGear(h,this);return;}
   if(h.mode==='menu'){drawJourneyMenu(h,this);return;}
   if(h.mode==='preferences'){this.preferences.draw(h);return;}
   if(h.mode==='dialogue'&&this.npcTab==='talk'){this.places.encounter(h,id=>{if(id==='shop')h.go('shop');else{this.npcTab=id;this.page=0;h.redraw();}});return;}
@@ -96,7 +98,8 @@ export class FeaturePanels {
   if(['armory','shop','building'].includes(h.mode)){timberSurface(h,f);paperSurface(h,{x:f.x+12,y:f.y+10,w:w-24,h:height-20});}
   else paperSurface(h,f,true);
   const expedition=['armory','cave','gate'].includes(h.mode)||(h.mode==='quests'&&h.context?.id==='board');
-  h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,expedition?(h.mode==='armory'?w-512:w-360):w-160,42,24);
+  const hasBalance=['shop','building','spellbook'].includes(h.mode);
+  h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,expedition?(h.mode==='armory'?w-512:w-360):w-(hasBalance?312:160),42,f.compact?21:24);
   if(expedition)h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
   h.button('close','返回',f.x+w-100,f.y+12,76,44,()=>h.close(),h.busy);
   const money=`金币 ${h.state.inventory.gold||0}`;
@@ -108,7 +111,6 @@ export class FeaturePanels {
   else if(h.mode==='quest-story')this.questStory(h,f);
   else if(h.mode==='dialogue')this.npc(h,f);
 
-  else if(h.mode==='armory'||h.mode==='equipment')this.gear(h,f);
   else if(h.mode==='spellbook')this.spell(h,f);
   else if(h.mode==='cave'||h.mode==='gate')this.cave(h,f);
 
@@ -186,23 +188,27 @@ export class FeaturePanels {
   if(!entries.some(e=>e.id===this.tradeSide+':'+this.tradeItem)){this.tradeSide='buy';this.tradeItem=Object.keys(market.buy)[0];}
   this.list(h,f,entries,this.tradeSide+':'+this.tradeItem,id=>{[this.tradeSide,this.tradeItem]=id.split(':');this.amount='1';},lw);
   const price=(this.tradeSide==='buy'?market.buy:market.sell)[this.tradeItem],amount=Number(this.amount),cost=price*amount;
-  if(!f.compact&&h.hasArt('items/'+this.tradeItem))h.image('items/'+this.tradeItem,dx+32,f.top+46,64,64);
-  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · 单价 ${price} · 持有 ${h.state.inventory[this.tradeItem]||0}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?0:88),f.top,dw-(f.compact?0:88),34,f.compact?18:24);
+  if(h.hasArt('items/'+this.tradeItem))h.image('items/'+this.tradeItem,dx+(f.compact?20:32),f.top+(f.compact?20:46),f.compact?40:64,f.compact?40:64);
+  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · 单价 ${price} · 持有 ${h.state.inventory[this.tradeItem]||0}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?52:88),f.top,dw-(f.compact?52:88),34,f.compact?16:24);
   if(!f.compact)h.text('TradePrice',`单价 ${price} 金币 · 持有 ${h.state.inventory[this.tradeItem]||0}`,dx+88,f.top+40,dw-88,28,16,C.muted);
-  h.field('trade-amount','数量（1–99）',this.amount,dx,f.top+(f.compact?36:116),150,v=>this.amount=v,true,2);
-  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${Number.isInteger(amount)?cost:'—'} 金币`,dx+170,f.top+(f.compact?58:138),dw-170,44,18);
-  h.button('trade-confirm',`确认${this.tradeSide==='buy'?'买入':'卖出'}`,dx,f.y+f.h-62,dw,44,()=>h.send('market_trade',{target,side:this.tradeSide,item:this.tradeItem,amount:Number(this.amount)}),h.busy,true);
+  const quantityY=f.top+(f.compact?36:116),step=(delta:number)=>{this.amount=String(Math.min(99,Math.max(1,(Number.isInteger(amount)?amount:1)+delta)));h.redraw();};
+  h.field('trade-amount','数量 1–99',this.amount,dx+52,quantityY,88,v=>this.amount=v,true,2);
+  h.button('trade-minus','−',dx,quantityY+22,44,44,()=>step(-1),h.busy||amount<=1,false,'game',{label:'减少购买或出售数量'});
+  h.button('trade-plus','+',dx+148,quantityY+22,44,44,()=>step(1),h.busy||amount>=99,false,'game',{label:'增加购买或出售数量'});
+  const valid=Number.isInteger(amount)&&amount>=1&&amount<=99,balance=this.tradeSide==='buy'?h.state.inventory.gold||0:h.state.inventory[this.tradeItem]||0,required=this.tradeSide==='buy'?cost:amount,missing=valid?Math.max(0,required-balance):0;
+  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${valid?cost:'—'} 金币`,dx+208,f.top+(f.compact?58:138),dw-208,44,18);
+  if(!h.error&&!h.notice)h.text('TradeReadiness',!valid?'请输入 1–99 的整数数量':missing?`还差 ${missing} ${this.tradeSide==='buy'?'金币':itemNames[this.tradeItem]}`:`交易后${this.tradeSide==='buy'?'金币':'持有'} ${balance-required}`,dx,f.y+f.h-108,dw,36,15,missing||!valid?C.danger:C.muted);
+  h.button('trade-confirm',`确认${this.tradeSide==='buy'?'买入':'卖出'}`,dx,f.y+f.h-62,dw,44,()=>h.send('market_trade',{target,side:this.tradeSide,item:this.tradeItem,amount:Number(this.amount)}),h.busy||!valid||!!missing,true);
  }
  private building(h:PanelHost,f:Frame){
   const obj=h.context;if(!obj)return;const key=obj.building||'workshop',level=h.state.buildings[key]||1,costs=upgradeCosts(level),dx=f.x+f.w*.44,dw=f.w*.56-24;
   h.image('interiors/workbench',f.x+f.w*.22,f.top+46,208,61);
   h.text('BlueprintName',`${({home:'家园',workshop:'工坊',library:'图书馆'} as Record<string,string>)[key]} · 等级 ${level}`,f.x+24,f.top+94,f.w*.40,40,22);
-  h.text('UpgradeCosts',level>=3?'已达当前最高等级':`升级至 ${level+1} 级
-${costText(costs)}`,dx,f.top,dw,74,18);
+  h.text('UpgradeCosts',level>=3?'已达当前最高等级':`扩建至 ${level+1} 级\n`+Object.entries(costs).map(([id,n])=>`${itemNames[id]||id} ${h.state.inventory[id]||0}/${n}`).join(' · '),dx,f.top,dw,74,f.compact?16:18);
   h.button('upgrade-building','确认升级',dx,f.top+84,dw,44,()=>h.send('upgrade',{target:obj.id}),h.busy||level>=3||shortages(h.state,costs).length>0,true);
   if(obj.id==='workshop_counter'){
-   if(!f.compact)h.text('PlankRecipe','木板蓝图 · 3 木材 → 1 木板',f.x+24,f.top+166,f.w-48,40,20);
-   h.button('craft-plank','制作木板 · 木材 3',f.x+24,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('craft',{target:obj.id}),h.busy||shortages(h.state,plankRecipe).length>0,true);
+   if(!f.compact){h.image('items/plank',f.x+56,f.top+206,48,48);h.text('PlankRecipe','木板蓝图',f.x+96,f.top+172,f.w-120,34,22);h.text('PlankMaterials',`3 份木材 → 1 块木板\n手边有 ${h.state.inventory.wood||0} 份木材${(h.state.inventory.wood||0)<3?'，还需收集 '+(3-(h.state.inventory.wood||0))+' 份':'，可以开工'}`,f.x+96,f.top+210,f.w-120,56,16,C.muted);}
+   h.button('craft-plank',`制作木板 · 木材 ${h.state.inventory.wood||0}/3`,f.x+24,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('craft',{target:obj.id}),h.busy||shortages(h.state,plankRecipe).length>0,true);
    h.button('counter-sell',`卖萝卜 · +${8+level-1} 金币`,f.x+32+(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('sell',{target:obj.id}),h.busy||!h.state.inventory.crop);
    h.button('counter-seed','买种子 · 金币 2',f.x+40+2*(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('buy_seed',{target:obj.id}),h.busy||(h.state.inventory.gold||0)<2);
   }
@@ -214,50 +220,36 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
   if(this.npcTab==='contracts'){this.contracts(h,f,true);return;}
   this.npcTab='talk';h.redraw();
  }
- private gear(h:PanelHost,f:Frame){
-  if(h.mode==='armory')this.tabs(h,f,[['obtain','购买与打造'],['sell','出售武器']],this.gearTab,id=>this.gearTab=id);
-  const weapons=h.state.combat?.weapons||{},ids=Object.keys(weapons),lw=Math.floor(f.w*.31),dx=f.x+lw+48,dw=f.w-lw-72;
-  if(h.mode==='equipment'&&!weapons[this.weaponId])this.weaponId=ids.find(id=>h.state.inventory[id]>0)||ids[0];
-  if(this.weaponId!=='soup'&&!weapons[this.weaponId])this.weaponId=ids[0];const weapon=weapons[this.weaponId]||weapons[ids[0]];if(!weapon)return;
-  this.list(h,f,[...ids.map(id=>({id,label:`${weapons[id].name} · 持有 ${h.state.inventory[id]||0}`})),...(h.mode==='armory'?[{id:'soup',label:`便携菜汤 · 持有 ${h.state.inventory.soup||0}`}]:[])],this.weaponId,id=>this.weaponId=id,lw);
-  const soup=this.weaponId==='soup',owned=h.state.inventory[this.weaponId]||0;
-  const artSize=f.compact?48:72,artX=dx+artSize/2;
-  h.image('items/'+this.weaponId,artX,f.top+(f.compact?38:58),artSize,artSize);
-  h.text('WeaponName',soup?'便携菜汤':weapon.name,dx+artSize+16,f.top,dw-artSize-16,38,f.compact?20:24);
-  h.text('WeaponStats',soup?'生命 +20 · 体力 +15\n洞内原地饮用；可被打断。':`${weapon.damage} ${weapon.magic?'魔法':'物理'}伤害 · 距离 ${weapon.reach}\n每次 ${weapon.stamina} 体力 · 间隔 ${weapon.interval} 秒`,dx+artSize+16,f.top+(f.compact?32:44),dw-artSize-16,f.compact?54:70,f.compact?15:17);
-  const equipped=h.state.combat?.equipped;
-  if(h.mode==='equipment'){
-   h.text('EquippedState',equipped===this.weaponId?'当前已装备':`当前装备：${equipped?itemNames[equipped]:'尚未装备'}`,dx,f.top+122,dw,38,16,C.muted);
-   h.button('equip-weapon',equipped===this.weaponId?'已装备':'装备此武器',dx,f.y+f.h-62,dw,44,()=>h.send('gear_equip',{item:this.weaponId}),h.busy||!owned||equipped===this.weaponId,true);return;
-  }
-  if(this.gearTab==='sell'){
-   const price=Math.floor(weapon.price/4),lastEquipped=equipped===this.weaponId&&owned===1;
-   h.text('WeaponSell',soup?'菜汤留作洞内恢复。':f.compact?`回款 ${price} 金币${lastEquipped?' · 最后一件售出后卸下':''}`:`出售一件可获得 ${price} 金币。${lastEquipped?'\n这是当前装备的最后一件，出售后将卸下。':''}`,dx,f.top+(f.compact?86:122),dw,f.compact?30:76,17,C.muted);
-   h.button('sell-gear',this.confirm===this.weaponId?'确认出售这一件':`出售一件 · +${price} 金币`,dx,f.y+f.h-62,dw,44,()=>{if(this.confirm===this.weaponId)void h.send('gear_sell',{target:'armory_counter',item:this.weaponId}).then(ok=>{if(ok){this.confirm='';h.redraw();}});else{this.confirm=this.weaponId;h.redraw();}},h.busy||soup||owned<1,true);return;
-  }
-  const price=soup?8:weapon.price;
-  const canEquip=!soup&&owned>0;
-  if(f.compact&&!soup)h.text('CraftShortfall',weapon.craft_reasons[0]||'蓝图条件已满足',dx,f.top+86,dw,26,14,C.muted);
-  if(!f.compact)h.text('CraftRequirements',soup?'购买后放入行囊，按 R 或恢复按钮饮用。':`打造材料 · ${costText(weapon.costs)}\n${weapon.craft_reasons.join('；')||'材料与能力已满足，可制作。'}`,dx,f.top+112,dw,72,16,C.muted);
-  if(canEquip&&!f.compact)h.text('ArmoryEquippedState',equipped===this.weaponId?'这件武器已装备':`持有 ${owned} 件 · 当前装备：${equipped?itemNames[equipped]:'尚未装备'}`,dx,f.top+190,dw,28,16,C.muted);
-  const bw=(dw-(canEquip?24:12))/(canEquip?3:2),footer=f.y+f.h-62;
-  h.button('buy-gear',`购买 · ${price} 金币`,dx,footer,bw,44,()=>h.send('gear_buy',{target:'armory_counter',item:this.weaponId}),h.busy||(h.state.inventory.gold||0)<price,!canEquip);
-  h.button(soup?'gear-equipment':'craft-gear',soup?'查看装备':'按蓝图打造',dx+bw+12,footer,bw,44,()=>soup?h.go('equipment'):h.send('gear_craft',{target:'armory_counter',item:this.weaponId}),h.busy||(!soup&&weapon.craft_reasons.length>0));
-  if(canEquip)h.button('armory-equip',equipped===this.weaponId?'已装备':'装备此武器',dx+(bw+12)*2,footer,bw,44,()=>h.send('gear_equip',{item:this.weaponId}),h.busy||equipped===this.weaponId,true);
- }
  private spell(h:PanelHost,f:Frame){
   const learned=!!h.state.combat?.spark_learned,magic=h.state.knowledge_growth?.magic||0;
   h.image('items/journal',f.x+f.w*.18,f.top+78,80,80);
   const dx=f.x+f.w*.34,dw=f.w*.66-24;
   h.text('SpellName','火花术',dx,f.top,dw,38,26);
-  h.text('SpellDescription','12 魔法伤害 · 4 体力 · 冷却 4 秒\n进入洞穴后，选择目标并按 Q 施放。',dx,f.top+48,dw,72,18);
-  if(!f.compact)h.text('SpellRequirements',`研习需要：魔法 1 级、金币 8\n当前魔法 ${magic} 级 · ${learned?'已经学会':'尚未学会'}`,dx,f.top+140,dw,72,18,C.muted);
+  h.text('SpellDescription','12 魔法伤害 · 4 体力 · 冷却 4 秒'+(f.compact?'':'\n进入洞穴后，选择目标并按 Q 施放。'),dx,f.top+48,dw,f.compact?28:72,f.compact?16:18);
+  h.text('SpellRequirements',learned?'✓ 已掌握 · 洞内选中目标，按 Q 施放':`研习需要 · 魔法 ${magic}/1 级 · 金币 ${h.state.inventory.gold||0}/8`,dx,f.top+(f.compact?84:140),dw,f.compact?52:72,16,learned?C.moss:C.muted);
   h.button('learn-spark',learned?'已经学会':'研习 · 金币 8',dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send('spark_learn',{target:'spell_desk'}),h.busy||learned||magic<1||(h.state.inventory.gold||0)<8,true);
   h.button('spell-growth','查看魔法培养',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>{this.growth='magic';h.go('growth');},h.busy);
  }
  private cave(h:PanelHost,f:Frame){
   const c=h.state.combat,obj=h.context;if(!c||!obj)return;
   const gate=h.mode==='gate',inCave=h.state.location.startsWith('cave_'),dx=f.x+24,dw=f.w-48;
+  if(!gate&&!inCave){
+   const ready=!!c.equipped&&!!h.state.inventory[c.equipped],equipped=ready?c.weapons[c.equipped!]:null;
+   const low=(h.state.vitality?.current??100)<40||(h.state.stamina?.current??100)<20;
+   const compact=f.compact,top=f.top,footer=f.y+f.h-62;
+   h.text('CaveSummary','准备进入第一层',dx,top,dw,compact?28:38,compact?20:26);
+   if(!compact&&ready)h.image('items/'+c.equipped,dx+32,top+86,64,64);
+   h.text('CaveEquipment',ready?'✓ 已装备 '+equipped?.name:'○ 尚未装备武器',dx+(!compact&&ready?84:0),top+(compact?30:58),dw-(!compact&&ready?84:0),compact?24:32,compact?15:20,ready?C.moss:C.danger);
+   h.text('CaveVitals',`生命 ${h.state.vitality?.current}/${h.state.vitality?.max} · 体力 ${Math.floor(h.state.stamina?.current||0)}/${h.state.stamina?.max}`,dx+(!compact&&ready?84:0),top+(compact?54:98),dw-(!compact&&ready?84:0),28,compact?14:17,low?C.danger:C.muted);
+   const hint=!ready?'建议先装备武器。也可以自行决定进入。':low?'生命或体力偏低，建议先回床边休整。':'先探索首层；随时可撤离，已获材料保留。';
+   const note=h.text('CaveReadiness',hint,dx,top+(compact?82:154),dw,compact?36:56,compact?14:17,!ready||low?C.danger:C.ink);if(compact)note.lineHeight=18;
+   if(!compact){h.text('CaveHelp','空格攻击 · 点击怪物选择目标\n看见攻击预兆，先走出金色区域。',dx,top+226,dw,68,16,C.muted);}
+   const bw=(dw-12)/2;
+   h.button('cave-enter','进入第一层',dx,footer,bw,44,()=>h.send('cave_interact',{target:obj.id}).then(ok=>{if(ok)h.go('world');}),h.busy,ready&&!low);
+   const recover=c.boss_first&&!c.gate_open&&!(h.state.inventory.gate_stone||0);
+   h.button(recover?'stone-recover':ready&&low?'cave-rest':'cave-equipment',recover?'核实并补领门钥石':ready&&low?'标记床铺休整':ready?'查看装备':'先装备武器',dx+bw+12,footer,bw,44,()=>recover?h.send('stone_recover'):ready&&low?h.mark({mapId:'home',targetId:'home_bed'},'家中床铺'):h.go('equipment'),h.busy,!ready||low);
+   return;
+  }
   const body=gate?(c.gate_open?'石门已永久开启，无需再次提交魔法石。\n东行的路已经通了，查看安排后再出发吧。':`门钥魔法石 ${h.state.inventory.gate_stone||0} / 1 · 魔法 ${h.state.knowledge_growth?.magic||0} / 3\n击败底层守卫并培养魔法后，走近此处嵌石。`):inCave?`第 ${c.floor} 层 · ${c.cleared?'本层已清理':'本层仍有怪物'} · 已探索至 ${c.unlocked} 层\n安全区位于左侧；可随时撤离，已有战利品保留。`:`共 5 层 · 已开放至 ${c.unlocked} 层\n当前装备：${c.equipped?itemNames[c.equipped]:'尚未装备'} · 生命 ${h.state.vitality?.current}/${h.state.vitality?.max}`;
   h.text('CaveSummary',gate?'通往苇风渡口':inCave?obj.name:'主动进入战斗区域',dx,f.top,dw,38,24);
   h.text('CaveRequirements',body,dx,f.top+46,dw,88,18);

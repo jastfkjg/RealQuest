@@ -50,10 +50,11 @@ export function drawQuestBoard(h:PanelHost,selection:BoardSelection,giver?:strin
   pin(h,'NoticePin-'+entry.id,left+lw/2,yy+7);
   const status=h.state.tracked_quest===entry.id?'追踪中':questStatuses[entry.status];
   const label=h.button('select-'+entry.id,`${category(entry)} · ${status}\n${entry.title}${compact?'':`\n${done} / ${entry.objectives.length} 项完成`}`,left+14,yy+12,lw-28,noteH-22,()=>{selection.questId=entry.id;selection.detailPage=0;h.redraw(true);},h.busy,selected,'notice',{label:`${category(entry)} · ${status} · ${entry.title} · ${done}/${entry.objectives.length} 项完成`,pressed:selected});
-  label.horizontalAlign=Label.HorizontalAlign.LEFT;label.lineHeight=compact?20:24;label.fontSize=compact?14:16;
+  label.horizontalAlign=Label.HorizontalAlign.LEFT;label.lineHeight=compact?20:22;label.fontSize=compact?14:16;
  });
  if(pages>1){
   const by=footer-44,bw=(lw-12)/2;
+  h.box('NoticePreviousPaper',left,by,bw,44,C.paper,3);h.box('NoticeNextPaper',left+bw+12,by,bw,44,C.paper,3);
   h.button('list-prev','上一组',left,by,bw,44,()=>{const next=(selection.page-1+pages)%pages;selection.questId=entries[next*per].id;h.redraw(true);},h.busy,false,'game');
   h.button('list-next',`${selection.page+1}/${pages} · 下一组`,left+bw+12,by,bw,44,()=>{const next=(selection.page+1)%pages;selection.questId=entries[next*per].id;h.redraw(true);},h.busy,false,'game');
  }

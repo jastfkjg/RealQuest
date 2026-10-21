@@ -8,7 +8,7 @@
     "runtimeWebPs": 7,
     "sharedModules": 25,
     "sceneInputs": 76,
-    "files": 449,
+    "files": 453,
     "references": 31
   },
   "bindings": [
@@ -640,7 +640,7 @@
     {
       "source": "shared/game/inventory.ts",
       "target": "clients/cocos/assets/scripts/core/inventory.ts",
-      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f"
+      "sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -5480,7 +5480,7 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "960e8b423dd5630453d8f43b90dec56c03a7eb9aa7fd84c2edd37e137c850a12",
+      "sha256": "33c53b02f2d5f3d04db23dd4e437ce0330d08ee3355bbe5f3b900dce83a93760",
       "bytes": 37576,
       "roles": [
         "binding-contract"
@@ -7258,8 +7258,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "1850816f75598b6417858f6a60c3b57c75e46248e9810ad5e0eba8cece1b4b0c",
-      "bytes": 103513,
+      "sha256": "8e4dc4579cc3bfe0f4fb61a9c71d9ddeb6efeb0a7c555c9c60886393e988e055",
+      "bytes": 104702,
       "roles": [
         "inspected-source"
       ],
@@ -7504,8 +7504,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f",
-      "bytes": 7061,
+      "sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6",
+      "bytes": 7054,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7798,8 +7798,22 @@
     {
       "path": "clients/cocos/assets/scripts/ui/dossier.ts",
       "owner": "cocos-adapter",
-      "sha256": "e14f19439f4b2f6d894b9d25e92201c5a211d4d52f7f7302ba51c458f7833fbf",
-      "bytes": 11099,
+      "sha256": "010352d4fff9148d555d6c83b7437b46cd5a684689e8bbe4571308e154c46bba",
+      "bytes": 11113,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/expeditionGear.ts",
+      "owner": "cocos-adapter",
+      "sha256": "fb0aba1ce1dc2362fab6004e5c4afe2e27a7b2f23211477da2c04d5b77616e77",
+      "bytes": 10710,
       "roles": [
         "inspected-source"
       ],
@@ -7826,8 +7840,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "5ec931a27eaba8c12adb86300054fcbcbe7f98e358c8a5c5bad4cf4d6cb79b5d",
-      "bytes": 12774,
+      "sha256": "9f744c6bf7749846cdcc611ee2861dba615dbe0f93fa158cff20866f0fc45e0f",
+      "bytes": 13300,
       "roles": [
         "inspected-source"
       ],
@@ -7840,8 +7854,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/journeyMenu.ts",
       "owner": "cocos-adapter",
-      "sha256": "404f4a33dd69e51eb96f617c06e02062672f048735ce951dadc70d32e49c5442",
-      "bytes": 3220,
+      "sha256": "8689b3b2d51bbba89ac757fab4faf23c2dda82d1c7b7da8b2464d6a9599f6c3d",
+      "bytes": 3238,
       "roles": [
         "inspected-source"
       ],
@@ -7854,8 +7868,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/life.ts",
       "owner": "cocos-adapter",
-      "sha256": "12adde1af129360aa938e95161dfe4506f39b15d38cc4666aae049224ed7c41f",
-      "bytes": 39751,
+      "sha256": "54436f6bfca63a5c2d33c9f51e5c6e30002ce0d588f768ff0c361c66595a4cbf",
+      "bytes": 39869,
       "roles": [
         "inspected-source"
       ],
@@ -7868,8 +7882,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/materials.ts",
       "owner": "cocos-adapter",
-      "sha256": "c4666fd1575c7e6b3f0cb2d72bb094c79ba235402ba42aec72ec1787151f5198",
-      "bytes": 3170,
+      "sha256": "1c9f93c1c6cc7275ebafb593a4f25292b65583a593c7f5637c99e1f96fd0d7ba",
+      "bytes": 3225,
       "roles": [
         "inspected-source"
       ],
@@ -7882,8 +7896,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "684a22078545e0b698d4915a3341c0bbb4c48a7b483ff6f6a865e504cacb8881",
-      "bytes": 32544,
+      "sha256": "18fe01efb5b04d95e470604abd6d18d96836d8d964d549d034bcd0d380c8a2fe",
+      "bytes": 32245,
       "roles": [
         "inspected-source"
       ],
@@ -7924,8 +7938,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/questBoard.ts",
       "owner": "cocos-adapter",
-      "sha256": "4fe95e3cefb8fc68df9cb2d55218efe816b49263d6e9dff31197626d8f8d54b3",
-      "bytes": 10385,
+      "sha256": "c3909b3c7e3c5eb99e3cd6714d1791bfe60f5f50c3786e66ace6daed02c6dfdc",
+      "bytes": 10496,
       "roles": [
         "inspected-source"
       ],
@@ -7938,8 +7952,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/storage.ts",
       "owner": "cocos-adapter",
-      "sha256": "a3b0c6c4a27af5207a661acda9d5e4758f20a5527d06d1c0b1afe3d32689669a",
-      "bytes": 5193,
+      "sha256": "575dcee29b69e79a8d8b7dcac5b729120c1b64ee227d274918cf846618fb6c9c",
+      "bytes": 5581,
       "roles": [
         "inspected-source"
       ],
@@ -8148,8 +8162,8 @@
     {
       "path": "clients/cocos/tools/smoke-consistency.mjs",
       "owner": "cocos-adapter",
-      "sha256": "2d6a7d4a6b1920ef51331efdbbedbaafff042755f475de299dd0af8522962c9d",
-      "bytes": 18853,
+      "sha256": "60a04404854f17ad324cd7b5413d5de0b923b61ff81936410f05afad1444267e",
+      "bytes": 18976,
       "roles": [
         "inspected-source"
       ],
@@ -8162,8 +8176,8 @@
     {
       "path": "clients/cocos/tools/smoke-data.mjs",
       "owner": "cocos-adapter",
-      "sha256": "111cbdbf75df5c85eb4912a09d2d317e466cb00e3292c64dacfa4a14b368b798",
-      "bytes": 11358,
+      "sha256": "d841f534535aac21ab8df3c2e0e9df9266ff6fca3cd28bfec1f82e1abae970b3",
+      "bytes": 11479,
       "roles": [
         "inspected-source"
       ],
@@ -8190,8 +8204,8 @@
     {
       "path": "clients/cocos/tools/smoke-dialogue.mjs",
       "owner": "cocos-adapter",
-      "sha256": "7d263f61c864dba1a7c1e7dad0adcd159993ca185e3e0b8837e096071b7a85ab",
-      "bytes": 7908,
+      "sha256": "e7e9a21009205d382253051d4e1390316e06ae8aae480ea262f081ba640c0bd5",
+      "bytes": 7918,
       "roles": [
         "inspected-source"
       ],
@@ -8206,6 +8220,20 @@
       "owner": "cocos-adapter",
       "sha256": "d0ac69c8315f175645988bb6955a0f86e9ea584c9ec7730dadc0a95cdcdacd88",
       "bytes": 18217,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/smoke-expedition-chain.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "d0342613b9eb995cbdfa2d241d1251060f244b4beccb31ef808e37ba63e8b75b",
+      "bytes": 13966,
       "roles": [
         "inspected-source"
       ],
@@ -8232,8 +8260,8 @@
     {
       "path": "clients/cocos/tools/smoke-interface-refresh.mjs",
       "owner": "cocos-adapter",
-      "sha256": "aeab9344ecd6bbea57a564ed317f5a7ab90278e7e86f5fd5c344282983c3a7a4",
-      "bytes": 9826,
+      "sha256": "9b87f13ed62051edde759312b47073140142377832c92bb3d69945cb9d093e95",
+      "bytes": 11302,
       "roles": [
         "inspected-source"
       ],
@@ -8260,8 +8288,8 @@
     {
       "path": "clients/cocos/tools/smoke-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "7d214c0a9d62dbfe78d376cb6659d83169b084a29de9bc23a9dacd9f10eac8c5",
-      "bytes": 22106,
+      "sha256": "81f844951f5ec32ccc3417ed37866aec21e777b1535fad84628330cc354982b7",
+      "bytes": 24031,
       "roles": [
         "inspected-source"
       ],
@@ -8302,8 +8330,8 @@
     {
       "path": "clients/cocos/tools/smoke-neighbor-encounter.mjs",
       "owner": "cocos-adapter",
-      "sha256": "5ea76df51ebae60d397982c3218c4b717902672f88a9b9b0450b0c0f2afb6670",
-      "bytes": 11324,
+      "sha256": "00c5a654bbe685eae00306670afe24a300966f84d9b3fe853f51ff3d469322a1",
+      "bytes": 11342,
       "roles": [
         "inspected-source"
       ],
@@ -8442,8 +8470,8 @@
     {
       "path": "clients/cocos/tools/smoke-session.mjs",
       "owner": "cocos-adapter",
-      "sha256": "6e855710aa4ec44e163796ee952d4add0fccee63b00e949d62b85a05c9a5edf7",
-      "bytes": 14416,
+      "sha256": "bf93c3016472ccb356ceccf0da4391bd709fbe79151c2dc0f54ccfc611d1fb71",
+      "bytes": 14537,
       "roles": [
         "inspected-source"
       ],
@@ -8470,8 +8498,8 @@
     {
       "path": "clients/cocos/tools/smoke-village-art.mjs",
       "owner": "cocos-adapter",
-      "sha256": "50cc30e85c140e91f2e22cf6b1457168c9eaf204758ff2633b1f3c3b15e58feb",
-      "bytes": 13682,
+      "sha256": "d908e7f1191fb7b47b40064ea6b5666fbccff9409ee2c67320ba64a6b28d4cf0",
+      "bytes": 13545,
       "roles": [
         "inspected-source"
       ],
@@ -8610,8 +8638,8 @@
     {
       "path": "clients/cocos/tools/test-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "22dd405d7420b7119507e971ff0499186a58e3195f7151092bcfc8bdbff4881a",
-      "bytes": 5527,
+      "sha256": "6acd087f0d8974a67b2ff3c567445ea9b4ddc252788900b4e59960c003f57b06",
+      "bytes": 5499,
       "roles": [
         "inspected-source"
       ],
@@ -8696,6 +8724,34 @@
       "owner": "cocos-adapter",
       "sha256": "5a18fef52d8cae749541f62405e3c2a62a3e75bd6fe1a09e222ca10a4e34aa43",
       "bytes": 2768,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/ui-layout-audit.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "12ea4f5e18b76c355641ea6d694141a12ced4cdbcd9a73332d3c6f06dbae60e6",
+      "bytes": 1363,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/ui-navigation.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "b28e5308e1e446a6f27df138c4880e13f422e2f09f68d98ed67cf1e7cc602060",
+      "bytes": 697,
       "roles": [
         "inspected-source"
       ],
@@ -9244,8 +9300,8 @@
     {
       "path": "shared/game/inventory.ts",
       "owner": "shared-game",
-      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f",
-      "bytes": 7061,
+      "sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6",
+      "bytes": 7054,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9670,8 +9726,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "605829a97490cb638cf86fb6afdfcfeed6c2e113946c5ceaaf9107ff0d796be1",
-      "bytes": 3041,
+      "sha256": "1a0d99b71ed1030d3d1453d18ec521aad74052685f958b74f1eba485fecf22a8",
+      "bytes": 3148,
       "roles": [
         "inspected-source"
       ],
@@ -9984,8 +10040,8 @@
     {
       "path": "tools/test-cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "3ab959c6dd6a013ce1d8c51dc2896e3d6104ed64e7d318e3d2cbac5aa7e98e62",
-      "bytes": 4762,
+      "sha256": "a9b7326bbda1056894dd0ccc7768f75be29a385241b204f343cf91d4634ea4d6",
+      "bytes": 4867,
       "roles": [
         "inspected-source"
       ],
