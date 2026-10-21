@@ -1,0 +1,3 @@
+# Optional historical PNG packers; separate from the backend runtime.
+# Verified with the existing bundled Python3.12.14/Pillow12.3.0 tool runtime.
+Pillow==12.3.0

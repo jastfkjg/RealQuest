@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
-const require=createRequire(new URL('../../../frontend/package.json',import.meta.url)),ts=require('typescript');
+const require=createRequire(new URL('../../../package.json',import.meta.url)),ts=require('typescript');
 const source=ts.transpileModule(await fs.readFile(new URL('../../../shared/game/features.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
 const f=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const s={inventory:{wood:2,gold:20},knowledge_points:1,skill_points:2,health_points:1,character_growth_options:{magic:{currency:'knowledge_points',cost:1,expected_invested:3},building:{currency:'skill_points',cost:3,expected_invested:4},vitality:{currency:'health_points',cost:1,expected_invested:2}},timer:{elapsed:12,started_at:100,running:true},position:{x:64,y:352},location:'cave_1',combat:{encounter:'encounter-a',input_seq:7,enemies:[{id:'dead',hp:0,x:65,y:352},{id:'nearest',hp:18,x:240,y:344},{id:'selected',hp:14,x:408,y:240}]}};

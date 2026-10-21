@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
-const require=createRequire(new URL('../../../frontend/package.json',import.meta.url));
+const require=createRequire(new URL('../../../package.json',import.meta.url));
 const ts=require('typescript'),cache=new Map();
 async function module(name){
   if(cache.has(name))return cache.get(name);
@@ -13,7 +13,7 @@ const {Client,TransportError,ApiError,readRecovery}=await import(await module('c
 const reply=(revision=1,id='fixture')=>({save_id:id,state:{revision,world_clock:{elapsed:0,day_seconds:1800},inventory:{seed:6}},world:{id:'overworld'},server_time:1800000000+revision});
 function fixture(){
   let session=null,pending=null,next=0,calls=[],handler=async()=>reply();
-  const transport={getSession:()=>session,setSession:s=>session=s,getPending:()=>structuredClone(pending),setPending:(id,p)=>pending=structuredClone(p),uuid:()=>`request-${++next}`,request:async(path,method,body,token)=>{
+  const transport={getSession:()=>session,setSession:s=>session=s,clearSession:(id,token)=>{if(session?.saveId===id&&session?.token===token)session=null;},getPending:()=>structuredClone(pending),setPending:(id,p)=>pending=structuredClone(p),uuid:()=>`request-${++next}`,request:async(path,method,body,token)=>{
     if(path==='client-session')return {...reply(),...(token?{}:{session_token:'server-token'})};
     calls.push({path,body:structuredClone(body),token});return handler(path,body);
   }};
@@ -56,17 +56,71 @@ let groups=0;
  const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();f.transport.setSession({token:'another',saveId:'another'});const count=f.calls.length;await assert.rejects(c.command('plant'),/另一页面/);assert.equal(f.calls.length,count);assert.equal(c.status,'unauthorized');await assert.rejects(c.refresh(),/另一页面/);groups++;
 }
 {
- const data=new Map();const storage={getItem:k=>data.get(k)||null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k),key:i=>[...data.keys()][i]??null,get length(){return data.size;}};
+ const data=new Map();const storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k),key:i=>[...data.keys()][i]??null,get length(){return data.size;}};
  globalThis.__phase23Storage=storage;
  const sys='data:text/javascript;base64,'+Buffer.from('export const sys={localStorage:globalThis.__phase23Storage,isNative:false}').toString('base64');
  let code=ts.transpileModule(await fs.readFile(new URL('../assets/scripts/platform.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
  code=code.replace("from 'cc'",`from ${JSON.stringify(sys)}`).replace("from './core/client'",`from ${JSON.stringify(await module('client'))}`);
+ const effects=ts.transpileModule(await fs.readFile(new URL('../assets/scripts/experience.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+ code=code.replace("from './core/preferences'",`from ${JSON.stringify(await module('preferences'))}`).replace("from './experience'",`from ${JSON.stringify('data:text/javascript;base64,'+Buffer.from(effects).toString('base64'))}`);
  const {transport}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
  const a={version:1,saveId:'same',body:{save_id:'same',request_id:'tab-a',action:'plant',data:{}}},b={...a,body:{...a.body,request_id:'tab-b',action:'store'}};
- transport.setPending('same',a);transport.setPending('same',b);assert.equal(data.size,2);transport.setPending('same',null,'tab-a');assert.deepEqual(transport.getPending('same'),b);transport.setPending('same',null,'tab-b');assert.equal(transport.getPending('same'),null);delete globalThis.__phase23Storage;groups++;
+ transport.setPending('same',a);transport.setPending('same',b);assert.equal(data.size,2);transport.setPending('same',null,'tab-a');assert.deepEqual(transport.getPending('same'),b);transport.setPending('same',null,'tab-b');assert.equal(transport.getPending('same'),null);
+ const token='a'.repeat(43);data.set('realquest-cocos-guest-v1',token);transport.setSession({token,saveId:'same'});assert(!data.has('realquest-cocos-guest-v1'));
+ transport.setPending('same',a);transport.setPending('different',{...b,saveId:'different'});data.set('unrelated','keep');data.set('realquest-cocos-inventory-v2:same','same-pref');data.set('realquest-cocos-inventory-v2:different','other-pref');
+ transport.clearSession('same','b'.repeat(43));assert(transport.getSession());
+ transport.clearSession('same',token);assert.equal(transport.getSession(),null);assert.equal(transport.getPending('same'),null);assert(transport.getPending('different'));assert.equal(data.get('unrelated'),'keep');assert.equal(data.get('realquest-cocos-inventory-v2:same'),undefined);assert.equal(data.get('realquest-cocos-inventory-v2:different'),'other-pref');
+ const shapeKey='realquest-outbox-v2:shape:bad';
+ for(const raw of ['null','[]','false','0','"lost"','{bad']){data.set(shapeKey,raw);assert.throws(()=>transport.getPending('shape'),/待确认操作记录异常/);assert.equal(data.get(shapeKey),raw);data.delete(shapeKey);}
+ const legacyKey='realquest-pending-v1:shape';for(const raw of ['', 'null','[]','false','{bad']){data.set(legacyKey,raw);assert.throws(()=>transport.getPending('shape'),/待确认操作记录异常/);assert.equal(data.get(legacyKey),raw);data.delete(legacyKey);}
+ for(const raw of ['null','[]','false','{bad',JSON.stringify({token:'bad',saveId:'same'})]){data.set('realquest-session-v2',raw);assert.throws(()=>transport.getSession(),/本机会话记录异常/);assert.equal(data.get('realquest-session-v2'),raw);data.delete('realquest-session-v2');}
+ console.log('PASS original storage adapter rejects16 malformed current/legacy/credential representations, preserves exact bytes and exposes readable messages.');
+ delete globalThis.__phase23Storage;groups++;
 }
 const {walkable,pathfind,accessibleTarget}=await import(await module('navigation'));
 const map={id:'overworld',width:320,height:240,obstacles:[[128,64,32,80]],trees:[],objects:[{id:'home',kind:'building',x:64,y:64}]};
 assert(!walkable(map,140,100));const route=pathfind(map,{x:64,y:96},{x:224,y:96});assert(route.length);assert(route.every(p=>walkable(map,p.x,p.y)));
 assert.equal(accessibleTarget({mapId:'home',targetId:'chest'},{...map,interiors:{home:{...map,id:'home',objects:[]}}},{location:'overworld',world_clock:{elapsed:0,day_seconds:1800},npc_encounter:null},1800000000)?.id,'home');groups++;
 console.log(`${groups} shared core groups passed: durable retries/reload, rejection, expired auth, storage failure, stale replies, safe recovery and navigation.`);
+
+// Data lifecycle: no guest creation during cookie lookup, export or deletion recovery.
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});
+ f.handle(async(path)=>{assert.equal(path,'state');return {...reply(3,'cookie-save'),state:{...reply().state,character:{name:'旧网页'},activities:[],study_plan_log:[]}};});
+ const preview=await c.inspectWebJourney();assert.equal(preview.save_id,'cookie-save');assert.equal(c.state,null);assert.equal(f.session,null);assert.equal(f.calls[0].token,undefined);
+ f.handle(async(path,b)=>{assert.equal(path,'client-from-web');assert.equal(b.save_id,'cookie-save');return {...reply(4,'cookie-save'),session_token:'linked-token'};});
+ await c.continueWebJourney(preview.save_id);assert.equal(c.saveId,'cookie-save');assert.equal(f.session.token,'linked-token');groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async()=>({state:{inventory:{seed:6}},ledger:[]}));assert.equal((await c.exportData()).state.inventory.seed,6);
+ f.handle(async()=>{f.transport.setSession({saveId:'fixture',token:'other-tab-token'});return {state:{},ledger:[]};});
+ await assert.rejects(c.exportData(),/另一页面/);groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async(path)=>{assert.equal(path,'client-delete');throw new TransportError('committed but lost');});
+ await assert.rejects(c.deleteData(),/lost/);const intent=structuredClone(f.session);assert(intent.deletion);assert.equal(c.deletionPending,true);
+ await assert.rejects(c.command('plant'),/管理/);
+ f.handle(async(path,b)=>{assert.equal(path,'client-delete');assert.equal(b.request_id,intent.deletion.requestId);return {deleted:true,save_id:'fixture'};});
+ const reloaded=new Client(f.transport,()=>{});assert.equal(await reloaded.boot(),null);assert.equal(f.session,null);assert.equal(reloaded.state,null);assert.equal(reloaded.status,'disconnected');groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();let sent=false;
+ f.transport.setSession=()=>{throw Error('storage denied');};f.handle(async()=>{sent=true;return {deleted:true,save_id:'fixture'};});
+ await assert.rejects(c.deleteData(),/storage denied/);assert.equal(sent,false);assert(c.state);groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async()=>{throw new TransportError('offline');});await assert.rejects(c.command('plant'));
+ let deleted=false;f.handle(async()=>{deleted=true;return {deleted:true,save_id:'fixture'};});await assert.rejects(c.deleteData(),/待保存/);assert.equal(deleted,false);groups++;
+}
+console.log(`${groups} total core groups passed, including explicit cookie continuity, guarded export, durable deletion/reload and pending/storage protection.`);
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async()=>{throw new ApiError(403,'denied');});await assert.rejects(c.deleteData(),/denied/);
+ assert.equal(c.deletionPending,false);assert.equal(c.status,'ready');assert(c.state);assert.equal(f.session.deletion,undefined);
+ f.handle(async()=>{f.transport.setSession({saveId:'elsewhere',token:'other'});return {...reply(8,'restored'),session_token:'restored-token'};});
+ await assert.rejects(c.restore({recovery_key:'x'.repeat(43)}),/另一页面/);assert.equal(c.saveId,'fixture');assert.equal(f.session.saveId,'elsewhere');
+ console.log('17 total core groups passed, including definitive deletion rejection and late recovery after another tab switches.');
+}

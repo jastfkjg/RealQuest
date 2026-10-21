@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+const require=createRequire(new URL('../../../package.json',import.meta.url)),ts=require('typescript'),cache=new Map();
+async function module(name){
+ if(cache.has(name))return cache.get(name);
+ let source=ts.transpileModule(await fs.readFile(new URL('../../../shared/game/'+name+'.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+ for(const match of [...source.matchAll(/from ['"]\.\/(\w+)['"]/g)])source=source.replace(match[0],'from '+JSON.stringify(await module(match[1])));
+ const url='data:text/javascript;base64,'+Buffer.from(source).toString('base64');cache.set(name,url);return url;
+}
+const f=await import(await module('lifeRecords')),now=Date.parse('2026-10-16T16:00:00Z')/1000;
+const book=(id,date,extra={})=>({id,date,title:id,target_minutes:25,created_at:1,completed_at:null,archived_at:null,minutes:0,...extra});
+const s={study_task_log:[book('today','2026-10-17'),book('yesterday','2026-10-16'),book('completed','2026-10-17',{completed_at:1}),book('archived','2026-10-17',{archived_at:1}),book('child','2026-10-17',{plan_id:'plan'})],study_plan_log:[{id:'plan',archived_at:1,created_at:1},{id:'live',archived_at:null,created_at:2}],timer:null,activities:[],life_journal:{tasks:[{id:'a',date:'2026-10-16',status:'active',accepted_at:1},{id:'b',date:'2026-10-16',status:'claimed',accepted_at:2},{id:'c',date:'2026-10-16',status:'cancelled',accepted_at:3}]}};
+const original=JSON.stringify(s);
+assert.deepEqual(f.studyRecords(s,now,'today').map(t=>t.id),['child','completed','today']);
+assert.deepEqual(f.studyRecords(s,now,'history').map(t=>t.id),['yesterday']);
+assert.deepEqual(f.studyRecords(s,now,'archived').map(t=>t.id),['archived']);
+assert.deepEqual(f.studyRecords(s,now,'history','2026-10-15'),[]);
+assert.deepEqual(f.studyRecords(s,now-1,'today').map(t=>t.id),['yesterday']);
+assert.deepEqual(f.contractRecords(s,'2026-10-16','all').map(t=>t.id),['c','b','a']);
+for(const status of ['active','claimed','cancelled'])assert.equal(f.contractRecords(s,'2026-10-16',status)[0].status,status);
+assert.equal(f.contractRecords(s,'2026-10-17','all').length,0);
+assert.deepEqual(f.planRecords(s,true).map(p=>p.id),['plan']);assert.deepEqual(f.planRecords(s,false).map(p=>p.id),['live']);
+assert.equal(JSON.stringify(s),original,'reads preserve authoritative arrays');
+const t=s.study_task_log[0];assert(f.studyAccess(s,t).start);
+assert(!f.studyAccess(s,s.study_task_log[2]).edit);assert(f.studyAccess(s,s.study_task_log[2]).writable);
+assert(!f.studyAccess(s,s.study_task_log[3]).writable);assert(f.studyAccess(s,s.study_task_log[3]).archive);
+assert(!f.studyAccess(s,s.study_task_log[4]).start);assert(f.studyAccess(s,s.study_task_log[4]).parentArchived);
+s.timer={study_task_id:t.id};assert(!f.studyAccess(s,t).archive);assert(!f.studyAccess(s,t).edit);assert(!f.studyAccess(s,s.study_task_log[1]).ownTimer);assert(!f.studyAccess(s,s.study_task_log[1]).start);s.timer=null;
+s.activities=[{id:'yes',date:t.date,kind:'study'},{date:t.date,kind:'study'},{id:'other',date:t.date,kind:'study',study_task_id:'other'},{id:'same',date:t.date,kind:'study',study_task_id:t.id},{id:'wrongday',date:'2026-10-16',kind:'study'},{id:'wrongkind',date:t.date,kind:'exercise'}];
+assert.deepEqual(f.linkableRecords(s,t).map(a=>a.id),['yes']);assert.deepEqual(f.linkedRecords(s,t.id).map(a=>a.id),['same']);
+assert.deepEqual(f.linkableRecords(s,s.study_task_log[2]).map(a=>a.id),['yes'],'completed books can link');assert.deepEqual(f.linkableRecords(s,s.study_task_log[4]),[]);
+assert.equal(f.recordKey({},5),'legacy-5');assert.equal(f.recordKey({id:'real'},5),'real');
+assert.match(f.recordSource({source:'manual',verified:false}),/手动.*未核验/);assert.match(f.recordSource({source:'timer',verified:true}),/保留历史核验标记/);assert.match(f.recordSource({source:'demo'}),/演示/);
+const note='中文😀'.repeat(80)+'\n第二段\n';assert.equal(f.textPages(note,20,3).join('\n').replaceAll('\n',''),note.replaceAll('\n',''));assert(f.textPages(note,20,3).every(p=>p.split('\n').length<=3));
+assert.deepEqual(f.slicePage([1,2,3],999,2),{items:[3],index:1,count:2});assert.deepEqual(f.slicePage([],0,1),{items:[],index:0,count:1});
+assert.equal(f.shortText('中文😀abcd',4),'中文😀…');assert.equal(f.realTime(null),'未记录');
+console.log('PASS Life history: CST day rollover, nonmutating filters/order, archived/complete/other-timer guards, eligible real record identity, provenance and complete paginated text.');

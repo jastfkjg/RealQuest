@@ -1,12 +1,13 @@
 import type { Reply, GameState, World } from './protocol';
 import { acceptClock } from './clock';
-export type Session = { token: string; saveId: string };
+export type Session = { token: string; saveId: string; deletion?: { requestId: string } };
 export type Pending = { version: 1; saveId: string; body: { action: string; data: Record<string, unknown>; request_id: string; save_id: string } };
 export type RecoveryFile = { format: 'realquest-recovery'; version: 1; recovery_key: string; character_name?: string };
 export interface Transport {
   request(path: string, method: string, body?: unknown, token?: string): Promise<any>;
   getSession(): Session | null;
   setSession(session: Session): void;
+  clearSession(saveId: string, token: string): void;
   getPending(saveId: string): Pending | null;
   setPending(saveId: string, pending: Pending | null, requestId?: string): void;
   uuid(): string;
@@ -29,6 +30,8 @@ export class Client {
   pending: Pending | null = null;
   private queue: Promise<unknown> = Promise.resolve();
   private queued = 0;
+  private dataBusy = false;
+  deletionPending = false;
   constructor(private transport: Transport, private changed: () => void) {}
   private validate(reply: Reply) {
     if (!reply?.save_id || !reply.state || !Number.isFinite(reply.state.revision) || !Number.isFinite(reply.server_time)) throw new TransportError('服务器响应不完整，请重连确认');
@@ -45,7 +48,7 @@ export class Client {
     this.changed(); return reply;
   }
   private failed(error: unknown) {
-    this.status = error instanceof ApiError && error.status === 401 ? 'unauthorized' : this.pending ? 'uncertain' : 'offline';
+    this.status = this.deletionPending ? 'uncertain' : error instanceof ApiError && error.status === 401 ? 'unauthorized' : this.pending ? 'uncertain' : 'offline';
     this.changed();
   }
   async boot() {
@@ -53,6 +56,7 @@ export class Client {
     try {
       const session = this.transport.getSession();
       this.token = session?.token || ''; this.saveId = session?.saveId || '';
+      if(session?.deletion){this.deletionPending=true;await this.deleteData();return null;}
       const reply = await this.transport.request('client-session', 'POST', undefined, this.token);
       this.validate(reply);
       if (this.saveId && reply.save_id !== this.saveId) throw new Error('会话与本机存档标识不一致，已停止连接');
@@ -67,7 +71,8 @@ export class Client {
   }
   private checkSession() {
     const session=this.transport.getSession();
-    if(!session || (session.saveId && session.saveId!==this.saveId))throw new ApiError(401,'此页旅程已在另一页面切换，请刷新后继续');
+    if(!session || session.token!==this.token || (session.saveId && session.saveId!==this.saveId))throw new ApiError(401,'此页旅程已在另一页面切换，请刷新后继续');
+    if(session.deletion && !this.deletionPending)throw new ApiError(401,'此旅程正在另一页面删除，请刷新确认结果');
   }
   private loadPending() {
     this.pending=this.transport.getPending(this.saveId);
@@ -96,6 +101,7 @@ export class Client {
     }
   }
   command(action: string, data: Record<string, unknown> = {}) {
+    if (this.dataBusy || this.deletionPending) return Promise.reject(new Error('正在管理旅程数据，请稍候'));
     if (!this.state || !this.token || !['ready','saving'].includes(this.status)) return Promise.reject(new Error('尚未连接存档'));
     const saveId = this.saveId;
     this.queued++;
@@ -116,6 +122,7 @@ export class Client {
   }
   async reconnect() {
     await this.queue;
+    if(this.deletionPending)return this.deleteData();
     try {
       this.loadPending();
       while(this.pending)await this.sendPending();
@@ -125,21 +132,27 @@ export class Client {
   async refresh() {
     try {
       this.checkSession();
+      if(this.deletionPending)throw new Error('请先确认删除结果');
       const reply = this.accept(await this.transport.request('state', 'GET', undefined, this.token));
       if (!this.pending && !this.queued) this.status = 'ready'; this.changed(); return reply;
     } catch (e) { this.failed(e); throw e; }
   }
   async previewRecovery(file: RecoveryFile) {
+    if(this.deletionPending)throw new Error('请先确认删除结果');
     if(this.saveId)this.loadPending();
     if (this.queued) throw new Error('请等待当前保存完成');
     return this.transport.request('recovery-preview', 'POST', { recovery_key: file.recovery_key });
   }
   async restore(file: RecoveryFile) {
+    if(this.deletionPending || this.dataBusy)throw new Error('请先完成当前数据操作');
+    this.dataBusy=true;
+    try{
     if(this.saveId)this.loadPending();
     if (this.queued) throw new Error('请等待当前保存完成');
     const reply = await this.transport.request('client-recover', 'POST', { recovery_key: file.recovery_key });
     this.validate(reply);
     if(this.pending && reply.save_id !== this.saveId)throw new Error('请先用当前旅程的凭证确认待保存操作，再切换旅程');
+    if(this.saveId)this.checkSession();
     // If storage rejects, keep the current journey fully intact.
     this.transport.setSession({ token: reply.session_token, saveId: reply.save_id });
     this.token = reply.session_token; this.saveId = reply.save_id!;
@@ -147,10 +160,83 @@ export class Client {
     this.accept(reply);
     while(this.pending)await this.sendPending();
     this.status = 'ready'; this.changed(); return reply;
+    }finally{this.dataBusy=false;}
   }
   async recoveryFile(): Promise<RecoveryFile> {
+    if(this.deletionPending || this.dataBusy)throw new Error('请先完成当前数据操作');
     this.checkSession();this.loadPending();
     if (this.pending || this.queued) throw new Error('请先确认当前旅程的待保存操作');
     return this.transport.request('recovery-file', 'POST', undefined, this.token);
+  }
+
+  async inspectWebJourney() {
+    if(this.deletionPending)throw new Error('请先确认删除结果');
+    // No token and no POST /session: read the cookie save without creating one.
+    const reply=await this.transport.request('state','GET');
+    this.validate(reply);
+    if(!reply.state.character)throw new Error('此浏览器没有已登记的原网页旅程，请导入旅程凭证');
+    return {save_id:reply.save_id,character:reply.state.character,
+      plan_count:reply.state.study_plan_log?.length||0,record_count:reply.state.activities.length,
+      timer:reply.state.timer,revision:reply.state.revision};
+  }
+
+  async continueWebJourney(saveId:string) {
+    if(this.dataBusy||this.deletionPending)throw new Error('请先完成当前数据操作');
+    this.dataBusy=true;
+    try{
+      await this.queue;
+      if(this.saveId){this.checkSession();this.loadPending();}
+      if(this.pending&&saveId!==this.saveId)throw new Error('请先确认当前旅程的待保存操作，再切换旅程');
+      const reply=await this.transport.request('client-from-web','POST',{save_id:saveId});
+      this.validate(reply);
+      if(reply.save_id!==saveId)throw new Error('原网页旅程已变化，请重新核对');
+      if(this.saveId)this.checkSession();
+      this.transport.setSession({token:reply.session_token,saveId:reply.save_id});
+      this.token=reply.session_token;this.saveId=reply.save_id;this.state=null;this.world=null;
+      this.accept(reply);
+      while(this.pending)await this.sendPending();
+      this.status='ready';this.changed();return reply;
+    }finally{this.dataBusy=false;}
+  }
+
+  async exportData() {
+    if(this.dataBusy||this.deletionPending)throw new Error('请先完成当前数据操作');
+    this.dataBusy=true;
+    try{
+      await this.queue;this.checkSession();this.loadPending();
+      if(this.pending)throw new Error('请先确认待保存操作，再导出完整数据');
+      const result=await this.transport.request('export','GET',undefined,this.token);
+      this.checkSession();
+      if(!result?.state||!Array.isArray(result.ledger))throw new Error('服务器返回的完整数据不正确，请重试');
+      return result;
+    }finally{this.dataBusy=false;}
+  }
+
+  async deleteData() {
+    if(this.dataBusy)throw new Error('请等待当前数据操作');
+    this.dataBusy=true;
+    try{
+      await this.queue;this.checkSession();this.loadPending();
+      if(this.pending)throw new Error('请先确认待保存操作，再删除旅程');
+      const session=this.transport.getSession()!;
+      const deletion=session.deletion||{requestId:this.transport.uuid()};
+      // Persist intent before sending; reload must confirm it, never create a guest.
+      this.transport.setSession({...session,deletion});this.deletionPending=true;
+      const result=await this.transport.request('client-delete','POST',
+        {save_id:this.saveId,request_id:deletion.requestId},this.token);
+      if(result?.deleted!==true||result.save_id!==this.saveId)throw new TransportError('删除结果无法确认，请重试核实');
+      this.transport.clearSession(this.saveId,this.token);
+      this.state=null;this.world=null;this.saveId='';this.token='';this.pending=null;
+      this.deletionPending=false;this.status='disconnected';this.changed();return null;
+    }catch(e){
+      if(e instanceof ApiError&&e.status>=400&&e.status<500){
+        const current=this.transport.getSession();
+        if(current?.saveId===this.saveId&&current.token===this.token){
+          this.transport.setSession({token:this.token,saveId:this.saveId});
+          this.deletionPending=false;this.status=e.status===401?'unauthorized':'ready';
+        }
+      }
+      this.status=this.deletionPending?'uncertain':this.status;this.changed();throw e;
+    }finally{this.dataBusy=false;}
   }
 }

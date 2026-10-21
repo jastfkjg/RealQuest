@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parents[1]
 SRC=ROOT/'assets/generated/hearthwood'
-OUT=ROOT/'frontend/public/assets/hearthwood/detail'
+OUT=ROOT/'assets/runtime/hearthwood/detail'
 QA=ROOT/'output/hud-interiors'
 QA.mkdir(parents=True,exist_ok=True)
 records=[]
@@ -113,5 +113,5 @@ manifest=dict(version=3,source='Original built-in image_gen outputs; exact promp
     rebuild='tools/build_detail_art.py',rebuild_sha256=sha(Path(__file__)),
     records=records)
 (ROOT/'docs/art/detail-art-v3.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(ROOT/'frontend/src/game/detailAssets.json').write_text(json.dumps(runtime,indent=2)+'\n')
+(ROOT/'tools/scene-art/detailAssets.json').write_text(json.dumps(runtime,indent=2)+'\n')
 print(f'Packed {len(records)} original detail assets; {sum(r["size_bytes"] for r in records):,} runtime bytes; sources unchanged.')

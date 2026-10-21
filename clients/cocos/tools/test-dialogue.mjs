@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+const require=createRequire(new URL('../../../package.json',import.meta.url)),ts=require('typescript');
+const code=ts.transpileModule(await fs.readFile(new URL('../assets/scripts/ui/dialogue.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+const {DialogueReader,dialogueCopy}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+assert.deepEqual(dialogueCopy('莉亚：谢谢你。 熟悉度 +2。','莉亚'),{words:'谢谢你。',outcome:'熟悉度 +2。'});
+assert.deepEqual(dialogueCopy('诺亚：一起收好了。 体力 −4，熟悉度 +1。','诺亚'),{words:'一起收好了。',outcome:'体力 −4，熟悉度 +1。'});
+assert.deepEqual(dialogueCopy('今天想读些什么？','莉亚'),{words:'今天想读些什么？',outcome:''});
+const r=new DialogueReader();
+r.open('first',['你好，旅人。','下次见。'],false);assert.equal(r.text,'');assert(r.typing);assert(!r.choices);
+r.tick(.05,false);assert(r.text.length>0);r.advance(false);assert.equal(r.text,'你好，旅人。');assert(!r.choices,'skip must not also choose a reply');
+r.open('first',['你好，旅人。','下次见。'],false);assert.equal(r.text,'你好，旅人。','clock redraw preserves reveal');
+r.advance(false);assert.equal(r.text,'');r.advance(false);assert.equal(r.text,'下次见。');r.advance(false);assert(r.choices);
+r.open('first',['你好，','旅人。下次见。'],false);assert(r.choices,'resize keeps read completion');
+r.open('second',['新一段。'],true);assert.equal(r.text,'新一段。');assert(!r.choices,'reduced motion still waits for explicit continuation');r.advance(true);assert(r.choices);
+r.open('third',['你好🌱，旅人。'],false);r.advance(false);assert.equal(r.text,'你好🌱，旅人。');r.open('third',['你好🌱，','旅人。'],false);assert(!r.typing,'reflow preserves read characters across surrogate pairs');
+console.log('PASS gradual Chinese reveal, skip/continue separation, redraw and resize continuity, new encounter reset and reduced-motion explicit replies.');

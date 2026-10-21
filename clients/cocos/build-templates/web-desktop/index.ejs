@@ -5,12 +5,111 @@
   <title>RealQuest · 林间旅程</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#3f6348">
-  <link rel="stylesheet" href="<%= cssUrl %>">
+  <link rel="icon" href="data:,">
+  <link id="rq-style" rel="stylesheet" href="<%= cssUrl %>" onerror="this.dataset.failed='true'">
 </head>
 <body>
+  <section id="rq-boot" role="dialog" aria-modal="true" aria-labelledby="rq-boot-title" aria-describedby="rq-boot-note" aria-busy="false" data-state="loading" tabindex="-1">
+    <div class="rq-boot-paper">
+      <p class="rq-boot-brand">RealQuest <span>林间旅程</span></p>
+      <h1 id="rq-boot-title">正在准备旅程</h1>
+      <p id="rq-boot-note" role="status" aria-live="polite">正在载入村庄与随身物件，请稍等片刻。</p>
+      <p class="rq-boot-save">重新载入会保留本机旅程凭证与待确认操作。</p>
+      <button id="rq-boot-retry" type="button" hidden>重新载入旅程</button>
+    </div>
+  </section>
+  <noscript>
+    <style>#rq-boot,#GameDiv{display:none!important}</style>
+    <main class="rq-boot-paper rq-no-script"><p class="rq-boot-brand">RealQuest <span>林间旅程</span></p><h1>需要允许 JavaScript</h1><p>这版旅程需要 JavaScript 才能开始。请在浏览器允许后重新载入。</p><form method="get"><button class="rq-boot-link" type="submit">重新载入旅程</button></form></main>
+  </noscript>
   <div id="GameDiv" cc_exact_fit_screen="true">
     <div id="Cocos3dGameContainer"><canvas id="GameCanvas" tabindex="0" aria-label="RealQuest 村庄。WASD 或方向键移动，E 交互，I 行囊，L 成长，Escape 返回。"></canvas></div>
   </div>
-  <%- include(cocosTemplate, {}) %>
+  <script>
+  (function () {
+    'use strict';
+    var phase = 'loading', slowTimer = 0;
+    var messages = {
+      graphics: ['暂时无法展开村庄', '浏览器未能开启 WebGL 图形功能。请使用支持 WebGL 的浏览器，并检查图形加速是否可用后重试。'],
+      files: ['旅途资源未能载入', '部分画面或程序资源没有载入。请检查网络连接，再重新载入旅程。']
+    };
+    function node(id) { return document.getElementById(id); }
+    function gate(blocked) {
+      var game = node('GameDiv'), controls = node('realquest-accessibility');
+      [game, controls].forEach(function (element) {
+        if (!element) return;
+        element.inert = blocked;
+        if (blocked) element.setAttribute('aria-hidden', 'true');
+        else element.removeAttribute('aria-hidden');
+      });
+    }
+    function show(title, note) {
+      var root = node('rq-boot');
+      if (!root) return;
+      root.dataset.state = phase;
+      root.setAttribute('aria-busy', 'false');
+      node('rq-boot-title').textContent = title;
+      node('rq-boot-note').textContent = note;
+      node('rq-boot-retry').hidden = false;
+      gate(true);
+      if (document.hasFocus() && (document.activeElement === document.body || document.activeElement === node('GameCanvas'))) node('rq-boot-retry').focus();
+    }
+    function fail(reason) {
+      if (phase === 'ready' || phase === 'failed') return;
+      phase = 'failed'; clearTimeout(slowTimer);
+      var message = messages[reason] || messages.files;
+      show(message[0], message[1]);
+    }
+    function resourceError(event) {
+      if ((event.target && /^(SCRIPT|LINK)$/.test(event.target.tagName)) || event.message) fail('files');
+    }
+    function rejected() { fail('files'); }
+    function ready() {
+      if (phase === 'ready') return;
+      phase = 'ready'; clearTimeout(slowTimer);
+      window.removeEventListener('error', resourceError, true);
+      window.removeEventListener('unhandledrejection', rejected);
+      var root = node('rq-boot'), focusOwned = root && root.contains(document.activeElement);
+      gate(false);
+      if (root) root.remove();
+      if (focusOwned) node('GameCanvas').focus({preventScroll: true});
+    }
+    window.REALQUEST_BOOT = {
+      get pending() { return phase !== 'ready'; },
+      ready: ready,
+      fail: fail,
+      start: function (load) {
+        if (phase === 'failed') return;
+        try { load().catch(function (error) { fail('files'); console.error(error); }); }
+        catch (error) { fail('files'); console.error(error); }
+      }
+    };
+    gate(true);
+    node('rq-boot-retry').addEventListener('click', function () { window.location.reload(); });
+    window.addEventListener('error', resourceError, true);
+    window.addEventListener('unhandledrejection', rejected);
+    try {
+      var probe = document.createElement('canvas');
+      var gl = probe.getContext('webgl2') || probe.getContext('webgl') || probe.getContext('experimental-webgl');
+      if (!gl) fail('graphics');
+      else { var release = gl.getExtension('WEBGL_lose_context'); if (release) release.loseContext(); }
+    } catch (error) { fail('graphics'); }
+    probe = gl = release = null;
+    if (node('rq-style').dataset.failed) fail('files');
+    if (phase !== 'failed') slowTimer = setTimeout(function () {
+      if (phase !== 'loading') return;
+      phase = 'slow';
+      show('资源还在路上', '载入比平时久一些。可以继续等待，也可以检查网络后重新载入。');
+    }, 12000);
+  }());
+  </script>
+  <% if (polyfillsBundleFile) { %>
+  <script src="<%= polyfillsBundleFile %>" charset="utf-8"></script>
+  <% } %>
+  <script src="<%= systemJsBundleFile %>" charset="utf-8"></script>
+  <script src="<%= importMapFile %>" type="systemjs-importmap" charset="utf-8"></script>
+  <script>
+    window.REALQUEST_BOOT.start(function () { return System.import('<%= indexJsName %>'); });
+  </script>
 </body>
 </html>

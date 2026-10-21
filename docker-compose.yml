@@ -28,8 +28,7 @@ services:
       retries: 15
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./output/cocos-delivery
     ports: ["127.0.0.1:8080:80"]
     depends_on:
       backend:

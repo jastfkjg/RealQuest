@@ -23,7 +23,7 @@ def main() -> int:
     errors: list[str] = []
     required = ['AGENTS.md', 'DESIGN.md', 'README.md', 'docs/art/ASSET_PLAN.md',
                 'docs/art/REVIEW_CHECKLIST.md', 'docs/tasks/01-inventory-slice.md',
-                'styles/realquest-tokens.css']
+                'docs/design/realquest-tokens.css']
     for name in required:
         if not (ROOT / name).is_file():
             errors.append(f'Missing {name}')
@@ -51,7 +51,7 @@ def main() -> int:
                 errors.append(f'Non-English CJK text in documentation: {path.relative_to(ROOT)}')
             if len(re.findall(r'^```', text, re.M)) % 2:
                 errors.append(f'Unbalanced Markdown fences: {path.relative_to(ROOT)}')
-    css = (ROOT / 'styles/realquest-tokens.css').read_text()
+    css = (ROOT / 'docs/design/realquest-tokens.css').read_text()
     colors = dict(re.findall(r'--rq-([\w-]+):\s*(#[0-9a-fA-F]{6});', css))
     pairs = [('ink', 'linen', 4.5), ('ink-muted', 'linen', 4.5),
              ('ink', 'canvas', 4.5), ('ink-muted', 'canvas', 4.5),

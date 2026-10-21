@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'frontend/public/assets/hearthwood/market'
+OUT = ROOT / 'assets/runtime/hearthwood/market'
 OUT.mkdir(parents=True, exist_ok=True)
 sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 records = []

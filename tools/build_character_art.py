@@ -7,7 +7,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "assets/generated/hearthwood/character-emblems-v2.png"
-TARGET = ROOT / "frontend/public/assets/hearthwood/character"
+TARGET = ROOT / "assets/runtime/hearthwood/character"
 MANIFEST = ROOT / "docs/art/character-art-v2.json"
 CELLS = {"science": (0, 0), "magic": (1, 0), "planting": (2, 0), "ranching": (0, 1), "building": (1, 1)}
 

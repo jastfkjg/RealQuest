@@ -1,5 +1,7 @@
 # 架构
 
+2026-10-20：Cocos 是唯一客户端。原React/Phaser应用已退役；共享后端与规范规则继续使用，历史切片描述不作为旧客户端兼容门槛。
+
 ## 村庄战斗（2026-10-16）
 
 `combat.py` 保存追加式 `village_combat` 状态与5层遭遇；`combat_world.py` 提供固定碰撞和锚点。客户端只发送单位方向、瞄准、动作意图与世界视图owner／遭遇epoch／连续seq，服务端按实际接收间隔（单次最多0.25秒、断流丢弃）子步推进移动、攻击预兆、伤害、掉落和冷却。不同地图、旧遭遇、乱序或错误owner的输入被拒绝，非战斗移动命令不可在洞内改位置。菜单、失焦、Life Mode与后台暂停同一世界和战斗时钟。
@@ -14,19 +16,20 @@
 
 存档无需新增SQL表或清空数据：无时钟存档补默认值，旧村民时钟保留已提交的可玩时间，旧凌晨01:00–06:00调整为06:00而不追罚；持久化后迁移幂等。自然体力恢复、作物／资源、委托到期和现实日额度仍使用原服务端Unix时间戳；游戏睡眠只移动世界时钟，昏倒不获得积攒的睡眠恢复。
 
-前端在现有`WorldClockLifecycle`中处理续期／暂停，通过同一命令队列与身份校验同步状态。床边面板、夜间提醒和今晨状态使用原DOM／Hearthwood样式。跨夜后清除路径、导航、按键和旧面板，将同场景角色也同步到安全床边；场景变化仍沿用现有Phaser切换。文字状态导出同时提供权威位置、实际场景和显示时间，避免将过渡动画误判成状态丢失。验证与限制见[任务26](tasks/26-day-night-sleep.md)。
+Cocos 在 `Bootstrap.ts` 与规范共享客户端中处理世界时钟续期、暂停和输入归属，`ui/panels.ts` 提供床边与夜间状态。场景、角色与面板根据服务端快照更新；不通过UI状态逐帧同步移动。文字状态导出同时提供权威位置、实际场景和显示时间。
 
 ## 模块
 
-- `frontend/src/App.tsx`：角色创建、状态栏、任务提示、活动录入、计时、背包与建筑面板。
-- `frontend/src/game/`：Phaser 场景、程序像素素材、碰撞、移动、对象交互；React 负责场景容器的创建与销毁。
-- `frontend/src/stores/game.ts`：Zustand 服务端状态快照、面板状态、请求反馈及服务端时差。资产不在客户端结算。
-- `frontend/src/services/api.ts`：同源请求、串行操作队列、每操作 UUID、网络异常时同一键重试。
+- `clients/cocos/assets/scripts/Bootstrap.ts`：唯一客户端入口、世界与输入生命周期。
+- `clients/cocos/assets/scripts/ui/`：行囊、任务、现实成长、存档与各功能面板；`theme.ts` 为共享界面token。
+- `shared/game/client.ts`、`clock.ts`：规范网络协议、串行命令、持久请求ID、状态revision/会话防护与服务端时间锚点。
+- `shared/game/`：共享规则/类型源；同步到Cocos的 `core/`，不手工维护第二份规则。
+- `tools/scene-art/`、`assets/runtime/`：离线Canvas素材生成与规范图片源；无需React/Phaser或旧客户端构建。
 - `backend/app/main.py`：游客凭证、请求校验、事务、幂等回执、导出、删除。
 - `backend/app/rules.py`：确定性游戏规则；没有 LLM 依赖。
 - `backend/app/quests.py`：固定剧情委托定义、进度判定、解锁及派生状态。
 - `backend/app/world.py`：统一地图尺寸、碰撞几何与交互对象。通过 session API 提供给客户端。
-- `backend/app/models.py`：Player、Receipt、RecoveryKey、GuestSession；Alembic 001 / 002。
+- `backend/app/models.py`：Player、Receipt、RecoveryKey、GuestSession；Alembic 001–003。
 
 ## 数据模型
 
@@ -40,7 +43,7 @@
 
 ## 操作数据流
 
-浏览器意图 → API 身份识别 → 锁定玩家 → 检查幂等键与内容指纹 → 规则校验 → 扣除或发放资源 → 保存状态与回执 → 返回新版本快照 → React / Phaser 更新。
+浏览器意图 → API 身份识别 → 锁定玩家 → 检查幂等键与内容指纹 → 规则校验 → 扣除或发放资源 → 保存状态与回执 → 返回新版本快照 → Cocos 更新。
 
 PostgreSQL 使用行锁，SQLite 使用 `BEGIN IMMEDIATE` 串行写入。客户端按 revision 忽略旧快照，操作队列避免同一页面相互覆盖。客户端仅发送行为和目标，不发送应得资产。
 
@@ -76,7 +79,7 @@ Additive JSON defaults preserve the current save version, inventory, five attrib
 
 The daily task ID is derived from the server's Asia/Shanghai date, so different requests cannot create multiple reward-bearing pledges for one day. Linked exercise record IDs and the task's completion marker prevent duplicate health awards. `exercise_record` accepts a stable record UUID and detects conflicting reuse, supplementing request receipts across uncertain responses. `health_spend` checks an expected investment count before subtracting a point and raising capacity/current stamina. Receipts include point and capacity deltas. Existing activity XP is awarded only by activity creation, not linking or pledge completion. Imported/client balances never become authority.
 
-The React field journal uses the same store and command queue; no second Phaser instance, gameplay clock or exercise-verification mechanism is introduced. Existing server-clock anchoring drives the HUD and text-state projection. The page's `#training` entry restores on reload, clears on return/bed marking, owns keyboard input and restores focus to its opener or the Life Mode entry.
+The Cocos life journal uses the shared command queue and server clock. It owns text input/focus and pauses world play without adding a second client, clock or behavior-verification mechanism. The historical exercise-award slice below is provenance; current growth points follow the authoritative reality-commission rules.
 
 ## Knowledge growth slice (2026-10-14)
 

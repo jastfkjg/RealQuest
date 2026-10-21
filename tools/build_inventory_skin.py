@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser.add_argument("--asset", choices=["satchel-shell-v1", "journal-spread-v1", "character-dossier-v1", "arrival-village-v1", "arrival-register-v1", "commission-wood-v1", "commission-river-v1", "commission-scroll-v1", "commission-hourglass-v1", "commission-study-v1", "commission-exercise-v1", "commission-work-v1", "commission-ledger-v1", "commission-letter-v1", "life-journal-v1"], default="satchel-shell-v1")
     asset = parser.parse_args().asset
     SOURCE = ROOT / f"assets/generated/hearthwood/{asset}.png"
-    TARGET = ROOT / f"frontend/public/assets/hearthwood/{asset}.webp"
+    TARGET = ROOT / f"assets/runtime/hearthwood/{asset}.webp"
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(SOURCE) as image:
         original = image.convert("RGBA")

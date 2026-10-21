@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'docs/art/generated/departure-v1'
-OUT = ROOT / 'frontend/public/assets/hearthwood/residents'
+OUT = ROOT / 'assets/runtime/hearthwood/residents'
 records = []
 for name in ['adu','lanya']:
     image = Image.open(SOURCE / f'{name}-source.png').convert('RGBA')
@@ -30,7 +30,7 @@ for name in ['adu','lanya']:
     records.append({'path':str(p.relative_to(ROOT)),'dimensions':[1024,1536],'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 # Scenery is cut and packed at two native pixels per world unit. Explicit
 # variants follow collision footprints; the runtime never stretches a texture.
-SCENERY = ROOT/'frontend/public/assets/hearthwood/journey'
+SCENERY = ROOT/'assets/runtime/hearthwood/journey'
 SCENERY.mkdir(exist_ok=True)
 for name, sizes in [('cliff',[(448,224),(576,256),(224,144)]),('boat',[(72,176)])]:
     image=Image.open(SOURCE/f'{name}-source.png').convert('RGBA')

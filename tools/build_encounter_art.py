@@ -8,7 +8,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "assets/generated/hearthwood"
-TARGET = ROOT / "frontend/public/assets/hearthwood/encounters"
+TARGET = ROOT / "assets/runtime/hearthwood/encounters"
 MANIFEST = ROOT / "docs/art/encounter-art-v1.json"
 
 

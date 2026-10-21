@@ -3,7 +3,7 @@
   "license": "Original generated project artwork; no third-party pack",
   "status": "candidate_pending_owner_visual_review",
   "rebuild": "tools/build_market_art.py",
-  "rebuild_sha256": "2088b0d873b24279fa0f1b0562605bf06dfea218257345f441aa32823b4c8be4",
+  "rebuild_sha256": "e69e3754e1a69cfb6eb7c7a875c092b6caea042a92fb3b08d1886285352063ec",
   "records": [
     {
       "id": "market-shop",
@@ -19,7 +19,7 @@
         1344,
         1145
       ],
-      "path": "frontend/public/assets/hearthwood/market/shop.png",
+      "path": "assets/runtime/hearthwood/market/shop.png",
       "width": 272,
       "height": 232,
       "sha256": "4bbb5436eddd41b7cb75e53b5895970b2873a3a325832a99dd26f577cad1bd6c",
@@ -40,7 +40,7 @@
         1967,
         793
       ],
-      "path": "frontend/public/assets/hearthwood/market/counter.png",
+      "path": "assets/runtime/hearthwood/market/counter.png",
       "width": 416,
       "height": 169,
       "sha256": "13881ae9bd228c8c366f180180beabdd523cff62e52fcbb679ed1ba5b5f3fb58",

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 const require = createRequire(
-    new URL("../../../frontend/package.json", import.meta.url),
+    new URL("../../../package.json", import.meta.url),
   ),
   ts = require("typescript");
 const root = new URL("../../../", import.meta.url),

@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
-const require=createRequire(new URL('../../../frontend/package.json',import.meta.url));
+const require=createRequire(new URL('../../../package.json',import.meta.url));
 const {chromium}=require('playwright');
 const browser=await chromium.launch({headless:true});
 let video;

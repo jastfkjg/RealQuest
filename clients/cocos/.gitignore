@@ -17,3 +17,21 @@ web-phase45/
 web-cave-polish/
 
 web-village-polish/
+web-data-management/
+
+web-life-records/
+
+web-dossier/
+
+web-guidance/
+
+web-places/
+
+web-map-refinement/
+
+web-neighbor-encounter/
+
+web-neighbor-encounter-final/
+
+# Creator review builds are generated artifacts.
+/web-*/

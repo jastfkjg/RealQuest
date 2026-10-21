@@ -17,7 +17,8 @@ cleanup() {
     exit "$smoke_exit_code"
 }
 trap cleanup EXIT
-docker build -f "$root/frontend/Dockerfile" -t "$frontend_image" "$root"
+node "$root/tools/cocos-release.mjs" --verify "$root/output/cocos-delivery"
+docker build -t "$frontend_image" "$root/output/cocos-delivery"
 docker build -t "$backend_image" "$root/backend"
 export REALQUEST_FRONTEND_IMAGE="$frontend_image" REALQUEST_BACKEND_IMAGE="$backend_image"
 export POSTGRES_PASSWORD=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

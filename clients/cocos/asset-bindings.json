@@ -3,10 +3,190 @@
   "note": "Canonical shared/game logic and cave presentation; existing PNGs and reproducible scene derivatives, see tasks35–38.",
   "records": [
     {
+      "source": "assets/generated/hearthwood/satchel-shell-v1.png",
+      "target": "assets/resources/ui/satchel.png",
+      "sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
+      "output_sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63"
+    },
+    {
+      "source": "assets/generated/hearthwood/commission-wood-v1.png",
+      "target": "assets/resources/ui/notice-timber.png",
+      "sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f",
+      "output_sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f"
+    },
+    {
+      "source": "assets/derived/panel-materials/notice-paper.png",
+      "target": "assets/resources/ui/notice-paper.png",
+      "sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d",
+      "output_sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d"
+    },
+    {
+      "source": "assets/runtime/hearthwood/encounters/notice-paper.webp",
+      "target": "assets/resources/ui/notice-paper-web.webp",
+      "sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "output_sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd"
+    },
+    {
+      "source": "assets/derived/panel-materials/arrival.png",
+      "target": "assets/resources/ui/arrival.png",
+      "sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b",
+      "output_sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b"
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-village-v1.webp",
+      "target": "assets/resources/ui/arrival-web.webp",
+      "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "output_sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b"
+    },
+    {
+      "source": "assets/derived/panel-materials/register.png",
+      "target": "assets/resources/ui/register.png",
+      "sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f",
+      "output_sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f"
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-register-v1.webp",
+      "target": "assets/resources/ui/register-web.webp",
+      "sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "output_sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f"
+    },
+    {
+      "source": "assets/derived/panel-materials/book.png",
+      "target": "assets/resources/ui/book.png",
+      "sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f",
+      "output_sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f"
+    },
+    {
+      "source": "assets/runtime/hearthwood/journal-spread-v1.webp",
+      "target": "assets/resources/ui/book-web.webp",
+      "sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "output_sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a"
+    },
+    {
+      "source": "assets/derived/panel-materials/life-book.png",
+      "target": "assets/resources/ui/life-book.png",
+      "sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7",
+      "output_sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7"
+    },
+    {
+      "source": "assets/runtime/hearthwood/life-journal-v1.webp",
+      "target": "assets/resources/ui/life-book-web.webp",
+      "sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "output_sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781"
+    },
+    {
+      "source": "assets/derived/panel-materials/letter.png",
+      "target": "assets/resources/ui/letter.png",
+      "sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728",
+      "output_sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728"
+    },
+    {
+      "source": "assets/runtime/hearthwood/commission-letter-v1.webp",
+      "target": "assets/resources/ui/letter-web.webp",
+      "sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c",
+      "output_sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c"
+    },
+    {
+      "source": "assets/runtime/hearthwood/detail/items/journal.png",
+      "target": "assets/resources/items/journal.png",
+      "sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab",
+      "output_sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab"
+    },
+    {
+      "source": "assets/derived/inventory-icons/stone_sword.png",
+      "target": "assets/resources/items/stone_sword.png",
+      "sha256": "e31c0d1d40fa77c26320ef43ee33f5af05fbd2df8ad075c7fea4f92d2ce38105",
+      "output_sha256": "e31c0d1d40fa77c26320ef43ee33f5af05fbd2df8ad075c7fea4f92d2ce38105"
+    },
+    {
+      "source": "assets/derived/inventory-icons/reinforced_sword.png",
+      "target": "assets/resources/items/reinforced_sword.png",
+      "sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d",
+      "output_sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d"
+    },
+    {
+      "source": "assets/derived/inventory-icons/spring_spear.png",
+      "target": "assets/resources/items/spring_spear.png",
+      "sha256": "ef5751ed4e7d5a62a7fc087bf2f557447184f05a899306b357e40065bf6a35a5",
+      "output_sha256": "ef5751ed4e7d5a62a7fc087bf2f557447184f05a899306b357e40065bf6a35a5"
+    },
+    {
+      "source": "assets/derived/inventory-icons/glow_staff.png",
+      "target": "assets/resources/items/glow_staff.png",
+      "sha256": "9d7712e4a846ad74fa4e5bd6c3a376f09632cfb7e27eb700af1b8ae29782985a",
+      "output_sha256": "9d7712e4a846ad74fa4e5bd6c3a376f09632cfb7e27eb700af1b8ae29782985a"
+    },
+    {
+      "source": "assets/derived/inventory-icons/gel.png",
+      "target": "assets/resources/items/gel.png",
+      "sha256": "fd27cdec84500ca8d45eec631d60c98bb979f741f220b85002e4530f8e6439e6",
+      "output_sha256": "fd27cdec84500ca8d45eec631d60c98bb979f741f220b85002e4530f8e6439e6"
+    },
+    {
+      "source": "assets/derived/inventory-icons/shell.png",
+      "target": "assets/resources/items/shell.png",
+      "sha256": "892aad9662afbb1c68792493f43ddbb38de371aef4ed0f9fbbd3b276ab04ccf9",
+      "output_sha256": "892aad9662afbb1c68792493f43ddbb38de371aef4ed0f9fbbd3b276ab04ccf9"
+    },
+    {
+      "source": "assets/derived/inventory-icons/crystal.png",
+      "target": "assets/resources/items/crystal.png",
+      "sha256": "8e4b9e072fdc228c4d5eed476fcd9156d62a18627f2be319c8162f79305df2f5",
+      "output_sha256": "8e4b9e072fdc228c4d5eed476fcd9156d62a18627f2be319c8162f79305df2f5"
+    },
+    {
+      "source": "assets/derived/inventory-icons/gate_stone.png",
+      "target": "assets/resources/items/gate_stone.png",
+      "sha256": "a4d25ff7d810d5864c7665039ce6c124a9f2a6a447c1df454559846776a5da21",
+      "output_sha256": "a4d25ff7d810d5864c7665039ce6c124a9f2a6a447c1df454559846776a5da21"
+    },
+    {
+      "source": "assets/derived/inventory-icons/soup.png",
+      "target": "assets/resources/items/soup.png",
+      "sha256": "14760f4ae03d4a5479f745a17a569551550c7a4aa0a426b0f022d51dc796b612",
+      "output_sha256": "14760f4ae03d4a5479f745a17a569551550c7a4aa0a426b0f022d51dc796b612"
+    },
+    {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4",
-      "output_sha256": "39d858677090f7e1048b00bfde43ec46b669cf35de3279d3f742a890c213c1a4"
+      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
+      "output_sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
+    },
+    {
+      "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
+      "target": "assets/resources/atlas/terrain.png",
+      "sha256": "285a0cc5003355322880638113e828996c16ab42cf57b3cae4ee922480e18d61",
+      "output_sha256": "285a0cc5003355322880638113e828996c16ab42cf57b3cae4ee922480e18d61"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/lia-portrait.png",
+      "target": "assets/resources/atlas/lia.png",
+      "sha256": "6258894fec9609dc0a4d980b598134797a8c94ccec0c0283ee8447e3943896bc",
+      "output_sha256": "6258894fec9609dc0a4d980b598134797a8c94ccec0c0283ee8447e3943896bc"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/noah-portrait.png",
+      "target": "assets/resources/atlas/noah.png",
+      "sha256": "5aab8791b6abaf3807ef4ddfadd8b925d08aae4a761fc04d7e859c64c1ac9a00",
+      "output_sha256": "5aab8791b6abaf3807ef4ddfadd8b925d08aae4a761fc04d7e859c64c1ac9a00"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/mira-portrait.png",
+      "target": "assets/resources/atlas/mira.png",
+      "sha256": "15c57ac0d796fccca26d9a3f84af682b98802aea1cf0634d59ace1f7b8d588fa",
+      "output_sha256": "15c57ac0d796fccca26d9a3f84af682b98802aea1cf0634d59ace1f7b8d588fa"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/adu-portrait.png",
+      "target": "assets/resources/atlas/adu.png",
+      "sha256": "dafecf5f7086cd418a93e1b313a4633490b58bd65e90486670e816623c9aab47",
+      "output_sha256": "dafecf5f7086cd418a93e1b313a4633490b58bd65e90486670e816623c9aab47"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/lanya-portrait.png",
+      "target": "assets/resources/atlas/lanya.png",
+      "sha256": "fa32e86fa7307d72903195359aab3252d2c9f60e0617ee69a79d8744ca140877",
+      "output_sha256": "fa32e86fa7307d72903195359aab3252d2c9f60e0617ee69a79d8744ca140877"
     },
     {
       "source": "shared/game/interaction.ts",
@@ -47,8 +227,8 @@
     {
       "source": "shared/game/client.ts",
       "target": "assets/scripts/core/client.ts",
-      "sha256": "cdddb6957942d684248522ba85ab6fa1d7ce9c2d3b11a3f0708308885c50290d",
-      "output_sha256": "cdddb6957942d684248522ba85ab6fa1d7ce9c2d3b11a3f0708308885c50290d"
+      "sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20",
+      "output_sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20"
     },
     {
       "source": "shared/game/clock.ts",
@@ -77,8 +257,8 @@
     {
       "source": "shared/game/localScene.ts",
       "target": "assets/scripts/core/localScene.ts",
-      "sha256": "19c5778aac1e4d135c00d7ea8bf63ab09a7712297781c12cf3a47ef4ee34cc2e",
-      "output_sha256": "19c5778aac1e4d135c00d7ea8bf63ab09a7712297781c12cf3a47ef4ee34cc2e"
+      "sha256": "8a39130bed5b125830bcdf81c562b1ac4ca711ef24b7dfce938e99a5096a784f",
+      "output_sha256": "8a39130bed5b125830bcdf81c562b1ac4ca711ef24b7dfce938e99a5096a784f"
     },
     {
       "source": "shared/game/sceneLayout.ts",
@@ -87,343 +267,427 @@
       "output_sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/home.png",
+      "source": "shared/game/lifeJournalDates.ts",
+      "target": "assets/scripts/core/lifeJournalDates.ts",
+      "sha256": "1840bb8e3edda9538bc3b14c2a6fe0864f8ee9a357c7d055e35d7d2dcc621433",
+      "output_sha256": "1840bb8e3edda9538bc3b14c2a6fe0864f8ee9a357c7d055e35d7d2dcc621433"
+    },
+    {
+      "source": "shared/game/lifeRecords.ts",
+      "target": "assets/scripts/core/lifeRecords.ts",
+      "sha256": "016f148ca4ad33e0f6ed97e94601bb60a04cde5e56fb179d57bd26a8c12c6379",
+      "output_sha256": "016f148ca4ad33e0f6ed97e94601bb60a04cde5e56fb179d57bd26a8c12c6379"
+    },
+    {
+      "source": "shared/game/dossier.ts",
+      "target": "assets/scripts/core/dossier.ts",
+      "sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729",
+      "output_sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729"
+    },
+    {
+      "source": "shared/game/nextDeparture.ts",
+      "target": "assets/scripts/core/nextDeparture.ts",
+      "sha256": "b5d79b60da45f4f067e89ef69e3a2245cc34b56c259f6432927aea1f70d9d133",
+      "output_sha256": "b5d79b60da45f4f067e89ef69e3a2245cc34b56c259f6432927aea1f70d9d133"
+    },
+    {
+      "source": "shared/game/guidance.ts",
+      "target": "assets/scripts/core/guidance.ts",
+      "sha256": "bb1f4c9f18f95205068e025a2460c400c2712da5b1004b48cdf470f683d3901c",
+      "output_sha256": "bb1f4c9f18f95205068e025a2460c400c2712da5b1004b48cdf470f683d3901c"
+    },
+    {
+      "source": "shared/game/continuation.ts",
+      "target": "assets/scripts/core/continuation.ts",
+      "sha256": "3b4746e84df0ce874a8f22010ac2f97f6a8268f1878b3c53e7a0281d6c8ba99e",
+      "output_sha256": "3b4746e84df0ce874a8f22010ac2f97f6a8268f1878b3c53e7a0281d6c8ba99e"
+    },
+    {
+      "source": "shared/game/places.ts",
+      "target": "assets/scripts/core/places.ts",
+      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c",
+      "output_sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c"
+    },
+    {
+      "source": "shared/game/atlas.ts",
+      "target": "assets/scripts/core/atlas.ts",
+      "sha256": "a10d69534768f38d25042b56f5309393158bac02978f919686df1c8484509afd",
+      "output_sha256": "a10d69534768f38d25042b56f5309393158bac02978f919686df1c8484509afd"
+    },
+    {
+      "source": "shared/game/items.ts",
+      "target": "assets/scripts/core/items.ts",
+      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a",
+      "output_sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a"
+    },
+    {
+      "source": "shared/game/inventory.ts",
+      "target": "assets/scripts/core/inventory.ts",
+      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f",
+      "output_sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f"
+    },
+    {
+      "source": "shared/game/preferences.ts",
+      "target": "assets/scripts/core/preferences.ts",
+      "sha256": "2e7689af718fc8a83e10b74af2ebaa2db97bcd74c400f8f1787649bf53d34975",
+      "output_sha256": "2e7689af718fc8a83e10b74af2ebaa2db97bcd74c400f8f1787649bf53d34975"
+    },
+    {
+      "source": "assets/runtime/hearthwood/village/home.png",
       "target": "assets/resources/village/home.png",
       "sha256": "ec1c7cafc3bbe10996560d5c8eab4548010de4c6c3728465ef4d907e95e17e8c",
       "output_sha256": "ec1c7cafc3bbe10996560d5c8eab4548010de4c6c3728465ef4d907e95e17e8c"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/workshop.png",
+      "source": "assets/runtime/hearthwood/village/workshop.png",
       "target": "assets/resources/village/workshop.png",
       "sha256": "c83867db9f7673de0edf678ec1a10de51cf133dec4c01390304af146e36c64b1",
       "output_sha256": "c83867db9f7673de0edf678ec1a10de51cf133dec4c01390304af146e36c64b1"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/library.png",
+      "source": "assets/runtime/hearthwood/village/library.png",
       "target": "assets/resources/village/library.png",
       "sha256": "25a82883eb21e2164d19f547836c23652d20c9d7ec7560d54fc33d9555604586",
       "output_sha256": "25a82883eb21e2164d19f547836c23652d20c9d7ec7560d54fc33d9555604586"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/guild.png",
+      "source": "assets/runtime/hearthwood/village/guild.png",
       "target": "assets/resources/village/guild.png",
       "sha256": "4c116b706e36027e6a297fd85499eb92478743631e1267b099b9f62d9c691738",
       "output_sha256": "4c116b706e36027e6a297fd85499eb92478743631e1267b099b9f62d9c691738"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/oak.png",
+      "source": "assets/runtime/hearthwood/village/oak.png",
       "target": "assets/resources/village/oak.png",
       "sha256": "8e724f448ce1e1167761c23a33a6dcc333199289d304e373135b7184a2d33adc",
       "output_sha256": "8e724f448ce1e1167761c23a33a6dcc333199289d304e373135b7184a2d33adc"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/oak-alt.png",
+      "source": "assets/runtime/hearthwood/village/oak-alt.png",
       "target": "assets/resources/village/oak-alt.png",
       "sha256": "78065d1254f8279f087ef5db09ebfb3aa31c58380fd5e31ee53672b309c79da8",
       "output_sha256": "78065d1254f8279f087ef5db09ebfb3aa31c58380fd5e31ee53672b309c79da8"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/fir.png",
+      "source": "assets/runtime/hearthwood/village/fir.png",
       "target": "assets/resources/village/fir.png",
       "sha256": "6e12c818f79e6506420e90cf6e5f3a7de77336e96d605ba04cc95166075b7a6d",
       "output_sha256": "6e12c818f79e6506420e90cf6e5f3a7de77336e96d605ba04cc95166075b7a6d"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/birch.png",
+      "source": "assets/runtime/hearthwood/village/birch.png",
       "target": "assets/resources/village/birch.png",
       "sha256": "03f2e6099e2efb93012e06118f67f9b3f81762e989e4fbe9e18da152e6a46281",
       "output_sha256": "03f2e6099e2efb93012e06118f67f9b3f81762e989e4fbe9e18da152e6a46281"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/shrub.png",
+      "source": "assets/runtime/hearthwood/village/shrub.png",
       "target": "assets/resources/village/shrub.png",
       "sha256": "7301da0b6ebb3844df83193bf6a0ec2a0cf226a36487a48239c6f634c4ed0bdb",
       "output_sha256": "7301da0b6ebb3844df83193bf6a0ec2a0cf226a36487a48239c6f634c4ed0bdb"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/board.png",
+      "source": "assets/runtime/hearthwood/village/board.png",
       "target": "assets/resources/village/board.png",
       "sha256": "b73db527151f5da06c5c567331e1ef62007c9a0f462eb6a111c55becb8274467",
       "output_sha256": "b73db527151f5da06c5c567331e1ef62007c9a0f462eb6a111c55becb8274467"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/wood.png",
+      "source": "assets/runtime/hearthwood/village/wood.png",
       "target": "assets/resources/village/wood.png",
       "sha256": "5a50dbb896644da6d9669e15fb148ca904057df68e321a991b4451d462eff128",
       "output_sha256": "5a50dbb896644da6d9669e15fb148ca904057df68e321a991b4451d462eff128"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/stone.png",
+      "source": "assets/runtime/hearthwood/village/stone.png",
       "target": "assets/resources/village/stone.png",
       "sha256": "ebcef8e7cf7f2e7a9de53693e0bc7cef5b0e7402ebbc4ccdd69330c1143028cf",
       "output_sha256": "ebcef8e7cf7f2e7a9de53693e0bc7cef5b0e7402ebbc4ccdd69330c1143028cf"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/bridge.png",
+      "source": "assets/runtime/hearthwood/village/bridge.png",
       "target": "assets/resources/village/bridge.png",
       "sha256": "b784fe1cdbf648d5cb5b4bd7ef89841c88546c72a1ab0380a74c4089cb2ab65d",
       "output_sha256": "b784fe1cdbf648d5cb5b4bd7ef89841c88546c72a1ab0380a74c4089cb2ab65d"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/grass.png",
+      "source": "assets/runtime/hearthwood/village/grass.png",
       "target": "assets/resources/village/grass.png",
       "sha256": "d6d041deca7631e86ed2cd8a928ffc403eb3b132e797e8a7d33f4d4a86ecbbcf",
       "output_sha256": "d6d041deca7631e86ed2cd8a928ffc403eb3b132e797e8a7d33f4d4a86ecbbcf"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/grass-patch.png",
+      "source": "assets/runtime/hearthwood/village/grass-patch.png",
       "target": "assets/resources/village/grass-patch.png",
       "sha256": "b60f2ea04d7ed25bcde61a0722f30cbcc4aa05e8ec265e7f8543b0fcbb266b0a",
       "output_sha256": "b60f2ea04d7ed25bcde61a0722f30cbcc4aa05e8ec265e7f8543b0fcbb266b0a"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/bank-stones.png",
+      "source": "assets/runtime/hearthwood/village/bank-stones.png",
       "target": "assets/resources/village/bank-stones.png",
       "sha256": "ce6eec9b914c35fe6f75ae31c3541f7f52dbb5bf89729b00917814a37aa22ad8",
       "output_sha256": "ce6eec9b914c35fe6f75ae31c3541f7f52dbb5bf89729b00917814a37aa22ad8"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/fence.png",
+      "source": "assets/runtime/hearthwood/village/fence.png",
       "target": "assets/resources/village/fence.png",
       "sha256": "9972003b056633b582a9593096ad9383314f1558a750acd73d42aed69f900bca",
       "output_sha256": "9972003b056633b582a9593096ad9383314f1558a750acd73d42aed69f900bca"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/bench.png",
+      "source": "assets/runtime/hearthwood/village/bench.png",
       "target": "assets/resources/village/bench.png",
       "sha256": "78f3d45e0c949abae2c720565377e183eeca7925969a2d0fbc999b3ae3354e1b",
       "output_sha256": "78f3d45e0c949abae2c720565377e183eeca7925969a2d0fbc999b3ae3354e1b"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/lantern.png",
+      "source": "assets/runtime/hearthwood/village/lantern.png",
       "target": "assets/resources/village/lantern.png",
       "sha256": "03cd3941855d10b76a4d9e4f02cee16c30945b5b3ab2c6ece883f39aa8a222e9",
       "output_sha256": "03cd3941855d10b76a4d9e4f02cee16c30945b5b3ab2c6ece883f39aa8a222e9"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-0.png",
+      "source": "assets/runtime/hearthwood/village/actor-0.png",
       "target": "assets/resources/village/actor-0.png",
       "sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0",
       "output_sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0"
     },
     {
-      "source": "frontend/public/assets/hearthwood/market/shop.png",
+      "source": "assets/runtime/hearthwood/market/shop.png",
       "target": "assets/resources/village/shop.png",
       "sha256": "4bbb5436eddd41b7cb75e53b5895970b2873a3a325832a99dd26f577cad1bd6c",
       "output_sha256": "4bbb5436eddd41b7cb75e53b5895970b2873a3a325832a99dd26f577cad1bd6c"
     },
     {
-      "source": "frontend/public/assets/hearthwood/market/counter.png",
+      "source": "assets/runtime/hearthwood/market/counter.png",
       "target": "assets/resources/interiors/market-counter.png",
       "sha256": "13881ae9bd228c8c366f180180beabdd523cff62e52fcbb679ed1ba5b5f3fb58",
       "output_sha256": "13881ae9bd228c8c366f180180beabdd523cff62e52fcbb679ed1ba5b5f3fb58"
     },
     {
-      "source": "frontend/public/assets/hearthwood/residents/lia-actor.png",
+      "source": "assets/runtime/hearthwood/residents/lia-actor.png",
       "target": "assets/resources/village/lia-actor.png",
       "sha256": "d58498f929d8a8357c591a7adf8754fbf5052e150b0faf7715566dc7affaa815",
       "output_sha256": "d58498f929d8a8357c591a7adf8754fbf5052e150b0faf7715566dc7affaa815"
     },
     {
-      "source": "frontend/public/assets/hearthwood/residents/noah-actor.png",
+      "source": "assets/runtime/hearthwood/residents/noah-actor.png",
       "target": "assets/resources/village/noah-actor.png",
       "sha256": "ef2931079f4c3421deb18f4c5a989e8e0023b4f2045ecbff61b2ca5175443f8c",
       "output_sha256": "ef2931079f4c3421deb18f4c5a989e8e0023b4f2045ecbff61b2ca5175443f8c"
     },
     {
-      "source": "frontend/public/assets/hearthwood/residents/mira-actor.png",
+      "source": "assets/runtime/hearthwood/residents/mira-actor.png",
       "target": "assets/resources/village/mira-actor.png",
       "sha256": "cc826a2323dd7f0782bafb3b96ffabd10afa28f22e3a3d5a993cf6501df6b672",
       "output_sha256": "cc826a2323dd7f0782bafb3b96ffabd10afa28f22e3a3d5a993cf6501df6b672"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/wood.png",
+      "source": "assets/runtime/hearthwood/residents/adu-actor.png",
+      "target": "assets/resources/village/adu-actor.png",
+      "sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c",
+      "output_sha256": "24bb860927cf66caaf8a793a0688810f5bfed6247fe09f8f9f6b5cdc5fa3c84c"
+    },
+    {
+      "source": "assets/runtime/hearthwood/residents/lanya-actor.png",
+      "target": "assets/resources/village/lanya-actor.png",
+      "sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc",
+      "output_sha256": "133b90d3c368c05655b0a836389c4ebfb76ac70893910c3542349582bffbccfc"
+    },
+    {
+      "source": "assets/runtime/hearthwood/detail/items/wood.png",
       "target": "assets/resources/items/wood.png",
       "sha256": "e78ff54825ebaafaeed0870503464d88a0472c140ab8d26865bad4bdeeb12a6a",
       "output_sha256": "e78ff54825ebaafaeed0870503464d88a0472c140ab8d26865bad4bdeeb12a6a"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/stone.png",
+      "source": "assets/runtime/hearthwood/detail/items/stone.png",
       "target": "assets/resources/items/stone.png",
       "sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249",
       "output_sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/seed.png",
+      "source": "assets/runtime/hearthwood/detail/items/seed.png",
       "target": "assets/resources/items/seed.png",
       "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
       "output_sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/crop.png",
+      "source": "assets/runtime/hearthwood/detail/items/crop.png",
       "target": "assets/resources/items/crop.png",
       "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
       "output_sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/plank.png",
+      "source": "assets/runtime/hearthwood/detail/items/plank.png",
       "target": "assets/resources/items/plank.png",
       "sha256": "d896c43ff0922f26f00b5f3a51ec6171d44b362e5404d7af165cb1b34ccc1b80",
       "output_sha256": "d896c43ff0922f26f00b5f3a51ec6171d44b362e5404d7af165cb1b34ccc1b80"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/items/backpack.png",
+      "source": "assets/runtime/hearthwood/detail/items/backpack.png",
       "target": "assets/resources/items/backpack.png",
       "sha256": "919731c141b7af551b0481bfbfeb6f5adbdbc6751e4f7483c4359cb52f60682e",
       "output_sha256": "919731c141b7af551b0481bfbfeb6f5adbdbc6751e4f7483c4359cb52f60682e"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/notice.png",
+      "source": "assets/runtime/hearthwood/detail/items/gold.png",
+      "target": "assets/resources/items/gold.png",
+      "sha256": "bb04bccdf92ead66281025bc214b3083ca28b8b7d9cdd5eb8de8a1bee7c8cfb1",
+      "output_sha256": "bb04bccdf92ead66281025bc214b3083ca28b8b7d9cdd5eb8de8a1bee7c8cfb1"
+    },
+    {
+      "source": "assets/runtime/hearthwood/detail/interiors/notice.png",
       "target": "assets/resources/interiors/notice.png",
       "sha256": "314879cd3227eeb598041cc650ddefca7283336dca60f84c4aa1c350f6e9ff20",
       "output_sha256": "314879cd3227eeb598041cc650ddefca7283336dca60f84c4aa1c350f6e9ff20"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/bookcase.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/bookcase.png",
       "target": "assets/resources/interiors/bookcase.png",
       "sha256": "43ffb8cbaf2898370b80844c78557c037cd767f96b7cc53090c0621fc9cb4ca8",
       "output_sha256": "43ffb8cbaf2898370b80844c78557c037cd767f96b7cc53090c0621fc9cb4ca8"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/workbench.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/workbench.png",
       "target": "assets/resources/interiors/workbench.png",
       "sha256": "d8e3fcd658fb1e25b80e1ae24e060137fe601b2702cb8712132b4f28ebdf6056",
       "output_sha256": "d8e3fcd658fb1e25b80e1ae24e060137fe601b2702cb8712132b4f28ebdf6056"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/desk-88.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/desk-88.png",
       "target": "assets/resources/interiors/desk-88.png",
       "sha256": "b57fd86f9d865d9688eb919661770d4402fbd976b2cefa7810fd1ad247f049fd",
       "output_sha256": "b57fd86f9d865d9688eb919661770d4402fbd976b2cefa7810fd1ad247f049fd"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/desk-96.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/desk-96.png",
       "target": "assets/resources/interiors/desk-96.png",
       "sha256": "dc8e0caf5cbc799b3de5588debd4a845dfc84681cd30296b0434d1666ad989c2",
       "output_sha256": "dc8e0caf5cbc799b3de5588debd4a845dfc84681cd30296b0434d1666ad989c2"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/bed.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/bed.png",
       "target": "assets/resources/interiors/bed.png",
       "sha256": "c142ea1c0b65217b08e959ef7900b4f4399537f41a78b1e04aa093d98530583c",
       "output_sha256": "c142ea1c0b65217b08e959ef7900b4f4399537f41a78b1e04aa093d98530583c"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/hearth.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/hearth.png",
       "target": "assets/resources/interiors/hearth.png",
       "sha256": "006059f41c59aae5ede906ef209239f60877dc8fcfdb091422e30f67b6ad028e",
       "output_sha256": "006059f41c59aae5ede906ef209239f60877dc8fcfdb091422e30f67b6ad028e"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/planter.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/planter.png",
       "target": "assets/resources/interiors/planter.png",
       "sha256": "959e750a69e575c19b77fa761cf2da5fabb9903ffa331abb0cdd9e498b220275",
       "output_sha256": "959e750a69e575c19b77fa761cf2da5fabb9903ffa331abb0cdd9e498b220275"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/barrel.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/barrel.png",
       "target": "assets/resources/interiors/barrel.png",
       "sha256": "6fa08c301e23798f5e470b754b5aab7dc4f54882715257f992bd989264efaa79",
       "output_sha256": "6fa08c301e23798f5e470b754b5aab7dc4f54882715257f992bd989264efaa79"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/anvil.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/anvil.png",
       "target": "assets/resources/interiors/anvil.png",
       "sha256": "2570dad3eca15ee1347918433e2f7a5c3c19be7427ea664b08c94f2ce9306de6",
       "output_sha256": "2570dad3eca15ee1347918433e2f7a5c3c19be7427ea664b08c94f2ce9306de6"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/rug.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/rug.png",
       "target": "assets/resources/interiors/rug.png",
       "sha256": "80fcc056eb326007a955762dfc2cfdabd7c9f207848e83a271570a05947cffd8",
       "output_sha256": "80fcc056eb326007a955762dfc2cfdabd7c9f207848e83a271570a05947cffd8"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/window.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/window.png",
       "target": "assets/resources/interiors/window.png",
       "sha256": "b9f59b5bbc4e46480349caf23020db83aed6faa533b8c3b09fb296feb1d28f56",
       "output_sha256": "b9f59b5bbc4e46480349caf23020db83aed6faa533b8c3b09fb296feb1d28f56"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/chest-open.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/chest-open.png",
       "target": "assets/resources/interiors/chest-open.png",
       "sha256": "e31464398fcc54da9a97f106af8eef2ca1a63c2d8c903ad2fb8ec5d6c62907f4",
       "output_sha256": "e31464398fcc54da9a97f106af8eef2ca1a63c2d8c903ad2fb8ec5d6c62907f4"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/book.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/book.png",
       "target": "assets/resources/interiors/book.png",
       "sha256": "e96f5437bae2982a6ff7323c9a8c50fd2860436a2f52a1f590495951d1a8051a",
       "output_sha256": "e96f5437bae2982a6ff7323c9a8c50fd2860436a2f52a1f590495951d1a8051a"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/lantern.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/lantern.png",
       "target": "assets/resources/interiors/lantern.png",
       "sha256": "0a71879a435d3f6f150b9efd9cc95345dcd9882f6883120cababf2056bb8f96c",
       "output_sha256": "0a71879a435d3f6f150b9efd9cc95345dcd9882f6883120cababf2056bb8f96c"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/wall.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/wall.png",
       "target": "assets/resources/interiors/wall.png",
       "sha256": "4665b1d12ceb5b800cb43d14f91cfcfc1d55d422742f91418472640d69ae550f",
       "output_sha256": "4665b1d12ceb5b800cb43d14f91cfcfc1d55d422742f91418472640d69ae550f"
     },
     {
-      "source": "frontend/public/assets/hearthwood/detail/interiors/chest-closed.png",
+      "source": "assets/runtime/hearthwood/detail/interiors/chest-closed.png",
       "target": "assets/resources/interiors/chest-closed.png",
       "sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51",
       "output_sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-1.png",
+      "source": "assets/runtime/hearthwood/village/actor-1.png",
       "target": "assets/resources/village/actor-1.png",
       "sha256": "99dfa0cbfa0b2536c7a9ebbf09ce993d2d7b0ba2ed0d42d8f4ac01b410ba9f95",
       "output_sha256": "99dfa0cbfa0b2536c7a9ebbf09ce993d2d7b0ba2ed0d42d8f4ac01b410ba9f95"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-2.png",
+      "source": "assets/runtime/hearthwood/village/actor-2.png",
       "target": "assets/resources/village/actor-2.png",
       "sha256": "2a08d5ca4502168e87dd4c0bd7412f21f2a6dfd3736c35adbe1ee0369a963b55",
       "output_sha256": "2a08d5ca4502168e87dd4c0bd7412f21f2a6dfd3736c35adbe1ee0369a963b55"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-3.png",
+      "source": "assets/runtime/hearthwood/village/actor-3.png",
       "target": "assets/resources/village/actor-3.png",
       "sha256": "c5fca3c46a8453d9594a3b3656edb933a3594d1ab5dd182af30cf487f8f16953",
       "output_sha256": "c5fca3c46a8453d9594a3b3656edb933a3594d1ab5dd182af30cf487f8f16953"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-4.png",
+      "source": "assets/runtime/hearthwood/village/actor-4.png",
       "target": "assets/resources/village/actor-4.png",
       "sha256": "1013c27c3018300a14ead56695af486f0284a4acbb1a9f95ab71e16f6ea4cffd",
       "output_sha256": "1013c27c3018300a14ead56695af486f0284a4acbb1a9f95ab71e16f6ea4cffd"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/actor-5.png",
+      "source": "assets/runtime/hearthwood/village/actor-5.png",
       "target": "assets/resources/village/actor-5.png",
       "sha256": "1d5b964a6622724c8bf2584897a98195e1aba11832f0887d8f3e4bb9fbd4e23e",
       "output_sha256": "1d5b964a6622724c8bf2584897a98195e1aba11832f0887d8f3e4bb9fbd4e23e"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/chest.png",
+      "source": "assets/runtime/hearthwood/village/chest.png",
       "target": "assets/resources/village/chest.png",
       "sha256": "9ff2f1a90a5fbfd3f1d3c0a13d35dd3699eb3f78e0e2958162f3316c2bafa8b7",
       "output_sha256": "9ff2f1a90a5fbfd3f1d3c0a13d35dd3699eb3f78e0e2958162f3316c2bafa8b7"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/crates.png",
+      "source": "assets/runtime/hearthwood/village/crates.png",
       "target": "assets/resources/village/crates.png",
       "sha256": "76a4839ef3b24addfe8a380452c34ddf11b1b4282006f16fd5e50d0d98e80fce",
       "output_sha256": "76a4839ef3b24addfe8a380452c34ddf11b1b4282006f16fd5e50d0d98e80fce"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/flowers.png",
+      "source": "assets/runtime/hearthwood/village/flowers.png",
       "target": "assets/resources/village/flowers.png",
       "sha256": "02fe8c36028adb8bd96fd19ca1b5fc9d607bb46028f2a9c36f6186b3ec64ec4d",
       "output_sha256": "02fe8c36028adb8bd96fd19ca1b5fc9d607bb46028f2a9c36f6186b3ec64ec4d"
     },
     {
-      "source": "frontend/public/assets/hearthwood/village/rune.png",
+      "source": "assets/runtime/hearthwood/village/rune.png",
       "target": "assets/resources/village/rune.png",
       "sha256": "7fce745d5e96c9bd17450298981ec3a1572108da33aef9b95aea9621d2dec286",
       "output_sha256": "7fce745d5e96c9bd17450298981ec3a1572108da33aef9b95aea9621d2dec286"
@@ -469,6 +733,12 @@
       "target": "assets/resources/scenes/rug-96-80.png",
       "sha256": "7895c1c40c4558880e844cb0f09fe13b1bed5026a29ec568e5015d506c880565",
       "output_sha256": "7895c1c40c4558880e844cb0f09fe13b1bed5026a29ec568e5015d506c880565"
+    },
+    {
+      "source": "assets/derived/cocos-textures/terrain-lossless.webp",
+      "target": "assets/resources/scenes/terrain-web.webp",
+      "sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e",
+      "output_sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e"
     }
   ]
 }

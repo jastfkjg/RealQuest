@@ -1,5 +1,282 @@
 # Hearthwood Review Checklist
 
+## Cocos 构图与操作层级修正 — 2026-10-20 任务111
+
+- [x] 用户指出此前整体候选仍有书页越界、无用移动提示、突兀返回和数据面板感；记录为新的修正要求，未沿用工程通过当作视觉认可。
+- [x] 实际查看原书页美术与真实截图；目录/成长分类依据书页内缘布局，集中弹窗停止绘制世界HUD、移动提示和导航入口。
+- [x] 原生墨迹目录/布签/返回翻页/切角确认牌分工明确；保留44px目标、语义ID、键盘焦点、减少动态与真实命令。
+- [x] 档案、属性、培养、装备、指南、成长进度/计时等按内容重排；沿用原资产、真实数据和来源，没有购买/生成或新规则。
+- [x] 同源码/载荷30套194组回归、23组工具/逻辑单元、236项后端和9项启动检查通过；代表画面已查看，最终界面另行重验。
+- [x] 修复目录可访问名称、重连期间后台请求竞争和结束后立即补心跳的状态问题，原焦点/一致性/重试断言保留且通过。
+- [x] 默认包与候选完全一致，原库完整快照/2角色/455回执保持；本轮489个回归所属PID退出、SDK副本清理，仅保留5443/8143人工预览。
+
+完整命令、失败修正和最终证据见[任务111](../tasks/111-cocos-interface-composition.md)。
+
+## Cocos 告示板游戏感检查点 — 2026-10-20 任务110
+
+- [x] 审查用户7张当前截图和真实 Cocos 源码，首轮实现告示板→原文→返回。
+- [x] 使用已有木板和纸页，记录像素相同的 PNG 重编码及实际九宫格边距；没有新购买、字体或源图覆盖。
+- [x] 实际检查1440×900、1920×1080、1056×627、1024×768、844×390、740×360，短横屏显式目标/索引分页。
+- [x] 隔离QA中真实进屋/采集→交付，丢失回复后重放相同 request_id，只奖励一次并经重载保留；原生键盘、焦点返回、模式输入隔离通过。
+- [x] 玩家明确回复“认可，继续整体优化”（2026-10-20），批准首轮告示板实际材质方向并授权后续推广；没有把它扩大为最终所有页面的实际渲染批准。
+
+首轮命令、触摸/截图回执与后续整体交付见 `docs/tasks/110-cocos-game-interface-refresh.md`。首轮批准仅用于本次材质方向；不继承旧 Web 实现的实际渲染批准。
+
+## Cocos 整体页面与弹窗候选 — 2026-10-20 任务110
+
+- [x] 登记使用已有到达场景与签名夹板；保持真实外观ID与服务器旅程。
+- [x] 随身页为双页目录，成长根页面为非对称手记；短横屏提供紧凑布局，空态不显示无意义分页。
+- [x] 洞穴与石门使用既有原生 Graphics 定义，搭配状态/行动纸页；原命令、条件与回礼均保留。
+- [x] 凭证插画与操作纸页分开，相关原生弹窗沿用共享材质、可见焦点与按压状态。
+- [x] 六个已有材质的 PNG 后备与源 WebP 的解码像素完全相等；书本/凭证按需载入；无新字体、购买或生成美术。
+- [x] 修复共享控件包装的实时状态读取后，完整30套浏览器回归、23组单元/工具与236项后端测试通过；实际复核代表页面与横屏截图。
+- [x] 默认本地包与已验证候选源码/载荷完全相同；9项启动保护通过，自动化与SDK副本已清理，仅保留5443/8143人工预览。
+
+工程验证不代替玩家对最终全部画面的体验意见；本轮继续按已批准方向完成候选，不再逐页等待许可。
+
+## Cocos唯一客户端清理 — 2026-10-20任务109
+
+- [x] 146个素材/来源文件逐字节迁出，109绑定、真实类型、7张地表/室内栅格与布局重建保持；163张图的原始/派生来源审计通过。
+- [x] 新的唯一Cocos release实际构建成功；实际查看村庄、城市旅店与740横屏现实成长截图。无新视觉处理或扩大批准。
+- [x] 23单元模块、236后端、9启动链与8真实Nginx交付检查通过；原SDK签名保持，工作副本/导入缓存清理。
+- [x] 一次28套/185组Cocos回归通过；实际查看6张代表截图，133份当前QA/空预览数据库附属文件清理，166个所属PID退出、无新预览保留。完整证据与未验范围见[任务109](../tasks/109-cocos-only-client.md)。
+
+
+## Cocos 第一章选中改进 — 2026-10-20 任务108
+
+- [x] 236 后端测试、7 相关 Cocos/工具单元模块、109 绑定/真实引擎类型、原素材校验与真实 Creator 3.8.8 release 构建通过；三套浏览器验收共 14 组交互通过。
+- [x] 隔离 QA 库实际验证购买→明确装备、失败/丢失回包重试、替换装备及刷新；接支线保留主线，手动切换和刷新持久化。
+- [x] 实际翻山抵城、走到旅店、进入、交信、订房与睡醒；桌面 1440×900 和横屏 740×360 截图已检查。路牌原生固定字号，室内不残留室外路牌；窄屏保留选中委托可见。
+- [ ] 用户对本轮实际画面的视觉反馈；不得当作其他城市/地图的新美术批准。完整证据与边界见[任务108](../tasks/108-cocos-chapter1-friction.md)。
+
+## 原生Edge长会话 — 2026-10-19任务86
+
+- [x] 当前J3官方Edge155 headless/M4独立45分钟，94采样/7PNG、固定工程参考和同档/移动保存通过；预检单独统计，不拼取消片段。
+- [x] 实际查看预检世界/成长、长会话15/30/45分钟世界及结束/移动后共7图；移动后取景拉远，几何通过不代替玩家手感批准。
+- [x] 三个专属浏览器/profile/API/代理与临时防休眠退出，原5442/I3健康保留，无新素材或处理。
+- [ ] 原生缩放/系统、其他目标性能和物理设备、实际CI/生产与玩家等原门槛继续开放。
+
+详见[任务86](../tasks/86-cocos-native-edge-session.md)。
+
+
+## 原生Firefox检查 — 2026-10-18任务84
+
+- [x] 官方Firefox158.0/原生BiDi/current J3七组15PNG，中文研习同档刷新与五尺寸、WebGL2.0通过；唯一QA书页/结算，无额外奖励。
+- [x] 实际查看地图、刷新书页、740/1920现实成长四张，控制和中文可读；无新处理、素材或玩家批准扩张。
+- [x] 专属浏览器/profile、所属只读DMG挂载与QA服务退出，原5442/I3健康保留。
+- [ ] Safari、物理设备、系统辅助技术、完整交付/预算与玩家等原门槛继续开放。
+
+详见[任务84](../tasks/84-cocos-native-firefox.md)。
+
+
+## 原生Edge检查 — 2026-10-18任务83
+
+- [x] 官方Edge155.0.4283.62/current J3八组17PNG，五尺寸和DPR2模拟触控；两份QA各一书页/一结算，无奖励。
+- [x] 实际查看地图、刷新后原书页、740现实成长、DPR2焦点四张及保留选择器失败图；不扩大玩家视觉批准。
+- [x] 两个专属Edge/profile及QA服务退出，原5442/I3健康保留；无新素材或界面处理。
+- [ ] V6其他品牌/物理设备、系统和生产/玩家等原门槛继续开放。
+
+详见[任务83](../tasks/83-cocos-native-edge.md)。
+
+
+## 数据一致性检查 — 2026-10-18任务82
+
+- [x] 当前J3常规consistency九组/13PNG及四相关单元/194后端项，逐项关闭V3数据一致性；原27套证据不冒充新全量。
+- [x] 实际查看断网禁用保存、联网确认、快七天书页、旧回包存档面板四张及保留失败图；状态/结算由断言核对，不只看截图。
+- [x] 原玩家已批准的启动故障页范围保持；本轮没有新素材/界面处理，不扩大其他视觉批准。
+- [x] QA浏览器与服务退出，原5442/I3健康保留。其余玩家/系统/设备/实际CI/生产门槛继续开放。
+
+详见[任务82](../tasks/82-cocos-consistency-acceptance.md)。
+
+
+## 当前J3与固定PG Alpine恢复 — 2026-10-18
+
+- [x] 固定生产模板镜像/用户名和库名下的七项恢复、三浏览器阶段/12PNG；六表完整值/模式、Cookie/双Bearer/凭证/幂等与旧001升级通过，V1按原允许的隔离夹具范围关闭。
+- [x] 实际查看原Web凭证下载、恢复后J3及旧Cookie升级后J3三张；原准备数据/历史日期保持，不扩大玩家批准。
+- [x] 无测试服务遗留，Docker恢复停止；原18停止容器和两份新QA数据卷保留作证据，原试玩健康。审计561常规浏览器记录及本轮3份PG记录/17个PID均无所属存活。
+- [ ] 真实生产/全局角色、实际CI/系统/品牌浏览器/物理横屏与其余玩家批准仍开放；原Web保留。
+
+详见[任务81](../tasks/81-cocos-pinned-postgres-restore.md)。
+
+## 当前J3容器与回环HTTPS — 2026-10-18
+
+- [x] 实际Linux arm64当前J3正常七组/4PNG；2946站点文件逐份一致、269资源含WebP的MIME/cache/gzip/404、受本轮证书约束的HTTPS/Cookie/Bearer/旧标签/回退通过。
+- [x] 独立浏览器就绪后主动SIGINT例期望exit130/complete:false，资源自行清理，控制器无补救；不是第二份产品全量通过。
+- [x] API19源码/28锁定依赖、两QA库完整；查看实际桌面世界/740成长页/切回后740三张。561浏览器/1535结束PID审计无所属遗留，Docker停止、18原停止容器保持，5442健康。
+- [ ] 正式生产域名/库角色/amd64、实际CI/系统/品牌浏览器/物理横屏与其余玩家批准仍开放；原Web保留。
+
+详见[任务80](../tasks/80-cocos-j3-container-https.md)。
+
+## J3独立重建与交付 — 2026-10-18
+
+- [x] 903输入独立安装/真实Creator重建269文件逐字节一致；新包三套19组/61PNG、原Nginx9组/5PNG和固定七网络样本/10PNG通过。
+- [x] 查看6张实际截图（近首领、故障、短成长页、切回村庄、慢加载、唯一书页）；仅作开发检查。截图总数76，排除交付html中的运行素材，原统计保留。
+- [x] 五QA库完整/七网络游客各一次书页结算；559浏览器/1522结束PID审计无所属遗留，原I3人工试玩健康。
+- [ ] 当前J3容器TLS/目标条件、实际CI/系统/品牌浏览器/实机与其余玩家批准仍开放；不退役原Web。
+
+详见[任务79](../tasks/79-cocos-j3-independent-delivery.md)。
+
+
+## J3当前完整回归 — 2026-10-18
+
+- [x] 同一次27套/172组/702份实际PNG，默认取景7组无外部技能依赖；全部测试/源/后端/构建前后一致，无未执行项。
+- [x] 实际查看当前近距离首领、书页/长备注、地图、底部回答、行囊、图书馆和740洞穴8张；无新素材/玩法/规则变动。551浏览器/1493结束PID审计无所属遗留，原I3人工预览仍健康。
+- [ ] 玩家/J3取景与其他画面、实际CI/系统/实机/生产仍未全部验收。J3原生1分钟预检及单次45分钟已由任务78通过，I3预览切换授权继续待答；不退役原Web。
+
+详见[任务77](../tasks/77-cocos-j3-full-regression.md)。 原生长会话详见[任务78](../tasks/78-cocos-j3-native-session.md)：94份样本/7PNG、GC后DOM与监听器不增长、固定工程限值与同档核验通过，553浏览器/1499结束PID审计无所属遗留；不扩大玩家批准。
+
+
+## Cocos首领短横屏候选 — 2026-10-18
+
+- [x] 同位置原I3裁切负例保留，J1编译/黑屏与J2单侧留白/夹具错误保留，不改断言隐藏。
+- [x] J3四方位/五尺寸与真实鼠标/触控、原战斗/模式/重连：6相关套件32组通过；技能合成截图单套8组复验通过。原两张黑图仅作为读回失败证据，原生画面已实际查看。
+- [x] 原绘制、PNG/WebP/导入元数据保持；无新素材/规则/字体，107类型/六单位/390＋435保护、源/构建/清理核验通过。
+- [ ] J3视觉与战斗手感由玩家确认；新27套全量/系统/实机/实际CI/生产等仍开放。5442/I3尚未切换：自动审批拒绝中断原预览，待明确允许；不扩展原故障页或其他三处画面批准。
+
+详见[任务76](../tasks/76-cocos-combat-framing.md)。
+
+## Cocos 原生语义与自然续链 — 2026-10-18
+
+- [x] task62真实旧包AX基线复现可见Start无原生按钮；D候选原生中文登记、Space/Enter一次、具名成长/真实EditBox、M/Escape/原焦点及世界移动5检查通过。无新素材或视觉主题，22单元/106类型/386来源/原390＋435保护通过。
+- [x] 常规第23套已登记；全量23套/155组/658PNG、修正就绪等待后的语义单套5检查、真实Chrome155语义5检查及Nginx9组通过；5442已同库更新，完整快照一致。原生AX查询不替代OS读屏器/系统IME/缩放/实机或全V5；这些门槛仍待。
+- [x] task59同一自然旅人首层/回顾4检查24PNG、五层首领6检查23PNG；100原上限、真实所得材料/购买短杖和菜汤，实际获得1枚门钥魔法石，石门仍关闭。
+- [x] 真实计时10:34:06至10:59:17，原timer/书页只生成1条25分钟记录（timer/verified:false），1检查3PNG；知识点0，原规则经验/碎片保持。随后解读符文并向莉亚交第八项委托，3检查7PNG，最终238金币/60学识/4知识碎片。
+- [ ] 三小时约定仍真实13:09:37.376到期；结算/魔法培养/开门/离村住宿返乡和玩家战斗/其他画面手感仍待。未扩大三处界面与偏好页的既有批准。
+
+## Cocos 自然流程与PostgreSQL17 — 2026-10-18
+
+- [x] task59村庄经营续链11检查/44独立PNG：七剧情交付、三单、采集发现/双箱、制作/小屋2级、短休/睡眠、诺亚/米拉喜爱心意和帮助；严格最终288金币/3木材/2石料/5萝卜/1木板、成长点0/石门关。移动诺亚与已完成交单在同档接续，没有重置或重复奖励。
+- [ ] 莉亚普通心意/帮助与符文接取已完成；25分钟真实计时10:34:06开始，结束记录/符文交付与后续游戏链仍待；计时不核验现实行为。
+- [x] task61已安装真实Chrome155（非附带Chromium156）5组/8PNG，代表登记/移动/行囊/地图找人/成长/刷新/740横屏通过；实际看地图/横屏行囊，专属进程/配置退出。其他浏览器/系统IME/实机/长会话/性能预算仍开放。
+
+- [x] task59新QA旅人从初始位置真实步行/门口/诺亚领取三小时；已完成同存档安家/箱子存取/六田60秒自然成熟收获12/石剑购买装备/刷新，9检查、37独立PNG。没有成长夹具或改期限，点数0、石门关，截图已查看。
+- [ ] 原约定2026-10-18 13:09:37北京时间到期；真实到期结算/培养、交易订单/社交/全部委托、完整洞穴与远行返乡继续。同一QA保存仍在等待，未声称现实学习行为已核验，V2开放。
+- [x] task60官方17.11 SHA核验/私有编译；两个独立真实PG17集群通过在线custom备份/新库恢复、六表全部原值与模式定义指纹、原Cookie/双Bearer/凭证/删除与结算重放、真实001恢复升级及原Web/Cocos接续，7组/12PNG、0替代游客/意外浏览器错误。
+- [x] PG清理7报告/30PID及标记无遗留；自然早期短步骤11报告/12PID记录无所属闲置浏览器/Node。仅原人工试玩和实际三小时等待控制器/API依赖保留，882冻结源输入未改。
+- [ ] 本机macOS17.11不是精确Alpine镜像/生产部署证明，实际角色/生产副本/容器/HTTPS/CI/设备和其余门槛仍开放。原Web保持，既有画面批准范围不变。
+
+详细命令、失败/恢复、原值指纹、素材/源码范围及清理证据：[task59](../tasks/59-cocos-natural-journey.md)、[task60](../tasks/60-cocos-postgres-restore.md)。
+
+## Cocos 世界反馈与横屏HUD — 2026-10-18
+
+- [x] 修复740横屏结果纸、四格说明与世界路标遮挡；五尺寸实际控件/非按钮HUD区域、DPR2模拟触控按住/松开/地图输入归属及重复结果显示通过，保留四格位置/大小/用途。
+- [x] 最终run-KltWgO完整22套/150组/655PNG，零意外浏览器错误；最终通知/原技能帧4组/21PNG、登记8组/56PNG、真实Nginx9组/5截图分别通过。最终注册中文、740结果、夜间村庄/城市与Nginx世界实际查看。
+- [x] 原项目与独立882文件副本真实重建的266产物完全一致；106类型/384来源/原390＋435保护通过。导入异常元数据已精确还原并保留取证，未绕过源变化守卫；无新素材、依赖或服务端规则改动。
+- [x] 5442已同库存档交付；完整模式/六表指纹一致，1角色/974结算保留，旧所属服务退出、新试玩供人工复核保留。原用户浏览器未驱动或关闭。
+- [ ] 新提示位置不扩大既有三处画面/task49批准；全局键盘/AT、系统IME/缩放、实机、真实等待节奏、目标PG17/CI/容器/HTTPS及其他V项继续开放。
+
+文件、命令、失败原因、指纹与清理：[task58](../tasks/58-cocos-world-feedback-layout.md)。
+
+## Cocos 当前生产包独立重建 — 2026-10-18
+
+- [x] 882文件源码快照无旧依赖/Creator项目缓存/原Web安装构建；独立有锁安装、官方Creator3.8.8生产重建，266产物逐字节相同，所有源输入前后不变。
+- [x] 副本21单元、106绑定/真实类型、384来源/107引用；原仓390+435历史保护通过。新包session5组与原技能帧2组/13PNG、零意外浏览器错误；740重连与1440地图实际查看。
+- [x] 14份报告/38PID及启动时间、专属浏览器/Creator/项目标记核验无遗留；人工5442/API8142健康保留，玩家库未读取或操作。
+- [ ] 740成功提示局部遮挡仍归V5；实际CI/容器/HTTPS、目标PostgreSQL17、设备及其余门槛继续，不扩大既有三处画面和task49偏好批准。
+
+边界、命令、指纹与证据：[task57](../tasks/57-cocos-independent-production-rebuild.md)。
+
+## Cocos 存档备份恢复 — 2026-10-17
+
+- [x] 当前SQLite隔离链：真实WAL在线备份，六表/完整模式指纹，原Web原生凭证、Cocos预览/取消/确认/刷新/再次恢复、两个Bearer/原Cookie/删除回执和同结算重放通过；001模式/未版本化对照旧角色真实进入Cocos，0替代玩家。
+- [x] 最终7组/7PNG；22单元（含10SQLite合同）、106真实类型、384文件/107引用和原390+435保护通过。代表画面已查看，无新UI/素材/依赖或玩家批准扩展。
+- [x] 56报告/183PID及专属浏览器标记核对无遗留；所有本轮浏览器/API/两个代理退出，原人工5442/API8142健康，未读取或操作其玩家库。
+- [ ] 目标生产PostgreSQL、实际切换/恢复、当前生产独立重建/容器/HTTPS、设备和其余V门槛保留，不把本地SQLite等同目标生产证明。
+
+命令、完整数据范围、截图与失败记录：[task56](../tasks/56-cocos-save-backup-restore.md)。
+
+## Cocos 过渡保护合同 — 2026-10-17
+
+- [x] T6当前保留阶段：原390基线/精确提取不变，435原Git文件、18封闭例外、9精确形状、2旧测试适配/46原断言、003新增迁移和原启动/发布全部保护。
+- [x] 实际接入后21单元/19真实源副本负向夹具、106真实类型、378文件/107静态引用通过；运行时/产物与task54完整22套相同，无新资产、依赖、画面或服务端改动。
+- [x] 合并20报告/350PID记录和启动时间、专属浏览器标记核对无遗留；仅人工5442/API8142保留，原玩家库未操作。
+- [ ] 实际CI/目标交付、V1–V7其余门槛及未来归档/删除/默认切换仍按各自授权与证据执行；不扩大玩家画面批准。
+
+文件、命令、负向夹具和范围：[task55](../tasks/55-cocos-transition-protection.md)。
+
+## Cocos 生产候选交付 — 2026-10-17
+
+- [x] 官方Creator3.8.8实际release关闭debug/sourceMaps、开启MD5；新ready包266文件/14,812,110字节，私有schema2清单、版本目录与确定性封包核验通过。
+- [x] 真实Nginx9组/5PNG：266资源MIME/缓存、gzip、404、同源API/Cookie；两个实际引擎版本接续与根入口切回，稳定业务状态及原ledger保持。API/Nginx/浏览器finally退出，代表三图已查看。
+- [x] 修复登记加载期间抢占姓名焦点而滞留禁用开始按钮；实际截留PNG验证后完整session5组与真实时钟帧2组通过。无新素材/音频/字体/依赖或服务端规则/迁移改动。
+- [x] 最终新生产包run-R0sQYv全部22套/148组/639PNG通过，零意外浏览器错误；代表登记/重连/回答/四格/历史备注与原Web返回实际查看。329个已结束PID记录/浏览器标记核对无遗留，人工预览健康。
+- [ ] 实际已提交CI/容器、HTTPS、实机及其余T/V门槛保留；740结果提示局部遮挡归V5继续整理，原Web默认发布不变。
+
+命令、产物/失败证据及限制：[task54](../tasks/54-cocos-production-delivery.md)。
+
+## Cocos 本轮玩家画面确认 — 2026-10-17
+
+- [x] 当前地图与找村民、底部交谈回答、行囊四格：玩家答复“这三处都可以保留”。此前task49偏好页/操作/音量音色确认有效。
+- [ ] V4其余场景、战斗/远行手感、系统/实机和生产发布门槛继续验收；不构成原Web退役批准。以下各轮待复核文字为当时记录，当前确认范围以此处及task39为准。
+
+## Cocos 启动与存档路径 — 2026-10-17
+
+- [x] T1本地主入口/只读预检/明确库配置、同库互斥、真实health就绪和迁移/启动/服务退出清理完成；11启动单元、9真实启动组、4会话组/8PNG及7生命周期通过，代表740恢复图已查看。19单元整套与最终定向2模块、106真实类型、390保护和368文件来源通过。
+- [x] 无运行时/画面/图片/字体/音频/依赖变化；复用task52源6c1230de/包1132a5f6。5442/API8142同包同库，私有备份及全部表/模式指纹一致，1角色/974结算记录保留；旧人工退出，新89393/89396–89397供试玩保留。
+- [x] 15报告/74已结束任务PID及唯一浏览器owner/profile核对无遗留；共享宿主/用户浏览器保留，人工root/API/build记录200。
+- [ ] 本轮不扩大task49偏好批准，不构成默认Web切换、生产CI/部署或实机验收。T2/T3实际CI/T6和V仍开放。
+
+命令、限制、备份与清理：[task53](../tasks/53-cocos-startup-save-paths.md)。
+
+## Cocos 当前统一回归 — 2026-10-17
+
+- [x] 当前真实Creator3.8.8 navigation构建，源6c1230de/产物1132a5f6；最终冻结run-ojHM8V全部22套通过，147组/638PNG，零意外浏览器错误。代表网络恢复、现实成长长备注、附着回答、偏好、行囊及原Web返回画面已实际查看。
+- [x] 18单元、232后端、106绑定/真实类型、390原保护和精确提取/登记合同通过；7类真实生命周期、5类只读库归属守卫分别通过。864文件无Web安装/构建源副本完成真构建与session4组，源字节不变；不冒称已提交CI。
+- [x] 修复网络恢复控件遮挡、预测拐角移动与洞内走近；未改服务端碰撞/奖励规则。没有新素材/声音/字体/依赖，81PNG字节及既有7场景/9图标来源链保持。
+- [x] 人工5442/API8142同库更新；只读备份和全部表/模式指纹一致，1角色/764结算记录保留。旧人工服务退出；核对51运行记录和300个PID/启动时间，无所属测试进程遗留。仅新人工84208/84210–84211供试玩保留。
+- [ ] 此次完成T5本地技术验证，仅task49偏好/操作/音量音色已有玩家确认。其他画面/手感、系统/实机、实际CI与生产/发布回退门槛仍按task39；原Web未退役。
+
+具体命令、完整矩阵、失败记录、备份及清理证明：[task52](../tasks/52-cocos-unified-regression.md)。下列各轮进程/包名为历史交付记录。
+
+## Cocos 源输入归属与重建 — 2026-10-17
+
+- [x] 354文件/106绑定（81PNG/25共享模块）、91冻结Web输入和86处静态字符串/模板分类；81导入UUID/帧/纹理ID、尺寸及nearest/untrim/不可pack检查，原来源链不可被烘焙输入checksum替代。
+- [x] 场景读取从47补为完整79项，实际传递模块/Python app和已读图片有哈希；7PNG/7布局/43sprite与9图标保持原字节，没有新素材/声音/字体/原图变化。
+- [x] 无原Web安装/构建的854文件源副本中，5个原PNG整理器成功且354登记/854源文件字节不变；同步106、真实类型、16单元、6实际CLI故障拒绝和仅刷新来源损坏拒绝/恢复验证通过。
+- [x] 与task50已验证源包的259运行时文件完全一致；根212绑定源/输出文件不变。本轮仅离线资产/来源检查，不新增游戏画面批准；专属工具/浏览器退出、人工5442/API8142健康。
+- [ ] 源目录冻结是过渡安排，未来归档/删除仍须先迁出/验证/获授权；当前游戏全链、实机、CI、发布和玩家待评画面仍按task39。
+
+来源策略/逐文件清单与实际命令：[task51](../tasks/51-cocos-source-ownership.md)。
+
+## Cocos 独立工具验证 — 2026-10-17
+
+- [x] 根锁保持30条既有版本/完整性记录；106源绑定/真实类型、15单元模块与原仓390/精确注册表合同通过。
+- [x] 849文件源码副本无frontend package/install/dist或编辑器缓存；包括原有Web构建模板，真实Creator完成。7场景PNG/43绑定/7布局+9图标字节复现，无新素材或源像素修改。
+- [x] 最终11浏览器组/38图+2真实时钟帧，桌面和740×360原画面已查看，输入/全屏/偏好/自然采集交付成功；零意外错误，全部专用QA/浏览器/工作进程已退出，人工预览保留。
+- [ ] 实际提交的CI检出、冻结源归属、全套浏览器统一入口、其他画面/设备/发布门槛仍按task39执行。此次工具验证不增加任何画面批准范围。
+
+命令、失败修正与最终证据：[task50](../tasks/50-cocos-independent-tooling.md)。
+
+## Cocos 旅途偏好与提醒 — 2026-10-17
+
+- [x] 四张原生木/纸短书页、原book PNG与共享按钮，106绑定/真实类型通过；无新位图/音频素材/字体/外部包，原Web声音代码哈希留存。
+- [x] 最终偏好11组/38图、布局1组/12图、聊天3组/9图、行囊4组/11图和原技能帧2图，共72张；实际设置/等待全屏/三提醒/城市和洞穴横屏/键盘焦点检查，零意外浏览器错误。
+- [x] 实际AudioContext节点启停/静音/失焦、系统媒体模拟变化/持久偏好、真实浏览器全屏等待/重复F/退出/失败与输入归属；自然采集拒绝/丢包不假报收获、实际安家交付仅一奖励音；只读提醒不发点或消费。
+- [x] 同库5442完整1个玩家players行指纹一致/备份保留；18旧候选/QA退出、无遗留headless/Node/Creator，人工47723/47725–47726供体验。
+- [x] 玩家确认本轮偏好页/操作/音量音色“这轮可以保留”，M9据此勾选。
+- [ ] 其他画面、真实系统媒体/IME/设备、Safari/辅助技术/缩放/性能/完整昼夜远行与发布回退仍开放，原Web未退役。
+
+具体命令、夹具与证据：[task49](../tasks/49-cocos-preferences-notices.md)。
+
+## Cocos 行囊与四格 — 2026-10-17
+
+- [x] 复用原批准Web布袋的未改PNG、原金币与5种PNG；9种原SVG符号可复现64px衍生，105绑定/真实类型与163图原审计通过。此次Cocos画面另行复核。
+- [x] 最终主链11组/59图、预览边界4组/11图、聊天回归3组/9图和原技能帧3图，共82独立图；实际桌面/短横屏/图标按压/触屏/固定目标/聊天检查。无意外浏览器错误。
+- [x] 四格/零引用/完整用途/钱包，真实播种/工坊制作/两处出售，拒绝/两次丢包同ID重连/迟到响应不抢Life，A↔B实际备份确认恢复、旧全局主动带入、可选存储写失败及仅删除B偏好通过。自然链和展示/近距夹具明确分开。
+- [x] 5442同库完整players行切换指纹一致，备份保留；专用QA/浏览器/Node/Creator结束，人工预览40818/40820–40821供试玩。原Web/真实玩家数据保留。
+- [ ] 玩家实际画面与手感批准；真实设备/系统IME/Safari/屏幕阅读器/文字缩放/性能/多日离线/实际迁移与退役仍开放。
+
+命令、范围、录像、哈希与清理：[task47](../tasks/47-cocos-inventory-continuity.md)。
+
+## Cocos data management and legacy continuity — 2026-10-17
+
+- [x] Existing session page only: recovery/data tabs, truthful full export vs credential, named deletion/confirmation/cancel and uncertain-result retry. No new art/font/audio or source-asset modifications.
+- [x] Isolated Chromium7 groups/20 captures cover actual cookie/file continuation, backup acknowledgement, downloads, rejection/retry, deletion reply loss/reload and revocation. Desktop1920/1440/1024 and landscape844/740, DPR2 touch/reduced motion; representative actual captures inspected. Deferred UI destruction fixes immediate download-return layout, verified at200ms.
+- [x] Backend232 tests, shared core17 groups, real Creator build/78 bindings/types,395 originals+7 extraction checks and original Web build pass. Same-server fixtures only; no real-player database migration.
+- [ ] Owner render/feel approval, physical devices/Safari/native focus/IME/screen reader/text scaling, PostgreSQL and target deployment/save cutover remain separate gates. No retirement approval implied.
+
+Evidence, commands and cleanup: [task40](../tasks/40-cocos-data-management.md).
+
 ## Cocos functional panels and combat — phases4–5
 
 - [x] Distinct linen/timber quest, trade/order, blueprint, resident, equipment/growth/spell, map and direct Life task/plan/timer/manual-history panels use native Chinese text and real server state. No fake possessions, teleport navigation or minted growth points.
@@ -499,3 +776,93 @@ Status: implemented/browser-verified candidate; owner render/feel approval pendi
 - [ ] Owner actual render/feel, physical devices/Safari/native focus/IME/accessibility/text scaling, miniature-platform payload/VRAM and long sessions remain open. Farming/advanced item/travel/night gaps remain separate work.
 
 Exact files, commands, fixture/provenance limits, recordings and cleanup: [task38](../tasks/38-village-interior-polish.md).
+
+## Cocos Life history/study organization — 2026-10-17
+
+Status: task39 M3 implemented and locally browser-verified candidate; owner render acceptance pending.
+
+- [x] Direct Life entry, separate dated commission/activity histories, today/history/archive books, linked records and old exercise history. No new assets or source/provenance changes; shared Hearthwood tokens/system fonts retained.
+- [x] Book/plan editing, archive/restore, exact same-title identity, same-day association, parent archive guards and explicit original timer ownership. Main browser8 groups/72 captures at1920/1440/1024 and844/740; actual DPR2 touch and44px nonoverlapping controls. Key screenshots personally inspected.
+- [x] Real Creator build/80 source bindings/types, shared/core/date preservation tests and232 backend tests pass. Three final screenshots and focused checks verify initial Shift+Tab, contextual receipts and timer display after final cleanup; supplied frame client preserves real server time.
+- [ ] Physical devices/Safari, full native IME, screen readers/text scaling/DOM semantics, broader retirement/performance and owner render approval remain separate.
+
+Exact files, commands, fixture boundaries, screenshots and lifecycle cleanup: [task41](../tasks/41-cocos-life-records.md).
+
+## Cocos registration and dossier — 2026-10-17
+
+Status: task39 M1/M8 implemented/local-browser candidate, owner render approval pending.
+
+- [x] Six existing appearance IDs/actors and original home art reused; zero new asset/font/audio/source processing. CJK/default-name drafts, rejection/retry, single creation, original-role reload/recovery and disabled pending input preserve data.
+- [x] Read-only identity, original level/cumulative EXP, current/max capacity, attributes, balances and seven ability quotes; no EXP conversion/progress bar/countdown. Explicit mutations, latest-state refresh after actual stale quote, exact double-click/lost-response conservation verified.
+- [x] Main8 browser groups/60 captures plus actual recording;1920/1440/1024 and844/740, DPR2 touch/reduced motion,44px controls. Key screenshots personally inspected. Existing data lifecycle regression on new build7 groups/20 captures passes.
+- [x] Actual Creator3.8.8/81 bindings/types,17 core groups, new pure dossier/registration tests, original-source preservation,232 backend tests and isolated original-Web build pass.
+- [ ] Owner actual render, physical devices/Safari/native IME/screen readers/text scaling and complete retirement/deployment/rollback gates remain open.
+
+Files, commands, fixture boundaries and cleanup: [task42](../tasks/42-cocos-registration-dossier.md).
+
+## Cocos current goal and journey guidance — 2026-10-17
+
+- [x] Native foldable goal HUD, reopenable guide, original proximity/confirmation briefing and review, three preparation bookmarks, read-only comparison and original history/growth entrances. Manual side-quest ownership, independent markers and old routes remain intact. No asset/font/audio/rule/schema additions.
+- [x] Isolated main8 groups/79 captures, original Life8 groups/72 captures, real Creator3.8.8 build/84 bindings/types, core17 groups, preserved original decision assertions,232 backend tests and isolated Web build pass. Representative real screenshots and supplied skill frame captures inspected; final target text has a solid9.70:1 backing.
+- [ ] Actual device/browser visibility and focus, physical touch/IME/accessibility/text scaling, owner render/feel approval and full release/rollback remain open. The automated environment reports every tab visible/focused: controlled blur/focus handler tests are explicitly distinguished from actual background-tab validation.
+
+Evidence, fixture limits, commands and cleanup: [task43](../tasks/43-cocos-journey-guidance.md).
+
+
+## Cocos places and neighbors — 2026-10-17
+
+- [x] All15-map/category/object index with duplicate-place labels, exact server travel restrictions, moving-person bearings and explicit marker-only action; complete neighbor preferences/familiarity/routines and landscape preset topics/five gift choices/help. No asset/font/audio/API/schema/rule additions.
+- [x] Isolated main8 groups/63 captures, actual travel2 groups/17 captures and rest2 groups/4 captures pass; gift/fare rejection and committed-lost replay conserve resources, encounter expiry points to the new room, actual inn sleep/return preserve original progress. Desktop/short landscape/DPR2 and44px/no-overlap checks pass; representative screens and supplied frame images inspected. Real Creator3.8.8/85 bindings/types, core17, place/guidance/feature,232 backend tests, original Web build and preservation guards pass.
+- [ ] Owner actual render/feel, original provisional travel art, physical devices/real background behavior, full accessibility/IME/zoom, natural whole-chapter pacing and deployment/rollback remain open. No retirement approval implied.
+
+Files, exact commands, fixture boundaries and cleanup: [task44](../tasks/44-cocos-places-neighbors.md).
+
+
+## Cocos map/encounter owner feedback correction — 2026-10-17
+
+- [x] M opens spatial terrain/buildings/current point and bounded44px landmark controls; secondary index/all15 maps, marker-only direction and exact server quotes retained. Six unchanged PNG rebindings with exact source/target hashes; no new art.
+- [x] Illustrated place/neighbor/gift leaves and low portrait conversation over the real room/world; scoped painted-moss/linen timber controls. Main8 groups/63 captures plus7 focused captures, map/world skill bursts, Creator/types/92 bindings, core17/pure geometry/protected originals and163-image audit pass. Actual desktop/short landscape/map leader/room/chest screenshots inspected.
+- [ ] Owner actual render/feel review of this revised candidate and device/release gates remain open. Earlier index candidate explicitly received needs-adjustment feedback; do not infer approval or spread the treatment to unrelated screens.
+
+Evidence and preserved manual save/cleanup: [task44](../tasks/44-cocos-places-neighbors.md).
+
+
+## Cocos resident discovery and scene dialogue — 2026-10-17
+
+- [x] Visible portraits/N locate real indoor residents; door/exit instruction survives short landscape, actual same-room walking reaches server-valid conversation, world labels keep screen text scale. No teleport or altered routine.
+- [x] Actual scene remains visible behind low speaker/answer choices; gifts are an existing five-item tray with true counts. Long press survives clock redraw, gift drag-out cancels, original pad holds/releases and direct Life entry remain usable.
+- [x] Final separate Creator3.8.8 bundle/92 bindings/types, core17/place/guidance and391-preservation guards pass; natural5 groups/31 captures plus original place/social8 groups/63 distinct captures and4 supplied-client frame captures pass. Latest actual scenes/short landscape/portrait/door/gift images inspected.
+- [ ] Owner rejected task45 dialogue as data/PPT-like; task46 continues scoped conversation correction. Broader screens, device/browser/IME/accessibility and complete retirement gates remain open. Prior revisions explicitly received needs-adjustment feedback.
+
+Exact sources, commands, fixtures, preserved handoff and cleanup: [task45](../tasks/45-cocos-neighbor-encounter.md).
+
+
+## Cocos sequential scene conversation — 2026-10-17
+
+- [x] Actual actors/room focus, compact single speech surface, explicit reveal/advance/replies and separate confirmed numeric feedback; no position/rule/save mutation by presentation.
+- [x] E/Space/pointer, held-repeat guard, redraw/reflow/return continuity, camera restoration and reduced-motion touch tested. Actor/menu occlusion checked and actual desktop/short-landscape images inspected.
+- [x] Independent final build/types/core/preservation checks and reader3/natural6/place-social8 browser groups pass,107 total captures including the supplied-client2. Manual save backed up and full player rows unchanged on handoff; owned automation cleaned.
+- [ ] Owner feel approval remains open after prior explicit rejections. Other pages, actual devices/IME/accessibility and retirement gates remain open.
+
+Evidence, exact commands, fixtures and retained preview: [task46](../tasks/46-cocos-conversation-presence.md).
+
+
+## Attached Cocos answers — 2026-10-17
+
+- [x] Owner feedback on task46 answer position addressed with replies inside the same bottom speech surface, contextual topic options and scoped paper/moss control states. No floating answer panel, server rule or real save-coordinate change.
+- [x] Final94 bindings/Creator/types, core17/place/guidance/preservation checks and original Web isolated build pass. Reader3/natural6/social-place8 groups with113 captures including supplied-client2 pass; actual desktop/short-landscape/default/hover/pressed/focus images inspected.
+- [x] Manual5442 same database/full player rows verified unchanged with backup; QA/browser/worker cleanup recorded. Original item registry extraction is exact; M7 UI remains unwired/unverified.
+- [ ] Actual owner render/feel approval, other pages, physical devices/IME/accessibility and full retirement gates remain open.
+
+Evidence, commands, fixtures and retained preview: [task48](../tasks/48-cocos-attached-answers.md).
+
+
+### Cocos startup recovery — 2026-10-18
+
+Owner answered “可以保留” for this startup fault page only: readable cause, native reload control and credential/outbox preservation note. No broader visual or Web retirement approval. Actual Creator E startup suite has six checks, including no-JavaScript native Enter navigation returning200 and WebGL-disabled740 landscape. Full regression and actual long-session checks remain in progress; see [task63](../tasks/63-cocos-startup-recovery.md). No new assets.
+
+### Cocos lossless terrain — 2026-10-18
+
+- [x] Original PNG, dimensions, palette and complete decoded RGBA bytes remain unchanged; derivative has independent provenance and importer UUID, nearest sampling and no trim. Browser decoders and capability-negative PNG fixture checked in three test engines.
+- [x] Actual world/map/satchel and resource503/reload/same-save flows captured; WebKit fallback and fault images inspected. Startup downloads are measured separately from the larger package retaining both formats and unchanged GPU texture memory.
+- [ ] Brand browser/physical device and production network evidence remain open. Existing owner approvals keep their original scope; no new artwork or broader visual approval is inferred. Exact versioned results and failures: [task70](../tasks/70-cocos-network-budget.md).
