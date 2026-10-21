@@ -130,6 +130,7 @@ jobs:
         with:
           name: realquest-cocos-candidate
           path: output/cocos-delivery/
+          include-hidden-files: true
           retention-days: 30
           if-no-files-found: error
 
@@ -149,6 +150,11 @@ jobs:
         with:
           name: realquest-cocos-candidate
           path: output/cocos-delivery
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Verify downloaded Cocos release
+        run: node tools/cocos-release.mjs --verify output/cocos-delivery
       - name: Validate repositories
         id: repositories
         run: |
