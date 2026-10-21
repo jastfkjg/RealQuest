@@ -10026,8 +10026,8 @@
     {
       "path": "tools/test-cocos-delivery-lifecycle.mjs",
       "owner": "root-tooling",
-      "sha256": "7b7e5af09902d0880dc8f5172e1365b07be35ff7a118618914f8661c2c4a6f1c",
-      "bytes": 8714,
+      "sha256": "56cb81e6d0143bfe8e8f8e8fc2d28309b63be076c89499f7fd54559b44e40782",
+      "bytes": 9654,
       "roles": [
         "inspected-source"
       ],
@@ -10110,8 +10110,8 @@
     {
       "path": "tools/test-cocos-release.mjs",
       "owner": "root-tooling",
-      "sha256": "86ebc087232f82f2fc5d5b4523f41e598b37f57624c937a4ea2699663576b2c9",
-      "bytes": 4653,
+      "sha256": "69522060cdad744c74e60d83dc5b9d273d3d842fc6e965557a6d74f996ac7e15",
+      "bytes": 6448,
       "roles": [
         "inspected-source"
       ],

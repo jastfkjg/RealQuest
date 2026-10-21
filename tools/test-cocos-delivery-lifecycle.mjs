@@ -59,7 +59,22 @@ export function validateDeliveryProbe(r,mode){
  assert(Array.isArray(r.result.services),'Standalone command must write service cleanup states');assert(r.result.services.every(s=>s.groupExited));
  assert(Array.isArray(r.result.errors));assert(!r.result.errors.some(e=>/^(?:browser|service|cancel) cleanup:/.test(e)),'Standalone cleanup errors cannot count as an expected lifecycle failure');
  assert.equal((r.result.cleanupSignalErrors||[]).length,0,'Standalone cleanup signal errors must fail');
- if(mode==='normal'){assert.equal(r.exit.code,0);assert(r.result.complete&&!r.result.cancelled&&r.result.checks.length===9);}
+ if(mode==='normal'){
+  assert.equal(r.exit.code,0);assert(r.result.complete&&!r.result.cancelled);assert.deepEqual(r.result.errors,[]);
+  const required=[
+   'actual-production-package-and-native-nginx-start',
+   'noncached-entry-and-immutable-versioned-html-preserve-query',
+   'all-runtime-heads-mime-cache-and-real-gzip',
+   'missing-assets-are-real-uncached-404-with-no-game-html-fallback',
+   'same-origin-api-cookie-nostore-and-cross-origin-rejection',
+   'real-production-engine-cookie-continuation-move-life-and-landscape',
+   'old-real-game-tab-reloads-from-retained-version-after-entry-switch',
+   'root-entry-rollback-keeps-cookie-bearer-and-character-without-restore',
+  ];
+  assert(['explicit-http-fixture','two-real-engine-releases'].includes(r.result.entrySwitch?.kind));
+  if(r.result.entrySwitch.kind==='two-real-engine-releases')required.push('second-real-engine-release-keeps-same-cookie-credential-and-stable-save');
+  assert.deepEqual(r.result.checks.map(c=>c.name).sort(),required.sort());assert(r.result.checks.every(c=>c.passed===true));
+ }
  else{assert.notEqual(r.exit.code,0);assert(!r.result.complete);assert.equal(r.result.cancelled,mode!=='service-exit');}
 }
 
