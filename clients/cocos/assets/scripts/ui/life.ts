@@ -1,6 +1,7 @@
 import type { PanelHost } from './panels';
 import type { StudyTask, StudyPlan } from '../core/protocol';
 import { C } from './theme';
+import {bookSurface,bookLeaves,gameControls,paperSurface,inkRule,meter} from './materials';
 import { entityId, timerSeconds, timeText } from '../core/features';
 import { lifeDate, moveDay, moveMonth, calendarDays, dailyQuota } from '../core/lifeJournalDates';
 import {
@@ -10,7 +11,7 @@ import {
 } from '../core/lifeRecords';
 import { residentPositions } from '../core/residents';
 
-type Frame = { x: number; y: number; w: number; h: number; compact: boolean };
+type Frame = { x: number; y: number; w: number; h: number; compact: boolean; book?:boolean };
 type Row = { id: string; label: string };
 type FooterAction = { id: string; label: string; action: () => unknown; disabled?: boolean; secondary?: Omit<FooterAction, 'secondary'> };
 type Tab = 'study' | 'plans' | 'record' | 'contracts' | 'history';
@@ -45,21 +46,41 @@ export class LifePanels {
       archivedPlans: this.archivedPlans, historyDate: this.historyDate, oldExercise: this.oldExercise,
       activityId: this.activityId, calendarMonth: this.month, calendarPage: this.monthPage };
   }
-  draw(h: PanelHost) {
+  draw(original: PanelHost) {
+    const h=gameControls(original);
     this.hint = '';
     const titles: Record<string, string> = { 'life': '现实成长', 'life-study': '研习书页', 'life-study-tools': '整理书页',
       'life-study-records': '书页里的记录', 'life-link': '关联已有学习记录', 'life-plan': '长期计划', 'life-plan-pages': '计划的全部书页',
       'life-calendar': '选择日期', 'life-contract': '现实约定详情', 'life-activity': '活动记录详情', 'life-exercise': '旧日锻炼约定',
       'life-exercise-records': '旧约定的活动', 'life-timer': '当前专注计时', 'study-new': '写下今日研习', 'study-edit': '修改研习书页',
       'plan-new': '装订长期计划', 'plan-edit': '修改长期计划' };
+    const book=h.mode==='life'&&h.height>=560&&h.width>=980;
     const height = Math.min(h.mode.startsWith('study-') || h.mode.startsWith('plan-') ? 400 : 620, h.height - 24);
-    const f: Frame = { w: Math.min(1040, h.width - 32), h: height, x: 0, y: (h.height - height) / 2, compact: height < 460 };
+    let f: Frame = { w: Math.min(h.mode==='life'?1000:860, h.width - 32), h: height, x: 0, y: (h.height - height) / 2, compact: height < 460, book };
     f.x = (h.width - f.w) / 2;
-    h.box('LifePaper', f.x, f.y, f.w, f.h, C.paper, 16);
-    h.text('LifeTitle', titles[h.mode], f.x + 24, f.y + 12, 215, 42, 22);
-    h.text('LifeBalances', '知识 ' + (h.state.knowledge_points || 0) + ' · 健康 ' + (h.state.health_points || 0) + ' · 技能 ' + (h.state.skill_points || 0),
-      f.x + 244, f.y + 20, f.w - 356, 28, 15, C.muted);
-    h.button('close', '返回', f.x + f.w - 100, f.y + 12, 76, 44, () => h.close(), h.busy);
+    if(book){
+      const bw=Math.min(1240,h.width-32,(h.height-28)*1.5),bh=bw/1.5,bx=(h.width-bw)/2,by=(h.height-bh)/2;
+      bookSurface(h,{x:bx,y:by,w:bw,h:bh},true);
+      const {left,right}=bookLeaves({x:bx,y:by,w:bw,h:bh},true);
+      f={x:right.x-24,y:by+bh*.09,w:right.w+48,h:bh*.79,compact:bh*.79<460,book:true};
+      const lx=left.x,lw=left.w;
+      h.region('life-index-leaf',lx,by+bh*.08,lw,bh*.80);
+      h.region('life-content-leaf',right.x,by+bh*.09,right.w,bh*.79);
+      h.text('LifeTitle','现实成长',lx,by+bh*.08,lw,36,26);
+      h.person('actor-'+h.state.character?.appearance,lx+24,by+bh*.19,48,64);
+      h.text('LifeTraveler',h.state.character?.name||'旅人',lx+58,by+bh*.13,lw-58,28,18);
+      h.text('LifeBalances','知识 '+(h.state.knowledge_points||0)+' · 健康 '+(h.state.health_points||0)+'\n技能 '+(h.state.skill_points||0),lx+58,by+bh*.17,lw-58,48,14,C.muted);
+      const tabs:[Tab,string][]=[['study','研习书页'],['plans','长期计划'],['record','手动记录'],['contracts','现实约定'],['history','活动历史']];
+      const step=Math.min(58,(bh*.52)/5);
+      tabs.forEach(([id,label],i)=>h.button('tab-'+id,label,lx,by+bh*.28+i*step,lw,Math.max(44,step-8),()=>{this.lifeTab=id;this.cancelId='';h.redraw(true);},h.busy,this.lifeTab===id,'entry',{label,pressed:this.lifeTab===id}));
+      h.text('LifeIndexDate',lifeDate(h.now),lx,by+bh*.86,lw,28,14,C.muted);
+      h.text('LifePageHeading',tabs.find(t=>t[0]===this.lifeTab)![1],f.x+24,f.y+12,f.w-140,42,24);
+    }else{
+      paperSurface(h,f,true);
+      h.text('LifeTitle',titles[h.mode],f.x+24,f.y+12,215,42,22);
+      h.text('LifeBalances','知识 '+(h.state.knowledge_points||0)+' · 健康 '+(h.state.health_points||0)+' · 技能 '+(h.state.skill_points||0),f.x+244,f.y+20,f.w-356,28,15,C.muted);
+    }
+    h.button('close','返回',f.x+f.w-100,f.y+12,76,44,()=>h.close(),h.busy);
     if (h.mode === 'life') this.root(h, f);
     else if (h.mode === 'life-study') this.study(h, f);
     else if (h.mode === 'life-study-tools') this.studyTools(h, f);
@@ -77,9 +98,9 @@ export class LifePanels {
     if (message) h.text('LifeFeedback', textPages(message, Math.max(16, Math.floor((f.w - 48) / 15)), 2)[0],
       f.x + 24, f.y + f.h - 108, f.w - 48, 42, 14, h.error ? C.danger : C.muted);
   }
-  private strip(h: PanelHost, f: Frame, y: number, entries: { id: string; label: string; action: () => unknown; selected?: boolean; disabled?: boolean }[]) {
+  private strip(h: PanelHost, f: Frame, y: number, entries: { id: string; label: string; action: () => unknown; selected?: boolean; primary?:boolean; disabled?: boolean }[]) {
     const width = (f.w - 48 - (entries.length - 1) * 8) / entries.length;
-    entries.forEach((e, i) => h.button(e.id, e.label, f.x + 24 + i * (width + 8), f.y + y, width, 44, e.action, h.busy || !!e.disabled, !!e.selected,undefined,{label:e.label,pressed:e.selected}));
+    entries.forEach((e, i) => h.button(e.id, e.label, f.x + 24 + i * (width + 8), f.y + y, width, 44, e.action, h.busy || !!e.disabled, !!e.selected||!!e.primary,e.selected!==undefined?'tab':undefined,{label:e.label,pressed:e.selected}));
   }
   private pager(h: PanelHost, f: Frame, key: string, count: number, index: number, primary?: FooterAction) {
     const y = f.y + f.h - 62;
@@ -97,7 +118,15 @@ export class LifePanels {
   private rows(h: PanelHost, f: Frame, key: string, items: Row[], top: number, choose: (id: string) => unknown, empty: string, primary?: FooterAction) {
     const per = Math.max(1, Math.floor((f.h - 114 - top + 8) / 52));
     const page = slicePage(items, this.pages.get(key) || 0, per); this.pages.set(key, page.index);
-    if (!items.length) h.text('LifeEmpty', textPages(empty, Math.floor((f.w - 48) / 17), 2)[0], f.x + 24, f.y + top, f.w - 48, 48, 17, C.muted);
+    if (!items.length){
+      if(!f.compact&&f.h-top>=310){h.image('items/journal',f.x+f.w/2,f.y+top+50,64,64);h.text('LifeEmpty',textPages(empty,Math.min(28,Math.floor((f.w-64)/17)),3)[0],f.x+32,f.y+top+96,f.w-64,80,17,C.muted,true);}
+      else h.text('LifeEmpty',textPages(empty,Math.floor((f.w-48)/17),2)[0],f.x+24,f.y+top,f.w-48,48,17,C.muted);
+      if(primary){const centered=!f.compact&&f.h-top>=400,by=centered?f.y+top+196:f.y+f.h-62,total=centered?Math.min(400,f.w-64):f.w-48,bx=f.x+(f.w-total)/2,bw=primary.secondary?(total-8)/2:total;
+        h.button(primary.id,primary.label,bx,by,bw,44,primary.action,h.busy||!!primary.disabled,true);
+        if(primary.secondary){const next=primary.secondary;h.button(next.id,next.label,bx+bw+8,by,bw,44,next.action,h.busy||!!next.disabled);}
+      }
+      return;
+    }
     page.items.forEach((r, i) => h.button('open-' + r.id, r.label, f.x + 24, f.y + top + i * 52, f.w - 48, 44, () => choose(r.id), h.busy));
     this.pager(h, f, key, page.count, page.index, primary);
   }
@@ -117,7 +146,8 @@ export class LifePanels {
   }
   private root(h: PanelHost, f: Frame) {
     const tabs: [Tab, string][] = [['study', '研习书页'], ['plans', '长期计划'], ['record', '手动记录'], ['contracts', '现实约定'], ['history', '活动历史']];
-    this.strip(h, f, 68, tabs.map(([id, label]) => ({ id: 'tab-' + id, label, selected: this.lifeTab === id, action: () => { this.lifeTab = id; this.cancelId = ''; h.redraw(true); } })));
+    if(!f.book)this.strip(h, f, 68, tabs.map(([id, label]) => ({ id: 'tab-' + id, label, selected: this.lifeTab === id, action: () => { this.lifeTab = id; this.cancelId = ''; h.redraw(true); } })));
+    if(f.book)h.text('LifeSectionCaption',this.lifeTab==='study'?lifeDate(h.now)+' · 研习与计时':this.lifeTab==='history'?'活动记录与来源':this.lifeTab==='record'?'填写活动内容与数量':this.lifeTab==='contracts'?'按领取日期查看现实约定':'保留的长期计划',f.x+24,f.y+68,f.w-48,36,16,C.muted);
     if (this.lifeTab === 'study') this.studyList(h, f);
     else if (this.lifeTab === 'plans') this.planList(h, f);
     else if (this.lifeTab === 'record') this.manual(h, f);
@@ -144,7 +174,8 @@ export class LifePanels {
     h.text('StudyProgress', t.date + ' · ' + t.minutes + '/' + t.target_minutes + '分钟 · ' + (t.archived_at ? '已归档' : t.completed_at ? '已完成' : '未完成')
       + (access.ownTimer ? ' · 本页 ' + timeText(timerSeconds(h.state, h.now)) + (h.state.timer?.running ? ' 计时中' : ' 已暂停') : ''),
       f.x + 24, f.y + (f.compact ? 158 : 196), f.w - 48, 26, 16, C.muted);
-    this.strip(h, f, f.compact ? 184 : 240, [
+    if(!f.compact){h.box('StudyTrack',f.x+24,f.y+236,f.w-48,5,C.canvas,0);if(t.minutes>0)h.box('StudyProgressFill',f.x+24,f.y+236,(f.w-48)*Math.min(1,t.minutes/t.target_minutes),5,C.moss,0);}
+    this.strip(h, f, f.compact ? 184 : 270, [
       { id: 'study-records', label: '查看关联明细', action: () => h.go('life-study-records') },
       { id: 'study-link', label: '关联已有记录', action: () => h.go('life-link'), disabled: !access.writable },
       { id: 'study-tools', label: '编辑与归档', action: () => h.go('life-study-tools') },
@@ -154,7 +185,7 @@ export class LifePanels {
     this.strip(h, f, f.h - 62, [
       { id: 'timer-toggle', label: timer ? (access.ownTimer ? (timer.running ? '暂停计时' : '继续计时') : '查看当前计时') : '开始计时',
         action: () => timer ? access.ownTimer ? h.send(timer.running ? 'timer_pause' : 'timer_resume', { timer_id: timer.id }) : h.go('life-timer') : h.send('timer_start', { task_id: t.id }),
-        disabled: !timer && !access.start },
+        disabled: !timer && !access.start,primary:true },
       { id: 'timer-finish', label: '结束并记录本页计时', action: () => h.send('timer_finish', { timer_id: timer?.id }), disabled: !access.ownTimer },
     ]);
     if (access.ownTimer) this.hint = '本页计时 ' + timeText(timerSeconds(h.state, h.now)) + ' · ' + (timer?.running ? '进行中' : '已暂停') + ' · 未核验行为';
@@ -215,7 +246,7 @@ export class LifePanels {
       { id: 'plan-pages', label: '查看全部书页', action: () => h.go('life-plan-pages') },
     ]);
     this.strip(h, f, f.h - 62, [
-      { id: 'plan-today', label: p.archived_at ? '先取回计划再翻页' : '翻开今天一页', disabled: !!p.archived_at, action: async () => {
+      { id: 'plan-today', label: p.archived_at ? '先取回计划再翻页' : '翻开今天一页', disabled: !!p.archived_at,primary:true, action: async () => {
         const ok = await h.send('study_plan_today', { plan_id: p.id });
         if (ok) { const t = h.state.study_task_log?.find(t => t.plan_id === p.id && t.date === lifeDate(h.now)); if (t) this.openTask(h, t.id); }
       } },
@@ -248,11 +279,12 @@ export class LifePanels {
     const timer = h.state.timer;
     if (!timer) { h.text('NoTimer', '当前计时已结束，记录可从书页或活动历史查看。', f.x + 24, f.y + 90, f.w - 48, 64, 18); return; }
     this.pageTitle(h, f, timer.topic);
-    h.text('TimerCurrent', timeText(timerSeconds(h.state, h.now)) + ' · ' + (timer.running ? '进行中' : '已暂停'), f.x + 24, f.y + (f.compact ? 158 : 196), f.w - 48, 24, 18, C.moss);
+    h.text('TimerCurrent', timeText(timerSeconds(h.state, h.now)) + (f.compact?' · '+(timer.running?'进行中':'已暂停'):''), f.x + 24, f.y + (f.compact ? 158 : 222), f.w - 48, f.compact?24:76, f.compact?18:48, C.moss,!f.compact);
+    if(!f.compact)h.text('TimerStatus',timer.running?'正在专注':'计时已暂停',f.x+24,f.y+302,f.w-48,32,17,C.muted,true);
     const task = h.state.study_task_log?.find(t => t.id === timer.study_task_id);
-    h.button('timer-book', task ? '查看关联书页 · ' + task.date : '旧计时没有关联书页', f.x + 24, f.y + (f.compact ? 184 : 240), f.w - 48, 44, () => task && this.openTask(h, task.id), h.busy || !task);
+    h.button('timer-book', task ? '查看关联书页 · ' + task.date : '旧计时没有关联书页', f.x + 24, f.y + (f.compact ? 184 : 360), f.w - 48, 44, () => task && this.openTask(h, task.id), h.busy || !task,false,'entry');
     this.strip(h, f, f.h - 62, [
-      { id: 'timer-toggle', label: timer.running ? '暂停计时' : '继续计时', action: () => h.send(timer.running ? 'timer_pause' : 'timer_resume', { timer_id: timer.id }) },
+      { id: 'timer-toggle', label: timer.running ? '暂停计时' : '继续计时',primary:true, action: () => h.send(timer.running ? 'timer_pause' : 'timer_resume', { timer_id: timer.id }) },
       { id: 'timer-finish', label: '结束并记录', action: () => h.send('timer_finish', { timer_id: timer.id }) },
     ]);
     this.hint = '这里控制的是上方主题的当前计时；计时经过不代表行为已核验。';
@@ -271,14 +303,14 @@ export class LifePanels {
         const filters: ContractFilter[] = ['all', 'claimed', 'cancelled', 'active']; this.contractFilter = filters[(filters.indexOf(this.contractFilter) + 1) % filters.length]; this.pages.delete('contracts'); h.redraw(true);
       } },
     ];
-    let offset = 0;
-    actions.forEach((a, i) => { h.button(a.id, a.label, x + offset, y, widths[i], 44, a.run, h.busy || (a.id === 'contract-current' && !active)); offset += widths[i] + gap; });
+    let offset = 0;const stacked=f.w<760;
+    actions.forEach((a,i)=>{const bw=stacked?(f.w-64)/3:widths[i];h.button(a.id,a.label,stacked?x+(i%3)*(bw+8):x+offset,stacked?y+Math.floor(i/3)*52:y,bw,44,a.run,h.busy||(a.id==='contract-current'&&!active));offset+=bw+gap;});
     const records = contractRecords(h.state, date, this.contractFilter);
     const quota = dailyQuota(h.state.life_journal?.tasks || [], lifeDate(h.now), h.state.life_journal?.limit || 5);
     const selectedQuota = dailyQuota(h.state.life_journal?.tasks || [], date, h.state.life_journal?.limit || 5);
     this.hint = date + ' 已结算 ' + selectedQuota.claimed + '/' + (h.state.life_journal?.limit || 5) + ' · 预留 ' + selectedQuota.reserved + '；今日可领取 ' + quota.remaining + '。按领取日归档。';
     this.rows(h, f, 'contracts', records.map(t => ({ id: 'contract-' + t.id, label: contractStatuses[t.status] + ' · ' + lifeKinds[t.kind] + ' ' + t.hours + '小时 · ' + (t.status === 'claimed' ? '+' + t.reward + ' ' + pointNames[t.kind] : t.status === 'cancelled' ? '0点' : '等待结算') })),
-      178, id => { this.cancelId = id.slice(9); h.go('life-contract'); }, '这一天没有符合条件的约定。可以更换日期或查看当前跨天约定。');
+      stacked?230:178, id => { this.cancelId = id.slice(9); h.go('life-contract'); }, '这一天没有符合条件的约定。可以更换日期或查看当前跨天约定。');
   }
   private selectContractDay(h: PanelHost, date: string) { this.contractDate = date === lifeDate(h.now) ? null : date; this.pages.delete('contracts'); h.redraw(true); }
   private contract(h: PanelHost, f: Frame) {
@@ -355,9 +387,11 @@ export class LifePanels {
   }
   private manual(h: PanelHost, f: Frame) {
     const kinds = ['study', 'exercise', 'creative', 'steps', 'management'];
-    h.button('activity-kind', activityNames[this.activityKind] + ' · 更换类型', f.x + 24, f.y + 126, 168, 44, () => { this.activityKind = kinds[(kinds.indexOf(this.activityKind) + 1) % kinds.length]; this.amount = '1'; h.redraw(); }, h.busy);
-    h.field('activity-amount', '数量（' + activityUnit(this.activityKind) + '）', this.amount, f.x + 208, f.y + 120, 120, v => this.amount = v, true, 6);
-    h.field('activity-note', '备注（选填）', this.note, f.x + 344, f.y + 120, f.w - 368, v => this.note = v, false, 160);
+    h.button('activity-kind', activityNames[this.activityKind] + ' · 更换类型', f.x + 24, f.y + 126, f.compact?168:Math.min(240,f.w-240), 44, () => { this.activityKind = kinds[(kinds.indexOf(this.activityKind) + 1) % kinds.length]; this.amount = '1'; h.redraw(); }, h.busy);
+    const amountX=f.compact?f.x+208:f.x+Math.min(288,f.w-192);
+    h.field('activity-amount', '数量（' + activityUnit(this.activityKind) + '）', this.amount, amountX, f.y + 120, 120, v => this.amount = v, true, 6);
+    h.field('activity-note', '备注（选填）', this.note, f.x+(f.compact?344:24), f.y+(f.compact?120:218), f.compact?f.w-368:f.w-48, v => this.note = v, false, 160);
+    if(!f.compact)h.text('ActivitySource','记录来源 · 手动填写',f.x+24,f.y+308,f.w-48,28,16,C.muted);
     this.hint = '手动记录 · 未核验。不会直接发放知识、健康或技能点。';
     const valid = Number.isInteger(Number(this.amount)) && Number(this.amount) > 0;
     h.button('save-activity', '保存这条手动记录', f.x + 24, f.y + f.h - 62, f.w - 48, 44, async () => {

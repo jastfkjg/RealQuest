@@ -1,3 +1,4 @@
+import {paperSurface,inkRule,gameControls} from './materials';
 import type { Label } from 'cc';
 import type { PanelHost } from './panels';
 import { DialogueReader, dialogueCopy } from './dialogue';
@@ -24,9 +25,9 @@ export class PlacesPanels {
   inspect(h:PanelHost,id:string){this.init(h);const e=placeEntries(h.world,h.state,h.now).find(e=>e.mapId===h.state.location&&e.object.id===id);if(e){this.mapId=e.mapId;this.selected=e.key;h.go('place-detail');}}
   snapshot(){return {atlasPins:this.chartPins,atlasMap:this.mapId,atlasCategory:this.category,atlasSelected:this.selected,atlasPage:this.page,neighborId:this.person,neighborPage:this.neighborPage,socialGift:this.gift,dialogue:this.reader.snapshot()};}
   private init(h:PanelHost){if(this.saveId!==h.saveId){this.saveId=h.saveId;this.mapId=h.state.location;this.category='all';this.selected='';this.person='lia';this.page=this.neighborPage=0;this.gift='';this.leaves.clear();this.message=this.lastNotice='';}}
-  private tactile(h:PanelHost):PanelHost{return {...h,button:(id,label,x,y,w,height,action,disabled,primary,skin)=>h.button(id,label,x,y,w,height,action,disabled,primary,skin||'game')};}
+  private tactile(h:PanelHost):PanelHost{return gameControls(h);}
   draw(original:PanelHost){
-    const h=this.tactile(original);this.init(h);if(h.mode==='neighbor-find'){this.finder(h);return;}if(h.mode==='neighbor-topics'){this.topicChoices(h);return;}if(h.mode==='neighbor-gift'){this.giftTray(h);return;}const heights:Record<string,number>={map:720,'place-detail':440,'neighbor-detail':540,'neighbor-schedule':540,'neighbor-topics':360,'neighbor-gift':500};const f:Frame={w:Math.min(h.mode==='map'?1180:h.mode==='place-detail'?880:1040,h.width-32),h:Math.min(heights[h.mode]||620,h.height-24),x:0,y:0};f.x=(h.width-f.w)/2;f.y=(h.height-f.h)/2;
+    const h=this.tactile(original);this.init(h);if(h.mode==='neighbor-find'){this.finder(h);return;}if(h.mode==='neighbor-topics'){this.topicChoices(h);return;}if(h.mode==='neighbor-gift'){this.giftTray(h);return;}const heights:Record<string,number>={map:720,'place-detail':440,'neighbor-detail':540,'neighbor-schedule':540,'neighbor-topics':360,'neighbor-gift':500};const f:Frame={w:Math.min(h.mode==='map'?1180:h.mode==='place-detail'?880:h.mode.startsWith('neighbor-')?920:1040,h.width-32),h:Math.min(heights[h.mode]||620,h.height-24),x:0,y:0};f.x=(h.width-f.w)/2;f.y=(h.height-f.h)/2;
     const title=({map:'回响大陆 · 旅途地图','place-index':'地点索引',neighbors:'邻里名册','place-detail':'地点手记','neighbor-detail':'邻里近况','neighbor-schedule':'平常的一天','neighbor-topics':'聊一聊','neighbor-gift':'捎一份心意'} as Record<string,string>)[h.mode];
     this.paper(h,f);h.text('PlacesTitle',title,f.x+24,f.y+12,f.w-160,42,22);h.button('close','返回',f.x+f.w-100,f.y+12,76,44,()=>h.close(),h.busy);
     if(h.mode==='map')this.atlas(h,f);
@@ -37,7 +38,7 @@ export class PlacesPanels {
   }
   private paper(h:PanelHost,f:Frame){
     h.box('PlacesTimberShadow',f.x-3,f.y+3,f.w+6,f.h,C.wood,12);
-    h.box('PlacesPaper',f.x,f.y,f.w,f.h,C.paper,10);
+    paperSurface(h,f,true);
     h.box('PlacesBinding',f.x+12,f.y+12,4,f.h-24,C.wood,2);
     h.line('PlacesHeaderRule',[{x:f.x+24,y:f.y+62},{x:f.x+f.w-24,y:f.y+62}],C.line,1);
   }
@@ -93,7 +94,7 @@ export class PlacesPanels {
     if(illustrated){const entry=placeEntries(h.world,h.state,h.now).find(e=>e.key===this.selected),person=this.person;
       const objectArt:Record<string,string>={plot:'items/seed',wood:'items/wood',stone:'items/stone',storage:'interiors/chest-closed',rest:'interiors/bed',study:'interiors/book',station:'interiors/workbench',armory:'interiors/anvil',market:'interiors/market-counter',board:'interiors/notice',spellbook:'interiors/book'};
       const art=h.mode==='neighbor-gift'?'items/'+this.gift:h.mode.startsWith('neighbor-')?'atlas/'+person:entry?.object.kind==='building'&&['home','workshop','library','guild','shop'].includes(entry.object.id)?'village/'+entry.object.id:entry?objectArt[entry.object.kind]:null;
-      h.box('PlaceSubjectTag',f.x+28,f.y+96,160,224,C.raised,5);
+      inkRule(h,'PlacePortraitRule',f.x+44,f.y+328,128);
       if(art)h.image(art,f.x+108,f.y+178,96,96);
       else {h.box('PlaceSubjectSeal',f.x+76,f.y+146,64,64,C.canvas,8);h.text('PlaceSubjectGlyph','路标',f.x+80,f.y+152,56,52,20,C.ink,true);}
       const title=h.mode==='neighbor-gift'?(itemNames[this.gift]||this.gift):h.mode.startsWith('neighbor-')?(h.world.residents?.find(r=>r.id===person)?.name||'旅途人物'):entry?placeName(entry,h.world):'旅途手记';
@@ -101,9 +102,12 @@ export class PlacesPanels {
       h.text('PlaceSubjectHint',h.mode==='neighbor-gift'?'持有 '+(h.state.inventory[this.gift]||0)+' 份':'翻阅手记 · 到场互动',f.x+36,f.y+282,144,26,14,C.muted,true);
       h.line('PlacesFold',[{x:f.x+204,y:f.y+90},{x:f.x+204,y:f.y+f.h-126}],C.line,1);
     }
-    const rows=Math.max(2,Math.floor((f.h-114-top)/24)),pages=textPages(body,Math.max(16,Math.floor(bodyWidth/16)),rows),index=Math.max(0,Math.min(this.leaves.get(key)||0,pages.length-1));this.leaves.set(key,index);
-    h.text('PlacesBody',pages[index],f.x+offset,f.y+top,bodyWidth,Math.min(rows,pages[index].split('\n').length)*24,16);return {key,index,count:pages.length};
+    const parts=body.split('\n'),heading=illustrated?parts.shift()||'':'';
+    const bodyTop=top+(illustrated?46:0),rows=Math.max(2,Math.floor((f.h-114-bodyTop)/24)),pages=textPages(illustrated?parts.join('\n'):body,Math.max(16,Math.floor(bodyWidth/16)),rows),index=Math.max(0,Math.min(this.leaves.get(key)||0,pages.length-1));this.leaves.set(key,index);
+    if(illustrated)h.text('PlacesLeafHeading',heading,f.x+offset,f.y+top,bodyWidth,36,22);
+    h.text('PlacesBody',pages[index],f.x+offset,f.y+bodyTop,bodyWidth,Math.min(rows,pages[index].split('\n').length)*24,16);return {key,index,count:pages.length};
   }
+
   private footer(h:PanelHost,f:Frame,p:{key:string;index:number;count:number},primary:Action,secondary?:Action){
     const y=f.y+f.h-62,middle=(f.w-264)/2;
     h.button('places-prev','前页',f.x+24,y,96,44,()=>{this.leaves.set(p.key,p.index-1);h.redraw();},h.busy||!p.index);
@@ -149,14 +153,34 @@ export class PlacesPanels {
     const schedule=h.mode==='neighbor-schedule',clock=villageClock(h.state,h.now);
     const body=schedule&&r ? r.name+' · 平常的一天\n'+r.schedule.map(s=>(s.minute===p.phase?'此刻 · ':'')+clockLabel(s.minute)+' '+residentPlace(h.world,s.location)+' · '+s.activity).join('\n')+'\n作息按游戏时钟，阅读时暂停；和你交谈时会停留。每日社交限制按北京时间，游戏睡眠不重置。'
       : p.name+' · '+(r?.role||'旅途人物')+'\n'+(r?.signature||p.activity)+'\n当前位置：'+residentPlace(h.world,p.location!)+' · '+p.activity+'\n游戏第'+clock.day+'天 '+clockLabel(clock.minute)+'\n'+(r?'熟悉度 '+(h.state.relationships[r.id]||0)+' · '+(a.social?.memory_unlocked?'往事话题已解锁':'熟悉度5解锁往事')+'\n最爱 '+(itemNames[r.favorite]||r.favorite)+' · 喜欢 '+(itemNames[r.liked]||r.liked)+'\n帮忙：'+r.help+'\n今日'+(a.social?.greeted?'已问候':'尚未问候')+' · '+(a.social?.gifted?'已送心意':'可送一份心意')+' · '+(a.social?.helped?'已帮忙':'可帮一次忙')+'\n社交需要到场确认，每日限制按北京时间零点刷新。':'没有村民熟悉度/赠礼接口；到场查看旅途报价。')+'\n'+bearingText({mapId:p.location!,targetId:p.id},h.world,h.state,h.now);
-    const leaf=this.leaf(h,f,(schedule?'schedule:':'neighbor:')+p.id,body);
+    let leaf:{key:string;index:number;count:number};
+    if(!schedule&&f.h>=500){
+      const lx=f.x+36,lw=190,rx=f.x+266,rw=f.w-306;
+      h.image('atlas/'+p.id,lx+lw/2,f.y+158,112,112);
+      h.text('NeighborName',p.name,lx,f.y+232,lw,38,26,C.ink,true);
+      h.text('NeighborRole',r?.role||'旅途人物',lx,f.y+274,lw,28,16,C.wood,true);
+      h.text('NeighborSignature',textPages(r?.signature||p.activity,11,4)[0],lx+4,f.y+320,lw-8,96,16,C.muted,true);
+      inkRule(h,'NeighborPortraitRule',lx+24,f.y+420,lw-48);
+      h.text('NeighborPlace','此刻在'+residentPlace(h.world,p.location!),rx,f.y+88,rw,36,22);
+      h.text('NeighborActivity',p.activity+' · 第'+clock.day+'天 '+clockLabel(clock.minute),rx,f.y+130,rw,30,16,C.muted);
+      inkRule(h,'NeighborNoteRule',rx,f.y+178,rw);
+      if(r){
+        h.text('NeighborBond','熟悉度 '+(h.state.relationships[r.id]||0)+' · '+(a.social?.memory_unlocked?'可以聊聊往事':'熟悉度5可聊往事'),rx,f.y+192,rw,30,17);
+        [['最爱',r.favorite],['喜欢',r.liked]].forEach(([caption,id],i)=>{const xx=rx+i*(rw/2);if(h.hasArt('items/'+id))h.image('items/'+id,xx+20,f.y+260,32,32);h.text('NeighborGift-'+i,caption+' '+(itemNames[id]||id),xx+44,f.y+242,rw/2-44,36,16);});
+        h.text('NeighborHelp','一起做点事 · '+r.help,rx,f.y+292,rw,48,17);
+        h.text('NeighborToday','今日'+(a.social?.greeted?'已问候':'尚未问候')+' · '+(a.social?.gifted?'已送心意':'可送心意')+' · '+(a.social?.helped?'已帮忙':'可帮忙'),rx,f.y+344,rw,28,15,C.muted);
+      }else h.text('NeighborTravelRole','到场后可查看这段旅途的安排与报价。',rx,f.y+204,rw,64,18);
+      h.text('NeighborBearing',textPages(bearingText({mapId:p.location!,targetId:p.id},h.world,h.state,h.now),Math.floor(rw/15),2)[0],rx,f.y+384,rw,42,15,C.moss);
+      if(!h.error)h.text('NeighborSocialRule',r?'社交需到场确认；每日限制按北京时间零点刷新。':'此人物没有熟悉度与赠礼接口。',f.x+32,f.y+f.h-108,f.w-64,38,14,C.muted);
+      leaf={key:'neighbor:'+p.id,index:0,count:1};
+    }else leaf=this.leaf(h,f,(schedule?'schedule:':'neighbor:')+p.id,body);
     this.footer(h,f,leaf,{id:'neighbor-mark',label:'标记此人并返回',run:()=>h.mark({mapId:p.location!,targetId:p.id},p.name)},r?{id:'neighbor-routine',label:schedule?'查看近况':'日常作息',run:()=>h.go(schedule?'neighbor-detail':'neighbor-schedule')}:{id:'neighbor-index',label:'村民名录',run:()=>h.go('neighbors')});
   }
   private speaker(h:PanelHost){this.init(h);const id=h.context?.kind==='npc'?h.context.id:'';if(id){this.person=id;if(h.notice&&h.notice!==this.lastNotice){this.message=h.notice;this.lastNotice=h.notice;}}return id;}
   private finder(h:PanelHost){
     const route=neighborRoute(h.world,h.state,h.now,this.person);if(!route)return;
     const w=Math.min(700,h.width-32),height=Math.min(340,h.height-24),x=(h.width-w)/2,y=h.height-height-12,p=route.person;
-    h.box('FinderWood',x-3,y+4,w+6,height,C.wood,10);h.box('FinderPaper',x,y,w,height,C.paper,8);
+    h.box('FinderWood',x-3,y+4,w+6,height,C.wood,10);paperSurface(h,{x,y,w,h:height});
     h.text('FinderTitle','今天想找谁？',x+24,y+14,w-272,40,22);
     ['lia','noah','mira'].forEach((id,i)=>{const xx=x+w-232+i*68,name=h.world.residents?.find(r=>r.id===id)?.name||id;h.button('finder-'+id,'',xx,y+12,60,60,()=>{this.person=id;h.redraw();},h.busy,id===this.person,undefined,{label:'选择'+name,pressed:id===this.person});h.image('atlas/'+id,xx+30,y+42,52,52);});
     h.image('atlas/'+p.id,x+88,y+142,128,128);h.text('FinderName',p.name,x+24,y+214,128,32,22,C.ink,true);
@@ -169,7 +193,7 @@ export class PlacesPanels {
   private encounterFrame(h:PanelHost){
     const short=h.height<500,topics=h.mode==='neighbor-topics',choices=topics||this.reader.choices,w=Math.min(900,h.width-32),height=topics?(short?228:244):choices?(short?168:200):(short?144:176),x=(h.width-w)/2,y=h.height-height-16;
     h.box('EncounterShadow',x-3,y+5,w+6,height,C.wood,8);
-    h.box('EncounterLinen',x,y,w,height,C.paper,6);
+    paperSurface(h,{x,y,w,h:height});
     h.box('EncounterTop',x+8,y+6,w-16,3,C.line,0);
     return {x,y,w,h:height,short};
   }
@@ -217,7 +241,7 @@ export class PlacesPanels {
   private giftTray(h:PanelHost){
     const id=this.speaker(h),r=h.world.residents?.find(r=>r.id===id),a=socialAccess(h.world,h.state,h.now,id);if(!r)return;
     const w=Math.min(920,h.width-32),height=Math.min(320,h.height-24),x=(h.width-w)/2,y=h.height-height-12,choices=['crop','wood','stone','plank','seed'];if(!choices.includes(this.gift))this.gift=r.favorite;
-    h.box('GiftWood',x-4,y+4,w+8,height,'#70563e',10);h.box('GiftLinen',x,y,w,height,C.paper,8);
+    h.box('GiftWood',x-4,y+4,w+8,height,'#70563e',10);paperSurface(h,{x,y,w,h:height});
     h.image('atlas/'+id,x+w-88,y+94,112,112);h.text('GiftRecipient',r.name,x+w-156,y+158,136,30,20,C.ink,true);
     h.text('GiftQuestion','捎了点东西，想送给你。',x+24,y+12,w-200,36,22);
     const cell=60,gap=8,start=x+24;

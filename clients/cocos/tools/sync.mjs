@@ -35,6 +35,11 @@ async function bind(source, target, transform = x => x) {
   records.push({ source, target, sha256: crypto.createHash('sha256').update(bytes).digest('hex'), output_sha256: crypto.createHash('sha256').update(result).digest('hex') });
 }
 await bind('assets/generated/hearthwood/satchel-shell-v1.png','assets/resources/ui/satchel.png');
+await bind('assets/generated/hearthwood/commission-wood-v1.png','assets/resources/ui/notice-timber.png');
+await bind('assets/derived/panel-materials/notice-paper.png','assets/resources/ui/notice-paper.png');
+const panelMaterials=JSON.parse(await fs.readFile(path.join(root,'docs/art/cocos-panel-materials-v1.json'),'utf8'));
+for(const record of panelMaterials.records){const name=path.basename(record.path,'.png');if(name!=='notice-paper')await bind(record.path,'assets/resources/ui/'+name+'.png');await bind(record.source,'assets/resources/ui/'+name+'-web.webp');}
+await bind('assets/runtime/hearthwood/detail/items/journal.png','assets/resources/items/journal.png');
 const inventoryArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/cocos-inventory-icons-v1.json'),'utf8'));
 for(const record of inventoryArt.records)await bind(record.path,'assets/resources/items/'+record.id+'.png');
 await bind('shared/game/protocol.ts', 'assets/scripts/core/protocol.ts');

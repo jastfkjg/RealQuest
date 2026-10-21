@@ -1,3 +1,4 @@
+import {paperSurface,timberSurface,gameControls} from './materials';
 import type { PanelHost } from "./panels";
 import { itemNames } from "../core/features";
 import { C } from "./theme";
@@ -16,7 +17,7 @@ export class StorageView {
     this.page = Math.min(this.page, pages - 1);
     if (!all.includes(this.item)) this.item = all[0];
     const ids = all.slice(this.page * 6, this.page * 6 + 6);
-    h.box("StoragePaper", x, y, w, height, C.paper, 12);
+    paperSurface(h,{x,y,w,h:height},true);
     h.text("StorageTitle", "家园储物箱", x + 24, y + 12, w - 140, 40, 24);
     h.button(
       "close",
@@ -80,7 +81,7 @@ export class StorageView {
           undefined,
           {label: '选择'+(side==='inventory'?'背包':'箱子')+'中的'+(itemNames[id]||id)+'，'+count+'份',pressed:selected},
         );
-        if (["wood", "stone", "seed", "crop", "plank"].includes(id))
+        if (h.hasArt("items/" + id))
           h.image(
             "items/" + id,
             bx + cell / 2,

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "rebuild": "tools/build_panel_art.py",
+  "rebuild_sha256": "973e55345505d97058d4e0b52252626ff097cb5e1b8b0609fd629ff17578b248",
+  "records": [
+    {
+      "source": "assets/runtime/hearthwood/encounters/notice-paper.webp",
+      "source_sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "path": "assets/derived/panel-materials/notice-paper.png",
+      "sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d",
+      "width": 1434,
+      "height": 867,
+      "nine_slice_source_px": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "edge_display_px": 18,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-village-v1.webp",
+      "source_sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "path": "assets/derived/panel-materials/arrival.png",
+      "sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b",
+      "width": 1586,
+      "height": 992,
+      "nine_slice_source_px": null,
+      "edge_display_px": null,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-register-v1.webp",
+      "source_sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "path": "assets/derived/panel-materials/register.png",
+      "sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f",
+      "width": 1122,
+      "height": 1402,
+      "nine_slice_source_px": null,
+      "edge_display_px": null,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    },
+    {
+      "source": "assets/runtime/hearthwood/journal-spread-v1.webp",
+      "source_sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "path": "assets/derived/panel-materials/book.png",
+      "sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f",
+      "width": 1536,
+      "height": 1024,
+      "nine_slice_source_px": null,
+      "edge_display_px": null,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    },
+    {
+      "source": "assets/runtime/hearthwood/life-journal-v1.webp",
+      "source_sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "path": "assets/derived/panel-materials/life-book.png",
+      "sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7",
+      "width": 1536,
+      "height": 1024,
+      "nine_slice_source_px": null,
+      "edge_display_px": null,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    },
+    {
+      "source": "assets/runtime/hearthwood/commission-letter-v1.webp",
+      "source_sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c",
+      "path": "assets/derived/panel-materials/letter.png",
+      "sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728",
+      "width": 1024,
+      "height": 1536,
+      "nine_slice_source_px": null,
+      "edge_display_px": null,
+      "license": "Existing original generated RealQuest artwork; no third-party license claimed.",
+      "processing": "PNG fallback re-encoding only. Exact decoded RGBA equality; no resizing, recoloring, cropping or source changes."
+    }
+  ]
+}

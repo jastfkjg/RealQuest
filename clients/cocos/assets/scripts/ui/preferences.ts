@@ -1,3 +1,4 @@
+import {paperSurface,timberSurface,gameControls} from './materials';
 import type {PanelHost} from './panels';
 import {C} from './theme';
 import {textPages} from '../core/lifeRecords';
@@ -10,7 +11,7 @@ export class PreferencePanels {
  snapshot(){return {preferencePage:this.page,noticeIndex:this.note};}
  draw(h:PanelHost){
   const w=Math.min(640,h.width-32),height=Math.min(344,h.height-24),x=(h.width-w)/2,y=(h.height-height)/2;
-  h.box('PreferenceWood',x-3,y+3,w+6,height,C.wood,8);h.box('PreferencePaper',x,y,w,height,C.paper,6);
+  h.box('PreferenceWood',x-3,y+3,w+6,height,C.wood,8);paperSurface(h,{x,y,w,h:height},true);
   h.box('PreferenceSpine',x,y,7,height,C.moss,0);
   h.image('interiors/book',x+48,y+34,48,48);h.text('PreferenceTitle','旅途偏好',x+84,y+12,w-208,42,24);
   h.button('close','返回',x+w-100,y+12,76,44,()=>h.close(),false,false,'game');

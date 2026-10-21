@@ -38,7 +38,7 @@ npm run cocos:test:startup -- --build web-current/web-desktop
 npm run cocos:art:check
 ```
 
-The browser runner prepares independent databases/cookies and random loopback ports for28 Cocos suites, and verifies browser/service cleanup in finally. It does not need a manually running preview and does not accept a player database. Current source ownership has no legacy-client or Git-history preservation gate.
+The browser runner prepares independent databases/cookies and random loopback ports for30 Cocos suites, and verifies browser/service cleanup in finally. It does not need a manually running preview and does not accept a player database. Current source ownership has no legacy-client or Git-history preservation gate.
 
 Real engine type checks and builds need the configured official Creator SDK. Development builds are available through `cocos:build`; `npm run build` creates a release with debug/sourceMaps disabled and MD5 caching enabled. Optional mini-game targets remain explicit Creator builds and require the owner's platform AppID.
 

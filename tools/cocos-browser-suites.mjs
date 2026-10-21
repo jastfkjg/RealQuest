@@ -1,5 +1,7 @@
 const module=(id,file,result='result.json',extra={})=>({id,file,result,timeoutMs:300000,group:'current',...extra});
 export const browserSuites=[
+ module('interface-refresh','clients/cocos/tools/smoke-interface-refresh.mjs',undefined,{timeoutMs:420000}),
+ module('quest-board','clients/cocos/tools/smoke-quest-board.mjs'),
  module('consistency','clients/cocos/tools/smoke-consistency.mjs'),
  module('pause','clients/cocos/tools/smoke-pause.mjs'),
  module('textures','clients/cocos/tools/smoke-textures.mjs'),

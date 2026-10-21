@@ -1,3 +1,4 @@
+import {paperSurface,inkRule} from './materials';
 import type { PanelHost } from './panels';
 import type { GuidanceAction } from '../core/guidance';
 import { currentGuidance, objectiveText, serviceNear } from '../core/guidance';
@@ -18,9 +19,9 @@ export class GuidancePanels {
   snapshot() { return { guideSection: this.section, preparationTopic: this.topic, comparisonWeapon: this.weapon }; }
   draw(h: PanelHost) {
     if (this.saveId !== h.saveId) { this.saveId = h.saveId; this.pages.clear(); this.section = 'basics'; this.automaticTopic = true; }
-    const height = Math.min(620, h.height - 24), f: Frame = { x: 0, y: (h.height - height) / 2, w: Math.min(1040, h.width - 32), h: height, compact: height < 460 };
+    const height = Math.min(620, h.height - 24), f: Frame = { x: 0, y: (h.height - height) / 2, w: Math.min(920, h.width - 32), h: height, compact: height < 460 };
     f.x = (h.width - f.w) / 2;
-    h.box('GuidancePaper', f.x, f.y, f.w, f.h, C.paper, 16);
+    paperSurface(h,f,true);
     const title = ({ guide: '旅人指南', 'guide-goal': '当前旅途目标', expedition: '第一次初探', preparation: '再出发手记', 'preparation-compare': '可选装备比较' } as Record<string, string>)[h.mode];
     h.text('GuidanceTitle', title, f.x + 24, f.y + 12, f.w - 152, 42, 22);
     h.button('close', '返回', f.x + f.w - 100, f.y + 12, 76, 44, () => h.close(), h.busy);
@@ -34,14 +35,24 @@ export class GuidancePanels {
   private tabs(h: PanelHost, f: Frame, entries: [string, string][], selected: string, change: (id: string) => void) {
     const width = (f.w - 48 - (entries.length - 1) * 8) / entries.length;
     entries.forEach(([id, label], i) => h.button('guide-tab-' + id, label, f.x + 24 + i * (width + 8), f.y + 68, width, 44,
-      () => { change(id); h.redraw(true); }, h.busy, selected === id));
+      () => { change(id); h.redraw(true); }, h.busy, selected === id,'tab'));
   }
   private leaf(h: PanelHost, f: Frame, key: string, body: string, top: number) {
-    const rows = Math.max(3, Math.floor((f.h - 114 - top) / 24)), pages = textPages(body, Math.max(16, Math.floor((f.w - 48) / 16)), rows);
-    const index = Math.max(0, Math.min(this.pages.get(key) || 0, pages.length - 1)); this.pages.set(key, index);
-    h.text('GuidanceBody', pages[index], f.x + 24, f.y + top, f.w - 48, Math.min(rows, pages[index].split('\n').length) * 24, 16);
-    return { key, index, count: pages.length, last: index === pages.length - 1 };
+    const illustrated=!f.compact&&f.h>=520,parts=body.split('\n'),heading=parts.shift()||'',offset=illustrated?132:24;
+    const width=f.w-offset-32,bodyTop=top+(illustrated?68:0),rows=Math.max(3,Math.floor((f.h-114-bodyTop)/24));
+    const pages=textPages(illustrated?parts.join('\n'):body,Math.max(16,Math.floor(width/16)),rows);
+    const index=Math.max(0,Math.min(this.pages.get(key)||0,pages.length-1));this.pages.set(key,index);
+    if(illustrated){
+      h.text('GuidanceHeading',heading,f.x+32,f.y+top,f.w-64,48,24);
+      inkRule(h,'GuidanceHeadingRule',f.x+32,f.y+top+54,f.w-64);
+      const weapon=h.state.combat?.equipped,art=h.mode==='preparation'&&this.topic==='gear'&&weapon&&(h.state.inventory[weapon]||0)>0?'items/'+weapon:'items/journal';
+      h.image(art,f.x+72,f.y+bodyTop+48,64,64);
+      h.text('GuidancePageMark','手记',f.x+32,f.y+bodyTop+96,80,28,14,C.wood,true);
+    }
+    h.text('GuidanceBody',pages[index],f.x+offset,f.y+bodyTop,width,Math.min(rows,pages[index].split('\n').length)*24,16);
+    return {key,index,count:pages.length,last:index===pages.length-1};
   }
+
   private pager(h: PanelHost, f: Frame, page: { key: string; index: number; count: number }, primary: Action, secondary: Action) {
     const y = f.y + f.h - 62, middle = (f.w - 264) / 2;
     h.button('guide-prev', '前页', f.x + 24, y, 96, 44, () => { this.pages.set(page.key, page.index - 1); h.redraw(); }, h.busy || !page.index);

@@ -2236,5 +2236,30 @@
       "status": "retired_client_provenance_only",
       "note": "Legacy renderer removed on owner authorization; not a current asset dependency."
     }
-  ]
+  ],
+  "cocos_panel_refresh": {
+    "status": "overall_candidate_implemented_and_regression_verified",
+    "manifest": "docs/art/cocos-panel-materials-v1.json",
+    "timber_source": "assets/generated/hearthwood/commission-wood-v1.png",
+    "wood_slice_source_px": [
+      105,
+      105,
+      105,
+      105
+    ],
+    "wood_edge_display_px": 24,
+    "note": "Existing original wood and paper; paper is pixel-identical PNG re-encoding. Native Cocos text, controls, progress and rewards. No new external artwork or font.",
+    "board_actual_owner_approved_on": "2026-10-20",
+    "approval": "认可，继续整体优化",
+    "scope": [
+      "registration",
+      "quest board/original text",
+      "journey menu",
+      "cave/gate decisions",
+      "credential/data leaves",
+      "Life study/history/forms",
+      "related native popup surfaces"
+    ],
+    "lazy_loading": "Book and credential artwork is loaded on demand. Browsers supporting WebP reuse the original lossless materials; other platforms retain pixel-identical PNG fallbacks. Native text/actions remain separate."
+  }
 }

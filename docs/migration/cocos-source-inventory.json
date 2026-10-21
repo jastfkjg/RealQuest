@@ -3,12 +3,12 @@
   "policy": "docs/migration/cocos-source-policy.json",
   "note": "Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.",
   "counts": {
-    "bindings": 109,
-    "runtimePNGs": 83,
-    "runtimeWebPs": 1,
+    "bindings": 123,
+    "runtimePNGs": 91,
+    "runtimeWebPs": 7,
     "sharedModules": 25,
     "sceneInputs": 76,
-    "files": 403,
+    "files": 449,
     "references": 31
   },
   "bindings": [
@@ -23,6 +23,244 @@
         "dimensions": [
           1254,
           1254
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/generated/hearthwood/commission-wood-v1.png",
+      "target": "clients/cocos/assets/resources/ui/notice-timber.png",
+      "sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f",
+      "importer": {
+        "uuid": "d69b5740-55c8-2f99-b405-e4e7c17bde0a",
+        "frame": "d69b5740-55c8-2f99-b405-e4e7c17bde0a@f9941",
+        "texture": "d69b5740-55c8-2f99-b405-e4e7c17bde0a@6c48a",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/notice-paper.png",
+      "target": "clients/cocos/assets/resources/ui/notice-paper.png",
+      "sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d",
+      "importer": {
+        "uuid": "869f0c90-dddf-54db-fd12-279761a60f1c",
+        "frame": "869f0c90-dddf-54db-fd12-279761a60f1c@f9941",
+        "texture": "869f0c90-dddf-54db-fd12-279761a60f1c@6c48a",
+        "dimensions": [
+          1434,
+          867
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/encounters/notice-paper.webp",
+      "target": "clients/cocos/assets/resources/ui/notice-paper-web.webp",
+      "sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "importer": {
+        "uuid": "ae80df85-a279-0c63-d45e-c031ecc0c787",
+        "frame": "ae80df85-a279-0c63-d45e-c031ecc0c787@f9941",
+        "texture": "ae80df85-a279-0c63-d45e-c031ecc0c787@6c48a",
+        "dimensions": [
+          1434,
+          867
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/arrival.png",
+      "target": "clients/cocos/assets/resources/ui/arrival.png",
+      "sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b",
+      "importer": {
+        "uuid": "6678cc2d-18db-8e21-09b3-7f050fbd4f71",
+        "frame": "6678cc2d-18db-8e21-09b3-7f050fbd4f71@f9941",
+        "texture": "6678cc2d-18db-8e21-09b3-7f050fbd4f71@6c48a",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-village-v1.webp",
+      "target": "clients/cocos/assets/resources/ui/arrival-web.webp",
+      "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "importer": {
+        "uuid": "95f9ddfe-84e6-87a2-5cbb-814e38a8f8f0",
+        "frame": "95f9ddfe-84e6-87a2-5cbb-814e38a8f8f0@f9941",
+        "texture": "95f9ddfe-84e6-87a2-5cbb-814e38a8f8f0@6c48a",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/register.png",
+      "target": "clients/cocos/assets/resources/ui/register.png",
+      "sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f",
+      "importer": {
+        "uuid": "a7d6b644-7705-9fcf-ef40-bd18c549dbd4",
+        "frame": "a7d6b644-7705-9fcf-ef40-bd18c549dbd4@f9941",
+        "texture": "a7d6b644-7705-9fcf-ef40-bd18c549dbd4@6c48a",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/arrival-register-v1.webp",
+      "target": "clients/cocos/assets/resources/ui/register-web.webp",
+      "sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "importer": {
+        "uuid": "94c473b3-2280-68ba-545f-2b318473d833",
+        "frame": "94c473b3-2280-68ba-545f-2b318473d833@f9941",
+        "texture": "94c473b3-2280-68ba-545f-2b318473d833@6c48a",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/book.png",
+      "target": "clients/cocos/assets/resources/ui/book.png",
+      "sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f",
+      "importer": {
+        "uuid": "ebfb8c39-f0fc-a3e7-36e9-5b8e6c788c84",
+        "frame": "ebfb8c39-f0fc-a3e7-36e9-5b8e6c788c84@f9941",
+        "texture": "ebfb8c39-f0fc-a3e7-36e9-5b8e6c788c84@6c48a",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/journal-spread-v1.webp",
+      "target": "clients/cocos/assets/resources/ui/book-web.webp",
+      "sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "importer": {
+        "uuid": "e302a359-3f07-ed6a-82cb-acf3504d623a",
+        "frame": "e302a359-3f07-ed6a-82cb-acf3504d623a@f9941",
+        "texture": "e302a359-3f07-ed6a-82cb-acf3504d623a@6c48a",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/life-book.png",
+      "target": "clients/cocos/assets/resources/ui/life-book.png",
+      "sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7",
+      "importer": {
+        "uuid": "aae173cb-6363-8a7e-319c-cf92b9f69d7f",
+        "frame": "aae173cb-6363-8a7e-319c-cf92b9f69d7f@f9941",
+        "texture": "aae173cb-6363-8a7e-319c-cf92b9f69d7f@6c48a",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/life-journal-v1.webp",
+      "target": "clients/cocos/assets/resources/ui/life-book-web.webp",
+      "sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "importer": {
+        "uuid": "1a420a59-2f96-2c4a-e21b-dea64b50d1c3",
+        "frame": "1a420a59-2f96-2c4a-e21b-dea64b50d1c3@f9941",
+        "texture": "1a420a59-2f96-2c4a-e21b-dea64b50d1c3@6c48a",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/panel-materials/letter.png",
+      "target": "clients/cocos/assets/resources/ui/letter.png",
+      "sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728",
+      "importer": {
+        "uuid": "629819cb-ac9f-8622-52b5-ef8b74497530",
+        "frame": "629819cb-ac9f-8622-52b5-ef8b74497530@f9941",
+        "texture": "629819cb-ac9f-8622-52b5-ef8b74497530@6c48a",
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/commission-letter-v1.webp",
+      "target": "clients/cocos/assets/resources/ui/letter-web.webp",
+      "sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c",
+      "importer": {
+        "uuid": "c9fb5673-fa2a-4304-5e1a-e1e917bf5b7a",
+        "frame": "c9fb5673-fa2a-4304-5e1a-e1e917bf5b7a@f9941",
+        "texture": "c9fb5673-fa2a-4304-5e1a-e1e917bf5b7a@6c48a",
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/runtime/hearthwood/detail/items/journal.png",
+      "target": "clients/cocos/assets/resources/items/journal.png",
+      "sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab",
+      "importer": {
+        "uuid": "ee1b5c35-bab2-3a78-d8f5-4ecd69787824",
+        "frame": "ee1b5c35-bab2-3a78-d8f5-4ecd69787824@f9941",
+        "texture": "ee1b5c35-bab2-3a78-d8f5-4ecd69787824@6c48a",
+        "dimensions": [
+          64,
+          64
         ],
         "filter": "nearest",
         "trim": "none",
@@ -2030,6 +2268,291 @@
       ]
     },
     {
+      "path": "assets/derived/panel-materials/arrival.png",
+      "owner": "derived-project-art",
+      "sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b",
+      "bytes": 2134448,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/arrival.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/arrival-village-v1.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "assets/derived/panel-materials/book.png",
+      "owner": "derived-project-art",
+      "sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f",
+      "bytes": 1968076,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/book.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/3"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/journal-spread-v1.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/derived/panel-materials/letter.png",
+      "owner": "derived-project-art",
+      "sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728",
+      "bytes": 1708516,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/letter.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/5"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/commission-letter-v1.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "path": "assets/derived/panel-materials/life-book.png",
+      "owner": "derived-project-art",
+      "sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7",
+      "bytes": 1957975,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/life-book.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/4"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/life-journal-v1.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/derived/panel-materials/notice-paper.png",
+      "owner": "derived-project-art",
+      "sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d",
+      "bytes": 1289418,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/notice-paper.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/0"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/encounters/notice-paper.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1434,
+        867
+      ]
+    },
+    {
+      "path": "assets/derived/panel-materials/register.png",
+      "owner": "derived-project-art",
+      "sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f",
+      "bytes": 1704644,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/register.png"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/runtime/hearthwood/arrival-register-v1.webp",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1122,
+        1402
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/arrival-register-v1.png",
+      "owner": "original-project-art",
+      "sha256": "d60fd30a4399c6da3c3d6812287f099a5b76f1ae29f8557e5be87967ed9bb846",
+      "bytes": 2003555,
+      "roles": [
+        "archived-art-source"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/arrival-register-v1.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/arrival-register-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1122,
+        1402
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/arrival-register-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "3f7eab666d15ee471d56898b147ddabfaebe2cb73a2a378973c289b7b035a2f1",
+      "bytes": 1400,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/arrival-register-v1.png",
+        "assets/runtime/hearthwood/arrival-register-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/arrival-village-v1.png",
+      "owner": "original-project-art",
+      "sha256": "6a02b9691748d67ebf2adecd7210d1d4a8fb2264e36993bf7203ec5e1ce98cc2",
+      "bytes": 1957324,
+      "roles": [
+        "archived-art-source"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/arrival-village-v1.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/arrival-village-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/arrival-village-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "576d3014be8b37e3f32ab4bc0f72eb5bc40b5875aa705d8cf453244a504f2814",
+      "bytes": 1239,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/arrival-village-v1.png",
+        "assets/runtime/hearthwood/arrival-village-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/commission-letter-v1.png",
+      "owner": "original-project-art",
+      "sha256": "1bf0258203154aa2e8abc2c4df88496f878e3e05fe75fbb6e6d0f1a21da222e9",
+      "bytes": 1814439,
+      "roles": [
+        "archived-art-source"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/commission-letter-v1.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/13"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/commission-letter-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/commission-letter-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "8402fba2e02d7d3586d353d66008cc3a99210ee25f821aa6d935c22dfc70ab82",
+      "bytes": 773,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/commission-letter-v1.png",
+        "assets/runtime/hearthwood/commission-letter-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/commission-wood-v1.png",
+      "owner": "original-project-art",
+      "sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f",
+      "bytes": 1594329,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/notice-timber.png"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/commission-wood-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/commission-wood-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "bd79ff73df070d63593bca0d83c4eddcf3f587aea8c80585bc66e0e958fcc6d3",
+      "bytes": 1449,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/commission-wood-v1.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "assets/generated/hearthwood/interiors-v3.png",
       "owner": "original-project-art",
       "sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
@@ -2098,6 +2621,7 @@
         "assets/runtime/hearthwood/detail/items/backpack.png",
         "assets/runtime/hearthwood/detail/items/crop.png",
         "assets/runtime/hearthwood/detail/items/gold.png",
+        "assets/runtime/hearthwood/detail/items/journal.png",
         "assets/runtime/hearthwood/detail/items/plank.png",
         "assets/runtime/hearthwood/detail/items/seed.png",
         "assets/runtime/hearthwood/detail/items/stone.png",
@@ -2122,6 +2646,80 @@
         1254,
         1254
       ]
+    },
+    {
+      "path": "assets/generated/hearthwood/journal-spread-v1.png",
+      "owner": "original-project-art",
+      "sha256": "36c3fe198916c96d4abf26a662f960c2a9a48479c43c6ca9df055123ddf99150",
+      "bytes": 2052312,
+      "roles": [
+        "archived-art-source"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/journal-spread-v1.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/journal-spread-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/journal-spread-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "82e0e81fb60a6e5c9e9a0227af8b92eca3f52598d118297be4656063de3ace36",
+      "bytes": 1829,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/journal-spread-v1.png",
+        "assets/runtime/hearthwood/journal-spread-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/life-journal-v1.png",
+      "owner": "original-project-art",
+      "sha256": "a97cb740374ba78421d7fb2356acfd0ef5e0c76019093923f831ea4642971e59",
+      "bytes": 2054804,
+      "roles": [
+        "archived-art-source"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/life-journal-v1.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/14"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/life-journal-v1.prompt.txt"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/life-journal-v1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "ae39aa08668bc1484487ec8dd67af75c31ab1da1837743728ce6138ec911af60",
+      "bytes": 1829,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/life-journal-v1.png",
+        "assets/runtime/hearthwood/life-journal-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
     },
     {
       "path": "assets/generated/hearthwood/market-counter-v1.png",
@@ -2554,6 +3152,87 @@
       ],
       "provenance": [],
       "inputs": []
+    },
+    {
+      "path": "assets/runtime/hearthwood/arrival-register-v1.webp",
+      "owner": "runtime-art",
+      "sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "bytes": 1203260,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/register.png",
+        "assets/resources/ui/register-web.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/4",
+        "docs/art/cocos-panel-materials-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/arrival-register-v1.png",
+        "assets/generated/hearthwood/arrival-register-v1.prompt.txt",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1122,
+        1402
+      ]
+    },
+    {
+      "path": "assets/runtime/hearthwood/arrival-village-v1.webp",
+      "owner": "runtime-art",
+      "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "bytes": 1565666,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/arrival.png",
+        "assets/resources/ui/arrival-web.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/3",
+        "docs/art/cocos-panel-materials-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/arrival-village-v1.png",
+        "assets/generated/hearthwood/arrival-village-v1.prompt.txt",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "assets/runtime/hearthwood/commission-letter-v1.webp",
+      "owner": "runtime-art",
+      "sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c",
+      "bytes": 1239224,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/letter.png",
+        "assets/resources/ui/letter-web.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/13",
+        "docs/art/cocos-panel-materials-v1.json#/records/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/commission-letter-v1.png",
+        "assets/generated/hearthwood/commission-letter-v1.prompt.txt",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1024,
+        1536
+      ]
     },
     {
       "path": "assets/runtime/hearthwood/detail/interiors/anvil.png",
@@ -3073,6 +3752,29 @@
       ]
     },
     {
+      "path": "assets/runtime/hearthwood/detail/items/journal.png",
+      "owner": "runtime-art",
+      "sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab",
+      "bytes": 5645,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/journal.png"
+      ],
+      "provenance": [
+        "docs/art/detail-art-v3.json#/records/7"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/items-ui-v3.png",
+        "tools/build_detail_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
       "path": "assets/runtime/hearthwood/detail/items/plank.png",
       "owner": "runtime-art",
       "sha256": "d896c43ff0922f26f00b5f3a51ec6171d44b362e5404d7af165cb1b34ccc1b80",
@@ -3162,6 +3864,84 @@
       "dimensions": [
         64,
         64
+      ]
+    },
+    {
+      "path": "assets/runtime/hearthwood/encounters/notice-paper.webp",
+      "owner": "runtime-art",
+      "sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "bytes": 890326,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/notice-paper.png",
+        "assets/resources/ui/notice-paper-web.webp"
+      ],
+      "provenance": [
+        "docs/art/cocos-panel-materials-v1.json#/records/0"
+      ],
+      "inputs": [
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1434,
+        867
+      ]
+    },
+    {
+      "path": "assets/runtime/hearthwood/journal-spread-v1.webp",
+      "owner": "runtime-art",
+      "sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "bytes": 1326372,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/book.png",
+        "assets/resources/ui/book-web.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/1",
+        "docs/art/cocos-panel-materials-v1.json#/records/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/journal-spread-v1.png",
+        "assets/generated/hearthwood/journal-spread-v1.prompt.txt",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/runtime/hearthwood/life-journal-v1.webp",
+      "owner": "runtime-art",
+      "sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "bytes": 1391868,
+      "roles": [
+        "archived-art-source",
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/life-book.png",
+        "assets/resources/ui/life-book-web.webp"
+      ],
+      "provenance": [
+        "docs/art/asset-manifest.json#/generated_runtime_assets/14",
+        "docs/art/cocos-panel-materials-v1.json#/records/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/life-journal-v1.png",
+        "assets/generated/hearthwood/life-journal-v1.prompt.txt",
+        "tools/build_panel_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
       ]
     },
     {
@@ -4700,8 +5480,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "e135d12bbd2d065af944b1b07437c4a887353d17688c53c86af52d3bb49ac145",
-      "bytes": 33263,
+      "sha256": "960e8b423dd5630453d8f43b90dec56c03a7eb9aa7fd84c2edd37e137c850a12",
+      "bytes": 37576,
       "roles": [
         "binding-contract"
       ],
@@ -5270,6 +6050,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/items/journal.png",
+      "owner": "cocos-adapter",
+      "sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab",
+      "bytes": 5645,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/detail/items/journal.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/items/plank.png",
       "owner": "cocos-adapter",
       "sha256": "d896c43ff0922f26f00b5f3a51ec6171d44b362e5404d7af165cb1b34ccc1b80",
@@ -5573,6 +6371,240 @@
       "dimensions": [
         3840,
         2560
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/arrival-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
+      "bytes": 1565666,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/arrival-village-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/arrival.png",
+      "owner": "cocos-adapter",
+      "sha256": "42685e60d7d4575c2f43a9bb78e9d9a43b407d31fcb162dee1444b03f318649b",
+      "bytes": 2134448,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/arrival.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/book-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "73a0135691241f7d65af909e3c877f0191cc1da021de85715b353dc06adab45a",
+      "bytes": 1326372,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/journal-spread-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/book.png",
+      "owner": "cocos-adapter",
+      "sha256": "04a18d4f5c7216e5a0ba42f3368937f9d7cdd36aed8545f6f787963cbb3b719f",
+      "bytes": 1968076,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/book.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/letter-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "669edd1bf2aa108832dd740dc13b29b4018a168b688a0d2ae1e4931b87728d5c",
+      "bytes": 1239224,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/commission-letter-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/letter.png",
+      "owner": "cocos-adapter",
+      "sha256": "0f8bea42f0124ae13aa4cccaf528d7d4e6c713dce66839e31cbf8c30b05ee728",
+      "bytes": 1708516,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/letter.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/life-book-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "28e3e1de658551709b1a9e6bf9676cd43437283b5ff954ac55b9729364187781",
+      "bytes": 1391868,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/life-journal-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/life-book.png",
+      "owner": "cocos-adapter",
+      "sha256": "9d172963a188a9c72d325d3c3484a3e0541883786b4f5077bccba4893ba600d7",
+      "bytes": 1957975,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/life-book.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/notice-paper-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "da7b1b1b00ca7af0b8564d19f6da350da7b7fe452b910fed5b7518702ccd42fd",
+      "bytes": 890326,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/encounters/notice-paper.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1434,
+        867
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/notice-paper.png",
+      "owner": "cocos-adapter",
+      "sha256": "9825162708874baa928eede519e50507cf7b2546b02b26d2029afc57bbfa137d",
+      "bytes": 1289418,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/notice-paper.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1434,
+        867
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/notice-timber.png",
+      "owner": "cocos-adapter",
+      "sha256": "12fc1cf99b4df2fc8402c1024b116b928eff81a70043a5cc561ce010c560889f",
+      "bytes": 1594329,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/commission-wood-v1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/register-web.webp",
+      "owner": "cocos-adapter",
+      "sha256": "b880d51a19c862ebad74fe9a33cf32347aa5782f130ad1d4a30ee954d4b9e56f",
+      "bytes": 1203260,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/runtime/hearthwood/arrival-register-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1122,
+        1402
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/register.png",
+      "owner": "cocos-adapter",
+      "sha256": "15ba7870f567ade6853d8fc7580c9558a4d93b01e44f67f1ae09aac6eb26e09f",
+      "bytes": 1704644,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/panel-materials/register.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1122,
+        1402
       ]
     },
     {
@@ -6226,8 +7258,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "a50e00992b540705dd2f7a7cad1fe4862272597a2dfec271171dd8214bb2f62c",
-      "bytes": 96660,
+      "sha256": "1850816f75598b6417858f6a60c3b57c75e46248e9810ad5e0eba8cece1b4b0c",
+      "bytes": 103513,
       "roles": [
         "inspected-source"
       ],
@@ -6766,8 +7798,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/dossier.ts",
       "owner": "cocos-adapter",
-      "sha256": "3014425dd79ca77779ea935b1d1eacbc81ccd892575238b5d4ed9960af663ea9",
-      "bytes": 9612,
+      "sha256": "e14f19439f4b2f6d894b9d25e92201c5a211d4d52f7f7302ba51c458f7833fbf",
+      "bytes": 11099,
       "roles": [
         "inspected-source"
       ],
@@ -6780,8 +7812,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/guidance.ts",
       "owner": "cocos-adapter",
-      "sha256": "8fc16f82d9135ab1d64c72831ca2bc5683b2e4c9ca4e7cbae31445ff94d1b079",
-      "bytes": 20396,
+      "sha256": "a339a0aad490d3fa5827f2b902b780e06a33fa211ea95ac2e370a9204604ef46",
+      "bytes": 21044,
       "roles": [
         "inspected-source"
       ],
@@ -6806,10 +7838,38 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/ui/journeyMenu.ts",
+      "owner": "cocos-adapter",
+      "sha256": "404f4a33dd69e51eb96f617c06e02062672f048735ce951dadc70d32e49c5442",
+      "bytes": 3220,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/ui/life.ts",
       "owner": "cocos-adapter",
-      "sha256": "108767324f753c153f501ea4a4df02f36fc8d9561b7976be1ce3b2f32d9f359f",
-      "bytes": 36239,
+      "sha256": "12adde1af129360aa938e95161dfe4506f39b15d38cc4666aae049224ed7c41f",
+      "bytes": 39751,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/materials.ts",
+      "owner": "cocos-adapter",
+      "sha256": "c4666fd1575c7e6b3f0cb2d72bb094c79ba235402ba42aec72ec1787151f5198",
+      "bytes": 3170,
       "roles": [
         "inspected-source"
       ],
@@ -6822,8 +7882,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "d503a8ae38155f6679ba49fb7565f91cddd5c618746baa51f05fa98ca18b57b6",
-      "bytes": 29895,
+      "sha256": "684a22078545e0b698d4915a3341c0bbb4c48a7b483ff6f6a865e504cacb8881",
+      "bytes": 32544,
       "roles": [
         "inspected-source"
       ],
@@ -6836,8 +7896,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/places.ts",
       "owner": "cocos-adapter",
-      "sha256": "eed02d0e32cfd4c59a5eba394808c153c541897e48a731401eed8b0a7936b4ab",
-      "bytes": 28106,
+      "sha256": "a39dc2dbe73ebc48d397320809b389d1657b926a2bc226bfefcdec49cba53e6e",
+      "bytes": 30328,
       "roles": [
         "inspected-source"
       ],
@@ -6850,8 +7910,22 @@
     {
       "path": "clients/cocos/assets/scripts/ui/preferences.ts",
       "owner": "cocos-adapter",
-      "sha256": "fb8768e0742ef581fc58894cb0cddc4b7442487ec9a22cb48dd7b79115fbe0de",
-      "bytes": 4990,
+      "sha256": "98799e279ba7b13db18ea279181b9b46702668f1f7783b4d1e791df5307cf5d6",
+      "bytes": 5049,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/questBoard.ts",
+      "owner": "cocos-adapter",
+      "sha256": "4fe95e3cefb8fc68df9cb2d55218efe816b49263d6e9dff31197626d8f8d54b3",
+      "bytes": 10385,
       "roles": [
         "inspected-source"
       ],
@@ -6864,8 +7938,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/storage.ts",
       "owner": "cocos-adapter",
-      "sha256": "22087ef568072abfd2bd6109dedb93a371246f35f1ed844f39a954aa369d6cc0",
-      "bytes": 5170,
+      "sha256": "a3b0c6c4a27af5207a661acda9d5e4758f20a5527d06d1c0b1afe3d32689669a",
+      "bytes": 5193,
       "roles": [
         "inspected-source"
       ],
@@ -7156,6 +8230,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-interface-refresh.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "aeab9344ecd6bbea57a564ed317f5a7ab90278e7e86f5fd5c344282983c3a7a4",
+      "bytes": 9826,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-inventory-preview.mjs",
       "owner": "cocos-adapter",
       "sha256": "4be8246beda15ce87c943f65ec0e3bf109769c48fd4703eb35548a783e1dccde",
@@ -7324,6 +8412,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-quest-board.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "78d4ccb969753f5ecd99b3e6eb7afb2c38a387cd18c12f1ff977b6ff40441d12",
+      "bytes": 7846,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-semantics.mjs",
       "owner": "cocos-adapter",
       "sha256": "9c0e0702970a62ab5487a5720bd0d372da4d029f7dfecb965ac93852f74422ff",
@@ -7396,8 +8498,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "5a6943562088d0c2f86209013f6815aa3f693ef6a2f7ec5bbdb9590dcae9e112",
-      "bytes": 7154,
+      "sha256": "24035efd9749bf4c7469819ff02ffe9dc51ee109fe53832032dedf61f56e02d4",
+      "bytes": 7823,
       "roles": [
         "inspected-source"
       ],
@@ -7648,8 +8750,8 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "d46371e4495c010ed9ae77fcb3db5d4c19b9d2d409bfaa307fea1df63fa1626a",
-      "bytes": 99306,
+      "sha256": "358454365285f1a3028f5f7f8a99f7ba735ca05accddbeed89eec830b35cd472",
+      "bytes": 100388,
       "roles": [
         "provenance"
       ],
@@ -7678,6 +8780,20 @@
       "owner": "art-provenance",
       "sha256": "eb474e55ee17f05c67aea3cb0e9b8be892e0f901a1de5d46bc0f5c1034ea1aaf",
       "bytes": 1043,
+      "roles": [
+        "provenance"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "docs/art/cocos-panel-materials-v1.json",
+      "owner": "art-provenance",
+      "sha256": "e019212f14a9c7a8cb8af130fc765496a4255eb9213e94b252420600dc51bd7f",
+      "bytes": 4196,
       "roles": [
         "provenance"
       ],
@@ -8462,6 +9578,22 @@
       "inputs": []
     },
     {
+      "path": "tools/build_panel_art.py",
+      "owner": "root-tooling",
+      "sha256": "973e55345505d97058d4e0b52252626ff097cb5e1b8b0609fd629ff17578b248",
+      "bytes": 1922,
+      "roles": [
+        "art-producer",
+        "inspected-source"
+      ],
+      "consumers": [
+        "docs/art/cocos-panel-materials-v1.json",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "tools/build_resident_art.py",
       "owner": "root-tooling",
       "sha256": "f02ad4f955b4f9637fd282d6adc8ecc6252ef5978e3499df23920a1a829a165d",
@@ -8538,8 +9670,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "0f1e8388d4ade39c6d7e87a76548d63ef5e670dd98b0c2375164bf962a570084",
-      "bytes": 2864,
+      "sha256": "605829a97490cb638cf86fb6afdfcfeed6c2e113946c5ceaaf9107ff0d796be1",
+      "bytes": 3041,
       "roles": [
         "inspected-source"
       ],
@@ -8678,8 +9810,8 @@
     {
       "path": "tools/cocos-sources.mjs",
       "owner": "root-tooling",
-      "sha256": "00acc171b299f0736f50b7c5b169d31e115048fc131288fc0c79bda1f34135e5",
-      "bytes": 14332,
+      "sha256": "0d31f2cc57103053fe622cab516ff6b9ae68a8f8fca0be5f83f3ccc4e60886f3",
+      "bytes": 14373,
       "roles": [
         "inspected-source"
       ],
@@ -8852,8 +9984,8 @@
     {
       "path": "tools/test-cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "13a421b76203669061696f24eecd2d5664b7b1acfddd8bfbd2dcbc759f81366e",
-      "bytes": 4534,
+      "sha256": "3ab959c6dd6a013ce1d8c51dc2896e3d6104ed64e7d318e3d2cbac5aa7e98e62",
+      "bytes": 4762,
       "roles": [
         "inspected-source"
       ],

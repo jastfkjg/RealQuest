@@ -1,6 +1,9 @@
 import type { Label } from 'cc';
 import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} from '../core/protocol';
 import {C} from './theme';
+import {drawQuestBoard,drawQuestStory} from './questBoard';
+import {drawJourneyMenu} from './journeyMenu';
+import {gameControls,paperSurface,timberSurface} from './materials';
 import {LifePanels} from './life';
 import {DossierPanels} from './dossier';
 import {GuidancePanels} from './guidance';
@@ -12,15 +15,19 @@ import {questTarget,currentMap} from '../core/navigation';
 import {residentPositions} from '../core/residents';
 import {textPages} from '../core/lifeRecords';
 
+export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page';
 export interface PanelHost {
  readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
  readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
  box(id:string,x:number,y:number,w:number,h:number,color:string,radius?:number):void;
  text(id:string,value:string,x:number,y:number,w:number,h:number,size?:number,color?:string,center?:boolean):Label;
- button(id:string,label:string,x:number,y:number,w:number,h:number,action:()=>unknown,disabled?:boolean,primary?:boolean,skin?:'game'|'reply'|'portrait'|'answer'|'pocket',semantic?:{label:string;pressed?:boolean}):Label;
+ button(id:string,label:string,x:number,y:number,w:number,h:number,action:()=>unknown,disabled?:boolean,primary?:boolean,skin?:ControlSkin,semantic?:{label:string;pressed?:boolean}):Label;
+ region(id:string,x:number,y:number,w:number,h:number):void;
  line(id:string,points:{x:number;y:number}[],color:string,width?:number):void;
  itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number):void;
  image(path:string,x:number,y:number,w:number,h:number,sliced?:boolean):void;
+ hasArt(path:string):boolean;
+ routeArt(gate:boolean,x:number,y:number,w:number,h:number):void;
  person(name:string,x:number,y:number,w:number,h:number):void;
  field(id:string,label:string,value:string,x:number,y:number,w:number,change:(value:string)=>void,numeric?:boolean,maxLength?:number):void;
  send(action:string,data?:Record<string,unknown>):Promise<boolean>;
@@ -58,18 +65,36 @@ export class FeaturePanels {
  lifeMode(mode:string){return this.lifePanels.handles(mode);}
  reset(){this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
  snapshot(){return {npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
- draw(h:PanelHost){
+ draw(original:PanelHost){
+  const h=gameControls(original);
+  if(h.mode==='menu'){drawJourneyMenu(h,this);return;}
   if(h.mode==='preferences'){this.preferences.draw(h);return;}
   if(h.mode==='dialogue'&&this.npcTab==='talk'){this.places.encounter(h,id=>{if(id==='shop')h.go('shop');else{this.npcTab=id;this.page=0;h.redraw();}});return;}
   if(this.places.handles(h.mode)){this.places.draw(h);return;}
   if(this.guidance.handles(h.mode)){this.guidance.draw(h);return;}
   if(this.dossier.handles(h.mode)){this.dossier.draw(h);return;}
   if(this.lifePanels.handles(h.mode)){this.lifePanels.draw(h);return;}
+  if(h.mode==='quests'||h.mode==='journal'){drawQuestBoard(h,this,h.mode==='quests'?h.context?.id:undefined);return;}
+  if(h.mode==='quest-story'){drawQuestStory(h,this);return;}
   const titles:Record<string,string>={menu:'旅程随身页',journal:'旅途委托',quests:h.context?.name||'村庄告示板','quest-story':'委托原文',shop:'风铃杂货铺',building:h.context?.name||'工坊蓝图',dialogue:h.context?.name||'村民对话',life:'现实成长',growth:'旅人成长',equipment:'随行装备',armory:'工坊武备台',spellbook:'火花术研习',cave:'石根山洞',gate:'村东石门',map:'旅途地图','study-new':'写下今日研习','study-edit':'修改研习书页','plan-new':'装订长期计划','plan-edit':'修改长期计划'};
-  const ideal=h.mode.startsWith('study-')||h.mode.startsWith('plan-')?400:({menu:520,shop:520,building:480,growth:560,equipment:520,armory:520,spellbook:480,cave:480,gate:480,map:500,life:560} as Record<string,number>)[h.mode]||620;
-  const w=Math.min(1040,h.width-32),height=Math.min(ideal,h.height-24);
+  const ideal=h.mode.startsWith('study-')||h.mode.startsWith('plan-')?400:({menu:520,shop:520,building:480,growth:560,equipment:520,armory:520,spellbook:480,cave:560,gate:560,map:500,life:560} as Record<string,number>)[h.mode]||620;
+  const w=Math.min(['cave','gate','armory','equipment','shop'].includes(h.mode)?1000:880,h.width-32),height=Math.min(ideal,h.height-24);
   const f:Frame={x:(h.width-w)/2,y:(h.height-height)/2,w,h:height,compact:height<460,top:(h.height-height)/2+80,bottom:(h.height+height)/2-114};
-  h.box('FeaturePaper',f.x,f.y,w,height,C.paper,16);
+  if(['cave','gate'].includes(h.mode)){
+   timberSurface(h,f);const left=Math.round(w*(f.compact?0.27:0.30));
+   h.box('ExpeditionCloth',f.x+18,f.y+68,left-18,height-86,C.moss,4);
+   h.routeArt(h.mode==='gate',f.x+30,f.y+(f.compact?78:112),left-48,f.compact?132:210);
+   h.text('ExpeditionPlace',h.mode==='gate'?'村东石门':'石根山洞',f.x+30,f.y+height-(f.compact?106:192),left-48,40,f.compact?20:26,C.paper,true);
+   if(!f.compact)h.text('ExpeditionCaption',h.mode==='gate'?'石门之外\n苇风渡口与远行之路':'旧采石场旁\n由你决定何时进入',f.x+34,f.y+height-144,left-56,60,16,C.paper,true);
+   const decision={...f,x:f.x+left+12,w:w-left-30,y:f.y+68,h:height-86};paperSurface(h,decision);
+   h.text('FeatureTitle',titles[h.mode],f.x+24,f.y+12,w-360,42,24,C.paper);
+   h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
+   h.button('close','返回',f.x+w-100,f.y+12,76,44,()=>h.close(),h.busy,false,'back-light');
+   const inner={...decision,top:decision.y+24,bottom:decision.y+decision.h-114,compact:decision.h<430};this.cave(h,inner);
+   if(h.error||h.notice)h.text('FeatureFeedback',h.error||h.notice,decision.x+24,decision.y+decision.h-108,decision.w-48,42,14,h.error?C.danger:C.muted);return;
+  }
+  if(['armory','shop','building'].includes(h.mode)){timberSurface(h,f);paperSurface(h,{x:f.x+12,y:f.y+10,w:w-24,h:height-20});}
+  else paperSurface(h,f,true);
   const expedition=['armory','cave','gate'].includes(h.mode)||(h.mode==='quests'&&h.context?.id==='board');
   h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,expedition?(h.mode==='armory'?w-512:w-360):w-160,42,24);
   if(expedition)h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
@@ -161,10 +186,11 @@ export class FeaturePanels {
   if(!entries.some(e=>e.id===this.tradeSide+':'+this.tradeItem)){this.tradeSide='buy';this.tradeItem=Object.keys(market.buy)[0];}
   this.list(h,f,entries,this.tradeSide+':'+this.tradeItem,id=>{[this.tradeSide,this.tradeItem]=id.split(':');this.amount='1';},lw);
   const price=(this.tradeSide==='buy'?market.buy:market.sell)[this.tradeItem],amount=Number(this.amount),cost=price*amount;
-  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · 单价 ${price} · 持有 ${h.state.inventory[this.tradeItem]||0}`:itemNames[this.tradeItem]||this.tradeItem,dx,f.top,dw,34,f.compact?18:22);
-  if(!f.compact)h.text('TradePrice',`单价 ${price} 金币 · 持有 ${h.state.inventory[this.tradeItem]||0}`,dx,f.top+36,dw,28,16,C.muted);
-  h.field('trade-amount','数量（1–99）',this.amount,dx,f.top+(f.compact?36:72),150,v=>this.amount=v,true,2);
-  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${Number.isInteger(amount)?cost:'—'} 金币`,dx+170,f.top+(f.compact?58:94),dw-170,44,18);
+  if(!f.compact&&h.hasArt('items/'+this.tradeItem))h.image('items/'+this.tradeItem,dx+32,f.top+46,64,64);
+  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · 单价 ${price} · 持有 ${h.state.inventory[this.tradeItem]||0}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?0:88),f.top,dw-(f.compact?0:88),34,f.compact?18:24);
+  if(!f.compact)h.text('TradePrice',`单价 ${price} 金币 · 持有 ${h.state.inventory[this.tradeItem]||0}`,dx+88,f.top+40,dw-88,28,16,C.muted);
+  h.field('trade-amount','数量（1–99）',this.amount,dx,f.top+(f.compact?36:116),150,v=>this.amount=v,true,2);
+  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${Number.isInteger(amount)?cost:'—'} 金币`,dx+170,f.top+(f.compact?58:138),dw-170,44,18);
   h.button('trade-confirm',`确认${this.tradeSide==='buy'?'买入':'卖出'}`,dx,f.y+f.h-62,dw,44,()=>h.send('market_trade',{target,side:this.tradeSide,item:this.tradeItem,amount:Number(this.amount)}),h.busy,true);
  }
  private building(h:PanelHost,f:Frame){
@@ -195,8 +221,10 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
   if(this.weaponId!=='soup'&&!weapons[this.weaponId])this.weaponId=ids[0];const weapon=weapons[this.weaponId]||weapons[ids[0]];if(!weapon)return;
   this.list(h,f,[...ids.map(id=>({id,label:`${weapons[id].name} · 持有 ${h.state.inventory[id]||0}`})),...(h.mode==='armory'?[{id:'soup',label:`便携菜汤 · 持有 ${h.state.inventory.soup||0}`}]:[])],this.weaponId,id=>this.weaponId=id,lw);
   const soup=this.weaponId==='soup',owned=h.state.inventory[this.weaponId]||0;
-  h.text('WeaponName',soup?'便携菜汤':weapon.name,dx,f.top,dw,38,24);
-  h.text('WeaponStats',soup?'生命 +20 · 体力 +15\n洞内原地饮用；可被打断。':`${weapon.damage} ${weapon.magic?'魔法':'物理'}伤害 · 距离 ${weapon.reach}\n每次 ${weapon.stamina} 体力 · 间隔 ${weapon.interval} 秒`,dx,f.top+(f.compact?32:44),dw,f.compact?54:70,f.compact?16:18);
+  const artSize=f.compact?48:72,artX=dx+artSize/2;
+  h.image('items/'+this.weaponId,artX,f.top+(f.compact?38:58),artSize,artSize);
+  h.text('WeaponName',soup?'便携菜汤':weapon.name,dx+artSize+16,f.top,dw-artSize-16,38,f.compact?20:24);
+  h.text('WeaponStats',soup?'生命 +20 · 体力 +15\n洞内原地饮用；可被打断。':`${weapon.damage} ${weapon.magic?'魔法':'物理'}伤害 · 距离 ${weapon.reach}\n每次 ${weapon.stamina} 体力 · 间隔 ${weapon.interval} 秒`,dx+artSize+16,f.top+(f.compact?32:44),dw-artSize-16,f.compact?54:70,f.compact?15:17);
   const equipped=h.state.combat?.equipped;
   if(h.mode==='equipment'){
    h.text('EquippedState',equipped===this.weaponId?'当前已装备':`当前装备：${equipped?itemNames[equipped]:'尚未装备'}`,dx,f.top+122,dw,38,16,C.muted);
@@ -219,7 +247,7 @@ ${costText(costs)}`,dx,f.top,dw,74,18);
  }
  private spell(h:PanelHost,f:Frame){
   const learned=!!h.state.combat?.spark_learned,magic=h.state.knowledge_growth?.magic||0;
-  h.image('interiors/book',f.x+f.w*.18,f.top+72,128,78);
+  h.image('items/journal',f.x+f.w*.18,f.top+78,80,80);
   const dx=f.x+f.w*.34,dw=f.w*.66-24;
   h.text('SpellName','火花术',dx,f.top,dw,38,26);
   h.text('SpellDescription','12 魔法伤害 · 4 体力 · 冷却 4 秒\n进入洞穴后，选择目标并按 Q 施放。',dx,f.top+48,dw,72,18);
