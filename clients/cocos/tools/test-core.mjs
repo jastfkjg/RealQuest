@@ -83,6 +83,44 @@ assert(!walkable(map,140,100));const route=pathfind(map,{x:64,y:96},{x:224,y:96}
 assert.equal(accessibleTarget({mapId:'home',targetId:'chest'},{...map,interiors:{home:{...map,id:'home',objects:[]}}},{location:'overworld',world_clock:{elapsed:0,day_seconds:1800},npc_encounter:null},1800000000)?.id,'home');groups++;
 console.log(`${groups} shared core groups passed: durable retries/reload, rejection, expired auth, storage failure, stale replies, safe recovery and navigation.`);
 
+// Account previews never replace a guest until explicitly adopted. Passwords
+// are request-only; failed network/storage and pending saves keep the old identity.
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ const original=structuredClone(f.session),login={...reply(9,'account-save'),session_token:'account-token',account:{username:'woodland'}};
+ f.handle(async(path,b,token)=>{assert.equal(path,'account/login');assert.equal(b.username,'woodland');return login;});
+ const preview=await c.authenticate('login','woodland','a long passphrase');
+ assert.deepEqual(f.session,original);assert.equal(c.saveId,'fixture');assert.equal(c.account,null);
+ await c.adoptAccount(preview);assert.equal(c.saveId,'account-save');assert.equal(c.account.username,'woodland');assert(!JSON.stringify(f.session).includes('passphrase'));
+ f.handle(async()=>{throw new TransportError('logout reply lost');});await assert.rejects(c.logout(),/lost/);assert.equal(f.session.logout,true);assert.equal(c.logoutPending,true);
+ await assert.rejects(c.command('plant'),/管理/);
+ f.handle(async path=>{assert.equal(path,'account/logout');return {logged_out:true};});
+ const reloaded=new Client(f.transport,()=>{});assert.equal(await reloaded.boot(),null);assert.equal(f.session,null);assert.equal(reloaded.disconnectionReason,'logout');
+ groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async()=>{throw new TransportError('offline');});await assert.rejects(c.command('plant'));
+ const count=f.calls.length;await assert.rejects(c.authenticate('register','woodland','long passphrase'),/待保存/);assert.equal(f.calls.length,count);
+ f.handle(async()=>reply(2));await c.reconnect();
+ f.handle(async()=>({...reply(3),session_token:'bound-token',account:{username:'woodland'}}));
+ const old=structuredClone(f.session);f.transport.setSession=()=>{throw Error('storage denied');};
+ await assert.rejects(c.authenticate('register','woodland','long passphrase'),/storage denied/);assert.equal(c.token,old.token);assert.equal(c.account,null);assert.deepEqual(f.session,old);groups++;
+}
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();
+ f.handle(async()=>{throw new ApiError(401,'bad credentials');});await assert.rejects(c.authenticate('login','woodland','wrong'),/credentials/);assert.equal(c.saveId,'fixture');
+ f.handle(async()=>{f.transport.setSession({token:'another-tab',saveId:'other'});return {...reply(2,'account'),session_token:'account-token',account:{username:'woodland'}};});
+ await assert.rejects(c.authenticate('login','woodland','long passphrase'),/另一页面/);assert.equal(c.saveId,'fixture');assert.equal(f.session.saveId,'other');groups++;
+}
+console.log('PASS account preview/adoption, pending-save guards, memory-only passwords, storage rejection, late tab changes and logout retry after reload.');
+{
+ const f=fixture(),c=new Client(f.transport,()=>{});await c.boot();const old=structuredClone(f.session);
+ f.handle(async()=>{throw new TransportError('registration response lost');});await assert.rejects(c.authenticate('register','woodland','long passphrase'),/注册结果待确认/);assert.deepEqual(f.session,old);
+ f.handle(async()=>({...reply(3),session_token:'account-token',account:{username:'woodland'}}));
+ const preview=await c.authenticate('login','woodland','long passphrase');assert.deepEqual(f.session,old);await c.adoptAccount(preview);assert.equal(c.saveId,old.saveId);assert.equal(c.account.username,'woodland');groups++;
+}
+
 // Data lifecycle: no guest creation during cookie lookup, export or deletion recovery.
 {
  const f=fixture(),c=new Client(f.transport,()=>{});
@@ -122,5 +160,5 @@ console.log(`${groups} total core groups passed, including explicit cookie conti
  assert.equal(c.deletionPending,false);assert.equal(c.status,'ready');assert(c.state);assert.equal(f.session.deletion,undefined);
  f.handle(async()=>{f.transport.setSession({saveId:'elsewhere',token:'other'});return {...reply(8,'restored'),session_token:'restored-token'};});
  await assert.rejects(c.restore({recovery_key:'x'.repeat(43)}),/另一页面/);assert.equal(c.saveId,'fixture');assert.equal(f.session.saveId,'elsewhere');
- console.log('17 total core groups passed, including definitive deletion rejection and late recovery after another tab switches.');
+ groups++;console.log(`${groups} total core groups passed, including definitive deletion rejection and late recovery after another tab switches.`);
 }

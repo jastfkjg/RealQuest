@@ -325,6 +325,8 @@ export interface GameState {
   revision: number;
 }
 export interface Reply {
+  account?: { username: string } | null;
+  session_token?: string;
   save_id?: string;
   state: GameState;
   world?: World;

@@ -1,6 +1,6 @@
 /** Browser semantics for the controls that the Cocos view actually rendered. */
 export type SemanticControl={id:string;label:string;x:number;y:number;w:number;h:number;disabled:boolean;pressed?:boolean};
-export type SemanticField={label:string;value:string};
+export type SemanticField={label:string;value:string;secret?:boolean;autocomplete?:string};
 export type SemanticText={id:string;text:string};
 type Frame={mode:string;title:string;controls:SemanticControl[];fields:Map<string,SemanticField>;texts:SemanticText[];focusId:string;busy:boolean;message:string};
 type Actions={activate:(id:string)=>void;focus:(id:string,clearInput?:boolean)=>void;escape:()=>void;key:(code:string,down:boolean,repeat:boolean)=>boolean};
@@ -51,6 +51,9 @@ export class WebSemantics {
   const element=this.doc?.activeElement;if(!this.editor||!['INPUT','TEXTAREA'].includes(element?.tagName)||element.type==='file')return;
   if(!this.namedInputs.has(element))this.namedInputs.set(element,element.getAttribute('aria-label'));
   element.setAttribute('aria-label',this.editor.label);if(element.id)this.root.setAttribute('aria-owns',element.id);
+  const field=this.frame?.fields.get(this.editor.id);
+  if(field?.autocomplete)element.setAttribute('autocomplete',field.autocomplete);else element.removeAttribute('autocomplete');
+  if(field?.secret){element.setAttribute('autocapitalize','none');element.spellcheck=false;}
  }
  returnFromEditing(){if(this.keyboard&&this.editorReturn){const id=this.editorReturn;this.editorReturn='';return this.focusControl(id);}return false;}
  update(frame:Frame){

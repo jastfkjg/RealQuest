@@ -13,6 +13,17 @@ assert.deepEqual(cleanQuick(['wood','wood','gold','missing']),['wood',null,null,
 entries.set(inventoryPreferenceKey('wrong'),JSON.stringify({version:2,saveId:'another',selected:'gold',quick:['gold']}));assert.deepEqual(p.enter('wrong').quick,['seed',null,null,null]);
 const blocked=new InventoryPreferences({getItem(){throw Error('blocked');},setItem(){throw Error('blocked');},removeItem(){throw Error('blocked');}});blocked.enter('a');blocked.bind(3,'wood',{wood:1});assert(blocked.warning);const ram=JSON.stringify(blocked.value);blocked.enter('b');blocked.enter('a');assert.equal(JSON.stringify(blocked.value),ram);
 console.log('PASS four-pocket swap/clear, per-save persistence/isolation, explicit legacy import, stale/unknown sanitization, scoped deletion and storage-failure RAM continuity.');
+const arranged=new InventoryPreferences(storage);arranged.enter('drag-a');
+const owned=['wood','seed','stone'],possessions={wood:3,seed:6,stone:2},original=JSON.stringify(possessions);
+assert.deepEqual(arranged.items(owned),owned);assert(arranged.place('seed',8,owned));assert.equal(arranged.items(owned)[8],'seed');
+assert(arranged.place('wood',8,owned));assert.equal(arranged.items(owned)[0],'seed');assert.equal(arranged.items(owned)[8],'wood');
+assert(!arranged.place('gold',2,owned));assert(!arranged.place('seed',-1,owned));assert(!arranged.place('seed',128,owned));
+assert(arranged.bind(1,'wood',possessions));assert(arranged.swapQuick(0,1));assert.deepEqual(arranged.value.quick,['wood','seed',null,null]);
+arranged.position(96,-48);const reloaded=new InventoryPreferences(storage);reloaded.enter('drag-a');assert.deepEqual(reloaded.value,arranged.value);assert.equal(JSON.stringify(possessions),original);
+reloaded.enter('drag-b');assert.deepEqual(reloaded.value.tray,[]);assert.deepEqual(reloaded.value.offset,{x:0,y:0});
+entries.set(inventoryPreferenceKey('sanitize'),JSON.stringify({version:2,saveId:'sanitize',quick:['seed'],tray:['seed','seed','unknown',null,'wood'],offset:{x:99999,y:'bad'}}));
+reloaded.enter('sanitize');assert.deepEqual(reloaded.value.tray,['seed',null,null,null,'wood']);assert.deepEqual(reloaded.value.offset,{x:4096,y:0});
+console.log('PASS tray placement/swap/empty cells, quick-pocket swap, persistence/isolation, malformed preferences and unchanged authoritative quantities.');
 const root=fileURLToPath(new URL('../../../',import.meta.url)),fixture=JSON.parse(execFileSync(root+'backend/.venv/bin/python',['-c',`import json
 from app.main import snapshot
 from app.rules import initial_state

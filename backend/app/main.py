@@ -7,10 +7,15 @@ import secrets
 import time
 import uuid
 from fastapi import FastAPI, Request, Response, HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy import select, delete, text, or_
+from sqlalchemy.exc import IntegrityError
 from .db import Session, engine
-from .models import Player, Receipt, RecoveryKey, GuestSession, ClientDeletion
+from .models import Player, Receipt, RecoveryKey, GuestSession, ClientDeletion, Account, AccountSession
+from .accounts import username_key, password_hash, verify_password, validate_password, throttle, account_view, new_session
 from .rules import initial_state, upgrade_state, apply, RuleError, study_task_views, exercise_task_views, recover_stamina, GATHER_COSTS, STAMINA_SECONDS, life_task_views, character_growth_options, HEALTH_CAPACITY_GAIN
 from .quests import quest_views
 from .world import WORLD
@@ -19,9 +24,17 @@ from .residents import routine_definitions, ensure_clock, social_view
 from .daynight import sleep_rules
 
 app = FastAPI(title='RealQuest API', version='0.1.0')
+DUMMY_PASSWORD_HASH = password_hash('dummy password for missing accounts', '0' * 32)
 COOKIE = os.getenv('SESSION_COOKIE_NAME', 'realquest_session')
 SECURE_COOKIE = os.getenv('COOKIE_SECURE', 'false').lower() == 'true'
 ALLOWED_ORIGINS = set(os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080,http://127.0.0.1:8080').split(','))
+
+@app.exception_handler(RequestValidationError)
+async def safe_account_validation(request, error):
+    # Pydantic's default errors echo invalid input, including submitted passwords.
+    if request.url.path.startswith('/api/account/'):
+        return JSONResponse({'detail': '账号或密码格式不正确'}, status_code=422)
+    return await request_validation_exception_handler(request, error)
 
 @app.middleware('http')
 async def protect_origin(request: Request, call_next):
@@ -58,7 +71,9 @@ def token_hash(request):
 
 def player_query(hashed):
     return select(Player).where(or_(Player.token_hash == hashed,
-        Player.id.in_(select(GuestSession.player_id).where(GuestSession.token_hash == hashed))))
+        Player.id.in_(select(GuestSession.player_id).where(GuestSession.token_hash == hashed)),
+        Player.id.in_(select(Account.player_id).join(AccountSession, AccountSession.account_id == Account.id)
+                      .where(AccountSession.token_hash == hashed, AccountSession.expires_at > time.time()))))
 
 def player_for(db, request, lock=False):
     query = player_query(token_hash(request))
@@ -122,7 +137,7 @@ def session(request: Request, response: Response):
 def state(request: Request):
     with Session() as db:
         player = player_for(db, request)
-        return snapshot(player.state, save_id=player.id)
+        return snapshot(player.state, save_id=player.id, account=account_view(db, player.id))
 
 @app.post('/api/client-session')
 def client_session(request: Request):
@@ -145,7 +160,89 @@ def client_session(request: Request):
             updated = copy.deepcopy(player.state)
             ensure_clock(updated, time.time())
             player.state = updated
-        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()}, save_id=player.id, **extra)
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()}, save_id=player.id, account=account_view(db, player.id), **extra)
+
+
+class AccountCredentials(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    username: str = Field(max_length=64)
+    password: str = Field(max_length=128, repr=False)
+    save_id: str | None = Field(default=None, min_length=36, max_length=36)
+
+
+@app.post('/api/account/register')
+def register_account(body: AccountCredentials, request: Request):
+    username = username_key(body.username)
+    validate_password(body.password)
+    throttle(request, username, 'register')
+    encoded = password_hash(body.password)
+    try:
+        with Session.begin() as db:
+            lock_sqlite(db)
+            if request.headers.get('authorization') is not None:
+                player = player_for(db, request, lock=True)
+                if body.save_id != player.id:
+                    raise HTTPException(409, '旅程已变化，请刷新核对后绑定')
+                if account_view(db, player.id):
+                    raise HTTPException(409, '此旅程已绑定账号，请直接登录')
+            else:
+                if body.save_id is not None:
+                    raise HTTPException(401, '请先连接要绑定的游客旅程')
+                player = Player(id=str(uuid.uuid4()), token_hash=hashlib.sha256(secrets.token_bytes(32)).hexdigest(), state=initial_state())
+                db.add(player)
+                db.flush()
+            account = Account(id=str(uuid.uuid4()), username=username, password_hash=encoded,
+                              player_id=player.id, created_at=time.time())
+            db.add(account)
+            db.flush()  # Enforce uniqueness before revoking any guest credentials.
+            # Old guest/recovery files must not bypass the newly bound password.
+            db.execute(delete(GuestSession).where(GuestSession.player_id == player.id))
+            db.execute(delete(RecoveryKey).where(RecoveryKey.player_id == player.id))
+            player.token_hash = hashlib.sha256(secrets.token_bytes(32)).hexdigest()
+            token = new_session(db, account)
+            return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()},
+                            save_id=player.id, session_token=token, account={'username': username})
+    except IntegrityError:
+        raise HTTPException(409, '用户名不可用，或此旅程已绑定账号；请更换用户名或直接登录')
+
+
+@app.post('/api/account/login')
+def login_account(body: AccountCredentials, request: Request):
+    username = username_key(body.username)
+    throttle(request, username, 'login')
+    with Session() as db:
+        account = db.scalar(select(Account).where(Account.username == username))
+        encoded = account.password_hash if account else DUMMY_PASSWORD_HASH
+        account_id = account.id if account else None
+    valid = verify_password(body.password, encoded)
+    if not account_id or not valid:
+        raise HTTPException(401, '用户名或密码不正确')
+    with Session.begin() as db:
+        lock_sqlite(db)
+        account = db.scalar(select(Account).where(Account.id == account_id).with_for_update())
+        if not account or account.password_hash != encoded:
+            raise HTTPException(401, '用户名或密码不正确')
+        player = db.get(Player, account.player_id) if account.player_id else None
+        if not player:
+            # Deleting a journey preserves the login; the next login starts empty.
+            player = Player(id=str(uuid.uuid4()), token_hash=hashlib.sha256(secrets.token_bytes(32)).hexdigest(), state=initial_state())
+            db.add(player)
+            db.flush()
+            account.player_id = player.id
+        token = new_session(db, account)
+        return snapshot(player.state, world={**WORLD, 'residents': routine_definitions()},
+                        save_id=player.id, session_token=token, account={'username': account.username})
+
+
+@app.post('/api/account/logout')
+def logout_account(request: Request):
+    if request.headers.get('authorization') is None:
+        raise HTTPException(401, '请使用当前账号会话退出')
+    hashed = token_hash(request)
+    with Session.begin() as db:
+        db.execute(delete(AccountSession).where(AccountSession.token_hash == hashed))
+    # Idempotent even when a committed response was lost; never deletes saves.
+    return {'logged_out': True}
 
 @app.post('/api/command')
 def command(body: Command, request: Request):
@@ -205,7 +302,7 @@ class RecoveryInput(BaseModel):
 def recovery_player(db, body):
     key = db.get(RecoveryKey, hashlib.sha256(body.recovery_key.encode()).hexdigest())
     player = db.get(Player, key.player_id) if key else None
-    if not player:
+    if not player or account_view(db, player.id):
         raise HTTPException(404, '未找到这份凭证对应的旅程，请确认连接的是原来的服务器；已删除的存档无法恢复')
     return player
 
@@ -214,6 +311,8 @@ def recovery_file(request: Request):
     with Session.begin() as db:
         lock_sqlite(db)
         player = player_for(db, request, lock=True)
+        if account_view(db, player.id):
+            raise HTTPException(403, '账号旅程请使用用户名和密码接续；可在数据管理中导出完整数据')
         if not player.state['character']:
             raise HTTPException(422, '创建角色后才能保存旅程凭证')
         token = secrets.token_urlsafe(32)
@@ -310,6 +409,10 @@ def client_delete(body: ClientDeletionInput, request: Request):
         db.execute(delete(Receipt).where(Receipt.player_id == player.id))
         db.execute(delete(RecoveryKey).where(RecoveryKey.player_id == player.id))
         db.execute(delete(GuestSession).where(GuestSession.player_id == player.id))
+        # Serialize with login before revoking sessions. Otherwise a concurrent
+        # login could leave a token that reactivates when this account starts over.
+        db.scalar(select(Account).where(Account.player_id == player.id).with_for_update())
+        db.execute(delete(AccountSession).where(AccountSession.account_id.in_(select(Account.id).where(Account.player_id == player.id))))
         db.delete(player)
         db.add(ClientDeletion(token_hash=hashed, request_id=body.request_id,
                               save_id=body.save_id, created_at=time.time()))
@@ -324,6 +427,8 @@ def delete_session(request: Request, response: Response):
         db.execute(delete(Receipt).where(Receipt.player_id == player.id))
         db.execute(delete(RecoveryKey).where(RecoveryKey.player_id == player.id))
         db.execute(delete(GuestSession).where(GuestSession.player_id == player.id))
+        db.scalar(select(Account).where(Account.player_id == player.id).with_for_update())
+        db.execute(delete(AccountSession).where(AccountSession.account_id.in_(select(Account.id).where(Account.player_id == player.id))))
         db.delete(player)
     response.delete_cookie(COOKIE)
     return {'deleted': True}

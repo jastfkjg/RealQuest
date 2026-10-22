@@ -1,5 +1,11 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-22 task116 — optional username accounts
+
+用户要求保留游客体验并实现用户名密码注册登录。新增账号绑定/登录预览/明确接续/退出保留数据，保留存档ID和历史；账号绑定撤销游客凭证。无邮箱验证码或自助找回密码。专项计划与验证记录见docs/tasks/116-cocos-username-accounts.md。保留同工作区任务115的HUD/行囊编辑，独立构建和QA，不操作原玩家库。
+
+task116收尾：真实Creator3.8.8独立release、124绑定/459来源/真实类型、23组工具与共享单元（core21）、最终260后端通过。修正原生密码框preload、焦点重绘和字符串展开计数的Creator编译差异。最终同来源/后端的账号6、存档与会话13、语义11、成长8、技能动作循环1共39组浏览器检查通过，代表截图已检查，流程录像已保存。18次运行123个已知自有PID和浏览器进程组退出、独立SDK副本清理。保留5449/API8149独立新库人工预览，原5443/5448和原玩家库保持；无默认包覆盖/提交/推送/部署。完整证据及中间失败不冒算通过见任务116和output/cocos-accounts-116/verification.json。
+
 - Task109 complete: Cocos-only release rebuilt; 146 art files relocated with original bytes,109 bindings/403 sources/real types verified;23 unit modules/236 backend/19 deployment tests/9 startup/8 Nginx checks and one full28-suite/185-check browser run passed. Final npm options/default empty start passed with identical runtime/payload; exact133 QA/empty-save files and finished caches removed,166 PIDs exited. Original signed SDK and current package/evidence retained; no preview/commit/push/deploy. See docs/tasks/109-cocos-only-client.md and output/cocos-retirement/verification.json.
 
 - Current task109 (2026-10-20): owner authorized Cocos-only source/runtime/tooling, removal of React/Phaser and all local historical player/QA data. Art146 exact-byte moves and109 bindings verified; offline Canvas sources/4 tests relocated, legacy gates retired, default build/start/CI/Docker switched. Current validation and cleanup are tracked in docs/tasks/109-cocos-only-client.md; older output evidence was intentionally cleaned and old compatibility/approval waits below are historical.

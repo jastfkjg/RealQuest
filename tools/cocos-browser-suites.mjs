@@ -1,5 +1,7 @@
 const module=(id,file,result='result.json',extra={})=>({id,file,result,timeoutMs:300000,group:'current',...extra});
 export const browserSuites=[
+ module('accounts','clients/cocos/tools/smoke-accounts.mjs',undefined,{timeoutMs:420000}),
+ module('hud-drag','clients/cocos/tools/smoke-hud-drag.mjs'),
  module('combat-experience','clients/cocos/tools/smoke-combat-experience.mjs',undefined,{timeoutMs:420000}),
  module('expedition-chain','clients/cocos/tools/smoke-expedition-chain.mjs',undefined,{timeoutMs:420000}),
  module('interface-refresh','clients/cocos/tools/smoke-interface-refresh.mjs',undefined,{timeoutMs:420000}),

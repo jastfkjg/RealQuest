@@ -149,8 +149,8 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a",
-      "output_sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a"
+      "sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65",
+      "output_sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -227,8 +227,8 @@
     {
       "source": "shared/game/client.ts",
       "target": "assets/scripts/core/client.ts",
-      "sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20",
-      "output_sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20"
+      "sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1",
+      "output_sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1"
     },
     {
       "source": "shared/game/clock.ts",
@@ -329,8 +329,8 @@
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6",
-      "output_sha256": "303e6666f80f6a5598a1f1029a2380a35664ed76ac0fd969f5c7e2162dfeb7a6"
+      "sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4",
+      "output_sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4"
     },
     {
       "source": "shared/game/preferences.ts",

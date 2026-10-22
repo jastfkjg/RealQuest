@@ -2,13 +2,15 @@ import type {GameState,World,NavigationTarget} from './protocol';
 import {itemDefinitions,itemNames} from './items';
 import {currentMap} from './navigation';
 export interface PreferenceStorage {getItem(key:string):string|null;setItem(key:string,value:string):void;removeItem(key:string):void;}
-export type InventoryPreference={version:2;saveId:string;selected:string;quick:(string|null)[]};
+export type InventoryPreference={version:2;saveId:string;selected:string;quick:(string|null)[];tray:(string|null)[];offset:{x:number;y:number}};
 const known=(id:unknown):id is string=>typeof id==='string'&&Object.prototype.hasOwnProperty.call(itemDefinitions,id);
 export const inventoryPreferenceKey=(id:string)=>'realquest-cocos-inventory-v2:'+id;
 export function cleanQuick(value:unknown):(string|null)[]{
  const seen=new Set<string>();return Array.from({length:4},(_,i)=>{const id=Array.isArray(value)?value[i]:null;if(!known(id)||seen.has(id))return null;seen.add(id);return id;});
 }
-function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'seed',quick:['seed',null,null,null]};}
+function cleanTray(value:unknown):(string|null)[]{const seen=new Set<string>();return (Array.isArray(value)?value.slice(0,128):[]).map(id=>{if(!known(id)||seen.has(id))return null;seen.add(id);return id;});}
+function cleanOffset(value:any){return {x:Number.isFinite(value?.x)?Math.max(-4096,Math.min(4096,value.x)):0,y:Number.isFinite(value?.y)?Math.max(-4096,Math.min(4096,value.y)):0};}
+function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'seed',quick:['seed',null,null,null],tray:[],offset:{x:0,y:0}};}
 /** Optional presentation preferences; never authoritative possessions. */
 export class InventoryPreferences {
  private memory=new Map<string,InventoryPreference>(); private active=''; warning='';
@@ -17,7 +19,7 @@ export class InventoryPreferences {
  get value(){return this.memory.get(this.active)||defaults(this.active);}
  enter(saveId:string){
   this.active=saveId;if(this.memory.has(saveId))return this.value;
-  let value=defaults(saveId);if(saveId)try{const raw=this.storage.getItem(inventoryPreferenceKey(saveId));if(raw){const p=JSON.parse(raw);if(p?.version===2&&p.saveId===saveId){value={version:2,saveId,selected:known(p.selected)?p.selected:'seed',quick:cleanQuick(p.quick)};}}}catch{this.warning='本机偏好暂时无法读取，本次整理仍可继续。';}
+  let value=defaults(saveId);if(saveId)try{const raw=this.storage.getItem(inventoryPreferenceKey(saveId));if(raw){const p=JSON.parse(raw);if(p?.version===2&&p.saveId===saveId){value={version:2,saveId,selected:known(p.selected)?p.selected:'seed',quick:cleanQuick(p.quick),tray:cleanTray(p.tray),offset:cleanOffset(p.offset)};}}}catch{this.warning='本机偏好暂时无法读取，本次整理仍可继续。';}
   this.memory.set(saveId,value);return value;
  }
  private write(value:InventoryPreference){if(!this.active)return;this.memory.set(this.active,value);try{this.storage.setItem(inventoryPreferenceKey(this.active),JSON.stringify(value));this.warning='';}catch{this.warning='本次整理已保留在当前窗口，关闭后可能需要重新安排。';}}
@@ -27,6 +29,10 @@ export class InventoryPreferences {
   const quick=[...this.value.quick],old=quick.indexOf(id);if(old>=0)quick[old]=quick[slot];quick[slot]=id;this.write({...this.value,quick});return true;
  }
  clear(slot:number){if(!Number.isInteger(slot)||slot<0||slot>3)return;const quick=[...this.value.quick];quick[slot]=null;this.write({...this.value,quick});}
+ items(ids:string[]){const available=new Set(ids.filter(known)),tray=this.value.tray.map(id=>id&&available.has(id)?id:null);for(const id of available){if(tray.includes(id))continue;const empty=tray.indexOf(null);if(empty<0)tray.push(id);else tray[empty]=id;}return tray;}
+ place(id:string,index:number,ids:string[]){if(!known(id)||!ids.includes(id)||!Number.isInteger(index)||index<0||index>=128)return false;const tray=this.items(ids);while(tray.length<=index)tray.push(null);const old=tray.indexOf(id);if(old<0)return false;[tray[old],tray[index]]=[tray[index],id];this.write({...this.value,tray});return true;}
+ swapQuick(from:number,to:number){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>3||to>3)return false;const quick=[...this.value.quick];[quick[from],quick[to]]=[quick[to],quick[from]];this.write({...this.value,quick});return true;}
+ position(x:number,y:number){this.write({...this.value,offset:cleanOffset({x,y})});}
  legacy(){
   const candidates:{key:string;label:string;quick:(string|null)[]}[]=[];
   for(const [key,label] of [['realquest-cocos-quick-v1','旧Cocos快捷栏'],['realquest-quick-items','原Web快捷栏']])try{const raw=this.storage.getItem(key);if(!raw)continue;const value=JSON.parse(raw);if(!Array.isArray(value))continue;const quick=cleanQuick(value);if(quick.some(Boolean))candidates.push({key,label,quick});}catch{/* Optional legacy data cannot authenticate or choose a journey. */}

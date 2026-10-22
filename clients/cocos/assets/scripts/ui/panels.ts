@@ -11,12 +11,13 @@ import {GuidancePanels} from './guidance';
 import {PlacesPanels} from './places';
 import {PreferencePanels} from './preferences';
 import type {GuidanceAction} from '../core/guidance';
+import type {DragSpec} from './drag';
 import {itemNames,growthNames,questStatuses,costText,shortages,growthCommand,timeText,entityId,plankRecipe,upgradeCosts} from '../core/features';
 import {questTarget,currentMap} from '../core/navigation';
 import {residentPositions} from '../core/residents';
 import {textPages} from '../core/lifeRecords';
 
-export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page';
+export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud';
 export interface PanelHost {
  readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
  readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
@@ -24,6 +25,7 @@ export interface PanelHost {
  text(id:string,value:string,x:number,y:number,w:number,h:number,size?:number,color?:string,center?:boolean):Label;
  button(id:string,label:string,x:number,y:number,w:number,h:number,action:()=>unknown,disabled?:boolean,primary?:boolean,skin?:ControlSkin,semantic?:{label:string;pressed?:boolean}):Label;
  region(id:string,x:number,y:number,w:number,h:number):void;
+ drag(id:string,spec:DragSpec):void;
  line(id:string,points:{x:number;y:number}[],color:string,width?:number):void;
  itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number):void;
  image(path:string,x:number,y:number,w:number,h:number,sliced?:boolean):void;
