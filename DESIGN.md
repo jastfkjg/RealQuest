@@ -6,6 +6,8 @@
 
 ## 1. Purpose and boundaries
 
+**行囊简化方案已获准（2026-10-22，task118）：** 玩家认可`docs/art/references/inventory-context-tag-v1.png`的布局，并明确删除“整理快捷栏”按钮。右侧常驻快捷栏管理页移除；背包打开时只显示布袋，点选物品后才显示内容紧凑的详情签。签内只保留物品身份/真实数量、短用途、原主要动作与用途来源；详情关闭和行囊关闭分开。左侧保留整理物品、四格放置/移除与点按/键盘替代，支持原有拖放。沿用既有布袋/物品资产与真实文字，不把概念图新背景或烘焙文字用作运行资源；工程证据见任务118，实际渲染验收单独记录。
+
 **HUD与行囊拖放候选（2026-10-22，task115）：** 世界状态使用苔绿布牌、细生命/体力条与真实金币；旅程/行囊/成长/邻里共享一条紧凑工具栏，任务笺保留独立详情和方向标记。行囊标题可拖动整组并钳制在视口；真实物品可拖到安静空格/占格交换或安排四格，口袋可交换、拖回。位置与排列按旅程保存为本机表现偏好，永不修改权威数量。保留点按分配、清空、前后移动与位置按钮，失焦/模式切换/缩放取消手势；原布袋/物品图不变。实际工程证据与未验范围见任务115，视觉批准仍待玩家反馈。
 
 **Cocos composition correction (2026-10-20, task111):** the owner rejected the remaining book overflow, movement hint, prominent return control, and dashboard-like buttons/information. The actual illustrated leaf defines content bounds; viewport bounds alone are insufficient. Focused panels suppress world HUD/navigation/instructions. Directory entries use ink rows, categories use cloth bookmarks, return/page navigation stays light, and resource-changing actions retain tactile confirmation. Structure each view around actual objects, progress and concise conditions; a paper background alone is insufficient. Collect overall render and interaction evidence before handoff; this feedback does not approve the previous full candidate.
@@ -260,7 +262,7 @@ One composed scene with a character preview, name field, small appearance select
 
 Offer a quick start; life-goal planning is optional after entry. Explain guest-save behavior according to actual storage architecture. Do not promise local-only storage if the server stores the save.
 
-Current welcome reference: full-bleed village illustration with a live, modestly scaled traveler; one linen registration sheet, signature-line name input, six slightly offset portrait tags and a moss-painted wooden entry button. The selected character updates immediately and remains the same in gameplay and the dossier. IDs 0–2 are preserved, IDs 3–5 are audited additions; appearances do not change attributes. Use an opaque-enough canopy shade behind mobile brand text. The illustrated arrival is separate from the playable tilemap. Source and evidence: `docs/tasks/04-arrival-slice.md`.
+Current Cocos welcome candidate (task117, 2026-10-22): full-bleed village illustration with no detached traveler overlay or outfit caption; one linen registration board, a 20px single-line name editor and three distinct existing actor silhouettes without clothing labels. The selected card uses a visible check and native pressed semantics; the selected actor continues into gameplay and the dossier. Palette variants3–5 remain valid saved identities but are not repeated in new registration. The moss entry action leads; login/continuation is secondary. Desktop and short landscape keep readable, unscaled text and at least44px controls. The illustrated arrival is separate from the playable map. No new artwork. Actual owner render review remains pending; source/evidence: `docs/tasks/117-cocos-registration-polish.md` (earlier reference: task04).
 
 ### 7.7 Life Mode
 

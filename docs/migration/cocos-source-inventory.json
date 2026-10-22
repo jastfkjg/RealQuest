@@ -555,7 +555,7 @@
     {
       "source": "shared/game/appearances.ts",
       "target": "clients/cocos/assets/scripts/core/appearances.ts",
-      "sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c"
+      "sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080"
     },
     {
       "source": "shared/game/client.ts",
@@ -5485,7 +5485,7 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "e6698ff4ded75a07837cb68665d0e7a0a20127e842282678f870dc843e596e87",
+      "sha256": "0b7af8bdb3477a9430a267edf18f8561ccbe72eb9e73f1d54e049043e059c3b8",
       "bytes": 37865,
       "roles": [
         "binding-contract"
@@ -7263,8 +7263,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "d4402ffd8b8e597e0cfb83f27eb0ac796d7d29efbb3497b3eaa632361eb594b2",
-      "bytes": 126117,
+      "sha256": "3448feb4e8bd72a4f600d578c1baafe880bbcd5228211a93f22fbac08d3e4e24",
+      "bytes": 126553,
       "roles": [
         "inspected-source"
       ],
@@ -7277,8 +7277,8 @@
     {
       "path": "clients/cocos/assets/scripts/accessibility.ts",
       "owner": "cocos-adapter",
-      "sha256": "7a6490ad7fc81d154b39365659b001e8577991bb7ec94046e34cfaaa69b7753a",
-      "bytes": 11212,
+      "sha256": "463e44629c99d853e905604b2bb41657e24a7375544e3472fd9aa0696ba70fa0",
+      "bytes": 12163,
       "roles": [
         "inspected-source"
       ],
@@ -7333,8 +7333,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/appearances.ts",
       "owner": "cocos-adapter",
-      "sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c",
-      "bytes": 1001,
+      "sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080",
+      "bytes": 1149,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7875,8 +7875,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "fae0cff26d4acdda44f93bd608f4a68197f3e11dfe1e0f5aec11baefbad4fd68",
-      "bytes": 16822,
+      "sha256": "4a26b3c1a3dcb006e392913bf868b8ce74c3a0c977503ed4b602fac24de689cf",
+      "bytes": 18266,
       "roles": [
         "inspected-source"
       ],
@@ -7931,8 +7931,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "9be42b4dd741b7e9217c3163483cddcab06bd3995d044bf2d59a26610b1cebb0",
-      "bytes": 32328,
+      "sha256": "ecb6afb621604c65d75480690b89a6d667a065654c6f4c26739d0925c31172ac",
+      "bytes": 32341,
       "roles": [
         "inspected-source"
       ],
@@ -8281,8 +8281,8 @@
     {
       "path": "clients/cocos/tools/smoke-dossier.mjs",
       "owner": "cocos-adapter",
-      "sha256": "d0ac69c8315f175645988bb6955a0f86e9ea584c9ec7730dadc0a95cdcdacd88",
-      "bytes": 18217,
+      "sha256": "e5c54a05e051c99893805926a1ea54fcb2bd278b2f117b9f9e336742dc671993",
+      "bytes": 19775,
       "roles": [
         "inspected-source"
       ],
@@ -8323,8 +8323,8 @@
     {
       "path": "clients/cocos/tools/smoke-hud-drag.mjs",
       "owner": "cocos-adapter",
-      "sha256": "dbf36de0b273aa711c8f512f7583802bf7918984fdafd7d278a44b87577ba937",
-      "bytes": 8675,
+      "sha256": "20a3dc561edd6adce6b46478b99c48c5bb371641f5bc94ead00ca9bbb31b7271",
+      "bytes": 9426,
       "roles": [
         "inspected-source"
       ],
@@ -8365,8 +8365,8 @@
     {
       "path": "clients/cocos/tools/smoke-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "81f844951f5ec32ccc3417ed37866aec21e777b1535fad84628330cc354982b7",
-      "bytes": 24031,
+      "sha256": "60fd6989ad17cfb3c3a08051ade115ec89143041628286ddf3c2ecafce98d1cb",
+      "bytes": 24125,
       "roles": [
         "inspected-source"
       ],
@@ -9201,8 +9201,8 @@
     {
       "path": "shared/game/appearances.ts",
       "owner": "shared-game",
-      "sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c",
-      "bytes": 1001,
+      "sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080",
+      "bytes": 1149,
       "roles": [
         "canonical-binding-source",
         "inspected-source"

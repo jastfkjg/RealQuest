@@ -38,6 +38,9 @@ export const appearances = [
   },
 ] as const;
 
+// Three distinct source silhouettes. Palette-only variants remain valid save IDs.
+export const registrationAppearances = appearances.slice(0, 3);
+
 export function getAppearance(id: number) {
   return (
     appearances.find((appearance) => appearance.id === id) ?? appearances[0]

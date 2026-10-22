@@ -30,7 +30,7 @@ import {StorageView} from './ui/storage';
 import {InventoryView} from './ui/inventory';
 import {InventoryDrag,type DragSpec} from './ui/drag';
 import {itemIntent} from './core/inventory';
-import {appearances,getAppearance} from './core/appearances';
+import {registrationAppearances} from './core/appearances';
 import {registration} from './core/dossier';
 import {currentGuidance,guidanceMode,type GuidanceAction} from './core/guidance';
 import {JourneyContinuation} from './core/continuation';
@@ -258,8 +258,8 @@ export class RealQuestSpike extends Component {
   }
   private paintInventoryDrag(spec:DragSpec,x:number,y:number,dx:number,dy:number){
     if(spec.panel){
-      const bag=this.uiRegions.find(r=>r.id==='inventory-bag'),tag=this.uiRegions.find(r=>r.id==='inventory-tag');if(!bag||!tag)return;
-      dx=Math.max(12-(bag.x-20),Math.min(this.width-12-(tag.x+tag.w),dx));dy=Math.max(12-(bag.y-4),Math.min(this.height-12-(bag.y+bag.h+12),dy));
+      const bounds=this.uiRegions.find(r=>r.id==='inventory-layout');if(!bounds)return;
+      dx=Math.max(12-bounds.x,Math.min(this.width-12-(bounds.x+bounds.w),dx));dy=Math.max(12-bounds.y,Math.min(this.height-12-(bounds.y+bounds.h),dy));
       this.panel.setPosition(-this.width/2+dx,this.height/2-dy);return;
     }
     this.clear(this.dragLayer);this.dragLayer.setPosition(-this.width/2,this.height/2);this.dragLayer.setSiblingIndex(this.node.children.length-1);
@@ -360,11 +360,11 @@ export class RealQuestSpike extends Component {
     this.controls.push({ id, label, x: wp.x, y: this.height-wp.y, w, h, disabled,skin,...(semantic?{accessibleName:semantic.label,pressed:semantic.pressed}:{}) });
     return text;
   }
-  private itemSlot(parent:Node,id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference=false,number?:number){
+  private itemSlot(parent:Node,id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference=false,number?:number,hint?:string){
     const worldQuick=id.startsWith('world-quick-'),canUse=worldQuick&&item==='seed'&&count>0&&this.client.state&&this.client.world&&!itemIntent(this.client.world,this.client.state,serverNow(),item).reason&&!!itemIntent(this.client.world,this.client.state,serverNow(),item).command;
     const purpose=!item?'整理':count<=0?'已耗尽':canUse?'可播种':'查看';
     const label=(number?number+' · ':'')+(item?(itemNames[item]||item)+' · '+(count>0?'持有'+count+'份':'已耗尽'):'空口袋')+(worldQuick?' · '+(canUse?'预览播种':!item?'整理快捷栏':'查看物品，选择下一步'):'');
-    const text=this.button(parent,id,label,x,y,w,h,action,this.busy||!this.canPlay(),selected,'pocket'),n=text.node.parent!;
+    const text=this.button(parent,id,label+(hint?' · '+hint:''),x,y,w,h,action,this.busy||!this.canPlay(),selected,'pocket'),n=text.node.parent!;
     const empty=reference&&!item;
     if(empty){const g=n.getComponent(Graphics)!;g.clear();g.fillColor=new Color('#233d3140');g.roundRect(-w/2,-h/2,w,h,7);g.fill();g.strokeColor=new Color('#8ba075');g.lineWidth=1;g.roundRect(-w/2+1,-h/2+1,w-2,h-2,7);g.stroke();}
     if(item&&(!reference||count>0)){const art=this.image(n,'items/'+item,0,-4,32,32);if(art&&count<=0)art.addComponent(UIOpacity).opacity=100;}
@@ -876,37 +876,39 @@ export class RealQuestSpike extends Component {
   private welcome() {
     let pendingDeletion=false,hasSession=false;
     try{const session=transport.getSession();pendingDeletion=!!session?.deletion;hasSession=!!session||!!sys.localStorage.getItem('realquest-cocos-guest-v1');}catch{/* Preserve malformed records for recovery. */}
-    const ui=gameControls(this.panelHost()),compact=this.height<650||this.width<1000;
+    const ui=gameControls(this.panelHost()),compact=this.height<740||this.width<1050;
     const scale=Math.max(this.width/1586,this.height/992);
     this.box(this.panel,'ArrivalGround',0,0,this.width,this.height,C.moss,0);
     ui.image('ui/arrival',this.width/2,this.height/2,1586*scale,992*scale);
     this.box(this.panel,'ArrivalShade',0,0,this.width,this.height,'#15291d38',0);
-    const left=compact?Math.max(180,Math.min(300,this.width*.28)):this.width-580;
-    this.box(this.panel,'ArrivalBrandShade',compact?0:48,compact?0:76,compact?left:370,compact?this.height:130,'#233d31c9',compact?0:6);
-    this.text(this.panel,'Title','RealQuest',compact?24:72,compact?32:94,compact?left-40:330,56,compact?28:44,C.paper);
-    this.text(this.panel,'ArrivalPlace','回响村庄 · 旅程的起点',compact?24:74,compact?94:160,compact?left-40:328,48,16,C.paper);
-    const actorX=compact?left/2:this.width*.30,actorY=this.height*(compact?.68:.70);
-    const avatar=this.make(this.panel,'ArrivalTraveler',actorX,-actorY,72,96);avatar.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;this.setActor(avatar,'actor-'+this.registrationAppearance,0);
-    this.text(this.panel,'OutfitName',getAppearance(this.registrationAppearance).name,compact?20:actorX-120,actorY+56,compact?left-40:240,32,16,C.paper,!compact);
-    const w=compact?this.width-left-20:480,height=compact?Math.min(376,this.height-32):600,x=compact?left:this.width-w-80,y=(this.height-height)/2;
+    const left=compact?Math.max(180,Math.min(280,this.width*.26)):0;
+    this.box(this.panel,'ArrivalBrandShade',compact?0:48,compact?0:56,compact?left:358,compact?this.height:144,'#233d31c9',compact?0:6);
+    this.text(this.panel,'Title','RealQuest',compact?24:72,compact?32:74,compact?left-40:310,56,compact?28:44,C.paper);
+    this.text(this.panel,'ArrivalPlace',compact?'回响村庄\n旅程的起点':'回响村庄 · 旅程的起点',compact?24:74,compact?94:140,compact?left-40:308,48,16,C.paper);
+    const w=compact?this.width-left-20:536,height=compact?Math.min(376,this.height-32):680,x=compact?left:this.width-w-56,y=(this.height-height)/2;
     if(compact)paperSurface(ui,{x,y,w,h:height},true);else ui.image('ui/register',x+w/2,y+height/2,w,height);
-    const px=x+(compact?24:60),pw=w-(compact?48:120),top=compact?12:100;
-    this.text(this.panel,'Subtitle',pendingDeletion?'旅程结果待确认':'旅人登记',px,y+top,pw,36,24);
-    const nameY=y+(compact?56:148);
-    this.field('traveler-name','旅人姓名（空白使用「林间旅人」）',this.registrationName,px,nameY,pw,v=>this.registrationName=v,false,16);
+    const px=x+(compact?24:70),pw=w-(compact?48:140),top=compact?12:120;
+    ui.region('registration-paper',px,y+top,pw,compact?height-top-16:516);
+    this.text(this.panel,'Subtitle',pendingDeletion?'旅程结果待确认':'旅人登记',px,y+top,pw,36,compact?24:28);
+    if(!compact)this.text(this.panel,'ArrivalInvitation','留个名字，从这里出发。',px,y+158,pw,24,16,C.muted);
+    const nameY=y+(compact?54:198);
+    this.field('traveler-name','旅人姓名',this.registrationName,px,nameY,pw,v=>this.registrationName=v,false,16);
+    if(!compact)this.text(this.panel,'NameHint','最多 16 字 · 留空即为「林间旅人」',px,y+284,pw,24,14,C.muted);
     const nameInput=this.panel.getChildByName('traveler-name');if(nameInput){nameInput.getComponent(EditBox)!.enabled=this.loaded&&!this.busy&&!pendingDeletion;this.controls.find(c=>c.id==='traveler-name')!.disabled=!this.loaded||this.busy||pendingDeletion;}
-    const columns=compact?6:3,gap=8,ww=(pw-(columns-1)*gap)/columns,cardH=compact?80:92,sy=y+(compact?130:230);
-    appearances.forEach((a,i)=>{
-      const bx=px+(i%columns)*(ww+gap),yy=sy+Math.floor(i/columns)*(cardH+10),selected=a.id===this.registrationAppearance;
-      const label=ui.button('appearance-'+a.id,(selected?'✓ ':'')+a.label,bx,yy,ww,cardH,()=>{this.registrationAppearance=a.id;this.dirty=true;},this.busy||pendingDeletion,selected,'game',{label:a.label,pressed:selected});
-      label.fontSize=14;const n=this.panel.getChildByName('appearance-'+a.id)!;n.getChildByName('Label')?.setPosition(0,compact?-27:-32);
-      const sprite=this.make(n,'Outfit',0,compact?9:12,compact?42:48,compact?56:64);sprite.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;this.setActor(sprite,'actor-'+a.id,0);
+    this.text(this.panel,'AppearanceHeading','选择人物形象',px,y+(compact?134:324),pw,26,18);
+    const gap=12,ww=(pw-2*gap)/3,cardH=compact?64:108,sy=y+(compact?164:360);
+    registrationAppearances.forEach((a,i)=>{
+      const bx=px+i*(ww+gap),selected=a.id===this.registrationAppearance;
+      ui.button('appearance-'+a.id,'',bx,sy,ww,cardH,()=>{this.registrationAppearance=a.id;this.dirty=true;},this.busy||pendingDeletion||!this.loaded,selected,'game',{label:'人物形象 '+(i+1),pressed:selected});
+      const n=this.panel.getChildByName('appearance-'+a.id)!;
+      const sprite=this.make(n,'Traveler',0,compact?2:4,48,64);sprite.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;this.setActor(sprite,'actor-'+a.id,0);
+      if(selected)this.text(n,'Selected','✓',ww/2-28,-cardH/2+4,24,24,18,C.paper,true);
     });
-    const message=this.error||this.notice||(pendingDeletion?'上次删除结果尚待确认。确认后再接续旅程。':hasSession?'继续将读取原角色与记录；新外观仅用于新登记。':'选择外观并署名，旅程与现实成长都会保存到服务器。');
-    this.text(this.panel,'WelcomeNote',message,px,y+(compact?218:438),pw,compact?36:44,14,this.error?C.danger:C.muted);
-    const half=(pw-8)/2,by=y+(compact?height-62:492);
-    ui.button('start',this.busy?'正在连接…':pendingDeletion?'确认删除结果':hasSession?'继续旅程':'开始旅程',px,by,half,44,()=>this.startJourney(),this.busy||!this.loaded,true);
-    ui.button('import-save','登录 / 接续旅程',px+half+8,by,half,44,()=>this.open('session'),this.busy||pendingDeletion);
+    const message=this.error||this.notice||(pendingDeletion?'上次删除结果待确认，请先确认。':hasSession?'接续时保留原角色与记录。':compact?'姓名可留空 · 旅程自动保存':'旅程与成长记录会自动保存。');
+    this.text(this.panel,'WelcomeNote',compact?message.replace(/\n/g,' '):message,px,y+(compact?234:480),pw,compact?28:44,14,this.error?C.danger:C.muted);
+    const half=(pw-12)/2,by=y+(compact?height-60:532);
+    ui.button('start',this.busy?'正在连接…':pendingDeletion?'确认删除结果':hasSession?'继续旅程':'开始旅程',px,by,compact?half:pw,compact?44:50,()=>this.startJourney(),this.busy||!this.loaded,true);
+    ui.button('import-save','登录 / 接续旅程',compact?px+half+12:px,compact?by:y+588,compact?half:pw,44,()=>this.open('session'),this.busy||pendingDeletion,false,'page');
   }
   private drawPanel() {
     this.controls=[];this.actions.clear();this.semanticTexts=[];this.semanticFields.clear();
@@ -951,29 +953,32 @@ export class RealQuestSpike extends Component {
     };
   }
   private field(id:string,label:string,value:string,x:number,y:number,w:number,change:(v:string)=>void,numeric=false,maxLength=80,password=false,reveal=false){
-    this.text(this.panel,'Label-'+id,label,x,y,w,22,14,C.muted);
-    const n=this.make(this.panel,id,x+w/2,-y-44,w,44),g=n.addComponent(Graphics);g.fillColor=new Color(C.raised);g.roundRect(-w/2,-22,w,44,8);g.fill();g.strokeColor=new Color('#687455');g.lineWidth=1;g.roundRect(-w/2,-22,w,44,8);g.stroke();
+    const nameField=id==='traveler-name',singleLine=password||nameField,height=nameField?(this.height<740||this.width<1050?48:52):44,offset=nameField?28:22,fontSize=nameField?20:16;
+    this.text(this.panel,'Label-'+id,label,x,y,w,22,nameField?16:14,C.muted);
+    const n=this.make(this.panel,id,x+w/2,-y-offset-height/2,w,height),g=n.addComponent(Graphics);
+    const paint=(focused=false)=>{g.clear();g.fillColor=new Color(C.raised);g.roundRect(-w/2,-height/2,w,height,8);g.fill();g.strokeColor=new Color(focused?C.amber:'#687455');g.lineWidth=focused?2:1;g.roundRect(-w/2,-height/2,w,height,8);g.stroke();};paint(this.focusId===id);
     // Creator chooses input vs textarea during component preload. Configure
     // secret fields before activation so native editing is masked as well.
-    if(password)n.active=false;
+    if(singleLine)n.active=false;
     const edit=n.addComponent(EditBox);
     edit.maxLength=maxLength;edit.inputMode=numeric?EditBox.InputMode.NUMERIC:EditBox.InputMode.ANY;
-    if(password){edit.inputMode=EditBox.InputMode.SINGLE_LINE;edit.inputFlag=reveal?EditBox.InputFlag.DEFAULT:EditBox.InputFlag.PASSWORD;}
-    if(password)n.active=true;
+    if(singleLine){edit.inputMode=EditBox.InputMode.SINGLE_LINE;edit.inputFlag=password&&!reveal?EditBox.InputFlag.PASSWORD:EditBox.InputFlag.DEFAULT;}
+    if(singleLine)n.active=true;
     for(const child of [...n.children])child.destroy();
-    edit.textLabel=this.text(n,'Value',value,-w/2+12,-22,w-24,44,16);edit.placeholderLabel=this.text(n,'Placeholder','',-w/2+12,-22,w-24,44,16,C.muted);edit.string=value;
+    const inset=nameField?14:12;
+    edit.textLabel=this.text(n,'Value',value,-w/2+inset,-height/2,w-inset*2,height,fontSize);edit.placeholderLabel=this.text(n,'Placeholder',nameField?'林间旅人':'',-w/2+inset,-height/2,w-inset*2,height,fontSize,C.muted);edit.string=value;
+    if(nameField){edit.textLabel.enableWrapText=false;edit.placeholderLabel.enableWrapText=false;}
     this.semanticFields.set(id,{label,value:password?(value?'已输入密码':''):value,secret:password,autocomplete:password?(this.accountForm==='register'?'new-password':'current-password'):id==='account-username'?'username':undefined});this.actions.set(id,()=>{this.clearInput();this.focusId=id;this.semantics.labelEditor(id,label);edit.focus();});
-    n.on(EditBox.EventType.EDITING_DID_BEGAN,()=>{this.focusId=id;this.semantics.labelEditor(id,label);});
-    if(this.focusId===id){g.strokeColor=new Color(C.amber);g.lineWidth=3;g.roundRect(-w/2-2,-24,w+4,48,10);g.stroke();}
+    n.on(EditBox.EventType.EDITING_DID_BEGAN,()=>{this.clearInput();this.focusId=id;paint(true);this.semantics.labelEditor(id,label);});
     const live=()=>n.isValid&&n.activeInHierarchy&&n.name===id;
     n.on(EditBox.EventType.TEXT_CHANGED,()=>{if(live())change(edit.string);});
-    n.on(EditBox.EventType.EDITING_DID_ENDED,()=>{if(live()){change(edit.string);this.dirty=true;}});
+    n.on(EditBox.EventType.EDITING_DID_ENDED,()=>{if(live()){change(edit.string);paint(false);this.dirty=true;}});
     // Canvas focus can request a redraw between pointer down and up. Retain
     // this editor until the press ends, just as the existing buttons do.
     n.on(Node.EventType.TOUCH_START,()=>{if(!this.busy)this.pressedButtons.add(n);});
     n.on(Node.EventType.TOUCH_END,()=>this.pressedButtons.delete(n));
     n.on(Node.EventType.TOUCH_CANCEL,()=>this.pressedButtons.delete(n));
-    const wp=n.worldPosition;this.controls.push({id,label,x:wp.x,y:this.height-wp.y,w,h:44,disabled:this.busy});
+    const wp=n.worldPosition;this.controls.push({id,label,x:wp.x,y:this.height-wp.y,w,h:height,disabled:this.busy});
     edit.enabled=!this.busy;
   }
   private async sendFeature(action:string,data:Record<string,unknown>={}){

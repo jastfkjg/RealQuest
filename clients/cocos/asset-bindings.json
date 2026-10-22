@@ -221,8 +221,8 @@
     {
       "source": "shared/game/appearances.ts",
       "target": "assets/scripts/core/appearances.ts",
-      "sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c",
-      "output_sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c"
+      "sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080",
+      "output_sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080"
     },
     {
       "source": "shared/game/client.ts",

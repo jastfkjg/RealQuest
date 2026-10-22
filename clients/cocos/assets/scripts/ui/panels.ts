@@ -27,7 +27,7 @@ export interface PanelHost {
  region(id:string,x:number,y:number,w:number,h:number):void;
  drag(id:string,spec:DragSpec):void;
  line(id:string,points:{x:number;y:number}[],color:string,width?:number):void;
- itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number):void;
+ itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number,hint?:string):void;
  image(path:string,x:number,y:number,w:number,h:number,sliced?:boolean):void;
  hasArt(path:string):boolean;
  routeArt(gate:boolean,x:number,y:number,w:number,h:number):void;
