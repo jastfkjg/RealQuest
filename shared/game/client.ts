@@ -118,7 +118,7 @@ export class Client {
       if (saveId !== this.saveId) throw new Error('存档已切换，已取消旧操作');
       const clock = this.state!.world_clock;
       const day = clock ? Math.floor(clock.elapsed / clock.day_seconds) + 1 : undefined;
-      const pending: Pending = { version: 1, saveId, body: { action, data: ['move','gather','plant','harvest'].includes(action) ? { world_day: day, ...data } : data, request_id: this.transport.uuid(), save_id: saveId } };
+      const pending: Pending = { version: 1, saveId, body: { action, data: ['move','gather','till','plant','water','harvest','reclaim'].includes(action) ? { world_day: day, ...data } : data, request_id: this.transport.uuid(), save_id: saveId } };
       // No mutation may leave this device before its retry identity is durable.
       this.transport.setPending(saveId, pending); this.pending = pending;
       return this.sendPending();

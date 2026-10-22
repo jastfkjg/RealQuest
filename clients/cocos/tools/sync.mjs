@@ -2,10 +2,12 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { imageDimensions } from '../../../tools/cocos-image-info.mjs';
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const root = path.resolve(project, '../..');
+execFileSync('python3',[path.join(root,'tools/generate_crop_catalog.py')]);
 const records = [];
 async function bind(source, target, transform = x => x) {
   const bytes = await fs.readFile(path.join(root, source));
@@ -32,6 +34,7 @@ async function bind(source, target, transform = x => x) {
       'f9941':{ ver:'1.0.12',importer:'sprite-frame',uuid:uuid+'@f9941',imported:true,files:['.json'],subMetas:{},displayName:path.basename(target,extension),id:'f9941',name:'spriteFrame',userData:{...common,trimType:'none',trimThreshold:1,rotated:false,offsetX:0,offsetY:0,trimX:0,trimY:0,width,height,rawWidth:width,rawHeight:height,borderTop:0,borderBottom:0,borderLeft:0,borderRight:0,imageUuidOrDatabaseUri:uuid+'@6c48a',atlasUuid:'',packable:false} }
     },userData:{type:'sprite-frame',redirect:uuid+'@f9941',hasAlpha:true}},null,2)+'\n');
   }
+  const previous=records.findIndex(r=>r.target===target);if(previous>=0)records.splice(previous,1);
   records.push({ source, target, sha256: crypto.createHash('sha256').update(bytes).digest('hex'), output_sha256: crypto.createHash('sha256').update(result).digest('hex') });
 }
 await bind('assets/generated/hearthwood/satchel-shell-v1.png','assets/resources/ui/satchel.png');
@@ -45,7 +48,7 @@ for(const record of inventoryArt.records)await bind(record.path,'assets/resource
 await bind('shared/game/protocol.ts', 'assets/scripts/core/protocol.ts');
 await bind('assets/runtime/hearthwood/world-map-terrain-v1.png','assets/resources/atlas/terrain.png');
 for(const id of ['lia','noah','mira','adu','lanya'])await bind(`assets/runtime/hearthwood/residents/${id}-portrait.png`,`assets/resources/atlas/${id}.png`);
-for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock', 'features', 'combatMotion', 'caveArt', 'caveView', 'localScene', 'sceneLayout', 'lifeJournalDates', 'lifeRecords', 'dossier', 'nextDeparture', 'guidance', 'continuation', 'places', 'atlas', 'items', 'inventory', 'preferences']) {
+for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock', 'features', 'combatMotion', 'caveArt', 'caveView', 'localScene', 'sceneLayout', 'lifeJournalDates', 'lifeRecords', 'dossier', 'nextDeparture', 'guidance', 'continuation', 'places', 'atlas', 'cropCatalog', 'farming', 'items', 'inventory', 'preferences']) {
   await bind(`shared/game/${name}.ts`, `assets/scripts/core/${name}.ts`, b => b.toString().replaceAll('"../types"', '"./protocol"').replace('"../stores/game"', '"./clock"'));
 }
 const art = ['home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0'];
@@ -66,5 +69,7 @@ for(const source of [...sceneArt.existing_sprite_inputs,...sceneArt.records.map(
 const lossless=JSON.parse(await fs.readFile(path.join(root,'docs/art/cocos-lossless-textures-v1.json'),'utf8'));
 if(lossless.records.length!==1||lossless.records[0].source!=='assets/derived/local-scenes/terrain.png'||lossless.records[0].decoded_rgba_equal!==true)throw Error('Expected the reviewed single lossless terrain derivative.');
 await bind(lossless.records[0].path,'assets/resources/scenes/terrain-web.webp');
+const farmingArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/farming-art-v1.json'),'utf8'));
+for(const record of farmingArt.records)await bind(record.path,'assets/resources/'+record.binding+'.png');
 await fs.writeFile(path.join(project, 'asset-bindings.json'), JSON.stringify({schema_version:1,note:'Canonical shared/game logic and cave presentation; existing PNGs and reproducible scene derivatives, see tasks35–38.',records},null,2)+'\n');
 console.log(`Bound ${records.length} canonical sources and unchanged art files.`);

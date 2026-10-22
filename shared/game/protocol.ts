@@ -296,7 +296,9 @@ export interface GameState {
   energy: number;
   knowledge_shard: number;
   buildings: Record<string, number>;
-  plots: Record<string, { planted_at: number; ready_at: number }>;
+  farm?: {version:number;tilled:string[]};
+  farming?: {capacity:number;till_cost:Record<string,number>;stamina:Record<string,number>;clock:string;day_seconds:number;growth_multiplier:number;plots:Record<string,{progress:number;ready:boolean}>};
+  plots: Record<string, {planted_at:number;ready_at?:number;crop_id?:string;clock?:string;planted_tick?:number;ready_tick?:number;harvests_left?:number;watered?:boolean}>;
   gathered: Record<string, number>;
   relationships: Record<string, number>;
   events: string[];
@@ -343,6 +345,7 @@ export type Panel =
   | "travel"
   | "sleep"
   | "neighbors"
+  | "farm"
   | "training"
   | "menu"
   | "map"

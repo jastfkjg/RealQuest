@@ -1,3 +1,4 @@
+import {plotProgress,plotCrop,remaining} from './farming';
 import type { GameState, Panel, WorldObject } from "./protocol";
 import { staminaNow } from "./stamina";
 
@@ -66,19 +67,11 @@ export function interactionFor(
               : undefined,
       };
     }
+    case "soil": return {label:'开垦这块土地',panel:'farm'};
     case "plot": {
-      const crop = state.plots[obj.id];
-      const seconds = crop ? Math.ceil(crop.ready_at - now) : 0;
-      return {
-        label: crop ? "收获" : "播种",
-        command: crop ? "harvest" : "plant",
-        reason:
-          seconds > 0
-            ? `${seconds} 秒后成熟`
-            : !crop && state.inventory.seed < 1
-              ? "需要种子 · 杂货铺或工坊可购买"
-              : undefined,
-      };
+      const crop=state.plots[obj.id];
+      if(!crop)return {label:'选择种子 / 耕作',panel:'farm'};
+      return plotProgress(state,crop,now)>=1?{label:'收获'+plotCrop(crop).name+' · 1体力',command:'harvest'}:{label:plotCrop(crop).name+' · '+remaining(state,crop,now),panel:'farm'};
     }
     case "landmark":
       return {

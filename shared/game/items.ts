@@ -1,3 +1,4 @@
+import {crops} from "./cropCatalog";
 // Stable game IDs; fine64px original item art shares one presentation registry.
 export interface ItemDefinition {
   name: string;
@@ -73,6 +74,10 @@ const additions: [string,string,string,string,string][] = [
 for (const [id,name,group,summary,body] of additions) itemDefinitions[id]={name,group,summary,
   description:summary,source:group==='武器'?'村庄工坊武备台 · 购买或按图纸打造':id==='gate_stone'?'石根山洞第5层 · 石壳守卫首次击败':id==='soup'?'村庄工坊武备台':'石根山洞 · 对应怪物固定掉落',
   use:id==='gate_stone'?'魔法3级后走近东行石门开启，永久通行':group==='武器'?'装备后在洞内攻击；购买不要求制造等级':'在武备台查看用途与持有状态',icon:gearSymbol(body)};
+for(const c of crops){
+ itemDefinitions[c.seed]={name:c.name+'种子',group:'种植',summary:'需要种植 '+c.level+' 级 · '+c.days+' 游戏日首熟',description:c.note,source:'风铃杂货铺 · 所有等级均可购买',use:'播种消耗1份 · 每轮收获'+c.yield+'份 · 共'+c.harvests+'轮；游戏时间与睡眠推进生长，离线暂停',icon:'assets/derived/farming-v1/items/'+c.seed+'.png'};
+ itemDefinitions[c.item]={name:c.name,group:'收获',summary:'可在风铃杂货铺出售。',description:c.note,source:'家园农田 · 成熟后收获',use:'杂货铺出售 · 基础单价'+c.sell+'金币，工坊升级可提高报价',icon:'assets/derived/farming-v1/items/'+c.item+'.png'};
+}
 export const itemNames: Record<string, string> = {
   gold: "金币",
   ...Object.fromEntries(

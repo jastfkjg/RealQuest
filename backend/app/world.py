@@ -89,6 +89,17 @@ OBJECTS.append(passage('village_departure','东行路牌 · 苇风渡口',1816,3
 OBJECTS.append(CAVE_ENTRY)
 INTERIORS['workshop']['objects'].append({'id':'armory_counter','kind':'armory','name':'武备台 · 购买与打造','x':376,'y':280,'hitbox':[352,224,48,32]})
 INTERIORS['library']['objects'].append({'id':'spell_desk','kind':'spellbook','name':'术式研习 · 火花术','x':112,'y':232})
+# Farmable home lawn; the original six plot IDs and all landmarks stay stable.
+FARM_CELLS = []
+for row in range(9):
+    for col in range(7):
+        x,y=88+col*48,440+row*48
+        if col in (1,2,3) and row in (0,1): continue
+        if 116 <= x <= 160 and y <= 600: continue
+        if any(x+23>rx and x-23<rx+w and y+23>ry and y-23<ry+h for rx,ry,w,h in OBSTACLES): continue
+        if any(hypot(x-o['x'],y-o['y'])<42 for o in OBJECTS if o['kind']!='plot'): continue
+        FARM_CELLS.append({'id':f'farm_{col}_{row}','kind':'soil','name':'可开垦土地','x':x,'y':y})
+OBJECTS.extend(FARM_CELLS)
 WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS}
 
 def map_for(location='overworld', state=None, now=None):
@@ -96,7 +107,9 @@ def map_for(location='overworld', state=None, now=None):
     if state is None or now is None:
         return base
     from .residents import resident_objects
-    return {**base, 'objects': [o for o in base['objects'] if o['kind'] != 'npc'] + resident_objects(state, now, location)}
+    tilled=set(state.get('farm',{}).get('tilled',[f'plot_{i}' for i in range(6)]))
+    objects=[{**o,'kind':'plot' if o['id'] in tilled else 'soil','name':'田地' if o['id'] in tilled else '可开垦土地'} if o['kind'] in ['plot','soil'] else o for o in base['objects'] if o['kind']!='npc']
+    return {**base, 'objects': objects + resident_objects(state, now, location)}
 
 def walkable(x,y,location='overworld'):
     world=map_for(location)

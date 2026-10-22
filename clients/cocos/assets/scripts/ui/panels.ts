@@ -1,3 +1,5 @@
+import {FarmingPanels} from './farming';
+import {seedCrop,growingDays} from '../core/farming';
 import type { Label } from 'cc';
 import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} from '../core/protocol';
 import {C} from './theme';
@@ -17,7 +19,7 @@ import {questTarget,currentMap} from '../core/navigation';
 import {residentPositions} from '../core/residents';
 import {textPages} from '../core/lifeRecords';
 
-export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud';
+export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud'|'satchel-slot'|'satchel-pocket'|'satchel-close';
 export interface PanelHost {
  readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
  readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
@@ -41,6 +43,7 @@ type Frame={x:number;y:number;w:number;h:number;compact:boolean;top:number;botto
 const lifeNames={study:'学习',exercise:'运动',work:'工作'};
 export class FeaturePanels {
  private lifePanels=new LifePanels();
+ private farming=new FarmingPanels(()=>{this.growth='planting';});
  private dossier=new DossierPanels();
  private guidance=new GuidancePanels();
  private places=new PlacesPanels();
@@ -63,13 +66,14 @@ export class FeaturePanels {
  amount='1'; orderId=''; tradeItem='seed'; tradeSide='buy';
  lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';shopTab='trade';gearTab='obtain';
  private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
- handles(mode:string){return mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
+ handles(mode:string){return mode==='farm'||mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
  guideMode(mode:string){return this.guidance.handles(mode);}
  lifeMode(mode:string){return this.lifePanels.handles(mode);}
  reset(){this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
  snapshot(){return {npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
  draw(original:PanelHost){
   const h=gameControls(original);
+  if(h.mode==='farm'){this.farming.draw(h);return;}
   if(['armory','equipment','gear-recipe'].includes(h.mode)){drawExpeditionGear(h,this);return;}
   if(h.mode==='menu'){drawJourneyMenu(h,this);return;}
   if(h.mode==='preferences'){this.preferences.draw(h);return;}
@@ -191,14 +195,16 @@ export class FeaturePanels {
   this.list(h,f,entries,this.tradeSide+':'+this.tradeItem,id=>{[this.tradeSide,this.tradeItem]=id.split(':');this.amount='1';},lw);
   const price=(this.tradeSide==='buy'?market.buy:market.sell)[this.tradeItem],amount=Number(this.amount),cost=price*amount;
   if(h.hasArt('items/'+this.tradeItem))h.image('items/'+this.tradeItem,dx+(f.compact?20:32),f.top+(f.compact?20:46),f.compact?40:64,f.compact?40:64);
-  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · 单价 ${price} · 持有 ${h.state.inventory[this.tradeItem]||0}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?52:88),f.top,dw-(f.compact?52:88),34,f.compact?16:24);
+  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · ${price}金币${seedCrop(this.tradeItem)?' · 需'+seedCrop(this.tradeItem)!.level+'级 / 当前'+(h.state.skill_growth?.planting||0)+'级':' · 持有'+(h.state.inventory[this.tradeItem]||0)}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?52:88),f.top,dw-(f.compact?52:88),34,f.compact?16:24);
   if(!f.compact)h.text('TradePrice',`单价 ${price} 金币 · 持有 ${h.state.inventory[this.tradeItem]||0}`,dx+88,f.top+40,dw-88,28,16,C.muted);
-  const quantityY=f.top+(f.compact?36:116),step=(delta:number)=>{this.amount=String(Math.min(99,Math.max(1,(Number.isInteger(amount)?amount:1)+delta)));h.redraw();};
+  const crop=seedCrop(this.tradeItem);
+  if(crop&&!f.compact)h.text('SeedRequirement','需种植 '+crop.level+' 级 · 当前 '+(h.state.skill_growth?.planting||0)+' 级 · 可先购买'+(f.compact?'':'\n'+growingDays(h.state,crop.days)+'游戏日首熟 · 每轮'+crop.yield+'份 · 共'+crop.harvests+'轮'),dx,f.top+(f.compact?35:76),dw,f.compact?24:46,f.compact?12:14,(h.state.skill_growth?.planting||0)<crop.level?C.danger:C.muted);
+  const quantityY=f.top+(f.compact?36:128),step=(delta:number)=>{this.amount=String(Math.min(99,Math.max(1,(Number.isInteger(amount)?amount:1)+delta)));h.redraw();};
   h.field('trade-amount','数量 1–99',this.amount,dx+52,quantityY,88,v=>this.amount=v,true,2);
   h.button('trade-minus','−',dx,quantityY+22,44,44,()=>step(-1),h.busy||amount<=1,false,'game',{label:'减少购买或出售数量'});
   h.button('trade-plus','+',dx+148,quantityY+22,44,44,()=>step(1),h.busy||amount>=99,false,'game',{label:'增加购买或出售数量'});
   const valid=Number.isInteger(amount)&&amount>=1&&amount<=99,balance=this.tradeSide==='buy'?h.state.inventory.gold||0:h.state.inventory[this.tradeItem]||0,required=this.tradeSide==='buy'?cost:amount,missing=valid?Math.max(0,required-balance):0;
-  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${valid?cost:'—'} 金币`,dx+208,f.top+(f.compact?58:138),dw-208,44,18);
+  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${valid?cost:'—'} 金币`,dx+208,f.top+(f.compact?58:150),dw-208,44,18);
   if(!h.error&&!h.notice)h.text('TradeReadiness',!valid?'请输入 1–99 的整数数量':missing?`还差 ${missing} ${this.tradeSide==='buy'?'金币':itemNames[this.tradeItem]}`:`交易后${this.tradeSide==='buy'?'金币':'持有'} ${balance-required}`,dx,f.y+f.h-108,dw,36,15,missing||!valid?C.danger:C.muted);
   h.button('trade-confirm',`确认${this.tradeSide==='buy'?'买入':'卖出'}`,dx,f.y+f.h-62,dw,44,()=>h.send('market_trade',{target,side:this.tradeSide,item:this.tradeItem,amount:Number(this.amount)}),h.busy||!valid||!!missing,true);
  }

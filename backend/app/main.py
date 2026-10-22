@@ -98,6 +98,8 @@ def snapshot(state, **extra):
     view['stamina_rules'] = {'gather_costs': GATHER_COSTS, 'seconds_per_point': STAMINA_SECONDS, 'capacity_per_point': HEALTH_CAPACITY_GAIN}
     view['character_growth_options'] = character_growth_options(view)
     view['market'] = market_view(view, now)
+    from .farming import farm_view
+    view['farming'] = farm_view(view, now)
     view['npc_social'] = social_view(view, view['market']['date'])
     view['sleep_rules'] = sleep_rules()
     from .journey import quotes

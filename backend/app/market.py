@@ -1,6 +1,7 @@
 """Server-owned village prices and dated, finite material orders."""
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from .farming import CROPS
 
 ORDER_DEFINITIONS = [
     {'id': 'timber', 'title': '给货架添一层木香', 'item': 'wood', 'amount': 6, 'gold': 18, 'note': '米拉想把空货架修好，摆上村民们的新收获。'},
@@ -13,8 +14,8 @@ def market_view(state, now):
     day = datetime.fromtimestamp(now, ZoneInfo('Asia/Shanghai')).date().isoformat()
     return {
         'date': day, 'timezone': 'Asia/Shanghai',
-        'buy': {'seed': 2},
-        'sell': {'crop': 8 + state['buildings']['workshop'] - 1, 'wood': 2, 'stone': 3, 'plank': 8,
+        'buy': {c['seed']:c['buy'] for c in CROPS},
+        'sell': {**{c['item']:c['sell']+state['buildings']['workshop']-1 for c in CROPS}, 'wood': 2, 'stone': 3, 'plank': 8,
                  **{k: v for k, v in SELL.items() if k not in ['stone_sword','reinforced_sword','spring_spear','glow_staff']}},
         'orders': [{**o, 'completed': state.get('market_orders', {}).get(o['id']) == day} for o in ORDER_DEFINITIONS],
     }

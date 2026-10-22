@@ -1,10 +1,16 @@
 # RealQuest Design System
 
+## Cocos 种植体系候选 — 2026-10-22 task120
+
+12种作物拥有独立种子、初芽、幼苗、生长、成熟与背包产物；沿用Hearthwood，无烘焙文字。商店所有种子可买，服务端仅在播种时检查种植等级（首批0–5级，原升级规则无新增等级上限）。世界右上耕作入口显示家园可开垦网格，点选土地走近后打开耕作手记，种子目录显示参考图与真实库存，已种土地显示本种作物阶段/剩余时长/采收轮次。新作物按唯一游戏时钟生长，睡眠推进，Life/离线暂停；成熟不枯萎，浇水可选且每轮仅一次。旧作物保留原现实计时与一次留种。开垦/播种/浇水/收获/恢复均服务端结算，空田恢复需明确确认。地图索引只列已开垦田地。实际渲染是候选，待玩家反馈；详见docs/tasks/120-cocos-farming-system.md。
+
 **Direction:** Hearthwood — a cozy pixel-life adventure with a practical life companion.  
 **Version:** 1.0, 2026-10-10.  
 **Status:** Hearthwood direction and actual satchel inventory owner-approved (2026-10-10). Journal and adventurer dossier implemented. Village arrival concept approved; welcome implementation is the current visual checkpoint. See the scoped task records for individual approval and evidence.
 
 ## 1. Purpose and boundaries
+
+**行囊减法修正（2026-10-22，task119）：** 玩家反馈任务118实际画面仍与预览不一致，取消行囊内金币/物资钱袋、“随身物品”分类与独立“移出口袋”按钮。标题下直接展示真实持有物格位，保留用户排列空位；四个缝线口袋和一个整理入口构成底部。点击物品出现短详情签，再点已选物品所在口袋可收回引用，拖回物品区同样可移除。木牌与纸签复用已绑定材质；44px皮扣关闭控件取代孤立字形。世界HUD/商店仍按原规则展示货币，数量不因整理改变；实际渲染反馈继续单独记录。
 
 **行囊简化方案已获准（2026-10-22，task118）：** 玩家认可`docs/art/references/inventory-context-tag-v1.png`的布局，并明确删除“整理快捷栏”按钮。右侧常驻快捷栏管理页移除；背包打开时只显示布袋，点选物品后才显示内容紧凑的详情签。签内只保留物品身份/真实数量、短用途、原主要动作与用途来源；详情关闭和行囊关闭分开。左侧保留整理物品、四格放置/移除与点按/键盘替代，支持原有拖放。沿用既有布袋/物品资产与真实文字，不把概念图新背景或烘焙文字用作运行资源；工程证据见任务118，实际渲染验收单独记录。
 

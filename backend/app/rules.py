@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
 from .quests import QUESTS, progress, quest_views
 from .market import market_view
+from . import farming
 from .residents import RESIDENTS, ensure_clock, resident_position, near_resident, greeting, release_encounter, LEASE_SECONDS, settle_clock
 from .daynight import clock_view, night_due, finish_day, SHORT_REST_MINUTES, DAY_SECONDS
 
@@ -80,6 +81,7 @@ def upgrade_state(original):
     ensure_combat(state)
     from .village_intro import ensure_intro
     ensure_intro(state)
+    farming.ensure_farm(state)
     return state
 
 
@@ -553,7 +555,7 @@ def apply(state, action, data, now):
             return f'已接取：{quest["title"]}。当前追踪保持不变，可在委托页选择追踪'
         require(view['status'] == 'ready', '请先完成任务目标，奖励只能领取一次')
         for item, amount in quest['reward'].items():
-            state['inventory'][item] += amount
+            state['inventory'][item] = state['inventory'].get(item,0) + amount
         grant_xp(state,quest['attribute'],quest['xp'])
         state['quests'][quest['id']]['status']='claimed'
         state['quests'][quest['id']]['claimed_at']=now
@@ -578,12 +580,12 @@ def apply(state, action, data, now):
             total = market[side][item] * amount
             spend(state, {'gold': total} if side == 'buy' else {item: amount})
             if side == 'buy':
-                state['inventory'][item] += amount
+                state['inventory'][item] = state['inventory'].get(item,0) + amount
                 return f'买入 {amount} 份种子，花费 {total} 金币。'
             state['inventory']['gold'] += total
             bump(state, 'market_sold', amount)
             bump(state, 'trade_income', total)
-            if item == 'crop':
+            if item in farming.BY_ITEM:
                 bump(state, 'sold', amount)
             return f'出售 {amount} 份物品，获得 {total} 金币。'
         require(data.get('date') == market['date'], '小铺已换上今天的新订单，请刷新后重新查看')
@@ -630,7 +632,7 @@ def apply(state, action, data, now):
         state['stamina']['current'] = min(state['stamina']['max'], state['stamina']['current'] + 20)
         state['stamina']['updated_at'] = now
         state['vitality']['current'] = min(state['vitality']['max'], state['vitality']['current'] + 10)
-        return '小憩了 30 游戏分钟，体力 +20、生命 +10（不超过上限）；作物仍按现实时间生长。'
+        return '小憩了 30 游戏分钟，体力 +20、生命 +10（不超过上限）；新作物随游戏时间生长，旧作物保留原计时。'
     if action in ['store', 'withdraw']:
         require(target == 'home_chest', '请先走近家园储物箱')
         item=data.get('item')
@@ -711,21 +713,8 @@ def apply(state, action, data, now):
         state['npc_helped'][target] = today
         state['relationships'][target] = state['relationships'].get(target,0)+1
         return f'{resident["name"]}：{resident["help_reply"]} 体力 −4，熟悉度 +1。'
-    if action in ['plant', 'harvest']:
-        require(obj['kind'] == 'plot', '这里不是农田')
-        if action == 'plant':
-            require(target not in state['plots'], '这里已经种了作物')
-            spend(state, {'seed': 1})
-            if 'first_plant' not in state['events']:
-                state['events'].append('first_plant')
-            state['plots'][target] = {'planted_at': now, 'ready_at': now + (45 if state['buildings']['home'] >= 2 else 60)}
-            return '种下了萝卜。离线时也会继续生长'
-        require(target in state['plots'] and state['plots'][target]['ready_at'] <= now, '作物还没有成熟')
-        del state['plots'][target]
-        state['inventory']['crop'] += 2
-        bump(state,'harvest',2)
-        state['inventory']['seed'] += 1
-        return '收获了 2 份萝卜，并留下 1 份种子'
+    if action in ['till','plant','water','harvest','reclaim']:
+        return farming.command(state, action, data, now, obj, require, spend, recover_stamina, bump)
     if action == 'upgrade':
         require(obj['kind'] == 'station' and obj.get('building') in state['buildings'], '请进入建筑，在工作台或手册处升级')
         target=obj['building']

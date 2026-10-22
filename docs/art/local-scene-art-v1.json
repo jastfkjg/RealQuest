@@ -290,7 +290,7 @@
     },
     {
       "path": "backend/app/world.py",
-      "sha256": "38404d9336beb667863509ec332a36f1ac0fdc49d6d6ee9c25aeed22c008802d"
+      "sha256": "b1f4aa0a35ddec21257873b1356218b5a0f822e2e1347075ffeee2156e214999"
     },
     {
       "path": "tools/build_local_scene_art.mjs",
@@ -309,7 +309,7 @@
       "sha256": "57286a018db9f893628d8316779ce55d8da99dcf86630bb6b9db1f6f37eb5a28"
     }
   ],
-  "geography_sha256": "c69c99e43b28e5f93961e041c006653ab0acc247a78ae199f43c708a11084644",
+  "geography_sha256": "8febccbcb93728c3d52658af2d1f9816c7e3b55986ed821c80bfd09174d46fb4",
   "layout": {
     "path": "shared/game/sceneLayout.ts",
     "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"

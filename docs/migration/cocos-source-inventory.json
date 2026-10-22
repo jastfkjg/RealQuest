@@ -3,12 +3,12 @@
   "policy": "docs/migration/cocos-source-policy.json",
   "note": "Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.",
   "counts": {
-    "bindings": 124,
-    "runtimePNGs": 91,
+    "bindings": 196,
+    "runtimePNGs": 161,
     "runtimeWebPs": 7,
-    "sharedModules": 26,
+    "sharedModules": 28,
     "sceneInputs": 76,
-    "files": 459,
+    "files": 613,
     "references": 31
   },
   "bindings": [
@@ -423,7 +423,7 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "clients/cocos/assets/scripts/core/protocol.ts",
-      "sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65"
+      "sha256": "aff3ddd084c407fb970da084c4b31e92a600dbaede0ef0897a2f54fa3d531830"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -530,7 +530,7 @@
     {
       "source": "shared/game/interaction.ts",
       "target": "clients/cocos/assets/scripts/core/interaction.ts",
-      "sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1"
+      "sha256": "89ce60e1af70ef565254df782588a406d33f64f34b2ef97d048690f769901955"
     },
     {
       "source": "shared/game/stamina.ts",
@@ -550,7 +550,7 @@
     {
       "source": "shared/game/navigation.ts",
       "target": "clients/cocos/assets/scripts/core/navigation.ts",
-      "sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562"
+      "sha256": "72caab454746524b363ff6841e1d97904a62361139d1182ef286937524de587e"
     },
     {
       "source": "shared/game/appearances.ts",
@@ -560,7 +560,7 @@
     {
       "source": "shared/game/client.ts",
       "target": "clients/cocos/assets/scripts/core/client.ts",
-      "sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1"
+      "sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f"
     },
     {
       "source": "shared/game/clock.ts",
@@ -570,7 +570,7 @@
     {
       "source": "shared/game/features.ts",
       "target": "clients/cocos/assets/scripts/core/features.ts",
-      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee"
+      "sha256": "674d903a7001d192fe540e822c4bbcdb4e99b7d61aab81997b4eab225c1f0a8e"
     },
     {
       "source": "shared/game/combatMotion.ts",
@@ -630,7 +630,7 @@
     {
       "source": "shared/game/places.ts",
       "target": "clients/cocos/assets/scripts/core/places.ts",
-      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c"
+      "sha256": "40ad0f38c55e8ff261a2a0dc67aafa568efd845b2f29ed2db562f0dae491faf5"
     },
     {
       "source": "shared/game/atlas.ts",
@@ -638,14 +638,24 @@
       "sha256": "a10d69534768f38d25042b56f5309393158bac02978f919686df1c8484509afd"
     },
     {
+      "source": "shared/game/cropCatalog.ts",
+      "target": "clients/cocos/assets/scripts/core/cropCatalog.ts",
+      "sha256": "4915b85805e45fe72b9550ec867dc16bb69db4f37fab3c3b15dfe6bf74434842"
+    },
+    {
+      "source": "shared/game/farming.ts",
+      "target": "clients/cocos/assets/scripts/core/farming.ts",
+      "sha256": "76d7e259a39d559b97a07be02041087acf6d8082bfb018798157d140f0bfa4ea"
+    },
+    {
       "source": "shared/game/items.ts",
       "target": "clients/cocos/assets/scripts/core/items.ts",
-      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a"
+      "sha256": "f25ef6fa4ff42bf3edc8750c900c51989f68e5d10c917c9098cc2d6a825554c4"
     },
     {
       "source": "shared/game/inventory.ts",
       "target": "clients/cocos/assets/scripts/core/inventory.ts",
-      "sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4"
+      "sha256": "05d5c99bacc817a5f810ddfe61dc8982fa68df774d1c52aca595bba2708bdf13"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -1136,40 +1146,6 @@
         "uuid": "342c7200-156b-d55a-61fd-48f9af0dc6e8",
         "frame": "342c7200-156b-d55a-61fd-48f9af0dc6e8@f9941",
         "texture": "342c7200-156b-d55a-61fd-48f9af0dc6e8@6c48a",
-        "dimensions": [
-          64,
-          64
-        ],
-        "filter": "nearest",
-        "trim": "none",
-        "packable": false
-      }
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/seed.png",
-      "target": "clients/cocos/assets/resources/items/seed.png",
-      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
-      "importer": {
-        "uuid": "f6f980a0-f37a-0783-04e9-3c97ef413407",
-        "frame": "f6f980a0-f37a-0783-04e9-3c97ef413407@f9941",
-        "texture": "f6f980a0-f37a-0783-04e9-3c97ef413407@6c48a",
-        "dimensions": [
-          64,
-          64
-        ],
-        "filter": "nearest",
-        "trim": "none",
-        "packable": false
-      }
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/crop.png",
-      "target": "clients/cocos/assets/resources/items/crop.png",
-      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
-      "importer": {
-        "uuid": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7",
-        "frame": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7@f9941",
-        "texture": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7@6c48a",
         "dimensions": [
           64,
           64
@@ -1807,6 +1783,1230 @@
         "trim": "none",
         "packable": false
       }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed.png",
+      "target": "clients/cocos/assets/resources/items/seed.png",
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737",
+      "importer": {
+        "uuid": "f6f980a0-f37a-0783-04e9-3c97ef413407",
+        "frame": "f6f980a0-f37a-0783-04e9-3c97ef413407@f9941",
+        "texture": "f6f980a0-f37a-0783-04e9-3c97ef413407@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-1.png",
+      "target": "clients/cocos/assets/resources/farming/radish-1.png",
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966",
+      "importer": {
+        "uuid": "8dac273c-bf5a-39ac-cbf3-5e187cd77c8b",
+        "frame": "8dac273c-bf5a-39ac-cbf3-5e187cd77c8b@f9941",
+        "texture": "8dac273c-bf5a-39ac-cbf3-5e187cd77c8b@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-2.png",
+      "target": "clients/cocos/assets/resources/farming/radish-2.png",
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe",
+      "importer": {
+        "uuid": "f7916002-d31c-9244-0c94-26e968e16bb2",
+        "frame": "f7916002-d31c-9244-0c94-26e968e16bb2@f9941",
+        "texture": "f7916002-d31c-9244-0c94-26e968e16bb2@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-3.png",
+      "target": "clients/cocos/assets/resources/farming/radish-3.png",
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f",
+      "importer": {
+        "uuid": "82fd001f-0cee-a83d-e8aa-ceb4c6fa4278",
+        "frame": "82fd001f-0cee-a83d-e8aa-ceb4c6fa4278@f9941",
+        "texture": "82fd001f-0cee-a83d-e8aa-ceb4c6fa4278@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-4.png",
+      "target": "clients/cocos/assets/resources/farming/radish-4.png",
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520",
+      "importer": {
+        "uuid": "87ddb5fc-46fd-5143-4bc2-29766107a33b",
+        "frame": "87ddb5fc-46fd-5143-4bc2-29766107a33b@f9941",
+        "texture": "87ddb5fc-46fd-5143-4bc2-29766107a33b@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/crop.png",
+      "target": "clients/cocos/assets/resources/items/crop.png",
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0",
+      "importer": {
+        "uuid": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7",
+        "frame": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7@f9941",
+        "texture": "9f6e4b4a-50e9-8ed5-29fb-6a55d91781b7@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_wheat.png",
+      "target": "clients/cocos/assets/resources/items/seed_wheat.png",
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0",
+      "importer": {
+        "uuid": "035f0031-7237-eb2a-351d-b61cffb8894e",
+        "frame": "035f0031-7237-eb2a-351d-b61cffb8894e@f9941",
+        "texture": "035f0031-7237-eb2a-351d-b61cffb8894e@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-1.png",
+      "target": "clients/cocos/assets/resources/farming/wheat-1.png",
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe",
+      "importer": {
+        "uuid": "4fbf47dd-5752-586f-17e6-81d56704b4de",
+        "frame": "4fbf47dd-5752-586f-17e6-81d56704b4de@f9941",
+        "texture": "4fbf47dd-5752-586f-17e6-81d56704b4de@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-2.png",
+      "target": "clients/cocos/assets/resources/farming/wheat-2.png",
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6",
+      "importer": {
+        "uuid": "fcbaddeb-7409-8707-4556-2586495857ee",
+        "frame": "fcbaddeb-7409-8707-4556-2586495857ee@f9941",
+        "texture": "fcbaddeb-7409-8707-4556-2586495857ee@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-3.png",
+      "target": "clients/cocos/assets/resources/farming/wheat-3.png",
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d",
+      "importer": {
+        "uuid": "3fc8bc85-bbe9-268f-c36a-5daeed285770",
+        "frame": "3fc8bc85-bbe9-268f-c36a-5daeed285770@f9941",
+        "texture": "3fc8bc85-bbe9-268f-c36a-5daeed285770@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-4.png",
+      "target": "clients/cocos/assets/resources/farming/wheat-4.png",
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe",
+      "importer": {
+        "uuid": "6391571f-5b67-da2f-9f8c-4fd7b6fc5473",
+        "frame": "6391571f-5b67-da2f-9f8c-4fd7b6fc5473@f9941",
+        "texture": "6391571f-5b67-da2f-9f8c-4fd7b6fc5473@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/wheat.png",
+      "target": "clients/cocos/assets/resources/items/wheat.png",
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f",
+      "importer": {
+        "uuid": "b34589a2-53c3-c62b-6a0a-4c089c8dd92e",
+        "frame": "b34589a2-53c3-c62b-6a0a-4c089c8dd92e@f9941",
+        "texture": "b34589a2-53c3-c62b-6a0a-4c089c8dd92e@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_carrot.png",
+      "target": "clients/cocos/assets/resources/items/seed_carrot.png",
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef",
+      "importer": {
+        "uuid": "b8890c89-8d75-9793-7928-2c221a90710d",
+        "frame": "b8890c89-8d75-9793-7928-2c221a90710d@f9941",
+        "texture": "b8890c89-8d75-9793-7928-2c221a90710d@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-1.png",
+      "target": "clients/cocos/assets/resources/farming/carrot-1.png",
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7",
+      "importer": {
+        "uuid": "7e1c382f-7135-73bb-4605-2facb513fdb9",
+        "frame": "7e1c382f-7135-73bb-4605-2facb513fdb9@f9941",
+        "texture": "7e1c382f-7135-73bb-4605-2facb513fdb9@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-2.png",
+      "target": "clients/cocos/assets/resources/farming/carrot-2.png",
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e",
+      "importer": {
+        "uuid": "624ef6c0-f783-ec38-4172-257b3ec20bf3",
+        "frame": "624ef6c0-f783-ec38-4172-257b3ec20bf3@f9941",
+        "texture": "624ef6c0-f783-ec38-4172-257b3ec20bf3@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-3.png",
+      "target": "clients/cocos/assets/resources/farming/carrot-3.png",
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1",
+      "importer": {
+        "uuid": "68948d5c-5cc6-b902-2027-9e8096ea79e9",
+        "frame": "68948d5c-5cc6-b902-2027-9e8096ea79e9@f9941",
+        "texture": "68948d5c-5cc6-b902-2027-9e8096ea79e9@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-4.png",
+      "target": "clients/cocos/assets/resources/farming/carrot-4.png",
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda",
+      "importer": {
+        "uuid": "fbfbd326-c7fa-cb94-e00e-ccf4ffcba017",
+        "frame": "fbfbd326-c7fa-cb94-e00e-ccf4ffcba017@f9941",
+        "texture": "fbfbd326-c7fa-cb94-e00e-ccf4ffcba017@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/carrot.png",
+      "target": "clients/cocos/assets/resources/items/carrot.png",
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f",
+      "importer": {
+        "uuid": "1ef76afb-bd6e-a956-d950-4d1162715508",
+        "frame": "1ef76afb-bd6e-a956-d950-4d1162715508@f9941",
+        "texture": "1ef76afb-bd6e-a956-d950-4d1162715508@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_potato.png",
+      "target": "clients/cocos/assets/resources/items/seed_potato.png",
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453",
+      "importer": {
+        "uuid": "4870c084-7b36-a15e-14fb-657b70867910",
+        "frame": "4870c084-7b36-a15e-14fb-657b70867910@f9941",
+        "texture": "4870c084-7b36-a15e-14fb-657b70867910@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-1.png",
+      "target": "clients/cocos/assets/resources/farming/potato-1.png",
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee",
+      "importer": {
+        "uuid": "1f07846c-53d6-5fa4-158c-881af7a4f6ad",
+        "frame": "1f07846c-53d6-5fa4-158c-881af7a4f6ad@f9941",
+        "texture": "1f07846c-53d6-5fa4-158c-881af7a4f6ad@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-2.png",
+      "target": "clients/cocos/assets/resources/farming/potato-2.png",
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80",
+      "importer": {
+        "uuid": "a630fe98-8f08-1950-b96d-58a328994670",
+        "frame": "a630fe98-8f08-1950-b96d-58a328994670@f9941",
+        "texture": "a630fe98-8f08-1950-b96d-58a328994670@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-3.png",
+      "target": "clients/cocos/assets/resources/farming/potato-3.png",
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806",
+      "importer": {
+        "uuid": "7f33b1fe-0fc2-48e1-23cf-4863c1b1176a",
+        "frame": "7f33b1fe-0fc2-48e1-23cf-4863c1b1176a@f9941",
+        "texture": "7f33b1fe-0fc2-48e1-23cf-4863c1b1176a@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-4.png",
+      "target": "clients/cocos/assets/resources/farming/potato-4.png",
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006",
+      "importer": {
+        "uuid": "f5735479-1236-61c7-0b45-3e57ff36fb68",
+        "frame": "f5735479-1236-61c7-0b45-3e57ff36fb68@f9941",
+        "texture": "f5735479-1236-61c7-0b45-3e57ff36fb68@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/potato.png",
+      "target": "clients/cocos/assets/resources/items/potato.png",
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb",
+      "importer": {
+        "uuid": "9937a78f-cee5-6a52-0994-b0c6eb503b44",
+        "frame": "9937a78f-cee5-6a52-0994-b0c6eb503b44@f9941",
+        "texture": "9937a78f-cee5-6a52-0994-b0c6eb503b44@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_tomato.png",
+      "target": "clients/cocos/assets/resources/items/seed_tomato.png",
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f",
+      "importer": {
+        "uuid": "fb1b147a-c428-328a-1130-121f7e0edd85",
+        "frame": "fb1b147a-c428-328a-1130-121f7e0edd85@f9941",
+        "texture": "fb1b147a-c428-328a-1130-121f7e0edd85@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-1.png",
+      "target": "clients/cocos/assets/resources/farming/tomato-1.png",
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1",
+      "importer": {
+        "uuid": "32441ba3-1183-cff9-19ad-03ee85738fa2",
+        "frame": "32441ba3-1183-cff9-19ad-03ee85738fa2@f9941",
+        "texture": "32441ba3-1183-cff9-19ad-03ee85738fa2@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-2.png",
+      "target": "clients/cocos/assets/resources/farming/tomato-2.png",
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701",
+      "importer": {
+        "uuid": "8fca2533-958f-6849-4df9-efc37ee528cc",
+        "frame": "8fca2533-958f-6849-4df9-efc37ee528cc@f9941",
+        "texture": "8fca2533-958f-6849-4df9-efc37ee528cc@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-3.png",
+      "target": "clients/cocos/assets/resources/farming/tomato-3.png",
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44",
+      "importer": {
+        "uuid": "7decc699-2b2c-7e57-0e83-4dec6b0dd975",
+        "frame": "7decc699-2b2c-7e57-0e83-4dec6b0dd975@f9941",
+        "texture": "7decc699-2b2c-7e57-0e83-4dec6b0dd975@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-4.png",
+      "target": "clients/cocos/assets/resources/farming/tomato-4.png",
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4",
+      "importer": {
+        "uuid": "ad3991ab-f808-fb7f-591a-56b5d66949b1",
+        "frame": "ad3991ab-f808-fb7f-591a-56b5d66949b1@f9941",
+        "texture": "ad3991ab-f808-fb7f-591a-56b5d66949b1@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/tomato.png",
+      "target": "clients/cocos/assets/resources/items/tomato.png",
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807",
+      "importer": {
+        "uuid": "a1eb1ea4-99b0-2af1-25fe-dbc1efbd8533",
+        "frame": "a1eb1ea4-99b0-2af1-25fe-dbc1efbd8533@f9941",
+        "texture": "a1eb1ea4-99b0-2af1-25fe-dbc1efbd8533@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_strawberry.png",
+      "target": "clients/cocos/assets/resources/items/seed_strawberry.png",
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe",
+      "importer": {
+        "uuid": "d68c9726-2f4a-6b4b-dd01-f6f2215bd744",
+        "frame": "d68c9726-2f4a-6b4b-dd01-f6f2215bd744@f9941",
+        "texture": "d68c9726-2f4a-6b4b-dd01-f6f2215bd744@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-1.png",
+      "target": "clients/cocos/assets/resources/farming/strawberry-1.png",
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26",
+      "importer": {
+        "uuid": "786b0aa7-a005-2ae6-2d07-467d35015659",
+        "frame": "786b0aa7-a005-2ae6-2d07-467d35015659@f9941",
+        "texture": "786b0aa7-a005-2ae6-2d07-467d35015659@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-2.png",
+      "target": "clients/cocos/assets/resources/farming/strawberry-2.png",
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65",
+      "importer": {
+        "uuid": "1eaf5d05-4ca4-d144-059f-e98ff3b033f4",
+        "frame": "1eaf5d05-4ca4-d144-059f-e98ff3b033f4@f9941",
+        "texture": "1eaf5d05-4ca4-d144-059f-e98ff3b033f4@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-3.png",
+      "target": "clients/cocos/assets/resources/farming/strawberry-3.png",
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde",
+      "importer": {
+        "uuid": "3fc417f7-2368-a650-52ed-662de5df1681",
+        "frame": "3fc417f7-2368-a650-52ed-662de5df1681@f9941",
+        "texture": "3fc417f7-2368-a650-52ed-662de5df1681@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-4.png",
+      "target": "clients/cocos/assets/resources/farming/strawberry-4.png",
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615",
+      "importer": {
+        "uuid": "ea29d82b-5b58-9dd9-5abf-d1c8ede0b84f",
+        "frame": "ea29d82b-5b58-9dd9-5abf-d1c8ede0b84f@f9941",
+        "texture": "ea29d82b-5b58-9dd9-5abf-d1c8ede0b84f@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/strawberry.png",
+      "target": "clients/cocos/assets/resources/items/strawberry.png",
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d",
+      "importer": {
+        "uuid": "58e0e74d-7646-56bd-4c1d-82bc8b760244",
+        "frame": "58e0e74d-7646-56bd-4c1d-82bc8b760244@f9941",
+        "texture": "58e0e74d-7646-56bd-4c1d-82bc8b760244@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_corn.png",
+      "target": "clients/cocos/assets/resources/items/seed_corn.png",
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829",
+      "importer": {
+        "uuid": "0069611c-006d-f8ed-cb4f-2d2fa5d6c24d",
+        "frame": "0069611c-006d-f8ed-cb4f-2d2fa5d6c24d@f9941",
+        "texture": "0069611c-006d-f8ed-cb4f-2d2fa5d6c24d@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-1.png",
+      "target": "clients/cocos/assets/resources/farming/corn-1.png",
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d",
+      "importer": {
+        "uuid": "08662935-146e-ad99-0a5b-0af24486548b",
+        "frame": "08662935-146e-ad99-0a5b-0af24486548b@f9941",
+        "texture": "08662935-146e-ad99-0a5b-0af24486548b@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-2.png",
+      "target": "clients/cocos/assets/resources/farming/corn-2.png",
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f",
+      "importer": {
+        "uuid": "fa2ca06a-1dd4-f9ff-9276-098382e502a4",
+        "frame": "fa2ca06a-1dd4-f9ff-9276-098382e502a4@f9941",
+        "texture": "fa2ca06a-1dd4-f9ff-9276-098382e502a4@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-3.png",
+      "target": "clients/cocos/assets/resources/farming/corn-3.png",
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812",
+      "importer": {
+        "uuid": "491850c5-27d6-966e-2320-998aa0a501dd",
+        "frame": "491850c5-27d6-966e-2320-998aa0a501dd@f9941",
+        "texture": "491850c5-27d6-966e-2320-998aa0a501dd@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-4.png",
+      "target": "clients/cocos/assets/resources/farming/corn-4.png",
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06",
+      "importer": {
+        "uuid": "d64b24d1-8219-d114-a2a0-186df2dbfcf8",
+        "frame": "d64b24d1-8219-d114-a2a0-186df2dbfcf8@f9941",
+        "texture": "d64b24d1-8219-d114-a2a0-186df2dbfcf8@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/corn.png",
+      "target": "clients/cocos/assets/resources/items/corn.png",
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717",
+      "importer": {
+        "uuid": "11cfcfab-d2c7-f895-c6de-cb881b8849a3",
+        "frame": "11cfcfab-d2c7-f895-c6de-cb881b8849a3@f9941",
+        "texture": "11cfcfab-d2c7-f895-c6de-cb881b8849a3@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_eggplant.png",
+      "target": "clients/cocos/assets/resources/items/seed_eggplant.png",
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d",
+      "importer": {
+        "uuid": "992c42ca-a25f-c918-1920-fd02bde5331d",
+        "frame": "992c42ca-a25f-c918-1920-fd02bde5331d@f9941",
+        "texture": "992c42ca-a25f-c918-1920-fd02bde5331d@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-1.png",
+      "target": "clients/cocos/assets/resources/farming/eggplant-1.png",
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f",
+      "importer": {
+        "uuid": "5ae54ba2-72b6-3f3d-c5a4-ffe675bf2648",
+        "frame": "5ae54ba2-72b6-3f3d-c5a4-ffe675bf2648@f9941",
+        "texture": "5ae54ba2-72b6-3f3d-c5a4-ffe675bf2648@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-2.png",
+      "target": "clients/cocos/assets/resources/farming/eggplant-2.png",
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b",
+      "importer": {
+        "uuid": "aa0a62f1-70c6-f141-ccee-cd1de2695f77",
+        "frame": "aa0a62f1-70c6-f141-ccee-cd1de2695f77@f9941",
+        "texture": "aa0a62f1-70c6-f141-ccee-cd1de2695f77@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-3.png",
+      "target": "clients/cocos/assets/resources/farming/eggplant-3.png",
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1",
+      "importer": {
+        "uuid": "2cf3e9be-5929-fb7a-1988-bc32e9d10308",
+        "frame": "2cf3e9be-5929-fb7a-1988-bc32e9d10308@f9941",
+        "texture": "2cf3e9be-5929-fb7a-1988-bc32e9d10308@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-4.png",
+      "target": "clients/cocos/assets/resources/farming/eggplant-4.png",
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a",
+      "importer": {
+        "uuid": "d1c6a6b8-d081-72c9-5a8d-cc8b464d81f9",
+        "frame": "d1c6a6b8-d081-72c9-5a8d-cc8b464d81f9@f9941",
+        "texture": "d1c6a6b8-d081-72c9-5a8d-cc8b464d81f9@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/eggplant.png",
+      "target": "clients/cocos/assets/resources/items/eggplant.png",
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9",
+      "importer": {
+        "uuid": "c289287e-bf5f-f0e4-4352-dd325e4342c5",
+        "frame": "c289287e-bf5f-f0e4-4352-dd325e4342c5@f9941",
+        "texture": "c289287e-bf5f-f0e4-4352-dd325e4342c5@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_pumpkin.png",
+      "target": "clients/cocos/assets/resources/items/seed_pumpkin.png",
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d",
+      "importer": {
+        "uuid": "81a7a49a-fe30-9ab8-6ac9-a38051c13daa",
+        "frame": "81a7a49a-fe30-9ab8-6ac9-a38051c13daa@f9941",
+        "texture": "81a7a49a-fe30-9ab8-6ac9-a38051c13daa@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-1.png",
+      "target": "clients/cocos/assets/resources/farming/pumpkin-1.png",
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e",
+      "importer": {
+        "uuid": "af4ecd52-a81e-8ff7-86f6-951df96a02eb",
+        "frame": "af4ecd52-a81e-8ff7-86f6-951df96a02eb@f9941",
+        "texture": "af4ecd52-a81e-8ff7-86f6-951df96a02eb@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-2.png",
+      "target": "clients/cocos/assets/resources/farming/pumpkin-2.png",
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce",
+      "importer": {
+        "uuid": "68272806-69f6-e105-24a0-3298eae87e8b",
+        "frame": "68272806-69f6-e105-24a0-3298eae87e8b@f9941",
+        "texture": "68272806-69f6-e105-24a0-3298eae87e8b@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-3.png",
+      "target": "clients/cocos/assets/resources/farming/pumpkin-3.png",
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5",
+      "importer": {
+        "uuid": "209ae049-e96e-b656-2acc-7991da7269f4",
+        "frame": "209ae049-e96e-b656-2acc-7991da7269f4@f9941",
+        "texture": "209ae049-e96e-b656-2acc-7991da7269f4@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-4.png",
+      "target": "clients/cocos/assets/resources/farming/pumpkin-4.png",
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff",
+      "importer": {
+        "uuid": "72705f6c-1013-56ef-b72b-4ab0d87c3355",
+        "frame": "72705f6c-1013-56ef-b72b-4ab0d87c3355@f9941",
+        "texture": "72705f6c-1013-56ef-b72b-4ab0d87c3355@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/pumpkin.png",
+      "target": "clients/cocos/assets/resources/items/pumpkin.png",
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe",
+      "importer": {
+        "uuid": "f10b0fc4-f398-d92c-491b-22489091f960",
+        "frame": "f10b0fc4-f398-d92c-491b-22489091f960@f9941",
+        "texture": "f10b0fc4-f398-d92c-491b-22489091f960@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_cabbage.png",
+      "target": "clients/cocos/assets/resources/items/seed_cabbage.png",
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682",
+      "importer": {
+        "uuid": "726c98ed-1e7a-edd0-c72f-e44e841471ee",
+        "frame": "726c98ed-1e7a-edd0-c72f-e44e841471ee@f9941",
+        "texture": "726c98ed-1e7a-edd0-c72f-e44e841471ee@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-1.png",
+      "target": "clients/cocos/assets/resources/farming/cabbage-1.png",
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21",
+      "importer": {
+        "uuid": "312b00f2-b281-e23d-4adb-dd4d85cd8e67",
+        "frame": "312b00f2-b281-e23d-4adb-dd4d85cd8e67@f9941",
+        "texture": "312b00f2-b281-e23d-4adb-dd4d85cd8e67@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-2.png",
+      "target": "clients/cocos/assets/resources/farming/cabbage-2.png",
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554",
+      "importer": {
+        "uuid": "6b5d0d35-535d-d86b-3aea-919ce935108a",
+        "frame": "6b5d0d35-535d-d86b-3aea-919ce935108a@f9941",
+        "texture": "6b5d0d35-535d-d86b-3aea-919ce935108a@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-3.png",
+      "target": "clients/cocos/assets/resources/farming/cabbage-3.png",
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399",
+      "importer": {
+        "uuid": "68f2ad13-85f0-64f2-8b7c-85f2d5d962a0",
+        "frame": "68f2ad13-85f0-64f2-8b7c-85f2d5d962a0@f9941",
+        "texture": "68f2ad13-85f0-64f2-8b7c-85f2d5d962a0@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-4.png",
+      "target": "clients/cocos/assets/resources/farming/cabbage-4.png",
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572",
+      "importer": {
+        "uuid": "9f51c590-c52d-2bf8-f610-8b19813e3969",
+        "frame": "9f51c590-c52d-2bf8-f610-8b19813e3969@f9941",
+        "texture": "9f51c590-c52d-2bf8-f610-8b19813e3969@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/cabbage.png",
+      "target": "clients/cocos/assets/resources/items/cabbage.png",
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8",
+      "importer": {
+        "uuid": "f5e4468d-6043-c963-dca5-101cdcec3bb3",
+        "frame": "f5e4468d-6043-c963-dca5-101cdcec3bb3@f9941",
+        "texture": "f5e4468d-6043-c963-dca5-101cdcec3bb3@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_sunflower.png",
+      "target": "clients/cocos/assets/resources/items/seed_sunflower.png",
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46",
+      "importer": {
+        "uuid": "ffe72bfd-c993-e82c-b909-fb2cf3e0db89",
+        "frame": "ffe72bfd-c993-e82c-b909-fb2cf3e0db89@f9941",
+        "texture": "ffe72bfd-c993-e82c-b909-fb2cf3e0db89@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-1.png",
+      "target": "clients/cocos/assets/resources/farming/sunflower-1.png",
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a",
+      "importer": {
+        "uuid": "d4b942c5-a93b-18b4-f69e-d4e45965043a",
+        "frame": "d4b942c5-a93b-18b4-f69e-d4e45965043a@f9941",
+        "texture": "d4b942c5-a93b-18b4-f69e-d4e45965043a@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-2.png",
+      "target": "clients/cocos/assets/resources/farming/sunflower-2.png",
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f",
+      "importer": {
+        "uuid": "0c9bd6b0-3338-0511-e864-fac18ec4daf7",
+        "frame": "0c9bd6b0-3338-0511-e864-fac18ec4daf7@f9941",
+        "texture": "0c9bd6b0-3338-0511-e864-fac18ec4daf7@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-3.png",
+      "target": "clients/cocos/assets/resources/farming/sunflower-3.png",
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f",
+      "importer": {
+        "uuid": "3f2c5c10-5eb3-c557-bea4-c7abcc0d5250",
+        "frame": "3f2c5c10-5eb3-c557-bea4-c7abcc0d5250@f9941",
+        "texture": "3f2c5c10-5eb3-c557-bea4-c7abcc0d5250@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-4.png",
+      "target": "clients/cocos/assets/resources/farming/sunflower-4.png",
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c",
+      "importer": {
+        "uuid": "463f1cb6-cec5-8df7-c7b9-e6d6843b0d0f",
+        "frame": "463f1cb6-cec5-8df7-c7b9-e6d6843b0d0f@f9941",
+        "texture": "463f1cb6-cec5-8df7-c7b9-e6d6843b0d0f@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/sunflower.png",
+      "target": "clients/cocos/assets/resources/items/sunflower.png",
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639",
+      "importer": {
+        "uuid": "291c7568-7c92-28ef-b755-63d4d7d6692d",
+        "frame": "291c7568-7c92-28ef-b755-63d4d7d6692d@f9941",
+        "texture": "291c7568-7c92-28ef-b755-63d4d7d6692d@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_blueberry.png",
+      "target": "clients/cocos/assets/resources/items/seed_blueberry.png",
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545",
+      "importer": {
+        "uuid": "042e85c7-3497-e974-2fd1-b019fef1a981",
+        "frame": "042e85c7-3497-e974-2fd1-b019fef1a981@f9941",
+        "texture": "042e85c7-3497-e974-2fd1-b019fef1a981@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-1.png",
+      "target": "clients/cocos/assets/resources/farming/blueberry-1.png",
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5",
+      "importer": {
+        "uuid": "5e067294-f785-1e57-03a3-104d2931b800",
+        "frame": "5e067294-f785-1e57-03a3-104d2931b800@f9941",
+        "texture": "5e067294-f785-1e57-03a3-104d2931b800@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-2.png",
+      "target": "clients/cocos/assets/resources/farming/blueberry-2.png",
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096",
+      "importer": {
+        "uuid": "84456ed7-2897-979c-779e-309d4af317a6",
+        "frame": "84456ed7-2897-979c-779e-309d4af317a6@f9941",
+        "texture": "84456ed7-2897-979c-779e-309d4af317a6@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-3.png",
+      "target": "clients/cocos/assets/resources/farming/blueberry-3.png",
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e",
+      "importer": {
+        "uuid": "d0b262a7-0c6e-26cc-054a-5949e77275d5",
+        "frame": "d0b262a7-0c6e-26cc-054a-5949e77275d5@f9941",
+        "texture": "d0b262a7-0c6e-26cc-054a-5949e77275d5@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-4.png",
+      "target": "clients/cocos/assets/resources/farming/blueberry-4.png",
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306",
+      "importer": {
+        "uuid": "8ce556e6-54fa-6642-c55b-c4eee24415ce",
+        "frame": "8ce556e6-54fa-6642-c55b-c4eee24415ce@f9941",
+        "texture": "8ce556e6-54fa-6642-c55b-c4eee24415ce@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/farming-v1/items/blueberry.png",
+      "target": "clients/cocos/assets/resources/items/blueberry.png",
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
+      "importer": {
+        "uuid": "d5bec462-4b1e-ca33-b391-e9c6fcbd9723",
+        "frame": "d5bec462-4b1e-ca33-b391-e9c6fcbd9723@f9941",
+        "texture": "d5bec462-4b1e-ca33-b391-e9c6fcbd9723@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
     }
   ],
   "records": [
@@ -1873,6 +3073,1662 @@
       "dimensions": [
         3840,
         2560
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/blueberry.png",
+      "owner": "derived-project-art",
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
+      "bytes": 6003,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/blueberry.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/71"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/cabbage.png",
+      "owner": "derived-project-art",
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8",
+      "bytes": 7777,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/cabbage.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/59"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/carrot.png",
+      "owner": "derived-project-art",
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f",
+      "bytes": 6286,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/carrot.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/17"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/corn.png",
+      "owner": "derived-project-art",
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717",
+      "bytes": 7260,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/corn.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/41"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/crop.png",
+      "owner": "derived-project-art",
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0",
+      "bytes": 6227,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/crop.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/eggplant.png",
+      "owner": "derived-project-art",
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9",
+      "bytes": 6273,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/eggplant.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/47"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/potato.png",
+      "owner": "derived-project-art",
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb",
+      "bytes": 6082,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/potato.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/23"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/pumpkin.png",
+      "owner": "derived-project-art",
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe",
+      "bytes": 6380,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/pumpkin.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/53"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed.png",
+      "owner": "derived-project-art",
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737",
+      "bytes": 6906,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/0"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_blueberry.png",
+      "owner": "derived-project-art",
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545",
+      "bytes": 6841,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_blueberry.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/66"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_cabbage.png",
+      "owner": "derived-project-art",
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682",
+      "bytes": 6544,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_cabbage.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/54"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_carrot.png",
+      "owner": "derived-project-art",
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef",
+      "bytes": 5928,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_carrot.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/12"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_corn.png",
+      "owner": "derived-project-art",
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829",
+      "bytes": 7650,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_corn.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/36"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_eggplant.png",
+      "owner": "derived-project-art",
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d",
+      "bytes": 7508,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_eggplant.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/42"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_potato.png",
+      "owner": "derived-project-art",
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453",
+      "bytes": 6948,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_potato.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/18"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_pumpkin.png",
+      "owner": "derived-project-art",
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d",
+      "bytes": 6870,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_pumpkin.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/48"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_strawberry.png",
+      "owner": "derived-project-art",
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe",
+      "bytes": 7894,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_strawberry.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/30"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_sunflower.png",
+      "owner": "derived-project-art",
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46",
+      "bytes": 7188,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_sunflower.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/60"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_tomato.png",
+      "owner": "derived-project-art",
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f",
+      "bytes": 7604,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_tomato.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/24"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/seed_wheat.png",
+      "owner": "derived-project-art",
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0",
+      "bytes": 6382,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/seed_wheat.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/6"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/strawberry.png",
+      "owner": "derived-project-art",
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d",
+      "bytes": 5772,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/strawberry.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/35"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/sunflower.png",
+      "owner": "derived-project-art",
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639",
+      "bytes": 7385,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/sunflower.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/65"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/tomato.png",
+      "owner": "derived-project-art",
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807",
+      "bytes": 5612,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/tomato.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/29"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/items/wheat.png",
+      "owner": "derived-project-art",
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f",
+      "bytes": 5946,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/wheat.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/11"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/blueberry-1.png",
+      "owner": "derived-project-art",
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5",
+      "bytes": 2754,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/blueberry-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/67"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/blueberry-2.png",
+      "owner": "derived-project-art",
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096",
+      "bytes": 5718,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/blueberry-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/68"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/blueberry-3.png",
+      "owner": "derived-project-art",
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e",
+      "bytes": 9265,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/blueberry-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/69"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/blueberry-4.png",
+      "owner": "derived-project-art",
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306",
+      "bytes": 14373,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/blueberry-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/70"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/cabbage-1.png",
+      "owner": "derived-project-art",
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21",
+      "bytes": 2424,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/cabbage-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/55"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/cabbage-2.png",
+      "owner": "derived-project-art",
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554",
+      "bytes": 6581,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/cabbage-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/56"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/cabbage-3.png",
+      "owner": "derived-project-art",
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399",
+      "bytes": 11035,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/cabbage-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/57"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/cabbage-4.png",
+      "owner": "derived-project-art",
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572",
+      "bytes": 14124,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/cabbage-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/58"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/carrot-1.png",
+      "owner": "derived-project-art",
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7",
+      "bytes": 1812,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/carrot-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/13"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/carrot-2.png",
+      "owner": "derived-project-art",
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e",
+      "bytes": 6651,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/carrot-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/14"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/carrot-3.png",
+      "owner": "derived-project-art",
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1",
+      "bytes": 10683,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/carrot-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/15"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/carrot-4.png",
+      "owner": "derived-project-art",
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda",
+      "bytes": 13856,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/carrot-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/16"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/corn-1.png",
+      "owner": "derived-project-art",
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d",
+      "bytes": 2244,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/corn-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/37"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/corn-2.png",
+      "owner": "derived-project-art",
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f",
+      "bytes": 5529,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/corn-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/38"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/corn-3.png",
+      "owner": "derived-project-art",
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812",
+      "bytes": 8441,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/corn-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/39"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/corn-4.png",
+      "owner": "derived-project-art",
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06",
+      "bytes": 13181,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/corn-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/40"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/eggplant-1.png",
+      "owner": "derived-project-art",
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f",
+      "bytes": 2806,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/eggplant-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/43"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/eggplant-2.png",
+      "owner": "derived-project-art",
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b",
+      "bytes": 7392,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/eggplant-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/44"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/eggplant-3.png",
+      "owner": "derived-project-art",
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1",
+      "bytes": 10015,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/eggplant-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/45"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/eggplant-4.png",
+      "owner": "derived-project-art",
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a",
+      "bytes": 13276,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/eggplant-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/46"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/potato-1.png",
+      "owner": "derived-project-art",
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee",
+      "bytes": 3220,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/potato-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/19"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/potato-2.png",
+      "owner": "derived-project-art",
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80",
+      "bytes": 9155,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/potato-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/20"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/potato-3.png",
+      "owner": "derived-project-art",
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806",
+      "bytes": 12486,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/potato-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/21"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/potato-4.png",
+      "owner": "derived-project-art",
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006",
+      "bytes": 16994,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/potato-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/22"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/pumpkin-1.png",
+      "owner": "derived-project-art",
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e",
+      "bytes": 1966,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/pumpkin-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/49"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/pumpkin-2.png",
+      "owner": "derived-project-art",
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce",
+      "bytes": 6578,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/pumpkin-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/50"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/pumpkin-3.png",
+      "owner": "derived-project-art",
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5",
+      "bytes": 10599,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/pumpkin-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/51"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/pumpkin-4.png",
+      "owner": "derived-project-art",
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff",
+      "bytes": 15637,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/pumpkin-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/52"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/radish-1.png",
+      "owner": "derived-project-art",
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966",
+      "bytes": 1510,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/radish-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/radish-2.png",
+      "owner": "derived-project-art",
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe",
+      "bytes": 5272,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/radish-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/radish-3.png",
+      "owner": "derived-project-art",
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f",
+      "bytes": 9763,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/radish-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/radish-4.png",
+      "owner": "derived-project-art",
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520",
+      "bytes": 13522,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/radish-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/strawberry-1.png",
+      "owner": "derived-project-art",
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26",
+      "bytes": 2287,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/strawberry-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/31"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/strawberry-2.png",
+      "owner": "derived-project-art",
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65",
+      "bytes": 5268,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/strawberry-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/32"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/strawberry-3.png",
+      "owner": "derived-project-art",
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde",
+      "bytes": 8071,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/strawberry-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/33"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/strawberry-4.png",
+      "owner": "derived-project-art",
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615",
+      "bytes": 10966,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/strawberry-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/34"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/sunflower-1.png",
+      "owner": "derived-project-art",
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a",
+      "bytes": 2497,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/sunflower-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/61"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/sunflower-2.png",
+      "owner": "derived-project-art",
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f",
+      "bytes": 5516,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/sunflower-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/62"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/sunflower-3.png",
+      "owner": "derived-project-art",
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f",
+      "bytes": 8091,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/sunflower-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/63"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/sunflower-4.png",
+      "owner": "derived-project-art",
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c",
+      "bytes": 12412,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/sunflower-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/64"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-2.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/tomato-1.png",
+      "owner": "derived-project-art",
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1",
+      "bytes": 1890,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/tomato-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/25"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/tomato-2.png",
+      "owner": "derived-project-art",
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701",
+      "bytes": 5248,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/tomato-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/26"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/tomato-3.png",
+      "owner": "derived-project-art",
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44",
+      "bytes": 7725,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/tomato-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/27"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/tomato-4.png",
+      "owner": "derived-project-art",
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4",
+      "bytes": 11593,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/tomato-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/28"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-1.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/wheat-1.png",
+      "owner": "derived-project-art",
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe",
+      "bytes": 1478,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/wheat-1.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/7"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/wheat-2.png",
+      "owner": "derived-project-art",
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6",
+      "bytes": 4354,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/wheat-2.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/8"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/wheat-3.png",
+      "owner": "derived-project-art",
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d",
+      "bytes": 8988,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/wheat-3.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/9"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/farming-v1/plants/wheat-4.png",
+      "owner": "derived-project-art",
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe",
+      "bytes": 12205,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/farming/wheat-4.png"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/records/10"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/farming-v1/sheet-0.png",
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
       ]
     },
     {
@@ -2558,6 +5414,147 @@
       "inputs": []
     },
     {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "owner": "original-project-art",
+      "sha256": "621e3c6163686fc98e2ddde6c5711caaae0d6f8a577a07a3fa47753c1cdeae7b",
+      "bytes": 2513748,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/carrot.png",
+        "assets/derived/farming-v1/items/crop.png",
+        "assets/derived/farming-v1/items/potato.png",
+        "assets/derived/farming-v1/items/seed.png",
+        "assets/derived/farming-v1/items/seed_carrot.png",
+        "assets/derived/farming-v1/items/seed_potato.png",
+        "assets/derived/farming-v1/items/seed_wheat.png",
+        "assets/derived/farming-v1/items/wheat.png",
+        "assets/derived/farming-v1/plants/carrot-1.png",
+        "assets/derived/farming-v1/plants/carrot-2.png",
+        "assets/derived/farming-v1/plants/carrot-3.png",
+        "assets/derived/farming-v1/plants/carrot-4.png",
+        "assets/derived/farming-v1/plants/potato-1.png",
+        "assets/derived/farming-v1/plants/potato-2.png",
+        "assets/derived/farming-v1/plants/potato-3.png",
+        "assets/derived/farming-v1/plants/potato-4.png",
+        "assets/derived/farming-v1/plants/radish-1.png",
+        "assets/derived/farming-v1/plants/radish-2.png",
+        "assets/derived/farming-v1/plants/radish-3.png",
+        "assets/derived/farming-v1/plants/radish-4.png",
+        "assets/derived/farming-v1/plants/wheat-1.png",
+        "assets/derived/farming-v1/plants/wheat-2.png",
+        "assets/derived/farming-v1/plants/wheat-3.png",
+        "assets/derived/farming-v1/plants/wheat-4.png",
+        "docs/art/farming-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/sources/0"
+      ],
+      "inputs": [
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "owner": "original-project-art",
+      "sha256": "15941bd0a449ddf99344c546c165c7c3d217a4378a7c9ff47b10ff79052e6397",
+      "bytes": 2312671,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/corn.png",
+        "assets/derived/farming-v1/items/eggplant.png",
+        "assets/derived/farming-v1/items/seed_corn.png",
+        "assets/derived/farming-v1/items/seed_eggplant.png",
+        "assets/derived/farming-v1/items/seed_strawberry.png",
+        "assets/derived/farming-v1/items/seed_tomato.png",
+        "assets/derived/farming-v1/items/strawberry.png",
+        "assets/derived/farming-v1/items/tomato.png",
+        "assets/derived/farming-v1/plants/corn-1.png",
+        "assets/derived/farming-v1/plants/corn-2.png",
+        "assets/derived/farming-v1/plants/corn-3.png",
+        "assets/derived/farming-v1/plants/corn-4.png",
+        "assets/derived/farming-v1/plants/eggplant-1.png",
+        "assets/derived/farming-v1/plants/eggplant-2.png",
+        "assets/derived/farming-v1/plants/eggplant-3.png",
+        "assets/derived/farming-v1/plants/eggplant-4.png",
+        "assets/derived/farming-v1/plants/strawberry-1.png",
+        "assets/derived/farming-v1/plants/strawberry-2.png",
+        "assets/derived/farming-v1/plants/strawberry-3.png",
+        "assets/derived/farming-v1/plants/strawberry-4.png",
+        "assets/derived/farming-v1/plants/tomato-1.png",
+        "assets/derived/farming-v1/plants/tomato-2.png",
+        "assets/derived/farming-v1/plants/tomato-3.png",
+        "assets/derived/farming-v1/plants/tomato-4.png",
+        "docs/art/farming-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/sources/1"
+      ],
+      "inputs": [
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "owner": "original-project-art",
+      "sha256": "c33863ed44df5de2d4f4cad18018694d553e94ddcc3378a9f1735a7fdc89c77c",
+      "bytes": 2478001,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/blueberry.png",
+        "assets/derived/farming-v1/items/cabbage.png",
+        "assets/derived/farming-v1/items/pumpkin.png",
+        "assets/derived/farming-v1/items/seed_blueberry.png",
+        "assets/derived/farming-v1/items/seed_cabbage.png",
+        "assets/derived/farming-v1/items/seed_pumpkin.png",
+        "assets/derived/farming-v1/items/seed_sunflower.png",
+        "assets/derived/farming-v1/items/sunflower.png",
+        "assets/derived/farming-v1/plants/blueberry-1.png",
+        "assets/derived/farming-v1/plants/blueberry-2.png",
+        "assets/derived/farming-v1/plants/blueberry-3.png",
+        "assets/derived/farming-v1/plants/blueberry-4.png",
+        "assets/derived/farming-v1/plants/cabbage-1.png",
+        "assets/derived/farming-v1/plants/cabbage-2.png",
+        "assets/derived/farming-v1/plants/cabbage-3.png",
+        "assets/derived/farming-v1/plants/cabbage-4.png",
+        "assets/derived/farming-v1/plants/pumpkin-1.png",
+        "assets/derived/farming-v1/plants/pumpkin-2.png",
+        "assets/derived/farming-v1/plants/pumpkin-3.png",
+        "assets/derived/farming-v1/plants/pumpkin-4.png",
+        "assets/derived/farming-v1/plants/sunflower-1.png",
+        "assets/derived/farming-v1/plants/sunflower-2.png",
+        "assets/derived/farming-v1/plants/sunflower-3.png",
+        "assets/derived/farming-v1/plants/sunflower-4.png",
+        "docs/art/farming-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/farming-art-v1.json#/sources/2"
+      ],
+      "inputs": [
+        "tools/build_farming_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
       "path": "assets/generated/hearthwood/interiors-v3.png",
       "owner": "original-project-art",
       "sha256": "73f205e0fa2989a57f93c055316b3fb26e6a4e7bf892e3f4d3e56af56e951325",
@@ -2624,11 +5621,9 @@
       ],
       "consumers": [
         "assets/runtime/hearthwood/detail/items/backpack.png",
-        "assets/runtime/hearthwood/detail/items/crop.png",
         "assets/runtime/hearthwood/detail/items/gold.png",
         "assets/runtime/hearthwood/detail/items/journal.png",
         "assets/runtime/hearthwood/detail/items/plank.png",
-        "assets/runtime/hearthwood/detail/items/seed.png",
         "assets/runtime/hearthwood/detail/items/stone.png",
         "assets/runtime/hearthwood/detail/items/wood.png",
         "docs/art/detail-art-v3.json"
@@ -3711,29 +6706,6 @@
       ]
     },
     {
-      "path": "assets/runtime/hearthwood/detail/items/crop.png",
-      "owner": "runtime-art",
-      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
-      "bytes": 5111,
-      "roles": [
-        "canonical-binding-source"
-      ],
-      "consumers": [
-        "assets/resources/items/crop.png"
-      ],
-      "provenance": [
-        "docs/art/detail-art-v3.json#/records/3"
-      ],
-      "inputs": [
-        "assets/generated/hearthwood/items-ui-v3.png",
-        "tools/build_detail_art.py"
-      ],
-      "dimensions": [
-        64,
-        64
-      ]
-    },
-    {
       "path": "assets/runtime/hearthwood/detail/items/gold.png",
       "owner": "runtime-art",
       "sha256": "bb04bccdf92ead66281025bc214b3083ca28b8b7d9cdd5eb8de8a1bee7c8cfb1",
@@ -3792,29 +6764,6 @@
       ],
       "provenance": [
         "docs/art/detail-art-v3.json#/records/4"
-      ],
-      "inputs": [
-        "assets/generated/hearthwood/items-ui-v3.png",
-        "tools/build_detail_art.py"
-      ],
-      "dimensions": [
-        64,
-        64
-      ]
-    },
-    {
-      "path": "assets/runtime/hearthwood/detail/items/seed.png",
-      "owner": "runtime-art",
-      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
-      "bytes": 7593,
-      "roles": [
-        "canonical-binding-source"
-      ],
-      "consumers": [
-        "assets/resources/items/seed.png"
-      ],
-      "provenance": [
-        "docs/art/detail-art-v3.json#/records/0"
       ],
       "inputs": [
         "assets/generated/hearthwood/items-ui-v3.png",
@@ -5455,6 +8404,20 @@
       "inputs": []
     },
     {
+      "path": "backend/app/crops.json",
+      "owner": "server-world",
+      "sha256": "3071d488b8d9395191b812a17765cf2a2d29f9e3b5466f016ec57f23c4ce9791",
+      "bytes": 3349,
+      "roles": [
+        "authoritative-crop-catalogue"
+      ],
+      "consumers": [
+        "shared/game/cropCatalog.ts"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "backend/app/journey_world.py",
       "owner": "server-world",
       "sha256": "f0c6ad1c8bcf0e58b22b4501ef11bd15572fefbf959ca7b42bda4e5d23cdc1c8",
@@ -5471,8 +8434,8 @@
     {
       "path": "backend/app/world.py",
       "owner": "server-world",
-      "sha256": "38404d9336beb667863509ec332a36f1ac0fdc49d6d6ee9c25aeed22c008802d",
-      "bytes": 9117,
+      "sha256": "b1f4aa0a35ddec21257873b1356218b5a0f822e2e1347075ffeee2156e214999",
+      "bytes": 9970,
       "roles": [
         "scene-bake-input"
       ],
@@ -5485,8 +8448,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "0b7af8bdb3477a9430a267edf18f8561ccbe72eb9e73f1d54e049043e059c3b8",
-      "bytes": 37865,
+      "sha256": "6733a5c74602d4e95c67cfa2192f6f355b4c4fa2a26e2c3937addae75403a111",
+      "bytes": 60135,
       "roles": [
         "binding-contract"
       ],
@@ -5602,6 +8565,870 @@
       "dimensions": [
         1536,
         1024
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/blueberry-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5",
+      "bytes": 2754,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/blueberry-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/blueberry-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096",
+      "bytes": 5718,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/blueberry-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/blueberry-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e",
+      "bytes": 9265,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/blueberry-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/blueberry-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306",
+      "bytes": 14373,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/blueberry-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/cabbage-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21",
+      "bytes": 2424,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/cabbage-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/cabbage-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554",
+      "bytes": 6581,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/cabbage-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/cabbage-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399",
+      "bytes": 11035,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/cabbage-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/cabbage-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572",
+      "bytes": 14124,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/cabbage-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/carrot-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7",
+      "bytes": 1812,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/carrot-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/carrot-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e",
+      "bytes": 6651,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/carrot-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/carrot-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1",
+      "bytes": 10683,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/carrot-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/carrot-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda",
+      "bytes": 13856,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/carrot-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/corn-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d",
+      "bytes": 2244,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/corn-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/corn-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f",
+      "bytes": 5529,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/corn-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/corn-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812",
+      "bytes": 8441,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/corn-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/corn-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06",
+      "bytes": 13181,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/corn-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/eggplant-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f",
+      "bytes": 2806,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/eggplant-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/eggplant-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b",
+      "bytes": 7392,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/eggplant-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/eggplant-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1",
+      "bytes": 10015,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/eggplant-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/eggplant-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a",
+      "bytes": 13276,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/eggplant-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/potato-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee",
+      "bytes": 3220,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/potato-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/potato-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80",
+      "bytes": 9155,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/potato-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/potato-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806",
+      "bytes": 12486,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/potato-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/potato-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006",
+      "bytes": 16994,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/potato-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/pumpkin-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e",
+      "bytes": 1966,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/pumpkin-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/pumpkin-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce",
+      "bytes": 6578,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/pumpkin-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/pumpkin-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5",
+      "bytes": 10599,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/pumpkin-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/pumpkin-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff",
+      "bytes": 15637,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/pumpkin-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/radish-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966",
+      "bytes": 1510,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/radish-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/radish-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe",
+      "bytes": 5272,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/radish-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/radish-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f",
+      "bytes": 9763,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/radish-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/radish-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520",
+      "bytes": 13522,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/radish-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/strawberry-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26",
+      "bytes": 2287,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/strawberry-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/strawberry-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65",
+      "bytes": 5268,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/strawberry-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/strawberry-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde",
+      "bytes": 8071,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/strawberry-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/strawberry-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615",
+      "bytes": 10966,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/strawberry-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/sunflower-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a",
+      "bytes": 2497,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/sunflower-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/sunflower-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f",
+      "bytes": 5516,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/sunflower-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/sunflower-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f",
+      "bytes": 8091,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/sunflower-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/sunflower-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c",
+      "bytes": 12412,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/sunflower-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/tomato-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1",
+      "bytes": 1890,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/tomato-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/tomato-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701",
+      "bytes": 5248,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/tomato-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/tomato-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44",
+      "bytes": 7725,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/tomato-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/tomato-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4",
+      "bytes": 11593,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/tomato-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/wheat-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe",
+      "bytes": 1478,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/wheat-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/wheat-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6",
+      "bytes": 4354,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/wheat-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/wheat-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d",
+      "bytes": 8988,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/wheat-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/farming/wheat-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe",
+      "bytes": 12205,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/plants/wheat-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
       ]
     },
     {
@@ -5947,15 +9774,87 @@
       ]
     },
     {
-      "path": "clients/cocos/assets/resources/items/crop.png",
+      "path": "clients/cocos/assets/resources/items/blueberry.png",
       "owner": "cocos-adapter",
-      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
-      "bytes": 5111,
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
+      "bytes": 6003,
       "roles": [
         "generated-copy"
       ],
       "consumers": [
-        "assets/runtime/hearthwood/detail/items/crop.png"
+        "assets/derived/farming-v1/items/blueberry.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/cabbage.png",
+      "owner": "cocos-adapter",
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8",
+      "bytes": 7777,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/cabbage.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/carrot.png",
+      "owner": "cocos-adapter",
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f",
+      "bytes": 6286,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/carrot.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/corn.png",
+      "owner": "cocos-adapter",
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717",
+      "bytes": 7260,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/corn.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/crop.png",
+      "owner": "cocos-adapter",
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0",
+      "bytes": 6227,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/crop.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -5974,6 +9873,24 @@
       ],
       "consumers": [
         "assets/derived/inventory-icons/crystal.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/eggplant.png",
+      "owner": "cocos-adapter",
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9",
+      "bytes": 6273,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/eggplant.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -6091,6 +10008,42 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/items/potato.png",
+      "owner": "cocos-adapter",
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb",
+      "bytes": 6082,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/potato.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/pumpkin.png",
+      "owner": "cocos-adapter",
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe",
+      "bytes": 6380,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/pumpkin.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/items/reinforced_sword.png",
       "owner": "cocos-adapter",
       "sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d",
@@ -6111,13 +10064,211 @@
     {
       "path": "clients/cocos/assets/resources/items/seed.png",
       "owner": "cocos-adapter",
-      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
-      "bytes": 7593,
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737",
+      "bytes": 6906,
       "roles": [
         "generated-copy"
       ],
       "consumers": [
-        "assets/runtime/hearthwood/detail/items/seed.png"
+        "assets/derived/farming-v1/items/seed.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_blueberry.png",
+      "owner": "cocos-adapter",
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545",
+      "bytes": 6841,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_blueberry.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_cabbage.png",
+      "owner": "cocos-adapter",
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682",
+      "bytes": 6544,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_cabbage.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_carrot.png",
+      "owner": "cocos-adapter",
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef",
+      "bytes": 5928,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_carrot.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_corn.png",
+      "owner": "cocos-adapter",
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829",
+      "bytes": 7650,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_corn.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_eggplant.png",
+      "owner": "cocos-adapter",
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d",
+      "bytes": 7508,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_eggplant.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_potato.png",
+      "owner": "cocos-adapter",
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453",
+      "bytes": 6948,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_potato.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_pumpkin.png",
+      "owner": "cocos-adapter",
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d",
+      "bytes": 6870,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_pumpkin.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_strawberry.png",
+      "owner": "cocos-adapter",
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe",
+      "bytes": 7894,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_strawberry.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_sunflower.png",
+      "owner": "cocos-adapter",
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46",
+      "bytes": 7188,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_sunflower.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_tomato.png",
+      "owner": "cocos-adapter",
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f",
+      "bytes": 7604,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_tomato.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/seed_wheat.png",
+      "owner": "cocos-adapter",
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0",
+      "bytes": 6382,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/seed_wheat.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -6208,6 +10359,78 @@
       ],
       "consumers": [
         "assets/derived/inventory-icons/stone_sword.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/strawberry.png",
+      "owner": "cocos-adapter",
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d",
+      "bytes": 5772,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/strawberry.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/sunflower.png",
+      "owner": "cocos-adapter",
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639",
+      "bytes": 7385,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/sunflower.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/tomato.png",
+      "owner": "cocos-adapter",
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807",
+      "bytes": 5612,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/tomato.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/wheat.png",
+      "owner": "cocos-adapter",
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f",
+      "bytes": 5946,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/farming-v1/items/wheat.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -7263,8 +11486,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "3448feb4e8bd72a4f600d578c1baafe880bbcd5228211a93f22fbac08d3e4e24",
-      "bytes": 126553,
+      "sha256": "c2ddbea3911df025caf00cb147745df3cd05b106e4dd410364b4a2a8fbf1d135",
+      "bytes": 130046,
       "roles": [
         "inspected-source"
       ],
@@ -7397,8 +11620,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/client.ts",
       "owner": "cocos-adapter",
-      "sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1",
-      "bytes": 16785,
+      "sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f",
+      "bytes": 16810,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7459,6 +11682,22 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/core/cropCatalog.ts",
+      "owner": "cocos-adapter",
+      "sha256": "4915b85805e45fe72b9550ec867dc16bb69db4f37fab3c3b15dfe6bf74434842",
+      "bytes": 3653,
+      "roles": [
+        "generated-copy",
+        "inspected-source"
+      ],
+      "consumers": [
+        "shared/game/cropCatalog.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/core/dossier.ts",
       "owner": "cocos-adapter",
       "sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729",
@@ -7475,10 +11714,26 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/core/farming.ts",
+      "owner": "cocos-adapter",
+      "sha256": "76d7e259a39d559b97a07be02041087acf6d8082bfb018798157d140f0bfa4ea",
+      "bytes": 1879,
+      "roles": [
+        "generated-copy",
+        "inspected-source"
+      ],
+      "consumers": [
+        "shared/game/farming.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/core/features.ts",
       "owner": "cocos-adapter",
-      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
-      "bytes": 3221,
+      "sha256": "674d903a7001d192fe540e822c4bbcdb4e99b7d61aab81997b4eab225c1f0a8e",
+      "bytes": 2938,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7509,8 +11764,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/interaction.ts",
       "owner": "cocos-adapter",
-      "sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1",
-      "bytes": 4347,
+      "sha256": "89ce60e1af70ef565254df782588a406d33f64f34b2ef97d048690f769901955",
+      "bytes": 4336,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7525,8 +11780,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4",
-      "bytes": 8522,
+      "sha256": "05d5c99bacc817a5f810ddfe61dc8982fa68df774d1c52aca595bba2708bdf13",
+      "bytes": 8942,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7541,8 +11796,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/items.ts",
       "owner": "cocos-adapter",
-      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a",
-      "bytes": 5416,
+      "sha256": "f25ef6fa4ff42bf3edc8750c900c51989f68e5d10c917c9098cc2d6a825554c4",
+      "bytes": 6159,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7605,8 +11860,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/navigation.ts",
       "owner": "cocos-adapter",
-      "sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562",
-      "bytes": 6399,
+      "sha256": "72caab454746524b363ff6841e1d97904a62361139d1182ef286937524de587e",
+      "bytes": 6459,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7637,8 +11892,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/places.ts",
       "owner": "cocos-adapter",
-      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c",
-      "bytes": 6994,
+      "sha256": "40ad0f38c55e8ff261a2a0dc67aafa568efd845b2f29ed2db562f0dae491faf5",
+      "bytes": 7241,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7669,8 +11924,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/protocol.ts",
       "owner": "cocos-adapter",
-      "sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65",
-      "bytes": 9440,
+      "sha256": "aff3ddd084c407fb970da084c4b31e92a600dbaede0ef0897a2f54fa3d531830",
+      "bytes": 9802,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7819,8 +12074,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/dossier.ts",
       "owner": "cocos-adapter",
-      "sha256": "010352d4fff9148d555d6c83b7437b46cd5a684689e8bbe4571308e154c46bba",
-      "bytes": 11113,
+      "sha256": "6da52e46b28ef1fcff982b41680428f83212f007115bbe4a1553bbe2600c3100",
+      "bytes": 11416,
       "roles": [
         "inspected-source"
       ],
@@ -7859,6 +12114,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/ui/farming.ts",
+      "owner": "cocos-adapter",
+      "sha256": "3a3936cecf6bcb5e6420bff4a08308b20d6ed7a0904aa1bf1fc008c58a148f82",
+      "bytes": 6095,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/ui/guidance.ts",
       "owner": "cocos-adapter",
       "sha256": "a339a0aad490d3fa5827f2b902b780e06a33fa211ea95ac2e370a9204604ef46",
@@ -7875,8 +12144,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "4a26b3c1a3dcb006e392913bf868b8ce74c3a0c977503ed4b602fac24de689cf",
-      "bytes": 18266,
+      "sha256": "7d7547e4f03a8ac453de0113ac06f8e2348bb6b76529e69aa071cadf5213b48a",
+      "bytes": 16869,
       "roles": [
         "inspected-source"
       ],
@@ -7931,8 +12200,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "ecb6afb621604c65d75480690b89a6d667a065654c6f4c26739d0925c31172ac",
-      "bytes": 32341,
+      "sha256": "0631d6e9778f28a8cb3317a755b2d7bc480e4fd86b8b7e04d85b48db272debb6",
+      "bytes": 33183,
       "roles": [
         "inspected-source"
       ],
@@ -8307,6 +12576,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-farming.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "1abce205d61a83424260e3cd3e233295141e3593f92b4a2486da0e8c879032c1",
+      "bytes": 11745,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-guidance.mjs",
       "owner": "cocos-adapter",
       "sha256": "311b5ff447a194f2450f127334ed7adc6f907d7e3223c6f1b727eb0c72f82c86",
@@ -8323,8 +12606,8 @@
     {
       "path": "clients/cocos/tools/smoke-hud-drag.mjs",
       "owner": "cocos-adapter",
-      "sha256": "20a3dc561edd6adce6b46478b99c48c5bb371641f5bc94ead00ca9bbb31b7271",
-      "bytes": 9426,
+      "sha256": "54e2a0df58eed17aabdef88d2b0298389f0ea48757ccfcd9e8f20a6bc51a3e1a",
+      "bytes": 9662,
       "roles": [
         "inspected-source"
       ],
@@ -8365,8 +12648,8 @@
     {
       "path": "clients/cocos/tools/smoke-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "60fd6989ad17cfb3c3a08051ade115ec89143041628286ddf3c2ecafce98d1cb",
-      "bytes": 24125,
+      "sha256": "d3c3ebd7821de74729f2340ffce9e12cd198ae62b7e3215278c66bc436847545",
+      "bytes": 24940,
       "roles": [
         "inspected-source"
       ],
@@ -8379,8 +12662,8 @@
     {
       "path": "clients/cocos/tools/smoke-landscape.mjs",
       "owner": "cocos-adapter",
-      "sha256": "380676dad86af6df6ba58e6213882928b9532fec55bc80657d13880e148255ab",
-      "bytes": 10264,
+      "sha256": "77dcf5e066c8688ed349773f51850a1187dbd2026ccea6331f66468dee5cdf22",
+      "bytes": 10228,
       "roles": [
         "inspected-source"
       ],
@@ -8435,8 +12718,8 @@
     {
       "path": "clients/cocos/tools/smoke-phase45.mjs",
       "owner": "cocos-adapter",
-      "sha256": "ea91cd1f0c302d9f24b176088f0884985261e3c6a432da692a7d859433a733da",
-      "bytes": 15706,
+      "sha256": "33e21244dc7ca70f22cbfa39a3d7de9f82a1b659401d9e70f3df3a9f7e2169a8",
+      "bytes": 15670,
       "roles": [
         "inspected-source"
       ],
@@ -8477,8 +12760,8 @@
     {
       "path": "clients/cocos/tools/smoke-places.mjs",
       "owner": "cocos-adapter",
-      "sha256": "81d526dedfcf8929c18a92f78b2bb0a6fdd818a716ec5409739aa3212406cd77",
-      "bytes": 18437,
+      "sha256": "067f295a270e1aceb5f5f4fe5d84eaead28d604f587daa39a4b08efe1eb8a6c2",
+      "bytes": 18444,
       "roles": [
         "inspected-source"
       ],
@@ -8533,8 +12816,8 @@
     {
       "path": "clients/cocos/tools/smoke-semantics.mjs",
       "owner": "cocos-adapter",
-      "sha256": "51f4aec3696fd4d421339f7c156eee20db3dd6691ed7ea5b0fcb772f2219dd88",
-      "bytes": 11612,
+      "sha256": "5eb7593f9bd4e2edb8ea6d917216f562718916d448e226ca8e9443b8693bfeda",
+      "bytes": 11610,
       "roles": [
         "inspected-source"
       ],
@@ -8603,8 +12886,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "c5b0f78a65730d933359de4db751d7d48961eb48f74bb5d3879fc4270f67c4a4",
-      "bytes": 7839,
+      "sha256": "2e28c8647bc589f0d86302051bf8640a0d6843d981bd042d2ac128e35acb8153",
+      "bytes": 8299,
       "roles": [
         "inspected-source"
       ],
@@ -8685,10 +12968,24 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/test-farming.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "7b6a30f18a9e2d2603cdac21f38766615db2931b41076dcce74a361e5204f977",
+      "bytes": 1831,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/test-features.mjs",
       "owner": "cocos-adapter",
-      "sha256": "454f3e37301f3f0833a6e3120e36c3e842dbb2239a34bbbf3924f22a56643595",
-      "bytes": 2594,
+      "sha256": "eeb73532d70ea42b3b1ccb1c2bd1ed3c2f1e9f4398ad359a022c023af5e88739",
+      "bytes": 2610,
       "roles": [
         "inspected-source"
       ],
@@ -8757,8 +13054,8 @@
     {
       "path": "clients/cocos/tools/test-places.mjs",
       "owner": "cocos-adapter",
-      "sha256": "1e49eb3f34cfe34b9fe8746eac85656bacaef5eabff3e69b7dcf4087f05f3653",
-      "bytes": 5070,
+      "sha256": "085ec143021fea5b675bb8363f191cd875fd7394909df827afa1abbd852ff963",
+      "bytes": 5077,
       "roles": [
         "inspected-source"
       ],
@@ -8883,8 +13180,8 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "0562714a1267ccca515840051d50af210f04f702badca40d2b674da679651f9e",
-      "bytes": 101245,
+      "sha256": "ab450ff4c8bca9aa9c43abfd83127715358361c66dd9057777bc4cb3127e38ba",
+      "bytes": 101917,
       "roles": [
         "provenance"
       ],
@@ -8897,7 +13194,7 @@
     {
       "path": "docs/art/cocos-inventory-icons-v1.json",
       "owner": "art-provenance",
-      "sha256": "a81d098946e2de6df2b92d1be0afd41b5e53d892a60f18956626dfeb501d1ea4",
+      "sha256": "02a9721fe25d0a35b0a60ab3c24af4936c9dc099e563da9f793fed2195602cc6",
       "bytes": 3806,
       "roles": [
         "provenance"
@@ -8955,6 +13252,20 @@
       "owner": "art-provenance",
       "sha256": "abc1b3950ca24768024a42e405cd0674af879577a5ff4b3c5180f2e71582db13",
       "bytes": 23088,
+      "roles": [
+        "provenance"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "docs/art/farming-art-v1.json",
+      "owner": "art-provenance",
+      "sha256": "6b3f19d3e283a462173c9ed7c63b77da10ff024608f9a2d6c5fb673fece86e4f",
+      "bytes": 44443,
       "roles": [
         "provenance"
       ],
@@ -9089,7 +13400,7 @@
     {
       "path": "docs/art/local-scene-art-v1.json",
       "owner": "art-provenance",
-      "sha256": "062547e011a3bb02946bd4a08b1be7d1d3228787b763c3d42d70c670bb73813d",
+      "sha256": "6a38388bfc55bf7de7767f56eb50ad899d4dfc807814fcf91f6567e714b3c446",
       "bytes": 16371,
       "roles": [
         "provenance"
@@ -9265,8 +13576,8 @@
     {
       "path": "shared/game/client.ts",
       "owner": "shared-game",
-      "sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1",
-      "bytes": 16785,
+      "sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f",
+      "bytes": 16810,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9327,6 +13638,22 @@
       "inputs": []
     },
     {
+      "path": "shared/game/cropCatalog.ts",
+      "owner": "shared-game",
+      "sha256": "4915b85805e45fe72b9550ec867dc16bb69db4f37fab3c3b15dfe6bf74434842",
+      "bytes": 3653,
+      "roles": [
+        "canonical-binding-source",
+        "inspected-source"
+      ],
+      "consumers": [
+        "assets/scripts/core/cropCatalog.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "shared/game/dossier.ts",
       "owner": "shared-game",
       "sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729",
@@ -9343,10 +13670,26 @@
       "inputs": []
     },
     {
+      "path": "shared/game/farming.ts",
+      "owner": "shared-game",
+      "sha256": "76d7e259a39d559b97a07be02041087acf6d8082bfb018798157d140f0bfa4ea",
+      "bytes": 1879,
+      "roles": [
+        "canonical-binding-source",
+        "inspected-source"
+      ],
+      "consumers": [
+        "assets/scripts/core/farming.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "shared/game/features.ts",
       "owner": "shared-game",
-      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
-      "bytes": 3221,
+      "sha256": "674d903a7001d192fe540e822c4bbcdb4e99b7d61aab81997b4eab225c1f0a8e",
+      "bytes": 2938,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9377,8 +13720,8 @@
     {
       "path": "shared/game/interaction.ts",
       "owner": "shared-game",
-      "sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1",
-      "bytes": 4347,
+      "sha256": "89ce60e1af70ef565254df782588a406d33f64f34b2ef97d048690f769901955",
+      "bytes": 4336,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9393,8 +13736,8 @@
     {
       "path": "shared/game/inventory.ts",
       "owner": "shared-game",
-      "sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4",
-      "bytes": 8522,
+      "sha256": "05d5c99bacc817a5f810ddfe61dc8982fa68df774d1c52aca595bba2708bdf13",
+      "bytes": 8942,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9409,8 +13752,8 @@
     {
       "path": "shared/game/items.ts",
       "owner": "shared-game",
-      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a",
-      "bytes": 5416,
+      "sha256": "f25ef6fa4ff42bf3edc8750c900c51989f68e5d10c917c9098cc2d6a825554c4",
+      "bytes": 6159,
       "roles": [
         "art-prompt",
         "canonical-binding-source",
@@ -9485,8 +13828,8 @@
     {
       "path": "shared/game/navigation.ts",
       "owner": "shared-game",
-      "sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562",
-      "bytes": 6399,
+      "sha256": "72caab454746524b363ff6841e1d97904a62361139d1182ef286937524de587e",
+      "bytes": 6459,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9517,8 +13860,8 @@
     {
       "path": "shared/game/places.ts",
       "owner": "shared-game",
-      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c",
-      "bytes": 6994,
+      "sha256": "40ad0f38c55e8ff261a2a0dc67aafa568efd845b2f29ed2db562f0dae491faf5",
+      "bytes": 7241,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9549,8 +13892,8 @@
     {
       "path": "shared/game/protocol.ts",
       "owner": "shared-game",
-      "sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65",
-      "bytes": 9440,
+      "sha256": "aff3ddd084c407fb970da084c4b31e92a600dbaede0ef0897a2f54fa3d531830",
+      "bytes": 9802,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9677,10 +14020,26 @@
       "inputs": []
     },
     {
+      "path": "tools/build_farming_art.py",
+      "owner": "root-tooling",
+      "sha256": "06a1d2e3eba5429675f7bdf67f48df676319628a58fc336c6255c9905cb85aad",
+      "bytes": 4292,
+      "roles": [
+        "art-producer",
+        "inspected-source"
+      ],
+      "consumers": [
+        "docs/art/farming-art-v1.json",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "tools/build_inventory_art.mjs",
       "owner": "root-tooling",
-      "sha256": "679488d57a1bd4519457a4582379cbe999c968cf1c833930bccd8a2ff41aa59b",
-      "bytes": 2644,
+      "sha256": "bd0e9b235bd2f98bf228a08bc7ceead9640e900f9909720eef35a27cf398bd70",
+      "bytes": 2659,
       "roles": [
         "art-producer",
         "inspected-source"
@@ -9819,8 +14178,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "c9a5d78558b725e38f1936165c9500d2183e3c7b80886e7908fb9328f94aa46d",
-      "bytes": 3410,
+      "sha256": "90cfaf9890b801ff34fa7257eac7d24e0b86084c041717f6c5d63c10e2fd2305",
+      "bytes": 3499,
       "roles": [
         "inspected-source"
       ],
@@ -9833,8 +14192,8 @@
     {
       "path": "tools/cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "a033a07824ed7e21d09bfdb98cc9e6b73941229b4bea960d592ac2d72a7c25bd",
-      "bytes": 12589,
+      "sha256": "423982847e5df358d1662ae9d757fb118666a96de214af9d85677237a93e0128",
+      "bytes": 12615,
       "roles": [
         "inspected-source"
       ],
@@ -9959,8 +14318,8 @@
     {
       "path": "tools/cocos-sources.mjs",
       "owner": "root-tooling",
-      "sha256": "0d31f2cc57103053fe622cab516ff6b9ae68a8f8fca0be5f83f3ccc4e60886f3",
-      "bytes": 14373,
+      "sha256": "37623c2c7b9a7122ddd25d4cd029c3cfac9adc38d47bd579a16b1bb07ec27eea",
+      "bytes": 14675,
       "roles": [
         "inspected-source"
       ],
@@ -9987,8 +14346,8 @@
     {
       "path": "tools/cocos-unit.mjs",
       "owner": "root-tooling",
-      "sha256": "6165349278ba7bd0f1a60b57642079ec82a0b6f171f326f093b074be46b666de",
-      "bytes": 3625,
+      "sha256": "2f97ee5a1c7c16e97af9dd9b490843538ac2c000f284557406575eb4c63f04ff",
+      "bytes": 3678,
       "roles": [
         "inspected-source"
       ],
@@ -10022,6 +14381,20 @@
       ],
       "consumers": [
         "tools/cocos-backup.mjs"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "tools/generate_crop_catalog.py",
+      "owner": "root-tooling",
+      "sha256": "559610ac2e80671498f768f4913c685639671a8da90bc68f120e6b0ce9e88bd8",
+      "bytes": 657,
+      "roles": [
+        "catalogue-generator"
+      ],
+      "consumers": [
+        "shared/game/cropCatalog.ts"
       ],
       "provenance": [],
       "inputs": []
@@ -10133,8 +14506,8 @@
     {
       "path": "tools/test-cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "178061119f2262681faa4903a06ce3ce4f40586746f9d882870a7554da03bfeb",
-      "bytes": 5063,
+      "sha256": "d3b7de952dfec27e55fe9707a925af31b53027c6d367ae9453e7a86ca8b3e549",
+      "bytes": 5150,
       "roles": [
         "inspected-source"
       ],
@@ -10380,7 +14753,7 @@
     },
     {
       "file": "clients/cocos/assets/scripts/core/items.ts",
-      "line": 11,
+      "line": 12,
       "literal": "/assets/hearthwood/detail/items/",
       "role": "descriptive-id-url-native-binding-used"
     },
@@ -10422,7 +14795,7 @@
     },
     {
       "file": "shared/game/items.ts",
-      "line": 11,
+      "line": 12,
       "literal": "/assets/hearthwood/detail/items/",
       "role": "descriptive-id-url-native-binding-used"
     },

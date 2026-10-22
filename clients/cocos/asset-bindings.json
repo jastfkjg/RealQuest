@@ -149,8 +149,8 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65",
-      "output_sha256": "1d919912ca68f661d203dc3e14a8181b52bfd62cc67e4e2ef33772dca4ac2c65"
+      "sha256": "aff3ddd084c407fb970da084c4b31e92a600dbaede0ef0897a2f54fa3d531830",
+      "output_sha256": "aff3ddd084c407fb970da084c4b31e92a600dbaede0ef0897a2f54fa3d531830"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -191,8 +191,8 @@
     {
       "source": "shared/game/interaction.ts",
       "target": "assets/scripts/core/interaction.ts",
-      "sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1",
-      "output_sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1"
+      "sha256": "89ce60e1af70ef565254df782588a406d33f64f34b2ef97d048690f769901955",
+      "output_sha256": "89ce60e1af70ef565254df782588a406d33f64f34b2ef97d048690f769901955"
     },
     {
       "source": "shared/game/stamina.ts",
@@ -215,8 +215,8 @@
     {
       "source": "shared/game/navigation.ts",
       "target": "assets/scripts/core/navigation.ts",
-      "sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562",
-      "output_sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562"
+      "sha256": "72caab454746524b363ff6841e1d97904a62361139d1182ef286937524de587e",
+      "output_sha256": "72caab454746524b363ff6841e1d97904a62361139d1182ef286937524de587e"
     },
     {
       "source": "shared/game/appearances.ts",
@@ -227,8 +227,8 @@
     {
       "source": "shared/game/client.ts",
       "target": "assets/scripts/core/client.ts",
-      "sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1",
-      "output_sha256": "32558d467b5a7a9cb5845fffa5900d5f94319ca57da6be2727f3e3f1e0c97bd1"
+      "sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f",
+      "output_sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f"
     },
     {
       "source": "shared/game/clock.ts",
@@ -239,8 +239,8 @@
     {
       "source": "shared/game/features.ts",
       "target": "assets/scripts/core/features.ts",
-      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
-      "output_sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee"
+      "sha256": "674d903a7001d192fe540e822c4bbcdb4e99b7d61aab81997b4eab225c1f0a8e",
+      "output_sha256": "674d903a7001d192fe540e822c4bbcdb4e99b7d61aab81997b4eab225c1f0a8e"
     },
     {
       "source": "shared/game/combatMotion.ts",
@@ -311,8 +311,8 @@
     {
       "source": "shared/game/places.ts",
       "target": "assets/scripts/core/places.ts",
-      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c",
-      "output_sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c"
+      "sha256": "40ad0f38c55e8ff261a2a0dc67aafa568efd845b2f29ed2db562f0dae491faf5",
+      "output_sha256": "40ad0f38c55e8ff261a2a0dc67aafa568efd845b2f29ed2db562f0dae491faf5"
     },
     {
       "source": "shared/game/atlas.ts",
@@ -321,16 +321,28 @@
       "output_sha256": "a10d69534768f38d25042b56f5309393158bac02978f919686df1c8484509afd"
     },
     {
+      "source": "shared/game/cropCatalog.ts",
+      "target": "assets/scripts/core/cropCatalog.ts",
+      "sha256": "4915b85805e45fe72b9550ec867dc16bb69db4f37fab3c3b15dfe6bf74434842",
+      "output_sha256": "4915b85805e45fe72b9550ec867dc16bb69db4f37fab3c3b15dfe6bf74434842"
+    },
+    {
+      "source": "shared/game/farming.ts",
+      "target": "assets/scripts/core/farming.ts",
+      "sha256": "76d7e259a39d559b97a07be02041087acf6d8082bfb018798157d140f0bfa4ea",
+      "output_sha256": "76d7e259a39d559b97a07be02041087acf6d8082bfb018798157d140f0bfa4ea"
+    },
+    {
       "source": "shared/game/items.ts",
       "target": "assets/scripts/core/items.ts",
-      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a",
-      "output_sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a"
+      "sha256": "f25ef6fa4ff42bf3edc8750c900c51989f68e5d10c917c9098cc2d6a825554c4",
+      "output_sha256": "f25ef6fa4ff42bf3edc8750c900c51989f68e5d10c917c9098cc2d6a825554c4"
     },
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4",
-      "output_sha256": "21da251cecfa42eb1f1e43fe722e1d25b0ad58db992f312976cdbe9be28843f4"
+      "sha256": "05d5c99bacc817a5f810ddfe61dc8982fa68df774d1c52aca595bba2708bdf13",
+      "output_sha256": "05d5c99bacc817a5f810ddfe61dc8982fa68df774d1c52aca595bba2708bdf13"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -511,18 +523,6 @@
       "target": "assets/resources/items/stone.png",
       "sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249",
       "output_sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249"
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/seed.png",
-      "target": "assets/resources/items/seed.png",
-      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
-      "output_sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b"
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/crop.png",
-      "target": "assets/resources/items/crop.png",
-      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
-      "output_sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466"
     },
     {
       "source": "assets/runtime/hearthwood/detail/items/plank.png",
@@ -745,6 +745,438 @@
       "target": "assets/resources/scenes/terrain-web.webp",
       "sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e",
       "output_sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed.png",
+      "target": "assets/resources/items/seed.png",
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737",
+      "output_sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-1.png",
+      "target": "assets/resources/farming/radish-1.png",
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966",
+      "output_sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-2.png",
+      "target": "assets/resources/farming/radish-2.png",
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe",
+      "output_sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-3.png",
+      "target": "assets/resources/farming/radish-3.png",
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f",
+      "output_sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-4.png",
+      "target": "assets/resources/farming/radish-4.png",
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520",
+      "output_sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/crop.png",
+      "target": "assets/resources/items/crop.png",
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0",
+      "output_sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_wheat.png",
+      "target": "assets/resources/items/seed_wheat.png",
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0",
+      "output_sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-1.png",
+      "target": "assets/resources/farming/wheat-1.png",
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe",
+      "output_sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-2.png",
+      "target": "assets/resources/farming/wheat-2.png",
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6",
+      "output_sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-3.png",
+      "target": "assets/resources/farming/wheat-3.png",
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d",
+      "output_sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-4.png",
+      "target": "assets/resources/farming/wheat-4.png",
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe",
+      "output_sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/wheat.png",
+      "target": "assets/resources/items/wheat.png",
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f",
+      "output_sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_carrot.png",
+      "target": "assets/resources/items/seed_carrot.png",
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef",
+      "output_sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-1.png",
+      "target": "assets/resources/farming/carrot-1.png",
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7",
+      "output_sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-2.png",
+      "target": "assets/resources/farming/carrot-2.png",
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e",
+      "output_sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-3.png",
+      "target": "assets/resources/farming/carrot-3.png",
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1",
+      "output_sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-4.png",
+      "target": "assets/resources/farming/carrot-4.png",
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda",
+      "output_sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/carrot.png",
+      "target": "assets/resources/items/carrot.png",
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f",
+      "output_sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_potato.png",
+      "target": "assets/resources/items/seed_potato.png",
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453",
+      "output_sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-1.png",
+      "target": "assets/resources/farming/potato-1.png",
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee",
+      "output_sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-2.png",
+      "target": "assets/resources/farming/potato-2.png",
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80",
+      "output_sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-3.png",
+      "target": "assets/resources/farming/potato-3.png",
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806",
+      "output_sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-4.png",
+      "target": "assets/resources/farming/potato-4.png",
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006",
+      "output_sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/potato.png",
+      "target": "assets/resources/items/potato.png",
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb",
+      "output_sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_tomato.png",
+      "target": "assets/resources/items/seed_tomato.png",
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f",
+      "output_sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-1.png",
+      "target": "assets/resources/farming/tomato-1.png",
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1",
+      "output_sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-2.png",
+      "target": "assets/resources/farming/tomato-2.png",
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701",
+      "output_sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-3.png",
+      "target": "assets/resources/farming/tomato-3.png",
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44",
+      "output_sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-4.png",
+      "target": "assets/resources/farming/tomato-4.png",
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4",
+      "output_sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/tomato.png",
+      "target": "assets/resources/items/tomato.png",
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807",
+      "output_sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_strawberry.png",
+      "target": "assets/resources/items/seed_strawberry.png",
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe",
+      "output_sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-1.png",
+      "target": "assets/resources/farming/strawberry-1.png",
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26",
+      "output_sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-2.png",
+      "target": "assets/resources/farming/strawberry-2.png",
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65",
+      "output_sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-3.png",
+      "target": "assets/resources/farming/strawberry-3.png",
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde",
+      "output_sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-4.png",
+      "target": "assets/resources/farming/strawberry-4.png",
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615",
+      "output_sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/strawberry.png",
+      "target": "assets/resources/items/strawberry.png",
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d",
+      "output_sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_corn.png",
+      "target": "assets/resources/items/seed_corn.png",
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829",
+      "output_sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-1.png",
+      "target": "assets/resources/farming/corn-1.png",
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d",
+      "output_sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-2.png",
+      "target": "assets/resources/farming/corn-2.png",
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f",
+      "output_sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-3.png",
+      "target": "assets/resources/farming/corn-3.png",
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812",
+      "output_sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-4.png",
+      "target": "assets/resources/farming/corn-4.png",
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06",
+      "output_sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/corn.png",
+      "target": "assets/resources/items/corn.png",
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717",
+      "output_sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_eggplant.png",
+      "target": "assets/resources/items/seed_eggplant.png",
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d",
+      "output_sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-1.png",
+      "target": "assets/resources/farming/eggplant-1.png",
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f",
+      "output_sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-2.png",
+      "target": "assets/resources/farming/eggplant-2.png",
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b",
+      "output_sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-3.png",
+      "target": "assets/resources/farming/eggplant-3.png",
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1",
+      "output_sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-4.png",
+      "target": "assets/resources/farming/eggplant-4.png",
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a",
+      "output_sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/eggplant.png",
+      "target": "assets/resources/items/eggplant.png",
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9",
+      "output_sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_pumpkin.png",
+      "target": "assets/resources/items/seed_pumpkin.png",
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d",
+      "output_sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-1.png",
+      "target": "assets/resources/farming/pumpkin-1.png",
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e",
+      "output_sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-2.png",
+      "target": "assets/resources/farming/pumpkin-2.png",
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce",
+      "output_sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-3.png",
+      "target": "assets/resources/farming/pumpkin-3.png",
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5",
+      "output_sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-4.png",
+      "target": "assets/resources/farming/pumpkin-4.png",
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff",
+      "output_sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/pumpkin.png",
+      "target": "assets/resources/items/pumpkin.png",
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe",
+      "output_sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_cabbage.png",
+      "target": "assets/resources/items/seed_cabbage.png",
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682",
+      "output_sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-1.png",
+      "target": "assets/resources/farming/cabbage-1.png",
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21",
+      "output_sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-2.png",
+      "target": "assets/resources/farming/cabbage-2.png",
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554",
+      "output_sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-3.png",
+      "target": "assets/resources/farming/cabbage-3.png",
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399",
+      "output_sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-4.png",
+      "target": "assets/resources/farming/cabbage-4.png",
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572",
+      "output_sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/cabbage.png",
+      "target": "assets/resources/items/cabbage.png",
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8",
+      "output_sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_sunflower.png",
+      "target": "assets/resources/items/seed_sunflower.png",
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46",
+      "output_sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-1.png",
+      "target": "assets/resources/farming/sunflower-1.png",
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a",
+      "output_sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-2.png",
+      "target": "assets/resources/farming/sunflower-2.png",
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f",
+      "output_sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-3.png",
+      "target": "assets/resources/farming/sunflower-3.png",
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f",
+      "output_sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-4.png",
+      "target": "assets/resources/farming/sunflower-4.png",
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c",
+      "output_sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/sunflower.png",
+      "target": "assets/resources/items/sunflower.png",
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639",
+      "output_sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_blueberry.png",
+      "target": "assets/resources/items/seed_blueberry.png",
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545",
+      "output_sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-1.png",
+      "target": "assets/resources/farming/blueberry-1.png",
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5",
+      "output_sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-2.png",
+      "target": "assets/resources/farming/blueberry-2.png",
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096",
+      "output_sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-3.png",
+      "target": "assets/resources/farming/blueberry-3.png",
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e",
+      "output_sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-4.png",
+      "target": "assets/resources/farming/blueberry-4.png",
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306",
+      "output_sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/blueberry.png",
+      "target": "assets/resources/items/blueberry.png",
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
+      "output_sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11"
     }
   ]
 }

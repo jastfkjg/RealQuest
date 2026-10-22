@@ -12,7 +12,7 @@ const digest=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const compare=(a,b)=>a<b?-1:a>b?1:0;
 const policyFile='docs/migration/cocos-source-policy.json';
 const inventoryFile='docs/migration/cocos-source-inventory.json';
-const provenanceFiles=['docs/art/asset-manifest.json','docs/art/village-art-v2.json','docs/art/detail-art-v3.json','docs/art/resident-art-v1.json','docs/art/market-art-v1.json','docs/art/departure-art-v1.json','docs/art/local-scene-art-v1.json','docs/art/cocos-inventory-icons-v1.json','docs/art/cocos-lossless-textures-v1.json','docs/art/cocos-panel-materials-v1.json'];
+const provenanceFiles=['docs/art/farming-art-v1.json','docs/art/asset-manifest.json','docs/art/village-art-v2.json','docs/art/detail-art-v3.json','docs/art/resident-art-v1.json','docs/art/market-art-v1.json','docs/art/departure-art-v1.json','docs/art/local-scene-art-v1.json','docs/art/cocos-inventory-icons-v1.json','docs/art/cocos-lossless-textures-v1.json','docs/art/cocos-panel-materials-v1.json'];
 const isFilePath=value=>typeof value==='string'&&/^(?:assets|docs|clients|shared|tools|backend)\/[\w./-]+\.[\w-]+$/.test(value);
 
 export function sourceOwner(file,policy){
@@ -95,6 +95,8 @@ export async function inspectSources(root=projectRoot){
   // creation provenance. Only the baker's own output rows are provenance here.
   index(file==='docs/art/local-scene-art-v1.json'?{records:data.records}:data);
  }
+ await add('backend/app/crops.json','authoritative-crop-catalogue','shared/game/cropCatalog.ts');
+ await add('tools/generate_crop_catalog.py','catalogue-generator','shared/game/cropCatalog.ts');
  await add(policyFile,'ownership-policy','source-inventory');
  await add('clients/cocos/asset-bindings.json','binding-contract','source-inventory');
  await add('docs/migration/cocos-client-retirement.json','relocation-provenance','source-inventory');
@@ -165,7 +167,7 @@ export async function inspectSources(root=projectRoot){
  }
  // Legacy descriptive symbols must resolve to the native sprites actually used.
  for(let i=0;i<6;i++)if(!copied.some(r=>r.source==='assets/runtime/hearthwood/village/actor-'+i+'.png'&&r.target==='clients/cocos/assets/resources/village/actor-'+i+'.png'))throw Error('Unbound descriptive appearance '+i);
- for(const id of ['wood','stone','seed','crop','plank','backpack','gold'])if(!copied.some(r=>r.source==='assets/runtime/hearthwood/detail/items/'+id+'.png'&&r.target==='clients/cocos/assets/resources/items/'+id+'.png'))throw Error('Unbound descriptive item '+id);
+ for(const id of ['wood','stone','seed','crop','plank','backpack','gold'])if(!copied.some(r=>r.source===(['seed','crop'].includes(id)?'assets/derived/farming-v1/items/'+id+'.png':'assets/runtime/hearthwood/detail/items/'+id+'.png')&&r.target==='clients/cocos/assets/resources/items/'+id+'.png'))throw Error('Unbound descriptive item '+id);
  const records=[...nodes.values()].map(n=>({...n,roles:[...n.roles].sort(),consumers:[...n.consumers].sort(),provenance:[...n.provenance].sort(),inputs:[...n.inputs].sort()})).sort((a,b)=>compare(a.path,b.path));
  return {schema_version:1,policy:policyFile,note:'Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.',counts:{bindings:copied.length,runtimePNGs:copied.filter(r=>r.target.endsWith('.png')).length,runtimeWebPs:copied.filter(r=>r.target.endsWith('.webp')).length,sharedModules:copied.filter(r=>r.target.endsWith('.ts')).length,sceneInputs:scene.inputs.length,files:records.length,references:references.length},bindings:copied,records,references};
 }

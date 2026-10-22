@@ -1,3 +1,4 @@
+import {seedCrop,itemCrop,growingDays,farmObjects} from './farming';
 import type {GameState,World,NavigationTarget} from './protocol';
 import {itemDefinitions,itemNames} from './items';
 import {currentMap} from './navigation';
@@ -52,19 +53,22 @@ export function itemIntent(world:World,s:GameState,now:number,item:string):ItemI
  if(['stone_sword','reinforced_sword','spring_spear','glow_staff'].includes(item)){intent.label='查看随行装备';intent.mode='equipment';}
  else if(item==='gate_stone')mark('标记东行石门','overworld','village_departure');
  else if(['gel','shell','crystal','soup'].includes(item))mark('标记工坊武备台','workshop','armory_counter');
- else if(item==='seed'){
-  const plot=world.objects.filter(o=>o.kind==='plot'&&!s.plots[o.id]).sort((a,b)=>Math.hypot(a.x-s.position.x,a.y-s.position.y)-Math.hypot(b.x-s.position.x,b.y-s.position.y)||a.id.localeCompare(b.id))[0];
-  if(!plot){intent.reason='农田已种满，成熟后再收获。';delete intent.mode;intent.label='没有空农田';}
-  else if(near(plot.id)){action('预览播种','plant',{target:plot.id},{seed:1},{});intent.seconds=s.buildings.home>=2?45:60;}
+ else if(seedCrop(item)){
+  const c=seedCrop(item)!;
+  const plot=farmObjects(world.objects,s).filter(o=>o.kind==='plot'&&!s.plots[o.id]).sort((a,b)=>Math.hypot(a.x-s.position.x,a.y-s.position.y)-Math.hypot(b.x-s.position.x,b.y-s.position.y)||a.id.localeCompare(b.id))[0];
+  if((s.skill_growth?.planting||0)<c.level){intent.reason='需要种植 '+c.level+' 级，当前 '+(s.skill_growth?.planting||0)+' 级';intent.label='培养种植技能';intent.mode='growth';}
+  else if(!plot){intent.reason='农田已种满，可收获后再播种，或在家园开垦。';delete intent.mode;intent.label='没有空农田';}
+  else if(near(plot.id)){action('预览播种','plant',{target:plot.id,seed:item},{[item]:1},{});intent.seconds=growingDays(s,c.days)*(s.world_clock?.day_seconds||1800);}
   else mark('标记家园农田','overworld',plot.id);
  }else if(item==='wood'){
   if(near('workshop_counter')){action('制作1块木板','craft',{target:'workshop_counter'},{wood:3},{plank:1});if(count>0&&count<3)intent.reason='还需要'+(3-count)+'份木材。';}
   else mark('标记工坊柜台','workshop','workshop_counter');
- }else if(item==='crop'){
-  if(near('workshop_counter'))action('出售1份萝卜','sell',{target:'workshop_counter'},{crop:1},{gold:7+s.buildings.workshop});
+ }else if(itemCrop(item)){
+  const c=itemCrop(item)!;
+  if(item==='crop'&&near('workshop_counter'))action('出售1份'+c.name,'sell',{target:'workshop_counter'},{[item]:1},{gold:7+s.buildings.workshop});
   else if(near('mira')||near('shop_counter')){
-   const price=s.market?.sell.crop;
-   if(typeof price==='number')action('出售1份萝卜','market_trade',{target:near('mira')?'mira':'shop_counter',side:'sell',item:'crop',amount:1},{crop:1},{gold:price});
+   const price=s.market?.sell[item];
+   if(typeof price==='number')action('出售1份'+c.name,'market_trade',{target:near('mira')?'mira':'shop_counter',side:'sell',item,amount:1},{[item]:1},{gold:price});
    else {intent.reason='杂货铺报价尚未同步。';mark('标记杂货铺柜台','shop','shop_counter');}
   }else mark('标记风铃杂货铺','shop','shop_counter');
  }else if(item==='stone')mark('标记小屋工作台','home','home_desk');

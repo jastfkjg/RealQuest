@@ -1,5 +1,6 @@
+import {itemNames} from './items';
 import type { GameState, GrowthTarget, Quest } from './protocol';
-export const itemNames:Record<string,string>={gold:'金币',seed:'种子',wood:'木材',stone:'石料',crop:'萝卜',plank:'木板',stone_sword:'石刃短剑',reinforced_sword:'加固短剑',spring_spear:'弹簧长矛',glow_staff:'微光短杖',gel:'黏液胶质',shell:'硬壳',crystal:'微光晶屑',gate_stone:'门钥魔法石',soup:'便携菜汤'};
+export {itemNames} from './items';
 export const growthNames:Record<GrowthTarget,string>={vitality:'生命上限',stamina:'体力上限',science:'科学',magic:'魔法',planting:'种植',ranching:'养殖',building:'建造'};
 export const questStatuses={available:'可接取',active:'进行中',ready:'待交付',claimed:'已完成',locked:'尚未开放'};
 export const costText=(costs:Record<string,number>)=>Object.entries(costs).map(([id,n])=>`${itemNames[id]||id} ${n}`).join(' · ');

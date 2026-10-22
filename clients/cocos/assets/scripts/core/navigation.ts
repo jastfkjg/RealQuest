@@ -6,6 +6,7 @@ import type {
   World,
 } from "./protocol";
 import { residentPositions } from "./residents";
+import { farmObjects } from "./farming";
 import { villageIntroStep } from "./villageIntro";
 
 export const mapById = (world: World, id: string): MapData =>
@@ -13,7 +14,7 @@ export const mapById = (world: World, id: string): MapData =>
 export const currentMap = (world: World, state: GameState, now: number): MapData => ({
   ...mapById(world, state.location),
   objects: [
-    ...mapById(world, state.location).objects.filter(
+    ...farmObjects(mapById(world, state.location).objects,state).filter(
       (o) => !["npc", "travel_npc"].includes(o.kind),
     ),
     ...residentPositions(world, state, now).filter(

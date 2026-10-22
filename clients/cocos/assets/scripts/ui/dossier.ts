@@ -1,3 +1,4 @@
+import {crops} from '../core/farming';
 import {paperSurface,inkRule,meter} from './materials';
 import type { PanelHost } from './panels';
 import type { GrowthTarget } from '../core/protocol';
@@ -100,11 +101,12 @@ export class DossierPanels {
     h.text('GrowthName', growthNames[this.growth], f.x + 132, f.y + 68, f.w - 264, 44, 22, C.ink, true);
     h.button('growth-next', '下一项', f.x + f.w - 120, f.y + 68, 96, 44, () => change(1), h.busy);
     if (!q) { h.text('GrowthMissing', '报价尚未就绪，请返回并重连服务器。', f.x + 24, f.y + 132, f.w - 48, 50, 18); return; }
+    const unlocked=this.growth==='planting'?(crops.filter(c=>c.level===q.next).map(c=>c.name).join('、')||'已全部解锁；继续培养仅提高等级'):'';
     const command = growthCommand(h.state, this.growth), balance = h.state[q.currency] || 0, currency = currencyLabels[q.currency];
     if(f.compact){
       h.text('GrowthLevels',q.current+' → '+q.next,f.x+24,f.y+124,f.w-48,36,26,C.ink,true);
       h.text('GrowthCost','持有 '+balance+' '+currency+' · 消耗 '+q.cost+(command.shortfall?' · 还差 '+command.shortfall:' · 剩余 '+(balance-q.cost)),f.x+24,f.y+164,f.w-48,28,16,C.muted,true);
-      h.text('GrowthConsent','确认才会投入点数；由诺亚现实委托结算。',f.x+24,f.y+196,f.w-48,28,15,C.muted,true);
+      h.text('GrowthConsent',unlocked?'下级：'+unlocked:'确认才会投入点数；由诺亚现实委托结算。',f.x+24,f.y+196,f.w-48,28,15,C.muted,true);
     }else{
       const lx=f.x+48,lw=Math.floor(f.w*.39),rx=lx+lw+40,rw=f.w-lw-136;
       h.image('items/journal',lx+lw/2,f.y+190,64,64);
@@ -115,7 +117,7 @@ export class DossierPanels {
       h.text('GrowthPrice',q.cost+' '+currency,rx,f.y+198,rw,42,26);
       h.text('GrowthWallet','随身持有 '+balance+' '+currency,rx,f.y+250,rw,30,17);
       h.text('GrowthRemainder',command.shortfall?'还需积攒 '+command.shortfall+' 点':'投入后剩余 '+(balance-q.cost)+' 点',rx,f.y+286,rw,30,17,command.shortfall?C.danger:C.moss);
-      h.text('GrowthConsent','点数来自诺亚的现实约定。\n由你确认后才投入培养。',rx,f.y+332,rw,54,15,C.muted);
+      h.text('GrowthConsent',unlocked?'下级：'+unlocked+'\n技能点来自诺亚的现实约定。':'点数来自诺亚的现实约定。\n由你确认后才投入培养。',rx,f.y+332,rw,54,15,C.muted);
     }
     this.footer(h, f, [{ id: 'growth-spend', label: command.shortfall ? '还差 ' + command.shortfall + ' ' + currency : '确认培养', primary: true, disabled: command.shortfall > 0,
       action: async () => {

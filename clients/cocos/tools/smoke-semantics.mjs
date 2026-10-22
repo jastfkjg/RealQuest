@@ -67,7 +67,7 @@ try{
  await action('menu');await until(s=>s.mode==='menu');await tabCycle('journey-menu-forward-reverse');await action('menu-character');await until(s=>s.mode==='character');await tabCycle('character-forward-reverse');await tree('character');await shot('character');await page.keyboard.press('Escape');await until(s=>s.mode==='menu'&&s.controls.some(c=>c.id==='menu-character'&&!c.disabled));const opener=(await read()).controls.find(c=>c.id==='menu-character').label;assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('aria-label')),opener);checks.push('nested native focus returns to original menu action');
  for(const viewport of [{width:1440,height:900},{width:740,height:360}]){
   await leaveToWorld();await page.setViewportSize(viewport);await until(s=>s.camera.width===viewport.width&&s.camera.height===viewport.height,'resized viewport');
-  for(const [key,mode,readyId] of [['m','map','atlas-current'],['j','journal','quest-read'],['i','inventory','inventory-wallet'],['l','life','study-new']]){
+  for(const [key,mode,readyId] of [['m','map','atlas-current'],['j','journal','quest-read'],['i','inventory','inventory-sort'],['l','life','study-new']]){
    await page.locator('canvas').focus();await page.keyboard.press(key);
    // Mode changes before the next Cocos redraw; wait for this panel's actual
    // control and its native peer, including after a viewport change.

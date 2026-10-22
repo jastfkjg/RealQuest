@@ -271,13 +271,17 @@ def test_timer_pause_restore_and_completion():
     assert s['activities'][0]['source']=='timer' and s['activities'][0]['amount']==2
     with pytest.raises(RuleError):apply(s,'timer_finish',{},now+700)
 
-def test_farm_offline_growth_trade_and_upgrade():
+def test_farm_world_growth_trade_and_upgrade():
     s=fresh();s['position']={'x':136,'y':440}
     apply(s,'plant',{'target':'plot_0'},100)
     assert s['inventory']['seed']==5
     with pytest.raises(RuleError):apply(s,'harvest',{'target':'plot_0'},159)
+    # Offline elapsed real time does not grow new world-clock crops.
+    with pytest.raises(RuleError):apply(s,'harvest',{'target':'plot_0'},100000)
+    s['world_clock']['elapsed']=s['plots']['plot_0']['ready_tick']
+    s['world_clock']['running_until']=0
     apply(s,'harvest',{'target':'plot_0'},100000)
-    assert s['inventory']['crop']==2 and s['inventory']['seed']==6
+    assert s['inventory']['crop']==2 and s['inventory']['seed']==5
     s['position']={'x':352,'y':232}
     if s['location']=='overworld':
         apply(s,'enter',{'target':'workshop'},100000)
