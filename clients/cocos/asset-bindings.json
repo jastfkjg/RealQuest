@@ -149,8 +149,8 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
-      "output_sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
+      "sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a",
+      "output_sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -239,20 +239,26 @@
     {
       "source": "shared/game/features.ts",
       "target": "assets/scripts/core/features.ts",
-      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0",
-      "output_sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0"
+      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
+      "output_sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee"
+    },
+    {
+      "source": "shared/game/combatMotion.ts",
+      "target": "assets/scripts/core/combatMotion.ts",
+      "sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b",
+      "output_sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b"
     },
     {
       "source": "shared/game/caveArt.ts",
       "target": "assets/scripts/core/caveArt.ts",
-      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c",
-      "output_sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c"
+      "sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e",
+      "output_sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e"
     },
     {
       "source": "shared/game/caveView.ts",
       "target": "assets/scripts/core/caveView.ts",
-      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e",
-      "output_sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e"
+      "sha256": "cde5cfb9a2ca85b92b3c24e0145963e6f1bf9ce05149b415e5c4aa852f8d6b95",
+      "output_sha256": "cde5cfb9a2ca85b92b3c24e0145963e6f1bf9ce05149b415e5c4aa852f8d6b95"
     },
     {
       "source": "shared/game/localScene.ts",

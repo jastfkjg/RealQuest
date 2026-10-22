@@ -42,6 +42,19 @@ export interface CaveEnemy {
   tx: number;
   ty: number;
   style?: string;
+  hit_until?: number;
+  stagger_until?: number;
+  dead_at?: number;
+}
+export interface CombatAction {
+  kind: string;
+  style?: string;
+  angle?: number;
+  reach?: number;
+  until: number;
+  started: number;
+  hit_at?: number;
+  seq?: number;
 }
 export interface CombatView {
   encounter: string;
@@ -52,6 +65,7 @@ export interface CombatView {
     angle: number;
     until: number;
     wave: string;
+    side?: string;
   }[];
   weapons: Record<string, WeaponDefinition>;
   enemies: CaveEnemy[];
@@ -63,14 +77,16 @@ export interface CombatView {
     text: string;
     until: number;
     kind: string;
+    id?: number;
+    enemy?: string;
+    heavy?: boolean;
+    exposed?: boolean;
   }[];
-  cast: {
-    kind: string;
-    angle?: number;
-    reach?: number;
-    until: number;
-    started: number;
-  } | null;
+  cast: CombatAction | null;
+  action?: CombatAction | null;
+  dash?: { dx: number; dy: number; started: number; until: number } | null;
+  dodge_at?: number;
+  hurt_until?: number;
   message: string;
   cleared: boolean;
   unlocked: number;

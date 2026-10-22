@@ -711,7 +711,7 @@ export function monsterArt(
         [9, -3],
         [-9, -3],
       ],
-      "#405d42",
+      e.phase === "recover" ? "#b6a16a" : "#405d42",
     );
     poly(
       a,
@@ -737,6 +737,7 @@ export function monsterArt(
       ],
       "#7f966b",
     );
+    if(e.phase==='recover')poly(a,[[-3,-30],[3,-30],[4,-12],[0,-8],[-4,-12]],'#eed59b');
     line(
       a,
       [

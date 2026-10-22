@@ -17,6 +17,8 @@ import {controlSkin,gameControls,paperSurface,timberSurface,webMaterialPaths,laz
 import {travelNotices,confirmedCue} from './core/preferences';
 import {FeaturePanels,type PanelHost,type ControlSkin} from './ui/panels';
 import {CombatRenderer} from './combatView';
+import {CombatMotion,CombatInputBuffer} from './core/combatMotion';
+import type {CombatAction} from './core/protocol';
 import {combatIntention,itemNames} from './core/features';
 import {caveGround,caveRouteArt} from './core/caveArt';
 import {caveStatus,nextTarget,liveTarget} from './core/caveView';
@@ -117,6 +119,13 @@ export class RealQuestSpike extends Component {
   private inputEpoch=0;private responseObject="";private responseUntil=0;
   private combatPending:Promise<unknown>|null=null;
   private combatLastTick=0;
+  private combatMotion=new CombatMotion();
+  private localAction:CombatAction|null=null;
+  private localActionStart=0;private localActionReady=0;
+  private dodgePulse=false;private localDodgeUntil=0;private localDodgeReady=0;
+  private localDodge={dx:0,dy:0};
+  private combatReceiptAt=0;
+  private combatQueued=new CombatInputBuffer();
   private targetId:string|null=null;
   private attackPulse=false;private sparkPulse=false;private soupPulse=false;
   private marker:NavigationTarget|null=null;private markerLabel='';
@@ -154,7 +163,7 @@ export class RealQuestSpike extends Component {
     this.unsubscribeFocus=subscribeFocus(()=>this.hide(),()=>this.show());
     this.unsubscribeText=subscribeTextEscape(()=>{this.clearInput();this.dirty=true;this.semantics.returnFromEditing();});
     this.combatRenderer.attachFeedback(this.node);
-    this.combatDock=new CombatDock(this.node,id=>{if(id==='next-target')this.targetId=nextTarget(this.client.state!,this.targetId);else if(id==='attack')this.attackPulse=true;else if(id==='spark')this.sparkPulse=true;else this.soupPulse=true;this.dirty=true;});
+    this.combatDock=new CombatDock(this.node,id=>{if(id==='next-target')this.targetId=nextTarget(this.client.state!,this.targetId);else this.queueCombat(id);this.dirty=true;});
     this.panel.setSiblingIndex(this.node.children.length-1);
     this.resize();
     const host = globalThis as unknown as Record<string, any>;
@@ -355,7 +364,7 @@ export class RealQuestSpike extends Component {
   }
   private buildWorld() {
     this.world.active=true;
-    this.combatRenderer.reset();this.targetId=null;
+    this.combatRenderer.reset();this.targetId=null;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.localAction=null;this.localDodgeUntil=0;this.localActionReady=this.localDodgeReady=0;
     this.caveCameraCache=null;
     this.clearInput(); this.clear(this.world); this.objects.clear(); this.plotVisuals.clear(); this.npcMotion.clear();this.depths.clear();
     const map = this.map(); this.sceneId=map.id;
@@ -453,7 +462,7 @@ export class RealQuestSpike extends Component {
   }
   private keyDown(e: EventKeyboard) {
     if(textOwnsInput() || (e as any).isComposing)return;
-    if(e.keyCode===KeyCode.SHIFT_LEFT||e.keyCode===KeyCode.SHIFT_RIGHT){this.keys.add(e.keyCode);return;}
+    if(e.keyCode===KeyCode.SHIFT_LEFT||e.keyCode===KeyCode.SHIFT_RIGHT){if(!this.focusId&&!this.keys.has(e.keyCode)&&this.mode==='world'&&this.client.state?.location.startsWith('cave_')&&[KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].some(key=>this.keys.has(key)))this.queueCombat('dodge');this.keys.add(e.keyCode);return;}
     if(e.keyCode===KeyCode.TAB){const ids=this.controls.filter(c=>!c.disabled&&this.actions.has(c.id)).map(c=>c.id);const i=ids.indexOf(this.focusId);const reverse=this.keys.has(KeyCode.SHIFT_LEFT)||this.keys.has(KeyCode.SHIFT_RIGHT);this.focusId=ids[i<0?(reverse?ids.length-1:0):(i+(reverse?-1:1)+ids.length)%ids.length]||'';this.dirty=true;return;}
     if((e.keyCode===KeyCode.KEY_E||e.keyCode===KeyCode.SPACE)&&this.mode==='dialogue'&&(!this.focusId||['dialogue-read','dialogue-next'].includes(this.focusId))){if(this.keys.has(e.keyCode))return;this.features.advanceDialogue(this.panelHost());this.keys.add(e.keyCode);return;}
     if((e.keyCode===KeyCode.ENTER||e.keyCode===KeyCode.SPACE)&&this.focusId){this.actions.get(this.focusId)?.();return;}
@@ -467,6 +476,8 @@ export class RealQuestSpike extends Component {
     if(e.keyCode===KeyCode.KEY_N){if(this.client.state?.character&&this.client.world)this.features.findNeighbor(this.panelHost(),'lia');return;}
     if(e.keyCode===KeyCode.KEY_L){ this.open(this.mode==='life'?'world':'life'); return; }
     if(this.mode!=='world') return;
+    if(!this.keys.has(e.keyCode)&&e.keyCode===KeyCode.KEY_V)this.queueCombat('dodge');
+    if(!this.keys.has(e.keyCode)){if(e.keyCode===KeyCode.SPACE)this.queueCombat('attack');if(e.keyCode===KeyCode.KEY_Q)this.queueCombat('spark');if(e.keyCode===KeyCode.KEY_R)this.queueCombat('soup');}
     if(e.keyCode>=KeyCode.DIGIT_1&&e.keyCode<=KeyCode.DIGIT_4){void this.useQuick(e.keyCode-KeyCode.DIGIT_1);return;}
     if(e.keyCode===KeyCode.KEY_T&&this.client.state?.location.startsWith('cave_')){this.targetId=nextTarget(this.client.state,this.targetId);this.dirty=true;return;}
     if(e.keyCode===KeyCode.KEY_E) { if(this.keys.has(e.keyCode))return;void this.interact();this.keys.add(e.keyCode); return; }
@@ -474,7 +485,7 @@ export class RealQuestSpike extends Component {
   }
   private touchRelease(event:EventTouch){this.touches.delete((event.getID()??0));}
   private keyUp(e: EventKeyboard) { this.keys.delete(e.keyCode); }
-  private clearInput() { this.inputEpoch++;this.approach=null;this.keys.clear();this.touches.clear();this.pressedButtons.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=false;this.combatDock?.release(); }
+  private clearInput() { this.inputEpoch++;this.approach=null;this.keys.clear();this.touches.clear();this.pressedButtons.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=this.dodgePulse=false;this.localAction=null;this.combatQueued.clear();this.localDodgeUntil=0;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.combatDock?.release(); }
   private dismissContext(){this.clearInput();this.dirty=true;if(this.mode==='welcome')return;if(this.mode==='world'){this.continuation.dismiss();return;}if(!this.busy){if(this.inventoryView.dismiss(this.panelHost()))return;this.recovery=null;this.recoveryPreview=null;this.closePanel();}}
   private syncSemantics(){
     const controls=this.controls.filter(c=>!['left','right','up','down'].includes(c.id)&&(this.actions.has(c.id)||c.disabled)).map(c=>({...c,label:c.accessibleName||c.label}));
@@ -580,7 +591,12 @@ export class RealQuestSpike extends Component {
       const length=Math.max(1,Math.hypot(dx,dy)), step=Math.min(dt,0.05)*120;
       const cave=this.client.state.location.startsWith('cave_');
       const previous={...this.p},next={x:this.p.x+dx/length*step,y:this.p.y+dy/length*step};
-      if(cave){this.updateCombat(dx,dy);const to=this.client.state.position,factor=Math.min(1,dt*18);this.p.x+=(to.x-this.p.x)*factor;this.p.y+=(to.y-this.p.y)*factor;}
+      if(cave){
+        this.previewCombat(dx,dy);
+        const dodging=this.elapsed<this.localDodgeUntil;
+        this.p=this.combatMotion.step(this.map(),this.client.state.position,dodging?this.localDodge.dx:dx,dodging?this.localDodge.dy:dy,dt,this.elapsed,dodging?360:160);
+        this.updateCombat(dx,dy);
+      }
       if(!cave&&!this.busy){
         const map=this.map(),x=walkable(map,next.x,this.p.y)?next.x:this.p.x,proposed={x,y:walkable(map,x,next.y)?next.y:this.p.y};
         const accepted=pendingSafeMove(map,this.p,proposed,this.client.state.position,this.moveTarget);
@@ -600,7 +616,19 @@ export class RealQuestSpike extends Component {
       // must not race that refresh when the replay temporarily reports ready.
       if(!this.busy&&this.elapsed-this.lastRefresh>5){this.lastRefresh=this.elapsed;void this.refreshJourney();}
       this.restoreLocalCamera();
-      this.combatRenderer.draw(this.client.state,this.targetId,reducedMotion(),{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height});
+      const combat=this.client.state.combat,visualTime=(combat?.time||0)+Math.min(.12,Math.max(0,this.elapsed-this.combatReceiptAt));
+      const local=this.localAction&&this.elapsed-this.localActionStart<this.localAction.until-this.localAction.started?{...this.localAction,started:visualTime-(this.elapsed-this.localActionStart),until:visualTime-(this.elapsed-this.localActionStart)+this.localAction.until-this.localAction.started}:null;
+      const action=local||(combat?.action&&combat.action.until>visualTime?combat.action:null);
+      if(cave&&action?.angle!==undefined)this.actorDirection=Math.abs(Math.cos(action.angle))>Math.abs(Math.sin(action.angle))?(Math.cos(action.angle)>0?3:2):(Math.sin(action.angle)<0?1:0);
+      const hurt=!!combat?.effects.some(e=>e.kind==='hurt'&&e.until>visualTime+.38);
+      this.actor.setScale(1,1);this.actor.angle=0;
+      if(cave&&!reducedMotion()){
+        if(action){const phase=Math.min(1,Math.max(0,(visualTime-action.started)/.38)),lean=Math.sin(phase*Math.PI);this.actor.angle=-Math.cos(action.angle||0)*lean*8;}
+        if(this.elapsed<this.localDodgeUntil)this.actor.angle=this.localDodge.dx*12;
+      }
+      const opacity=this.actor.getComponent(UIOpacity)||this.actor.addComponent(UIOpacity);opacity.opacity=cave&&hurt?175:255;
+      if(cave&&action)this.setActor(this.actor,this.actorArt(),sourceActorFrame(this.actorDirection,false,this.elapsed,reducedMotion()));
+      this.combatRenderer.draw(this.client.state,this.targetId,reducedMotion(),{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height},{position:this.p,action,time:visualTime});
       for(const [id,node] of this.objects)if(['lia','noah','mira'].includes(id))node.active=false;
       for(const obj of this.supportedObjects()){
         let n=this.objects.get(obj.id);
@@ -625,7 +653,7 @@ export class RealQuestSpike extends Component {
     if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.mode==='world'?this.nearest():undefined,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,this.busy,reducedMotion(),this.elapsed);
     this.updateConversationCamera(dt);
     this.updateItemPreviewCamera();
-    this.depths.set(this.actor,this.p.y);
+    this.depths.set(this.actor,this.client.state?.location.startsWith('cave_')?Math.max(this.p.y,this.combatRenderer.playerDepth):this.p.y);
     [...this.world.children].sort((a,b)=>(this.depths.get(a)||-1000)-(this.depths.get(b)||-1000)).forEach((n,i)=>n.setSiblingIndex(i));
     const nearby=this.nearest(), signature=(nearby?.id||'')+JSON.stringify(nearby&&this.client.state?interactionFor(nearby,this.client.state,serverNow()):null);
     if(signature!==this.lastNearby){this.lastNearby=signature;this.dirty=true;}
@@ -894,12 +922,67 @@ export class RealQuestSpike extends Component {
     }
     return success;
   }
+  private queueCombat(id:string){
+    this.combatQueued.queue(id);
+    if(id==='attack')this.attackPulse=true;
+    else if(id==='spark')this.sparkPulse=true;
+    else if(id==='soup')this.soupPulse=true;
+    else if(id==='dodge'){
+      this.dodgePulse=true;
+      const touches=Array.from(this.touches.values()),held=(key:KeyCode)=>this.keys.has(key)||touches.includes(key);
+      let x=Number(held(KeyCode.KEY_D)||held(KeyCode.ARROW_RIGHT))-Number(held(KeyCode.KEY_A)||held(KeyCode.ARROW_LEFT));
+      let y=Number(held(KeyCode.KEY_S)||held(KeyCode.ARROW_DOWN))-Number(held(KeyCode.KEY_W)||held(KeyCode.ARROW_UP));
+      if(!x&&!y&&this.route.length){x=this.route[0].x-this.p.x;y=this.route[0].y-this.p.y;}
+      if(!x&&!y&&this.client.state){const target=liveTarget(this.client.state,this.targetId);x=this.p.x-(target?.x??this.p.x+1);y=this.p.y-(target?.y??this.p.y);}
+      const length=Math.hypot(x,y)||1;this.localDodge={dx:x/length,dy:y/length};
+    }
+  }
+  private consumeCombat(id:string,queued:Record<string,number>){
+    if(!this.combatQueued.consume(id,queued[id]))return;
+    if(id==='attack')this.attackPulse=false;
+    else if(id==='spark')this.sparkPulse=false;
+    else if(id==='soup')this.soupPulse=false;
+    else if(id==='dodge')this.dodgePulse=false;
+  }
+  private previewCombat(dx:number,dy:number){
+    for(const id of this.combatQueued.expired(this.elapsed))this.consumeCombat(id,this.combatQueued.snapshot());
+    const s=this.client.state!,c=s.combat;if(!c||this.busy||this.client.status==='uncertain'||this.client.status==='offline')return;
+    const target=liveTarget(s,this.targetId);
+    if(this.dodgePulse&&this.elapsed>=this.localDodgeReady&&(c.dodge_at||0)<=c.time&&s.position.x>=166){
+      this.localDodgeUntil=this.elapsed+.18;this.localDodgeReady=this.elapsed+1.15;this.localAction=null;
+      void soundEffects.unlock();
+    }
+    const weapon=c.equipped?c.weapons[c.equipped]:null;
+    const spark=this.sparkPulse,attack=this.attackPulse||this.keys.has(KeyCode.SPACE)||!!this.combatDock?.held;
+    if(this.elapsed<this.localActionReady||c.cast||this.elapsed<this.localDodgeUntil||c.attack_at>c.time||s.position.x<166)return;
+    const magic=spark&&c.spark_learned&&c.spark_at<=c.time&&(s.stamina?.current||0)>=4;
+    if(!magic&&(!attack||!weapon||!s.inventory[c.equipped!]))return;
+    const duration=magic?.5:Math.min(weapon!.interval,.38),angle=Math.atan2((target?.y??this.p.y)-this.p.y,(target?.x??this.p.x+1)-this.p.x);
+    this.localAction={kind:magic?'spark':'weapon',style:magic?'spark':c.equipped==='glow_staff'?'bolt':c.equipped==='spring_spear'?'thrust':'sweep',angle,reach:magic?96:weapon!.reach,started:c.time,until:c.time+duration};
+    this.localActionStart=this.elapsed;this.localActionReady=this.elapsed+(magic?.5:weapon!.interval);
+    void soundEffects.unlock().then(()=>soundEffects.play(magic||c.equipped==='glow_staff'?'spell':'swing'));
+  }
   private updateCombat(dx:number,dy:number){
-    if(this.busy||this.combatPending||this.elapsed-this.combatLastTick<0.11)return;
-    const intention=combatIntention(this.client.state!,this.owner,{dx,dy},this.targetId,{attack:this.keys.has(KeyCode.SPACE)||!!this.combatDock?.held||this.attackPulse,spark:this.keys.has(KeyCode.KEY_Q)||this.sparkPulse,soup:this.keys.has(KeyCode.KEY_R)||this.soupPulse});
+    if(this.busy||this.combatPending||this.elapsed-this.combatLastTick<0.075)return;
+    const intention=combatIntention(this.client.state!,this.owner,{dx,dy},this.targetId,{attack:this.keys.has(KeyCode.SPACE)||!!this.combatDock?.held||this.attackPulse,spark:this.sparkPulse,soup:this.soupPulse,dodge:this.dodgePulse,dodge_x:this.localDodge.dx,dodge_y:this.localDodge.dy});
     if(!intention)return;
-    this.targetId=intention.targetId;this.combatLastTick=this.elapsed;this.attackPulse=this.sparkPulse=this.soupPulse=false;
-    this.combatPending=this.client.command('cave_tick',intention.data).then(reply=>{if(reply.state.combat?.message)this.notice=reply.state.combat.message;}).catch(e=>{this.error=e.message;this.clearInput();}).finally(()=>{this.combatPending=null;this.dirty=true;});
+    this.combatMotion.checkpoint(intention.data.seq);
+    this.targetId=intention.targetId;this.combatLastTick=this.elapsed;
+    const queued=this.combatQueued.snapshot(),dodgeAt=this.client.state!.combat?.dodge_at||0;
+    this.combatQueued.markSent(queued,this.elapsed);
+    const epoch=this.inputEpoch,location=this.client.state!.location;
+    this.combatPending=this.client.command('cave_tick',intention.data).then(reply=>{
+      if(epoch===this.inputEpoch&&location===reply.state.location)this.combatMotion.acknowledge(intention.data.seq,reply.state.position,this.elapsed);
+      else this.combatMotion.reset(reply.state.position,this.elapsed);
+      this.combatReceiptAt=this.elapsed;
+      if(epoch===this.inputEpoch){
+        const c=reply.state.combat;
+        if(c?.action?.seq===intention.data.seq)this.consumeCombat(c.action.kind==='spark'?'spark':'attack',queued);
+        if(c?.cast?.kind==='soup'&&intention.data.soup)this.consumeCombat('soup',queued);
+        if((c?.dodge_at||0)>dodgeAt&&intention.data.dodge)this.consumeCombat('dodge',queued);
+      }
+      if(reply.state.combat?.message)this.notice=reply.state.combat.message;
+    }).catch(e=>{this.error=e.message;this.clearInput();}).finally(()=>{this.combatPending=null;this.dirty=true;});
   }
   private followGuidance(action:GuidanceAction){
     this.continuation.dismiss();
@@ -972,7 +1055,7 @@ export class RealQuestSpike extends Component {
       this.box(this.hud,'CaveHintPaper',hintX,this.height-72,hintW,48,C.paper,6);
       this.text(this.hud,'CaveHint',this.error||v.hint,hintX+10,this.height-68,hintW-20,40,14,this.error?C.danger:C.ink);
       if(c.cast){const barX=compact?192:20,barY=this.height-94,barW=compact?hintW:240;this.box(this.hud,'CastTrack',barX,barY,barW,5,'#415a41',0);this.box(this.hud,'CastProgress',barX,barY,Math.max(1,barW*v.castProgress),5,'#dbc18a',0);}
-      this.combatDock?.draw(this.width,this.height,s,!this.canPlay()||this.busy,this.controls,this.actions);
+      this.combatDock?.draw(this.width,this.height,s,!this.canPlay()||this.busy,this.controls,this.actions,this.focusId);
 
     }
   }
@@ -1105,7 +1188,15 @@ export class RealQuestSpike extends Component {
 
   private clientChanged(){
     this.dirty=true;const s=this.client?.state,save=this.client?.saveId,action=this.client?.pending?.body.action;
-    if(s&&this.audibleState&&s!==this.audibleState&&save===this.audibleSave&&action&&!['move','world_resume','world_pause'].includes(action)){const cue=confirmedCue(this.audibleState,s);if(cue)soundEffects.play(cue);}
+    if(s&&this.audibleState&&s!==this.audibleState&&save===this.audibleSave&&action&&!['move','world_resume','world_pause'].includes(action)){const cue=confirmedCue(this.audibleState,s);if(cue)soundEffects.play(cue);
+      if(action==='cave_tick'&&s.combat?.encounter===this.audibleState.combat?.encounter){
+        const old=new Set(this.audibleState.combat?.effects.map(e=>e.id??[e.kind,e.until,e.x,e.y].join(':')));
+        const events=s.combat?.effects.filter(e=>!old.has(e.id??[e.kind,e.until,e.x,e.y].join(':')))||[];
+        if(events.some(e=>e.kind==='hurt'))soundEffects.play('hurt');
+        if(events.some(e=>e.kind==='hit'))soundEffects.play('hit');
+        if(events.some(e=>e.kind==='defeat'))soundEffects.play('defeat');
+      }
+    }
     this.audibleState=s||null;this.audibleSave=save||'';
   }
   private async toggleFullScreen(){if(fullScreen.pending)return;await fullScreen.toggle();this.notice=fullScreen.error||(fullScreen.active?'已进入全屏，Esc 可退出。':'已退出全屏。');this.dirty=true;}

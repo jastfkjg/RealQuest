@@ -5,13 +5,13 @@ from collections import deque
 from .daynight import clock_view, DAY_SECONDS
 
 WEAPONS = {
-    'stone_sword': dict(name='石刃短剑', price=24, damage=8, interval=.65, reach=28, stamina=1, magic=False,
+    'stone_sword': dict(name='石刃短剑', price=24, damage=8, interval=.48, reach=34, stamina=0, magic=False, style='sweep', windup=.10, knockback=15,
                         science=1, magic_level=1, either=True, costs={'plank': 2, 'stone': 2}),
-    'reinforced_sword': dict(name='加固短剑', price=96, damage=12, interval=.65, reach=32, stamina=1, magic=False,
+    'reinforced_sword': dict(name='加固短剑', price=96, damage=12, interval=.48, reach=38, stamina=0, magic=False, style='sweep', windup=.10, knockback=18,
                         science=1, magic_level=1, either=True, costs={'plank': 3, 'stone': 4, 'shell': 2, 'gold': 8}),
-    'spring_spear': dict(name='弹簧长矛', price=120, damage=13, interval=.85, reach=48, stamina=2, magic=False,
+    'spring_spear': dict(name='弹簧长矛', price=120, damage=13, interval=.70, reach=56, stamina=0, magic=False, style='thrust', windup=.16, knockback=22,
                         science=1, magic_level=0, either=False, costs={'plank': 3, 'stone': 4, 'shell': 2, 'gold': 10}),
-    'glow_staff': dict(name='微光短杖', price=120, damage=10, interval=.85, reach=112, stamina=2, magic=True,
+    'glow_staff': dict(name='微光短杖', price=120, damage=10, interval=.72, reach=128, stamina=0, magic=True, style='bolt', windup=.18, knockback=6,
                         science=0, magic_level=2, either=False, costs={'plank': 3, 'stone': 3, 'crystal': 2, 'gel': 2, 'gold': 10}),
 }
 ENEMIES = {
@@ -43,6 +43,9 @@ def ensure_combat(state):
             'unlocked': 1, 'day': 0, 'floors': {}, 'time': 0., 'last_tick': 0., 'attack_at': 0.,
             'spark_at': 0., 'hurt_until': 0., 'soup_at': 0., 'soups_used': 0, 'cast': None,
             'effects': [], 'projectiles': [], 'message': '', 'moves': 0, 'encounter': '', 'input_seq': 0}
+    c = state['village_combat']
+    for key, value in dict(dodge_at=0., dash=None, action=None, event_seq=0).items():
+        c.setdefault(key, value)
     for item in ITEMS:
         state['inventory'].setdefault(item, 0)
     for item in [*WEAPONS, 'gel', 'shell', 'crystal', 'soup']:
@@ -54,7 +57,7 @@ def reset_day(state, now):
     c = ensure_combat(state)
     day = clock_view(state, now)['day']
     if c['day'] != day:
-        c.update(day=day, floors={}, last_tick=0., cast=None, effects=[], projectiles=[], soups_used=0)
+        c.update(day=day, floors={}, last_tick=0., cast=None, action=None, dash=None, effects=[], projectiles=[], soups_used=0)
     return c
 
 
@@ -99,7 +102,8 @@ def combat_view(state, now):
         'unlocked': c['unlocked'], 'equipped': c['equipped'], 'gate_open': c['gate_open'],
         'legacy_passage': c['legacy_passage'], 'boss_first': c['boss_first'], 'spark_learned': c['spark_learned'],
         'soups_used': c['soups_used'], 'attack_at': c['attack_at'], 'spark_at': c['spark_at'], 'soup_at': c['soup_at'],
-        'encounter': c.get('encounter',''), 'input_seq': c.get('input_seq',0)}
+        'encounter': c.get('encounter',''), 'input_seq': c.get('input_seq',0),
+        'action': c.get('action'), 'dash': c.get('dash'), 'dodge_at': c['dodge_at'], 'hurt_until': c['hurt_until']}
 
 
 def near_service(state, target, places):
@@ -150,29 +154,80 @@ def defeated(state, enemy):
             ensure_intro(state)['first_clear'] = True
 
 
+def effect(c, kind, x, y, text='', duration=.65, **extra):
+    c['event_seq'] = c.get('event_seq', 0) + 1
+    c['effects'].append(dict(id=c['event_seq'], kind=kind, x=x, y=y, text=text,
+                             until=c['time']+duration, **extra))
+
+
+def push_enemy(state, enemy, angle, distance):
+    from .world import walkable
+    # Sweep small steps so knockback never crosses a pillar, wall or shelter.
+    for _ in range(math.ceil(distance/3)):
+        step = min(3, distance); distance -= step
+        nx, ny = enemy['x']+math.cos(angle)*step, enemy['y']+math.sin(angle)*step
+        if nx < 166 or not walkable(nx, ny, state['location']):
+            break
+        enemy['x'], enemy['y'] = nx, ny
+
+
+def damage_enemy(state, enemy, attack):
+    c = state['village_combat']; definition = ENEMIES[enemy['kind']]
+    # Armored beetles expose their shell after an attack; bosses retain armor.
+    exposed = enemy['kind'] == 'beetle' and enemy['phase'] == 'recover'
+    armor = 0 if attack['magic'] or exposed else definition['armor']
+    damage = max(1, attack['damage']-armor)
+    enemy['hp'] = max(0, enemy['hp']-damage)
+    enemy['hit_until'] = c['time']+.22
+    effect(c, 'hit', enemy['x'], enemy['y'], f'−{damage}', enemy=enemy['id'],
+           heavy=attack.get('style') == 'thrust', exposed=exposed)
+    if enemy['hp'] == 0:
+        enemy['dead_at'] = c['time']
+        effect(c, 'defeat', enemy['x'], enemy['y'], duration=.4, enemy=enemy['id'])
+        defeated(state, enemy)
+    elif enemy['kind'] != 'boss':
+        push_enemy(state, enemy, attack['angle'], attack.get('knockback', 8))
+        # Telegraphs are commitments: normal hits do not erase every attack.
+        # A recovery window can be extended slightly, never stun-locked forever.
+        enemy['stagger_until'] = c['time']+.12
+
+
 def attack_hit(state, cast):
-    c = state['village_combat']
-    p = state['position']
+    c = state['village_combat']; p = state['position']
     if p['x'] < 166:
         return
+    if cast.get('style') == 'bolt':
+        c['projectiles'].append(dict(x=p['x'], y=p['y'], angle=cast['angle'],
+            until=c['time']+cast['reach']/220, wave=f"player-{c['event_seq']}-{c['input_seq']}",
+            side='player', damage=cast['damage'], magic=True, knockback=cast.get('knockback', 6),
+            style='bolt'))
+        return
     enemies = [e for e in c['floors'].get(state['location'][5:], []) if e['hp'] > 0]
-    # Aim is an intention. Server validates distance, angle and line of sight.
     candidates = []
     from .world import clear_path
+    arc = .28 if cast.get('style') == 'thrust' else .65 if cast['magic'] else .95
     for enemy in enemies:
         dx, dy = enemy['x']-p['x'], enemy['y']-p['y']
         distance = math.hypot(dx, dy)
         direction = math.atan2(dy, dx)
         angle = abs(math.atan2(math.sin(direction-cast['angle']), math.cos(direction-cast['angle'])))
-        if distance <= cast['reach'] + (20 if enemy['kind']=='boss' else 10) and angle <= (.35 if cast['magic'] else .85) and clear_path(p, enemy, state['location']):
+        if distance <= cast['reach'] + (20 if enemy['kind']=='boss' else 10) and (distance <= 6 or angle <= arc) and clear_path(p, enemy, state['location']):
             candidates.append((distance, enemy))
-    if candidates:
-        enemy = min(candidates, key=lambda row: row[0])[1]
-        damage = max(1, cast['damage']-(0 if cast['magic'] else ENEMIES[enemy['kind']]['armor']))
-        enemy['hp'] = max(0, enemy['hp']-damage)
-        c['effects'].append(dict(x=enemy['x'], y=enemy['y'], text=f'−{damage}', until=c['time']+.65, kind='hit'))
-        if enemy['hp'] == 0:
-            defeated(state, enemy)
+    for _, enemy in sorted(candidates, key=lambda row: row[0])[:2 if cast.get('style') == 'thrust' else 3]:
+        damage_enemy(state, enemy, cast)
+    if not candidates:
+        effect(c, 'miss', p['x'], p['y'], duration=.25)
+
+
+def hurt_player(state, damage):
+    c = state['village_combat']; t = c['time']
+    if t < c['hurt_until'] or (c.get('dash') and t < c['dash']['started']+.14):
+        return False
+    state['vitality']['current'] = max(0, state['vitality']['current']-damage)
+    c['hurt_until'] = t+.8
+    p = state['position']
+    effect(c, 'hurt', p['x'], p['y'], f'−{damage}')
+    return True
 
 
 def retreat(state, now, defeat=False):
@@ -180,7 +235,7 @@ def retreat(state, now, defeat=False):
     boss = c['floors'].get('5', [])
     if boss and boss[0]['hp'] > 0:
         c['floors'].pop('5', None)
-    c.update(last_tick=0., cast=None, effects=[], projectiles=[], soups_used=0)
+    c.update(last_tick=0., cast=None, action=None, dash=None, effects=[], projectiles=[], soups_used=0)
     state['location'], state['position'] = 'overworld', {'x':304,'y':1180}
     if defeat:
         state['vitality']['current'] = math.ceil(state['vitality']['max']*.3)
@@ -244,6 +299,8 @@ def step_enemies(state, dt):
                 c['projectiles'] = []
             e['phase'] = 'idle'
             continue
+        if t < e.get('stagger_until', 0):
+            continue
         if e['phase']=='windup':
             if t >= e['until']:
                 tx,ty=e['tx'],e['ty']; hit=False
@@ -262,29 +319,29 @@ def step_enemies(state, dt):
                     hit=distance<60 and abs(math.atan2(math.sin(a-base),math.cos(a-base)))<=math.pi/3
                     damage=8
                 else:
+                    if e['kind']=='slime':
+                        from .world import walkable
+                        if tx>=166 and walkable(tx,ty,state['location']) and clear_path(e,{'x':tx,'y':ty},state['location']):
+                            e['x'],e['y']=tx,ty
                     hit=math.hypot(p['x']-tx,p['y']-ty)<(40 if boss else 26)
                     damage=8 if boss and e.get('style')=='sweep' else d['damage']
-                if hit and t>=c['hurt_until']:
-                    state['vitality']['current']=max(0,state['vitality']['current']-damage)
-                    c['hurt_until']=t+.8
-                    c['effects'].append(dict(x=p['x'],y=p['y'],text=f'−{damage}',until=t+.65,kind='hurt'))
+                if hit:
+                    hurt_player(state, damage)
                 e['phase']='recover'; e['until']=t+(1.2 if e.get('style')=='sweep' else 1.6 if boss else .7)
             continue
         if e['phase']=='dash':
             nx=e['x']+e['vx']*dt;ny=e['y']+e['vy']*dt
             if nx>=166 and walkable(nx,ny,state['location']):e['x'],e['y']=nx,ny
             if not e['dash_hit'] and math.hypot(p['x']-e['x'],p['y']-e['y'])<24 and t>=c['hurt_until']:
-                state['vitality']['current']=max(0,state['vitality']['current']-4)
-                c['hurt_until']=t+.8;e['dash_hit']=True
-                c['effects'].append(dict(x=p['x'],y=p['y'],text='−4',until=t+.65,kind='hurt'))
+                e['dash_hit']=hurt_player(state, 4)
             if t>=e['until']:e.update(phase='recover',until=t+.7)
             continue
         if e['phase']=='recover':
             if t>=e['until']: e['phase']='pursue'
             continue
-        if distance < (105 if e['kind']=='bat' else 78 if boss else 42) and t>=e['ready'] and clear_path(e,p,state['location']):
+        if distance < (105 if e['kind']=='bat' else 180 if boss else 42) and t>=e['ready'] and clear_path(e,p,state['location']):
             e['move']+=1
-            style='shot' if boss and e['hp']<=80 and e['move']%3==0 else 'sweep' if boss and e['move']%2==0 else 'slam'
+            style='shot' if boss and (distance>80 or (e['hp']<=80 and e['move']%3==0)) else 'sweep' if boss and e['move']%2==0 else 'slam'
             windup=1. if style=='shot' else .9 if style=='sweep' else d['windup']
             e.update(phase='windup',until=t+windup,ready=t+d['interval'],tx=p['x'],ty=p['y'],style=style)
         else:
@@ -306,27 +363,43 @@ def tick(state, data, now):
     require(isinstance(seq,int) and not isinstance(seq,bool) and seq == c.get('input_seq',0)+1, '战斗输入已更新，请等待同步')
     clock=state['world_clock']
     require(data.get('owner') == clock.get('owner'), '另一页面正在管理世界，请在当前页面继续')
-    c['input_seq'] = seq
     if clock.get('running_until',0) < now or not clock.get('running_until'):
+        c['input_seq']=seq
         c['last_tick']=now
         return ''
     axes=[data.get(k,0) for k in ['dx','dy','aim_x','aim_y']]
     require(all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) for v in axes), '战斗输入无效')
     dx,dy,ax,ay=axes
     require(abs(dx)<=1 and abs(dy)<=1 and 0<=ax<=640 and 0<=ay<=448, '战斗输入超出范围')
+    dodge_axes=[data.get('dodge_x',dx),data.get('dodge_y',dy)]
+    require(all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) and abs(v)<=1 for v in dodge_axes), '闪避方向无效')
+    c['input_seq']=seq
     gap=now-c['last_tick']
     dt=min(.25,max(0.,gap)) if c['last_tick'] and gap<=.75 else 0.
     c['last_tick']=now
     recover_stamina(state,now)
     floor_enemies(state,now)
     length=max(1,math.hypot(dx,dy)); dx/=length; dy/=length
+    if data.get('dodge') is True and c['time'] >= c['dodge_at'] and dt > 0 and state['position']['x'] >= 166:
+        vx, vy = dodge_axes
+        if math.hypot(vx,vy) < .01:
+            vx, vy = state['position']['x']-ax, state['position']['y']-ay
+        length=math.hypot(vx,vy) or 1
+        c['dash']=dict(dx=vx/length,dy=vy/length,started=c['time'],until=c['time']+.18)
+        c['dodge_at']=c['time']+1.15
+        c['cast']=None
+        c['action']=None
+        effect(c,'dodge',state['position']['x'],state['position']['y'],duration=.22)
     # Substeps keep tell/impact and movement outcomes stable across polling rates.
     remaining=dt
     while remaining>1e-8 and is_cave(state):
         step=min(.025,remaining); remaining-=step; c['time']+=step
         p=state['position']
-        for axis,value in [('x',dx),('y',dy)]:
-            target=p[axis]+value*160*step
+        dash=c.get('dash')
+        if dash and c['time'] >= dash['until']:
+            c['dash']=None; dash=None
+        for axis,value in [('x',dash['dx'] if dash else dx),('y',dash['dy'] if dash else dy)]:
+            target=p[axis]+value*(360 if dash else 160)*step
             point={**p,axis:target}
             if walkable(point['x'],point['y'],state['location']): p[axis]=target
         cast=c['cast']
@@ -345,21 +418,28 @@ def tick(state, data, now):
         step_enemies(state,step)
         projectiles=[]
         for shot in c.get('projectiles',[]):
-            shot['x']+=math.cos(shot['angle'])*90*step;shot['y']+=math.sin(shot['angle'])*90*step
+            speed=220 if shot.get('side')=='player' else 90
+            shot['x']+=math.cos(shot['angle'])*speed*step;shot['y']+=math.sin(shot['angle'])*speed*step
             if shot['until']<c['time'] or not walkable(shot['x'],shot['y'],state['location']):continue
-            if p['x']>=166 and math.hypot(p['x']-shot['x'],p['y']-shot['y'])<15:
-                if c.get('hit_wave')!=shot['wave'] and c['time']>=c['hurt_until']:
-                    state['vitality']['current']=max(0,state['vitality']['current']-6)
-                    c['hurt_until']=c['time']+.8;c['hit_wave']=shot['wave']
-                    c['effects'].append(dict(x=p['x'],y=p['y'],text='−6',until=c['time']+.65,kind='hurt'))
+            if shot.get('side')=='player':
+                hit=next((e for e in c['floors'].get(state['location'][5:],[]) if e['hp']>0 and
+                    math.hypot(e['x']-shot['x'],e['y']-shot['y']) < (24 if e['kind']=='boss' else 13)),None)
+                if hit:
+                    damage_enemy(state,hit,shot)
+                    continue
+            elif p['x']>=166 and math.hypot(p['x']-shot['x'],p['y']-shot['y'])<15:
+                if c.get('hit_wave')!=shot['wave'] and hurt_player(state,6):
+                    c['hit_wave']=shot['wave']
                 continue
             projectiles.append(shot)
+        if state['location']=='cave_5' and all(e['hp']<=0 for e in c['floors'].get('5',[])):
+            projectiles=[shot for shot in projectiles if shot.get('side')=='player']
         c['projectiles']=projectiles
         if state['vitality']['current']<=0:
             retreat(state,now,True)
             return c['message']
     t=c['time']; c['effects']=[e for e in c['effects'] if e['until']>t]
-    if not c['cast'] and dt>0:
+    if not c['cast'] and not c.get('dash') and dt>0:
         angle=math.atan2(ay-state['position']['y'],ax-state['position']['x'])
         if data.get('soup') is True and state['inventory']['soup']>0 and t>=c['soup_at'] and (state['location']!='cave_5' or c['soups_used']<2):
             c['cast']=dict(kind='soup',until=t+1.2,started=t)
@@ -367,14 +447,17 @@ def tick(state, data, now):
             state['stamina']['current']-=4
             state['stamina']['updated_at']=now
             c['attack_at']=t+.5; c['spark_at']=t+4
-            c['cast']=dict(kind='spark',angle=angle,damage=12,magic=True,reach=96,until=t+.5,started=t)
+            c['cast']=dict(kind='spark',angle=angle,damage=12,magic=True,reach=96,until=t+.28,started=t,style='spark',knockback=12)
+            c['action']={**c['cast'],'until':t+.5,'hit_at':t+.28,'seq':c['input_seq']}
         elif state['position']['x']>=166 and data.get('attack') is True and c['equipped'] in WEAPONS and state['inventory'][c['equipped']]>0 and t>=c['attack_at']:
             w=WEAPONS[c['equipped']]
             if state['stamina']['current']>=w['stamina']:
                 state['stamina']['current']-=w['stamina']
-                state['stamina']['updated_at']=now
+                if w['stamina']:
+                    state['stamina']['updated_at']=now
                 c['attack_at']=t+w['interval']
-                c['cast']=dict(kind='weapon',angle=angle,damage=w['damage'],magic=w['magic'],reach=w['reach'],until=t+.12,started=t)
+                c['cast']=dict(kind='weapon',angle=angle,damage=w['damage'],magic=w['magic'],reach=w['reach'],until=t+w['windup'],started=t,style=w['style'],knockback=w['knockback'])
+                c['action']={**c['cast'],'until':t+min(w['interval'],.38),'hit_at':t+w['windup'],'seq':c['input_seq']}
     return ''
 
 
@@ -455,7 +538,7 @@ def command(state, action, data, now):
                 require(c['unlocked']>=destination+1 if destination==3 else c['unlocked']>=5,'这条通路尚未打通')
             else: raise ValueError('Unsupported cave target')
             state['location']=f'cave_{destination}'; state['position']={'x':64,'y':352}
-        c.update(last_tick=0.,cast=None,effects=[],projectiles=[],soups_used=0,encounter=str(uuid.uuid4()),input_seq=0)
+        c.update(last_tick=0.,cast=None,action=None,dash=None,effects=[],projectiles=[],soups_used=0,encounter=str(uuid.uuid4()),input_seq=0)
         floor_enemies(state,now)
         return f'进入石根山洞第{state["location"][5:]}层 · 普通移动不耗体力，可随时撤离'
     require(False,'未知村庄战斗操作')

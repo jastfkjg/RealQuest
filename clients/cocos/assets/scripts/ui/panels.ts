@@ -243,7 +243,7 @@ export class FeaturePanels {
    h.text('CaveVitals',`生命 ${h.state.vitality?.current}/${h.state.vitality?.max} · 体力 ${Math.floor(h.state.stamina?.current||0)}/${h.state.stamina?.max}`,dx+(!compact&&ready?84:0),top+(compact?54:98),dw-(!compact&&ready?84:0),28,compact?14:17,low?C.danger:C.muted);
    const hint=!ready?'建议先装备武器。也可以自行决定进入。':low?'生命或体力偏低，建议先回床边休整。':'先探索首层；随时可撤离，已获材料保留。';
    const note=h.text('CaveReadiness',hint,dx,top+(compact?82:154),dw,compact?36:56,compact?14:17,!ready||low?C.danger:C.ink);if(compact)note.lineHeight=18;
-   if(!compact){h.text('CaveHelp','空格攻击 · 点击怪物选择目标\n看见攻击预兆，先走出金色区域。',dx,top+226,dw,68,16,C.muted);}
+   if(!compact){h.text('CaveHelp','空格普攻免体力 · V 闪避\n看见蓄势先避让，收招时反击。',dx,top+226,dw,68,16,C.muted);}
    const bw=(dw-12)/2;
    h.button('cave-enter','进入第一层',dx,footer,bw,44,()=>h.send('cave_interact',{target:obj.id}).then(ok=>{if(ok)h.go('world');}),h.busy,ready&&!low);
    const recover=c.boss_first&&!c.gate_open&&!(h.state.inventory.gate_stone||0);
@@ -253,7 +253,7 @@ export class FeaturePanels {
   const body=gate?(c.gate_open?'石门已永久开启，无需再次提交魔法石。\n东行的路已经通了，查看安排后再出发吧。':`门钥魔法石 ${h.state.inventory.gate_stone||0} / 1 · 魔法 ${h.state.knowledge_growth?.magic||0} / 3\n击败底层守卫并培养魔法后，走近此处嵌石。`):inCave?`第 ${c.floor} 层 · ${c.cleared?'本层已清理':'本层仍有怪物'} · 已探索至 ${c.unlocked} 层\n安全区位于左侧；可随时撤离，已有战利品保留。`:`共 5 层 · 已开放至 ${c.unlocked} 层\n当前装备：${c.equipped?itemNames[c.equipped]:'尚未装备'} · 生命 ${h.state.vitality?.current}/${h.state.vitality?.max}`;
   h.text('CaveSummary',gate?'通往苇风渡口':inCave?obj.name:'主动进入战斗区域',dx,f.top,dw,38,24);
   h.text('CaveRequirements',body,dx,f.top+46,dw,88,18);
-  if(!f.compact)h.text('CaveHelp',gate?'石门开启后，可以从这里查看离村路线。\n带好路途补给；村庄里的家与成长手记仍会为你保留。':'WASD / 点击地面移动 · 点击怪物选定目标\n空格攻击 · Q 火花术 · R 菜汤\n打开面板、切换到现实成长或离开窗口，会停止发送战斗输入。',dx,f.top+150,dw,110,17,C.muted);
+  if(!f.compact)h.text('CaveHelp',gate?'石门开启后，可以从这里查看离村路线。\n带好路途补给；村庄里的家与成长手记仍会为你保留。':'WASD / 点击地面移动 · 点击怪物选定目标\n空格普攻 · V 闪避 · Q 火花术 · R 菜汤\n打开面板、切换到现实成长或离开窗口，会停止发送战斗输入。',dx,f.top+150,dw,110,17,C.muted);
   if(gate){
    h.button('open-gate',c.gate_open?'石门已开启':'确认嵌入魔法石',dx,f.y+f.h-62,Math.min(300,dw/2-8),44,()=>h.send('gate_open'),h.busy||c.gate_open||!c.boss_first||(h.state.inventory.gate_stone||0)<1||(h.state.knowledge_growth?.magic||0)<3,true);
    h.button('gate-travel','查看离村安排',dx+Math.min(312,dw/2),f.y+f.h-62,Math.min(300,dw/2-8),44,()=>h.go('travel'),h.busy||!c.gate_open);return;

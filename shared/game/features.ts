@@ -17,7 +17,7 @@ export function questEntries(state:GameState,giver?:string):Quest[]{return state
 // Descriptive existing recipes only. The server validates costs and mutates assets.
 export const plankRecipe={wood:3};
 export const upgradeCosts=(level:number)=>({wood:level*6,stone:level*3,gold:level*10});
-export function combatIntention(state:GameState,owner:string,axes:{dx:number;dy:number},targetId:string|null,buttons:{attack:boolean;spark:boolean;soup:boolean}){
+export function combatIntention(state:GameState,owner:string,axes:{dx:number;dy:number},targetId:string|null,buttons:{attack:boolean;spark:boolean;soup:boolean;dodge?:boolean;dodge_x?:number;dodge_y?:number}){
  const c=state.combat;if(!c?.encounter||!state.location.startsWith('cave_'))return null;
  const alive=c.enemies.filter(e=>e.hp>0),p=state.position;
  const target=alive.find(e=>e.id===targetId)||alive.sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0];

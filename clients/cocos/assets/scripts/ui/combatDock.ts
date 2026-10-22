@@ -51,9 +51,10 @@ export class CombatDock {
     this.release();
     this.root.active = false;
   }
-  private shape(b: Button, color: string) {
-    if (b.color === color) return;
-    b.color = color;
+  private shape(b: Button, color: string, progress = 0, focused = false) {
+    const key=color+":"+Math.round(progress*20)+':'+focused;
+    if (b.color === key) return;
+    b.color = key;
     const g = b.node.getComponent(Graphics)!;
     g.clear();
     const { w, h } = b.control;
@@ -64,6 +65,8 @@ export class CombatDock {
     g.lineWidth = 1;
     g.roundRect(-w / 2, -h / 2, w, h, 8);
     g.stroke();
+    if(progress>0){g.fillColor=new Color('#9b794b');g.rect(-w/2+5,-h/2+4,(w-10)*Math.min(1,progress),3);g.fill();}
+    if(focused){g.strokeColor=new Color(C.amber);g.lineWidth=3;g.roundRect(-w/2-2,-h/2-2,w+4,h+4,9);g.stroke();}
   }
   private create(id: string, x: number, y: number, w: number, h: number) {
     const n = new Node(id);
@@ -113,7 +116,7 @@ export class CombatDock {
     n.on(Node.EventType.TOUCH_START, (e: EventTouch) => {
       e.propagationStopped = true;
       if (b.disabled) return;
-      if (id === "attack") this.heldPointers.add(e.getID() ?? 0);
+      if (id === "attack") { this.heldPointers.add(e.getID() ?? 0); this.run(id); }
       else this.run(id);
       n.getComponent(UIOpacity)!.opacity = 210;
     });
@@ -138,14 +141,15 @@ export class CombatDock {
     locked: boolean,
     controls: Control[],
     actions: Map<string, () => unknown>,
+    focusId = '',
   ) {
     this.root.active = true;
     this.root.setPosition(-width / 2, height / 2);
     const compact = width < 1000,
-      w = compact ? 82 : 108,
+      w = compact ? 68 : 96,
       h = 54,
-      gap = 8,
-      x = width - 4 * w - 3 * gap - 20,
+      gap = compact ? 6 : 8,
+      x = width - 5 * w - 4 * gap - 20,
       y = height - 140,
       size = width + ":" + height;
     if (this.size !== size) {
@@ -154,7 +158,7 @@ export class CombatDock {
       this.root.removeAllChildren();
       this.buttons.clear();
       this.size = size;
-      ["attack", "spark", "soup", "next-target"].forEach((id, i) =>
+      ["attack", "dodge", "spark", "soup", "next-target"].forEach((id, i) =>
         this.create(id, x + i * (w + gap), y, w, h),
       );
     }
@@ -170,10 +174,16 @@ export class CombatDock {
           : c.cast
             ? "出手中"
             : c.attack_at > c.time
-              ? "蓄势"
-              : "攻击",
-        compact ? "按住连击" : "空格 · 按住连击",
+              ? "收势"
+              : c.equipped === "spring_spear" ? "直刺" : c.equipped === "glow_staff" ? "法弹" : "挥剑",
+        compact ? "按住连击" : "空格 · 免体力",
         locked || !has || stamina < (weapon?.stamina || 0),
+      ],
+      [
+        "dodge",
+        "闪避",
+        (c.dodge_at || 0) > c.time ? `${((c.dodge_at || 0)-c.time).toFixed(1)} 秒` : compact ? "移动方向" : "V / Shift",
+        locked || (c.dodge_at || 0)>c.time || s.position.x<166,
       ],
       [
         "spark",
@@ -208,7 +218,7 @@ export class CombatDock {
       ],
       [
         "next-target",
-        "切换目标",
+        compact ? "目标" : "切换目标",
         compact ? "点击选择" : "T · 不会攻击",
         locked || !c.enemies.some((e) => e.hp > 0),
       ],
@@ -217,7 +227,7 @@ export class CombatDock {
       const b = this.buttons.get(id)!;
       b.disabled = disabled;
       b.control.disabled = disabled;
-      b.control.label = label;
+      b.control.label = label + ' · ' + caption;
       b.label.string = label;
       b.caption.string = caption;
       b.label.color = new Color(
@@ -235,6 +245,8 @@ export class CombatDock {
               ? "#2c4b36"
               : C.moss
             : C.raised,
+        id === 'attack' ? Math.max(0,(c.attack_at-c.time)/(weapon?.interval||1)) : id === 'dodge' ? Math.max(0,((c.dodge_at||0)-c.time)/1.15) : id === 'spark' ? Math.max(0,(c.spark_at-c.time)/4) : 0,
+        focusId === id,
       );
       controls.push(b.control);
       if (!disabled) actions.set(id, () => this.run(id));

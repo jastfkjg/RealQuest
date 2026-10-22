@@ -2261,5 +2261,17 @@
       "related native popup surfaces"
     ],
     "lazy_loading": "Book and credential artwork is loaded on demand. Browsers supporting WebP reuse the original lossless materials; other platforms retain pixel-identical PNG fallbacks. Native text/actions remain separate."
+  },
+  "cocos_combat_experience": {
+    "date": "2026-10-22",
+    "task": "docs/tasks/114-cocos-combat-experience.md",
+    "status": "implemented_and_locally_verified_pending_owner_feel_review",
+    "source": "Original RealQuest native geometry, existing authorized actor sprites and original WebAudio oscillator code",
+    "canonical_geometry": "shared/game/caveView.ts",
+    "native_animation": "clients/cocos/assets/scripts/combatView.ts",
+    "original_synthesized_audio": "clients/cocos/assets/scripts/experience.ts",
+    "new_raster_font_audio_files": [],
+    "source_images_modified": false,
+    "processing": "Weapon silhouettes and arcs rendered from deterministic world-coordinate marks. Sprite transforms animate windup/hit/recovery/death. Sound envelopes are synthesized at runtime; no third-party recordings, downloads or generation services."
   }
 }

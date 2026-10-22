@@ -1,4 +1,4 @@
-import type { CaveEnemy, GameState, MapData } from "./protocol";
+import type { CaveEnemy, GameState, MapData, CombatAction } from "./protocol";
 import { walkable } from "./navigation";
 import type { Mark } from "./caveArt";
 export function caveSight(
@@ -64,7 +64,9 @@ export function caveStatus(s: GameState, id: string | null, map: MapData) {
                   ? "体力不足 · 可饮汤或安全撤离"
                   : target?.phase === "windup"
                     ? "预兆已出现 · 移开金色区域"
-                    : "观察预兆 · 按住攻击，T 切换目标";
+                    : target?.phase === 'recover'
+                      ? target.kind === 'beetle' ? '硬壳露出破绽 · 趁收招反击' : '收招破绽 · 靠近反击'
+                      : "按住普攻 · 移动避让 · V 闪避";
   const cast = c.cast,
     progress = cast
       ? Math.max(
@@ -102,7 +104,7 @@ export function confirmedFeedback(s: GameState, reduced = false) {
   const c = s.combat;
   if (!c) return [];
   return c.effects
-    .filter((e) => e.until > c.time)
+    .filter((e) => e.until > c.time && (e.kind === 'hit' || e.kind === 'hurt'))
     .slice(-8)
     .map((e) => {
       const remaining = Math.min(0.65, e.until - c.time),
@@ -110,7 +112,7 @@ export function confirmedFeedback(s: GameState, reduced = false) {
       return {
         ...e,
         anchorY: e.y - (e.kind === "hit" && c.floor === 5 ? 84 : 48),
-        key: [e.kind, e.x, e.y, e.text, e.until].join(":"),
+        key: [c.encounter,e.id ?? [e.kind, e.x, e.y, e.text, e.until].join(":")].join(':'),
         alpha: reduced ? 1 : Math.min(1, remaining / 0.15),
         lift: reduced ? 0 : age * 12,
       };
@@ -210,20 +212,21 @@ export function combatMarks(
     }
   }
   for (const shot of c.projectiles) {
+    const bodyY=shot.y-18;
     a.push({
       kind: "poly",
       points: [
-        { x: shot.x, y: shot.y - 6 },
-        { x: shot.x + 4, y: shot.y },
-        { x: shot.x, y: shot.y + 6 },
-        { x: shot.x - 4, y: shot.y },
+        { x: shot.x, y: bodyY - 6 },
+        { x: shot.x + 4, y: bodyY },
+        { x: shot.x, y: bodyY + 6 },
+        { x: shot.x - 4, y: bodyY },
       ],
-      fill: "#f0cc8a",
-      stroke: "#946940",
+      fill: shot.side === 'player' ? '#d4f0bc' : "#f0cc8a",
+      stroke: shot.side === 'player' ? '#6f9c79' : "#946940",
       line: 0.7,
     });
   }
-  if (c.cast && c.cast.kind !== "soup") {
+  if (c.cast && c.cast.kind === "spark") {
     const angle = c.cast.angle || 0,
       r = c.cast.reach || 28;
     path(
@@ -257,4 +260,37 @@ export function combatMarks(
     );
   }
   return a;
+}
+
+/** Original native weapon geometry; a swing is an intention, never a claimed hit. */
+export function weaponMarks(equipped:string|null,owned:boolean,p:{x:number;y:number},action:CombatAction|null,time:number,reduced=false):Mark[]{
+  if(!equipped||!owned)return [];
+  const marks:Mark[]=[],casting=action?.kind==='spark',style=(casting?null:action?.style)||(equipped==='glow_staff'?'bolt':equipped==='spring_spear'?'thrust':'sweep');
+  const age=action?Math.max(0,time-action.started):0,phase=Math.min(1,age/.32),active=!!action&&time<action.until;
+  const aim=action?.angle||0,angle=active?(style==='sweep'&&!casting?aim-1.1+phase*2.2:aim):.65;
+  const extension=active&&style==='thrust'?(reduced?12:Math.sin(phase*Math.PI)*22):0;
+  const origin={x:p.x+(active?Math.cos(aim)*extension:10),y:p.y-18+(active?Math.sin(aim)*extension:0)};
+  const point=(along:number,across:number)=>({x:origin.x+Math.cos(angle)*along-Math.sin(angle)*across,y:origin.y+Math.sin(angle)*along+Math.cos(angle)*across});
+  const line=(start:number,end:number,color:string,width:number)=>marks.push({kind:'line',points:[point(start,0),point(end,0)],stroke:color,line:width});
+  if(active&&style==='sweep'&&!casting){
+    const points=[{x:origin.x,y:origin.y}];
+    const reach=action.reach||34;
+    for(let i=0;i<=12;i++){const a=aim-1.1+(i/12)*2.2;points.push({x:origin.x+Math.cos(a)*reach,y:origin.y+Math.sin(a)*reach});}
+    marks.push({kind:'poly',points,fill:'#e5e7bf',alpha:reduced?.12:.14+Math.sin(phase*Math.PI)*.12});
+    if(!reduced)marks.push({kind:'line',points:points.slice(1),stroke:'#eee7ba',line:2,alpha:.65});
+  }
+  if(active&&casting)marks.push({kind:'ellipse',x:point(20,0).x,y:point(20,0).y,w:20,h:20,stroke:'#e7c487',line:2,alpha:.8});
+  if(style==='thrust'){
+    line(-12,25,'#71593f',3);
+    marks.push({kind:'poly',points:[point(25,-3),point(35,0),point(25,3)],fill:'#d8e6ce',stroke:'#486554',line:1});
+  }else if(style==='bolt'||style==='spark'){
+    line(-6,16,'#71593f',3);
+    marks.push({kind:'poly',points:[point(15,-4),point(22,0),point(15,4),point(11,0)],fill:active?'#f2e7ac':'#c9e0b1',stroke:'#5d8068',line:1});
+    if(active)marks.push({kind:'ellipse',x:point(18,0).x,y:point(18,0).y,w:14+(reduced?0:phase*12),h:14+(reduced?0:phase*12),stroke:style==='spark'?'#e7c487':'#d4e9b6',line:2,alpha:.8});
+  }else{
+    line(-5,2,'#735638',4);
+    marks.push({kind:'line',points:[point(3,-5),point(3,5)],stroke:'#c7ac71',line:2});
+    marks.push({kind:'poly',points:[point(5,-2.5),point(27,-1.5),point(31,0),point(27,2),point(5,2.5)],fill:equipped==='reinforced_sword'?'#e3e7cf':'#b6c6b0',stroke:'#4d6556',line:1});
+  }
+  return marks;
 }

@@ -34,7 +34,8 @@ for(const change of [
  {apiURL:'http://127.0.0.1:12346/wrong'},
 ])assert.throws(()=>validateBrowserConfig({...config,...change},owner,file));
 console.log('PASS fixture configuration rejects player/preview/outside DB paths, ownership mismatches and non-loopback/mismatched endpoints.');
-assert.equal(selectSuites('current').length,31);assert.equal(selectSuites('all').length,31);
+assert.equal(selectSuites('current').length,32);assert.equal(selectSuites('all').length,32);
+assert.equal(selectSuites('combat-experience')[0].file,'clients/cocos/tools/smoke-combat-experience.mjs');
 assert.equal(selectSuites('expedition-chain')[0].file,'clients/cocos/tools/smoke-expedition-chain.mjs');
 assert.equal(selectSuites('quest-board')[0].file,'clients/cocos/tools/smoke-quest-board.mjs');
 assert.equal(selectSuites('interface-refresh')[0].file,'clients/cocos/tools/smoke-interface-refresh.mjs');

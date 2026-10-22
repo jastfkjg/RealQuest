@@ -88,12 +88,21 @@ try{
   assert(start>=0&&end>start&&navigation>end&&canvas>navigation&&tail>canvas);
   let adapted=source.slice(0,start)+'  const {browser,page}=globalThis.__rqFrameClient;\n'+source.slice(end,navigation)+source.slice(canvas,tail)+'export {main};\n';
   assert.equal(adapted.split('  await browser.close();').length,2);adapted=adapted.replace('  await browser.close();','  // The owning regression finally closes the browser.');
+  const captureStart=adapted.indexOf('async function captureScreenshot('),captureEnd=adapted.indexOf('class ConsoleErrorTracker',captureStart);
+  assert(captureStart>=0&&captureEnd>captureStart);
+  // WebGL can return opaque black via toDataURL despite a correct compositor.
+  adapted=adapted.slice(0,captureStart)+`async function captureScreenshot(page,canvas,outPath){
+    const clip=canvas?await canvas.boundingBox():null;
+    fs.writeFileSync(outPath,await page.screenshot({type:'png',omitBackground:false,...(clip?{clip}:{})}));
+  }
+
+`+adapted.slice(captureEnd);
   const directory=path.join(test.directory,'frame-client');await fs.mkdir(directory);const worker=path.join(directory,'supplied-client.mjs');await fs.writeFile(worker,adapted);
   const args=process.argv;globalThis.__rqFrameClient={browser,page};
   try{process.argv=[process.execPath,worker,'--url',test.baseURL,'--iterations','2','--pause-ms','250','--screenshot-dir',directory,'--actions-json',JSON.stringify({steps:[{buttons:['left'],frames:6},{buttons:[],frames:4}]})];await (await import(pathToFileURL(worker))).main();}
   finally{process.argv=args;delete globalThis.__rqFrameClient;}
   assert.equal(digest(await fs.readFile(process.env.REALQUEST_FRAME_CLIENT,'utf8')),digest(source));assert(!(await fs.readdir(directory)).some(n=>n.startsWith('errors-')));
-  report.frameClient={sourceSHA256:digest(source),adaptedSHA256:digest(adapted),adaptations:'Reuse owned browser/page; keep current seeded world; outer finally owns cleanup. Supplied choreography/capture/text/error logic unchanged; existing real-time advanceTime used.'};
+  report.frameClient={sourceSHA256:digest(source),adaptedSHA256:digest(adapted),adaptations:'Reuse owned browser/page; keep current seeded world; outer finally owns cleanup. Supplied choreography/text/error logic unchanged; native compositor screenshots replace opaque-black WebGL canvas readback; existing real-time advanceTime used.'};
   assert((await read(page)).player.x<observed.s.player.x-2);report.checks.push('Optional supplied web-game client executes two actual keyboard bursts and retains screenshots/text without unexpected errors on the owned isolated page');
  }
  const credential=await page.evaluate(()=>localStorage.getItem('realquest-session-v2'));await context.close();

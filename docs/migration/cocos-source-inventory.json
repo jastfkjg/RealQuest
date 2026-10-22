@@ -3,12 +3,12 @@
   "policy": "docs/migration/cocos-source-policy.json",
   "note": "Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.",
   "counts": {
-    "bindings": 123,
+    "bindings": 124,
     "runtimePNGs": 91,
     "runtimeWebPs": 7,
-    "sharedModules": 25,
+    "sharedModules": 26,
     "sceneInputs": 76,
-    "files": 453,
+    "files": 456,
     "references": 31
   },
   "bindings": [
@@ -423,7 +423,7 @@
     {
       "source": "shared/game/protocol.ts",
       "target": "clients/cocos/assets/scripts/core/protocol.ts",
-      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
+      "sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -570,17 +570,22 @@
     {
       "source": "shared/game/features.ts",
       "target": "clients/cocos/assets/scripts/core/features.ts",
-      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0"
+      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee"
+    },
+    {
+      "source": "shared/game/combatMotion.ts",
+      "target": "clients/cocos/assets/scripts/core/combatMotion.ts",
+      "sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b"
     },
     {
       "source": "shared/game/caveArt.ts",
       "target": "clients/cocos/assets/scripts/core/caveArt.ts",
-      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c"
+      "sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e"
     },
     {
       "source": "shared/game/caveView.ts",
       "target": "clients/cocos/assets/scripts/core/caveView.ts",
-      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e"
+      "sha256": "cde5cfb9a2ca85b92b3c24e0145963e6f1bf9ce05149b415e5c4aa852f8d6b95"
     },
     {
       "source": "shared/game/localScene.ts",
@@ -5480,8 +5485,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "33c53b02f2d5f3d04db23dd4e437ce0330d08ee3355bbe5f3b900dce83a93760",
-      "bytes": 37576,
+      "sha256": "bb06f76a5e09523cfbd0e8be56106802d335e48e0e683f1643d0648e9303b505",
+      "bytes": 37865,
       "roles": [
         "binding-contract"
       ],
@@ -7258,8 +7263,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "8e4dc4579cc3bfe0f4fb61a9c71d9ddeb6efeb0a7c555c9c60886393e988e055",
-      "bytes": 104702,
+      "sha256": "76899634f667e37a98116eeac3c551251a69e59f5569a0c4da181ba68d77760c",
+      "bytes": 112061,
       "roles": [
         "inspected-source"
       ],
@@ -7314,8 +7319,8 @@
     {
       "path": "clients/cocos/assets/scripts/combatView.ts",
       "owner": "cocos-adapter",
-      "sha256": "bbd19ff9182247eb069a34252f38c507d7d983c0119deb6719b9cd96881abd7e",
-      "bytes": 5014,
+      "sha256": "810bda5e69f8e8f117f2f08e2ca0482dfa3fc5a368a94dd71761927b20707535",
+      "bytes": 6949,
       "roles": [
         "inspected-source"
       ],
@@ -7360,8 +7365,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/caveArt.ts",
       "owner": "cocos-adapter",
-      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c",
-      "bytes": 17833,
+      "sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e",
+      "bytes": 17958,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7376,8 +7381,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/caveView.ts",
       "owner": "cocos-adapter",
-      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e",
-      "bytes": 7382,
+      "sha256": "cde5cfb9a2ca85b92b3c24e0145963e6f1bf9ce05149b415e5c4aa852f8d6b95",
+      "bytes": 10379,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7422,6 +7427,22 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/core/combatMotion.ts",
+      "owner": "cocos-adapter",
+      "sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b",
+      "bytes": 2989,
+      "roles": [
+        "generated-copy",
+        "inspected-source"
+      ],
+      "consumers": [
+        "shared/game/combatMotion.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/core/continuation.ts",
       "owner": "cocos-adapter",
       "sha256": "3b4746e84df0ce874a8f22010ac2f97f6a8268f1878b3c53e7a0281d6c8ba99e",
@@ -7456,8 +7477,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/features.ts",
       "owner": "cocos-adapter",
-      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0",
-      "bytes": 3174,
+      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
+      "bytes": 3221,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7648,8 +7669,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/protocol.ts",
       "owner": "cocos-adapter",
-      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
-      "bytes": 8969,
+      "sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a",
+      "bytes": 9373,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -7728,8 +7749,8 @@
     {
       "path": "clients/cocos/assets/scripts/experience.ts",
       "owner": "cocos-adapter",
-      "sha256": "9eab99c0c7cb09356c1fe7dea4631b5e2a846ec67cab4f68200ab69f0c6ee19c",
-      "bytes": 4510,
+      "sha256": "ae8ebf8452e0e2265c6aaeb823c345a7900b104ef7e3704f310b858337d02290",
+      "bytes": 4900,
       "roles": [
         "inspected-source"
       ],
@@ -7770,8 +7791,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/combatDock.ts",
       "owner": "cocos-adapter",
-      "sha256": "c2bcad68361ac64ce5c2cf61a06f12dadc0871e0c38e54bf9e8eefbcf2171306",
-      "bytes": 6860,
+      "sha256": "da14c75fa4a7afd269f01d2baaf3e5d666467d86f62f70440186a1433c5c2935",
+      "bytes": 7821,
       "roles": [
         "inspected-source"
       ],
@@ -7896,8 +7917,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "18fe01efb5b04d95e470604abd6d18d96836d8d964d549d034bcd0d380c8a2fe",
-      "bytes": 32245,
+      "sha256": "a4074d28c64c77fc7836e326c7c0592d7cb4035962215f2361188f72a685964e",
+      "bytes": 32247,
       "roles": [
         "inspected-source"
       ],
@@ -8120,8 +8141,8 @@
     {
       "path": "clients/cocos/tools/smoke-cave-art.mjs",
       "owner": "cocos-adapter",
-      "sha256": "6ce51af2c8651cfad3924ba2f4b3ae12c66b8ea06e9340ebf21148f7e3ed4fe0",
-      "bytes": 14297,
+      "sha256": "fb07ab126d9d22e54d1c725490639a187459ed88e70324ad252c4afbc74dac8c",
+      "bytes": 14298,
       "roles": [
         "inspected-source"
       ],
@@ -8146,10 +8167,24 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-combat-experience.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "7461ee783a9def883549f93df414629cb942c100eb983a63ad44a7b4f16ef498",
+      "bytes": 17732,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-combat-framing.mjs",
       "owner": "cocos-adapter",
-      "sha256": "926135529152c6e6fc9d2fa811265d8d6cbda098225801a26685e4e72b9da940",
-      "bytes": 13923,
+      "sha256": "2493d5f6bc1b5470f668caa4c3b3e42680b211f5f47ce10907a8c8ea536cdbb8",
+      "bytes": 14557,
       "roles": [
         "inspected-source"
       ],
@@ -8526,8 +8561,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "24035efd9749bf4c7469819ff02ffe9dc51ee109fe53832032dedf61f56e02d4",
-      "bytes": 7823,
+      "sha256": "c5b0f78a65730d933359de4db751d7d48961eb48f74bb5d3879fc4270f67c4a4",
+      "bytes": 7839,
       "roles": [
         "inspected-source"
       ],
@@ -8554,8 +8589,8 @@
     {
       "path": "clients/cocos/tools/test-cave-view.mjs",
       "owner": "cocos-adapter",
-      "sha256": "a350fec2f6e8c2d495324040df316234116d06c34f02b296ba1c8fcd6a50257d",
-      "bytes": 4112,
+      "sha256": "ca4b791eca62822a39421c6e398e3a1a12643a233b20ef9e077b64b3ff2769c4",
+      "bytes": 6486,
       "roles": [
         "inspected-source"
       ],
@@ -8694,8 +8729,8 @@
     {
       "path": "clients/cocos/tools/test-preferences.mjs",
       "owner": "cocos-adapter",
-      "sha256": "74c5eec24b7194df16dc3c9d15e0fc3327dbfa09ba0ddc714ad3ac62caa1a7cc",
-      "bytes": 6969,
+      "sha256": "31a38e43723b23ec38abfaa7117c40507eeaa71766533a34344eb40f6d704faa",
+      "bytes": 7257,
       "roles": [
         "inspected-source"
       ],
@@ -8806,8 +8841,8 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "358454365285f1a3028f5f7f8a99f7ba735ca05accddbeed89eec830b35cd472",
-      "bytes": 100388,
+      "sha256": "0562714a1267ccca515840051d50af210f04f702badca40d2b674da679651f9e",
+      "bytes": 101245,
       "roles": [
         "provenance"
       ],
@@ -9156,8 +9191,8 @@
     {
       "path": "shared/game/caveArt.ts",
       "owner": "shared-game",
-      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c",
-      "bytes": 17833,
+      "sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e",
+      "bytes": 17958,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9172,8 +9207,8 @@
     {
       "path": "shared/game/caveView.ts",
       "owner": "shared-game",
-      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e",
-      "bytes": 7382,
+      "sha256": "cde5cfb9a2ca85b92b3c24e0145963e6f1bf9ce05149b415e5c4aa852f8d6b95",
+      "bytes": 10379,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9218,6 +9253,22 @@
       "inputs": []
     },
     {
+      "path": "shared/game/combatMotion.ts",
+      "owner": "shared-game",
+      "sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b",
+      "bytes": 2989,
+      "roles": [
+        "canonical-binding-source",
+        "inspected-source"
+      ],
+      "consumers": [
+        "assets/scripts/core/combatMotion.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "shared/game/continuation.ts",
       "owner": "shared-game",
       "sha256": "3b4746e84df0ce874a8f22010ac2f97f6a8268f1878b3c53e7a0281d6c8ba99e",
@@ -9252,8 +9303,8 @@
     {
       "path": "shared/game/features.ts",
       "owner": "shared-game",
-      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0",
-      "bytes": 3174,
+      "sha256": "1c797e3a8376728614610855df7e605df4b4214ddb4fe17b4e4850e1f41564ee",
+      "bytes": 3221,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9456,8 +9507,8 @@
     {
       "path": "shared/game/protocol.ts",
       "owner": "shared-game",
-      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
-      "bytes": 8969,
+      "sha256": "b100c9a434450c11d4637e9386ceba3ff6d8812525bebd66579703a846ce5a6a",
+      "bytes": 9373,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -9726,8 +9777,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "1a0d99b71ed1030d3d1453d18ec521aad74052685f958b74f1eba485fecf22a8",
-      "bytes": 3148,
+      "sha256": "ee30cfc266fb73bc3f1b7023373118e7f522135ffd198a628b92600d41614c73",
+      "bytes": 3257,
       "roles": [
         "inspected-source"
       ],
@@ -10040,8 +10091,8 @@
     {
       "path": "tools/test-cocos-browser.mjs",
       "owner": "root-tooling",
-      "sha256": "a9b7326bbda1056894dd0ccc7768f75be29a385241b204f343cf91d4634ea4d6",
-      "bytes": 4867,
+      "sha256": "fd2b782344537c4d51865dda2166ce93b1ed92bada2e494b162e05aa4d29b830",
+      "bytes": 4974,
       "roles": [
         "inspected-source"
       ],
