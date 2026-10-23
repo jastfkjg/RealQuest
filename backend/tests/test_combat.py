@@ -41,8 +41,8 @@ def ticking(s,now,**data):
 
 
 def test_new_player_can_buy_initial_weapon_without_stats_and_equip():
-    s=player(); s['inventory']['gold']=32; at(s,'workshop','armory_counter')
-    apply(s,'gear_buy',{'target':'armory_counter','item':'stone_sword'},NOW)
+    s=player(); s['inventory']['gold']=32; at(s,'workshop','blacksmith')
+    apply(s,'gear_buy',{'target':'blacksmith','item':'stone_sword'},NOW)
     apply(s,'gear_equip',{'item':'stone_sword'},NOW)
     assert s['inventory']['gold']==8 and s['village_combat']['equipped']=='stone_sword'
     assert s['knowledge_growth']=={'science':0,'magic':0}
@@ -58,7 +58,9 @@ def test_crafting_gates_resources_and_exact_output(item,branch,level):
     s['skill_growth']['building']=1
     with pytest.raises(RuleError): apply(s,'gear_craft',{'target':'armory_counter','item':item},NOW)
     s['knowledge_growth'][branch]=level
-    apply(s,'blueprint_buy',{'target':'armory_counter','item':item},NOW)
+    at(s,'workshop','blacksmith')
+    apply(s,'blueprint_buy',{'target':'blacksmith','item':item},NOW)
+    at(s,'workshop','armory_counter')
     before=copy.deepcopy(s['inventory'])
     apply(s,'gear_craft',{'target':'armory_counter','item':item},NOW)
     assert s['inventory'][item]==1
@@ -164,8 +166,8 @@ def test_all_cave_anchors_spawns_and_monsters_have_walkable_routes():
 def test_buy_retry_and_gate_concurrency_are_transactional(client):
     cmd(client,'create',{'name':'武备结算'})
     with Session.begin() as db:
-        p=db.scalar(select(Player));s=player();at(s,'workshop','armory_counter');s['inventory']['gold']=32;p.state=s
-    key=str(uuid.uuid4());data={'target':'armory_counter','item':'stone_sword'}
+        p=db.scalar(select(Player));s=player();at(s,'workshop','blacksmith');s['inventory']['gold']=32;p.state=s
+    key=str(uuid.uuid4());data={'target':'blacksmith','item':'stone_sword'}
     first=cmd(client,'gear_buy',data,key);again=cmd(client,'gear_buy',data,key)
     assert first.status_code==again.status_code==200 and again.json()['replayed']
     assert again.json()['state']['inventory']['gold']==8 and again.json()['state']['inventory']['stone_sword']==1

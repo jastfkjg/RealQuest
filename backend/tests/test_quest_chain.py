@@ -1,3 +1,4 @@
+from test_game import chop_tree
 """Progressive story contracts, using authoritative actions and isolated fixtures."""
 import copy
 import uuid
@@ -31,7 +32,7 @@ def board(s,action,id):
 
 def settle(s):
     at(s,'overworld','home');apply(s,'enter',{'target':'home'},NOW)
-    at(s,'overworld','wood_1');apply(s,'gather',{'target':'wood_1'},NOW)
+    at(s,'overworld','wood_1');chop_tree(s,'wood_1',NOW)
     board(s,'quest_claim','settle_in')
 
 def crops(s,seed='seed'):
@@ -79,7 +80,7 @@ def test_natural_farm_craft_build_ranch_chain_has_funding_without_grind():
     ranch(s)
     assert 'first_expedition' in entries(s) and 'leave_valley' not in entries(s)
     # Actual earnings fund a normal sword after the coop/chicken, without inventory grants.
-    at(s,'workshop','armory_counter');apply(s,'gear_buy',{'target':'armory_counter','item':'stone_sword'},NOW)
+    at(s,'workshop','blacksmith');apply(s,'gear_buy',{'target':'blacksmith','item':'stone_sword'},NOW)
     apply(s,'gear_equip',{'item':'stone_sword'},NOW)
     assert s['inventory']['gold']>=0 and s['inventory']['animal_feed']==2
     assert upgrade_state(s)==s
@@ -127,7 +128,7 @@ def test_early_crafting_building_and_care_are_recognized_without_repeating():
 
 def test_expedition_clue_and_departure_reveal_order_and_gate_conditions():
     s=player();farm_and_home(s);ranch(s);board(s,'quest_accept','first_expedition')
-    at(s,'workshop','armory_counter');apply(s,'gear_buy',{'target':'armory_counter','item':'stone_sword'},NOW);apply(s,'gear_equip',{'item':'stone_sword'},NOW)
+    at(s,'workshop','blacksmith');apply(s,'gear_buy',{'target':'blacksmith','item':'stone_sword'},NOW);apply(s,'gear_equip',{'item':'stone_sword'},NOW)
     at(s,'overworld','cave_entry');apply(s,'cave_interact',{'target':'cave_entry'},NOW)
     # Deterministic combat fixture; actual combat is separately exercised in browser.
     for enemy in floor_enemies(s,NOW):enemy['hp']=0;defeated(s,enemy)

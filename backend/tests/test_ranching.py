@@ -26,6 +26,32 @@ def buy(s, species):
     return key
 
 
+def device(s, facility):
+    """QA resources/skill, with actual learn → craft → place commands."""
+    from app.production import MACHINES, CELLS
+    spec = MACHINES[facility]['craft']
+    existing = next((k for k,m in s['construction']['machines'].items() if m['facility']==facility), None)
+    if existing:
+        m=s['construction']['machines'][existing];s.update(location='pasture',position={'x':m['x'],'y':m['y']+40})
+        return existing
+    s['skill_growth']['building']=4;s['inventory']['plank']=100
+    s.update(location='workshop',position={'x':96,'y':288})
+    apply(s,'construction_learn',{'target':'carpenter','recipe':spec['item']},100)
+    s['position']={'x':240,'y':196}
+    apply(s,'construction_craft',{'target':'workshop_counter','recipe':spec['item']},100)
+    s.update(location='pasture',position={'x':448,'y':440})
+    occupied={(m['x'],m['y']) for m in s['construction']['machines'].values()}
+    x,y=next(p for p in CELLS if p not in occupied)
+    apply(s,'construction_machine_place',{'target':'ranch_ledger','recipe':spec['item'],'x':x,'y':y},100)
+    key=list(s['construction']['machines'])[-1]
+    s['position']={'x':x,'y':y+40}
+    return key
+
+
+def device_data(s, key, **extra):
+    return dict(target=key,expected_version=s['construction']['machines'][key]['version'],**extra)
+
+
 def advance(s, days):
     s['world_clock']['elapsed']+=days*DAY_SECONDS
     settle_ranch(s,100)
@@ -109,14 +135,14 @@ def test_feed_orders_crafting_and_processing_all_products():
         s['inventory'][item]=1;before=s['inventory']['animal_feed'];apply(s,'ranch_feed_craft',{'target':'ranch_ledger','item':item},100)
         assert s['inventory']['animal_feed']==before+count and s['inventory'][item]==0
     for recipe_id,r in RECIPES.items():
-        s['ranch']['facilities'][r['facility']]=True
+        key=device(s,r['facility'])
         for fine in [False,True]:
             prefix='fine_' if fine else '';s['inventory'][prefix+r['input']]=1
-            apply(s,'ranch_process',{'target':'ranch_ledger','recipe':recipe_id,'fine':fine},100)
-            with pytest.raises(RuleError):apply(s,'ranch_process',{'target':'ranch_ledger','recipe':recipe_id},100)
-            advance(s,r['days']);apply(s,'ranch_job_collect',{'target':'ranch_ledger','facility':r['facility']},100)
+            apply(s,'ranch_process',device_data(s,key,recipe=recipe_id,fine=fine),100)
+            with pytest.raises(RuleError):apply(s,'ranch_process',device_data(s,key,recipe=recipe_id),100)
+            advance(s,r['days']);apply(s,'ranch_job_collect',device_data(s,key,facility=key),100)
             assert s['inventory'][prefix+r['output']]==1
-            with pytest.raises(RuleError):apply(s,'ranch_job_collect',{'target':'ranch_ledger','facility':r['facility']},100)
+            with pytest.raises(RuleError):apply(s,'ranch_job_collect',device_data(s,key,facility=key),100)
 
 
 def test_old_save_fields_preserved_and_gate_requires_real_approach():
@@ -149,16 +175,15 @@ def test_clock_takeover_discards_unconfirmed_tail_for_animals_and_processing():
     s = ranch_state()
     key = buy(s, 'chicken')
     apply(s, 'ranch_feed', {'target': key}, 100)
-    s['ranch']['facilities']['mayo'] = True
+    machine = device(s, 'mayo')
     s['inventory']['egg'] = 1
-    s['position'] = {'x': 448, 'y': 440}
-    apply(s, 'ranch_process', {'target': 'ranch_ledger', 'recipe': 'egg_mayo'}, 100)
+    apply(s, 'ranch_process', device_data(s,machine,recipe='egg_mayo'), 100)
     apply(s, 'world_resume', {'owner': 'first-world'}, 100)
     apply(s, 'world_resume', {'owner': 'second-world'}, 105)
     assert s['world_clock']['elapsed'] == 0
     assert s['ranch']['animals'][key]['age'] == 0
     assert s['ranch']['animals'][key]['feed_seconds'] == DAY_SECONDS
-    assert ranch_view(copy.deepcopy(s), 105)['jobs']['mayo']['remaining_days'] == .5
+    assert ranch_view(copy.deepcopy(s), 105)['jobs'][machine]['remaining_days'] == .5
     apply(s, 'world_pause', {'owner': 'first-world'}, 106)
     assert s['ranch']['animals'][key]['age'] == 0
     apply(s, 'world_pause', {'owner': 'second-world'}, 107)
@@ -314,17 +339,16 @@ def test_parallel_build_buy_feed_collect_process_and_sell_conserve_resources(cli
     assert sorted(r.status_code for r in results) == [200, 422]
     s = saved_fixture()
     assert s['inventory']['egg'] == 2 and s['inventory']['fine_egg'] == 1
-    s['ranch']['facilities']['mayo'] = True
-    s['position'] = {'x': 448, 'y': 440}
+    machine = device(s, 'mayo')
     save_fixture(s)
-    results = parallel('ranch_process', {'target': 'ranch_ledger', 'recipe': 'egg_mayo'})
+    results = parallel('ranch_process', device_data(s,machine,recipe='egg_mayo'))
     assert sorted(r.status_code for r in results) == [200, 422]
     after = saved_fixture()
     assert after['inventory']['egg'] == 1 and len(after['ranch']['jobs']) == 1
-    assert post_ranch(client, 'ranch_job_collect', {'target': 'ranch_ledger', 'facility': 'mayo'}).status_code == 422
+    assert post_ranch(client, 'ranch_job_collect', {'target':machine,'facility':machine,'expected_version':1}).status_code == 422
     after['world_clock']['elapsed'] += DAY_SECONDS
     save_fixture(after)
-    results = parallel('ranch_job_collect', {'target': 'ranch_ledger', 'facility': 'mayo'})
+    results = parallel('ranch_job_collect', {'target':machine,'facility':machine,'expected_version':1})
     assert sorted(r.status_code for r in results) == [200, 422]
     s = saved_fixture()
     assert s['inventory']['mayonnaise'] == 1 and not s['ranch']['jobs']
@@ -358,27 +382,28 @@ def test_read_projection_does_not_commit_growth_or_unconfirmed_offline_time(clie
 def test_processing_stays_paused_in_life_mode_and_sleep_finishes_once(client, monkeypatch):
     create(client)
     s = ranch_state()
-    s['ranch']['facilities']['cheese'] = True
+    machine = device(s, 'cheese')
     s['inventory']['fine_milk'] = 1
-    apply(s, 'ranch_process', {'target': 'ranch_ledger', 'recipe': 'milk_cheese', 'fine': True}, 100)
+    apply(s, 'ranch_process', device_data(s,machine,recipe='milk_cheese',fine=True), 100)
     apply(s, 'world_resume', {'owner': 'ranch-view'}, 100)
     apply(s, 'world_pause', {'owner': 'ranch-view'}, 105)
     save_fixture(s)
     monkeypatch.setattr('app.main.time.time', lambda: 1000000)
     before = client.get('/api/state').json()['state']
-    assert not before['ranching']['jobs']['cheese']['ready']
-    assert before['ranching']['jobs']['cheese']['remaining_days'] == pytest.approx(1 - 5 / DAY_SECONDS)
+    assert not before['ranching']['jobs'][machine]['ready']
+    assert before['ranching']['jobs'][machine]['remaining_days'] == pytest.approx(1 - 5 / DAY_SECONDS)
     s = saved_fixture()
     s.update(location='home', position={'x': 336, 'y': 112})
     save_fixture(s)
     assert post_ranch(client, 'rest', {'target': 'home_bed', 'expected_day': 1}).status_code == 200
     s = saved_fixture()
-    s.update(location='pasture', position={'x': 448, 'y': 440})
+    m=s['construction']['machines'][machine]
+    s.update(location='pasture', position={'x':m['x'],'y':m['y']+40})
     save_fixture(s)
     receipt = str(uuid.uuid4())
-    result = post_ranch(client, 'ranch_job_collect', {'target': 'ranch_ledger', 'facility': 'cheese'}, receipt)
+    result = post_ranch(client, 'ranch_job_collect', device_data(s,machine,facility=machine), receipt)
     assert result.status_code == 200
-    assert post_ranch(client, 'ranch_job_collect', {'target': 'ranch_ledger', 'facility': 'cheese'}, receipt).json()['replayed']
+    assert post_ranch(client, 'ranch_job_collect', device_data(s,machine,facility=machine), receipt).json()['replayed']
     assert saved_fixture()['inventory']['fine_cheese'] == 1
     assert saved_fixture()['inventory']['fine_milk'] == 0
 

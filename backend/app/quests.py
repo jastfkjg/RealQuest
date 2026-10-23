@@ -4,7 +4,7 @@ LEGACY_QUESTS = [
      'description':'先在工坊购买或打造武器，进入旧采石场旁的五层石根山洞。击败底层守卫取得门钥魔法石，将魔法升至3级，在村东石门嵌石开启通路。带上村庄给岚姨的来信。穿过苇风渡口，翻越苍脊山脉，在苔桥城的灯穗旅店落脚一晚，再回村报个平安。修桥或乘船都能渡河，出发前记得准备绳索和体力。',
      'objectives':['击败洞穴底层守卫，取得门钥魔法石','将魔法提升至3级','在村东石门嵌石开启通路','走到村外苇风渡口','修桥或乘船渡河','翻越苍脊山脉抵达苔桥城','向灯穗旅店的岚姨交信','付费住宿并在旅店睡醒','返回回响村庄'],
      'reward':{'gold':20},'xp':20,'attribute':'strength','requires':'settle_in'},
-    {'id': 'market_neighbor', 'title': '小铺的第一位熟客', 'giver': 'mira', 'giver_name': '杂货铺店主 · 米拉', 'description': '田里的收获、路边的落枝，都有用处。到小铺出售一份物品，挣下自己的第一笔生意钱。', 'objectives': ['进入风铃杂货铺', '向米拉出售 1 份物品'], 'reward': {'gold': 10, 'seed': 2}, 'xp': 10, 'attribute': 'bond', 'requires': None},
+    {'id': 'market_neighbor', 'title': '小铺的第一位熟客', 'giver': 'mira', 'giver_name': '杂货铺店主 · 米拉', 'description': '田里的收获、砍伐的木材，都有用处。到小铺出售一份物品，挣下自己的第一笔生意钱。', 'objectives': ['进入风铃杂货铺', '向米拉出售 1 份物品'], 'reward': {'gold': 10, 'seed': 2}, 'xp': 10, 'attribute': 'bond', 'requires': None},
     {'id': 'village_supplier', 'title': '在村里扎下根', 'giver': 'mira', 'giver_name': '杂货铺店主 · 米拉', 'description': '帮邻居们完成三份补给订单，再把自己的小屋修缮到 2 级。下一轮播种会更快成熟。', 'objectives': ['累计交付 3 份小铺订单', '林间小屋升至 2 级'], 'reward': {'gold': 50}, 'xp': 20, 'attribute': 'stewardship', 'requires': 'market_neighbor'},
     {'id': 'settle_in', 'title': '给新生活一个落脚点', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '先认认自己的家，再收集一些修缮用的木材。', 'objectives': ['进入林间小屋', '采集 3 份木材'], 'reward': {'gold': 12, 'seed': 3}, 'xp': 10, 'attribute': 'stewardship', 'requires': None},
     {'id': 'first_harvest', 'title': '土地的第一份回礼', 'giver': 'board', 'giver_name': '村庄告示板', 'description': '种下一份期待。收获后，到风铃杂货铺或工坊柜台出售一份萝卜。', 'objectives': ['收获 2 份萝卜', '出售 1 份萝卜'], 'reward': {'gold': 25}, 'xp': 15, 'attribute': 'stewardship', 'requires': 'settle_in'},
@@ -23,11 +23,11 @@ def quest(id, title, description, objectives, reward, requires=None, *, giver='b
 
 # The authoring order is also the journal order. Future entries are not projected.
 QUESTS = [
-    quest('settle_in', '给新生活一个落脚点', '先看看自己的小屋，再拾些木材。村民给你准备了种子，可以从家门口的田地开始。',
-          ['进入林间小屋', '采集3份木材'], {'gold': 10, 'seed': 3}),
+    quest('settle_in', '给新生活一个落脚点', '先看看自己的小屋，从快捷栏拿起斧头，砍树获得木材。村民给你准备了种子，可以从家门口的田地开始。',
+          ['进入林间小屋', '砍树获得3份木材'], {'gold': 10, 'seed': 3}),
     quest('first_harvest', '土地的第一份回礼', '用白萝卜给邻居们添一道菜。亲手收获4份，再带4份到告示板确认交付。两块田的一轮收成就够；游戏睡眠推进生长，离线暂停。等待时可以认识小铺、收集修缮材料。已收获的进度会保留；误卖后可补种。',
           ['亲手收获4份白萝卜', '带4份白萝卜回告示板交付'], {'gold': 16}, 'settle_in', xp=15, delivery={'crop': 4}),
-    quest('craft_planks', '把落枝变成木板', '邻居请你到工坊练练手：3份木材能做1块木板。先认识材料如何变成成品；完成后工坊会备好修缮小屋的基础物资。',
+    quest('craft_planks', '把木材变成木板', '邻居请你到工坊练练手：3份木材能做1块木板。先认识材料如何变成成品；完成后工坊会备好修缮小屋的基础物资。',
           ['在工坊制作1块木板'], {'wood': 6, 'stone': 3}, 'first_harvest', attribute='craft'),
     quest('craft_home', '让这里像个家', '带上修缮物资，在小屋手册把林间小屋升到2级，需6木材、3石料和30银币。回礼含8银币、3份饲料，以及一次基础禽舍施工和首只小鸡领养援助；到牧场确认办理，不发放大额现金。',
           ['林间小屋升至2级'], {'gold': 8, 'animal_feed': 3}, 'craft_planks', xp=20, attribute='craft', ranch_aid=True),
@@ -45,7 +45,7 @@ QUESTS = [
           ['修桥或乘船渡河'], {'gold': 8}, 'leave_valley', giver='mountain_camp', giver_name='山路营地路牌', giver_map='mountain', accept_anywhere=True, attribute='strength'),
     quest('city_arrival', '把来信送到灯火下', '沿山路抵达苔桥城，向灯穗旅店的岚姨交信，再安排一晚住宿。留意路程体力与旅店费用，旅途中可以休息、折返。',
           ['翻越苍脊山脉抵达苔桥城', '向岚姨交信', '付费住宿并在旅店睡醒'], {'gold': 12}, 'crossing_path', giver='lanya', giver_name='灯穗旅店 · 岚姨', giver_map='inn', accept_anywhere=True, attribute='bond'),
-    quest('market_neighbor', '小铺的第一位熟客', '等作物长大的时候，去认识米拉吧。小铺也收购落枝和石料；交付主线需要4份白萝卜，出售前记得留够。',
+    quest('market_neighbor', '小铺的第一位熟客', '等作物长大的时候，去认识米拉吧。小铺也收购木材和石料；交付主线需要4份白萝卜，出售前记得留够。',
           ['进入风铃杂货铺', '向米拉出售1份物品'], {'gold': 10, 'seed': 2}, 'settle_in', giver='mira', giver_name='杂货铺店主 · 米拉', kind='side', attribute='bond'),
     quest('forest_path', '沿着风去森林', '沿村道找到微光林地，再采集6份石料。认识材料来源，以后修缮和扩建会更从容。',
           ['发现微光林地', '采集6份石料'], {'gold': 16, 'seed': 2}, 'first_harvest', giver='noah', giver_name='森林向导 · 诺亚', kind='side', attribute='strength', xp=15),

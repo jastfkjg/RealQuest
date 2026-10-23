@@ -63,32 +63,32 @@ try{
  context=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:path.join(out,'video'),size:{width:1440,height:900}}});page=await context.newPage();video=page.video();
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource|net::ERR_FAILED/.test(m.text()))errors.push(m.text());});
  await load();save=(await read()).saveId;
- await seed({location:'workshop',position:{x:336,y:280}},"s['quests']['settle_in']={'status':'claimed'};s['quests']['leave_valley']={'status':'active'};s['tracked_quest']='leave_valley';s['village_intro'].update(briefed=True,dismissed=False)");
+ await seed({location:'workshop',position:{x:328,y:184}},"s['quests']['settle_in']={'status':'claimed'};s['quests']['leave_valley']={'status':'active'};s['tracked_quest']='leave_valley';s['village_intro'].update(briefed=True,dismissed=False)");
  await shot('world-need-gold');assert.equal((await read()).guidance.entry.key,'intro:income');
  const initial=(await read()).savedPosition;await click('tracker-follow');assert.equal((await read()).marker.targetId,'wood_1');assert.deepEqual((await read()).savedPosition,initial);
- await use('armory_counter');assert.equal((await read()).mode,'armory');
- assert((await read()).controls.find(c=>c.id==='buy-gear').disabled);assert((await read()).controls.find(c=>c.id==='craft-gear').disabled);
- assert.match(await page.locator('body').innerText(),/还差 4 金币/);
- await shot('armory-shortfall-1440');await click('gear-requirements');await until(s=>s.mode==='gear-recipe');assert.match(await page.locator('body').innerText(),/建造1级/);await shot('craft-conditions-1440');await page.keyboard.press('Escape');await until(s=>s.mode==='armory');
+ await use('blacksmith');assert.equal((await read()).mode,'armory');
+ assert((await read()).controls.find(c=>c.id==='buy-gear').disabled);assert(!(await read()).controls.some(c=>c.id==='craft-gear'));
+ assert.match(await page.locator('body').innerText(),/还差 4银/);
+ await shot('armory-shortfall-1440');await click('smith-see-blueprint');await click('gear-requirements');await until(s=>s.mode==='gear-recipe');assert.match(await page.locator('body').innerText(),/建造1级/);await shot('craft-conditions-1440');await page.keyboard.press('Escape');await until(s=>s.mode==='armory');
  check('world goal preserves authoritative income step; route marking never moves player; purchase shortage and full server crafting reasons are readable');
  for(const [w,h] of [[1920,1080],[1024,768],[844,390],[740,360]]){
   await size(w,h);await shot('armory-shortfall-'+w);await click('gear-requirements');await shot('craft-conditions-'+w);await page.keyboard.press('Escape');await until(s=>s.mode==='armory');
  }
- await seed({},"s['inventory']['gold']=200");await size(1440,900);await shot('world-prepare-1440');await click('tracker-follow');await until(s=>s.mode==='armory');assert.deepEqual((await read()).savedPosition,initial);
+ await seed({},"s['inventory']['gold']=200");await size(1440,900);await shot('world-prepare-1440');await click('tracker-follow');await until(s=>s.mode==='armory');await click('tab-obtain');assert.deepEqual((await read()).savedPosition,initial);
  let reject=true,delay=true,release;const held=new Promise(r=>release=r),attempts=[];
  await page.route('**/api/command',async r=>{const b=r.request().postDataJSON();if(b?.action==='gear_buy'){attempts.push(b);if(reject){reject=false;return r.fulfill({status:422,contentType:'application/json',body:JSON.stringify({detail:'测试：柜台报价待确认'})});}if(delay){delay=false;await held;}}await r.continue();});
  await click('buy-gear');await until(s=>s.error.includes('报价待确认'));assert.equal((await read()).inventory.gold,200);assert.equal((await read()).inventory.stone_sword,0);await shot('purchase-rejected');
  await click('buy-gear');await until(s=>s.busy);assert((await read()).controls.find(c=>c.id==='buy-gear').disabled);release();await until(s=>s.inventory.stone_sword===1&&!s.busy);await page.unroute('**/api/command');
  assert.equal((await read()).inventory.gold,176);assert.equal((await read()).combat.equipped,null);assert.equal(attempts.length,2);await shot('purchased-not-equipped-1440');
  await world();assert.equal((await read()).guidance.entry.key,'intro:equip');await click('tracker-follow');await until(s=>s.mode==='equipment');await shot('equipment-confirm-1440');await click('equip-weapon');await until(s=>s.combat.equipped==='stone_sword'&&!s.busy);await shot('equipment-ready-1440');
- await page.keyboard.press('Escape');await until(s=>s.mode==='world');assert.equal((await read()).guidance.entry.key,'intro:explore');await use('armory_counter');
+ await page.keyboard.press('Escape');await until(s=>s.mode==='world');assert.equal((await read()).guidance.entry.key,'intro:explore');await use('blacksmith');
  check('failed purchase leaves balances untouched; pending purchase is disabled; buy does not auto-equip; world target advances only after explicit equip');
  for(const [w,h] of [[1440,900],[1920,1080],[1024,768],[844,390],[740,360]]){await size(w,h);await shot('equipped-'+w);}
- await size(1440,900);await click('select-reinforced_sword');assert.match(await page.locator('body').innerText(),/伤害 \+4/);await shot('compare-weapon-1440');await click('buy-gear');await until(s=>s.inventory.reinforced_sword===1&&!s.busy);assert.equal((await read()).combat.equipped,'stone_sword');
+ await size(1440,900);await click('select-reinforced_sword');assert.equal((await read()).combat.gear.reinforced_sword.damage-(await read()).combat.gear.stone_sword.damage,4);await shot('compare-weapon-1440');await click('buy-gear');await until(s=>s.inventory.reinforced_sword===1&&!s.busy);assert.equal((await read()).combat.equipped,'stone_sword');
  let equipReject=true,equipLost=true;const equipAttempts=[];
  await page.route('**/api/command',async r=>{const b=r.request().postDataJSON();if(b?.action==='gear_equip'){equipAttempts.push(b);if(equipReject){equipReject=false;return r.fulfill({status:422,contentType:'application/json',body:JSON.stringify({detail:'测试：装备未确认'})});}if(equipLost){equipLost=false;await r.fetch();return r.abort();}}await r.continue();});
- await click('armory-equip');await until(s=>s.error.includes('装备未确认'));assert.equal((await read()).combat.equipped,'stone_sword');await click('armory-equip');await until(s=>s.combat.equipped==='reinforced_sword'&&!s.busy);assert.equal(equipAttempts.length,3);assert.deepEqual(equipAttempts[1],equipAttempts[2]);await page.unroute('**/api/command');
- await load();assert.equal((await read()).combat.equipped,'reinforced_sword');await use('armory_counter');const pos=(await read()).savedPosition;await click('gear-depart');await until(s=>s.mode==='world');assert.equal((await read()).marker.targetId,'cave_entry');assert.deepEqual((await read()).savedPosition,pos);await shot('world-depart-1440');
+ await world();await click('menu');await click('menu-equipment');await click('select-reinforced_sword');await click('equip-weapon');await until(s=>s.error.includes('装备未确认'));assert.equal((await read()).combat.equipped,'stone_sword');await click('equip-weapon');await until(s=>s.combat.equipped==='reinforced_sword'&&!s.busy);assert.equal(equipAttempts.length,3);assert.deepEqual(equipAttempts[1],equipAttempts[2]);await page.unroute('**/api/command');
+ await load();assert.equal((await read()).combat.equipped,'reinforced_sword');await click('menu');await click('menu-equipment');const pos=(await read()).savedPosition;await click('gear-depart');await until(s=>s.mode==='world');assert.equal((await read()).marker.targetId,'cave_entry');assert.deepEqual((await read()).savedPosition,pos);await shot('world-depart-1440');
  check('current-weapon comparison; second purchase preserves equipped weapon; rejected equip and lost reply replay conserve items; reload persists equip and departure only marks the route');
  // Walk the actual room exit and village route; no fixture relocation between equip and entry.
  await go(240,320);await until(s=>s.location==='overworld'&&s.sceneId==='overworld'&&!s.busy);await page.waitForTimeout(180);

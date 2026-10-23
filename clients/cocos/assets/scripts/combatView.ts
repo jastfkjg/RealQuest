@@ -113,7 +113,7 @@ export class CombatRenderer {
       }
     }
     if(!this.weapon){this.weapon=this.node('EquippedWeapon');}
-    this.weapon.active=!presentation?.integratedSword||presentation.action?.kind==='spark';
+    this.weapon.active=(!s.tools||s.tools.held===c.equipped)&&(!presentation?.integratedSword||presentation.action?.kind==='spark');
     const p=presentation?.position||s.position,g=this.weapon.getComponent(Graphics)!;
     this.actorDepth=p.y;
     this.depths.set(this.weapon,p.y+2);g.clear();

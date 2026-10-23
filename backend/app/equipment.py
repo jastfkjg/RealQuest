@@ -68,7 +68,7 @@ def shop_view(state):
     offers=[k for k,g in GEAR.items() if g['region']==region and g['sale']]
     diagrams=[k for k,g in GEAR.items() if g['region']==region and g['blueprint_source']=='merchant']
     research=[k for k,g in GEAR.items() if city and g['region']=='city' and g['blueprint_source']=='research']
-    return dict(region=region,name='苔桥城精密工坊' if city else '工坊武备台',target='city_armory' if city else 'armory_counter',
+    return dict(region=region,name='苔桥城精密工坊' if city else '工坊 · 铁匠铺',target='city_armory' if city else 'blacksmith',craft_target='city_armory' if city else 'armory_counter',
                 offers=offers+['soup'],diagrams=diagrams,research=research,materials=MATERIALS if city else {},
                 craft=[k for k in state['village_combat']['blueprints'] if k in GEAR and (GEAR[k]['region']=='village' or city)])
 
@@ -94,7 +94,9 @@ def equip(state,item):
     require(not c['cast'] and not c.get('dash') and (not c.get('action') or c['action']['until']<=c['time']),'动作结束后再切换装备')
     reasons=use_reasons(state,item);require(not reasons,'；'.join(reasons))
     g=GEAR[item]
-    if g['slot']=='weapon': c['equipped']=item
+    if g['slot']=='weapon':
+        c['equipped']=item
+        if 'tools' in state:state['tools']['held']=item
     else: c['gear'][g['slot']]=item
     return '已装备'+g['name']
 
@@ -104,6 +106,8 @@ def remove_missing(state):
     if c.get('equipped') and not state['inventory'].get(c['equipped'],0):c['equipped']=None
     for slot,item in c['gear'].items():
         if item and not state['inventory'].get(item,0):c['gear'][slot]=None
+    from .tools import reconcile_held
+    reconcile_held(state)
 
 
 def command(state,action,data):
@@ -115,13 +119,16 @@ def command(state,action,data):
     if action=='gear_unequip':
         slot=data.get('slot');require(slot in ['weapon',*SLOTS],'请选择装备位置')
         require(not c['cast'] and not c.get('dash') and (not c.get('action') or c['action']['until']<=c['time']),'动作结束后再卸下装备')
-        if slot=='weapon':c['equipped']=None
+        if slot=='weapon':
+            if state.get('tools',{}).get('held')==c['equipped']:state['tools']['held']=None
+            c['equipped']=None
         else:c['gear'][slot]=None
         return '已卸下装备，物品保留在行囊中'
     shop=shop_view(state)
-    require(state['location'] in ['workshop','city'] and data.get('target')==shop['target'],'请走近相应的武备柜台')
-    obj=next((o for o in map_for(state['location'])['objects'] if o['id']==shop['target']),None)
-    require(obj and math.hypot(state['position']['x']-obj['x'],state['position']['y']-obj['y'])<=72,'请先走近柜台')
+    target=shop['craft_target'] if action=='gear_craft' else shop['target']
+    require(state['location'] in ['workshop','city'] and data.get('target')==target,'打造请使用锻造工作台；武器与图纸买卖请找铁匠')
+    obj=next((o for o in map_for(state['location'])['objects'] if o['id']==target),None)
+    require(obj and math.hypot(state['position']['x']-obj['x'],state['position']['y']-obj['y'])<=72,'请先走近锻造工作台' if action=='gear_craft' else '请先走近铁匠柜台')
     item=data.get('item');require(isinstance(item,str),'请选择物品')
     if action in ['blueprint_buy','blueprint_research']:
         require(item in (shop['diagrams'] if action=='blueprint_buy' else shop['research']),'这里没有这份图纸')
@@ -138,8 +145,9 @@ def command(state,action,data):
         return '已购入'+MATERIALS[item]['name']+f' ×{amount}'
     if action=='gear_buy':
         require(item in shop['offers'],'这里没有这种商品')
-        spend(state,{'gold':8 if item=='soup' else GEAR[item]['price']});state['inventory'][item]+=1
-        return '已买入'+('便携菜汤' if item=='soup' else GEAR[item]['name'])
+        amount=data.get('amount',1);require(type(amount) is int and 1<=amount<=99,'购买数量需为1至99')
+        spend(state,{'gold':(8 if item=='soup' else GEAR[item]['price'])*amount});state['inventory'][item]+=amount
+        return '已买入'+('便携菜汤' if item=='soup' else GEAR[item]['name'])+f' ×{amount}'
     if action=='gear_craft':
         require(item in GEAR,'没有这份装备配方')
         reasons=craft_reasons(state,item);require(not reasons,'；'.join(reasons))
@@ -148,7 +156,8 @@ def command(state,action,data):
     if action=='gear_sell':
         require(item in GEAR or item in ['gel','shell','crystal'],'关键物品不可出售')
         require(not c['cast'],'动作结束后再出售')
-        spend(state,{item:1});state['inventory']['gold']+=GEAR[item]['price']//4 if item in GEAR else {'gel':1,'shell':2,'crystal':3}[item]
+        amount=data.get('amount',1);require(type(amount) is int and 1<=amount<=99,'出售数量需为1至99')
+        spend(state,{item:amount});state['inventory']['gold']+=(GEAR[item]['price']//4 if item in GEAR else {'gel':1,'shell':2,'crystal':3}[item])*amount
         remove_missing(state)
-        return '已出售'+(GEAR[item]['name'] if item in GEAR else NAMES[item])
+        return '已出售'+(GEAR[item]['name'] if item in GEAR else NAMES[item])+f' ×{amount}'
     raise ValueError('未知装备操作')

@@ -46,10 +46,11 @@ export class RanchRenderer {
    for(const [id,s] of Object.entries(ranchShelters)){
     const level=save.buildings[id],art=level?'ranching/'+id+'-'+level:'ranching/ledger';bind('RanchBuilding-'+id,art,s.x,s.y-18,level?s.width:32,level?s.width*3/4:38);
    }
-   for(const [i,id] of Object.keys(ranchFacilities).entries())if(save.facilities[id]){
+   for(const [i,id] of Object.keys(ranchFacilities).entries())if(save.facilities[id]&&['water','rooting'].includes(id)){
     const x=id==='water'?270:id==='rooting'?574:168+(i-2)*92,y=id==='water'||id==='rooting'?360:474;
     bind('RanchFacility-'+id,'ranching/'+id,x,y,id==='water'||id==='rooting'?64:42,id==='water'||id==='rooting'?48:42);
    }
+   for(const [id,m] of Object.entries(state.construction?.machines||{})){const n=bind(id,'ranching/'+m.facility,m.x,m.y,44,44);n.setPosition(m.x,-m.y);this.depths.set(n,m.y);if(r.jobs[id]?.ready)bind('MachineReady-'+id,'items/'+r.jobs[id].output,m.x+14,m.y-40,18,18);}
    for(const [id,a] of Object.entries(r.animals)){
     if(id===save.mounted)continue;
     const n=bind(id,animalArt(a.species,a.stage),a.x,a.y,['chicken','duck'].includes(a.species)?42:62,['chicken','duck'].includes(a.species)?42:62);

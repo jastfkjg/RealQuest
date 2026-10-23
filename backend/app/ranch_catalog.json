@@ -226,7 +226,15 @@
         "wood": 12,
         "stone": 8
       },
-      "note": "鸡蛋或鸭蛋加工成蛋黄酱。"
+      "note": "鸡蛋或鸭蛋加工成蛋黄酱。",
+      "craft": {
+        "item": "mayo_machine",
+        "level": 1,
+        "costs": {
+          "plank": 4,
+          "stone": 8
+        }
+      }
     },
     "cheese": {
       "name": "压酪机",
@@ -235,7 +243,15 @@
         "wood": 18,
         "stone": 12
       },
-      "note": "牛奶和羊奶分别加工为奶酪和羊奶酪。"
+      "note": "牛奶和羊奶分别加工为奶酪和羊奶酪。",
+      "craft": {
+        "item": "cheese_press",
+        "level": 3,
+        "costs": {
+          "plank": 6,
+          "stone": 12
+        }
+      }
     },
     "loom": {
       "name": "织布机",
@@ -244,7 +260,16 @@
         "wood": 20,
         "stone": 6
       },
-      "note": "把羊毛织成布料。"
+      "note": "把羊毛织成布料。",
+      "craft": {
+        "item": "loom_machine",
+        "level": 2,
+        "costs": {
+          "plank": 6,
+          "wood": 2,
+          "stone": 6
+        }
+      }
     },
     "oil": {
       "name": "榨油机",
@@ -253,7 +278,15 @@
         "wood": 24,
         "stone": 18
       },
-      "note": "把松露加工成松露油。"
+      "note": "把松露加工成松露油。",
+      "craft": {
+        "item": "oil_press",
+        "level": 4,
+        "costs": {
+          "plank": 8,
+          "stone": 18
+        }
+      }
     }
   },
   "products": {

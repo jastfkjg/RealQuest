@@ -1,3 +1,6 @@
+import {isTool,toolIds,toolName,toolSpec,toolLevel,toolCost,toolTarget,toolReason,toolCells,toolArtPaths,type ToolId} from './core/tools';
+import {toolCatalog} from './core/toolCatalog';
+import {ToolRenderer,type WorkMotion} from './toolView';
 import {chestObjects} from './core/construction';
 import {formatMoney} from './core/currency';
 import {RanchRenderer} from './ranchView';
@@ -63,10 +66,17 @@ export class RealQuestSpike extends Component {
   private panel = new Node('Panel');
   private actor = new Node('Player');
   private objects = new Map<string, Node>();
-  private farmingTool=false;
+  private get farmingTool(){return this.mode==='world'&&this.client.state?.tools?.held==='hoe';}
+  private workMotion:WorkMotion|null=null;
+  private toolRange=1;private toolDirection:number|null=null;
+  private handTool():ToolId|null{const id=this.client.state?.tools?.held;return isTool(id)?id:null;}
+  private async holdItem(item:string|null){if(this.busy||!this.canPlay())return;this.clearInput();this.focusId='';this.toolRange=1;await this.sendFeature('tool_hold',{item});}
+  private toggleHoe(){void this.holdItem(this.farmingTool?null:'hoe');}
   private hoeQueue:WorldObject[]=[];
   private hoeAim:WorldObject|null=null;
   private hoePointer:number|null=null;
+  private toolGestureUntil=0;
+  private toolGestureHits=0;
   private hoeLastPoint:{x:number;y:number}|null=null;
   private hoeNext=0;
   private hoeHoldNext=0;
@@ -143,6 +153,7 @@ export class RealQuestSpike extends Component {
   private combatRenderer=new CombatRenderer(this.world,this.depths,this.frames);
   private combatDock:CombatDock|null=null;
   private ranchRenderer=new RanchRenderer(this.world,this.frames,this.depths);
+  private toolRenderer=new ToolRenderer(this.world,this.frames,this.objects,this.depths);
   private localScene=new LocalSceneRenderer(this.world,this.frames,this.objects,this.depths);
   private arrivalScene=new ArrivalScene(this.world,this.frames,this.objects,this.depths);
   private approach:{id:string;map:string}|null=null;
@@ -266,7 +277,7 @@ export class RealQuestSpike extends Component {
   private async loadArt() {
     const names = ['actor-1','actor-2','actor-3','actor-4','actor-5','shop','home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0','lia-actor','noah-actor','mira-actor'];
     try {
-      await Promise.all(Array.from(new Set([...sceneArtPaths,...cropArtPaths,...ranchArtPaths,...swordArtPaths,'ui/arrival','ui/register','ui/satchel','ui/notice-timber','ui/notice-paper','ui/shop-interior',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...Object.keys(gearCatalog).map(n=>`items/${n}`),...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold','journal'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
+      await Promise.all(Array.from(new Set([...toolArtPaths,...sceneArtPaths,...cropArtPaths,...ranchArtPaths,...swordArtPaths,'ui/arrival','ui/register','ui/satchel','ui/notice-timber','ui/notice-paper','ui/shop-interior','ui/blacksmith-interior','ui/weapon-stand','atlas/blacksmith','village/blacksmith-figure',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...Object.keys(gearCatalog).map(n=>`items/${n}`),...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold','journal'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
         // Keep one presentation key and the original PNG for unsupported platforms.
         const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path==='scenes/terrain'?'scenes/terrain-web':webMaterialPaths.has(path)?path+'-web':path:path;
         resources.load(asset + '/spriteFrame', SpriteFrame, (error, frame) => {
@@ -275,6 +286,8 @@ export class RealQuestSpike extends Component {
         });
       })));
       for(const [id,m] of Object.entries(gearMaterials)){const frame=this.frames.get('items/'+m.icon);if(frame)this.frames.set('items/'+id,frame);}
+      for(const [id,art] of Object.entries({wooden_chest:'interiors/chest-closed',reinforced_chest:'interiors/chest-open',mayo_machine:'ranching/mayo',loom_machine:'ranching/loom',cheese_press:'ranching/cheese',oil_press:'ranching/oil'})){const frame=this.frames.get(art);if(frame)this.frames.set('items/'+id,frame);}
+      for(const id of toolIds)this.frames.set('items/'+id,this.frames.get('tools/'+id+'-0')!);
       this.loaded = true;
     } catch { this.error = '画面资源未能载入，请刷新后重试。'; (globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.fail('files'); }
     this.dirty = true;
@@ -399,8 +412,9 @@ export class RealQuestSpike extends Component {
       const paint=(hover=false)=>{g.clear();if(primary||hover||this.focusId===id){g.strokeColor=new Color(primary?C.moss:C.amber);g.lineWidth=2;g.roundRect(-w/2,-h/2,w,h,3);g.stroke();}};
       paint();n.on(Node.EventType.MOUSE_ENTER,()=>{if(!disabled)paint(true);});n.on(Node.EventType.MOUSE_LEAVE,()=>paint());
     }
-    if(skin==='shop-item'||skin==='shop-tab'){
-      const g=n.getComponent(Graphics)!,tab=skin==='shop-tab';if(!tab)text.string='';
+    if(skin==='shop-item'||skin==='shop-tab'||skin==='smith-tab'){
+      const g=n.getComponent(Graphics)!,tab=skin!=='shop-item';if(!tab)text.string='';
+      if(skin==='smith-tab'){const paper=this.image(n,'ui/notice-paper',0,0,w-5,h-5,true);if(paper){paper.setSiblingIndex(0);paper.getComponent(Sprite)!.color=new Color(primary?C.moss:disabled?'#b9bca3':'#ffffff');}}
       const paint=(hover=false)=>{g.clear();const hot=!disabled&&(hover||this.focusId===id);g.fillColor=new Color(tab?(primary?C.moss:disabled?'#c6c7ad':C.paper):primary?'#3f63486b':hot?'#233d3150':'#00000000');g.roundRect(-w/2,-h/2,w,h,3);g.fill();if(primary||hot||tab){g.strokeColor=new Color(primary||hot?C.amber:'#8f6e4d');g.lineWidth=primary||hot?2:1;g.roundRect(-w/2+1,-h/2+1,w-2,h-2,3);g.stroke();}if(tab)text.color=new Color(primary?C.paper:disabled?C.muted:C.ink);};
       paint();n.on(Node.EventType.MOUSE_ENTER,()=>paint(true));n.on(Node.EventType.MOUSE_LEAVE,()=>paint());n.on(Node.EventType.TOUCH_START,()=>paint(true));n.on(Node.EventType.TOUCH_END,()=>paint());n.on(Node.EventType.TOUCH_CANCEL,()=>paint());
     }
@@ -426,14 +440,14 @@ export class RealQuestSpike extends Component {
   }
   private itemSlot(parent:Node,id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference=false,number?:number,hint?:string,muted=false){
     const shop=id.startsWith('select-sell:'),worldQuick=id.startsWith('world-quick-'),canUse=worldQuick&&!!seedCrop(item||'')&&count>0&&this.client.state&&this.client.world&&!itemIntent(this.client.world,this.client.state,serverNow(),item||'').reason&&!!itemIntent(this.client.world,this.client.state,serverNow(),item||'').command;
-    const isGear=!!item&&Object.prototype.hasOwnProperty.call(gearCatalog,item),worn=!!item&&(this.client.state?.combat?.equipped===item||Object.values(this.client.state?.combat?.equipment||{}).includes(item));
-    const purpose=!item?'整理':count<=0?'已耗尽':isGear?worn?'已装备':'装备':canUse?'可播种':'查看';
-    const label=(number?number+' · ':'')+(item?(itemNames[item]||item)+' · '+(count>0?'持有'+count+'份':'已耗尽'):'空口袋')+(worldQuick?' · '+(isGear?(worn?'已装备，点击保持装备':'点击装备，不触发攻击'):canUse?'预览播种':!item?'整理快捷栏':'查看物品，选择下一步'):'');
+    const tool=isTool(item),isGear=!!item&&Object.prototype.hasOwnProperty.call(gearCatalog,item),worn=!!item&&(this.client.state?.tools?.held===item||((gearCatalog as Record<string,{slot:string}>)[item]?.slot!=='weapon'&&Object.values(this.client.state?.combat?.equipment||{}).includes(item)));
+    const purpose=!item?'整理':count<=0?'已耗尽':tool?worn?'手持':'拿起':isGear?worn?'手持':'装备':seedCrop(item||'')?'播种':'查看';
+    const label=(number?number+' · ':'')+(item?(itemNames[item]||item)+' · '+(count>0?'持有'+count+'份':'已耗尽'):'空口袋')+(worldQuick?' · '+(tool?(worn?'正在手持，点击保持':'点击拿起，不触发使用'):isGear?(worn?'已装备，点击保持装备':'点击装备，不触发攻击'):seedCrop(item||'')?'拿起种子后点空田播种':!item?'整理快捷栏':'查看物品，选择下一步'):'');
     const satchel=!worldQuick,skin=satchel?(reference?'satchel-pocket':'satchel-slot'):'pocket';
     const text=this.button(parent,id,label+(hint?' · '+hint:''),x,y,w,h,action,this.busy||!this.canPlay(),selected,skin),n=text.node.parent!;
     const empty=reference&&!item;
     if(empty&&!satchel){const g=n.getComponent(Graphics)!;g.clear();g.fillColor=new Color('#233d3140');g.roundRect(-w/2,-h/2,w,h,7);g.fill();g.strokeColor=new Color('#8ba075');g.lineWidth=1;g.roundRect(-w/2+1,-h/2+1,w-2,h-2,7);g.stroke();}
-    if(item&&(!reference||count>0)){const size=shop?Math.min(64,w-12):satchel&&h>=64?40:32,art=this.image(n,'items/'+((gearMaterials as any)[item]?.icon||item),0,satchel?-2:-4,size,size);if(art&&(count<=0||muted))art.addComponent(UIOpacity).opacity=100;}
+    if(item&&(!reference||count>0)){const size=shop?Math.min(64,w-12):satchel&&h>=64?40:worldQuick&&h<52?24:32,art=this.image(n,'items/'+((gearMaterials as any)[item]?.icon||item),0,satchel?-2:-4,size,size);if(art&&(count<=0||muted))art.addComponent(UIOpacity).opacity=100;}
     else this.text(n,'Reference',item?shortText(itemNames[item]||item,2):'+',-w/2+3,-h/2+8,w-6,h-28,empty?20:12,satchel||empty||selected?C.paper:C.muted,true);
     if(number)this.text(n,'QuickNumber',String(number),-w/2+(satchel?7:3),-h/2+(satchel?3:1),16,18,12,satchel||empty||selected?C.paper:C.ink);
     const countLabel=this.text(n,'Count',item?(count>0||reference?String(count):'未持有'):'',shop?-w/2+4:count>0||reference?w/2-(satchel?30:25):-w/2+3,shop?h/2-26:worldQuick?-h/2+1:h/2-22,shop?w-8:count>0||reference?(satchel?24:22):w-6,shop?24:18,count>0||reference?(shop?14:12):11,satchel||selected?C.paper:C.muted,true);
@@ -441,6 +455,7 @@ export class RealQuestSpike extends Component {
     if(worldQuick)this.text(n,'QuickPurpose',purpose,-w/2+2,h/2-18,w-4,18,11,empty?C.paper:count<=0&&item?C.muted:C.ink,true);
   }
   private image(parent: Node, path: string, x: number, y: number, w: number, h: number,sliced=false) {
+    const item=path.startsWith('items/')?path.slice(6):'';if(isTool(item)&&this.client.state)path='tools/'+item+'-'+toolLevel(this.client.state,item);
     const sf = this.frames.get(path); if (!sf) {if(lazyMaterialPaths.has(path)&&!this.loadingUIArt.has(path)&&!this.failedUIArt.has(path)){this.loadingUIArt.add(path);const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path+'-web':path;resources.load(asset+'/spriteFrame',SpriteFrame,(error,frame)=>{this.loadingUIArt.delete(path);if(error){this.failedUIArt.add(path);this.notice='书页材质暂未载入，记录与操作仍可继续。';}else this.frames.set(path,frame);this.dirty=true;});}return null;}
     const n = this.make(parent, path, x, -y, w, h);
     const sprite = n.addComponent(Sprite); sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.spriteFrame = sf;
@@ -470,7 +485,7 @@ export class RealQuestSpike extends Component {
     this.combatRenderer.reset();this.targetId=null;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.localAction=null;this.localDodgeUntil=0;this.localActionReady=this.localDodgeReady=0;
     this.caveCameraCache=null;
     this.clearInput(); this.clear(this.world); this.objects.clear(); this.plotVisuals.clear(); this.npcMotion.clear();this.depths.clear();
-    this.hoeOverlay=null;this.ranchRenderer.reset();
+    this.hoeOverlay=null;this.ranchRenderer.reset();this.toolRenderer.reset();
     const map = this.map(); this.sceneId=map.id;
     this.world.getComponent(UITransform)!.setContentSize(map.width, map.height);
     this.zoom=localCamera(map,this.width,this.height);
@@ -524,8 +539,10 @@ export class RealQuestSpike extends Component {
     }
     }
     for(const obj of map.objects.filter(o=>!this.objects.has(o.id)&&!['plot','soil','npc','travel_npc'].includes(o.kind))){
-      if(['animal','shelter','ranch_ledger','ranch_exit'].includes(obj.kind))continue;
+      if(['animal','shelter','ranch_ledger','ranch_exit','resource'].includes(obj.kind))continue;
+      if(obj.kind==='production')continue;
       if(obj.id.startsWith('player_chest_')){const n=this.image(this.world,'interiors/chest-closed',obj.x,obj.y-9,40,30);if(n){this.objects.set(obj.id,n);this.depths.set(n,obj.y);}continue;}
+      if(obj.kind==='blacksmith'){const n=this.image(this.world,'village/blacksmith-figure',obj.x,obj.y-64/3,32,128/3);if(n){this.objects.set(obj.id,n);this.depths.set(n,obj.y);}continue;}
       if(obj.kind==='carpenter'){const n=this.make(this.world,obj.id,obj.x,-obj.y,32,128/3);n.getComponent(UITransform)!.setAnchorPoint(.5,0);n.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;this.setActor(n,'noah-actor',0);const tag=this.make(n,'CarpenterName',0,48,100,26);this.box(tag,'NameGround',-50,-13,100,26,'#233d31eb',4);this.text(tag,'Name','阿榆 · 木匠',-48,-13,96,26,13,C.paper,true);this.objects.set(obj.id,n);this.depths.set(n,obj.y);continue;}
       if(obj.kind==='ranch_gate'){const n=this.image(this.world,'ranching/ledger',obj.x,obj.y-18,32,36);if(n){this.objects.set(obj.id,n);this.depths.set(n,obj.y);}continue;}
       if(obj.kind==='cave'||obj.id==='village_departure'){
@@ -601,7 +618,7 @@ export class RealQuestSpike extends Component {
   // Creator's Web keyboard source listens on the canvas only. Native semantic
   // buttons use the same handler explicitly, keeping its mode and input guards.
   private semanticKey(code:string,down:boolean,repeat:boolean){
-    const name=/^Key[A-Z]$/.test(code)?'KEY_'+code.slice(3):/^Digit[1-4]$/.test(code)?'DIGIT_'+code.slice(5):({ArrowUp:'ARROW_UP',ArrowDown:'ARROW_DOWN',ArrowLeft:'ARROW_LEFT',ArrowRight:'ARROW_RIGHT',ShiftLeft:'SHIFT_LEFT',ShiftRight:'SHIFT_RIGHT'} as Record<string,string>)[code];
+    const name=/^Key[A-Z]$/.test(code)?'KEY_'+code.slice(3):/^Digit[1-8]$/.test(code)?'DIGIT_'+code.slice(5):({ArrowUp:'ARROW_UP',ArrowDown:'ARROW_DOWN',ArrowLeft:'ARROW_LEFT',ArrowRight:'ARROW_RIGHT',ShiftLeft:'SHIFT_LEFT',ShiftRight:'SHIFT_RIGHT'} as Record<string,string>)[code];
     const key=(KeyCode as unknown as Record<string,KeyCode>)[name||''];if(key===undefined)return false;
     if(down){if(!repeat)this.keyDown(new EventKeyboard(key,Input.EventType.KEY_DOWN));}else this.keyUp(new EventKeyboard(key,Input.EventType.KEY_UP));return true;
   }
@@ -621,19 +638,21 @@ export class RealQuestSpike extends Component {
     if(e.keyCode===KeyCode.KEY_N){if(this.client.state?.character&&this.client.world)this.features.findNeighbor(this.panelHost(),'lia');return;}
     if(e.keyCode===KeyCode.KEY_L){ this.open(this.mode==='life'?'world':'life'); return; }
     if(this.mode!=='world') return;
-    if(e.keyCode===KeyCode.KEY_H&&this.client.state?.location==='overworld'){if(this.keys.has(e.keyCode))return;this.farmingTool=!this.farmingTool;this.clearInput();this.keys.add(e.keyCode);this.focusId='';this.dirty=true;return;}
-    if(this.hoeActive()&&e.keyCode===KeyCode.KEY_E){if(!this.keys.has(e.keyCode)){const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);}this.keys.add(e.keyCode);return;}
+    if(e.keyCode===KeyCode.KEY_H&&this.client.state?.location==='overworld'){if(!this.keys.has(e.keyCode))this.toggleHoe();this.keys.add(e.keyCode);return;}
+    if(e.keyCode===KeyCode.KEY_G&&this.hoeActive()){if(this.keys.has(e.keyCode))return;const key=this.handTool()!;this.clearInput();this.keys.add(e.keyCode);if(['hoe','watering_can'].includes(key)){const max=toolCatalog.tiers[toolLevel(this.client.state!,key)].area;this.toolRange=this.toolRange===1?max:1;this.dirty=true;}return;}
+    if(this.hoeActive()&&e.keyCode===KeyCode.KEY_E){if(!this.keys.has(e.keyCode)){if(this.handTool()==='watering_can'&&this.canRefill())void this.sendFeature('tool_refill');else{const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);}}this.keys.add(e.keyCode);return;}
+    if(this.hoeActive()&&e.keyCode===KeyCode.SPACE){this.keys.add(e.keyCode);return;}
     if(!this.keys.has(e.keyCode)&&e.keyCode===KeyCode.KEY_V)this.queueCombat('dodge');
     if(!this.keys.has(e.keyCode)){if(e.keyCode===KeyCode.SPACE)this.queueCombat('attack');if(e.keyCode===KeyCode.KEY_Q)this.queueCombat('spark');if(e.keyCode===KeyCode.KEY_R)this.queueCombat('soup');}
-    if(e.keyCode>=KeyCode.DIGIT_1&&e.keyCode<=KeyCode.DIGIT_4){void this.useQuick(e.keyCode-KeyCode.DIGIT_1);return;}
+    if(e.keyCode>=KeyCode.DIGIT_1&&e.keyCode<=KeyCode.DIGIT_8){void this.useQuick(e.keyCode-KeyCode.DIGIT_1);return;}
     if(e.keyCode===KeyCode.KEY_T&&this.client.state?.location.startsWith('cave_')){this.targetId=nextTarget(this.client.state,this.targetId);this.dirty=true;return;}
     if(e.keyCode===KeyCode.KEY_E) { if(this.keys.has(e.keyCode))return;void this.interact();this.keys.add(e.keyCode); return; }
-    if([KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].includes(e.keyCode)){this.route=[];this.approach=null;this.hoeAim=null;this.hoeQueue=[];this.hoePointer=null;this.dirty=true;} this.keys.add(e.keyCode);
+    if([KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].includes(e.keyCode)){this.route=[];this.approach=null;this.hoeAim=null;this.hoeQueue=[];this.hoePointer=null;this.toolDirection=null;this.toolGestureUntil=this.elapsed+.12;this.inputEpoch++;this.dirty=true;} this.keys.add(e.keyCode);
   }
   private touchRelease(event:EventTouch){this.touches.delete((event.getID()??0));this.hoeEnd(event);}
-  private keyUp(e: EventKeyboard) { this.keys.delete(e.keyCode); }
-  private clearInput() { this.hoeQueue=[];this.hoePointer=null;this.hoeLastPoint=null;this.hoeAim=null;this.inventoryDrag.cancel();this.inputEpoch++;this.approach=null;this.keys.clear();this.touches.clear();this.pressedButtons.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=this.dodgePulse=false;this.mouseAttack=false;this.combatPointer=null;this.combatPointerScreen=null;this.localAction=null;this.combatQueued.clear();this.localDodgeUntil=0;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.combatDock?.release(); }
-  private dismissContext(){this.clearInput();this.dirty=true;if(this.mode==='welcome')return;if(this.mode==='world'){this.targetId=null;this.farmingTool=false;this.continuation.dismiss();return;}if(!this.busy){if(this.inventoryView.dismiss(this.panelHost()))return;this.recovery=null;this.recoveryPreview=null;this.closePanel();}}
+  private keyUp(e: EventKeyboard) { this.keys.delete(e.keyCode);if(e.keyCode===KeyCode.SPACE&&this.handTool()!=='hoe')this.hoeQueue=[]; }
+  private clearInput() { this.toolDirection=null;this.toolGestureUntil=this.elapsed+.12;this.hoeQueue=[];this.hoePointer=null;this.hoeLastPoint=null;this.hoeAim=null;this.inventoryDrag.cancel();this.inputEpoch++;this.approach=null;this.keys.clear();this.touches.clear();this.pressedButtons.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=this.dodgePulse=false;this.mouseAttack=false;this.combatPointer=null;this.combatPointerScreen=null;this.localAction=null;this.combatQueued.clear();this.localDodgeUntil=0;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.combatDock?.release(); }
+  private dismissContext(){this.clearInput();this.dirty=true;if(this.mode==='welcome')return;if(this.mode==='world'){this.targetId=null;if(this.client.state?.tools?.held&&!this.client.state.location.startsWith('cave_'))void this.holdItem(null);this.continuation.dismiss();return;}if(!this.busy){if(this.inventoryView.dismiss(this.panelHost()))return;this.recovery=null;this.recoveryPreview=null;this.closePanel();}}
   private syncSemantics(){
     const controls=this.controls.filter(c=>!['left','right','up','down'].includes(c.id)&&(this.actions.has(c.id)||c.disabled)).map(c=>({...c,label:c.accessibleName||c.label}));
     const texts=this.semanticTexts,title=texts.find(t=>t.id.endsWith('Title')||t.id==='Title')?.text||this.context?.name||'RealQuest';
@@ -666,9 +685,9 @@ export class RealQuestSpike extends Component {
     this.confirmDelete=false;
     if(mode==='inventory'&&this.mode!=='item-confirm')this.inventoryView.opened();
     if(this.mode==='item-confirm'&&mode!=='item-confirm'){this.inventoryView.clearPreview();this.panelHistory=this.panelHistory.filter(p=>p.mode!=='item-confirm');}
-    if(mode!=='world'&&mode!=='farm')this.farmingTool=false;
+
     if(mode==='world'){this.panelHistory=[];const lease=this.client.state?.npc_encounter;if(lease&&this.canPlay())void this.client.command('npc_release',{token:lease.token}).catch(()=>{});}
-    if(this.features.lifeMode(mode)||this.features.guideMode(mode)||['character','growth','armory','equipment','gear-recipe','cave','shop','building','spellbook','storage','sleep','travel','map','neighbors'].includes(mode))this.notice='';
+    if(this.features.lifeMode(mode)||this.features.guideMode(mode)||['character','growth','armory','forge','equipment','gear-recipe','cave','shop','building','spellbook','storage','sleep','travel','map','neighbors'].includes(mode))this.notice='';
     if(mode==='world'&&this.client.state?.character&&this.client.world)this.buildWorld();
     this.features.reset();this.mode=mode; this.page=0;this.focusId=''; this.clearInput(); this.error=''; this.dirty=true;
     if(mode==='session'&&!this.client.state&&!this.busy)void this.work(async()=>{
@@ -681,7 +700,7 @@ export class RealQuestSpike extends Component {
     if(this.client.state?.character&&this.canPlay()) void this.client.command(mode==='world'?'world_resume':'world_pause',{owner:this.owner}).catch(e=>{this.error=e.message;this.dirty=true;});
   }
   private worldTouch(e: EventTouch) {
-    if(this.farmingTool)return;
+    if(this.hoeActive()&&(this.hoePointer!==null||this.elapsed<this.toolGestureUntil))return;
     if(this.mode!=='world'||this.busy||!this.client.world||!this.canPlay())return;
     // Creator 3.8.8 dispatches mouse-generated touches before mouse-up and
     // leaves EventTouch.simulate false; the active mouse gesture owns them.
@@ -691,6 +710,7 @@ export class RealQuestSpike extends Component {
     const enemy=this.client.state?.combat?.enemies.find(enemy=>enemy.hp>0&&Math.hypot(enemy.x-x,enemy.y-y)<(enemy.kind==='boss'?36:26));
     if(this.client.state?.location.startsWith('cave_')&&enemy){this.targetId=enemy.id;this.combatPointer=null;this.combatPointerScreen=null;this.dirty=true;return;}
     const obj=this.supportedObjects().filter(o=>this.ranchRenderer.hit(o,x,y)||this.arrivalScene.hit(this.map(),o,x,y)||this.localScene.hit(o,x,y)||(['plot','soil'].includes(o.kind)&&Math.abs(o.x-x)<=22&&Math.abs(o.y-y)<=22)).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0];
+    if(!obj&&this.client.state?.tools?.held==='tree_seed'&&this.map().cultivation){const cell=farmCell(this.map().cultivation!,x,y);this.clearInput();if(Math.hypot(cell.x-this.p.x,cell.y-this.p.y)<=65){void this.work(async()=>{await this.syncMove();const r=await this.client.command('tree_plant',{x:cell.x,y:cell.y});this.notice=r.message||'';});}else{this.hoeQueue=[cell];this.route=approachRoute(this.map(),this.p,cell);this.approach=this.route.length?{id:cell.id,map:this.sceneId}:null;}this.dirty=true;return;}
     if(obj&&Math.hypot(obj.x-this.p.x,obj.y-this.p.y)<65) { void this.interact(obj); return; }
     this.clearInput();
     this.route=obj?approachRoute(this.map(),this.p,obj):pathfind(this.map(),this.p,{x,y});
@@ -705,11 +725,15 @@ export class RealQuestSpike extends Component {
     if(this.controls.some(c=>Math.abs(c.x-sx)<=c.w/2&&Math.abs(c.y-sy)<=c.h/2))return null;
     return {x:(local.x-this.world.position.x)/this.zoom,y:-(local.y-this.world.position.y)/this.zoom};
   }
-  private hoeActive(){return this.farmingTool&&this.mode==='world'&&this.shown&&this.client.state?.location==='overworld'&&!textOwnsInput();}
+  private hoeActive(){return !!this.handTool()&&this.mode==='world'&&this.shown&&this.client.state?.location==='overworld'&&!textOwnsInput();}
+  private canRefill(){return (this.map().water_sources||[]).some(([x,y,w,h])=>Math.hypot(Math.max(x-this.p.x,0,this.p.x-x-w),Math.max(y-this.p.y,0,this.p.y-y-h))<=64);}
   private hoeStart(e:EventTouch){
-    if(!this.hoeActive()||!this.canPlay())return;
+    if(!this.hoeActive()||!this.canPlay()||this.busy)return;
     const p=this.hoePoint(e);if(!p)return;
-    this.focusId='';this.hoePointer=e.getID()??0;this.hoeLastPoint=p;this.queueHoe(p.x,p.y);
+    if(this.supportedObjects().some(o=>!['resource','plot','soil'].includes(o.kind)&&this.localScene.hit(o,p.x,p.y)))return;
+    const key=this.handTool()!,target=toolTarget(this.map(),this.client.state!,serverNow(),key,p.x,p.y);
+    if(!target||key!=='hoe'&&!['resource','plot'].includes(target.kind))return;
+    this.clearInput();this.focusId='';this.hoePointer=e.getID()??0;this.toolDirection=this.actorDirection;this.toolGestureHits=0;this.toolGestureUntil=Infinity;this.hoeLastPoint=p;this.queueHoe(p.x,p.y);
   }
   private hoeDrag(e:EventTouch){
     if(!this.hoeActive()||this.hoePointer!==(e.getID()??0))return;
@@ -721,58 +745,72 @@ export class RealQuestSpike extends Component {
   private hoeEnd(e:EventTouch){
     if(this.hoePointer!==(e.getID()??0))return;
     if(e.getEventCode()===Input.EventType.TOUCH_CANCEL)this.clearInput();
+    if(this.toolGestureHits>0&&this.handTool()!=='hoe'){this.hoeQueue=[];this.route=[];this.approach=null;this.inputEpoch++;}
+    this.toolGestureUntil=this.elapsed+.25;
     this.hoePointer=null;this.hoeLastPoint=null;
   }
   private hoeHover(e:EventMouse){
-    if(!this.hoeActive())return;const p=this.hoePoint(e),land=this.map().cultivation;
-    if(p&&land){this.hoeAim=farmCell(land,p.x,p.y);this.dirty=true;}
+    if(!this.hoeActive())return;const p=this.hoePoint(e);
+    if(p){this.hoeAim=toolTarget(this.map(),this.client.state!,serverNow(),this.handTool()!,p.x,p.y);this.dirty=true;}
   }
   private hoeTarget(){
-    const moving=this.touches.size>0||[KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].some(key=>this.keys.has(key));
-    if(this.hoeAim&&!moving)return this.hoeAim;
-    const land=this.map().cultivation;if(!land)return null;
+    const key=this.handTool();if(!key)return null;
+    const moving=this.touches.size>0||[KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].some(k=>this.keys.has(k));
+    if(this.hoeAim&&!moving)return this.map().objects.find(o=>o.id===this.hoeAim!.id)||this.hoeAim;
     const [dx,dy]=[[0,1],[0,-1],[-1,0],[1,0]][this.actorDirection];
-    return farmCell(land,this.p.x+dx*40,this.p.y+dy*40);
+    return toolTarget(this.map(),this.client.state!,serverNow(),key,this.p.x+dx*40,this.p.y+dy*40);
   }
-  private hoeTargetSafe(){return this.client.state&&this.client.world&&this.farmingTool?this.hoeTarget():null;}
+  private hoeTargetSafe(){return this.client.state&&this.client.world&&this.hoeActive()?this.hoeTarget():null;}
   private queueHoe(x:number,y:number){
-    const land=this.map().cultivation;if(!land||!this.hoeActive()||!this.canPlay())return;
-    const cell=farmCell(land,x,y);this.hoeAim=cell;this.dirty=true;
-    if(this.client.state!.farm?.tilled.includes(cell.id)){this.notice='这里已经开垦，收起锄头后可播种或查看作物。';return;}
-    const reason=hoeReason(land,cell);if(reason){this.error=reason;return;}
-    if(this.hoeQueue.some(o=>o.id===cell.id))return;
-    if(this.hoeQueue.length>=16){this.notice='先锄完已选草地，再继续选择。';return;}
-    this.error='';this.hoeQueue.push(cell);
+    if(!this.hoeActive()||!this.canPlay())return;const map=this.map(),s=this.client.state!,key=this.handTool()!,target=toolTarget(map,s,serverNow(),key,x,y);
+    this.hoeAim=target;this.dirty=true;if(!target)return;
+    const cells=['hoe','watering_can'].includes(key)?toolCells(map,target.x,target.y,this.toolDirection??this.actorDirection,this.toolRange):[target];
+    let added=false;
+    for(const raw of cells){const cell=map.objects.find(o=>o.id===raw.id)||raw,reason=toolReason(map,s,key,cell);
+      if(reason){if(cells.length===1)this.error=reason;continue;}
+      if(this.hoeQueue.some(o=>o.id===cell.id)||this.hoeQueue.length>=16)continue;
+      this.hoeQueue.push(cell);added=true;
+    }
+    if(added)this.error='';
   }
   private updateHoe(){
     if(!this.hoeActive()){if(this.hoeOverlay)this.hoeOverlay.active=false;return;}
-    if(this.keys.has(KeyCode.SPACE)&&!this.focusId&&this.elapsed>=this.hoeHoldNext){const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);this.hoeHoldNext=this.elapsed+.25;}
+    if(!this.focusId&&this.elapsed>=this.hoeHoldNext){
+      if(this.keys.has(KeyCode.SPACE)){const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);}
+      else if(this.hoePointer!==null&&this.hoeLastPoint)this.queueHoe(this.hoeLastPoint.x,this.hoeLastPoint.y);
+      this.hoeHoldNext=this.elapsed+.18;
+    }
     if(!this.busy&&this.canPlay()&&this.hoeQueue.length&&!this.route.length&&!this.approach&&this.elapsed>=this.hoeNext){
-      const cell=this.hoeQueue[0];
-      if(this.client.state!.farm?.tilled.includes(cell.id))this.hoeQueue.shift();
+      const raw=this.hoeQueue[0],cell=this.map().objects.find(o=>o.id===raw.id)||raw;
+      if(toolReason(this.map(),this.client.state!,this.handTool()!,cell))this.hoeQueue.shift();
       else if(Math.hypot(cell.x-this.p.x,cell.y-this.p.y)<=65)void this.swingHoe(cell);
-      else{this.route=approachRoute(this.map(),this.p,cell);this.approach=this.route.length?{id:cell.id,map:this.sceneId}:null;if(!this.route.length){this.error='草地暂时无法靠近，请从小路绕行。';this.hoeQueue=[];}this.dirty=true;}
+      else{this.route=approachRoute(this.map(),this.p,cell);this.approach=this.route.length?{id:cell.id,map:this.sceneId}:null;if(!this.route.length){this.error='暂时无法靠近目标，请从小路绕行。';this.hoeQueue=[];}this.dirty=true;}
     }
     if(!this.hoeOverlay){this.hoeOverlay=this.make(this.world,'HoeOverlay',0,0,0,0);this.hoeOverlay.addComponent(Graphics);this.depths.set(this.hoeOverlay,10000);}
-    this.hoeOverlay.active=true;const g=this.hoeOverlay.getComponent(Graphics)!;g.clear();const cell=this.hoeQueue[0]||this.hoeTarget();
-    if(cell){const reason=hoeReason(this.map().cultivation!,cell),tilled=this.client.state!.farm?.tilled.includes(cell.id);g.strokeColor=new Color(tilled?C.amber:reason?C.danger:C.paper);g.lineWidth=1.5;g.rect(cell.x-21,-cell.y-18,42,36);g.stroke();}
-    const swing=this.hoeSwing;
-    if(swing&&swing.until>this.elapsed){
-      const t=1-(swing.until-this.elapsed)/.32,lean=reducedMotion()?0:Math.sin(t*Math.PI)*14,x=this.p.x+(swing.x>=this.p.x?10:-16),y=-this.p.y+20+lean;
-      g.fillColor=new Color(C.wood);g.rect(x,y,3,22);g.fill();g.fillColor=new Color('#c4c6b0');g.rect(x-5,y+19,14,5);g.fill();
-      if(!reducedMotion()){g.fillColor=new Color('#bfa573');for(let i=0;i<3;i++){g.rect(swing.x-10+i*9,-swing.y+6+Math.sin(t*Math.PI)*(9+i*3),2,2);g.fill();}}
+    this.hoeOverlay.active=true;const g=this.hoeOverlay.getComponent(Graphics)!;g.clear();const cell=this.hoeQueue[0]||this.hoeTarget(),key=this.handTool()!;
+    if(cell){const reason=toolReason(this.map(),this.client.state!,key,cell);g.strokeColor=new Color(reason?C.danger:C.paper);g.lineWidth=1.5;
+      const cells=this.hoeQueue.length?this.hoeQueue:['hoe','watering_can'].includes(key)?toolCells(this.map(),cell.x,cell.y,this.toolDirection??this.actorDirection,this.toolRange):[cell];
+      for(const c of cells){g.rect(c.x-21,-c.y-18,42,36);g.stroke();}
     }
   }
   private async swingHoe(cell:WorldObject){
     if(this.busy||!this.hoeActive()||!this.canPlay())return;
-    const epoch=this.inputEpoch;this.busy=true;this.error='';this.dirty=true;
+    const epoch=this.inputEpoch,key=this.handTool()!;this.busy=true;this.error='';this.dirty=true;
     try{
       await this.syncMove();
-      if(epoch!==this.inputEpoch||!this.hoeActive()||!this.canPlay())return;
-      this.hoeSwing={x:cell.x,y:cell.y,until:this.elapsed+.32};
-      const r=await this.client.command('till',{target:cell.id,x:cell.x,y:cell.y});this.notice=r.message||'';
+      if(epoch!==this.inputEpoch||!this.hoeActive()||this.handTool()!==key||!this.canPlay())return;
+      const reason=toolReason(this.map(),this.client.state!,key,cell);if(reason)throw Error(reason);
+      if(staminaNow(this.client.state!,serverNow())<toolCost(this.client.state!,key))throw Error('体力不足，回家睡觉可以补满。');
+      this.actorDirection=facingDirection(Math.atan2(cell.y-this.p.y,cell.x-this.p.x));
+      this.workMotion={kind:key,target:cell,started:this.elapsed,direction:this.actorDirection};this.hoeSwing={x:cell.x,y:cell.y,until:this.elapsed+.48};
+      await new Promise(resolve=>setTimeout(resolve,170));
+      if(epoch!==this.inputEpoch||!this.hoeActive()||this.handTool()!==key)return;
+      const live=this.map().objects.find(o=>o.id===cell.id)||cell;
+      const action=live.kind==='resource'?'tool_strike':key==='hoe'?'till':key==='watering_can'?'water':'reclaim';
+      const data=action==='tool_strike'?{target:cell.id,expected_version:live.resource_state!.version}:{target:cell.id,x:cell.x,y:cell.y};
+      const r=await this.client.command(action,data);if(this.hoePointer!==null)this.toolGestureHits++;this.notice=r.message||'';soundEffects.play(key==='watering_can'?'swing':'hit');
     }catch(e){this.error=(e as Error).message;this.hoeQueue=[];this.hoePointer=null;this.keys.delete(KeyCode.SPACE);}
-    finally{this.hoeQueue=this.hoeQueue.filter(o=>o.id!==cell.id);this.busy=false;this.hoeNext=this.elapsed+.22;this.dirty=true;}
+    finally{this.hoeQueue=this.hoeQueue.filter(o=>o.id!==cell.id);this.busy=false;this.hoeNext=this.elapsed+.36;this.dirty=true;}
   }
 
   private async syncMove() {
@@ -786,7 +824,10 @@ export class RealQuestSpike extends Component {
     finally { this.movePromise=null;this.moveTarget=null; this.dirty=true; }
   }
   private async interact(obj=this.nearest()) {
-    if(this.hoeActive()&&obj?.kind==='soil'){void this.swingHoe(obj);return;}
+    if(this.hoeActive()&&obj&&['resource','plot','soil'].includes(obj.kind)){void this.swingHoe(obj);return;}
+    const seed=this.client.state?.tools?.held;
+    if(seed&&seedCrop(seed)&&obj?.kind==='plot'&&!this.client.state!.plots[obj.id]){void this.work(async()=>{await this.syncMove();const r=await this.client.command('plant',{target:obj.id,seed});this.notice=r.message||'';});return;}
+    if(seed==='tree_seed'&&obj?.kind==='soil'){this.hoeQueue=[];void this.work(async()=>{await this.syncMove();const r=await this.client.command('tree_plant',{x:obj.x,y:obj.y});this.notice=r.message||'';});return;}
     if(!obj||this.busy||this.mode!=='world'||!this.canPlay())return;
     this.clearInput(); const epoch=this.inputEpoch;this.busy=true; this.error='';this.responseObject=obj.id;this.responseUntil=Infinity; this.dirty=true;
     try {
@@ -794,7 +835,10 @@ export class RealQuestSpike extends Component {
       if(epoch!==this.inputEpoch||!this.shown||this.mode!=='world'||textOwnsInput())return;
       if(Math.hypot(obj.x-this.client.state!.position.x,obj.y-this.client.state!.position.y)>65)throw new Error('尚未走到目标附近，请再靠近一些。');
       this.context=obj;
-      if(obj.kind==='carpenter'||['home_desk','workshop_counter'].includes(obj.id)){this.open('construction');
+      if(obj.kind==='blacksmith'){this.open('armory');
+      } else if(obj.id==='armory_counter'){this.open('forge');
+      } else if(obj.kind==='production'){this.open('production-machine');
+      } else if(obj.kind==='carpenter'||['home_desk','workshop_counter'].includes(obj.id)){this.open('construction');
       } else if(['animal','shelter','ranch_ledger'].includes(obj.kind)){this.open('ranch');
       } else if(['plot','soil'].includes(obj.kind)&&!(obj.kind==='plot'&&this.client.state!.plots[obj.id]&&plotStage(this.client.state!,this.client.state!.plots[obj.id],serverNow())===4)){this.open('farm');
       } else if(obj.kind==='npc') {
@@ -862,7 +906,7 @@ export class RealQuestSpike extends Component {
       const hurt=!!combat?.effects.some(e=>e.kind==='hurt'&&e.until>visualTime+.38);
       this.actor.setScale(1,1);this.actor.angle=0;
       const dodge=combat?.dash&&visualTime<combat.dash.until?combat.dash:this.elapsed<this.localDodgeUntil?{dx:this.localDodge.dx,dy:this.localDodge.dy,started:visualTime-(.18-(this.localDodgeUntil-this.elapsed)),until:visualTime+this.localDodgeUntil-this.elapsed}:null;
-      this.swordPose=swordPresentation({appearance:this.client.state.character?.appearance||0,weapon:combat?.equipped||null,owned:!!combat?.equipped&&!!this.client.state.inventory[combat.equipped],direction:this.actorDirection,action:cave?action:null,time:visualTime,elapsed:this.elapsed,moving:travelled>.05,dodge:cave?dodge:null,reduced:reducedMotion()});
+      this.swordPose=swordPresentation({appearance:this.client.state.character?.appearance||0,weapon:(!this.client.state.tools||this.client.state.tools.held===combat?.equipped)?combat?.equipped||null:null,owned:!!combat?.equipped&&!!this.client.state.inventory[combat.equipped],direction:this.actorDirection,action:cave?action:null,time:visualTime,elapsed:this.elapsed,moving:travelled>.05,dodge:cave?dodge:null,reduced:reducedMotion()});
       if(!cave){this.swordPose.phase=this.swordPose.moving?'walk':'ready';}
       const integratedSword=this.setSwordActor(this.swordPose);this.swordPose.active=integratedSword;
       if(cave&&!reducedMotion()&&!integratedSword){
@@ -871,6 +915,9 @@ export class RealQuestSpike extends Component {
       }
       const opacity=this.actor.getComponent(UIOpacity)||this.actor.addComponent(UIOpacity);opacity.opacity=cave&&hurt?175:255;
       if(cave&&action&&!integratedSword)this.setActor(this.actor,this.actorArt(),sourceActorFrame(this.actorDirection,false,this.elapsed,reducedMotion()));
+      this.toolRenderer.updateResources(this.map(),this.p,this.elapsed,reducedMotion());
+      this.toolRenderer.updateHeld(this.client.state,this.p,this.actorDirection,this.elapsed,reducedMotion(),this.workMotion);
+      if(this.workMotion&&this.elapsed-this.workMotion.started<.48&&!reducedMotion())this.actor.angle=Math.sin((this.elapsed-this.workMotion.started)/.48*Math.PI)*(this.actorDirection===2?4:-4);
       this.combatRenderer.draw(this.client.state,this.targetId,reducedMotion(),{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height},{position:this.p,action,time:visualTime,facing:facingAngles[this.actorDirection],integratedSword,aim});
       for(const [id,node] of this.objects)if(['lia','noah','mira'].includes(id))node.active=false;
       for(const o of this.map().objects.filter(o=>o.kind==='soil')){const n=this.objects.get(o.id);if(n)n.active=this.farmingTool;}
@@ -898,7 +945,7 @@ export class RealQuestSpike extends Component {
     if(this.client.state&&this.features.lifeMode(this.mode)&&this.shown&&this.canPlay()&&!this.busy&&!textOwnsInput()&&this.elapsed-this.lastRefresh>15){
       this.lastRefresh=this.elapsed;void this.refreshJourney();
     }
-    if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.mode==='world'?this.nearest():undefined,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,this.busy,reducedMotion(),this.elapsed);
+    if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.mode==='world'&&!this.hoeActive()?this.nearest():undefined,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,this.busy,reducedMotion(),this.elapsed);
     if(this.client.state)this.ranchRenderer.update(this.client.state,this.p,this.elapsed,reducedMotion());
     this.updateConversationCamera(dt);
     this.updateItemPreviewCamera();
@@ -961,9 +1008,14 @@ export class RealQuestSpike extends Component {
     this.box(this.hud,'ItemTargetLabel',x-62,y-64,124,30,C.moss,4);this.text(this.hud,'ItemTargetName',target.name,x-58,y-62,116,26,14,C.paper,true);
   }
   private drawQuickBar(){
-    this.inventoryView.init(this.panelHost());const short=this.width<1000,cell=short?52:60,gap=8,w=cell*4+gap*3,x=short?192+(this.width-488-w)/2:(this.width-w)/2,y=this.height-(short?140:82);
-    this.box(this.hud,'QuickCloth',x-8,y-8,w+16,cell+16,C.moss,7);
-    this.inventoryView.quick.forEach((id,i)=>this.itemSlot(this.hud,'world-quick-'+i,id,x+i*(cell+gap),y,cell,cell,id?this.client.state!.inventory[id]||0:0,!!id&&(this.client.state!.combat?.equipped===id||Object.values(this.client.state!.combat?.equipment||{}).includes(id)),()=>void this.useQuick(i),true,i+1));
+    this.inventoryView.init(this.panelHost());const short=this.width<1000,cell=short?44:this.width<1200?48:56,gap=short?6:8,cols=short?4:8,rows=short?2:1,hand=short?48:64,w=hand+12+cell*cols+gap*(cols-1),x=short?184:(this.width-w)/2,y=this.height-(short?124:this.width<1200?150:82),s=this.client.state!,held=s.tools?.held;
+    this.box(this.hud,'QuickCloth',x-8,y-8,w+16,rows*cell+(rows-1)*gap+16,C.moss,7);
+    this.button(this.hud,'current-hand','当前手持：'+(held?(isTool(held)?toolName(s,held):itemNames[held]||held):'空手')+'，点击收起',x,y,hand,rows*cell+(rows-1)*gap,()=>held?this.holdItem(null):this.openInventory(),this.busy||!this.canPlay(),!!held,'pocket');
+    const button=this.hud.getChildByName('current-hand')!;const original=button.getChildByName('Label')?.getComponent(Label);if(original)original.string='';
+    if(held)this.image(button,'items/'+held,0,short?7:-3,short?30:38,short?30:38);
+    this.text(button,'HandLabel','手持',-hand/2+2,short?22:14,hand-4,20,12,held?C.paper:C.ink,true);
+    if(held)this.text(button,'HandName',isTool(held)?toolSpec(held).name:seedCrop(held)?'种子':held==='tree_seed'?'树种':'武器',-hand/2+2,short?-42:-27,hand-4,20,12,held?C.paper:C.ink,true);
+    this.inventoryView.quick.forEach((id,i)=>this.itemSlot(this.hud,'world-quick-'+i,id,x+hand+12+(i%cols)*(cell+gap),y+Math.floor(i/cols)*(cell+gap),cell,cell,id?s.inventory[id]||0:0,!!id&&held===id,()=>void this.useQuick(i),true,i+1));
   }
   private conversationScene(){return this.context?.kind==='npc'&&((this.mode==='dialogue'&&this.features.npcTab==='talk')||['neighbor-topics','neighbor-gift'].includes(this.mode));}
   private updateConversationCamera(dt:number){
@@ -1037,8 +1089,11 @@ export class RealQuestSpike extends Component {
       this.text(this.hud,'LocalConnection',this.busy?'正在回应':this.connectionLabel(),x+204,y+61,66,20,12,'#d7ddc7');
     }
     if(s.ranch?.mounted)this.button(this.hud,'ranch-dismount','下马',this.width-180,142,160,44,()=>this.sendFeature('ranch_dismount'),this.busy,false,'game');
-    if(s.location==='overworld')this.button(this.hud,'world-farm',this.farmingTool?'收起锄头 · H':'装备锄头 · H',this.width-180,88,160,44,()=>{this.farmingTool=!this.farmingTool;this.clearInput();this.focusId='';this.dirty=true;},this.busy||!this.canPlay(),this.farmingTool,'hud',{label:'装备或收起锄头，H；家园草地每块4体力，点击或拖动直接开垦',pressed:this.farmingTool});
-    if(this.farmingTool){this.hudCloth('HoeHintGround',this.width-300,140,280,52);this.text(this.hud,'HoeHint','点地 / 拖动开垦 · 每块4体力\n按住空格＋移动 · Esc 收起',this.width-292,144,264,44,13,C.paper,true);}
+    if(s.location==='overworld')this.button(this.hud,'world-farm',this.farmingTool?'收起锄头 · H':'拿起锄头 · H',this.width-180,88,160,44,()=>this.toggleHoe(),this.busy||!this.canPlay(),this.farmingTool,'hud',{label:'拿起或收起背包中的锄头，H',pressed:this.farmingTool});
+    if(this.hoeActive()){const key=this.handTool()!,water=key==='watering_can'?' · 水'+s.tools!.water+'/'+s.tool_rules!.water_max:'';this.hudCloth('HoeHintGround',this.width-300,140,280,52);this.text(this.hud,'HoeHint',toolName(s,key)+' · '+toolCost(s,key)+'体力/次'+water+'\n按住连续操作 · Esc收起',this.width-292,144,264,44,13,C.paper,true);
+      if(['hoe','watering_can'].includes(key)&&toolLevel(s,key)>0)this.button(this.hud,'tool-range','范围 '+this.toolRange+(key==='hoe'?' 格 · G':''),this.width-180,200,key==='hoe'?160:78,44,()=>{this.clearInput();this.toolRange=this.toolRange===1?toolCatalog.tiers[toolLevel(s,key)].area:1;this.dirty=true;},this.busy);
+      if(key==='watering_can')this.button(this.hud,'tool-refill','补水 · E',this.width-(toolLevel(s,key)>0?94:180),200,toolLevel(s,key)>0?74:160,44,()=>this.sendFeature('tool_refill'),this.busy||!this.canRefill());
+    }
     const caveNav=s.location.startsWith('cave_'),navW=caveNav?272:364,navX=this.width-navW-20;
     this.hudCloth('WorldNavigation',navX,20,navW,60);
     const entries=[['menu','旅程','随身页',()=>this.navigate('menu')],['inventory','行囊','I',()=>void this.openInventory()],['life','成长','L',()=>this.navigate('life')],...(!caveNav?[['find-neighbor','找村民','N',()=>this.features.findNeighbor(this.panelHost(),'lia')]]:[])] as [string,string,string,()=>unknown][];
@@ -1048,16 +1103,16 @@ export class RealQuestSpike extends Component {
       this.text(l.node.parent!,'NavigationKey',key,-38,7,76,16,12,'#d2c5a4',true);
       if(i<entries.length-1)this.box(this.hud,'NavigationDivider',xx+85,35,1,30,'#71806480',0);
     });
-    const n=this.farmingTool?this.hoeTarget()||undefined:this.nearest(), action=n?this.farmingTool?{label:'挥锄 · 4体力',reason:s.farm?.tilled.includes(n.id)?'这里已经开垦':hoeReason(this.map().cultivation!,n)||(staminaNow(s,serverNow())<4?'体力不足 · 需要4点':undefined)}:interactionFor(n,s,serverNow()):null;
+    const key=this.hoeActive()?this.handTool():null,n=key?this.hoeTarget()||this.nearest():this.nearest(),action=n?key&&['resource','plot','soil'].includes(n.kind)?{label:toolSpec(key).verb+' · '+toolCost(s,key)+'体力',reason:toolReason(this.map(),s,key,n)||(staminaNow(s,serverNow())<toolCost(s,key)?'体力不足':undefined)}:interactionFor(n,s,serverNow()):null;
     const local=!!sceneLayouts[s.location],walking=!!this.route.length&&local;
     const caption=this.busy?'正在回应…':walking?`${this.approach?this.supportedObjects().find(o=>o.id===this.approach!.id)?.name||'目的地':'选定位置'}
 停止行走 · Esc`:n?local?`${n.name===action!.label?'':n.name+'\n'}${action!.reason||action!.label}  E`:action!.reason||`${action!.label}  E`:s.location.startsWith('cave_')?'走近阶梯或休息平台':'点击门口或家具 · 可自动走近';
-    if(n||walking||this.busy)this.button(this.hud,walking?'stop-walk':'interact',caption,this.width-(local?288:272),this.height-(local?80:76),local?268:252,local?60:56,()=>{if(walking){this.clearInput();this.dirty=true;}else if(this.farmingTool&&n)this.queueHoe(n.x,n.y);else void this.interact();},!walking&&(!n||this.busy||!this.canPlay()||!!action?.reason),true);
+    if(n||walking||this.busy)this.button(this.hud,walking?'stop-walk':'interact',caption,this.width-(local?288:272),this.height-(local?80:76),local?268:252,local?60:56,()=>{if(walking){this.clearInput();this.dirty=true;}else if(this.hoeActive()&&n&&['resource','plot','soil'].includes(n.kind))this.queueHoe(n.x,n.y);else void this.interact();},!walking&&(!n||this.busy||!this.canPlay()||!!action?.reason),true);
     if(!this.movementLearned&&!s.location.startsWith('cave_')&&this.width>=1000){this.box(this.hud,'MovementHintGround',20,this.height-42,378,30,'#233d31',4);this.text(this.hud,'MovementHint','WASD 移动 · 点击走近交互 · Esc 停步',28,this.height-40,362,26,14,C.paper);}
     this.drawTouchPad();
     if(!this.canPlay()&&!this.busy){
       const compact=this.width<1000&&!s.location.startsWith('cave_');
-      this.button(this.hud,'reconnect','重连并确认待保存操作',compact?192:20,compact?this.height-80:s.location.startsWith('cave_')?140:120,compact?this.width-488:270,compact?60:44,()=>this.reconnect(),false,true);
+      this.button(this.hud,'reconnect','重连并确认待保存操作',compact?316:20,compact?88:s.location.startsWith('cave_')?140:120,compact?Math.min(232,this.width-508):270,44,()=>this.reconnect(),false,true);
     }
     this.reconcileGuidanceMarker();
     this.drawStatus();
@@ -1082,7 +1137,7 @@ export class RealQuestSpike extends Component {
     this.clear(this.touchPad);this.touches.clear();this.padSize=size;const start=this.controls.length;
     for(const [id,label,x,y,key] of [['up','↑',76,this.height-174+offset,KeyCode.ARROW_UP],['left','←',24,this.height-122+offset,KeyCode.ARROW_LEFT],['down','↓',76,this.height-122+offset,KeyCode.ARROW_DOWN],['right','→',128,this.height-122+offset,KeyCode.ARROW_RIGHT]] as const){
       this.button(this.touchPad,id,label,x,y,48,48,()=>{});const b=this.touchPad.getChildByName(id)!;
-      b.on(Node.EventType.TOUCH_START,(event:EventTouch)=>{this.route=[];this.approach=null;this.hoeQueue=[];this.hoeAim=null;this.hoePointer=null;this.hoeLastPoint=null;this.dirty=true;this.combatPointer=null;this.combatPointerScreen=null;this.touches.set(event.getID()??0,key);});
+      b.on(Node.EventType.TOUCH_START,(event:EventTouch)=>{this.route=[];this.approach=null;this.hoeQueue=[];this.hoeAim=null;this.hoePointer=null;this.hoeLastPoint=null;this.toolDirection=null;this.toolGestureUntil=this.elapsed+.12;this.inputEpoch++;this.dirty=true;this.combatPointer=null;this.combatPointerScreen=null;this.touches.set(event.getID()??0,key);});
       b.on(Node.EventType.TOUCH_END,this.touchRelease,this);b.on(Node.EventType.TOUCH_CANCEL,this.touchRelease,this);
     }
     this.padControls=this.controls.slice(start);
@@ -1200,7 +1255,7 @@ export class RealQuestSpike extends Component {
     await this.work(async()=>{const location=this.client.state!.location;const reply=await this.client.command(action,data);this.notice=reply.message||'';success=true;
       if(this.client.state!.location!==location){this.p={...this.client.state!.position};this.buildWorld();this.open('world');}
     });
-    if(!success&&(action.startsWith('construction_')||action.startsWith('ranch_')||['knowledge_spend','skill_spend','health_spend','till','plant','water','harvest','reclaim','craft','sell','market_trade'].includes(action))&&this.client.status==='ready'){
+    if(!success&&(action.startsWith('construction_')||action.startsWith('ranch_')||['knowledge_spend','skill_spend','health_spend','till','plant','water','harvest','reclaim','tool_upgrade','tool_strike','craft','sell','market_trade'].includes(action))&&this.client.status==='ready'){
       const message=this.error;this.busy=true;this.dirty=true;
       try{await this.client.refresh();this.error=message+'。已同步最新报价，请核对后再操作。';}
       catch{this.error=message+'。暂时无法同步，请先重连。';}
@@ -1298,16 +1353,19 @@ export class RealQuestSpike extends Component {
     this.continuation.attach(this.client.saveId);this.continuation.reconcile(s,serverNow());
     const cave=s.location.startsWith('cave_');
     if(cave){h.button('tracker-open','当前目标 · '+entry.progress,20,this.width<1000?130:140,196,44,()=>this.navigate('guide-goal'),this.busy);return;}
-    const compact=this.width<1000,x=compact?192:20,y=compact?this.height-80:120,w=compact?this.width-488:284;
-    if(this.continuation.cue){
-      h.button('return-open','欢迎回来\n'+shortText(entry.title,Math.max(8,Math.floor((w-84)/16))),x,y,w-68,compact?60:68,()=>{this.continuation.dismiss();this.features.prepare();this.navigate('preparation');},this.busy,true);
-      h.button('return-dismiss','收起',x+w-60,y,60,compact?60:44,()=>{this.continuation.dismiss();this.dirty=true;},this.busy);return;
+    const compact=this.width<1000,x=compact?316:20,y=compact?88:120,w=compact?Math.min(284,this.width-508):284;
+    if(compact&&this.hoeActive()){
+      const label=h.button('tracker-open','目标',316,88,44,44,()=>this.navigate('guide-goal'),this.busy,false,'hud',{label:'查看当前目标：'+entry.title});label.fontSize=13;return;
     }
-    if(this.continuation.collapsed){h.button('tracker-toggle','展开目标',x,y,116,compact?60:44,()=>{this.continuation.fold(false);this.dirty=true;},this.busy);return;}
+    if(this.continuation.cue){
+      h.button('return-open','欢迎回来\n'+shortText(entry.title,Math.max(8,Math.floor((w-84)/16))),x,y,w-68,compact?44:68,()=>{this.continuation.dismiss();this.features.prepare();this.navigate('preparation');},this.busy,true);
+      h.button('return-dismiss','收起',x+w-60,y,60,44,()=>{this.continuation.dismiss();this.dirty=true;},this.busy);return;
+    }
+    if(this.continuation.collapsed){h.button('tracker-toggle','展开目标',x,y,116,44,()=>{this.continuation.fold(false);this.dirty=true;},this.busy);return;}
     if(!compact){
       const nearby=this.nearest(),target=entry.action?.target;
-      const direct=nearby&&target?.mapId===s.location&&target.targetId===nearby.id&&['armory_counter','cave_entry'].includes(nearby.id)&&!interactionFor(nearby,s,serverNow()).reason?nearby:null;
-      const actionLabel=direct?(direct.id==='armory_counter'?'打开武备台':'查看洞穴入口'):entry.action?.label||'旅途委托';
+      const direct=nearby&&target?.mapId===s.location&&target.targetId===nearby.id&&['armory_counter','blacksmith','cave_entry'].includes(nearby.id)&&!interactionFor(nearby,s,serverNow()).reason?nearby:null;
+      const actionLabel=direct?(direct.id==='blacksmith'?'找阿焰买武器':direct.id==='armory_counter'?'打开锻造工作台':'查看洞穴入口'):entry.action?.label||'旅途委托';
       this.box(this.hud,'JourneyGoalEdge',x,y+2,w,116,C.wood,4);this.box(this.hud,'JourneyGoalPaper',x+1,y,w-2,116,C.paper,4);this.box(this.hud,'JourneyGoalRibbon',x+12,y,3,24,C.moss,0);
       this.text(this.hud,'JourneyGoalStep','旅途委托 · '+entry.progress,x+24,y+4,w-94,24,12,C.muted);
       h.button('tracker-toggle','收起',x+w-56,y+2,48,44,()=>{this.continuation.fold(true);this.dirty=true;},this.busy,false,'page');
@@ -1317,8 +1375,8 @@ export class RealQuestSpike extends Component {
     }
     const title=shortText(entry.title,compact?Math.max(6,Math.floor((w-84)/16)):12),count=entry.note.match(/（(\d+\/\d+)）/);
     const detail=entry.kind==='quest'?(count?count[1]+' '+shortText(entry.note,compact?5:8):entry.progress+' · '+shortText(entry.note,compact?5:8)):entry.progress;
-    h.button('tracker-open',title+'\n'+detail,x,y,w-68,compact?60:68,()=>this.navigate('guide-goal'),this.busy);
-    h.button('tracker-toggle','收起',x+w-60,y,60,compact?60:44,()=>{this.continuation.fold(true);this.dirty=true;},this.busy);
+    h.button('tracker-open',title+'\n'+detail,x,y,w-68,compact?44:68,()=>this.navigate('guide-goal'),this.busy);
+    h.button('tracker-toggle','收起',x+w-60,y,60,44,()=>{this.continuation.fold(true);this.dirty=true;},this.busy);
     if(!compact)h.button('tracker-follow',entry.action?.label||'旅途委托',x,y+76,w,44,()=>entry.action?this.followGuidance(entry.action):this.navigate('journal'),this.busy,true);
   }
   private drawStatus(){
@@ -1554,6 +1612,7 @@ export class RealQuestSpike extends Component {
         if(events.some(e=>e.kind==='defeat'))soundEffects.play('defeat');
       }
     }
+    if(s&&(save!==this.audibleSave||s.tools?.held!==this.audibleState?.tools?.held)){this.toolRange=1;this.clearInput();this.workMotion=null;}
     this.audibleState=s||null;this.audibleSave=save||'';
   }
   private async toggleFullScreen(){if(fullScreen.pending)return;await fullScreen.toggle();this.notice=fullScreen.error||(fullScreen.active?'已进入全屏，Esc 可退出。':'已退出全屏。');this.dirty=true;}
@@ -1576,6 +1635,7 @@ export class RealQuestSpike extends Component {
       feedback,hudRegions,uiRegions:this.uiRegions,
       actorFrame:this.actorFrame,combatAim:this.aim(),swordPresentation:this.swordPose,npcPresentation:Object.fromEntries(this.npcMotion),combatTarget:this.targetId,sessionPage:this.sessionPage,account:this.client.account,accountForm:this.accountForm,accountPreview:this.accountPreview?{username:this.accountPreview.account!.username,saveId:this.accountPreview.save_id}:null,logoutPending:this.client.logoutPending,deletionPending:this.client.deletionPending,recoverySource:this.recoveryPreview?this.recoverySource:null,coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
       construction:s?.construction,constructionView:s?.construction_view,player:this.p, savedPosition:s?.position, saveId:this.client.saveId, revision:s?.revision, vitality:s?.vitality, combat:s?.combat, questLog:s?.quest_log, lifeJournal:s?.life_journal,villageIntro:s?.village_intro,trackedQuest:s?.tracked_quest, timer:s?.timer, studyTasks:s?.study_task_log, plans:s?.study_plan_log, growth:s?.character_growth_options, storage:s?.storage, features:this.features.snapshot(),guidance:this.client.state?{...this.continuation.inspect(),entry:currentGuidance(this.client.state,serverNow()),ownedMarker:this.guideMarker}:null,marker:this.marker,connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, character:s?.character,xp:s?.xp,attributes:s?.attributes,points:s?{knowledge:s.knowledge_points,health:s.health_points,skill:s.skill_points}:null, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
+      tools:s?.tools,toolRules:s?.tool_rules,toolPresentation:this.toolRenderer.presentation,toolRange:this.toolRange,
       ranch:s?.ranch,ranching:s?.ranching,farm:s?.farm,farming:s?.farming,farmingTool:this.farmingTool,hoe:{aim:this.hoeTargetSafe(),queue:this.hoeQueue.map(o=>o.id),pointer:this.hoePointer,swing:this.hoeSwing},plots:s?.plots, activities:s?.activities.slice(-10), camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.conversationZoom||this.zoom,width:this.width,height:this.height},
       plotPresentation:Object.fromEntries(this.plotVisuals),
       interactables:this.supportedObjects(),

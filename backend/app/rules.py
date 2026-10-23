@@ -87,6 +87,8 @@ def upgrade_state(original):
     construction.ensure_construction(state)
     ensure_story(state)
     ensure_economy(state)
+    from .tools import ensure_tools
+    ensure_tools(state)
     return state
 
 
@@ -338,6 +340,9 @@ def _apply(state, action, data, now):
         return '已经是新的一天，请重新选择操作。'
     if action.startswith('construction_'):
         return construction.command(state, action, data, now, require, spend)
+    if action.startswith('tool_') or action=='tree_plant':
+        from .tools import command
+        return command(state,action,data,now)
     if action == 'ranch_build':
         require(False, '住所工程请到工坊找木匠阿榆委托')
     if action.startswith('ranch_'):
@@ -592,8 +597,9 @@ def _apply(state, action, data, now):
         return f'任务完成：{quest["title"]}。奖励已放入背包'
     obj = next((o for o in map_for(location, state, now)['objects'] if o['id'] == data.get('target')), None)
     if action=='till':
-        from .world import HOME_LAND
+        from .tools import land_for
         from .farm_land import cell_at, cell_by_id
+        HOME_LAND=land_for(state,now)
         require(location=='overworld', '只能在家园草地使用锄头')
         obj=cell_at(HOME_LAND,data.get('x'),data.get('y')) if 'x' in data or 'y' in data else cell_by_id(HOME_LAND,data.get('target'))
         require(obj is not None, '请选择有效草地坐标')
@@ -698,19 +704,7 @@ def _apply(state, action, data, now):
         state['inventory']['seed']+=2
         return '找到旅人的补给：15 银币、2 份种子'
     if action == 'gather':
-        require(obj['kind'] in ['wood', 'stone'], '这里不能采集')
-        require(state['gathered'].get(target, 0) <= now, '资源正在恢复，稍后再来吧')
-        recover_stamina(state, now)
-        cost = GATHER_COSTS[obj['kind']]
-        require(state['stamina']['current'] >= cost, f'体力不足，需要 {cost} 点。回家睡觉可补满，也会随时间自然恢复。')
-        state['stamina']['current'] -= cost
-        quantity = 3 + int(state['attributes']['strength'] >= 50)
-        state['inventory'][obj['kind']] += quantity
-        bump(state,obj['kind'],quantity)
-        if 'first_gather' not in state['events']:
-            state['events'].append('first_gather')
-        state['gathered'][target] = now + 30
-        return f'采集成功，获得 {quantity} 份' + ('木材' if obj['kind'] == 'wood' else '石料') + f' · 体力 −{cost}'
+        require(False,'请从背包拿起斧头或十字镐，直接砍树或开采；地面不再刷新木石采集物')
     if action == 'talk':
         require(obj['kind'] == 'npc', '这不是可交谈的角色')
         if state['npc_days'].get(target) != today:

@@ -21,11 +21,11 @@ export class RanchPanels {
   h.button('close','回牧场',x+w-104,y+6,80,44,()=>h.close(),h.busy,false,'back-light');
   const tabs:[Tab,string][]=[['animals','伙伴'],['buy','幼崽'],['build','建造'],['feed','饲料'],['process','加工']];
   tabs.forEach(([tab,label],i)=>h.button('ranch-tab-'+tab,label,x+24+i*(w-48)/5,y+52,(w-64)/5,44,()=>{this.tab=tab;this.selected='';this.page=0;h.redraw(true);},h.busy,this.tab===tab,'page',{label,pressed:this.tab===tab}));
-  const ids=this.tab==='animals'?Object.keys(r.animals):this.tab==='buy'?ranchSpecies.map(s=>s.id):this.tab==='build'?[...Object.keys(ranchShelters),...Object.keys(ranchFacilities)]:this.tab==='process'?ranchCatalog.recipes.map(q=>q.id):['purchase','wheat','corn','all'];
+  const ids=this.tab==='animals'?Object.keys(r.animals):this.tab==='buy'?ranchSpecies.map(s=>s.id):this.tab==='build'?[...Object.keys(ranchShelters),...Object.keys(ranchFacilities).filter(id=>['water','rooting'].includes(id))]:this.tab==='process'?['devices']:['purchase','wheat','corn','all'];
   const per=short?(h.height<380?2:3):6,pages=Math.max(1,Math.ceil(ids.length/per));this.page=Math.min(this.page,pages-1);
   if(!ids.includes(this.selected))this.selected=ids[0]||'';
   if(contextChanged&&context.startsWith('animal_'))this.page=Math.max(0,Math.floor(ids.indexOf(this.selected)/per));
-  const label=(id:string)=>this.tab==='animals'?r.animals[id].name:this.tab==='buy'?ranchSpecies.find(a=>a.id===id)!.baby:this.tab==='build'?(ranchShelters[id]||ranchFacilities[id]).name:this.tab==='process'?ranchProducts[ranchCatalog.recipes.find(a=>a.id===id)!.output].name:({purchase:'购买饲料',wheat:'小麦制饲料',corn:'玉米制饲料',all:'给缺食伙伴添粮'} as Record<string,string>)[id];
+  const label=(id:string)=>this.tab==='animals'?r.animals[id].name:this.tab==='buy'?ranchSpecies.find(a=>a.id===id)!.baby:this.tab==='build'?(ranchShelters[id]||ranchFacilities[id]).name:this.tab==='process'?'生产设备':({purchase:'购买饲料',wheat:'小麦制饲料',corn:'玉米制饲料',all:'给缺食伙伴添粮'} as Record<string,string>)[id];
   ids.slice(this.page*per,(this.page+1)*per).forEach((id,i)=>h.button('ranch-select-'+id,(id===this.selected?'› ':'')+label(id),x+24,top+i*(short?46:52),left-12,44,()=>{this.selected=id;this.name='';h.redraw(true);},h.busy,id===this.selected,'page',{label:label(id),pressed:id===this.selected}));
   h.line('RanchFold',[{x:x+left+10,y:top},{x:x+left+10,y:bottom-52}],C.line,1);
   if(pages>1){h.button('ranch-prev','上一页',x+24,bottom-48,(left-20)/2,44,()=>{this.page=(this.page+pages-1)%pages;h.redraw();},h.busy,false,'page');h.button('ranch-next',`${this.page+1}/${pages} →`,x+28+(left-20)/2,bottom-48,(left-20)/2,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy,false,'page');}
@@ -84,13 +84,8 @@ export class RanchPanels {
    const type=this.selected,disabled=type==='purchase'?h.state.inventory.gold<r.feed_price*10:type==='all'?!hungry.length||(h.state.inventory.animal_feed||0)<need:!(h.state.inventory[type]>0);
    action('ranch-feed-action',nearLedger?(type==='purchase'?'购买10份':type==='all'?'确认补喂':'加工饲料'):'前往采购簿',()=>!nearLedger?relocate():type==='purchase'?send('ranch_feed_buy',{amount:10}):type==='all'?send('ranch_feed_all'):send('ranch_feed_craft',{item:type}),nearLedger&&disabled);
   }else{
-   const recipe=ranchCatalog.recipes.find(q=>q.id===this.selected)!,job=r.jobs[recipe.facility],facility=ranchFacilities[recipe.facility],prefix=this.fine?'fine_':'';
-   title(ranchProducts[recipe.output].name+' · '+facility.name);
-   const size=short?24:100;h.image('items/'+recipe.input,dx+size/2,top+42+size/2,size,size);h.text('RanchArrow','→',dx+size+12,top+(short?34:52),40,short?32:40,short?20:26,C.muted,true);h.image('items/'+recipe.output,dx+size*1.5+68,top+42+size/2,size,size);
-   const msg=job?(job.ready?'加工完成：'+(job.output.startsWith('fine_')?'优质':'')+ranchProducts[job.output.replace('fine_','')].name:'正在加工 · 还需'+ranchDays(job.remaining_days)):!save.facilities[recipe.facility]?'请先在建造页安装'+facility.name:`消耗1份${this.fine?'优质':''}${ranchProducts[recipe.input].name} · 持有${h.state.inventory[prefix+recipe.input]||0}份\n耗时${recipe.days}游戏日，成品品质保留。`;
-   info(msg,top+size+(short?42:48),short?38:90);
-   if(!job)h.button('ranch-quality',this.fine?'使用优质原料':'使用普通原料',dx,bottom-48,dw,44,()=>{this.fine=!this.fine;h.redraw();},h.busy,false,'page');
-   action('ranch-process',!nearLedger?'前往采购簿':job?(job.ready?'取出成品':'加工中'):'开始加工',()=>!nearLedger?relocate():job?send('ranch_job_collect',{facility:recipe.facility}):send('ranch_process',{recipe:recipe.id,fine:this.fine}),nearLedger&&(job?!job.ready:!save.facilities[recipe.facility]||!(h.state.inventory[prefix+recipe.input]>0)));
+   title('生产设备');info('向阿榆学习图纸，在工坊制作。\n设备带到加工地带摆放后，走近设备投料。\n每台独立加工，支持普通和优质原料。');
+   action('ranch-process','查看设备 / 摆放',()=>h.go('production'));
   }
   if(h.error||h.notice)h.text('RanchFeedback',h.error||h.notice,x+24,y+height-30,w-48,18,12,h.error?C.danger:C.muted);
   if(['offline','uncertain','unauthorized'].includes(h.connection))h.button('ranch-reconnect','重连并核对',dx,bottom,dw,44,()=>h.reconnect(),h.processing,true);

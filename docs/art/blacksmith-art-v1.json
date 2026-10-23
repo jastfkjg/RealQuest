@@ -1,0 +1,99 @@
+{
+  "source": "OpenAI built-in image_gen",
+  "rights": "Original project art; approved project concept used as sole reference; no third-party assets or fonts",
+  "approval": "Concept approved 2026-10-23; actual Cocos render pending owner review",
+  "records": [
+    {
+      "path": "assets/derived/blacksmith-v1/portrait.png",
+      "binding": "atlas/blacksmith",
+      "dimensions": [
+        320,
+        296
+      ],
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "source": "assets/generated/hearthwood/blacksmith-v1/character.png",
+      "source_sha256": "4d6126448c0c9bc1f5d8aa762dae5a7c31ec03863d00d012fd0708da430ef668",
+      "crop": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "alpha_bounds": [
+        37,
+        80,
+        1000,
+        963
+      ],
+      "processing": "alpha>=160; inspected isolated cell; proportional nearest-neighbor; bottom aligned; static pose, no animation"
+    },
+    {
+      "path": "assets/derived/blacksmith-v1/figure.png",
+      "binding": "village/blacksmith-figure",
+      "dimensions": [
+        48,
+        64
+      ],
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "source": "assets/generated/hearthwood/blacksmith-v1/character.png",
+      "source_sha256": "4d6126448c0c9bc1f5d8aa762dae5a7c31ec03863d00d012fd0708da430ef668",
+      "crop": [
+        1024,
+        0,
+        1536,
+        1024
+      ],
+      "alpha_bounds": [
+        25,
+        124,
+        475,
+        927
+      ],
+      "processing": "alpha>=160; inspected isolated cell; proportional nearest-neighbor; bottom aligned; static pose, no animation"
+    },
+    {
+      "path": "assets/derived/blacksmith-v1/stand.png",
+      "binding": "ui/weapon-stand",
+      "dimensions": [
+        320,
+        145
+      ],
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "source": "assets/generated/hearthwood/blacksmith-v1/stand.png",
+      "source_sha256": "3783a977b837c7efed52a4776cb2a339ae320472b6c1f05856be8de9d1e8511b",
+      "crop": [
+        123,
+        310,
+        1324,
+        855
+      ],
+      "processing": "alpha>=160; trim transparent bounds; proportional nearest-neighbor downsample to320x180 maximum"
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/interior.png",
+      "binding": "ui/blacksmith-interior",
+      "dimensions": [
+        1586,
+        992
+      ],
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "processing": "original bytes; textless environment"
+    }
+  ],
+  "processor": "tools/build_blacksmith_art.py",
+  "processor_sha256": "1846588472a311c02841a7dce857e1caa4771910ffe036d98aecdd3997531276",
+  "prompts": [
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/character.prompt.txt",
+      "sha256": "46fd340903a3bd8b5889a308a604a026e189659133e6880f166021991dd19446"
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/interior.prompt.txt",
+      "sha256": "ca3c0715a839ef85e57de441da9de801b96d085ae193c7a7b2f7b462aa928d02"
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/stand.prompt.txt",
+      "sha256": "47be70032b62c414aecd8f24997902b3fb0469c3d755ceb9cc42d13ea85ff42f"
+    }
+  ]
+}

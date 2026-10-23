@@ -2435,5 +2435,69 @@
     ],
     "binding_hashes": "clients/cocos/asset-bindings.json",
     "note": "Existing original Hearthwood art, unchanged bytes; both box tiers share the chest illustration. Carpenter temporarily reuses noah-actor; no new external art or independent character approval."
+  },
+  "production_129_reuse": {
+    "task": "docs/tasks/129-player-made-production.md",
+    "source_provenance": "docs/art/ranching-art-v1.json",
+    "source_modifications": false,
+    "new_art": false,
+    "records": [
+      {
+        "item": "mayo_machine",
+        "source": "assets/derived/ranching-v1/facilities/mayo.png",
+        "runtime_alias": "items/mayo_machine",
+        "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+      },
+      {
+        "item": "loom_machine",
+        "source": "assets/derived/ranching-v1/facilities/loom.png",
+        "runtime_alias": "items/loom_machine",
+        "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+      },
+      {
+        "item": "cheese_press",
+        "source": "assets/derived/ranching-v1/facilities/cheese.png",
+        "runtime_alias": "items/cheese_press",
+        "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+      },
+      {
+        "item": "oil_press",
+        "source": "assets/derived/ranching-v1/facilities/oil.png",
+        "runtime_alias": "items/oil_press",
+        "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+      }
+    ],
+    "approval": "Reused existing artwork; gameplay screenshots reviewed by developer, owner acceptance not claimed"
+  },
+  "cocos_blacksmith_counter": {
+    "task": "docs/tasks/blacksmith-counter.md",
+    "concept": "docs/art/references/workshop-counter-preview-v1/preview.png",
+    "approval": "Concept approved by user 2026-10-23; actual runtime awaits user review",
+    "provenance": "docs/art/blacksmith-art-v1.json",
+    "processor": "tools/build_blacksmith_art.py",
+    "original_sources": "assets/generated/hearthwood/blacksmith-v1",
+    "bindings": [
+      "atlas/blacksmith",
+      "village/blacksmith-figure",
+      "ui/weapon-stand",
+      "ui/blacksmith-interior"
+    ],
+    "text_and_controls": "Native Cocos; no baked UI text",
+    "third_party_downloads": false,
+    "source_modifications": false
+  },
+  "tools_and_resources_v1": {
+    "status": "implemented_browser_verified_owner_visual_review_pending",
+    "manifest": "docs/art/tool-art-v1.json",
+    "creator": "OpenAI built-in image_gen; original RealQuest artwork",
+    "license": "Original project-generated artwork; no third-party source uploaded",
+    "runtime_sprites": 35,
+    "tool_icons": 16,
+    "resource_states": 15,
+    "collected_icons": 4,
+    "processing": "tools/build_tool_art.py; cell slicing, connected-component alpha cleanup, nearest neighbor; originals unchanged",
+    "native_motion": "clients/cocos/assets/scripts/toolView.ts",
+    "native_motion_note": "Four-direction articulated grip/arms and tool raise/contact/recover, resource shake/fall, water/wood/stone particles; original character sheets reused, no claim of independently redrawn full-body frames",
+    "scope": "Tools and labor resources; no copied commercial artwork or fonts"
   }
 }

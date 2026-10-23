@@ -28,6 +28,10 @@ export class LocalSceneRenderer {
     const layout = sceneLayouts[map.id];
     if (!layout) return false;
     for (const record of layout) {
+      if(map.resource_nodes){
+        if(record.data.canopy||typeof record.data.worldObject==='string'&&map.resource_nodes.some(n=>n.id===record.data.worldObject))continue;
+        if(record.kind!=='image'&&map.trees.some(([x,y])=>record.x===x+5&&record.y===y+5))continue;
+      }
       const n = new Node(record.art || "SceneShadow");
       n.layer = this.parent.layer;
       this.parent.addChild(n);

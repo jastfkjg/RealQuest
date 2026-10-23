@@ -1,3 +1,5 @@
+import {ToolPanels} from './tools';
+import {ProductionPanels} from './production';
 import {ConstructionPanels} from './construction';
 import {formatMoney} from '../core/currency';
 import {canExploreStory,canReadGate} from '../core/story';
@@ -5,6 +7,7 @@ import {hasDepartureNotes} from '../core/nextDeparture';
 import {RanchPanels} from './ranching';
 import {FarmingPanels} from './farming';
 import {ShopPanels} from './shop';
+import {BlacksmithPanels} from './blacksmith';
 import type {InventoryPreferences} from '../core/inventory';
 import type { Label } from 'cc';
 import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} from '../core/protocol';
@@ -25,7 +28,7 @@ import {questTarget,currentMap} from '../core/navigation';
 import {residentPositions} from '../core/residents';
 import {textPages} from '../core/lifeRecords';
 
-export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud'|'satchel-slot'|'satchel-pocket'|'satchel-close'|'shop-item'|'shop-tab'|'shop-action';
+export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud'|'satchel-slot'|'satchel-pocket'|'satchel-close'|'shop-item'|'shop-tab'|'shop-action'|'smith-tab';
 export interface PanelHost {
  readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
  readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
@@ -49,7 +52,10 @@ type Frame={x:number;y:number;w:number;h:number;compact:boolean;top:number;botto
 const lifeNames={study:'学习',exercise:'运动',work:'工作'};
 export class FeaturePanels {
  private shopPanels:ShopPanels;
+ private blacksmith=new BlacksmithPanels();
  constructor(inventory:InventoryPreferences){this.shopPanels=new ShopPanels(inventory);}
+ private toolPanels=new ToolPanels();
+ private production=new ProductionPanels();
  private construction=new ConstructionPanels();
  private lifePanels=new LifePanels();
  private ranching=new RanchPanels();
@@ -76,18 +82,21 @@ export class FeaturePanels {
 
  lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';gearTab='obtain';gearFilter='all';
  private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
- handles(mode:string){return this.construction.handles(mode)|| this.shopPanels.handles(mode)||mode==='ranch'||mode==='farm'||mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
+ handles(mode:string){return mode==='tools'||this.production.handles(mode)||this.construction.handles(mode)|| this.shopPanels.handles(mode)||mode==='ranch'||mode==='farm'||mode==='forge'||mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
  guideMode(mode:string){return this.guidance.handles(mode);}
  lifeMode(mode:string){return this.lifePanels.handles(mode);}
  reset(){this.ranching.reset();this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
- snapshot(){return {...this.ranching.snapshot(),...this.shopPanels.snapshot(),npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,gearTab:this.gearTab,gearFilter:this.gearFilter,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
+ snapshot(){return {...this.ranching.snapshot(),...this.shopPanels.snapshot(),...this.blacksmith.snapshot(),npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,gearTab:this.gearTab,gearFilter:this.gearFilter,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
  draw(original:PanelHost){
   const h=gameControls(original);
+  if(h.mode==='tools'){this.toolPanels.draw(h);return;}
+  if(this.production.handles(h.mode)){this.production.draw(h);return;}
   if(this.construction.handles(h.mode)){this.construction.draw(h);return;}
   if(this.shopPanels.handles(h.mode)){this.shopPanels.draw(h);return;}
   if(h.mode==='ranch'){this.ranching.draw(h);return;}
   if(h.mode==='farm'){this.farming.draw(h);return;}
-  if(['armory','equipment','gear-recipe'].includes(h.mode)){drawExpeditionGear(h,this);return;}
+  if(h.mode==='armory'&&h.state.combat?.gear_shop?.region==='village'){this.blacksmith.draw(h,this);return;}
+  if(['armory','forge','equipment','gear-recipe'].includes(h.mode)){drawExpeditionGear(h,this);return;}
   if(h.mode==='menu'){drawJourneyMenu(h,this);return;}
   if(h.mode==='preferences'){this.preferences.draw(h);return;}
   if(h.mode==='dialogue'&&this.npcTab==='talk'){this.places.encounter(h,id=>{if(id==='shop')h.go('shop');else{this.npcTab=id;this.page=0;h.redraw();}});return;}

@@ -143,6 +143,9 @@ def command(state, action, data, now, require, spend):
     settle_clock(state, now)
     settle_ranch(state, now)
     ranch = state['ranch']
+    if action in ['ranch_process','ranch_job_collect']:
+        from .production import command as machine_command
+        return machine_command(state, action, data, now, require, spend)
     if action == 'ranch_enter':
         require(state['location'] == 'overworld', '请从家园牧场入口进入')
         require(math.hypot(state['position']['x'] - 400, state['position']['y'] - 600) <= 72, '请先走近家园牧场入口')
@@ -184,6 +187,7 @@ def command(state, action, data, now, require, spend):
     if action == 'ranch_facility':
         key = data.get('facility')
         require(target == 'ranch_ledger' and isinstance(key, str) and key in FACILITIES, '请在采购簿选择有效设施')
+        require('craft' not in FACILITIES[key], '生产设备需先学习图纸、在工坊制作，再到加工地带摆放')
         require(not ranch['facilities'].get(key), '设施已经建成')
         spend(state, FACILITIES[key]['costs'])
         ranch['facilities'][key] = True
@@ -207,7 +211,7 @@ def command(state, action, data, now, require, spend):
             ranch['last_tick'] = clock_elapsed(state, now)
         ranch['next_id'] += 1
         return f'{spec["baby"]}已送到{SHELTERS[spec["shelter"]]["name"]}，请记得添饲料。'
-    if action in ['ranch_feed_buy', 'ranch_feed_craft', 'ranch_process', 'ranch_job_collect', 'ranch_feed_all']:
+    if action in ['ranch_feed_buy', 'ranch_feed_craft', 'ranch_feed_all']:
         require(target == 'ranch_ledger', '请在牧场采购簿办理')
         if action == 'ranch_feed_buy':
             amount = data.get('amount', 10)
@@ -229,27 +233,6 @@ def command(state, action, data, now, require, spend):
             for animal in hungry:
                 animal['feed_seconds'] = DAY_SECONDS
             return f'为 {len(hungry)} 位缺食伙伴各添了一游戏日口粮。'
-        if action == 'ranch_job_collect':
-            facility = data.get('facility')
-            require(isinstance(facility, str) and facility in ranch['jobs'], '没有这项加工')
-            job = ranch['jobs'][facility]
-            require(clock_elapsed(state, now) >= job['ready_tick'], '加工尚未完成')
-            state['inventory'][job['output']] += 1
-            del ranch['jobs'][facility]
-            return '已取出加工成品。'
-        recipe_id = data.get('recipe')
-        require(isinstance(recipe_id, str) and recipe_id in RECIPES, '请选择有效加工配方')
-        recipe = RECIPES[recipe_id]
-        facility = recipe['facility']
-        require(ranch['facilities'].get(facility), '请先建造' + FACILITIES[facility]['name'])
-        require(facility not in ranch['jobs'], '这台设备已有加工，请先取出成品')
-        fine = data.get('fine', False)
-        require(isinstance(fine, bool), '请选择有效品质')
-        source = ('fine_' if fine else '') + recipe['input']
-        spend(state, {source: 1})
-        ranch['jobs'][facility] = {'recipe': recipe_id, 'output': ('fine_' if fine else '') + recipe['output'],
-            'ready_tick': clock_elapsed(state, now) + recipe['days'] * DAY_SECONDS}
-        return FACILITIES[facility]['name'] + '开始加工，游戏时间和睡眠推进。'
     require(target in ranch['animals'], '请选择牧场动物')
     animal = ranch['animals'][target]
     spec = ANIMALS[animal['species']]

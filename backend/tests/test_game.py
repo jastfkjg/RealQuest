@@ -53,6 +53,31 @@ def fresh():
     s['world_clock'].update(elapsed=187.5, running_until=0)
     return s
 
+def chop_tree(state, target, now):
+    """Earn a full tree's output through the public tool work rule."""
+    from app.world import map_for
+    node=next(o for o in map_for('overworld',state,now)['objects'] if o['id']==target)
+    state.update(location='overworld',position={'x':node['x'],'y':node['y']+44})
+    apply(state,'tool_hold',{'item':'axe'},now)
+    tick=max(now,state['tools']['next_at'])
+    for _ in range(6):
+        node=next(o for o in map_for('overworld',state,tick)['objects'] if o['id']==target)
+        if node['resource_state']['stage']!='tree':break
+        apply(state,'tool_strike',{'target':target,'expected_version':node['resource_state']['version']},tick)
+        tick+=.5
+
+
+def api_finish_tree(client,target='wood_1'):
+    # Quest-ledger tests start from five already saved, unrewarded hits. The
+    # final hit is a real API command; the full multi-hit loop has its own suite.
+    with Session.begin() as db:
+        p=db.scalar(select(Player));s=copy.deepcopy(p.state)
+        s['tools']['held']='axe';s['tools']['resources'][target]={'stage':'tree','work':5,'version':5};p.state=s
+    response=cmd(client,'tool_strike',{'target':target,'expected_version':5})
+    assert response.status_code==200
+    return response
+
+
 def study_create(state, now, minutes=25, title='读一章植物笔记'):
     key = str(uuid.uuid4())
     apply(state, 'study_create', {'task_id': key, 'title': title, 'target_minutes': minutes}, now)
@@ -224,16 +249,17 @@ def test_parallel_duplicate_awards_once(client):
     assert all(r.status_code==200 for r in results)
     assert client.get('/api/state').json()['state']['xp']==20
 
-def test_gather_cooldown_proximity_and_receipt(client):
+def test_tool_proximity_work_and_receipt(client):
     create(client)
-    assert cmd(client,'gather',{'target':'wood_2'}).status_code==422
+    assert cmd(client,'tool_hold',{'item':'axe'}).status_code==200
+    assert cmd(client,'tool_strike',{'target':'wood_2','expected_version':0}).status_code==422
     assert cmd(client,'move',{'x':320,'y':330}).status_code==200
-    result=cmd(client,'gather',{'target':'wood_1'})
-    assert result.json()['state']['inventory']['wood']==3
-    assert cmd(client,'gather',{'target':'wood_1'}).status_code==422
+    result=api_finish_tree(client)
+    assert result.json()['state']['inventory']['wood']==6
+    assert cmd(client,'tool_strike',{'target':'wood_1','expected_version':5}).status_code==422
     with Session() as db:
-        receipt=db.scalar(select(Receipt).where(Receipt.action=='gather'))
-        assert receipt.changes['inventory']=={'wood':3}
+        receipt=db.scalar(select(Receipt).where(Receipt.action=='tool_strike'))
+        assert receipt.changes['inventory']=={'wood':6,'tree_seed':1}
 
 def test_bounds_and_collision(client):
     create(client)
@@ -351,7 +377,7 @@ def test_quest_lifecycle_locked_and_claim_once(client):
     cmd(client,'enter',{'target':'home'})
     cmd(client,'exit',{'target':'home_exit'})
     cmd(client,'move',{'x':288,'y':320})
-    cmd(client,'gather',{'target':'wood_1'})
+    api_finish_tree(client)
     cmd(client,'move',{'x':256,'y':300})
     before=client.get('/api/state').json()['state']
     assert next(q for q in before['quest_log'] if q['id']=='settle_in')['status']=='ready'

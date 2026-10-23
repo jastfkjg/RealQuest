@@ -93,7 +93,7 @@ assert.equal(next(s, now + 200).target.targetId, "noah");
 s.combat.equipped = null;
 assert.equal(next(s, now).panel, "equipment");
 s.inventory.stone_sword = 0;
-assert.equal(next(s, now).target.targetId, "armory_counter");
+assert.equal(next(s, now).target.targetId, "blacksmith");
 s = fresh();
 s.stamina.current = 0;
 assert.equal(next(s, now).target.targetId, "home_bed");

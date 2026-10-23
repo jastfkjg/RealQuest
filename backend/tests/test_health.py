@@ -106,17 +106,18 @@ def test_gather_rejection_atomic_and_bed_rest(client, monkeypatch):
     from app.world import OBJECTS, INTERIORS
     create(client); now = 1800000000
     monkeypatch.setattr('app.main.time.time', lambda: now)
-    wood = next(o for o in OBJECTS if o['kind'] == 'wood')
+    wood = next(o for o in OBJECTS if o.get('resource') == 'tree')
     with Session.begin() as db:
         p = db.scalar(select(Player)); s = copy.deepcopy(p.state)
-        s['position'] = {'x': wood['x'], 'y': wood['y']}
-        s['stamina'] = {'current': 4, 'max': 100, 'updated_at': now}; p.state = s
+        s['position'] = {'x': wood['x'], 'y': wood['y']+44}
+        s['tools']['held']='axe';s['tools']['resources'][wood['id']]={'stage':'tree','work':5,'version':5}
+        s['stamina'] = {'current': 2, 'max': 100, 'updated_at': now}; p.state = s
     key = str(uuid.uuid4())
-    for _ in range(2): assert cmd(client, 'gather', {'target': wood['id']}, key).status_code == 200
-    s = client.get('/api/state').json()['state']; assert s['stamina']['current'] == 0 and s['inventory']['wood'] == 3
+    for _ in range(2): assert cmd(client, 'tool_strike', {'target': wood['id'],'expected_version':5}, key).status_code == 200
+    s = client.get('/api/state').json()['state']; assert s['stamina']['current'] == 0 and s['inventory']['wood'] == 6
     now += 31
     before = client.get('/api/export').json()
-    assert cmd(client, 'gather', {'target': wood['id']}).status_code == 422
+    assert cmd(client, 'tool_strike', {'target': wood['id'],'expected_version':6}).status_code == 422
     assert client.get('/api/export').json() == before
     with Session.begin() as db:
         p = db.scalar(select(Player)); value = copy.deepcopy(p.state)
@@ -142,16 +143,17 @@ def test_mining_recovery_reads_and_credential_restore(client, monkeypatch):
     from app.world import OBJECTS
     create(client); now = 1800000000
     monkeypatch.setattr('app.main.time.time', lambda: now)
-    stone = next(o for o in OBJECTS if o['kind'] == 'stone')
+    stone = next(o for o in OBJECTS if o.get('resource') == 'stone')
     with Session.begin() as db:
         p = db.scalar(select(Player)); s = copy.deepcopy(p.state)
-        s['position'] = {'x': stone['x'], 'y': stone['y']}
-        s['stamina'] = {'current': 5, 'max': 105, 'updated_at': now - 719}
+        s['position'] = {'x': stone['x'], 'y': stone['y']+44}
+        s['tools']['held']='pickaxe';s['tools']['resources'][stone['id']]={'stage':'whole','work':2,'version':2}
+        s['stamina'] = {'current': 2, 'max': 105, 'updated_at': now - 719}
         s['health_invested'] = 1; p.state = s
-    assert cmd(client, 'gather', {'target':stone['id']}).status_code == 422
+    assert cmd(client, 'tool_strike', {'target':stone['id'],'expected_version':2}).status_code == 422
     now += 1
-    for _ in range(2): assert client.get('/api/state').json()['state']['stamina']['current'] == 6
-    assert cmd(client, 'gather', {'target':stone['id']}).json()['state']['stamina']['current'] == 0
+    for _ in range(2): assert client.get('/api/state').json()['state']['stamina']['current'] == 3
+    assert cmd(client, 'tool_strike', {'target':stone['id'],'expected_version':2}).json()['state']['stamina']['current'] == 0
     key = client.post('/api/recovery-file').json()['recovery_key']
     now += 3600
     with TestClient(app) as restored:
@@ -160,5 +162,5 @@ def test_mining_recovery_reads_and_credential_restore(client, monkeypatch):
             state = restored.get('/api/state').json()['state']
             assert state['stamina']['current'] == 5 and state['stamina']['max'] == 105
             assert state['health_invested'] == 1
-        assert cmd(restored, 'gather', {'target':stone['id']}).status_code == 422
+        assert cmd(restored, 'tool_strike', {'target':stone['id'],'expected_version':3}).status_code == 422
     assert client.get('/api/state').json()['state']['stamina']['current'] == 5

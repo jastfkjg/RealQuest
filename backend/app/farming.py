@@ -18,7 +18,8 @@ def ensure_farm(state):
             state['storage'].setdefault(item, 0)
 
 def capacity(state):
-    from .world import HOME_LAND
+    from .tools import land_for
+    HOME_LAND=land_for(state,state.get('world_clock',{}).get('updated_at',0))
     return len({o['id'] for o in available_cells(HOME_LAND)} | set(state['farm']['tilled']))
 
 def duration(state, crop, regrow=False):
@@ -35,7 +36,9 @@ def ready(state, plot, now):
     return progress(state, plot, now) >= 1
 
 def farm_view(state, now):
-    return {'capacity': capacity(state), 'till_cost': TILL_COST, 'stamina': ACTION_STAMINA,
+    from .tools import stamina_cost
+    costs={**ACTION_STAMINA,'till':stamina_cost(state,'hoe'),'water':stamina_cost(state,'watering_can'),'reclaim':stamina_cost(state,'pickaxe')}
+    return {'capacity': capacity(state), 'till_cost': TILL_COST, 'stamina': costs,
             'clock': 'world', 'day_seconds': DAY_SECONDS,
             'growth_multiplier': .75 if state['buildings']['home'] >= 2 else 1,
             'plots': {k: {'progress': progress(state, p, now), 'ready': ready(state, p, now)} for k,p in state['plots'].items()}}
@@ -48,7 +51,8 @@ def command(state, action, data, now, obj, require, spend, recover_stamina, bump
     crop = None
     if action == 'till':
         require(obj['kind'] == 'soil' and target not in farm['tilled'], '这里已经开垦')
-        from .world import HOME_LAND
+        from .tools import land_for
+        HOME_LAND=land_for(state,now)
         reason=soil_reason(HOME_LAND,obj)
         require(reason is None, reason)
     else:
@@ -68,10 +72,15 @@ def command(state, action, data, now, obj, require, spend, recover_stamina, bump
             require(not plot.get('watered'), '本轮已经浇过水')
         elif action == 'reclaim':
             require(plot is None, '请先收完作物，再恢复草地')
+    from .tools import require_tool,stamina_cost,reconcile_held
+    tool={'till':'hoe','water':'watering_can','reclaim':'pickaxe'}.get(action)
+    if tool:require_tool(state,tool)
+    if action=='water':require(state['tools']['water']>=1,'水壶空了，请拿着水壶走到河湖边补水')
     recover_stamina(state,now)
-    cost=ACTION_STAMINA[action]
+    cost=stamina_cost(state,tool) if tool else ACTION_STAMINA[action]
     require(state['stamina']['current']>=cost, f'体力不足，需要 {cost} 点；回家睡觉可补满')
     state['stamina']['current']-=cost
+    if tool:state['tools']['held']=tool
     if action=='till':
         farm['tilled'].append(target)
         return '开垦了一块田地，位置已保存。'
@@ -80,11 +89,14 @@ def command(state, action, data, now, obj, require, spend, recover_stamina, bump
         return '田地已恢复为草地，可用锄头重新开垦。'
     tick=clock_elapsed(state,now)
     if action=='plant':
+        state['tools']['held']=crop['seed']
         spend(state,{crop['seed']:1})
+        reconcile_held(state)
         state['plots'][target]={'crop_id':crop['id'],'clock':'world','planted_at':now,'planted_tick':tick,'ready_tick':tick+duration(state,crop),'harvests_left':crop['harvests'],'watered':False}
         if 'first_plant' not in state['events']:state['events'].append('first_plant')
         return f'种下了{crop["name"]}。游戏时间与睡眠推进生长，离线暂停；成熟后不会枯萎。'
     if action=='water':
+        state['tools']['water']-=1
         plot['watered']=True
         plot['ready_tick']-=(plot['ready_tick']-plot['planted_tick'])*.1
         return '浇水完成，本轮成熟所需游戏时间缩短 10%。'

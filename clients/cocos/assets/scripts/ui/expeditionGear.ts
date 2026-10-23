@@ -9,7 +9,7 @@ import {textPages} from '../core/lifeRecords';
 import {canExploreStory} from '../core/story';
 import {hasDepartureNotes} from '../core/nextDeparture';
 
-type GearView={weaponId:string;page:number;detailPage:number;gearTab:string;gearFilter:string;confirm:string;prepare():void};
+export type GearView={weaponId:string;page:number;detailPage:number;gearTab:string;gearFilter:string;confirm:string;prepare():void};
 const cave={mapId:'overworld',targetId:'cave_entry'};
 const signed=(n:number)=>(n>0?'+':'')+Math.round(n*100)/100;
 const wrap=(s:string,w:number,size=15,lines=2)=>textPages(s,Math.max(8,Math.floor(w/size)),lines)[0];
@@ -27,15 +27,16 @@ function requirements(h:PanelHost,g:GearDefinition){
 }
 /** Regional server quotes, learned diagrams, explicit equipment; reading never changes resources. */
 export function drawExpeditionGear(h:PanelHost,v:GearView){
- const compact=h.height<600||h.width<980,recipe=h.mode==='gear-recipe',armory=h.mode==='armory';
+ const compact=h.height<600||h.width<980,recipe=h.mode==='gear-recipe',forge=h.mode==='forge',armory=h.mode==='armory'||forge;
+ if(forge)v.gearTab='craft';
  const w=Math.min(recipe?780:1120,h.width-24),height=Math.min(recipe?620:armory?700:580,h.height-24),x=(h.width-w)/2,y=(h.height-height)/2,footer=y+height-60;
  const c=h.state.combat!,gear=c.gear||c.weapons,shop=c.gear_shop,all=Object.keys(gear),eq=c.equipped;
  const equipped=(g:GearDefinition)=>g.slot==='weapon'?eq:c.equipment?.[g.slot];
  const equippedNames=['weapon','body','feet','charm'].map(slot=>`${slotNames[slot]}：${itemNames[slot==='weapon'?eq||'':c.equipment?.[slot]||'']||'未装备'}`);
- const target=shop?.target||'armory_counter';
+ const target=forge?shop?.craft_target||'armory_counter':shop?.target||'blacksmith';
  const send=(action:string)=>h.send(action,{item:v.weaponId,target});
  timberSurface(h,{x,y,w,h:height});paperSurface(h,{x:x+10,y:y+10,w:w-20,h:height-20});
- h.text('FeatureTitle',recipe?'图纸与装备条件':armory?shop?.name||'工坊武备台':'随行装备',x+24,y+10,w-(armory?330:140),40,compact?22:26);
+ h.text('FeatureTitle',recipe?'图纸与装备条件':forge?'工坊 · 锻造工作台':armory?shop?.name||'工坊 · 铁匠铺':'随行装备',x+24,y+10,w-(armory?330:140),40,compact?22:26);
  h.button('close','返回',x+w-100,y+10,76,44,()=>h.close(),h.busy);
  if(armory){
   const ready=!!eq&&!!h.state.inventory[eq],exploring=canExploreStory(h.state);
@@ -59,13 +60,13 @@ export function drawExpeditionGear(h:PanelHost,v:GearView){
  }
  const tabY=y+62,filters=armory?['all','martial','science','magic','gear']:['all','weapon','body','feet','charm'];
  if(!filters.includes(v.gearFilter))v.gearFilter='all';
- if(armory){
+ if(armory&&!forge){
   const tabs=[['obtain','成品'],['diagrams','图纸'],['craft','打造'],['sell','出售'],['materials','材料']];
   if(!tabs.some(t=>t[0]===v.gearTab))v.gearTab='obtain';
   const tw=(w-48-4*8)/5;
   tabs.forEach(([id,label],i)=>h.button('tab-'+id,label,x+24+i*(tw+8),tabY,tw,44,()=>{v.gearTab=id;v.page=0;v.confirm='';h.redraw(true);},h.busy,v.gearTab===id,'tab',{label,pressed:v.gearTab===id}));
  }
- const fy=armory?y+112:tabY,fw=(w-48-4*8)/5;
+ const fy=armory&&!forge?y+112:tabY,fw=(w-48-4*8)/5;
  filters.forEach((id,i)=>{const label=id==='all'?'全部':id==='gear'?'护具饰品':armory?({martial:'冷兵器',science:'科学',magic:'魔法'} as Record<string,string>)[id]:slotNames[id];h.button('filter-'+id,label,x+24+i*(fw+8),fy,fw,44,()=>{v.gearFilter=id;v.page=0;h.redraw(true);},h.busy,v.gearFilter===id,'page',{label,pressed:v.gearFilter===id});});
  const top=fy+54,left=compact?Math.max(176,Math.floor(w*.28)):280,dx=x+left+48,dw=w-left-72;
  const material=v.gearTab==='materials'&&armory,diagrams=v.gearTab==='diagrams'&&armory,sell=v.gearTab==='sell'&&armory,craft=v.gearTab==='craft'&&armory;
@@ -83,7 +84,8 @@ export function drawExpeditionGear(h:PanelHost,v:GearView){
  if(!ids.length){
   const message=material?'这里没有精密材料。苔桥城工坊提供高级材料。':craft?'还没有可打造的图纸。商人出售基础图纸，探索也能获得特殊图纸。':diagrams?'这个分类暂时没有图纸。':'还没有这类随行装备。';
   h.text('GearEmpty',wrap(message,dw,18,4),dx,top+12,dw,120,18,C.muted);
-  if(!armory)h.button('gear-depart','标记武备台',dx,footer,dw,44,()=>h.mark({mapId:'workshop',targetId:'armory_counter'},'工坊武备台'),h.busy,true);return;
+  if(forge)h.button('smith-mark','标记铁匠 · 购买图纸',dx,footer,dw,44,()=>h.mark({mapId:'workshop',targetId:'blacksmith'},'阿焰 · 铁匠'),h.busy,true);
+  else if(!armory)h.button('gear-depart','标记铁匠',dx,footer,dw,44,()=>h.mark({mapId:'workshop',targetId:'blacksmith'},'阿焰 · 铁匠'),h.busy,true);return;
  }
  const id=v.weaponId,g=gear[id],soup=id==='soup',m=shop?.materials[id],n=h.state.inventory[id]||0,name=itemNames[id]||id;
  const art=compact?56:112;
@@ -106,13 +108,15 @@ export function drawExpeditionGear(h:PanelHost,v:GearView){
  if(!compact){
   inkRule(h,'GearRule',dx,top+132,dw);
   const body=armory?diagrams?[g.known?'✓ 已学会，打造不会消耗图纸':`图纸报价 ${formatMoney(price)}`,'图纸来源：'+(g.blueprint_source==='research'?'城市研究兑换 · 另需6微光晶屑':'武备图纸商人'),...(g.blueprint_source==='research'?g.research_reasons:[]),`持有 ${formatMoney(gold)} / 需要 ${formatMoney(price)}`,use?'使用尚缺：'+use:'使用条件已满足']:material?[`单价 ${formatMoney(price)} · 持有 ${n} 份`,m!.summary]:sell?[`出售一件 +${formatMoney(Math.floor((g?.price||0)/4))}`,isEquipped&&n===1?'出售最后一件会自动卸下。':'物品数量和装备状态由服务器确认。']:[soup?'便携恢复补给':g.effect_text||'以可靠的形制陪伴旅途。',`持有 ${formatMoney(gold)} / 需要 ${formatMoney(price)}`+(missing?` · 还差 ${formatMoney(missing)}`:' · 可购买'),g?.known?'图纸已学会，可反复打造':'打造前先到「图纸」学会配方',use?'使用尚缺：'+use:'使用条件已满足',g?.craft_reasons[0]||'材料与制造能力已满足']: [equippedNames.join('\n'),g.effect_text||'可靠的随行武器。',use?'使用尚缺：'+use:'使用条件已满足'];
-  h.text('GearDetails',textPages(body.join('\n'),Math.floor(dw/16),Math.max(3,Math.floor((footer-top-196)/26)))[0],dx,top+150,dw,Math.max(80,footer-top-196),16,use?C.muted:C.ink);
+  h.text('GearDetails',textPages((forge?requirements(h,g):body).join('\n'),Math.floor(dw/16),Math.max(3,Math.floor((footer-top-196)/26)))[0],dx,top+150,dw,Math.max(80,footer-top-196),16,use?C.muted:C.ink);
  }
  const shortQuote=diagrams?(g.known?'✓ 图纸已永久学会':`图纸 ${formatMoney(price)}${g.blueprint_source==='research'?' + 6晶屑':''} · 持有 ${formatMoney(gold)}`):material?`单价 ${formatMoney(price)} · 持有 ${n} 份`:sell?isEquipped&&n===1?'当前装备的最后一件，售出后卸下。':`出售一件 +${formatMoney(Math.floor(g.price/4))}`:craft?use||g.craft_reasons[0]||'✓ 材料与能力已满足':use||g?.effect_text||delta;
  const feedback=h.error||h.notice||(!compact?'':shortQuote);
  if(feedback)h.text('GearFeedback',wrap(feedback,dw,14,compact?1:2),dx,footer-(compact?28:44),dw,compact?24:40,14,h.error?C.danger:C.muted);
  const bw=(dw-16)/3;
- if(!armory){
+ if(forge){
+  h.button('craft-gear',h.processing?'打造中…':'确认材料 · 打造 1 件',dx,footer,dw,44,()=>send('gear_craft'),h.busy||!validCraft,true,'shop-action');
+ }else if(!armory){
   h.button(equipId,isEquipped?'已装备':'装备',dx,footer,bw,44,equip,h.busy||!n||!!use||isEquipped,!isEquipped);
   h.button('gear-unequip','卸下',dx+bw+8,footer,bw,44,()=>h.send('gear_unequip',{slot:g.slot}),h.busy||!isEquipped);
   h.button('gear-depart','标记山洞',dx+(bw+8)*2,footer,bw,44,mark,h.busy);

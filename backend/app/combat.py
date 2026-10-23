@@ -512,6 +512,7 @@ def command(state, action, data, now):
         near_service(state,target,['overworld',*[f'cave_{n}' for n in range(1,6)]])
         if target=='cave_entry':
             state['location']='cave_1'; state['position']={'x':64,'y':352}
+            if 'tools' in state:state['tools']['held']=c['equipped']
         else:
             require(is_cave(state),'请走近洞内路标')
             floor=int(state['location'][5:]); enemies=floor_enemies(state,now)

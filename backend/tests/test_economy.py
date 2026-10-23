@@ -33,7 +33,7 @@ def test_non_cash_startup_aid_keeps_early_weapon_affordable_and_cannot_repeat():
     at(s,'pasture','ranch_ledger');before=copy.deepcopy(s)
     with pytest.raises(RuleError):apply(s,'ranch_buy',{'target':'ranch_ledger','species':'chicken','expected_next':2},NOW)
     assert s==before
-    at(s,'workshop','armory_counter');apply(s,'gear_buy',{'target':'armory_counter','item':'stone_sword'},NOW)
+    at(s,'workshop','blacksmith');apply(s,'gear_buy',{'target':'blacksmith','item':'stone_sword'},NOW)
     assert s['inventory']['gold']==12 and len(s['ranch']['animals'])==1
     before=copy.deepcopy(s)
     with pytest.raises(RuleError):board(s,'quest_claim','craft_home')

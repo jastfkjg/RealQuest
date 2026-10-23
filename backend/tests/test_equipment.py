@@ -14,7 +14,7 @@ from app.combat import WEAPONS,floor_enemies,attack_hit,damage_enemy,hurt_player
 
 
 def funded(city=False):
-    s=player();at(s,'city' if city else 'workshop','city_armory' if city else 'armory_counter')
+    s=player();at(s,'city' if city else 'workshop','city_armory' if city else 'blacksmith')
     s['inventory'].update(gold=30000,plank=300,stone=300,gel=300,shell=300,crystal=300,alloy=300,mechanism=300,energy_cell=300,focus_core=300)
     s['stamina'].update(max=200,current=200,updated_at=NOW);s['skill_growth']['building']=10;s['knowledge_growth'].update(science=12,magic=12)
     return s
@@ -25,7 +25,7 @@ def test_regional_stock_cannot_be_bypassed_with_forged_requests():
     assert 'flintlock' in q['offers'] and 'clockwork_pistol' not in q['offers']
     for action,item in [('gear_buy','clockwork_pistol'),('blueprint_buy','repeater_smg'),('blueprint_research','prism_rifle'),('gear_material_buy','alloy')]:
         before=copy.deepcopy(s)
-        with pytest.raises(RuleError):apply(s,action,dict(target='armory_counter',item=item),NOW)
+        with pytest.raises(RuleError):apply(s,action,dict(target='blacksmith',item=item),NOW)
         assert s==before
     at(s,'city','city_armory');q=equipment.shop_view(s)
     assert 'clockwork_pistol' in q['offers'] and 'repeater_smg' not in q['offers']
@@ -46,6 +46,7 @@ def test_every_item_has_real_acquisition_crafting_use_and_restoration(item):
     else:
         s['attributes']['wisdom']=25;at(s,'overworld','ruins');apply(s,'explore',dict(target='ruins'),NOW);at(s,'city','city_armory')
     assert item in s['village_combat']['blueprints'];before=copy.deepcopy(s['inventory'])
+    target=equipment.shop_view(s)['craft_target'];at(s,s['location'],target)
     apply(s,'gear_craft',dict(target=target,item=item),NOW)
     assert s['inventory'][item]==before[item]+1
     for key,n in g['costs'].items():assert s['inventory'][key]==before[key]-n
@@ -58,15 +59,16 @@ def test_every_item_has_real_acquisition_crafting_use_and_restoration(item):
 
 def test_diagram_is_permanent_and_separate_from_wielding_and_purchase():
     s=funded();s['skill_growth']['building']=0;s['knowledge_growth']['science']=0
-    apply(s,'gear_buy',dict(target='armory_counter',item='spring_spear'),NOW)
+    apply(s,'gear_buy',dict(target='blacksmith',item='spring_spear'),NOW)
     assert not equipment.GEAR['spring_spear']['id'] in s['village_combat']['blueprints']
     before=copy.deepcopy(s)
     with pytest.raises(RuleError):apply(s,'gear_equip',dict(item='spring_spear'),NOW)
     assert s==before
-    apply(s,'blueprint_buy',dict(target='armory_counter',item='spring_spear'),NOW)
+    apply(s,'blueprint_buy',dict(target='blacksmith',item='spring_spear'),NOW)
     before=copy.deepcopy(s)
-    with pytest.raises(RuleError):apply(s,'blueprint_buy',dict(target='armory_counter',item='spring_spear'),NOW)
+    with pytest.raises(RuleError):apply(s,'blueprint_buy',dict(target='blacksmith',item='spring_spear'),NOW)
     assert s==before
+    at(s,'workshop','armory_counter')
     with pytest.raises(RuleError):apply(s,'gear_craft',dict(target='armory_counter',item='spring_spear'),NOW)
     s['knowledge_growth']['science']=1;s['skill_growth']['building']=1
     for _ in range(2):apply(s,'gear_craft',dict(target='armory_counter',item='spring_spear'),NOW)
@@ -92,7 +94,7 @@ def test_armor_slots_effects_sale_and_storage_are_authoritative():
         s['inventory'][item]=1;apply(s,'gear_equip',dict(item=item),NOW)
     assert equipment.stats(s)==dict(defense=3,dodge_bonus=.15,hurt_bonus=0,heal_bonus=5,light=True)
     assert hurt_player(s,10) and s['vitality']['current']==93
-    apply(s,'gear_sell',dict(target='armory_counter',item='shell_armor'),NOW)
+    apply(s,'gear_sell',dict(target='blacksmith',item='shell_armor'),NOW)
     assert s['village_combat']['gear']['body'] is None and equipment.stats(s)['defense']==0
     at(s,'home','home_chest');apply(s,'store',dict(target='home_chest',item='scout_boots',amount=1),NOW)
     assert s['village_combat']['gear']['feet'] is None and s['storage']['scout_boots']==1
@@ -147,7 +149,7 @@ def test_old_save_migration_preserves_owned_weapon_and_original_crafting():
 def test_blueprint_duplicate_request_and_concurrent_purchase_charge_once(client):
     cmd(client,'create',dict(name='图纸回执'))
     with Session.begin() as db:db.scalar(select(Player)).state=funded()
-    key=str(uuid.uuid4());data=dict(target='armory_counter',item='wooden_bow')
+    key=str(uuid.uuid4());data=dict(target='blacksmith',item='wooden_bow')
     with ThreadPoolExecutor(2) as pool:results=list(pool.map(lambda _:cmd(client,'blueprint_buy',data,key),range(2)))
     assert [r.status_code for r in results]==[200,200]
     assert results[0].json()['state']['inventory']==results[1].json()['state']['inventory']

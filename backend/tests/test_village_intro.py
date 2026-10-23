@@ -1,3 +1,4 @@
+from test_game import chop_tree
 import copy
 import pytest
 from app.rules import initial_state, apply, upgrade_state, RuleError
@@ -24,7 +25,7 @@ def settle(state):
     at(state, 'overworld', 'home')
     apply(state, 'enter', {'target': 'home'}, NOW)
     at(state, 'overworld', 'wood_1')
-    apply(state, 'gather', {'target': 'wood_1'}, NOW)
+    chop_tree(state,'wood_1',NOW)
     at(state, 'overworld', 'board')
     apply(state, 'quest_claim', {'quest_id': 'settle_in'}, NOW)
 
@@ -45,8 +46,8 @@ def test_real_settlement_brief_purchase_clear_return_and_review_conserve_resourc
     state['quests']['ranch_start']={'status':'claimed'}
     apply(state, 'quest_accept', {'quest_id': 'first_expedition'}, NOW)
     assert not state['village_intro']['briefed']
-    at(state, 'workshop', 'armory_counter')
-    apply(state, 'gear_buy', {'target': 'armory_counter', 'item': 'stone_sword'}, NOW)
+    at(state, 'workshop', 'blacksmith')
+    apply(state, 'gear_buy', {'target': 'blacksmith', 'item': 'stone_sword'}, NOW)
     apply(state, 'gear_equip', {'item': 'stone_sword'}, NOW)
     clear_first(state)
     assert state['village_intro']['first_clear']

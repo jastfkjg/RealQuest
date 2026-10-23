@@ -1,4 +1,4 @@
-import {chestObjects,carpenter} from './construction';
+import {chestObjects,carpenter,machineObjects} from './construction';
 import type {
   GameState,
   MapData,
@@ -10,23 +10,28 @@ import { residentPositions } from "./residents";
 import { farmObjects } from "./farming";
 import {ranchObjects} from './ranching';
 import { villageIntroStep } from "./villageIntro";
+import {resourceObjects,resourceLand} from './tools';
 
 export const mapById = (world: World, id: string): MapData =>
   id === "overworld" ? world : world.areas?.[id] || world.interiors[id];
-export const currentMap = (world: World, state: GameState, now: number): MapData => ({
+export const currentMap = (world: World, state: GameState, now: number): MapData => {
+ const base=mapById(world,state.location),nodes=resourceObjects(base,state,now);
+ return ({
   ...mapById(world, state.location),
-  obstacles:[...mapById(world,state.location).obstacles,...(state.location==='home'?chestObjects(state).map(o=>o.hitbox!):[])],
+  cultivation:resourceLand(base,nodes),
+  obstacles:[...(base.permanent_obstacles||base.obstacles),...nodes.filter(n=>n.resource_state!.solid).map(n=>n.collider!),...(state.location==='home'?chestObjects(state).map(o=>o.hitbox!):state.location==='pasture'?machineObjects(state).map(o=>o.hitbox!):[])],
   objects: [
+    ...nodes,
     ...(state.location==='home'?chestObjects(state):state.location==='workshop'?[carpenter]:[]),
-    ...(state.location==='pasture'?ranchObjects(state):[]),
+    ...(state.location==='pasture'?[...ranchObjects(state),...machineObjects(state)]:[]),
     ...farmObjects(mapById(world, state.location).objects,state,mapById(world,state.location).cultivation).filter(
-      (o) => !["npc", "travel_npc"].includes(o.kind),
+      (o) => !["npc", "travel_npc",'resource'].includes(o.kind),
     ),
     ...residentPositions(world, state, now).filter(
       (r) => r.location === state.location,
     ),
   ],
-});
+});};
 export function accessibleTarget(
   target: NavigationTarget,
   world: World,
@@ -139,7 +144,7 @@ export function questTarget(
       craft_planks: [{mapId:'workshop',targetId:'workshop_counter'}],
       craft_home: [{mapId:'home',targetId:'home_desk'}],
       ranch_start: [{mapId:'pasture',targetId:'shelter_coop'}, {mapId:'pasture',targetId:'ranch_ledger'}, {mapId:'pasture',targetId:chicken || 'ranch_ledger'}],
-      first_expedition: [{mapId:'workshop',targetId:'armory_counter'}, {mapId:'overworld',targetId:'cave_entry'}, {mapId:'workshop',targetId:'armory_counter'}],
+      first_expedition: [{mapId:'workshop',targetId:'blacksmith'}, {mapId:'overworld',targetId:'cave_entry'}, {mapId:'workshop',targetId:'armory_counter'}],
       gate_story: [{mapId:'overworld',targetId:'library'}, {mapId:'overworld',targetId:'village_departure'}],
       gate_preparation: [{mapId:'overworld',targetId:'cave_entry'}, {mapId:'overworld',targetId:'noah'}],
       leave_valley: [{mapId:'overworld',targetId:'village_departure'}, {mapId:'overworld',targetId:'village_departure'}],

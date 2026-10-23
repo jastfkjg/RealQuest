@@ -1,4 +1,5 @@
 import type {RanchState,RanchView} from './ranching';
+import type {ToolState,ToolRules,ResourceState} from './tools';
 export type Attribute =
   "strength" | "wisdom" | "craft" | "stewardship" | "bond";
 export interface WorldObject {
@@ -15,6 +16,7 @@ export interface WorldObject {
   location?: string;
   activity?: string;
   walking?: boolean;
+  resource?:string;home?:boolean;art?:string;collider?:number[];resource_state?:ResourceState;planted?:boolean;ready_tick?:number;
 }
 export interface GearDefinition {
  id:string;name:string;route:string;tier:number;slot:string;price:number;region:string;sale:boolean;
@@ -81,7 +83,7 @@ export interface CombatView {
   equipment?:Record<string,string|null>;
   blueprints?:Record<string,string>;
   gear_stats?:{defense:number;dodge_bonus:number;hurt_bonus:number;heal_bonus:number;light:boolean};
-  gear_shop?:{region:string;name:string;target:string;offers:string[];diagrams:string[];research:string[];craft:string[];materials:Record<string,{name:string;price:number;icon:string;summary:string}>};
+  gear_shop?:{region:string;name:string;target:string;craft_target:string;offers:string[];diagrams:string[];research:string[];craft:string[];materials:Record<string,{name:string;price:number;icon:string;summary:string}>};
   weapons: Record<string, WeaponDefinition>;
   enemies: CaveEnemy[];
   floor: number;
@@ -317,6 +319,8 @@ export interface GameState {
   knowledge_shard: number;
   buildings: Record<string, number>;
   farm?: {version:number;tilled:string[]};
+  tools?:ToolState;
+  tool_rules?:ToolRules;
   ranch?: RanchState;
   ranching?: RanchView;
   farming?: {capacity:number;till_cost:Record<string,number>;stamina:Record<string,number>;clock:string;day_seconds:number;growth_multiplier:number;plots:Record<string,{progress:number;ready:boolean}>};
@@ -360,6 +364,7 @@ export interface Reply {
 export type Panel =
   | "preparation"
   | "armory"
+  | "forge"
   | "equipment"
   | "spellbook"
   | "cave"
@@ -445,12 +450,15 @@ export interface MapData {
   outdoor?: boolean;
   objects: WorldObject[];
   trees: number[][];
+  resource_nodes?:WorldObject[];
+  water_sources?:number[][];
   obstacles: number[][];
+  permanent_obstacles?:number[][];
   furniture?: Furniture[];
   regions?: Region[];
   spawn?: { x: number; y: number };
   roads?: [number[][],number][];
-  cultivation?: {bounds:number[];origin:number[];step:number;legacy:WorldObject[];blocked:number[][];roads:[number[][],number][]};
+  cultivation?: {bounds:number[];origin:number[];step:number;legacy:WorldObject[];blocked:number[][];permanent_blocked?:number[][];roads:[number[][],number][]};
 }
 export interface Quest {
   id: string;

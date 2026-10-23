@@ -1007,3 +1007,22 @@ Task124第二轮按概念图复核：背景与店招建立店内氛围，米拉�
 - [ ] 全主线与世界回归：保留洞穴脚本死亡和旧奖励32/30断言失败；玩家实际画面/手感、物理设备及系统IME/读屏仍待反馈。
 
 命令、截图、失败边界与保留项见 [任务128](../tasks/128-construction-and-carpenter.md)。
+
+
+### Task129 production devices — developer verification
+
+- Existing four ranching device PNGs reused unchanged; four inventory aliases recorded, no new generation/download/font. Exact source/binding checks and actual Creator types passed.
+- Actual learn → craft → place → per-instance process → sleep → collect → idle move/pack/re-place executed in isolated QA saves. Six recipes, fine quality, two identical devices, failed/lost replies, collision, full14-cell reachability and legacy migration covered by browser/backend/shared tests.
+- Representative actual desktop1440×900 and touch-emulated844×390/740×360 screenshots inspected, with32 production captures/video and20 construction captures/video retained. Final reports and limits: `docs/tasks/129-player-made-production.md`, `output/production-129/verification.json`.
+- These are developer checks. Owner visual approval, physical touch, native IME/screen reader and full long ranching/main-story acceptance are not claimed. Production uses a frozen checkpoint preview5482 to preserve concurrent blacksmith development and the earlier previews.
+
+
+## 工坊铁匠柜台 — 2026-10-23
+
+- [x] 已批准概念作为单页方向；原创无字环境、人物与托架有完整源/提示词/哈希与确定性处理，全部文案和控件原生。
+- [x] 铁匠买卖与工作台打造分别校验近身位置；永久图纸、准确数量费用、失败/丢回复重试、最后装备卸下与持久化实测。
+- [x] 固定来源最终Cocos构建、445后端、分轮33单元、最终三套浏览器16组/99图通过；桌面与短横屏代表原图已直接查看，未仅凭截图文件存在判断质量。
+- [x] 81个记录测试PID已退出，临时SDK清理，5486独立新档试玩明确保留；并行开发的500/来源漂移失败单独记录，未混入通过结果。
+- [ ] 玩家实际视觉/手感认可、系统IME/读屏/物理设备与并行task130最终整合另行验收，不由概念批准或独立副本代替。
+
+完整命令、源码归属、失败分轮、截图与保留服务见 [铁匠柜台任务](../tasks/blacksmith-counter.md)。

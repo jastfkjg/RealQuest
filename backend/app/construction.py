@@ -6,11 +6,16 @@ RECIPES = {
     'wooden_chest': {'name': '木箱', 'level': 0, 'slots': 12, 'costs': {'plank': 3, 'wood': 2}},
     'reinforced_chest': {'name': '加固木箱', 'level': 2, 'slots': 24, 'costs': {'plank': 6, 'stone': 4}},
 }
+from .production import CRAFTS
+RECIPES.update(CRAFTS)
+
 CARPENTER = {'id': 'carpenter', 'kind': 'carpenter', 'name': '阿榆 · 木匠', 'x': 96, 'y': 288}
 
 
 def ensure_construction(state):
     state.setdefault('construction', {'blueprints': [], 'chests': {}, 'next_id': 1, 'job': None, 'completed': []})
+    from .production import ensure_production
+    ensure_production(state)
 
 
 def chest_rect(chest):
@@ -83,15 +88,24 @@ def placement_reason(state, x, y, moving=None):
     return ''
 
 
+def facility_cells(state):
+    from .production import CELLS, placement_reason
+    return [{'x':x,'y':y,'reason':placement_reason(state,x,y)} for x,y in CELLS]
+
+
 def construction_view(state, now, moving=None):
     ensure_construction(state)
     return {'recipes': RECIPES, 'projects': projects(state),
             'remaining_days': max(0, (state['construction']['job']['ready_tick']-clock_elapsed(state, now))/DAY_SECONDS) if state['construction']['job'] else 0,
+            'facility_cells': facility_cells(state),
             'cells': [{'x': x, 'y': y, 'reason': placement_reason(state, x, y, moving)} for y in range(48, 289, 48) for x in range(48, 433, 48)]}
 
 
 def command(state, action, data, now, require, spend):
     c = state['construction']
+    if action.startswith('construction_machine_'):
+        from .production import command as machine_command
+        return machine_command(state, action, data, now, require, spend)
     target = data.get('target')
     near = lambda x, y: math.hypot(state['position']['x']-x, state['position']['y']-y) <= 72
     if action in ['construction_learn', 'construction_order']:
@@ -123,14 +137,14 @@ def command(state, action, data, now, require, spend):
         require(state['skill_growth']['building'] >= spec['level'], '需要建造' + str(spec['level']) + '级')
         spend(state, spec['costs'])
         state['inventory'][recipe] = state['inventory'].get(recipe, 0)+1
-        return '制作完成：' + spec['name'] + '。回家在家园手册中摆放。'
+        return '制作完成：' + spec['name'] + ('。到牧场采购簿的加工页摆放。' if spec.get('kind')=='facility' else '。回家在家园手册中摆放。')
     key = data.get('chest')
     chest = c['chests'].get(key) if isinstance(key, str) else None
     require(state['location'] == 'home', '请回到小屋里整理木箱')
     if action == 'construction_place':
         require(len(c['chests']) < 20, '小屋最多摆放20只木箱')
         recipe = data.get('recipe')
-        require(isinstance(recipe, str) and recipe in RECIPES, '请选择背包里的木箱')
+        require(isinstance(recipe, str) and recipe in RECIPES and 'slots' in RECIPES[recipe], '请选择背包里的木箱')
         reason = placement_reason(state, data.get('x'), data.get('y'))
         require(not reason, reason)
         spend(state, {recipe: 1})

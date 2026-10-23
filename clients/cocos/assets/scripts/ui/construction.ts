@@ -2,7 +2,7 @@ import type {PanelHost} from './panels';
 import {gameControls,paperSurface} from './materials';
 import {C} from './theme';
 import {costText,shortages} from '../core/features';
-import {chestArt} from '../core/construction';
+import {chestArt,constructionArt} from '../core/construction';
 /** Workbench recipes, a carpenter's order sheet and a measured room plan. */
 export class ConstructionPanels {
  private recipe='wooden_chest';private project='home';private cell={x:0,y:0};private page=0;private name='';private named='';
@@ -15,7 +15,7 @@ export class ConstructionPanels {
   const place=h.mode==='chest-placement',home=h.state.location==='home',npc=h.context?.id==='carpenter';
   h.text('ConstructionTitle',place?(moving?'移动木箱 · 内容随箱保留':'摆放木箱 · 家中平面图'):npc?'阿榆的木作与工程':home?'家园手册':'木作工作台',x+24,y+12,w-144,40,24);
   h.button('close','返回',x+w-100,y+12,76,44,()=>h.close(),h.busy);
-  const feedback=()=>h.text('ConstructionFeedback',h.error||h.notice||(c.job?`施工：${c.job.name} · 还需${Math.ceil(v.remaining_days*24)}游戏小时`:c.completed.length?`阿榆已完成：${c.completed[c.completed.length-1].name}`:''),x+24,bottom-44,w-48,40,14,h.error?C.danger:C.muted);
+  const feedback=()=>h.text('ConstructionFeedback',h.error||h.notice||(c.job?`施工：${c.job.name} · 还需${Math.ceil(v.remaining_days*24)}游戏小时`:c.completed.length?`阿榆已完成：${c.completed[c.completed.length-1].name}`:''),home?x+24:x+240,bottom-44,home?w-48:w-264,40,14,h.error?C.danger:C.muted);
   if(h.mode==='chest-name'&&chest){if(this.named!==h.saveId+':'+moving+':'+chest.version){this.named=h.saveId+':'+moving+':'+chest.version;this.name=chest.name;}h.field('chest-name','木箱名称（1–12字）',this.name,x+24,top+24,w-48,value=>this.name=value,false,12);h.button('chest-rename','保存箱名',x+24,bottom,w-48,44,async()=>{if(await h.send('construction_rename',{target:moving,chest:moving,expected_version:chest.version,name:this.name}))h.close();},h.busy||!this.name.trim(),true);feedback();return;}
   if(place){
    const size=short?44:52,gx=x+24,gy=top,planW=size*9,sideX=gx+planW+20,sideW=w-planW-68;
@@ -48,10 +48,10 @@ export class ConstructionPanels {
    h.button('find-carpenter','找阿榆 · 学图纸 / 扩建',x+w/2+8,bottom,w/2-32,44,()=>h.mark({mapId:'workshop',targetId:'carpenter'},'木匠阿榆'),h.busy);
   }else{
    const left=200,dx=x+left+40,dw=w-left-64;
-   const ids=npc?['wooden_chest','reinforced_chest','home','coop','barn','stable']:['wooden_chest','reinforced_chest'];
+   const ids=npc?[...Object.keys(v.recipes).sort((a,b)=>v.recipes[a].level-v.recipes[b].level),'home','coop','barn','stable']:Object.keys(v.recipes).sort((a,b)=>v.recipes[a].level-v.recipes[b].level);
    const per=short?3:6,pages=Math.ceil(ids.length/per);this.page=Math.min(this.page,pages-1);
    ids.slice(this.page*per,(this.page+1)*per).forEach((id,i)=>h.button('construction-select-'+id,(v.recipes[id]?.name||v.projects[id].name)+(v.projects[id]?' · 工程':''),x+24,top+i*48,left,44,()=>{if(v.recipes[id])this.recipe=id;else this.project=id;this.project=v.recipes[id]?'':id;h.redraw(true);},h.busy,(npc?(this.project||this.recipe):this.recipe)===id,'entry'));
-   if(pages>1)h.button('construction-page',`翻页 ${this.page+1}/${pages}`,x+24,bottom,left,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy,false,'page');
+   if(pages>1)h.button('construction-page',`翻页 ${this.page+1}/${pages}`,x+24,bottom-(npc?0:48),left,44,()=>{this.page=(this.page+1)%pages;h.redraw();},h.busy,false,'page');
    const project=npc&&this.project?v.projects[this.project]:null;
    if(project){
     h.text('ProjectDescription',project.level>=project.max_level?`${project.name} · ${project.level}级\n已完成当前全部扩建。`:`${project.name} · ${project.level} → ${project.level+1}级\n${costText(project.costs)}\n工期 ${project.days} 游戏日 · 不要求玩家建造等级`,dx,top,dw,short?88:126,short?15:20);
@@ -59,11 +59,11 @@ export class ConstructionPanels {
     h.button('construction-order',project.level>=project.max_level?'已完成全部扩建':'确认报价并委托施工',dx,bottom,dw,44,()=>h.send('construction_order',{target:'carpenter',building:this.project,expected_level:project.level}),h.busy||!!c.job||project.level>=3||shortages(h.state,project.costs).length>0,true);
    }else{
     const r=v.recipes[this.recipe],known=c.blueprints.includes(this.recipe),level=h.state.skill_growth?.building||0;
-    h.image(chestArt(this.recipe),dx+44,top+42,88,66);
-    h.text('RecipeDescription',`${r.name} · ${r.slots}格\n建造 ${level}/${r.level}级\n${costText(r.costs)}`,dx+104,top,dw-104,short?100:142,short?15:20);
-    const reasons=!known?'先向阿榆学习图纸。':level<r.level?'建造等级不足，可在旅人档案投入技能点。':'每种物品占一格；同类最多9999份。';
-    h.text('RecipeHint',npc?'阿榆：榫头对准，箱子就稳当了。\n图纸免费教授，学会后到工作台制作。':reasons,dx,top+(short?108:160),dw,short?52:84,short?13:17,C.muted);
-    h.button(npc?'construction-learn':'construction-craft',npc?(known?'已经学会图纸':'请阿榆教我这张图纸'):'确认材料 · 制作1只',dx,bottom,dw,44,()=>h.send(npc?'construction_learn':'construction_craft',{target:npc?'carpenter':'workshop_counter',recipe:this.recipe}),h.busy||(npc?known:!known||level<r.level||shortages(h.state,r.costs).length>0),true);
+    h.image(constructionArt(this.recipe,h.state),dx+44,top+42,88,66);
+    h.text('RecipeDescription',`${r.name}${r.slots?' · '+r.slots+'格':' · 生产设备'}\n建造 ${level}/${r.level}级\n${costText(r.costs)}`,dx+104,top,dw-104,short?100:142,short?15:20);
+    const reasons=!known?'先向阿榆学习图纸。':level<r.level?'建造等级不足，可在旅人档案投入技能点。':r.kind==='facility'?'制作后进入背包，到牧场加工页摆放。':'每种物品占一格；同类最多9999份。';
+    h.text('RecipeHint',npc?'阿榆：先看图纸，尺寸和材料都要对得上。\n图纸免费教授，学会后到工作台制作。':reasons,dx,top+(short?108:160),dw,short?52:84,short?13:17,C.muted);
+    h.button(npc?'construction-learn':'construction-craft',npc?(known?'已经学会图纸':'请阿榆教我这张图纸'):r.kind==='facility'?'确认材料 · 制作1台':'确认材料 · 制作1只',dx,bottom,dw,44,()=>h.send(npc?'construction_learn':'construction_craft',{target:npc?'carpenter':'workshop_counter',recipe:this.recipe}),h.busy||(npc?known:!known||level<r.level||shortages(h.state,r.costs).length>0),true);
    }
    if(!npc)h.button('workshop-services','木板 / 工坊修缮',x+24,bottom,left,44,()=>h.go('building'),h.busy,false,'page');
   }

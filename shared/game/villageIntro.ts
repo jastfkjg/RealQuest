@@ -111,8 +111,8 @@ export function villageIntroStep(state: GameState): IntroStep | null {
       1,
       "到工坊准备第一件武器",
       `石刃短剑 ${formatMoney(price)}，购买后即可装备。打造则需要图纸所列的建造、知识等级与材料。`,
-      "标记工坊武备台",
-      armory,
+      "标记工坊铁匠",
+      {mapId:"workshop",targetId:"blacksmith"},
     );
   }
   if (!combat.equipped || !state.inventory[combat.equipped])

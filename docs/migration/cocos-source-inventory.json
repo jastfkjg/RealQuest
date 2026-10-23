@@ -3,12 +3,12 @@
   "policy": "docs/migration/cocos-source-policy.json",
   "note": "Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.",
   "counts": {
-    "bindings": 292,
-    "runtimePNGs": 250,
+    "bindings": 337,
+    "runtimePNGs": 293,
     "runtimeWebPs": 7,
-    "sharedModules": 35,
+    "sharedModules": 37,
     "sceneInputs": 81,
-    "files": 852,
+    "files": 962,
     "references": 31
   },
   "bindings": [
@@ -23,6 +23,74 @@
         "dimensions": [
           1672,
           941
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/portrait.png",
+      "target": "clients/cocos/assets/resources/atlas/blacksmith.png",
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "importer": {
+        "uuid": "37a60dff-ea80-2e56-56ae-fbbd5a84a9e2",
+        "frame": "37a60dff-ea80-2e56-56ae-fbbd5a84a9e2@f9941",
+        "texture": "37a60dff-ea80-2e56-56ae-fbbd5a84a9e2@6c48a",
+        "dimensions": [
+          320,
+          296
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/figure.png",
+      "target": "clients/cocos/assets/resources/village/blacksmith-figure.png",
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "importer": {
+        "uuid": "ef22fe44-dd1d-8c0d-bb5a-d54743df8cd5",
+        "frame": "ef22fe44-dd1d-8c0d-bb5a-d54743df8cd5@f9941",
+        "texture": "ef22fe44-dd1d-8c0d-bb5a-d54743df8cd5@6c48a",
+        "dimensions": [
+          48,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/stand.png",
+      "target": "clients/cocos/assets/resources/ui/weapon-stand.png",
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "importer": {
+        "uuid": "c9fe9df9-370f-9d63-ac8f-927d730a77f7",
+        "frame": "c9fe9df9-370f-9d63-ac8f-927d730a77f7@f9941",
+        "texture": "c9fe9df9-370f-9d63-ac8f-927d730a77f7@6c48a",
+        "dimensions": [
+          320,
+          145
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/generated/hearthwood/blacksmith-v1/interior.png",
+      "target": "clients/cocos/assets/resources/ui/blacksmith-interior.png",
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "importer": {
+        "uuid": "aaeb39b3-5bff-4137-16ef-98b71c3fd385",
+        "frame": "aaeb39b3-5bff-4137-16ef-98b71c3fd385@f9941",
+        "texture": "aaeb39b3-5bff-4137-16ef-98b71c3fd385@6c48a",
+        "dimensions": [
+          1586,
+          992
         ],
         "filter": "nearest",
         "trim": "none",
@@ -404,9 +472,77 @@
       }
     },
     {
+      "source": "assets/derived/ranching-v1/facilities/mayo.png",
+      "target": "clients/cocos/assets/resources/items/mayo_machine.png",
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92",
+      "importer": {
+        "uuid": "e6dda8b6-835f-1575-4374-4caaf67202bf",
+        "frame": "e6dda8b6-835f-1575-4374-4caaf67202bf@f9941",
+        "texture": "e6dda8b6-835f-1575-4374-4caaf67202bf@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/loom.png",
+      "target": "clients/cocos/assets/resources/items/loom_machine.png",
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3",
+      "importer": {
+        "uuid": "bc28b86b-ab50-a37b-a39d-2938865a4f86",
+        "frame": "bc28b86b-ab50-a37b-a39d-2938865a4f86@f9941",
+        "texture": "bc28b86b-ab50-a37b-a39d-2938865a4f86@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/cheese.png",
+      "target": "clients/cocos/assets/resources/items/cheese_press.png",
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a",
+      "importer": {
+        "uuid": "4a2a8f1a-7700-84b7-dbb0-89e6db515416",
+        "frame": "4a2a8f1a-7700-84b7-dbb0-89e6db515416@f9941",
+        "texture": "4a2a8f1a-7700-84b7-dbb0-89e6db515416@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/oil.png",
+      "target": "clients/cocos/assets/resources/items/oil_press.png",
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9",
+      "importer": {
+        "uuid": "5a6d814a-42fb-798c-1853-8fddf29735b7",
+        "frame": "5a6d814a-42fb-798c-1853-8fddf29735b7@f9941",
+        "texture": "5a6d814a-42fb-798c-1853-8fddf29735b7@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
       "source": "shared/game/protocol.ts",
       "target": "clients/cocos/assets/scripts/core/protocol.ts",
-      "sha256": "be7780c133338e6dbdca53f6244667dc3c23216978810eda16b96e5a6f262dab"
+      "sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -518,7 +654,7 @@
     {
       "source": "shared/game/interaction.ts",
       "target": "clients/cocos/assets/scripts/core/interaction.ts",
-      "sha256": "7e5e59e406cc3b90387a24f9ad8c1fcd12808bb75fa2bc7a0bcc9326768ed880"
+      "sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531"
     },
     {
       "source": "shared/game/stamina.ts",
@@ -533,7 +669,7 @@
     {
       "source": "shared/game/villageIntro.ts",
       "target": "clients/cocos/assets/scripts/core/villageIntro.ts",
-      "sha256": "a154fc05f89bcd97ec326c1ae4d7ec3a92af5f483e994903027accf7b8e59d89"
+      "sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87"
     },
     {
       "source": "shared/game/story.ts",
@@ -543,7 +679,7 @@
     {
       "source": "shared/game/navigation.ts",
       "target": "clients/cocos/assets/scripts/core/navigation.ts",
-      "sha256": "dcb8b5f58e8073ecce069b8baf6911920dfeb061a236e68639091fea85a12b1e"
+      "sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c"
     },
     {
       "source": "shared/game/appearances.ts",
@@ -593,7 +729,7 @@
     {
       "source": "shared/game/sceneLayout.ts",
       "target": "clients/cocos/assets/scripts/core/sceneLayout.ts",
-      "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"
+      "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a"
     },
     {
       "source": "shared/game/lifeJournalDates.ts",
@@ -613,7 +749,7 @@
     {
       "source": "shared/game/nextDeparture.ts",
       "target": "clients/cocos/assets/scripts/core/nextDeparture.ts",
-      "sha256": "eb8326e3844a4760cac7aebbbc1d3b4e1ef1d779a3c3b312d09b321492904158"
+      "sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29"
     },
     {
       "source": "shared/game/guidance.ts",
@@ -628,7 +764,7 @@
     {
       "source": "shared/game/places.ts",
       "target": "clients/cocos/assets/scripts/core/places.ts",
-      "sha256": "2ab18e23699abc165395627ea2e3d1fb624756d01509ed4099315d137287dbe0"
+      "sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353"
     },
     {
       "source": "shared/game/atlas.ts",
@@ -648,7 +784,7 @@
     {
       "source": "shared/game/ranchCatalog.ts",
       "target": "clients/cocos/assets/scripts/core/ranchCatalog.ts",
-      "sha256": "88f31d2cab8903d874f12f63c311b1bb9cbe8a80d9d582e6e6ba7176e5cfaeec"
+      "sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555"
     },
     {
       "source": "shared/game/ranching.ts",
@@ -658,7 +794,17 @@
     {
       "source": "shared/game/construction.ts",
       "target": "clients/cocos/assets/scripts/core/construction.ts",
-      "sha256": "7e9cbbe94d9095983b33a876d8abf07af7d4afe0bc3e8aba83bb86a43221a03b"
+      "sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289"
+    },
+    {
+      "source": "shared/game/toolCatalog.ts",
+      "target": "clients/cocos/assets/scripts/core/toolCatalog.ts",
+      "sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af"
+    },
+    {
+      "source": "shared/game/tools.ts",
+      "target": "clients/cocos/assets/scripts/core/tools.ts",
+      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8"
     },
     {
       "source": "shared/game/farming.ts",
@@ -668,12 +814,12 @@
     {
       "source": "shared/game/items.ts",
       "target": "clients/cocos/assets/scripts/core/items.ts",
-      "sha256": "fce6a6a20e5cc7fb5d274bcff19f09a88c2f445430ec9ebf2c2062cef8f71330"
+      "sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225"
     },
     {
       "source": "shared/game/inventory.ts",
       "target": "clients/cocos/assets/scripts/core/inventory.ts",
-      "sha256": "a5291db99184bc7146dcdb71fddee0209852e033da52dea49214e4550295f8c8"
+      "sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -3027,6 +3173,601 @@
       }
     },
     {
+      "source": "assets/derived/tools-v1/tools/hoe-0.png",
+      "target": "clients/cocos/assets/resources/tools/hoe-0.png",
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0",
+      "importer": {
+        "uuid": "dfc76e7d-245f-bebd-e78f-d37ee5eb682b",
+        "frame": "dfc76e7d-245f-bebd-e78f-d37ee5eb682b@f9941",
+        "texture": "dfc76e7d-245f-bebd-e78f-d37ee5eb682b@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-0.png",
+      "target": "clients/cocos/assets/resources/tools/axe-0.png",
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
+      "importer": {
+        "uuid": "f294769a-59bc-79bb-4cbd-45bd8c67f496",
+        "frame": "f294769a-59bc-79bb-4cbd-45bd8c67f496@f9941",
+        "texture": "f294769a-59bc-79bb-4cbd-45bd8c67f496@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-0.png",
+      "target": "clients/cocos/assets/resources/tools/pickaxe-0.png",
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82",
+      "importer": {
+        "uuid": "395d2809-aff2-03f8-ef85-8556f6fbaa0e",
+        "frame": "395d2809-aff2-03f8-ef85-8556f6fbaa0e@f9941",
+        "texture": "395d2809-aff2-03f8-ef85-8556f6fbaa0e@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-0.png",
+      "target": "clients/cocos/assets/resources/tools/watering_can-0.png",
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9",
+      "importer": {
+        "uuid": "63eb7982-e3ea-0728-fe76-31357d9e4d4f",
+        "frame": "63eb7982-e3ea-0728-fe76-31357d9e4d4f@f9941",
+        "texture": "63eb7982-e3ea-0728-fe76-31357d9e4d4f@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-1.png",
+      "target": "clients/cocos/assets/resources/tools/hoe-1.png",
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5",
+      "importer": {
+        "uuid": "8db64861-de2a-d955-417e-37067181f2fd",
+        "frame": "8db64861-de2a-d955-417e-37067181f2fd@f9941",
+        "texture": "8db64861-de2a-d955-417e-37067181f2fd@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-1.png",
+      "target": "clients/cocos/assets/resources/tools/axe-1.png",
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521",
+      "importer": {
+        "uuid": "f3065ae2-53c6-7635-4222-3e60c631e4f2",
+        "frame": "f3065ae2-53c6-7635-4222-3e60c631e4f2@f9941",
+        "texture": "f3065ae2-53c6-7635-4222-3e60c631e4f2@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-1.png",
+      "target": "clients/cocos/assets/resources/tools/pickaxe-1.png",
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2",
+      "importer": {
+        "uuid": "c4f9349f-6b37-c1c2-5ed4-e8a08715f99c",
+        "frame": "c4f9349f-6b37-c1c2-5ed4-e8a08715f99c@f9941",
+        "texture": "c4f9349f-6b37-c1c2-5ed4-e8a08715f99c@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-1.png",
+      "target": "clients/cocos/assets/resources/tools/watering_can-1.png",
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4",
+      "importer": {
+        "uuid": "601879db-2584-f5f0-99f6-f86f57662e16",
+        "frame": "601879db-2584-f5f0-99f6-f86f57662e16@f9941",
+        "texture": "601879db-2584-f5f0-99f6-f86f57662e16@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-2.png",
+      "target": "clients/cocos/assets/resources/tools/hoe-2.png",
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac",
+      "importer": {
+        "uuid": "ddbb526a-345d-616d-6fe6-0e5f62ba42b2",
+        "frame": "ddbb526a-345d-616d-6fe6-0e5f62ba42b2@f9941",
+        "texture": "ddbb526a-345d-616d-6fe6-0e5f62ba42b2@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-2.png",
+      "target": "clients/cocos/assets/resources/tools/axe-2.png",
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d",
+      "importer": {
+        "uuid": "0f758531-cb8a-48f7-6c88-05a55057d1c0",
+        "frame": "0f758531-cb8a-48f7-6c88-05a55057d1c0@f9941",
+        "texture": "0f758531-cb8a-48f7-6c88-05a55057d1c0@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-2.png",
+      "target": "clients/cocos/assets/resources/tools/pickaxe-2.png",
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561",
+      "importer": {
+        "uuid": "70181c3e-1d2a-eff1-8f4c-f5b2709f3a73",
+        "frame": "70181c3e-1d2a-eff1-8f4c-f5b2709f3a73@f9941",
+        "texture": "70181c3e-1d2a-eff1-8f4c-f5b2709f3a73@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-2.png",
+      "target": "clients/cocos/assets/resources/tools/watering_can-2.png",
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236",
+      "importer": {
+        "uuid": "558ab516-5842-5cdf-0a65-b5b021222f73",
+        "frame": "558ab516-5842-5cdf-0a65-b5b021222f73@f9941",
+        "texture": "558ab516-5842-5cdf-0a65-b5b021222f73@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-3.png",
+      "target": "clients/cocos/assets/resources/tools/hoe-3.png",
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275",
+      "importer": {
+        "uuid": "6d9aa4bb-cbc7-e2ea-53a4-1f5881f79763",
+        "frame": "6d9aa4bb-cbc7-e2ea-53a4-1f5881f79763@f9941",
+        "texture": "6d9aa4bb-cbc7-e2ea-53a4-1f5881f79763@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-3.png",
+      "target": "clients/cocos/assets/resources/tools/axe-3.png",
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da",
+      "importer": {
+        "uuid": "36000e68-ebb8-9ec4-1b23-11c954808b4a",
+        "frame": "36000e68-ebb8-9ec4-1b23-11c954808b4a@f9941",
+        "texture": "36000e68-ebb8-9ec4-1b23-11c954808b4a@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-3.png",
+      "target": "clients/cocos/assets/resources/tools/pickaxe-3.png",
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448",
+      "importer": {
+        "uuid": "289aa532-4a75-d20b-b5fb-65df9dd8a020",
+        "frame": "289aa532-4a75-d20b-b5fb-65df9dd8a020@f9941",
+        "texture": "289aa532-4a75-d20b-b5fb-65df9dd8a020@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-3.png",
+      "target": "clients/cocos/assets/resources/tools/watering_can-3.png",
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413",
+      "importer": {
+        "uuid": "d4b2f03c-09af-7905-ff3b-d6155db7992d",
+        "frame": "d4b2f03c-09af-7905-ff3b-d6155db7992d@f9941",
+        "texture": "d4b2f03c-09af-7905-ff3b-d6155db7992d@6c48a",
+        "dimensions": [
+          96,
+          96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-whole.png",
+      "target": "clients/cocos/assets/resources/gathering/stone-whole.png",
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835",
+      "importer": {
+        "uuid": "a0927fb4-c160-adfe-80b4-842b2ad7af64",
+        "frame": "a0927fb4-c160-adfe-80b4-842b2ad7af64@f9941",
+        "texture": "a0927fb4-c160-adfe-80b4-842b2ad7af64@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-whole.png",
+      "target": "clients/cocos/assets/resources/gathering/copper-whole.png",
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46",
+      "importer": {
+        "uuid": "d457a0cf-c5af-9de9-a7cc-4a098b40f50b",
+        "frame": "d457a0cf-c5af-9de9-a7cc-4a098b40f50b@f9941",
+        "texture": "d457a0cf-c5af-9de9-a7cc-4a098b40f50b@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/items/copper_ore.png",
+      "target": "clients/cocos/assets/resources/items/copper_ore.png",
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
+      "importer": {
+        "uuid": "6691be05-a8ab-0c77-8907-87c2fe801d1a",
+        "frame": "6691be05-a8ab-0c77-8907-87c2fe801d1a@f9941",
+        "texture": "6691be05-a8ab-0c77-8907-87c2fe801d1a@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-whole.png",
+      "target": "clients/cocos/assets/resources/gathering/iron-whole.png",
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f",
+      "importer": {
+        "uuid": "6a89233e-37c5-9f4d-4bfe-fbe899097593",
+        "frame": "6a89233e-37c5-9f4d-4bfe-fbe899097593@f9941",
+        "texture": "6a89233e-37c5-9f4d-4bfe-fbe899097593@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/items/iron_ore.png",
+      "target": "clients/cocos/assets/resources/items/iron_ore.png",
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc",
+      "importer": {
+        "uuid": "b7af781c-0c3d-466e-bbab-745c82526125",
+        "frame": "b7af781c-0c3d-466e-bbab-745c82526125@f9941",
+        "texture": "b7af781c-0c3d-466e-bbab-745c82526125@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-whole.png",
+      "target": "clients/cocos/assets/resources/gathering/gold-whole.png",
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa",
+      "importer": {
+        "uuid": "cbfadf0b-1eb4-9dd4-2c99-524de01c09d3",
+        "frame": "cbfadf0b-1eb4-9dd4-2c99-524de01c09d3@f9941",
+        "texture": "cbfadf0b-1eb4-9dd4-2c99-524de01c09d3@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/items/gold_ore.png",
+      "target": "clients/cocos/assets/resources/items/gold_ore.png",
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d",
+      "importer": {
+        "uuid": "0e27b229-0ff1-1f26-460a-272705198b3d",
+        "frame": "0e27b229-0ff1-1f26-460a-272705198b3d@f9941",
+        "texture": "0e27b229-0ff1-1f26-460a-272705198b3d@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-cracked.png",
+      "target": "clients/cocos/assets/resources/gathering/stone-cracked.png",
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e",
+      "importer": {
+        "uuid": "b243b7e4-5699-e420-414c-71a09be300e5",
+        "frame": "b243b7e4-5699-e420-414c-71a09be300e5@f9941",
+        "texture": "b243b7e4-5699-e420-414c-71a09be300e5@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-cracked.png",
+      "target": "clients/cocos/assets/resources/gathering/copper-cracked.png",
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa",
+      "importer": {
+        "uuid": "f7eb1501-21e7-88c2-e51c-c7a22037945b",
+        "frame": "f7eb1501-21e7-88c2-e51c-c7a22037945b@f9941",
+        "texture": "f7eb1501-21e7-88c2-e51c-c7a22037945b@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-cracked.png",
+      "target": "clients/cocos/assets/resources/gathering/iron-cracked.png",
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab",
+      "importer": {
+        "uuid": "dca89286-c1fb-0178-c5fa-6eb0b9a7e997",
+        "frame": "dca89286-c1fb-0178-c5fa-6eb0b9a7e997@f9941",
+        "texture": "dca89286-c1fb-0178-c5fa-6eb0b9a7e997@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-cracked.png",
+      "target": "clients/cocos/assets/resources/gathering/gold-cracked.png",
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e",
+      "importer": {
+        "uuid": "d98eaa75-9eb4-240a-cc47-30f460dce03b",
+        "frame": "d98eaa75-9eb4-240a-cc47-30f460dce03b@f9941",
+        "texture": "d98eaa75-9eb4-240a-cc47-30f460dce03b@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-depleted.png",
+      "target": "clients/cocos/assets/resources/gathering/stone-depleted.png",
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e",
+      "importer": {
+        "uuid": "5a39e9ef-1768-7c6f-9b9d-ebdcc96c103e",
+        "frame": "5a39e9ef-1768-7c6f-9b9d-ebdcc96c103e@f9941",
+        "texture": "5a39e9ef-1768-7c6f-9b9d-ebdcc96c103e@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-depleted.png",
+      "target": "clients/cocos/assets/resources/gathering/copper-depleted.png",
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082",
+      "importer": {
+        "uuid": "2d664a45-ca9d-45e8-d257-57f528354153",
+        "frame": "2d664a45-ca9d-45e8-d257-57f528354153@f9941",
+        "texture": "2d664a45-ca9d-45e8-d257-57f528354153@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-depleted.png",
+      "target": "clients/cocos/assets/resources/gathering/iron-depleted.png",
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7",
+      "importer": {
+        "uuid": "1ea6b1ac-aa3f-cb70-6758-10c465868e5a",
+        "frame": "1ea6b1ac-aa3f-cb70-6758-10c465868e5a@f9941",
+        "texture": "1ea6b1ac-aa3f-cb70-6758-10c465868e5a@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-depleted.png",
+      "target": "clients/cocos/assets/resources/gathering/gold-depleted.png",
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4",
+      "importer": {
+        "uuid": "585431bc-c38b-8081-9c0a-d6258ac05345",
+        "frame": "585431bc-c38b-8081-9c0a-d6258ac05345@f9941",
+        "texture": "585431bc-c38b-8081-9c0a-d6258ac05345@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump.png",
+      "target": "clients/cocos/assets/resources/gathering/stump.png",
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348",
+      "importer": {
+        "uuid": "0e3b76f4-fef0-4ba0-ed42-dcc7085e31e0",
+        "frame": "0e3b76f4-fef0-4ba0-ed42-dcc7085e31e0@f9941",
+        "texture": "0e3b76f4-fef0-4ba0-ed42-dcc7085e31e0@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump-cracked.png",
+      "target": "clients/cocos/assets/resources/gathering/stump-cracked.png",
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0",
+      "importer": {
+        "uuid": "7897173e-1e07-6739-0c4c-cfb832b316fa",
+        "frame": "7897173e-1e07-6739-0c4c-cfb832b316fa@f9941",
+        "texture": "7897173e-1e07-6739-0c4c-cfb832b316fa@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/sapling.png",
+      "target": "clients/cocos/assets/resources/gathering/sapling.png",
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da",
+      "importer": {
+        "uuid": "b80d03b8-b8c4-2be6-bccd-db5487e02c29",
+        "frame": "b80d03b8-b8c4-2be6-bccd-db5487e02c29@f9941",
+        "texture": "b80d03b8-b8c4-2be6-bccd-db5487e02c29@6c48a",
+        "dimensions": [
+          128,
+          128
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tools-v1/items/tree_seed.png",
+      "target": "clients/cocos/assets/resources/items/tree_seed.png",
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd",
+      "importer": {
+        "uuid": "f1771425-3569-00c5-98cf-0b46a476248c",
+        "frame": "f1771425-3569-00c5-98cf-0b46a476248c@f9941",
+        "texture": "f1771425-3569-00c5-98cf-0b46a476248c@6c48a",
+        "dimensions": [
+          64,
+          64
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
       "source": "assets/derived/equipment-v1/stone_sword.png",
       "target": "clients/cocos/assets/resources/items/stone_sword.png",
       "sha256": "bf360cff0dd5eb3e7a61bbb2783442c83e4d33c74a66e14ace853ea31a625ed4",
@@ -4599,6 +5340,72 @@
       ],
       "provenance": [],
       "inputs": []
+    },
+    {
+      "path": "assets/derived/blacksmith-v1/figure.png",
+      "owner": "derived-project-art",
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "bytes": 3576,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/village/blacksmith-figure.png"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/blacksmith-v1/character.png"
+      ],
+      "dimensions": [
+        48,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/blacksmith-v1/portrait.png",
+      "owner": "derived-project-art",
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "bytes": 119679,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/atlas/blacksmith.png"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/0"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/blacksmith-v1/character.png"
+      ],
+      "dimensions": [
+        320,
+        296
+      ]
+    },
+    {
+      "path": "assets/derived/blacksmith-v1/stand.png",
+      "owner": "derived-project-art",
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "bytes": 79467,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/ui/weapon-stand.png"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/blacksmith-v1/stand.png"
+      ],
+      "dimensions": [
+        320,
+        145
+      ]
     },
     {
       "path": "assets/derived/cocos-textures/terrain-lossless.webp",
@@ -8057,6 +8864,7 @@
         "canonical-binding-source"
       ],
       "consumers": [
+        "assets/resources/items/cheese_press.png",
         "assets/resources/ranching/cheese.png"
       ],
       "provenance": [
@@ -8080,6 +8888,7 @@
         "canonical-binding-source"
       ],
       "consumers": [
+        "assets/resources/items/loom_machine.png",
         "assets/resources/ranching/loom.png"
       ],
       "provenance": [
@@ -8103,6 +8912,7 @@
         "canonical-binding-source"
       ],
       "consumers": [
+        "assets/resources/items/mayo_machine.png",
         "assets/resources/ranching/mayo.png"
       ],
       "provenance": [
@@ -8126,6 +8936,7 @@
         "canonical-binding-source"
       ],
       "consumers": [
+        "assets/resources/items/oil_press.png",
         "assets/resources/ranching/oil.png"
       ],
       "provenance": [
@@ -8628,6 +9439,811 @@
       ]
     },
     {
+      "path": "assets/derived/tools-v1/items/copper_ore.png",
+      "owner": "derived-project-art",
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
+      "bytes": 6818,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/copper_ore.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/18"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/items/gold_ore.png",
+      "owner": "derived-project-art",
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d",
+      "bytes": 6621,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/gold_ore.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/22"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/items/iron_ore.png",
+      "owner": "derived-project-art",
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc",
+      "bytes": 6706,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/iron_ore.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/20"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/items/tree_seed.png",
+      "owner": "derived-project-art",
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd",
+      "bytes": 5442,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/items/tree_seed.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/34"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-cracked.png",
+      "owner": "derived-project-art",
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa",
+      "bytes": 14137,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/copper-cracked.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/24"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-depleted.png",
+      "owner": "derived-project-art",
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082",
+      "bytes": 7360,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/copper-depleted.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/28"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-whole.png",
+      "owner": "derived-project-art",
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46",
+      "bytes": 13700,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/copper-whole.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/17"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-cracked.png",
+      "owner": "derived-project-art",
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e",
+      "bytes": 14403,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/gold-cracked.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/26"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-depleted.png",
+      "owner": "derived-project-art",
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4",
+      "bytes": 6915,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/gold-depleted.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/30"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-whole.png",
+      "owner": "derived-project-art",
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa",
+      "bytes": 13901,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/gold-whole.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/21"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-cracked.png",
+      "owner": "derived-project-art",
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab",
+      "bytes": 14495,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/iron-cracked.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/25"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-depleted.png",
+      "owner": "derived-project-art",
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7",
+      "bytes": 7700,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/iron-depleted.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/29"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-whole.png",
+      "owner": "derived-project-art",
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f",
+      "bytes": 13925,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/iron-whole.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/19"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/sapling.png",
+      "owner": "derived-project-art",
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da",
+      "bytes": 4212,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/sapling.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/33"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-cracked.png",
+      "owner": "derived-project-art",
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e",
+      "bytes": 13441,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/stone-cracked.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/23"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-depleted.png",
+      "owner": "derived-project-art",
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e",
+      "bytes": 6788,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/stone-depleted.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/27"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-whole.png",
+      "owner": "derived-project-art",
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835",
+      "bytes": 13111,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/stone-whole.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/16"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stump-cracked.png",
+      "owner": "derived-project-art",
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0",
+      "bytes": 13449,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/stump-cracked.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/32"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stump.png",
+      "owner": "derived-project-art",
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348",
+      "bytes": 13938,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/gathering/stump.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/31"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/resources.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
+      "bytes": 5805,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/axe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521",
+      "bytes": 5994,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/axe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d",
+      "bytes": 6141,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/axe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/9"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da",
+      "bytes": 6106,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/axe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/13"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0",
+      "bytes": 4489,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/hoe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/0"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5",
+      "bytes": 4599,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/hoe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac",
+      "bytes": 4690,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/hoe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/8"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275",
+      "bytes": 4739,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/hoe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/12"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82",
+      "bytes": 6001,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/pickaxe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2",
+      "bytes": 6253,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/pickaxe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/6"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561",
+      "bytes": 6218,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/pickaxe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/10"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448",
+      "bytes": 6324,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/pickaxe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/14"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-0.png",
+      "owner": "derived-project-art",
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9",
+      "bytes": 7524,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/watering_can-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-1.png",
+      "owner": "derived-project-art",
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4",
+      "bytes": 7293,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/watering_can-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/7"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-2.png",
+      "owner": "derived-project-art",
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236",
+      "bytes": 7669,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/watering_can-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/11"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-3.png",
+      "owner": "derived-project-art",
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413",
+      "bytes": 7671,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tools/watering_can-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/records/15"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
       "path": "assets/generated/hearthwood/arrival-register-v1.png",
       "owner": "original-project-art",
       "sha256": "d60fd30a4399c6da3c3d6812287f099a5b76f1ae29f8557e5be87967ed9bb846",
@@ -8697,6 +10313,116 @@
       "consumers": [
         "assets/generated/hearthwood/arrival-village-v1.png",
         "assets/runtime/hearthwood/arrival-village-v1.webp"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/character.png",
+      "owner": "original-project-art",
+      "sha256": "4d6126448c0c9bc1f5d8aa762dae5a7c31ec03863d00d012fd0708da430ef668",
+      "bytes": 1869094,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/blacksmith-v1/figure.png",
+        "assets/derived/blacksmith-v1/portrait.png",
+        "docs/art/blacksmith-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/0",
+        "docs/art/blacksmith-art-v1.json#/records/1"
+      ],
+      "inputs": [],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/character.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "46fd340903a3bd8b5889a308a604a026e189659133e6880f166021991dd19446",
+      "bytes": 1503,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "docs/art/blacksmith-art-v1.json"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/interior.png",
+      "owner": "original-project-art",
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "bytes": 2386684,
+      "roles": [
+        "canonical-binding-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/resources/ui/blacksmith-interior.png",
+        "docs/art/blacksmith-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/3"
+      ],
+      "inputs": [],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/interior.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "ca3c0715a839ef85e57de441da9de801b96d085ae193c7a7b2f7b462aa928d02",
+      "bytes": 1120,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "docs/art/blacksmith-art-v1.json"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/stand.png",
+      "owner": "original-project-art",
+      "sha256": "3783a977b837c7efed52a4776cb2a339ae320472b6c1f05856be8de9d1e8511b",
+      "bytes": 1091161,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/blacksmith-v1/stand.png",
+        "docs/art/blacksmith-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/blacksmith-art-v1.json#/records/2"
+      ],
+      "inputs": [],
+      "dimensions": [
+        1448,
+        1086
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/blacksmith-v1/stand.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "47be70032b62c414aecd8f24997902b3fb0469c3d755ceb9cc42d13ea85ff42f",
+      "bytes": 954,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "docs/art/blacksmith-art-v1.json"
       ],
       "provenance": [],
       "inputs": []
@@ -9815,6 +11541,87 @@
       ],
       "provenance": [],
       "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tools-v1/resources.png",
+      "owner": "original-project-art",
+      "sha256": "a372df659972fe6a3b696110a1fc8d15f80357f54502228115929ffd8b2990c6",
+      "bytes": 2443590,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/items/copper_ore.png",
+        "assets/derived/tools-v1/items/gold_ore.png",
+        "assets/derived/tools-v1/items/iron_ore.png",
+        "assets/derived/tools-v1/items/tree_seed.png",
+        "assets/derived/tools-v1/resources/copper-cracked.png",
+        "assets/derived/tools-v1/resources/copper-depleted.png",
+        "assets/derived/tools-v1/resources/copper-whole.png",
+        "assets/derived/tools-v1/resources/gold-cracked.png",
+        "assets/derived/tools-v1/resources/gold-depleted.png",
+        "assets/derived/tools-v1/resources/gold-whole.png",
+        "assets/derived/tools-v1/resources/iron-cracked.png",
+        "assets/derived/tools-v1/resources/iron-depleted.png",
+        "assets/derived/tools-v1/resources/iron-whole.png",
+        "assets/derived/tools-v1/resources/sapling.png",
+        "assets/derived/tools-v1/resources/stone-cracked.png",
+        "assets/derived/tools-v1/resources/stone-depleted.png",
+        "assets/derived/tools-v1/resources/stone-whole.png",
+        "assets/derived/tools-v1/resources/stump-cracked.png",
+        "assets/derived/tools-v1/resources/stump.png",
+        "docs/art/tool-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/sources/1"
+      ],
+      "inputs": [
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tools-v1/tools.png",
+      "owner": "original-project-art",
+      "sha256": "078d5caf3c822f88005e0ff8887c99e27ee15d9cf42815a33f6346bbe360ff79",
+      "bytes": 2059658,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/axe-0.png",
+        "assets/derived/tools-v1/tools/axe-1.png",
+        "assets/derived/tools-v1/tools/axe-2.png",
+        "assets/derived/tools-v1/tools/axe-3.png",
+        "assets/derived/tools-v1/tools/hoe-0.png",
+        "assets/derived/tools-v1/tools/hoe-1.png",
+        "assets/derived/tools-v1/tools/hoe-2.png",
+        "assets/derived/tools-v1/tools/hoe-3.png",
+        "assets/derived/tools-v1/tools/pickaxe-0.png",
+        "assets/derived/tools-v1/tools/pickaxe-1.png",
+        "assets/derived/tools-v1/tools/pickaxe-2.png",
+        "assets/derived/tools-v1/tools/pickaxe-3.png",
+        "assets/derived/tools-v1/tools/watering_can-0.png",
+        "assets/derived/tools-v1/tools/watering_can-1.png",
+        "assets/derived/tools-v1/tools/watering_can-2.png",
+        "assets/derived/tools-v1/tools/watering_can-3.png",
+        "docs/art/tool-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-art-v1.json#/sources/0"
+      ],
+      "inputs": [
+        "tools/build_tool_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
     },
     {
       "path": "assets/generated/hearthwood/village-actors-v2.layout.json",
@@ -12339,8 +14146,8 @@
     {
       "path": "backend/app/equipment.py",
       "owner": "server-world",
-      "sha256": "0c46d3edeb4834f8eef4d254d4f899e930cf21db98dd0a03f2ea8a56ec5f378d",
-      "bytes": 8873,
+      "sha256": "bdcce3637855de359e593f27ddba938688f52c51ba0a740ac1fca1d45b7660cf",
+      "bytes": 9602,
       "roles": [
         "authoritative-equipment-rules"
       ],
@@ -12395,8 +14202,8 @@
     {
       "path": "backend/app/ranch_catalog.json",
       "owner": "server-world",
-      "sha256": "cebe0a5e7ec69d1466478ca69794751c23ae9b0181a3009154e651cd6bed9062",
-      "bytes": 6880,
+      "sha256": "c23e9718272ce24f5e51993c4669f6479fead7f145c2bdb50f65f1903cb3eec8",
+      "bytes": 7500,
       "roles": [
         "authoritative-ranch-catalogue"
       ],
@@ -12409,8 +14216,8 @@
     {
       "path": "backend/app/ranching.py",
       "owner": "server-world",
-      "sha256": "f6d55e5074caf05dd0c8d142d07b17b132bb99e300bd3d5e3e85f869a77cf008",
-      "bytes": 15959,
+      "sha256": "886f0e66bfb54c7f71e1deff6fd0e36e25c583db8042601b09be36441c63e9b3",
+      "bytes": 14886,
       "roles": [
         "authoritative-ranch-rules",
         "scene-bake-input"
@@ -12418,6 +14225,34 @@
       "consumers": [
         "shared/game/ranchCatalog.ts",
         "tools/build_local_scene_art.mjs"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "backend/app/tool_catalog.json",
+      "owner": "server-world",
+      "sha256": "4c62d8e3b488ed9deceb4426ce770b7ff05761a47a1145dc50c9c9fb955d894e",
+      "bytes": 2075,
+      "roles": [
+        "authoritative-tool-catalogue"
+      ],
+      "consumers": [
+        "shared/game/toolCatalog.ts"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "backend/app/tools.py",
+      "owner": "server-world",
+      "sha256": "6e1d64a57d5242c2d6f1773bf77c123df7db8380b7f18178ea67046eb9602e96",
+      "bytes": 12048,
+      "roles": [
+        "authoritative-tool-rules"
+      ],
+      "consumers": [
+        "shared/game/tools.ts"
       ],
       "provenance": [],
       "inputs": []
@@ -12439,8 +14274,8 @@
     {
       "path": "backend/app/world.py",
       "owner": "server-world",
-      "sha256": "373fa2c07f71d5043f0d2a055f4b57ba473b7b366219f327cef2920c29f8e269",
-      "bytes": 12262,
+      "sha256": "1ba731a01962c12507a5f2c2791dc9626b9fefb9c91ce52adbe4a63af4f4e3b0",
+      "bytes": 15199,
       "roles": [
         "scene-bake-input"
       ],
@@ -12453,8 +14288,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "b10be0f6def58d69472eb74d568e1b744f5b4e792cb207dcf240a47215f017fd",
-      "bytes": 89651,
+      "sha256": "ebd824a030b8f02df6c3952387db882481bdbc604785f6cacf2915d5cdeee025",
+      "bytes": 103583,
       "roles": [
         "binding-contract"
       ],
@@ -12480,6 +14315,24 @@
       "dimensions": [
         128,
         128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/atlas/blacksmith.png",
+      "owner": "cocos-adapter",
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "bytes": 119679,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/blacksmith-v1/portrait.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        320,
+        296
       ]
     },
     {
@@ -13473,6 +15326,276 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/gathering/copper-cracked.png",
+      "owner": "cocos-adapter",
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa",
+      "bytes": 14137,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/copper-cracked.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/copper-depleted.png",
+      "owner": "cocos-adapter",
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082",
+      "bytes": 7360,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/copper-depleted.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/copper-whole.png",
+      "owner": "cocos-adapter",
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46",
+      "bytes": 13700,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/copper-whole.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/gold-cracked.png",
+      "owner": "cocos-adapter",
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e",
+      "bytes": 14403,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/gold-cracked.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/gold-depleted.png",
+      "owner": "cocos-adapter",
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4",
+      "bytes": 6915,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/gold-depleted.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/gold-whole.png",
+      "owner": "cocos-adapter",
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa",
+      "bytes": 13901,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/gold-whole.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/iron-cracked.png",
+      "owner": "cocos-adapter",
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab",
+      "bytes": 14495,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/iron-cracked.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/iron-depleted.png",
+      "owner": "cocos-adapter",
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7",
+      "bytes": 7700,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/iron-depleted.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/iron-whole.png",
+      "owner": "cocos-adapter",
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f",
+      "bytes": 13925,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/iron-whole.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/sapling.png",
+      "owner": "cocos-adapter",
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da",
+      "bytes": 4212,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/sapling.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/stone-cracked.png",
+      "owner": "cocos-adapter",
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e",
+      "bytes": 13441,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/stone-cracked.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/stone-depleted.png",
+      "owner": "cocos-adapter",
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e",
+      "bytes": 6788,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/stone-depleted.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/stone-whole.png",
+      "owner": "cocos-adapter",
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835",
+      "bytes": 13111,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/stone-whole.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/stump-cracked.png",
+      "owner": "cocos-adapter",
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0",
+      "bytes": 13449,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/stump-cracked.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/gathering/stump.png",
+      "owner": "cocos-adapter",
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348",
+      "bytes": 13938,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/resources/stump.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/interiors/anvil.png",
       "owner": "cocos-adapter",
       "sha256": "2570dad3eca15ee1347918433e2f7a5c3c19be7427ea664b08c94f2ce9306de6",
@@ -13923,6 +16046,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/items/cheese_press.png",
+      "owner": "cocos-adapter",
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a",
+      "bytes": 25520,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/ranching-v1/facilities/cheese.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/items/clockwork_pistol.png",
       "owner": "cocos-adapter",
       "sha256": "62fca5dc4ad8e7a57ce29876f5f3f4fa10e4a56d57ede59a1acd278552b5b613",
@@ -13950,6 +16091,24 @@
       ],
       "consumers": [
         "assets/derived/ranching-v1/items/cloth.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/copper_ore.png",
+      "owner": "cocos-adapter",
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
+      "bytes": 6818,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/items/copper_ore.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -14499,6 +16658,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/items/gold_ore.png",
+      "owner": "cocos-adapter",
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d",
+      "bytes": 6621,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/items/gold_ore.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/items/hunting_spear.png",
       "owner": "cocos-adapter",
       "sha256": "d4ab8b058bdeccf09903c96bdd1d38447915c4b8194e3de825aaf38fa007a0e0",
@@ -14532,6 +16709,24 @@
       "dimensions": [
         96,
         96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/iron_ore.png",
+      "owner": "cocos-adapter",
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc",
+      "bytes": 6706,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/items/iron_ore.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
       ]
     },
     {
@@ -14571,6 +16766,42 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/items/loom_machine.png",
+      "owner": "cocos-adapter",
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3",
+      "bytes": 22526,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/ranching-v1/facilities/loom.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/mayo_machine.png",
+      "owner": "cocos-adapter",
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92",
+      "bytes": 18711,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/ranching-v1/facilities/mayo.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/items/mayonnaise.png",
       "owner": "cocos-adapter",
       "sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d",
@@ -14604,6 +16835,24 @@
       "dimensions": [
         64,
         64
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/oil_press.png",
+      "owner": "cocos-adapter",
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9",
+      "bytes": 20652,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/ranching-v1/facilities/oil.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        128,
+        128
       ]
     },
     {
@@ -15198,6 +17447,24 @@
       "dimensions": [
         96,
         96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/items/tree_seed.png",
+      "owner": "cocos-adapter",
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd",
+      "bytes": 5442,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/items/tree_seed.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        64,
+        64
       ]
     },
     {
@@ -16191,6 +18458,294 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/tools/axe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
+      "bytes": 5805,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/axe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/axe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521",
+      "bytes": 5994,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/axe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/axe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d",
+      "bytes": 6141,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/axe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/axe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da",
+      "bytes": 6106,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/axe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/hoe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0",
+      "bytes": 4489,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/hoe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/hoe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5",
+      "bytes": 4599,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/hoe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/hoe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac",
+      "bytes": 4690,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/hoe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/hoe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275",
+      "bytes": 4739,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/hoe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/pickaxe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82",
+      "bytes": 6001,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/pickaxe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/pickaxe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2",
+      "bytes": 6253,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/pickaxe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/pickaxe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561",
+      "bytes": 6218,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/pickaxe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/pickaxe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448",
+      "bytes": 6324,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/pickaxe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/watering_can-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9",
+      "bytes": 7524,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/watering_can-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/watering_can-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4",
+      "bytes": 7293,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/watering_can-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/watering_can-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236",
+      "bytes": 7669,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/watering_can-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tools/watering_can-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413",
+      "bytes": 7671,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tools-v1/tools/watering_can-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/ui/arrival-web.webp",
       "owner": "cocos-adapter",
       "sha256": "ddd30e4f3fcabd395017dead96ee4e4af6610e266218a4024f9b99dfa0f1a28b",
@@ -16218,6 +18773,24 @@
       ],
       "consumers": [
         "assets/derived/panel-materials/arrival.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        1586,
+        992
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/ui/blacksmith-interior.png",
+      "owner": "cocos-adapter",
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "bytes": 2386684,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/generated/hearthwood/blacksmith-v1/interior.png"
       ],
       "provenance": [],
       "inputs": [],
@@ -16461,6 +19034,24 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/ui/weapon-stand.png",
+      "owner": "cocos-adapter",
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "bytes": 79467,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/blacksmith-v1/stand.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        320,
+        145
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/village/actor-0.png",
       "owner": "cocos-adapter",
       "sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0",
@@ -16638,6 +19229,24 @@
       "dimensions": [
         128,
         180
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/village/blacksmith-figure.png",
+      "owner": "cocos-adapter",
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "bytes": 3576,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/blacksmith-v1/figure.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        48,
+        64
       ]
     },
     {
@@ -17093,8 +19702,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "dc5a5ea4819ca81cacf0bf0069f6b4827ed95230bce3f96da5258003a81af861",
-      "bytes": 149845,
+      "sha256": "c8220c37b3f49f9d16df3972a9e0bb5cf3043fc9ab283e0762592b4412b495c1",
+      "bytes": 158732,
       "roles": [
         "inspected-source"
       ],
@@ -17149,8 +19758,8 @@
     {
       "path": "clients/cocos/assets/scripts/combatView.ts",
       "owner": "cocos-adapter",
-      "sha256": "2d0d17d0a96225d54d1eccd2b85cfdf9a20d4961c0c4026d802916a8ec9f79b6",
-      "bytes": 9685,
+      "sha256": "5774bf3844ef72ee68b0a6fb6816c398fea56b0c66d382ded2e027f7909b5ce4",
+      "bytes": 9726,
       "roles": [
         "inspected-source"
       ],
@@ -17275,8 +19884,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/construction.ts",
       "owner": "cocos-adapter",
-      "sha256": "7e9cbbe94d9095983b33a876d8abf07af7d4afe0bc3e8aba83bb86a43221a03b",
-      "bytes": 1134,
+      "sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289",
+      "bytes": 1980,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17419,8 +20028,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/interaction.ts",
       "owner": "cocos-adapter",
-      "sha256": "7e5e59e406cc3b90387a24f9ad8c1fcd12808bb75fa2bc7a0bcc9326768ed880",
-      "bytes": 4888,
+      "sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531",
+      "bytes": 5514,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17435,8 +20044,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "a5291db99184bc7146dcdb71fddee0209852e033da52dea49214e4550295f8c8",
-      "bytes": 9247,
+      "sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201",
+      "bytes": 9970,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17451,8 +20060,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/items.ts",
       "owner": "cocos-adapter",
-      "sha256": "fce6a6a20e5cc7fb5d274bcff19f09a88c2f445430ec9ebf2c2062cef8f71330",
-      "bytes": 8871,
+      "sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225",
+      "bytes": 10198,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17515,8 +20124,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/navigation.ts",
       "owner": "cocos-adapter",
-      "sha256": "dcb8b5f58e8073ecce069b8baf6911920dfeb061a236e68639091fea85a12b1e",
-      "bytes": 8572,
+      "sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c",
+      "bytes": 8959,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17531,8 +20140,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/nextDeparture.ts",
       "owner": "cocos-adapter",
-      "sha256": "eb8326e3844a4760cac7aebbbc1d3b4e1ef1d779a3c3b312d09b321492904158",
-      "bytes": 9967,
+      "sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29",
+      "bytes": 9960,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17547,8 +20156,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/places.ts",
       "owner": "cocos-adapter",
-      "sha256": "2ab18e23699abc165395627ea2e3d1fb624756d01509ed4099315d137287dbe0",
-      "bytes": 7610,
+      "sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353",
+      "bytes": 8045,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17579,8 +20188,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/protocol.ts",
       "owner": "cocos-adapter",
-      "sha256": "be7780c133338e6dbdca53f6244667dc3c23216978810eda16b96e5a6f262dab",
-      "bytes": 11552,
+      "sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1",
+      "bytes": 11951,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17595,8 +20204,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/ranchCatalog.ts",
       "owner": "cocos-adapter",
-      "sha256": "88f31d2cab8903d874f12f63c311b1bb9cbe8a80d9d582e6e6ba7176e5cfaeec",
-      "bytes": 4233,
+      "sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555",
+      "bytes": 4529,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17643,8 +20252,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/sceneLayout.ts",
       "owner": "cocos-adapter",
-      "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8",
-      "bytes": 47352,
+      "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a",
+      "bytes": 44320,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17705,10 +20314,42 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/core/toolCatalog.ts",
+      "owner": "cocos-adapter",
+      "sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af",
+      "bytes": 3214,
+      "roles": [
+        "generated-copy",
+        "inspected-source"
+      ],
+      "consumers": [
+        "shared/game/toolCatalog.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/core/tools.ts",
+      "owner": "cocos-adapter",
+      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
+      "bytes": 6013,
+      "roles": [
+        "generated-copy",
+        "inspected-source"
+      ],
+      "consumers": [
+        "shared/game/tools.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/core/villageIntro.ts",
       "owner": "cocos-adapter",
-      "sha256": "a154fc05f89bcd97ec326c1ae4d7ec3a92af5f483e994903027accf7b8e59d89",
-      "bytes": 5449,
+      "sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87",
+      "bytes": 5480,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -17751,8 +20392,8 @@
     {
       "path": "clients/cocos/assets/scripts/localSceneView.ts",
       "owner": "cocos-adapter",
-      "sha256": "b67a97f39d33462e732da72c52e86d7e3afc9676ae2405207123b16aa89d65ed",
-      "bytes": 4899,
+      "sha256": "78f81b913d1856cd926753f0cde8cd8ffbc56ba34dfa5fc4363041147c648d6d",
+      "bytes": 5180,
       "roles": [
         "inspected-source"
       ],
@@ -17779,8 +20420,50 @@
     {
       "path": "clients/cocos/assets/scripts/ranchView.ts",
       "owner": "cocos-adapter",
-      "sha256": "7ce5ccfcc9b857f76c7669f96b7a0fabe62e79a1f2a0ee7f694c47a326ffd586",
-      "bytes": 4825,
+      "sha256": "6877533efd71621d30a863a8cbb437b9f1fe221c0cdc903a715f9cdba85e387c",
+      "bytes": 5128,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/toolView.ts",
+      "owner": "cocos-adapter",
+      "sha256": "a91ea46854e9db2c6e085a0f36fe3788be5996bd5a146b5677c1fd1d542e0ef5",
+      "bytes": 6667,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/blacksmith.ts",
+      "owner": "cocos-adapter",
+      "sha256": "28543094de0023a7ca33b9a3f42b6428ff1bedcf40ae20b1ddf664ad05e0e8d8",
+      "bytes": 14923,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/blacksmithModel.ts",
+      "owner": "cocos-adapter",
+      "sha256": "3d05c1515669ba1c9e4c91183f28bfcd6c8b872bf2a8ff55622da94c0851fc68",
+      "bytes": 1916,
       "roles": [
         "inspected-source"
       ],
@@ -17807,8 +20490,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/construction.ts",
       "owner": "cocos-adapter",
-      "sha256": "9a9bd269b325f956876150ecf82cb76e7de5f5bb2b442435637654e1cef6f701",
-      "bytes": 9344,
+      "sha256": "6033c901de854bf8d6a6a430a0485c05165469666cb5e6cdd8a31ab1375f01cd",
+      "bytes": 9657,
       "roles": [
         "inspected-source"
       ],
@@ -17863,8 +20546,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/expeditionGear.ts",
       "owner": "cocos-adapter",
-      "sha256": "a238a23f1f510c6a0df76cc86548a9f335b2725bd277bb431ab6123b5c19ffe2",
-      "bytes": 14173,
+      "sha256": "0e247f04efc53c87d931b2797022643dafe19776cd92b4611966f7a5dfd15bac",
+      "bytes": 14704,
       "roles": [
         "inspected-source"
       ],
@@ -17877,8 +20560,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/farming.ts",
       "owner": "cocos-adapter",
-      "sha256": "c6df8feb156f5ba802b4393dea5e1e3f0b6c29745d48bd19e5c9ade04082b1ae",
-      "bytes": 5974,
+      "sha256": "9751dbb9b37f59365290d0f10a1fe00e262253106d75f54457df838a29dd4e07",
+      "bytes": 6173,
       "roles": [
         "inspected-source"
       ],
@@ -17905,8 +20588,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/inventory.ts",
       "owner": "cocos-adapter",
-      "sha256": "f53509e8161022545344359cda59e9f629db72b4869a2355dae8a29ca00faaf1",
-      "bytes": 17040,
+      "sha256": "8e5069946871b20fc5c552d93126cd8fd9fa0cd85ad9081fd95f747f82db8ac1",
+      "bytes": 17615,
       "roles": [
         "inspected-source"
       ],
@@ -17961,8 +20644,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/panels.ts",
       "owner": "cocos-adapter",
-      "sha256": "3a2fe32fdc7c603f2128034dee275a645006c3f44b16dbca5bc8ef579a459c8c",
-      "bytes": 30257,
+      "sha256": "3a152872cd62173c6699d074540fabb4b3c030d26c6eac76af6e7b3036fa1315",
+      "bytes": 30862,
       "roles": [
         "inspected-source"
       ],
@@ -18001,6 +20684,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/ui/production.ts",
+      "owner": "cocos-adapter",
+      "sha256": "662423d550635e664fc053b0619003bd793fa2b8b4f44dc668fc6955b7fa92e9",
+      "bytes": 8061,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/ui/questBoard.ts",
       "owner": "cocos-adapter",
       "sha256": "4ee5d4349618487bed487ef9bf2b0893724e17b596793e05cc20df2daafd37a6",
@@ -18017,8 +20714,8 @@
     {
       "path": "clients/cocos/assets/scripts/ui/ranching.ts",
       "owner": "cocos-adapter",
-      "sha256": "b4a62e33688e97e4b7bcf88109db932c0ffa281372ffaeae7de286e7e05fc09b",
-      "bytes": 13477,
+      "sha256": "d159a824988874d997784da3e0fdc33efd17b5360adf3134c630e90ae8fbc57e",
+      "bytes": 12179,
       "roles": [
         "inspected-source"
       ],
@@ -18075,6 +20772,20 @@
       "owner": "cocos-adapter",
       "sha256": "41a22e623857b84960ddd22c7d5829823cfe120f3e530cc0fe5d2da86e3c4536",
       "bytes": 256,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/assets/scripts/ui/tools.ts",
+      "owner": "cocos-adapter",
+      "sha256": "100e71beeedbe1a820aecbf2ddc0db75b86abb609cb8f55aa82cebd37c1cb0f6",
+      "bytes": 3535,
       "roles": [
         "inspected-source"
       ],
@@ -18225,6 +20936,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-blacksmith.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "1db3d61c7dbf6c9d0fcf770e61a891ace8ee36b91d7cdd5bdb7002be4d3f45dc",
+      "bytes": 10975,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-boot.mjs",
       "owner": "cocos-adapter",
       "sha256": "9ae69a6344d487c9da4672d159bbefe7d9155196d3ea8f0637f8bf3d4f77c1d4",
@@ -18311,8 +21036,8 @@
     {
       "path": "clients/cocos/tools/smoke-construction.mjs",
       "owner": "cocos-adapter",
-      "sha256": "f5cb891246332c105bc322777f74b3279db12afb4d81d712371697d5931ba8e6",
-      "bytes": 10490,
+      "sha256": "748165468aed052eb81e2f5f6ad66cc850a515f34e8b63f92266133672556f9f",
+      "bytes": 10604,
       "roles": [
         "inspected-source"
       ],
@@ -18395,8 +21120,8 @@
     {
       "path": "clients/cocos/tools/smoke-equipment.mjs",
       "owner": "cocos-adapter",
-      "sha256": "f7aebf033386dae475185e6859e7482351740d0a9cd640542543db079ab1e6e7",
-      "bytes": 14358,
+      "sha256": "029ee9468f572c7e9f19e2bf1cd7636fe59953c7e4eca25fc88df68bc8ba27e6",
+      "bytes": 15543,
       "roles": [
         "inspected-source"
       ],
@@ -18409,8 +21134,8 @@
     {
       "path": "clients/cocos/tools/smoke-expedition-chain.mjs",
       "owner": "cocos-adapter",
-      "sha256": "149d91dcb3d1295aba31829cc1e1ff56257428c2b828d3eff131d1722a5ff212",
-      "bytes": 14079,
+      "sha256": "bd6066570fe56afaf8e4ef54069e6b0c4bb9e79741f80d7ab6d2483f5549366c",
+      "bytes": 14292,
       "roles": [
         "inspected-source"
       ],
@@ -18423,8 +21148,8 @@
     {
       "path": "clients/cocos/tools/smoke-farming.mjs",
       "owner": "cocos-adapter",
-      "sha256": "ceb0cac7be892d454b7cb57ed7a6d496712cf0b9a2ce10d2a612bd522e037846",
-      "bytes": 12898,
+      "sha256": "84f5044cdbdbf4b95f860a54a612053a516df2b64261133b3ea54d652eee4d9b",
+      "bytes": 12964,
       "roles": [
         "inspected-source"
       ],
@@ -18437,8 +21162,8 @@
     {
       "path": "clients/cocos/tools/smoke-guidance.mjs",
       "owner": "cocos-adapter",
-      "sha256": "068860b066d599ca152c023a46495decfd94ada6084a26c4fb3aee70afdb1f00",
-      "bytes": 20574,
+      "sha256": "66c6b85557a528b3445e4ccdc8c58e4416c2c1310e035024794a7cf36c615dc0",
+      "bytes": 20570,
       "roles": [
         "inspected-source"
       ],
@@ -18451,8 +21176,8 @@
     {
       "path": "clients/cocos/tools/smoke-hoe.mjs",
       "owner": "cocos-adapter",
-      "sha256": "fb96a397b5dac9686d9648c46350ffeb85407fc477deeeb93c4c0fef2b0b0ed2",
-      "bytes": 11902,
+      "sha256": "cde64740e90e87cee0b11599a043e092d1fd8034ddd9d376ada1418bbe18fe99",
+      "bytes": 11982,
       "roles": [
         "inspected-source"
       ],
@@ -18493,8 +21218,8 @@
     {
       "path": "clients/cocos/tools/smoke-inventory-preview.mjs",
       "owner": "cocos-adapter",
-      "sha256": "4be8246beda15ce87c943f65ec0e3bf109769c48fd4703eb35548a783e1dccde",
-      "bytes": 8802,
+      "sha256": "1c882d1d7b367cbbbcd53fd8b5f8c0a48a41221efc9bb2c5b5af8a27263f3c8e",
+      "bytes": 9075,
       "roles": [
         "inspected-source"
       ],
@@ -18507,8 +21232,8 @@
     {
       "path": "clients/cocos/tools/smoke-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "d3c3ebd7821de74729f2340ffce9e12cd198ae62b7e3215278c66bc436847545",
-      "bytes": 24940,
+      "sha256": "a994676786e852f76b697e9967e7b3915b38adcf962aca2dc8fd1fd9998f5cfe",
+      "bytes": 25100,
       "roles": [
         "inspected-source"
       ],
@@ -18521,8 +21246,8 @@
     {
       "path": "clients/cocos/tools/smoke-landscape.mjs",
       "owner": "cocos-adapter",
-      "sha256": "77dcf5e066c8688ed349773f51850a1187dbd2026ccea6331f66468dee5cdf22",
-      "bytes": 10228,
+      "sha256": "cf236949ebfb1bf33689bd3d8f19a527cd35375bb9a318de5fab7ddeb3af047d",
+      "bytes": 10224,
       "roles": [
         "inspected-source"
       ],
@@ -18577,8 +21302,8 @@
     {
       "path": "clients/cocos/tools/smoke-phase45.mjs",
       "owner": "cocos-adapter",
-      "sha256": "853f1fc973df9cdefe0b1aeb46f90760c14220acac23c0e9b434ee9e4484692a",
-      "bytes": 15755,
+      "sha256": "7653584fae304ea84ed037ec3e7cc0c46a58f5120eaaaffff66a1e9b224d1b1f",
+      "bytes": 15828,
       "roles": [
         "inspected-source"
       ],
@@ -18659,6 +21384,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-production.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "796ffcc155c15b59ac9f25c480201c8f3d5423734afdc594b18bff422f388253",
+      "bytes": 12629,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-quest-board.mjs",
       "owner": "cocos-adapter",
       "sha256": "b3c57db9eb164c7c3701fd73029d833dd5effe409a34b7b2a0986caf433fa373",
@@ -18675,8 +21414,8 @@
     {
       "path": "clients/cocos/tools/smoke-quest-chain.mjs",
       "owner": "cocos-adapter",
-      "sha256": "da803d36554f54b792065a3f32052c3f328e347dec7f29d1bbb32f070ce714ce",
-      "bytes": 18701,
+      "sha256": "23c50ca02cc15ae483331191ab40e07217f44972d7c30bbb816b3b42f3349e06",
+      "bytes": 18788,
       "roles": [
         "inspected-source"
       ],
@@ -18689,8 +21428,8 @@
     {
       "path": "clients/cocos/tools/smoke-ranching.mjs",
       "owner": "cocos-adapter",
-      "sha256": "47441bea1d55e1e3d27256d66b30859dde5b1b08a777e760b86d2c99d8899b73",
-      "bytes": 31061,
+      "sha256": "225b4f25dea51aec3c5a456f6cbac7ddc801c06a8502be415eba670580242ed4",
+      "bytes": 33073,
       "roles": [
         "inspected-source"
       ],
@@ -18771,6 +21510,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/smoke-tools.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "07927da1f6db03d418cda972a01ecc34e991c898cbda58d53ba5b361994aed39",
+      "bytes": 16284,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/smoke-village-art.mjs",
       "owner": "cocos-adapter",
       "sha256": "d908e7f1191fb7b47b40064ea6b5666fbccff9409ee2c67320ba64a6b28d4cf0",
@@ -18801,8 +21554,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "03751a10636a86042f1cd2232fdf969375b5a3e58c3d85b47f8b098d576bab42",
-      "bytes": 9430,
+      "sha256": "ac149801fdfb808e95dd766209f2981fdec89105496fe52a715cf64746d6d19f",
+      "bytes": 10501,
       "roles": [
         "inspected-source"
       ],
@@ -18817,6 +21570,20 @@
       "owner": "cocos-adapter",
       "sha256": "c27c7d2c57ba5d513f3b0bcc4c19f70e7d495ea8f9e970fb2f36572d70e697cd",
       "bytes": 1485,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/test-blacksmith.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "4459f2f41b0c714e943b4b6a8b722793279375824093d1838ee0d1b606f90ee6",
+      "bytes": 2166,
       "roles": [
         "inspected-source"
       ],
@@ -18969,8 +21736,8 @@
     {
       "path": "clients/cocos/tools/test-inventory.mjs",
       "owner": "cocos-adapter",
-      "sha256": "ff524cf55f4d07a2abbee071560fb85e57b3d5417bc20cc2d43be5b651a92ef7",
-      "bytes": 7013,
+      "sha256": "6442071f3b751106748f66e7fd5be6b29ca7249e2d84d5d89469799c4c6a842a",
+      "bytes": 7241,
       "roles": [
         "inspected-source"
       ],
@@ -19051,6 +21818,20 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/tools/test-production.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "ca2b0c6d3e4e7fca1392e25f2053b07b562aae68f342612cbe80a1ec332a9105",
+      "bytes": 3703,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/tools/test-quest-chain.mjs",
       "owner": "cocos-adapter",
       "sha256": "1aa2712d95ddcdd8880c20a5eb661ced42c96dba619ca6022ba4e15784093f90",
@@ -19097,6 +21878,20 @@
       "owner": "cocos-adapter",
       "sha256": "a62e7a95285c16657455e4b776b1b13d96bcb84c694d0a4688a071ece975aa19",
       "bytes": 9509,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/test-tools.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "7d912fdd402223ac2a55f01981acdcc7a521bfdc3515bb3a58748837052072a9",
+      "bytes": 3683,
       "roles": [
         "inspected-source"
       ],
@@ -19193,8 +21988,22 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "2db3e06874c2f25e4a0d2b114d8471c9f98b0a85b656c1880936ae8101f7598c",
-      "bytes": 109081,
+      "sha256": "e854c2da639c32e4a35dceac5ed2ce100aa983674789ecc4bb6aae11fc64d210",
+      "bytes": 112034,
+      "roles": [
+        "provenance"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "docs/art/blacksmith-art-v1.json",
+      "owner": "art-provenance",
+      "sha256": "22757b692078eeee51d4503d32d04aae6476987c0743985816909e1a959213e4",
+      "bytes": 3293,
       "roles": [
         "provenance"
       ],
@@ -19427,8 +22236,8 @@
     {
       "path": "docs/art/local-scene-art-v1.json",
       "owner": "art-provenance",
-      "sha256": "804f9b0e0b8f934ef2f15c0bd0b0b8737f938234bb191850e37ec8f42a57d7f8",
-      "bytes": 17065,
+      "sha256": "beec89db35d0ece6e49b7731eade830bc1015ae9f0b2a2316dd46a0adeb177c6",
+      "bytes": 16964,
       "roles": [
         "provenance"
       ],
@@ -19540,6 +22349,20 @@
       "owner": "art-provenance",
       "sha256": "b4cf1d8b9979b84d030e3ebef50e63cbe1ed325f5f2f3c03d1b008fba5c9b73e",
       "bytes": 33308,
+      "roles": [
+        "provenance"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "docs/art/tool-art-v1.json",
+      "owner": "art-provenance",
+      "sha256": "3a84929bf3f7140b26fb87777a16821c55b9de0c0cea669fc3cb4d7760cc2764",
+      "bytes": 15839,
       "roles": [
         "provenance"
       ],
@@ -19734,8 +22557,8 @@
     {
       "path": "shared/game/construction.ts",
       "owner": "shared-game",
-      "sha256": "7e9cbbe94d9095983b33a876d8abf07af7d4afe0bc3e8aba83bb86a43221a03b",
-      "bytes": 1134,
+      "sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289",
+      "bytes": 1980,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -19878,8 +22701,8 @@
     {
       "path": "shared/game/interaction.ts",
       "owner": "shared-game",
-      "sha256": "7e5e59e406cc3b90387a24f9ad8c1fcd12808bb75fa2bc7a0bcc9326768ed880",
-      "bytes": 4888,
+      "sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531",
+      "bytes": 5514,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -19894,8 +22717,8 @@
     {
       "path": "shared/game/inventory.ts",
       "owner": "shared-game",
-      "sha256": "a5291db99184bc7146dcdb71fddee0209852e033da52dea49214e4550295f8c8",
-      "bytes": 9247,
+      "sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201",
+      "bytes": 9970,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -19910,8 +22733,8 @@
     {
       "path": "shared/game/items.ts",
       "owner": "shared-game",
-      "sha256": "fce6a6a20e5cc7fb5d274bcff19f09a88c2f445430ec9ebf2c2062cef8f71330",
-      "bytes": 8871,
+      "sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225",
+      "bytes": 10198,
       "roles": [
         "art-prompt",
         "canonical-binding-source",
@@ -19986,8 +22809,8 @@
     {
       "path": "shared/game/navigation.ts",
       "owner": "shared-game",
-      "sha256": "dcb8b5f58e8073ecce069b8baf6911920dfeb061a236e68639091fea85a12b1e",
-      "bytes": 8572,
+      "sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c",
+      "bytes": 8959,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20002,8 +22825,8 @@
     {
       "path": "shared/game/nextDeparture.ts",
       "owner": "shared-game",
-      "sha256": "eb8326e3844a4760cac7aebbbc1d3b4e1ef1d779a3c3b312d09b321492904158",
-      "bytes": 9967,
+      "sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29",
+      "bytes": 9960,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20018,8 +22841,8 @@
     {
       "path": "shared/game/places.ts",
       "owner": "shared-game",
-      "sha256": "2ab18e23699abc165395627ea2e3d1fb624756d01509ed4099315d137287dbe0",
-      "bytes": 7610,
+      "sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353",
+      "bytes": 8045,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20050,8 +22873,8 @@
     {
       "path": "shared/game/protocol.ts",
       "owner": "shared-game",
-      "sha256": "be7780c133338e6dbdca53f6244667dc3c23216978810eda16b96e5a6f262dab",
-      "bytes": 11552,
+      "sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1",
+      "bytes": 11951,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20066,8 +22889,8 @@
     {
       "path": "shared/game/ranchCatalog.ts",
       "owner": "shared-game",
-      "sha256": "88f31d2cab8903d874f12f63c311b1bb9cbe8a80d9d582e6e6ba7176e5cfaeec",
-      "bytes": 4233,
+      "sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555",
+      "bytes": 4529,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20114,8 +22937,8 @@
     {
       "path": "shared/game/sceneLayout.ts",
       "owner": "shared-game",
-      "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8",
-      "bytes": 47352,
+      "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a",
+      "bytes": 44320,
       "roles": [
         "canonical-binding-source",
         "inspected-source",
@@ -20178,10 +23001,42 @@
       "inputs": []
     },
     {
+      "path": "shared/game/toolCatalog.ts",
+      "owner": "shared-game",
+      "sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af",
+      "bytes": 3214,
+      "roles": [
+        "canonical-binding-source",
+        "inspected-source"
+      ],
+      "consumers": [
+        "assets/scripts/core/toolCatalog.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "shared/game/tools.ts",
+      "owner": "shared-game",
+      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
+      "bytes": 6013,
+      "roles": [
+        "canonical-binding-source",
+        "inspected-source"
+      ],
+      "consumers": [
+        "assets/scripts/core/tools.ts",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "shared/game/villageIntro.ts",
       "owner": "shared-game",
-      "sha256": "a154fc05f89bcd97ec326c1ae4d7ec3a92af5f483e994903027accf7b8e59d89",
-      "bytes": 5449,
+      "sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87",
+      "bytes": 5480,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -20388,6 +23243,22 @@
       "inputs": []
     },
     {
+      "path": "tools/build_tool_art.py",
+      "owner": "root-tooling",
+      "sha256": "d00db2376edf60e6b429ef95a07c309d34ef7f0000f6bb3ea7e1149c40d19b95",
+      "bytes": 5317,
+      "roles": [
+        "art-producer",
+        "inspected-source"
+      ],
+      "consumers": [
+        "docs/art/tool-art-v1.json",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "tools/build_village_art.py",
       "owner": "root-tooling",
       "sha256": "cae0be2fd391780babfaf975f3a86b6b7306506e3af3fa2ba924f174ebd525e1",
@@ -20448,8 +23319,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "ddb89b16ffaf57177ff827def67a63632acc59b758c01bd5ada8a873c6f4c8ee",
-      "bytes": 4203,
+      "sha256": "b29de5db4a2f906520f849e99143bf4f727620ed1592e1a192c3836fcba57908",
+      "bytes": 4478,
       "roles": [
         "inspected-source"
       ],
@@ -20588,8 +23459,8 @@
     {
       "path": "tools/cocos-sources.mjs",
       "owner": "root-tooling",
-      "sha256": "4d97f55e9ddb780a6bf179192b9acb80dd86f0873e6d779226dfeb3c7bc82af6",
-      "bytes": 15770,
+      "sha256": "f533d5a2279bc9aa82cf10ef642a84c20f4428536d5c2adca59faf8e80e17f29",
+      "bytes": 16120,
       "roles": [
         "inspected-source"
       ],
@@ -20616,8 +23487,8 @@
     {
       "path": "tools/cocos-unit.mjs",
       "owner": "root-tooling",
-      "sha256": "2b7004e5354cb2fff67bcb4c44baaab212d52a726cbd2cbbacf8e16b63a0913c",
-      "bytes": 4079,
+      "sha256": "dd72150d074e02c77a571a9b0a08bc009936eb1e7c595bbace78dda96087cf69",
+      "bytes": 4246,
       "roles": [
         "inspected-source"
       ],
@@ -20693,6 +23564,20 @@
       ],
       "consumers": [
         "shared/game/ranchCatalog.ts"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "tools/generate_tool_catalog.py",
+      "owner": "root-tooling",
+      "sha256": "0640a62d3611dcd00c315ac6ef2e44413d76b99216417c99fc52ad0bdaef1a5f",
+      "bytes": 475,
+      "roles": [
+        "catalogue-generator"
+      ],
+      "consumers": [
+        "shared/game/toolCatalog.ts"
       ],
       "provenance": [],
       "inputs": []
@@ -20986,8 +23871,8 @@
     {
       "path": "tools/test-next-departure-state.mjs",
       "owner": "shared-tests",
-      "sha256": "2af6332b106a99c189cfd806c5fd4eb99e2d640a47100aa316b4ac5147d2a3c6",
-      "bytes": 4802,
+      "sha256": "7252976eae5e5d8d4c1beea35dfa2719c0db757e569065a7b1c0e7b3e754c85b",
+      "bytes": 4798,
       "roles": [
         "inspected-source"
       ],
@@ -21051,7 +23936,7 @@
     },
     {
       "file": "clients/cocos/assets/scripts/core/items.ts",
-      "line": 15,
+      "line": 16,
       "literal": "/assets/hearthwood/detail/items/",
       "role": "descriptive-id-url-native-binding-used"
     },
@@ -21093,7 +23978,7 @@
     },
     {
       "file": "shared/game/items.ts",
-      "line": 15,
+      "line": 16,
       "literal": "/assets/hearthwood/detail/items/",
       "role": "descriptive-id-url-native-binding-used"
     },

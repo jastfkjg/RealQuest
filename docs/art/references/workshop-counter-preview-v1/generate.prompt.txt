@@ -1,0 +1,25 @@
+Use case: ui-mockup. Create ONE polished, coherent desktop game interface concept image for RealQuest, wide landscape 16:10, approximately 1600x1000. This is a DESIGN PREVIEW, not a shipped screenshot.
+Reference 1 is the project's approved general-store concept. Transform that design language into a dedicated blacksmith NPC weapon shop, retaining its warm hand-crafted fine pixel-art wood, brass, parchment and moss cloth material quality. Reference 2 is original authorized equipment artwork: preserve recognizable silhouettes of the first eight weapons (top row 6, second row first 2), especially the rough grey stone short sword with leather grip and brass guard. Do not use any reference labels/prices blindly.
+
+Core design: an actual cozy village blacksmith COUNTER, with a dedicated shopkeeper, attractive physical weapon display, concise detail tag, and an unambiguous purchase decision. NO full-screen pale parchment, no dashboard, no tiny text list, no generic app cards. Environment is warm stone and timber, softly glowing forge in upper right behind the interface, anvil/tools visible only at edges. Calm contrast, artisan atmosphere, restrained embellishment. More readable and less visually noisy than a loot-heavy fantasy game. Crisp fine pixel illustration and very clean readable Simplified Chinese typography.
+
+Composition:
+- Top approximately 17%: modest wood shop sign at upper left reading exactly "工坊 · 铁匠铺", hammer-and-anvil emblem. Next to it a prominent friendly ORIGINAL adult blacksmith NPC bust, ginger hair and short ginger beard, rolled cream shirt sleeves, sturdy brown leather apron. Distinct from the reference female shopkeeper and from a grey-haired forest ranger. Small label "驻店铁匠". A short pale speech ribbon reads "挑件趁手的吧，想自己做也有图纸。". Upper right a small wallet label "持有 20 银" with SILVER coin icon and a brass/wood close X. No giant character stealing space from items.
+- Under header: three tactile primary tabs "成品武器" (selected moss green), "武器图纸", "出售装备". Do NOT include crafting as a trading tab. Secondary category row below: "全部" selected, "冷兵器", "科学", "魔法", "护具". The category row is lighter/subordinate to the three primary tabs.
+- Main body left approx 64% width: a handsome dark timber weapon rack divided into 4 columns by 2 rows, each actual illustrated weapon propped on pegs or laid on the rack with good breathing room, large enough to appreciate detail, paper name tag and small price immediately below each object. Not square blank game inventory slots; a crafted sales display. First item has thin brass selection outline and subtle moss backing, distinct selected corner cue. Exact items by row, each appears once:
+row1 "石刃短剑" / "24 银"; "加固短剑" / "1 金 20 银"; "猎人长矛" / "38 银"; "榆木猎弓" / "48 银".
+row2 "石脊战锤" / "62 银"; "精钢重锤" / "1 金 60 银"; "弹簧长矛" / "1 金 50 银"; "齿轮连弩" / "1 金 80 银".
+Use the precise weapon shapes from reference 2. Silver prices use silver coin; mixed gold/silver are clear text. Short quiet paging line under rack "上一页" (disabled), "1 / 2 页 · 共 16 件", "下一页".
+- Main body right approx 32% width: a compact vertical parchment inspection sheet over moss fabric and wood, not an inventory bag. Selected sword laid diagonally on a small moss cloth display at its top. Clear title "石刃短剑", subtitle "冷兵器 · 1阶". Then evenly spaced readable information:
+"物理伤害 8"
+"攻击间隔 0.48 秒"
+"攻击距离 34"
+subtle divider
+"✓ 使用条件已满足"
+"当前持有 0 件"
+"购买成品无需学会图纸"
+A small pinned recipe slip at its bottom has a faint sword sketch on a paper scroll and reads "石刃短剑图纸", "8 银 · 永久学会", and modest navigation text "查看图纸 →". This navigates to blueprints, is NOT an immediate buy action. Keep all text within safe inner margins and avoid overfull long text.
+- Bottom: one single full-width narrow parchment transaction strip like the shop reference, around 11% height. Left selected item label "石刃短剑" with tiny sword icon and "购买数量 1 件". Middle clearly "需要 24 银" and warm rust message "还差 4 银". Right tactile but clearly DISABLED muted sage button reading "购买 1 件 · 24 银". No bright enabled purchase affordance since player only has 20 silver. Text remains legible. Do not show a crafting action or an equip action in this purchase strip.
+- Very bottom small quiet note "打造请使用工坊工作台" and unobtrusive corner footer "概念预览 · 铁匠形象待定".
+
+Quality: clean believable premium game UI design matching reference 1, strong physical materials and silhouettes, Chinese labels large and readable, 8 neatly aligned richly illustrated weapons, intentional compact spaces, no empty sea of paper, no grids of fake player-owned possessions, no invented equipment, no new game currencies or discounts, no browser chrome, no explanatory annotations outside the screen. The dedicated NPC and his workshop atmosphere are the key new personality. Clear shop browsing, selected object details and honest insufficient-balance state.

@@ -100,6 +100,8 @@ def snapshot(state, **extra):
     view['market'] = market_view(view, now)
     from .farming import farm_view
     view['farming'] = farm_view(view, now)
+    from .tools import view as tool_view
+    view['tool_rules'] = tool_view(view,now)
     from .ranching import ranch_view
     from .construction import settle_construction, construction_view
     settle_construction(view, now)

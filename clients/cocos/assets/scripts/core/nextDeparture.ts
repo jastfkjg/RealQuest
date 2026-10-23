@@ -16,7 +16,7 @@ export interface PreparationStep extends PreparationAction {
 }
 const cave = { mapId: "overworld", targetId: "cave_entry" };
 const noah = { mapId: "overworld", targetId: "noah" };
-const armory = { mapId: "workshop", targetId: "armory_counter" };
+const armory = { mapId: "workshop", targetId: "blacksmith" };
 export const bed = { mapId: "home", targetId: "home_bed" };
 
 export function hasDepartureNotes(state: GameState) {
@@ -193,7 +193,7 @@ export function nextDeparture(
       note: owned.length
         ? "武器已经在背包，主动装备后才能使用。整理装备不消耗物品。"
         : "购买武器不要求制造等级；已有洞穴通路会保留。",
-      label: owned.length ? "打开随身装备" : "标记工坊武备台",
+      label: owned.length ? "打开随身装备" : "标记工坊铁匠",
       ...(owned.length ? { panel: "equipment" as Panel } : { target: armory }),
     };
   if (

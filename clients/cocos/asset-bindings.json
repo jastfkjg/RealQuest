@@ -9,6 +9,30 @@
       "output_sha256": "d0e0f8751c79cccbcce8e8d7f87b91901572eabf4a5d94b1e33c569a5eac624e"
     },
     {
+      "source": "assets/derived/blacksmith-v1/portrait.png",
+      "target": "assets/resources/atlas/blacksmith.png",
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "output_sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883"
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/figure.png",
+      "target": "assets/resources/village/blacksmith-figure.png",
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "output_sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e"
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/stand.png",
+      "target": "assets/resources/ui/weapon-stand.png",
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "output_sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d"
+    },
+    {
+      "source": "assets/generated/hearthwood/blacksmith-v1/interior.png",
+      "target": "assets/resources/ui/blacksmith-interior.png",
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "output_sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82"
+    },
+    {
       "source": "assets/generated/hearthwood/satchel-shell-v1.png",
       "target": "assets/resources/ui/satchel.png",
       "sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
@@ -141,10 +165,34 @@
       "output_sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51"
     },
     {
+      "source": "assets/derived/ranching-v1/facilities/mayo.png",
+      "target": "assets/resources/items/mayo_machine.png",
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92",
+      "output_sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/loom.png",
+      "target": "assets/resources/items/loom_machine.png",
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3",
+      "output_sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/cheese.png",
+      "target": "assets/resources/items/cheese_press.png",
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a",
+      "output_sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/oil.png",
+      "target": "assets/resources/items/oil_press.png",
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9",
+      "output_sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+    },
+    {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "be7780c133338e6dbdca53f6244667dc3c23216978810eda16b96e5a6f262dab",
-      "output_sha256": "be7780c133338e6dbdca53f6244667dc3c23216978810eda16b96e5a6f262dab"
+      "sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1",
+      "output_sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -191,8 +239,8 @@
     {
       "source": "shared/game/interaction.ts",
       "target": "assets/scripts/core/interaction.ts",
-      "sha256": "7e5e59e406cc3b90387a24f9ad8c1fcd12808bb75fa2bc7a0bcc9326768ed880",
-      "output_sha256": "7e5e59e406cc3b90387a24f9ad8c1fcd12808bb75fa2bc7a0bcc9326768ed880"
+      "sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531",
+      "output_sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531"
     },
     {
       "source": "shared/game/stamina.ts",
@@ -209,8 +257,8 @@
     {
       "source": "shared/game/villageIntro.ts",
       "target": "assets/scripts/core/villageIntro.ts",
-      "sha256": "a154fc05f89bcd97ec326c1ae4d7ec3a92af5f483e994903027accf7b8e59d89",
-      "output_sha256": "a154fc05f89bcd97ec326c1ae4d7ec3a92af5f483e994903027accf7b8e59d89"
+      "sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87",
+      "output_sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87"
     },
     {
       "source": "shared/game/story.ts",
@@ -221,8 +269,8 @@
     {
       "source": "shared/game/navigation.ts",
       "target": "assets/scripts/core/navigation.ts",
-      "sha256": "dcb8b5f58e8073ecce069b8baf6911920dfeb061a236e68639091fea85a12b1e",
-      "output_sha256": "dcb8b5f58e8073ecce069b8baf6911920dfeb061a236e68639091fea85a12b1e"
+      "sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c",
+      "output_sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c"
     },
     {
       "source": "shared/game/appearances.ts",
@@ -281,8 +329,8 @@
     {
       "source": "shared/game/sceneLayout.ts",
       "target": "assets/scripts/core/sceneLayout.ts",
-      "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8",
-      "output_sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"
+      "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a",
+      "output_sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a"
     },
     {
       "source": "shared/game/lifeJournalDates.ts",
@@ -305,8 +353,8 @@
     {
       "source": "shared/game/nextDeparture.ts",
       "target": "assets/scripts/core/nextDeparture.ts",
-      "sha256": "eb8326e3844a4760cac7aebbbc1d3b4e1ef1d779a3c3b312d09b321492904158",
-      "output_sha256": "eb8326e3844a4760cac7aebbbc1d3b4e1ef1d779a3c3b312d09b321492904158"
+      "sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29",
+      "output_sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29"
     },
     {
       "source": "shared/game/guidance.ts",
@@ -323,8 +371,8 @@
     {
       "source": "shared/game/places.ts",
       "target": "assets/scripts/core/places.ts",
-      "sha256": "2ab18e23699abc165395627ea2e3d1fb624756d01509ed4099315d137287dbe0",
-      "output_sha256": "2ab18e23699abc165395627ea2e3d1fb624756d01509ed4099315d137287dbe0"
+      "sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353",
+      "output_sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353"
     },
     {
       "source": "shared/game/atlas.ts",
@@ -347,8 +395,8 @@
     {
       "source": "shared/game/ranchCatalog.ts",
       "target": "assets/scripts/core/ranchCatalog.ts",
-      "sha256": "88f31d2cab8903d874f12f63c311b1bb9cbe8a80d9d582e6e6ba7176e5cfaeec",
-      "output_sha256": "88f31d2cab8903d874f12f63c311b1bb9cbe8a80d9d582e6e6ba7176e5cfaeec"
+      "sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555",
+      "output_sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555"
     },
     {
       "source": "shared/game/ranching.ts",
@@ -359,8 +407,20 @@
     {
       "source": "shared/game/construction.ts",
       "target": "assets/scripts/core/construction.ts",
-      "sha256": "7e9cbbe94d9095983b33a876d8abf07af7d4afe0bc3e8aba83bb86a43221a03b",
-      "output_sha256": "7e9cbbe94d9095983b33a876d8abf07af7d4afe0bc3e8aba83bb86a43221a03b"
+      "sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289",
+      "output_sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289"
+    },
+    {
+      "source": "shared/game/toolCatalog.ts",
+      "target": "assets/scripts/core/toolCatalog.ts",
+      "sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af",
+      "output_sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af"
+    },
+    {
+      "source": "shared/game/tools.ts",
+      "target": "assets/scripts/core/tools.ts",
+      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
+      "output_sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8"
     },
     {
       "source": "shared/game/farming.ts",
@@ -371,14 +431,14 @@
     {
       "source": "shared/game/items.ts",
       "target": "assets/scripts/core/items.ts",
-      "sha256": "fce6a6a20e5cc7fb5d274bcff19f09a88c2f445430ec9ebf2c2062cef8f71330",
-      "output_sha256": "fce6a6a20e5cc7fb5d274bcff19f09a88c2f445430ec9ebf2c2062cef8f71330"
+      "sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225",
+      "output_sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225"
     },
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "a5291db99184bc7146dcdb71fddee0209852e033da52dea49214e4550295f8c8",
-      "output_sha256": "a5291db99184bc7146dcdb71fddee0209852e033da52dea49214e4550295f8c8"
+      "sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201",
+      "output_sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -1213,6 +1273,216 @@
       "target": "assets/resources/items/blueberry.png",
       "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
       "output_sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-0.png",
+      "target": "assets/resources/tools/hoe-0.png",
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0",
+      "output_sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-0.png",
+      "target": "assets/resources/tools/axe-0.png",
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
+      "output_sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-0.png",
+      "target": "assets/resources/tools/pickaxe-0.png",
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82",
+      "output_sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-0.png",
+      "target": "assets/resources/tools/watering_can-0.png",
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9",
+      "output_sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-1.png",
+      "target": "assets/resources/tools/hoe-1.png",
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5",
+      "output_sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-1.png",
+      "target": "assets/resources/tools/axe-1.png",
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521",
+      "output_sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-1.png",
+      "target": "assets/resources/tools/pickaxe-1.png",
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2",
+      "output_sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-1.png",
+      "target": "assets/resources/tools/watering_can-1.png",
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4",
+      "output_sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-2.png",
+      "target": "assets/resources/tools/hoe-2.png",
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac",
+      "output_sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-2.png",
+      "target": "assets/resources/tools/axe-2.png",
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d",
+      "output_sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-2.png",
+      "target": "assets/resources/tools/pickaxe-2.png",
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561",
+      "output_sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-2.png",
+      "target": "assets/resources/tools/watering_can-2.png",
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236",
+      "output_sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-3.png",
+      "target": "assets/resources/tools/hoe-3.png",
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275",
+      "output_sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-3.png",
+      "target": "assets/resources/tools/axe-3.png",
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da",
+      "output_sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-3.png",
+      "target": "assets/resources/tools/pickaxe-3.png",
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448",
+      "output_sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-3.png",
+      "target": "assets/resources/tools/watering_can-3.png",
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413",
+      "output_sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-whole.png",
+      "target": "assets/resources/gathering/stone-whole.png",
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835",
+      "output_sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-whole.png",
+      "target": "assets/resources/gathering/copper-whole.png",
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46",
+      "output_sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/copper_ore.png",
+      "target": "assets/resources/items/copper_ore.png",
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
+      "output_sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-whole.png",
+      "target": "assets/resources/gathering/iron-whole.png",
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f",
+      "output_sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/iron_ore.png",
+      "target": "assets/resources/items/iron_ore.png",
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc",
+      "output_sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-whole.png",
+      "target": "assets/resources/gathering/gold-whole.png",
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa",
+      "output_sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/gold_ore.png",
+      "target": "assets/resources/items/gold_ore.png",
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d",
+      "output_sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-cracked.png",
+      "target": "assets/resources/gathering/stone-cracked.png",
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e",
+      "output_sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-cracked.png",
+      "target": "assets/resources/gathering/copper-cracked.png",
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa",
+      "output_sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-cracked.png",
+      "target": "assets/resources/gathering/iron-cracked.png",
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab",
+      "output_sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-cracked.png",
+      "target": "assets/resources/gathering/gold-cracked.png",
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e",
+      "output_sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-depleted.png",
+      "target": "assets/resources/gathering/stone-depleted.png",
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e",
+      "output_sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-depleted.png",
+      "target": "assets/resources/gathering/copper-depleted.png",
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082",
+      "output_sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-depleted.png",
+      "target": "assets/resources/gathering/iron-depleted.png",
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7",
+      "output_sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-depleted.png",
+      "target": "assets/resources/gathering/gold-depleted.png",
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4",
+      "output_sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump.png",
+      "target": "assets/resources/gathering/stump.png",
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348",
+      "output_sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump-cracked.png",
+      "target": "assets/resources/gathering/stump-cracked.png",
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0",
+      "output_sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/sapling.png",
+      "target": "assets/resources/gathering/sapling.png",
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da",
+      "output_sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/tree_seed.png",
+      "target": "assets/resources/items/tree_seed.png",
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd",
+      "output_sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd"
     },
     {
       "source": "assets/derived/equipment-v1/stone_sword.png",

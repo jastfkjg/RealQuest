@@ -419,3 +419,20 @@ Task124第二轮：增加原创AI生成`shop-interior-v2.png`店内环境，所�
 ## 建造切片 task128：现有资源复用
 
 木箱与加固箱的两项物品图绑定复用原始原创 `detail/interiors/chest-closed.png` 字节；未修改源图、未引入外部资源。哈希及运行绑定见 asset-manifest.json 的 construction_128_reuse 与 clients/cocos/asset-bindings.json。平面图使用既有床、desk-96、hearth、planter，网格/文字原生绘制。阿榆暂复用 noah-actor；独立木匠造型与作息仍是明确缺口，未记为用户已批准。
+
+
+### Production devices reuse — task129
+
+Four inventory aliases (`mayo_machine`, `loom_machine`, `cheese_press`, `oil_press`) reuse the existing original `assets/derived/ranching-v1/facilities/{mayo,loom,cheese,oil}.png` unchanged. Runtime machines and placement previews use their original ranching bindings; backpack aliases resolve to the same preloaded SpriteFrames. No generated/downloaded art, fonts or source modifications. Rights, dimensions and original hashes remain in `ranching-art-v1.json`; copied bytes are verified in `clients/cocos/asset-bindings.json`. This is an interaction extension to the approved Hearthwood primitives, with actual gameplay/landscape evidence in task129; no owner visual approval is inferred.
+
+
+## 独立铁匠柜台 — 2026-10-23
+
+按用户批准工坊概念生成原创无字室内背景、透明铁匠头像/驻店全身形象及木/绿布武器托架。原始图片与准确提示词保存在 `assets/generated/hearthwood/blacksmith-v1/`；`tools/build_blacksmith_art.py` 以明确裁切、alpha阈值、等比最近邻缩小派生3张PNG，`--check` 逐字节复现，未改写源图。4个运行绑定与源/结果哈希、尺寸、处理方式见 `blacksmith-art-v1.json`。NPC头像和世界形象来自同张原创源，不复用别人的人物；世界形象仅静态站姿，无虚构动画帧。已有装备、木框、纸张、苔绿布与按钮状态复用授权资源。无新增字体、音效、第三方下载或付费素材；中文与交易数字保持原生。
+
+
+## 工具与资源劳动美术 — task130
+
+内置imagegen生成两张原创1536×1024透明源表，归档于assets/generated/hearthwood/tools-v1/，完整提示词同目录。确定性切片输出35张PNG：四工具×四档16图、四矿种×三状态12图、树桩/破损树桩/幼苗3图、矿石/树种背包图4图。alpha阈值160，清除邻格碎片，最近邻缩放，资源脚底基线112；源图不修改，不进入运行包。tools/build_tool_art.py --check核验图像与manifest可重建。
+
+现有原创树木与六人物源图复用；toolView.ts提供四向原生手臂/握点/工具起手、命中、收势，树木倒下、资源受击与水滴/木屑/石屑。它是分层关节动画，不宣称所有人物新增独立全身绘制序列。来源/哈希/切片见tool-art-v1.json；地形七张PNG保持原字节，动态资源由原生节点表示。实际实机截图和玩家视觉反馈另见任务130，不把源图通过当成最终批准。

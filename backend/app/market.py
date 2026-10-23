@@ -12,11 +12,12 @@ ORDER_DEFINITIONS = [
 
 def market_view(state, now):
     from .combat import SELL
+    from .tools import MATERIALS
     day = datetime.fromtimestamp(now, ZoneInfo('Asia/Shanghai')).date().isoformat()
     return {
         'date': day, 'timezone': 'Asia/Shanghai',
         'buy': {**{c['seed']:c['buy'] for c in CROPS}, 'animal_feed': FEED_PRICE},
-        'sell': {**{c['item']:c['sell'] * (100 + 10 * (state['buildings']['workshop']-1)) // 100 for c in CROPS}, 'wood': 2, 'stone': 3, 'plank': 8,
+        'sell': {**{c['item']:c['sell'] * (100 + 10 * (state['buildings']['workshop']-1)) // 100 for c in CROPS}, 'wood': 2, 'stone': 3, 'plank': 8, **{k:v['sell'] for k,v in MATERIALS.items()},
                  **{k: v for k, v in SELL.items() if k not in ['stone_sword','reinforced_sword','spring_spear','glow_staff']},
                  **{k: p['sell'] for k, p in PRODUCTS.items()},
                  **{'fine_' + k: p['sell'] * 3 // 2 for k, p in PRODUCTS.items()}},

@@ -302,7 +302,7 @@
     },
     {
       "path": "backend/app/ranching.py",
-      "sha256": "f6d55e5074caf05dd0c8d142d07b17b132bb99e300bd3d5e3e85f869a77cf008"
+      "sha256": "886f0e66bfb54c7f71e1deff6fd0e36e25c583db8042601b09be36441c63e9b3"
     },
     {
       "path": "backend/app/village_terrain.json",
@@ -310,7 +310,7 @@
     },
     {
       "path": "backend/app/world.py",
-      "sha256": "373fa2c07f71d5043f0d2a055f4b57ba473b7b366219f327cef2920c29f8e269"
+      "sha256": "1ba731a01962c12507a5f2c2791dc9626b9fefb9c91ce52adbe4a63af4f4e3b0"
     },
     {
       "path": "tools/build_local_scene_art.mjs",
@@ -329,10 +329,10 @@
       "sha256": "52e75ecdd9b5a05715498d28930b943d4ddf2490d5fb04148aa3a2628d137b6b"
     }
   ],
-  "geography_sha256": "091ca57c4b1ea15bec4c15afcff739f7b9191692c6458d3f98e49f9d69eebe7c",
+  "geography_sha256": "daad7caffb0a2fc407133b687bc8439ae75371f289a044dccb145813ba0ba361",
   "layout": {
     "path": "shared/game/sceneLayout.ts",
-    "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"
+    "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a"
   },
   "records": [
     {
@@ -419,8 +419,6 @@
     "assets/runtime/hearthwood/village/oak.png",
     "assets/runtime/hearthwood/village/rune.png",
     "assets/runtime/hearthwood/village/shrub.png",
-    "assets/runtime/hearthwood/village/stone.png",
-    "assets/runtime/hearthwood/village/wood.png",
     "assets/runtime/hearthwood/village/workshop.png"
   ],
   "notes": "2 source pixels/world unit. Furniture remains separate; no UI text baked into images. Actual server map dimensions/collisions/IDs unchanged."
