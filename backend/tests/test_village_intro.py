@@ -41,9 +41,10 @@ def clear_first(state):
 def test_real_settlement_brief_purchase_clear_return_and_review_conserve_resources():
     state = player()
     settle(state)
-    assert state['inventory']['gold'] == 32
-    apply(state, 'quest_accept', {'quest_id': 'leave_valley'}, NOW)
-    assert state['village_intro']['briefed']
+    assert state['inventory']['gold'] == 30
+    state['quests']['ranch_start']={'status':'claimed'}
+    apply(state, 'quest_accept', {'quest_id': 'first_expedition'}, NOW)
+    assert not state['village_intro']['briefed']
     at(state, 'workshop', 'armory_counter')
     apply(state, 'gear_buy', {'target': 'armory_counter', 'item': 'stone_sword'}, NOW)
     apply(state, 'gear_equip', {'item': 'stone_sword'}, NOW)
@@ -85,10 +86,12 @@ def test_briefing_and_review_reject_remote_or_unearned_progress():
 def test_gate_briefing_toggle_and_reload_never_change_balances_or_quest_tracking():
     state = player()
     settle(state)
+    state['quests']['first_expedition']={'status':'claimed'}
     at(state, 'overworld', 'village_departure')
     before = copy.deepcopy(state)
     apply(state, 'intro_brief', {'target': 'village_departure'}, NOW)
     before['village_intro']['briefed'] = True
+    before['events'].append('quest_gate_read')
     assert state == before
     for dismissed in [True, False, False]:
         apply(state, 'intro_toggle', {'dismissed': dismissed}, NOW)

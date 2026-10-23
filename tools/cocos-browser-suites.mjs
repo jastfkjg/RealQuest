@@ -1,5 +1,13 @@
 const module=(id,file,result='result.json',extra={})=>({id,file,result,timeoutMs:300000,group:'current',...extra});
 export const browserSuites=[
+ module('construction','clients/cocos/tools/smoke-construction.mjs',undefined,{timeoutMs:420000}),
+ module('economy','clients/cocos/tools/smoke-economy.mjs'),
+ module('sword-motion','clients/cocos/tools/smoke-sword-motion.mjs',undefined,{timeoutMs:600000}),
+ module('quest-chain','clients/cocos/tools/smoke-quest-chain.mjs',undefined,{timeoutMs:900000}),
+ module('ranching','clients/cocos/tools/smoke-ranching.mjs',undefined,{timeoutMs:2700000}),
+ module('shop','clients/cocos/tools/smoke-shop.mjs',undefined,{timeoutMs:420000}),
+ module('equipment','clients/cocos/tools/smoke-equipment.mjs',undefined,{timeoutMs:420000}),
+ module('hoe','clients/cocos/tools/smoke-hoe.mjs',undefined,{timeoutMs:420000}),
  module('farming','clients/cocos/tools/smoke-farming.mjs',undefined,{timeoutMs:420000}),
  module('accounts','clients/cocos/tools/smoke-accounts.mjs',undefined,{timeoutMs:420000}),
  module('hud-drag','clients/cocos/tools/smoke-hud-drag.mjs'),

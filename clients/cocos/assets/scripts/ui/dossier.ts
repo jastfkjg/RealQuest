@@ -1,3 +1,4 @@
+import {formatMoney} from '../core/currency';
 import {crops} from '../core/farming';
 import {paperSurface,inkRule,meter} from './materials';
 import type { PanelHost } from './panels';
@@ -77,9 +78,9 @@ export class DossierPanels {
     if(f.compact){const width=(f.w-72)/3;entries.forEach((e,i)=>h.text('Attribute-'+e.id,e.label+'  '+e.value,f.x+24+i%3*(width+12),f.y+128+Math.floor(i/3)*32,width,28,16));return;}
     const x=f.x+36,left=(f.w-108)*.53,right=x+left+48,rw=f.w-84-left-48;
     h.text('AttributeHeading','旅途留下的积累',x,f.y+132,left,32,20);
-    entries.slice(0,5).forEach((e,i)=>{const yy=f.y+182+i*48;h.text('Attribute-'+e.id,e.label,x,yy,left-64,32,18);h.text('AttributeValue-'+e.id,String(e.value),x+left-64,yy,64,32,22,C.ink,true);inkRule(h,'AttributeRule'+i,x,yy+38,left);});
+    entries.slice(0,5).forEach((e,i)=>{const yy=f.y+182+i*48;h.text('Attribute-'+e.id,e.label,x,yy,left-64,32,18);h.text('AttributeValue-'+e.id,e.id==='gold'?formatMoney(e.value):String(e.value),x+left-64,yy,64,32,22,C.ink,true);inkRule(h,'AttributeRule'+i,x,yy+38,left);});
     h.text('ResourceHeading','随身物资',right,f.y+132,rw,32,20);
-    entries.slice(5).forEach((e,i)=>{const yy=f.y+188+i*76;if(e.id==='gold')h.image('items/gold',right+20,yy+14,36,36);h.text('Attribute-'+e.id,e.label,right+52,yy-4,rw-52,26,15,C.muted);h.text('AttributeValue-'+e.id,String(e.value),right+52,yy+22,rw-52,32,24);});
+    entries.slice(5).forEach((e,i)=>{const yy=f.y+188+i*76;if(e.id==='gold')h.image('items/gold',right+20,yy+14,36,36);h.text('Attribute-'+e.id,e.label,right+52,yy-4,rw-52,26,15,C.muted);h.text('AttributeValue-'+e.id,e.id==='gold'?formatMoney(e.value):String(e.value),right+52,yy+22,rw-52,32,24);});
     h.text('AttributeRules','旅途积累与知识、健康、技能点分别留存。',x,f.y+468,f.w-72,32,15,C.muted);
   }
 

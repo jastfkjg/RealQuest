@@ -67,12 +67,11 @@ try{
  }
  await page.setViewportSize({width:740,height:360});await seed({x:320,y:300},{x:400,y:224});
  const selected=await read(page),enemy=selected.combat.enemies[0];
- await page.mouse.click(370+selected.camera.x+enemy.x*selected.camera.zoom,180-selected.camera.y+(enemy.y-10)*selected.camera.zoom);await page.waitForTimeout(300);
+ await page.mouse.click(370+selected.camera.x+enemy.x*selected.camera.zoom,180-selected.camera.y+(enemy.y-10)*selected.camera.zoom,{button:'right'});await page.waitForTimeout(300);
  let observed=await capture('mouse-selected');assert.deepEqual(observed.g.issues,[]);assert.equal(observed.s.combatTarget,enemy.id);assert.equal(observed.s.route.length,0);assert.deepEqual(observed.s.player,selected.player);assert.equal(observed.s.combat.enemies[0].hp,100);
- report.checks.push('Native mouse selection after actual camera fit hits the original guardian, creates no walk route or attack and preserves world position');
- const beforeMove=await read(page);await page.keyboard.down('a');
- try{for(let i=0;i<3;i++){await page.waitForTimeout(100);observed=await capture('native-moving-'+i);assert.deepEqual(observed.g.issues,[]);}}
- finally{await page.keyboard.up('a');}
+ report.checks.push('Native right-click lock after actual camera fit selects the original guardian, creates no walk route or attack and preserves world position');
+ const beforeMove=await read(page);
+ for(let i=0;i<3;i++){await page.keyboard.down('a');try{await page.waitForTimeout(50);}finally{await page.keyboard.up('a');}observed=await capture('native-moving-'+i);assert.deepEqual(observed.g.issues,[]);}
  await page.waitForTimeout(400);const stopped=await read(page);assert(stopped.player.x<beforeMove.player.x-5);await page.waitForTimeout(200);assert(Math.abs((await read(page)).player.x-stopped.player.x)<.5);
  await action('life');await until(s=>s.mode==='life'&&!s.pendingAction&&!s.busy,'Life owns input');const paused=await read(page);
  await page.keyboard.down('d');try{await page.waitForTimeout(200);}finally{await page.keyboard.up('d');}assert.deepEqual((await read(page)).player,paused.player);

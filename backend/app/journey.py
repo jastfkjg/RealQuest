@@ -1,3 +1,4 @@
+from .economy import money
 """Server quotes and mutations for one coherent departure chapter."""
 from .daynight import clock_view, settle_clock, DAY_SECONDS
 
@@ -10,17 +11,17 @@ OPTIONS = [
     ('repair_self','river_bridge','亲手修复旧桥','建造等级 1；修复后双向免费通行。',60,{'plank':6,'stone':4},0,None,None),
     ('repair_help','river_bridge','请工匠一起修桥','无需建造等级；修复后双向免费通行。',60,{'plank':6,'stone':4,'gold':10},0,None,None),
     ('bridge','river_bridge','走过旧桥','到达东岸山脚。',5,{},0,'mountain',{'x':128,'y':472}),
-    ('ferry','adu','乘船到东岸','船票单程 6 金币，到达山脚。',20,{'gold':6},0,'mountain',{'x':128,'y':472}),
-    ('dock_work','adu','帮忙整理缆绳','每天一次，获得 6 金币，足够一张船票。',30,{},10,None,None),
+    ('ferry','adu','乘船到东岸','船票单程 6 银币，到达山脚。',20,{'gold':6},0,'mountain',{'x':128,'y':472}),
+    ('dock_work','adu','帮忙整理缆绳','每天一次，获得 6 银币，足够一张船票。',30,{},10,None,None),
     ('cross_back','to_crossing','返回西岸渡口','旧桥已修复则免费，否则乘回程渡船。',20,{},0,'crossing',{'x':384,'y':320}),
-    ('trail_work','mountain_camp','整理山道补给','每天一次，获得 12 金币，可准备绳索或回程船票。',30,{},10,None,None),
+    ('trail_work','mountain_camp','整理山道补给','每天一次，获得 12 银币，可准备绳索或回程船票。',30,{},10,None,None),
     ('climb','mountain_pass','翻越苍脊山脉','需要自己的绳索和当前体力 60；抵达苔桥城南门。',180,{},60,'city',{'x':160,'y':480}),
     ('descend','to_mountain','翻山返回东岸','需要绳索与当前体力 20，沿熟悉的山道返乡。',120,{},20,'mountain',{'x':704,'y':184}),
     ('enter_inn','to_inn','进入灯穗旅店','公共厅免费进入，向岚姨交信、订房或帮工。',0,{},0,'inn',{'x':240,'y':294}),
     ('exit_inn','inn_exit','回到南门街','出门后可购买旅途补给或走向南城门。',0,{},0,'city',{'x':352,'y':264}),
-    ('deliver','lanya','交付村庄来信','岚姨收到信后支付 12 金币路费补贴，仅一次。',0,{},0,None,None),
-    ('book','lanya','订下今晚的客房','8 金币 / 晚；付款后走到客房床铺睡到次日 06:00。',0,{'gold':8},0,None,None),
-    ('inn_work','lanya','帮旅店整理布草','每天一次，获得 12 金币；缺钱时也有落脚办法。',30,{},10,None,None),
+    ('deliver','lanya','交付村庄来信','岚姨收到信后支付 12 银币路费补贴，仅一次。',0,{},0,None,None),
+    ('book','lanya','订下今晚的客房','8 银币 / 晚；付款后走到客房床铺睡到次日 06:00。',0,{'gold':8},0,None,None),
+    ('inn_work','lanya','帮旅店整理布草','每天一次，获得 12 银币；缺钱时也有落脚办法。',30,{},10,None,None),
 ]
 SUPPLY_TARGETS = ['adu','mountain_camp','city_supplies','lanya']
 CAMP_TARGETS = ['crossing_camp','mountain_camp']
@@ -43,8 +44,8 @@ def quotes(state, now):
     inventory = state['inventory']
     rows = list(OPTIONS)
     for target in SUPPLY_TARGETS:
-        rows += [('rope',target,'购置登山绳索','6 金币，永久保留的旅途装备，不占背包快捷栏。',0,{'gold':6},0,None,None),
-                 ('meal',target,'吃一份热食','3 金币，即刻恢复体力 20，不超过上限。',15,{'gold':3},0,None,None)]
+        rows += [('rope',target,'购置登山绳索','6 银币，永久保留的旅途装备，不占背包快捷栏。',0,{'gold':6},0,None,None),
+                 ('meal',target,'吃一份热食','3 银币，即刻恢复体力 20，不超过上限。',15,{'gold':3},0,None,None)]
     for target in CAMP_TARGETS:
         rows.append(('camp',target,'在长椅上歇脚','免费，恢复体力 20；小憩不能替代当晚睡眠。',30,{},0,None,None))
     result = []
@@ -64,7 +65,8 @@ def quotes(state, now):
         if id == 'rope' and d['rope_ready']: reasons.append('行囊里已经有绳索')
         if id in ['climb','descend'] and not d['rope_ready']: reasons.append('需要登山绳索，可在阿渡或补给台购买')
         if id == 'deliver':
-            if state.get('quests',{}).get('leave_valley',{}).get('status') != 'active': reasons.append('先在村庄告示板接取离村主线、带上来信')
+            if state.get('quests',{}).get('leave_valley',{}).get('status') not in ['active', 'claimed']:
+                reasons.append('先接取离村主线，带上村庄来信')
             if d['letter_delivered']: reasons.append('村庄来信已经交到岚姨手中')
         if id == 'book' and d['booking_day'] == clock['day']: reasons.append('今晚已订房，请走到客房床铺睡觉')
         for work in ['dock_work','inn_work','trail_work']:
@@ -72,8 +74,8 @@ def quotes(state, now):
         if id in ['meal','camp'] and state['stamina']['current'] >= state['stamina']['max']: reasons.append('当前体力已满')
         for key, amount in costs.items():
             if inventory.get(key,0) < amount:
-                names = {'gold':'金币','plank':'木板','stone':'石料'}
-                reasons.append(f'{names[key]}还差 {amount-inventory.get(key,0)}')
+                names = {'gold':'银币','plank':'木板','stone':'石料'}
+                reasons.append('钱币还差 '+money(amount-inventory.get(key,0)) if key=='gold' else f'{names[key]}还差 {amount-inventory.get(key,0)}')
         if state['stamina']['current'] < stamina: reasons.append(f'当前体力还差 {stamina-state["stamina"]["current"]}，先在营地歇脚或吃热食')
         if minutes and minute + minutes >= 1500: reasons.append('完成时已到 01:00，请先回家或到旅店睡觉')
         completed = ((id.startswith('repair_') and d['bridge_repaired']) or

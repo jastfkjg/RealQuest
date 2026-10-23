@@ -1,4 +1,7 @@
+import {formatMoney} from './currency';
+import {gearCatalog,gearMaterials,routeNames,slotNames} from './gearCatalog';
 import {crops} from "./cropCatalog";
+import {ranchProducts} from './ranching';
 // Stable game IDs; fine64px original item art shares one presentation registry.
 export interface ItemDefinition {
   name: string;
@@ -42,7 +45,7 @@ export const itemDefinitions: Record<string, ItemDefinition> = {
     name: "萝卜",
     group: "收获",
     summary: "卖给杂货铺，或交付村民的蔬菜订单。",
-    description: "刚从泥土中拔出的新鲜萝卜。带去杂货铺，为下一次冒险换些金币。",
+    description: "刚从泥土中拔出的新鲜萝卜。带去杂货铺，为下一次冒险换些银币。",
     source: "家园农田 · 成熟后收获",
     use: "在杂货铺或工坊出售；也可交付订单",
     icon: icon("crop"),
@@ -69,20 +72,34 @@ const additions: [string,string,string,string,string][] = [
   ['shell','硬壳碎片','材料','石壳虫掉落 · 加固武器','<path fill="#9da782" d="m9 28 17-15 25 6 5 28-25 9-23-10Z"/><path fill="none" d="m26 13 4 23 26 11M30 36 8 46m22-10 16-16"/>'],
   ['crystal','微光晶屑','材料','洞穴蝠掉落 · 用于短杖打造','<path fill="#91b5a3" d="m26 5 14 8 8 33-18 14L14 43Z"/><path fill="#dce5c5" d="m26 5 5 30-17 8Z"/><path fill="none" d="m31 35 9-22m-9 22 17 11m-17-11-1 25"/>'],
   ['gate_stone','门钥魔法石','关键物品','Boss首胜保底 · 魔法3级开启石门','<path fill="#c5cda4" d="m32 5 18 12 5 22-23 21L9 39l5-22Z"/><path fill="#759a83" d="m32 17 10 15-10 15-10-15Z"/><path fill="#f4e6b5" d="m32 23 6 9-6 9-6-9Z"/>'],
-  ['soup','便携菜汤','补给','恢复20生命＋15体力 · 8金币','<path fill="#b89a6a" d="M7 24h50l-7 27q-19 13-36 0Z"/><ellipse fill="#b2ba78" cx="32" cy="24" rx="25" ry="10"/><path fill="#d5c789" stroke="none" d="M17 23h9v5h-9Zm16-5h10v5H33Z"/>'],
+  ['soup','便携菜汤','补给','恢复20生命＋15体力 · 8银币','<path fill="#b89a6a" d="M7 24h50l-7 27q-19 13-36 0Z"/><ellipse fill="#b2ba78" cx="32" cy="24" rx="25" ry="10"/><path fill="#d5c789" stroke="none" d="M17 23h9v5h-9Zm16-5h10v5H33Z"/>'],
 ];
 for (const [id,name,group,summary,body] of additions) itemDefinitions[id]={name,group,summary,
   description:summary,source:group==='武器'?'村庄工坊武备台 · 购买或按图纸打造':id==='gate_stone'?'石根山洞第5层 · 石壳守卫首次击败':id==='soup'?'村庄工坊武备台':'石根山洞 · 对应怪物固定掉落',
   use:id==='gate_stone'?'魔法3级后走近东行石门开启，永久通行':group==='武器'?'装备后在洞内攻击；购买不要求制造等级':'在武备台查看用途与持有状态',icon:gearSymbol(body)};
 for(const c of crops){
  itemDefinitions[c.seed]={name:c.name+'种子',group:'种植',summary:'需要种植 '+c.level+' 级 · '+c.days+' 游戏日首熟',description:c.note,source:'风铃杂货铺 · 所有等级均可购买',use:'播种消耗1份 · 每轮收获'+c.yield+'份 · 共'+c.harvests+'轮；游戏时间与睡眠推进生长，离线暂停',icon:'assets/derived/farming-v1/items/'+c.seed+'.png'};
- itemDefinitions[c.item]={name:c.name,group:'收获',summary:'可在风铃杂货铺出售。',description:c.note,source:'家园农田 · 成熟后收获',use:'杂货铺出售 · 基础单价'+c.sell+'金币，工坊升级可提高报价',icon:'assets/derived/farming-v1/items/'+c.item+'.png'};
+ itemDefinitions[c.item]={name:c.name,group:'收获',summary:'可在风铃杂货铺出售。',description:c.note,source:'家园农田 · 成熟后收获',use:'杂货铺出售 · 基础单价'+formatMoney(c.sell)+'，工坊升级可提高报价',icon:'assets/derived/farming-v1/items/'+c.item+'.png'};
+}
+for(const [id,g] of Object.entries(gearCatalog)){
+ const weapon=g.slot==='weapon',w=g as any;
+ itemDefinitions[id]={name:g.name,group:weapon?'武器':slotNames[g.slot],summary:weapon?`${routeNames[g.route]} · ${g.tier}阶 · ${w.damage}伤害 · ${w.interval}秒`:g.effect_text,
+ description:g.effect_text||('精心制作的'+g.name+'。'),source:g.blueprint_source==='boss'?'石壳守卫首胜获得图纸':g.blueprint_source==='ruins'?'解读村庄沉睡符文获得图纸':g.blueprint_source==='research'?'苔桥城精密工坊 · 达成条件研究兑换图纸':g.region==='city'?'苔桥城精密工坊 · 成品或图纸':'村庄工坊武备台 · 成品或图纸',
+ use:`装备条件：永久体力上限${g.min_stamina}`+(w.use_science?` · 科学${w.use_science}`:'')+(w.use_magic?` · 魔法${w.use_magic}`:'')+'；图纸永久学会，打造消耗材料。',icon:'assets/derived/equipment-v1/'+id+'.png'};
+}
+for(const [id,m] of Object.entries(gearMaterials))itemDefinitions[id]={name:m.name,group:'材料',summary:m.summary,description:m.summary,source:'苔桥城精密工坊 · 材料柜台',use:'用于高级武器与护具打造',icon:itemDefinitions[m.icon]?.icon||icon(m.icon)};
+itemDefinitions.animal_feed={name:'牧场饲料',group:'养殖',summary:'动物成长与产出的每日口粮。',description:'禽畜通用饲料；不同动物每日用量不同。',source:'杂货铺或牧场采购簿购买，小麦/玉米加工',use:'走近牧场动物投喂；最多储备3游戏日，离线不消耗',icon:'assets/derived/ranching-v1/items/animal_feed.png'};
+for(const [id,p] of Object.entries(ranchProducts))for(const fine of [false,true]){
+ const key=(fine?'fine_':'')+id;
+ itemDefinitions[key]={name:(fine?'优质':'')+p.name,group:id==='wool'||id==='cloth'?'材料':'食物',summary:'杂货铺收购 · '+formatMoney(Math.floor(p.sell*(fine?1.5:1))),description:(fine?'亲密伙伴的优质出产。':'来自向阳牧场的新鲜出产。'),source:'动物成年产出或牧场设备加工',use:'可在杂货铺出售；原料也可在牧场加工',icon:'assets/derived/ranching-v1/items/'+id+'.png'};
 }
 export const itemNames: Record<string, string> = {
-  gold: "金币",
+  gold: "钱币",
   ...Object.fromEntries(
     Object.entries(itemDefinitions).map(([id, item]) => [id, item.name]),
   ),
 };
 // Legacy tray size, NOT an authoritative capacity or stack limit.
 export const inventoryTraySlots = 24;
+
+for(const [id,name] of [['wooden_chest','木箱'],['reinforced_chest','加固木箱']]){itemDefinitions[id]={name,group:'家具',summary:'回家在家园手册中摆放，走近存取。',description:'亲手制作的储物木箱，每种物品占一格。',source:'工坊工作台制作 · 木匠教授图纸',use:'家园手册摆放；走近木箱后可改名、存取和移动',icon:icon('plank')};itemNames[id]=name;}

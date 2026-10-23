@@ -272,7 +272,7 @@ def test_timer_pause_restore_and_completion():
     with pytest.raises(RuleError):apply(s,'timer_finish',{},now+700)
 
 def test_farm_world_growth_trade_and_upgrade():
-    s=fresh();s['position']={'x':136,'y':440}
+    s=fresh();s['inventory']['gold']=40;s['position']={'x':136,'y':440}
     apply(s,'plant',{'target':'plot_0'},100)
     assert s['inventory']['seed']==5
     with pytest.raises(RuleError):apply(s,'harvest',{'target':'plot_0'},159)
@@ -287,16 +287,16 @@ def test_farm_world_growth_trade_and_upgrade():
         apply(s,'enter',{'target':'workshop'},100000)
         s['position']={'x':240,'y':196}
     apply(s,'sell',{'target':'workshop_counter'},100000)
-    assert s['inventory']['gold']==28 and s['inventory']['crop']==1
+    assert s['inventory']['gold']==44 and s['inventory']['crop']==1
     s['inventory'].update(wood=6,stone=3)
     apply(s,'upgrade',{'target':'workshop_counter'},100000)
     assert s['buildings']['workshop']==2
-    assert s['inventory']['wood']==0 and s['inventory']['stone']==0 and s['inventory']['gold']==18
+    assert s['inventory']['wood']==0 and s['inventory']['stone']==0 and s['inventory']['gold']==14
     if s['location']=='overworld':
         apply(s,'enter',{'target':'workshop'},100000)
         s['position']={'x':240,'y':196}
     apply(s,'sell',{'target':'workshop_counter'},100000)
-    assert s['inventory']['gold']==27
+    assert s['inventory']['gold']==18
 
 def test_npc_once_daily_and_conditional_event():
     s=fresh();s['position']={'x':624,'y':272};now=1791522000
@@ -360,7 +360,7 @@ def test_quest_lifecycle_locked_and_claim_once(client):
         response=cmd(client,'quest_claim',{'quest_id':'settle_in'},key)
         assert response.status_code==200
     after=response.json()['state']
-    assert after['inventory']['gold']==before['inventory']['gold']+12
+    assert after['inventory']['gold']==before['inventory']['gold']+10
     assert after['inventory']['seed']==before['inventory']['seed']+3
     assert cmd(client,'quest_claim',{'quest_id':'settle_in'}).status_code==422
     assert cmd(client,'quest_accept',{'quest_id':'first_harvest'}).status_code==200
@@ -420,6 +420,9 @@ def test_every_map_interaction_has_reachable_approach():
 def test_side_quest_progress_survives_spending_and_rewards_once(quest_id,giver,location,position):
     from app.quests import quest_views, QUESTS
     s=fresh();s['location']=location;s['position']=position
+    # Public side quests now follow their teaching milestone.
+    prerequisite={'forest_path':'first_harvest','rune_research':'gate_story','wide_world':'ranch_start'}[quest_id]
+    s['quests'][prerequisite]={'status':'claimed'}
     apply(s,'quest_accept',{'quest_id':quest_id},100)
     with pytest.raises(RuleError): apply(s,'quest_claim',{'quest_id':quest_id},101)
     s['events'] += ['discovered_grove','visited_library','rune_awakened','discovered_lake','discovered_quarry']

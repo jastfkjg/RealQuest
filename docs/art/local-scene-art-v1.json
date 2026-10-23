@@ -285,16 +285,36 @@
       "sha256": "2e4ff4fa759a10b6d17de7f53f44608313e332b5dcf9da175853ce4bb2b5f808"
     },
     {
+      "path": "backend/app/daynight.py",
+      "sha256": "13f7a69e8a84290a01775a148e0cef443a8def9ef14640508cd81558d279e257"
+    },
+    {
+      "path": "backend/app/economy.py",
+      "sha256": "ff69655aa3487a9b1b9be01fc624a664ded17307add70050279d788535801c4f"
+    },
+    {
+      "path": "backend/app/farm_land.py",
+      "sha256": "57b7ae2a8a8ebc0d9d658841b6d4b52d6f4540b2f89627d910903b2f88a77679"
+    },
+    {
       "path": "backend/app/journey_world.py",
-      "sha256": "f0c6ad1c8bcf0e58b22b4501ef11bd15572fefbf959ca7b42bda4e5d23cdc1c8"
+      "sha256": "117e84cc31d97da7f3c5ca9ff2f4b9cb16a8bed3a9324e7deaa80e45eaf65674"
+    },
+    {
+      "path": "backend/app/ranching.py",
+      "sha256": "f6d55e5074caf05dd0c8d142d07b17b132bb99e300bd3d5e3e85f869a77cf008"
+    },
+    {
+      "path": "backend/app/village_terrain.json",
+      "sha256": "5967f69dd5996747abd5b3e3006df9518486e43b213834d3d0c4ad6afc92bad2"
     },
     {
       "path": "backend/app/world.py",
-      "sha256": "b1f4aa0a35ddec21257873b1356218b5a0f822e2e1347075ffeee2156e214999"
+      "sha256": "373fa2c07f71d5043f0d2a055f4b57ba473b7b366219f327cef2920c29f8e269"
     },
     {
       "path": "tools/build_local_scene_art.mjs",
-      "sha256": "0cf60d4da4069a09329d52b4335e3dde590d209ad88a14be82a3f58c9442159d"
+      "sha256": "1b4c2c5fdd105ea1a02868b205225694d787a425f70f9ce6ed8159361ef793c7"
     },
     {
       "path": "tools/scene-art/interiors.ts",
@@ -306,10 +326,10 @@
     },
     {
       "path": "tools/scene-art/villageGround.ts",
-      "sha256": "57286a018db9f893628d8316779ce55d8da99dcf86630bb6b9db1f6f37eb5a28"
+      "sha256": "52e75ecdd9b5a05715498d28930b943d4ddf2490d5fb04148aa3a2628d137b6b"
     }
   ],
-  "geography_sha256": "8febccbcb93728c3d52658af2d1f9816c7e3b55986ed821c80bfd09174d46fb4",
+  "geography_sha256": "091ca57c4b1ea15bec4c15afcff739f7b9191692c6458d3f98e49f9d69eebe7c",
   "layout": {
     "path": "shared/game/sceneLayout.ts",
     "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"

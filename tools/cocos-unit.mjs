@@ -6,6 +6,13 @@ import {runOwned} from './cocos-child.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 if(Number(process.versions.node.split('.')[0])!==22)throw Error('Cocos unit tools require Node22; run nvm use (see .nvmrc).');
 const modules=[
+ ['currency','clients/cocos/tools/test-currency.mjs'],
+ ['sword-motion','clients/cocos/tools/test-sword-motion.mjs'],
+ ['quest-chain','clients/cocos/tools/test-quest-chain.mjs'],
+ ['ranching','clients/cocos/tools/test-ranching.mjs'],
+ ['construction','clients/cocos/tools/test-construction.mjs'],
+ ['shop','clients/cocos/tools/test-shop.mjs'],
+ ['equipment','clients/cocos/tools/test-equipment.mjs'],
  ['farming','clients/cocos/tools/test-farming.mjs'],
  ['tool-lifecycle','tools/test-cocos-child.mjs'],
  ['source-ownership','tools/test-cocos-sources.mjs'],

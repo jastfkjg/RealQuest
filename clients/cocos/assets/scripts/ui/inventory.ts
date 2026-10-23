@@ -35,6 +35,7 @@ export class InventoryView {
   this.init(h);const id=this.quick[slot];this.feedback='';
   if(!id){h.go('inventory');this.pocket=slot;this.hint='先点选物品，再点口袋放入';return;}
   this.preferences.select(id);const intent=itemIntent(h.world,h.state,h.now,id);
+  if(intent.command==='gear_equip'&&!intent.reason){void h.send('gear_equip',{item:id});return;}
   if(seedCrop(id)&&intent.command&&!intent.reason)this.preview(h,intent,'world');
   else{h.go('inventory');this.view='main';this.detailOpen=true;this.pocket=slot;}
  }
@@ -126,7 +127,7 @@ export class InventoryView {
   }else{
    const intent=itemIntent(h.world,h.state,h.now,id),message=h.error||this.feedback||intent.reason||def.summary;
    const body=h.text('ItemPurpose',textPages(message,Math.floor((tw-32)/15),2)[0],tx+16,ty+82,tw-32,44,15,h.error?C.danger:C.ink);body.lineHeight=21;
-   const action=h.button('item-action',intent.label,tx+16,ty+140,132,44,()=>{if(intent.command)this.preview(h,intent);else if(intent.target)h.mark(intent.target,def.name);else if(intent.mode)h.go(intent.mode);},h.busy||!!intent.reason&&!intent.target&&!intent.mode,true,'game');action.fontSize=14;
+   const action=h.button('item-action',intent.label,tx+16,ty+140,132,44,()=>{if(intent.command==='gear_equip')void h.send('gear_equip',{item:id});else if(intent.command)this.preview(h,intent);else if(intent.target)h.mark(intent.target,def.name);else if(intent.mode)h.go(intent.mode);},h.busy||!!intent.reason&&!intent.target&&!intent.mode,true,'game');action.fontSize=14;
    const uses=h.button('item-uses','用途与来源',tx+156,ty+140,tw-172,44,()=>{this.view='uses';this.leaf=0;h.redraw(true);},h.busy,false,'page');uses.fontSize=14;
   }
  }

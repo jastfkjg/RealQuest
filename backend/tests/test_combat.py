@@ -57,7 +57,9 @@ def test_crafting_gates_resources_and_exact_output(item,branch,level):
     assert s==before
     s['skill_growth']['building']=1
     with pytest.raises(RuleError): apply(s,'gear_craft',{'target':'armory_counter','item':item},NOW)
-    s['knowledge_growth'][branch]=level; before=copy.deepcopy(s['inventory'])
+    s['knowledge_growth'][branch]=level
+    apply(s,'blueprint_buy',{'target':'armory_counter','item':item},NOW)
+    before=copy.deepcopy(s['inventory'])
     apply(s,'gear_craft',{'target':'armory_counter','item':item},NOW)
     assert s['inventory'][item]==1
     for k,n in WEAPONS[item]['costs'].items(): assert s['inventory'][k]==before[k]-n
@@ -254,7 +256,7 @@ def test_tick_receipts_bounded_and_ordered_across_retry_and_encounter(client):
 
 def test_departure_journal_tracks_combat_magic_and_gate_without_resetting_claims():
     from app.quests import progress, quest_views
-    s=player();assert progress(s,'leave_valley')[:3]==[False,False,False]
+    s=player();s['quests']['leave_valley']={'status':'active','definition_version':1};assert progress(s,'leave_valley')[:3]==[False,False,False]
     s['village_combat']['boss_first']=True;s['knowledge_growth']['magic']=3
     assert progress(s,'leave_valley')[:3]==[True,True,False]
     s['village_combat']['gate_open']=True;s['knowledge_growth']['magic']=0
@@ -298,7 +300,7 @@ def test_craft_retry_and_competing_last_materials_produce_one_weapon(client):
     with Session.begin() as db:
         p=db.scalar(select(Player));s=player();at(s,'workshop','armory_counter')
         s['skill_growth']['building']=1;s['knowledge_growth']['science']=1
-        s['inventory'].update(plank=2,stone=2);p.state=s
+        s['inventory'].update(plank=2,stone=2);s['village_combat']['blueprints']['stone_sword']='QA已学图纸';p.state=s
     key=str(uuid.uuid4());data={'target':'armory_counter','item':'stone_sword'}
     with ThreadPoolExecutor(2) as pool:
         statuses=list(pool.map(lambda _:cmd(client,'gear_craft',data,key).status_code,range(2)))
@@ -310,7 +312,7 @@ def test_craft_retry_and_competing_last_materials_produce_one_weapon(client):
 
 def test_legacy_journal_labels_exemption_without_claiming_boss_achievement():
     from app.quests import quest_views
-    s=player();s.pop('village_combat');s['location']='city';s=upgrade_state(s)
+    s=player();s.pop('village_combat');s.pop('quest_story');s['quests']['leave_valley']={'status':'active'};s['location']='city';s=upgrade_state(s)
     quest=next(q for q in quest_views(s) if q['id']=='leave_valley')
     assert '旧旅程' in quest['objectives'][0] and quest['checks'][:3]==[True,True,True]
     assert not s['village_combat']['boss_first'] and not s['inventory']['gate_stone']
@@ -325,7 +327,7 @@ def combat_step(s,now,**data):
 
 def combat_ready(weapon='stone_sword', location='cave_1'):
     s=enter(player());s['location']=location;c=s['village_combat'];floor_enemies(s,NOW)
-    s['position']={'x':220,'y':240};s['inventory'][weapon]=1;c['equipped']=weapon;combat_step(s,NOW)
+    s['knowledge_growth'].update(science=WEAPONS[weapon]['use_science'],magic=WEAPONS[weapon]['use_magic']);s['position']={'x':220,'y':240};s['inventory'][weapon]=1;c['equipped']=weapon;combat_step(s,NOW)
     return s,c
 
 
@@ -372,8 +374,9 @@ def test_dodge_timed_invulnerability_cooldown_and_resource_integrity():
     from app.combat import hurt_player
     s,c=combat_ready();before=copy.deepcopy(s['inventory']);stamina=s['stamina']['current']
     combat_step(s,NOW+.1,dx=1,dodge=True)
-    assert s['position']['x']>250 and c['dodge_at']>c['time'] and not hurt_player(s,5)
+    assert c['dash']['started']==c['time'] and c['dodge_at']>c['time'] and not hurt_player(s,5)
     ready=c['dodge_at'];combat_step(s,NOW+.2,dx=1,dodge=True);assert c['dodge_at']==ready
+    assert s['position']['x']>250
     combat_step(s,NOW+.3)
     assert hurt_player(s,5) and s['inventory']==before and s['stamina']['current']==stamina
 
@@ -382,10 +385,11 @@ def test_dodge_cannot_cross_pillar_and_cancels_unconsumed_soup():
     s,c=combat_ready();s['position']={'x':270,'y':120};s['inventory']['soup']=2
     c['cast']=dict(kind='soup',started=0,until=1.2)
     combat_step(s,NOW+.1,dx=1,dodge=True)
+    combat_step(s,NOW+.2)
     assert s['position']['x']<288 and walkable(s['position']['x'],s['position']['y'],'cave_1')
     assert c['cast'] is None and s['inventory']['soup']==2
-    apply(s,'world_pause',{'owner':OWNER},NOW+.1);pos=copy.deepcopy(s['position'])
-    apply(s,'cave_tick',dict(owner=OWNER,location='cave_1',encounter=c['encounter'],seq=c['input_seq']+1,dx=1,dy=0,aim_x=300,aim_y=120,dodge=True),NOW+.2)
+    apply(s,'world_pause',{'owner':OWNER},NOW+.2);pos=copy.deepcopy(s['position'])
+    apply(s,'cave_tick',dict(owner=OWNER,location='cave_1',encounter=c['encounter'],seq=c['input_seq']+1,dx=1,dy=0,aim_x=300,aim_y=120,dodge=True),NOW+.3)
     assert s['position']==pos
 
 
@@ -423,9 +427,10 @@ def test_boss_answers_ranged_attacks_and_clears_hostile_shards_on_death():
 def test_queued_dodge_retains_direction_after_movement_release_and_rejects_unbounded_vector():
     s,c=combat_ready();p=copy.deepcopy(s['position'])
     combat_step(s,NOW+.1,dx=0,dy=0,dodge=True,dodge_x=0,dodge_y=1)
+    combat_step(s,NOW+.2)
     assert s['position']['x']==p['x'] and s['position']['y']>p['y']+30
     before=copy.deepcopy(s)
-    with pytest.raises(RuleError):apply(s,'cave_tick',dict(owner=OWNER,location='cave_1',encounter=c['encounter'],seq=c['input_seq']+1,dx=0,dy=0,aim_x=250,aim_y=240,dodge=True,dodge_x=999,dodge_y=0),NOW+.2)
+    with pytest.raises(RuleError):apply(s,'cave_tick',dict(owner=OWNER,location='cave_1',encounter=c['encounter'],seq=c['input_seq']+1,dx=0,dy=0,aim_x=250,aim_y=240,dodge=True,dodge_x=999,dodge_y=0),NOW+.3)
     assert s==before
 
 

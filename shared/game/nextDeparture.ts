@@ -1,4 +1,5 @@
 import type { GameState, NavigationTarget, Panel } from "./protocol";
+import {canReadGate, legacyJourney, isMainTracked} from './story';
 
 export type PreparationTopic = "gear" | "trail" | "growth";
 export interface PreparationAction {
@@ -19,7 +20,7 @@ const armory = { mapId: "workshop", targetId: "armory_counter" };
 export const bed = { mapId: "home", targetId: "home_bed" };
 
 export function hasDepartureNotes(state: GameState) {
-  return !!state.combat && !!state.village_intro?.reviewed;
+  return canReadGate(state) && !!state.combat && !!state.village_intro?.reviewed && (legacyJourney(state) || !!state.village_intro?.briefed);
 }
 export function activePromise(state: GameState) {
   return state.life_journal?.tasks.find((task) => task.status === "active");
@@ -207,10 +208,10 @@ export function nextDeparture(
 }
 export function trackedDeparture(state: GameState, now: number) {
   if (
+    (!legacyJourney(state) && state.quests.gate_preparation?.status !== 'active') ||
     state.village_intro?.dismissed ||
     state.combat?.gate_open ||
-    (state.tracked_quest &&
-      !["settle_in", "leave_valley"].includes(state.tracked_quest))
+    !isMainTracked(state)
   )
     return null;
   return nextDeparture(state, now);
@@ -239,8 +240,7 @@ export function returnNote(
     !hasDepartureNotes(state) ||
     state.village_intro?.dismissed ||
     state.combat?.gate_open ||
-    (state.tracked_quest &&
-      !["settle_in", "leave_valley"].includes(state.tracked_quest))
+    !isMainTracked(state) || (!legacyJourney(state) && state.quests.gate_preparation?.status !== 'active')
   )
     return null;
   const step = nextDeparture(state, now);

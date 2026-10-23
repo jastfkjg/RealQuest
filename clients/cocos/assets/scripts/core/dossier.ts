@@ -18,5 +18,5 @@ export function registration(name: string, appearance: number) {
 export function dossierAttributes(state: GameState) {
   return [...Object.entries(attributeLabels).map(([id, label]) => ({ id, label, value: state.attributes[id as keyof typeof attributeLabels] })),
     { id: 'energy', label: '能量', value: state.energy }, { id: 'knowledge_shard', label: '知识碎片', value: state.knowledge_shard },
-    { id: 'gold', label: '金币', value: state.inventory.gold || 0 }];
+    { id: 'gold', label: '钱袋', value: state.inventory.gold || 0 }];
 }

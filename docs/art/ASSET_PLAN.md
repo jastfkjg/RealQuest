@@ -1,5 +1,29 @@
 # RealQuest Asset Plan and Provenance
 
+## 四向持剑 — 角色0与石刃短剑
+
+用户确认四向六阶段源图风格后，内置image_gen补充持剑行走与闪避关键帧。`tools/build_sword_art.py`以实际主体边界归一化为2张透明图集，四向共40姿势，96×96帧、脚底锚点 `[48,80]`、世界缩放 `2/3`，nearest显示。人物、握剑手、剑和短弧在同一帧，运行中隐藏旧独立武器节点。仅角色0装备石刃短剑时适用；其他外观/武器保留原绑定，未扩展为全武器动画体系。
+
+源图、所有提示词、中间稿、裁切/脚底测量/处理与SHA256见[sword-motion-v1.json](sword-motion-v1.json)；原图不进运行包，没有第三方素材上传或字体添加。`--check`可逐字节重建。补帧为两关键帧行走/闪避，没有专用受击造型；用户批准源图风格，实际动作和手感仍需游戏内验收，见[持剑任务](../tasks/sword-motion-preview.md)。
+
+## 完整养殖美术 — task125
+
+内置image_gen生成5张原创透明源表，原图与完整提示词保存在`assets/generated/hearthwood/ranching-v1/`。`tools/build_ranching_art.py`按实际测量边界裁切，alpha≥160并保留最大连通主体以清除邻格碎片，以最近邻输出52张运行图：七种动物的21个幼年/成长期/成年形态、9张住所升级、6个设施、3个牧场道具、12种产物与1种饲料。动物采用同组固定源像素比例，保留各阶段的体型和特征差异；12个优质产物明确复用对应普通产物原画，由本地化文字表示品质。
+
+源图不进运行包，未复制星露谷或其他第三方美术、购买素材或添加字体。所有来源、提示词/脚本哈希、裁切、透明处理、尺寸和绑定见[ranching-art-v1.json](ranching-art-v1.json)，`--check`验证运行图、manifest及4张实际像素尺寸联系表可复现。联系表已检查，实际Cocos浏览器呈现及玩家视觉反馈仍待验收；不以生成稿或联系表推定用户批准。
+
+## 三路线武器与护具 — task123
+
+内置image_gen生成原创1536×1024透明24格源表，保留原图与完整提示词；tools/build_equipment_art.py按256px格裁切、alpha≥160、最近邻缩放到96×96，输出18把武器与6件护具。图标与角色持握共用同一原画；朝向、起手和收势由原生节点变换，轨迹仍为原创Graphics。源表不进运行包，未下载/上传第三方资产或字体。4种精密材料暂用原有材料图的明确别名。来源、尺寸、哈希和处理见equipment-art-v1.json；实际截图与验收见任务123，玩家视觉批准尚待反馈。
+
+## 锄头交互 — task122
+
+复用task121土壤代码美术和task120作物72图。目标框、金属锄头/木柄与少量土屑为Bootstrap内原创Cocos Graphics，减少动态时不位移动效；无新位图、字体、下载或生成服务。道路从原场景代码逐点提取到权威`backend/app/village_terrain.json`，美术与可耕判定共用，7张原场景PNG逐像素核对保持相同。
+
+## 田地土壤代码美术 — task121
+
+`clients/cocos/assets/scripts/farmPaint.ts`为项目原创Cocos Graphics表现，复用`paintGraphics`，以半世界单位像素绘制土边/四道土垄/凹沟/碎土；相同地块ID固定纹理，干湿共享几何。无外部素材、图片处理、字体、新下载或生成服务。`asset-manifest.json`记录源码哈希与42×36世界单位范围，作物仍用task120现有绑定。候选效果待玩家视觉反馈。
+
 ## 原创种植美术 — task120
 
 内置image_gen生成3张1536×1024透明RGBA源表，12作物×6角色=72运行时PNG，含每种种子包、4个田间阶段、背包收获物。源图和完整提示词保存在assets/generated/hearthwood/farming-v1/，不进入运行包。tools/build_farming_art.py按记录的列/行边界切片、alpha>=160、田间仅保留最大连接植物区域以排除邻格碎片、最近邻缩放；物品64×64、植物96×96，植物按一致源像素比例与根部基线布局。全部尺寸/裁切/处理/原始与衍生哈希在farming-art-v1.json，Cocos绑定保留nearest/不裁切。没有复制星露谷或第三方素材、字体、付费包。旧seed/crop源图保留，运行时绑定改为本套原创素材。素材和实际渲染仍待玩家视觉确认。
@@ -385,3 +409,13 @@ Task113不新增、生成、下载或替换任何图片、字体、音效。沿�
 ## Cocos 洞穴战斗动作 — 2026-10-22 任务114
 
 复用已授权角色帧、原有洞穴和四类怪物几何。武器轮廓、挥击弧线、矛尖、杖晶、确认命中与石壳虫破绽由原生Graphics按世界坐标绘制；现有角色/怪物节点作短暂姿态变换，未伪称新增精灵帧。新增挥击、施法、命中、受击和击败声音由原生WebAudio振荡器/包络合成，沿用用户声音开关与暂停/静音/释放生命周期。无新图片、字体、音频文件、外部下载或生成服务；源素材未改。`asset-manifest.json` 的 `cocos_combat_experience` 记录源码与处理方式，生成副本哈希由Cocos绑定清单保存。画面候选和实测证据见任务114，不扩大此前视觉批准。
+
+## Task124 商店
+
+复用现有notice-timber、notice-paper、satchel、mira和语义物品图；货架横梁由Cocos绘制，无新增运行时图包。两张shop-*-concept-v2.png是用户批准方向的设计参考，不进入资源绑定，不代表实际库存。所有文案继续使用原生文字。
+
+Task124第二轮：增加原创AI生成`shop-interior-v2.png`店内环境，所有控件/文案原生叠加。只作商店背景，复用现有店招木框、纸页、米拉和物品；源图和提示词、哈希见asset-manifest的cocos_shop_counter.background。
+
+## 建造切片 task128：现有资源复用
+
+木箱与加固箱的两项物品图绑定复用原始原创 `detail/interiors/chest-closed.png` 字节；未修改源图、未引入外部资源。哈希及运行绑定见 asset-manifest.json 的 construction_128_reuse 与 clients/cocos/asset-bindings.json。平面图使用既有床、desk-96、hearth、planter，网格/文字原生绘制。阿榆暂复用 noah-actor；独立木匠造型与作息仍是明确缺口，未记为用户已批准。

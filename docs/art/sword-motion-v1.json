@@ -1,0 +1,1660 @@
+{
+  "schema_version": 1,
+  "created_on": "2026-10-23",
+  "status": "runtime_derivative_candidate_owner_style_approved_runtime_review_pending",
+  "owner_checkpoint": "Owner accepted the four-direction six-key-pose preview with 合适 on 2026-10-23; derived atlas and gameplay have separate review.",
+  "creator": "OpenAI built-in image_gen; original RealQuest artwork",
+  "rights": "Project-generated source, no third-party source or font added",
+  "script": "tools/build_sword_art.py",
+  "script_sha256": "0237e040e2c368c27a6f5865002faa680e562b1123cd7027c38ad4812bdd2e55",
+  "source": {
+    "path": "docs/art/references/sword-motion-preview-v1/preview.png",
+    "sha256": "98b844237e599b6dee8b04a1acf46ff9229c21ecf59aa81339ea839e29acdc8e",
+    "width": 1536,
+    "height": 1024,
+    "provenance": "docs/art/references/sword-motion-preview-v1/provenance.json",
+    "prompts": [
+      "docs/art/references/sword-motion-preview-v1/generate.prompt.txt",
+      "docs/art/references/sword-motion-preview-v1/refine.prompt.txt"
+    ]
+  },
+  "sources": [
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/motion-draft.png",
+      "sha256": "08d7cc19e908869d3d1c8c8a022fc90bb1a864c71cd17a4ce4930dc0da932ab2",
+      "bytes": 1197568,
+      "width": 1254,
+      "height": 1254,
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/motion.prompt.txt",
+      "prompt_sha256": "18e3a339b7fa55a801a2dd289003898faadd65165f594144c61793fe91000ada",
+      "runtime_input": false
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "sha256": "b8c4ff924d42022b2ad9fbf212ff7e5fdc36d1529ccf61bae69aa77d2b6bb348",
+      "bytes": 1165994,
+      "width": 1254,
+      "height": 1254,
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/motion-refine.prompt.txt",
+      "prompt_sha256": "b6b203d890d742eecaab7f7823f2c6cb340ae381b54276d8b829431c1370e585",
+      "runtime_input": true
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing.png",
+      "sha256": "97c0177c1cccd607f36571f6afa4a68c912f474a524817d4b48c9f28608f684a",
+      "bytes": 849473,
+      "width": 2172,
+      "height": 724,
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/passing.prompt.txt",
+      "prompt_sha256": "87c80b48896c81efa21f3211596719e5bf6886f4d053b0d7dc51cef3480a86ac",
+      "runtime_input": false
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing-front.png",
+      "sha256": "6119b39b4de6ebaa15cdee4615eac4f18eff17d7976e7e21ce681df489e92e50",
+      "bytes": 542800,
+      "width": 1774,
+      "height": 887,
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/passing-front.prompt.txt",
+      "prompt_sha256": "1a121253ee86f495debd15695c9c4cafc964c1818bf71793f3d9152ad712cd44",
+      "runtime_input": false
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+      "sha256": "f367682c24fcc69e0439abd8ef8f260e1d225abdb2cfe4b75ce015aa10e17d77",
+      "bytes": 822925,
+      "width": 2172,
+      "height": 724,
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/passing-compact.prompt.txt",
+      "prompt_sha256": "9c6ad6dbdebd459568b29bacd07fb02ebd11dc2f090543156804fcc75a340853",
+      "runtime_input": true
+    }
+  ],
+  "prompts": [
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/generate.prompt.txt",
+      "sha256": "2084e76da28f38ace567e62252c70160e701d70c3155df4a4245a5ecf329cfdf"
+    },
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/refine.prompt.txt",
+      "sha256": "97bee67c88e32501ca34d6de96378396853a4e674c29fe6fb33bfff22f4be579"
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/motion-refine.prompt.txt",
+      "sha256": "b6b203d890d742eecaab7f7823f2c6cb340ae381b54276d8b829431c1370e585"
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/motion.prompt.txt",
+      "sha256": "18e3a339b7fa55a801a2dd289003898faadd65165f594144c61793fe91000ada"
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing-compact.prompt.txt",
+      "sha256": "9c6ad6dbdebd459568b29bacd07fb02ebd11dc2f090543156804fcc75a340853"
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing-front.prompt.txt",
+      "sha256": "1a121253ee86f495debd15695c9c4cafc964c1818bf71793f3d9152ad712cd44"
+    },
+    {
+      "path": "assets/generated/hearthwood/sword-motion-v1/passing.prompt.txt",
+      "sha256": "87c80b48896c81efa21f3211596719e5bf6886f4d053b0d7dc51cef3480a86ac"
+    }
+  ],
+  "generation_review": "Initial supplemental walk B omitted some blades; targeted refinement repaired blades but retained near-identical strides. Separate passing drafts corrected feet and hands but became too slender. Final passing-compact.png preserves correct sword hands and restores compact proportions. Only motion.png and passing-compact.png contribute to the motion atlas; all drafts and prompts remain preserved outside runtime bundles.",
+  "processing": "Measured complete silhouettes; alpha >= 160; hidden transparent RGB cleared; nearest-neighbor packing; fixed per-direction body scale and common boot anchor. Original motion poses generated with built-in image_gen; Python performs no source repaint, invented pose, added weapon or painted pixel.",
+  "frame_size": [
+    96,
+    96
+  ],
+  "sheet_size": [
+    576,
+    384
+  ],
+  "foot_anchor_from_top_left": [
+    48,
+    80
+  ],
+  "world_scale": 0.6666666666666666,
+  "world_canvas_size": [
+    64,
+    64
+  ],
+  "standing_visible_body_world_height": 36,
+  "directions": [
+    "south",
+    "north",
+    "west",
+    "east"
+  ],
+  "stages": [
+    "ready",
+    "anticipation",
+    "start",
+    "active",
+    "follow",
+    "recovery"
+  ],
+  "sampling": "nearest",
+  "trim": false,
+  "poses": [
+    {
+      "direction": "south",
+      "stage": "ready",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        40,
+        46,
+        197,
+        254
+      ],
+      "source_foot_anchor": [
+        138,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        41,
+        54
+      ],
+      "destination_offset": [
+        23,
+        26
+      ],
+      "visible_bounds": [
+        23,
+        26,
+        64,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "anticipation",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        330,
+        51,
+        463,
+        254
+      ],
+      "source_foot_anchor": [
+        395,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        35,
+        53
+      ],
+      "destination_offset": [
+        31,
+        27
+      ],
+      "visible_bounds": [
+        31,
+        27,
+        66,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "start",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        540,
+        52,
+        719,
+        254
+      ],
+      "source_foot_anchor": [
+        652,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        46,
+        52
+      ],
+      "destination_offset": [
+        19,
+        28
+      ],
+      "visible_bounds": [
+        19,
+        28,
+        65,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "active",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        807,
+        53,
+        1033,
+        254
+      ],
+      "source_foot_anchor": [
+        878.5,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        59,
+        52
+      ],
+      "destination_offset": [
+        29,
+        28
+      ],
+      "visible_bounds": [
+        29,
+        28,
+        88,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "follow",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1081,
+        57,
+        1283,
+        254
+      ],
+      "source_foot_anchor": [
+        1150,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        52,
+        51
+      ],
+      "destination_offset": [
+        30,
+        29
+      ],
+      "visible_bounds": [
+        30,
+        29,
+        82,
+        80
+      ],
+      "atlas_rect": [
+        384,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "recovery",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1322,
+        46,
+        1477,
+        254
+      ],
+      "source_foot_anchor": [
+        1419,
+        254
+      ],
+      "scale": 0.25961538461538464,
+      "resized_size": [
+        40,
+        54
+      ],
+      "destination_offset": [
+        23,
+        26
+      ],
+      "visible_bounds": [
+        23,
+        26,
+        63,
+        80
+      ],
+      "atlas_rect": [
+        480,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "ready",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        71,
+        288,
+        242,
+        498
+      ],
+      "source_foot_anchor": [
+        136,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        44,
+        54
+      ],
+      "destination_offset": [
+        31,
+        26
+      ],
+      "visible_bounds": [
+        31,
+        26,
+        75,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "anticipation",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        327,
+        293,
+        472,
+        498
+      ],
+      "source_foot_anchor": [
+        402.5,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        37,
+        53
+      ],
+      "destination_offset": [
+        29,
+        27
+      ],
+      "visible_bounds": [
+        29,
+        27,
+        66,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "start",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        570,
+        293,
+        789,
+        498
+      ],
+      "source_foot_anchor": [
+        639,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        56,
+        53
+      ],
+      "destination_offset": [
+        30,
+        27
+      ],
+      "visible_bounds": [
+        30,
+        27,
+        86,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "active",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        803,
+        296,
+        993,
+        498
+      ],
+      "source_foot_anchor": [
+        918.5,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        49,
+        52
+      ],
+      "destination_offset": [
+        18,
+        28
+      ],
+      "visible_bounds": [
+        18,
+        28,
+        67,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "follow",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1053,
+        297,
+        1251,
+        498
+      ],
+      "source_foot_anchor": [
+        1174.5,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        51,
+        52
+      ],
+      "destination_offset": [
+        17,
+        28
+      ],
+      "visible_bounds": [
+        17,
+        28,
+        68,
+        80
+      ],
+      "atlas_rect": [
+        384,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "recovery",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1354,
+        288,
+        1515,
+        498
+      ],
+      "source_foot_anchor": [
+        1416,
+        498
+      ],
+      "scale": 0.2571428571428571,
+      "resized_size": [
+        41,
+        54
+      ],
+      "destination_offset": [
+        32,
+        26
+      ],
+      "visible_bounds": [
+        32,
+        26,
+        73,
+        80
+      ],
+      "atlas_rect": [
+        480,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "ready",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        48,
+        529,
+        197,
+        745
+      ],
+      "source_foot_anchor": [
+        141,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        37,
+        54
+      ],
+      "destination_offset": [
+        25,
+        26
+      ],
+      "visible_bounds": [
+        25,
+        26,
+        62,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "anticipation",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        311,
+        516,
+        478,
+        745
+      ],
+      "source_foot_anchor": [
+        400.5,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        42,
+        57
+      ],
+      "destination_offset": [
+        26,
+        23
+      ],
+      "visible_bounds": [
+        26,
+        23,
+        68,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "start",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        522,
+        530,
+        745,
+        745
+      ],
+      "source_foot_anchor": [
+        666,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        56,
+        54
+      ],
+      "destination_offset": [
+        12,
+        26
+      ],
+      "visible_bounds": [
+        12,
+        26,
+        68,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "active",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        772,
+        534,
+        1001,
+        745
+      ],
+      "source_foot_anchor": [
+        923,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        57,
+        53
+      ],
+      "destination_offset": [
+        10,
+        27
+      ],
+      "visible_bounds": [
+        10,
+        27,
+        67,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "follow",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1053,
+        530,
+        1262,
+        745
+      ],
+      "source_foot_anchor": [
+        1184,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        52,
+        54
+      ],
+      "destination_offset": [
+        15,
+        26
+      ],
+      "visible_bounds": [
+        15,
+        26,
+        67,
+        80
+      ],
+      "atlas_rect": [
+        384,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "recovery",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1328,
+        529,
+        1474,
+        745
+      ],
+      "source_foot_anchor": [
+        1420,
+        745
+      ],
+      "scale": 0.25,
+      "resized_size": [
+        36,
+        54
+      ],
+      "destination_offset": [
+        25,
+        26
+      ],
+      "visible_bounds": [
+        25,
+        26,
+        61,
+        80
+      ],
+      "atlas_rect": [
+        480,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "ready",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        73,
+        777,
+        223,
+        989
+      ],
+      "source_foot_anchor": [
+        125,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        38,
+        54
+      ],
+      "destination_offset": [
+        35,
+        26
+      ],
+      "visible_bounds": [
+        35,
+        26,
+        73,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "anticipation",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        315,
+        782,
+        471,
+        989
+      ],
+      "source_foot_anchor": [
+        386,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        40,
+        53
+      ],
+      "destination_offset": [
+        30,
+        27
+      ],
+      "visible_bounds": [
+        30,
+        27,
+        70,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "start",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        560,
+        782,
+        762,
+        989
+      ],
+      "source_foot_anchor": [
+        631.5,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        51,
+        53
+      ],
+      "destination_offset": [
+        30,
+        27
+      ],
+      "visible_bounds": [
+        30,
+        27,
+        81,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "active",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        803,
+        782,
+        1028,
+        989
+      ],
+      "source_foot_anchor": [
+        871.5,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        57,
+        53
+      ],
+      "destination_offset": [
+        31,
+        27
+      ],
+      "visible_bounds": [
+        31,
+        27,
+        88,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "follow",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1076,
+        783,
+        1284,
+        989
+      ],
+      "source_foot_anchor": [
+        1147,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        53,
+        52
+      ],
+      "destination_offset": [
+        30,
+        28
+      ],
+      "visible_bounds": [
+        30,
+        28,
+        83,
+        80
+      ],
+      "atlas_rect": [
+        384,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "recovery",
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_crop": [
+        1358,
+        777,
+        1509,
+        989
+      ],
+      "source_foot_anchor": [
+        1412,
+        989
+      ],
+      "scale": 0.25471698113207547,
+      "resized_size": [
+        38,
+        54
+      ],
+      "destination_offset": [
+        34,
+        26
+      ],
+      "visible_bounds": [
+        34,
+        26,
+        72,
+        80
+      ],
+      "atlas_rect": [
+        480,
+        288,
+        96,
+        96
+      ]
+    }
+  ],
+  "motion_stages": [
+    "walk_contact",
+    "walk_passing",
+    "dodge_lean",
+    "dodge_recover"
+  ],
+  "motion_poses": [
+    {
+      "direction": "south",
+      "stage": "walk_contact",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        48,
+        35,
+        233,
+        302
+      ],
+      "source_foot_anchor": [
+        155,
+        302
+      ],
+      "scale": 0.20224719101123595,
+      "resized_size": [
+        37,
+        54
+      ],
+      "destination_offset": [
+        26,
+        26
+      ],
+      "visible_bounds": [
+        26,
+        26,
+        63,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "walk_passing",
+      "source": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+      "source_crop": [
+        56,
+        118,
+        424,
+        641
+      ],
+      "source_foot_anchor": [
+        285,
+        641
+      ],
+      "scale": 0.10325047801147227,
+      "resized_size": [
+        38,
+        54
+      ],
+      "destination_offset": [
+        24,
+        26
+      ],
+      "visible_bounds": [
+        24,
+        26,
+        62,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "dodge_lean",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        667,
+        94,
+        893,
+        300
+      ],
+      "source_foot_anchor": [
+        775.5,
+        300
+      ],
+      "scale": 0.20224719101123595,
+      "resized_size": [
+        46,
+        42
+      ],
+      "destination_offset": [
+        26,
+        38
+      ],
+      "visible_bounds": [
+        26,
+        38,
+        72,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "south",
+      "stage": "dodge_recover",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        1004,
+        74,
+        1204,
+        300
+      ],
+      "source_foot_anchor": [
+        1114.5,
+        300
+      ],
+      "scale": 0.20224719101123595,
+      "resized_size": [
+        40,
+        46
+      ],
+      "destination_offset": [
+        26,
+        34
+      ],
+      "visible_bounds": [
+        26,
+        34,
+        66,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        0,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "walk_contact",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        74,
+        333,
+        282,
+        601
+      ],
+      "source_foot_anchor": [
+        151.5,
+        601
+      ],
+      "scale": 0.20149253731343283,
+      "resized_size": [
+        42,
+        54
+      ],
+      "destination_offset": [
+        32,
+        26
+      ],
+      "visible_bounds": [
+        32,
+        26,
+        74,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "walk_passing",
+      "source": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+      "source_crop": [
+        689,
+        118,
+        1057,
+        640
+      ],
+      "source_foot_anchor": [
+        835,
+        640
+      ],
+      "scale": 0.10344827586206896,
+      "resized_size": [
+        38,
+        54
+      ],
+      "destination_offset": [
+        33,
+        26
+      ],
+      "visible_bounds": [
+        33,
+        26,
+        71,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "dodge_lean",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        680,
+        387,
+        915,
+        601
+      ],
+      "source_foot_anchor": [
+        795,
+        601
+      ],
+      "scale": 0.20149253731343283,
+      "resized_size": [
+        47,
+        43
+      ],
+      "destination_offset": [
+        25,
+        37
+      ],
+      "visible_bounds": [
+        25,
+        37,
+        72,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "north",
+      "stage": "dodge_recover",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        1028,
+        374,
+        1235,
+        601
+      ],
+      "source_foot_anchor": [
+        1109.5,
+        601
+      ],
+      "scale": 0.20149253731343283,
+      "resized_size": [
+        42,
+        46
+      ],
+      "destination_offset": [
+        32,
+        34
+      ],
+      "visible_bounds": [
+        32,
+        34,
+        74,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        96,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "walk_contact",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        51,
+        634,
+        239,
+        897
+      ],
+      "source_foot_anchor": [
+        164,
+        897
+      ],
+      "scale": 0.20532319391634982,
+      "resized_size": [
+        39,
+        54
+      ],
+      "destination_offset": [
+        25,
+        26
+      ],
+      "visible_bounds": [
+        25,
+        26,
+        64,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "walk_passing",
+      "source": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+      "source_crop": [
+        1178,
+        118,
+        1516,
+        640
+      ],
+      "source_foot_anchor": [
+        1400,
+        640
+      ],
+      "scale": 0.10344827586206896,
+      "resized_size": [
+        35,
+        54
+      ],
+      "destination_offset": [
+        25,
+        26
+      ],
+      "visible_bounds": [
+        25,
+        26,
+        60,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "dodge_lean",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        664,
+        686,
+        910,
+        889
+      ],
+      "source_foot_anchor": [
+        798.5,
+        889
+      ],
+      "scale": 0.20532319391634982,
+      "resized_size": [
+        51,
+        42
+      ],
+      "destination_offset": [
+        20,
+        38
+      ],
+      "visible_bounds": [
+        20,
+        38,
+        71,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "west",
+      "stage": "dodge_recover",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        1010,
+        663,
+        1232,
+        889
+      ],
+      "source_foot_anchor": [
+        1119,
+        889
+      ],
+      "scale": 0.20532319391634982,
+      "resized_size": [
+        46,
+        46
+      ],
+      "destination_offset": [
+        26,
+        34
+      ],
+      "visible_bounds": [
+        26,
+        34,
+        72,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        192,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "walk_contact",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        64,
+        934,
+        259,
+        1199
+      ],
+      "source_foot_anchor": [
+        140.5,
+        1199
+      ],
+      "scale": 0.2037735849056604,
+      "resized_size": [
+        40,
+        54
+      ],
+      "destination_offset": [
+        32,
+        26
+      ],
+      "visible_bounds": [
+        32,
+        26,
+        72,
+        80
+      ],
+      "atlas_rect": [
+        0,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "walk_passing",
+      "source": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+      "source_crop": [
+        1770,
+        118,
+        2097,
+        640
+      ],
+      "source_foot_anchor": [
+        1885,
+        640
+      ],
+      "scale": 0.10344827586206896,
+      "resized_size": [
+        34,
+        54
+      ],
+      "destination_offset": [
+        36,
+        26
+      ],
+      "visible_bounds": [
+        36,
+        26,
+        70,
+        80
+      ],
+      "atlas_rect": [
+        96,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "dodge_lean",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        659,
+        976,
+        897,
+        1195
+      ],
+      "source_foot_anchor": [
+        773,
+        1195
+      ],
+      "scale": 0.2037735849056604,
+      "resized_size": [
+        48,
+        45
+      ],
+      "destination_offset": [
+        25,
+        35
+      ],
+      "visible_bounds": [
+        25,
+        35,
+        73,
+        80
+      ],
+      "atlas_rect": [
+        192,
+        288,
+        96,
+        96
+      ]
+    },
+    {
+      "direction": "east",
+      "stage": "dodge_recover",
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_crop": [
+        999,
+        963,
+        1207,
+        1187
+      ],
+      "source_foot_anchor": [
+        1106.5,
+        1187
+      ],
+      "scale": 0.2037735849056604,
+      "resized_size": [
+        42,
+        46
+      ],
+      "destination_offset": [
+        26,
+        34
+      ],
+      "visible_bounds": [
+        26,
+        34,
+        68,
+        80
+      ],
+      "atlas_rect": [
+        288,
+        288,
+        96,
+        96
+      ]
+    }
+  ],
+  "records": [
+    {
+      "appearance_id": 0,
+      "weapon_id": "stone_sword",
+      "path": "assets/derived/sword-motion-v1/actor-0.png",
+      "binding": "combat/sword-actor-0",
+      "width": 576,
+      "height": 384,
+      "sha256": "3b0975e2b0c9350a35630ed3e0bf5709cd07efc40a7f352a4387ac6e06ea159e",
+      "bytes": 101340,
+      "alpha": [
+        0,
+        255
+      ],
+      "source": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "source_sha256": "98b844237e599b6dee8b04a1acf46ff9229c21ecf59aa81339ea839e29acdc8e",
+      "prompt_path": "docs/art/references/sword-motion-preview-v1/refine.prompt.txt",
+      "prompt_sha256": "97bee67c88e32501ca34d6de96378396853a4e674c29fe6fb33bfff22f4be579",
+      "processing_sources": [
+        {
+          "path": "docs/art/references/sword-motion-preview-v1/preview.png",
+          "sha256": "98b844237e599b6dee8b04a1acf46ff9229c21ecf59aa81339ea839e29acdc8e"
+        }
+      ]
+    },
+    {
+      "appearance_id": 0,
+      "weapon_id": "stone_sword",
+      "path": "assets/derived/sword-motion-v1/motion-0.png",
+      "binding": "combat/sword-motion-0",
+      "width": 384,
+      "height": 384,
+      "sha256": "0da86900aa6d80c351344b43e43c37848d8cbdeef3f78f6d2ba1f9491e3769cd",
+      "bytes": 59461,
+      "alpha": [
+        0,
+        255
+      ],
+      "source": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+      "source_sha256": "b8c4ff924d42022b2ad9fbf212ff7e5fdc36d1529ccf61bae69aa77d2b6bb348",
+      "prompt_path": "assets/generated/hearthwood/sword-motion-v1/motion-refine.prompt.txt",
+      "prompt_sha256": "b6b203d890d742eecaab7f7823f2c6cb340ae381b54276d8b829431c1370e585",
+      "processing_sources": [
+        {
+          "path": "assets/generated/hearthwood/sword-motion-v1/motion.png",
+          "sha256": "b8c4ff924d42022b2ad9fbf212ff7e5fdc36d1529ccf61bae69aa77d2b6bb348"
+        },
+        {
+          "path": "assets/generated/hearthwood/sword-motion-v1/passing-compact.png",
+          "sha256": "f367682c24fcc69e0439abd8ef8f260e1d225abdb2cfe4b75ce015aa10e17d77"
+        }
+      ]
+    }
+  ],
+  "contact_sheets": [
+    {
+      "path": "output/cocos-sword-127/art-contact.png",
+      "sha256": "cffa749913625a05f0cab7d94a79043dd3c120782811c63e99a4f1fa2dd4c7b2"
+    },
+    {
+      "path": "output/cocos-sword-127/motion-contact.png",
+      "sha256": "55dcc031aadc2188f65bb43921c85737068ea083ec769e91785a44ba3010a82a"
+    }
+  ],
+  "limits": [
+    "The attack source contains six key poses per direction; supplementary genuine artwork provides two walk and two dodge keys per direction. There is no dedicated damage pose.",
+    "Weapon and arc are painted into the source pose; this atlas represents the accepted short-sword silhouette, not independent replacement sword layers.",
+    "This slice is actor-0 and stone_sword only. Other appearances and weapons must retain their existing presentation.",
+    "Two-frame walk/dodge cycles are limited key animation, not a complete high-frame-count animation set. Supplementary generated frames are candidates for runtime review.",
+    "Owner approval covers source style/proportions/poses only; runtime timing and scene readability require actual Cocos review."
+  ]
+}

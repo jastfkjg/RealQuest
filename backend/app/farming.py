@@ -2,11 +2,12 @@
 import json
 from pathlib import Path
 from .daynight import DAY_SECONDS, clock_elapsed
+from .farm_land import available_cells, soil_reason
 CROPS = json.loads(Path(__file__).with_name('crops.json').read_text())
 BY_ID = {c['id']: c for c in CROPS}
 BY_SEED = {c['seed']: c for c in CROPS}
 BY_ITEM = {c['item']: c for c in CROPS}
-TILL_COST = {'gold': 4, 'wood': 1, 'stone': 1}
+TILL_COST = {}
 ACTION_STAMINA = {'till': 4, 'plant': 2, 'water': 2, 'harvest': 1, 'reclaim': 2}
 
 def ensure_farm(state):
@@ -17,7 +18,8 @@ def ensure_farm(state):
             state['storage'].setdefault(item, 0)
 
 def capacity(state):
-    return {1: 18, 2: 30, 3: 42}.get(state['buildings']['home'], 42)
+    from .world import HOME_LAND
+    return len({o['id'] for o in available_cells(HOME_LAND)} | set(state['farm']['tilled']))
 
 def duration(state, crop, regrow=False):
     return crop['regrow_days' if regrow else 'days'] * DAY_SECONDS * (0.75 if state['buildings']['home'] >= 2 else 1)
@@ -41,13 +43,14 @@ def farm_view(state, now):
 def command(state, action, data, now, obj, require, spend, recover_stamina, bump):
     ensure_farm(state)
     target, farm = obj['id'], state['farm']
-    require(obj['kind'] in ['plot','soil'], '只能在家园标出的可耕土地上操作')
+    require(obj['kind'] in ['plot','soil'], '只能在家园草地或田地上操作')
     plot = state['plots'].get(target)
     crop = None
     if action == 'till':
         require(obj['kind'] == 'soil' and target not in farm['tilled'], '这里已经开垦')
-        require(len(farm['tilled']) < capacity(state), '田地已达家园上限，请先升级家园')
-        require(all(state['inventory'].get(k,0)>=v for k,v in TILL_COST.items()), '开垦需要 4 金币、1 木材、1 石料')
+        from .world import HOME_LAND
+        reason=soil_reason(HOME_LAND,obj)
+        require(reason is None, reason)
     else:
         require(target in farm['tilled'], '请先开垦这块土地')
         if action == 'plant':
@@ -70,11 +73,11 @@ def command(state, action, data, now, obj, require, spend, recover_stamina, bump
     require(state['stamina']['current']>=cost, f'体力不足，需要 {cost} 点；回家睡觉可补满')
     state['stamina']['current']-=cost
     if action=='till':
-        spend(state,TILL_COST);farm['tilled'].append(target)
+        farm['tilled'].append(target)
         return '开垦了一块田地，位置已保存。'
     if action=='reclaim':
         farm['tilled'].remove(target)
-        return '田地已恢复为草地，可重新选择位置开垦；材料不返还。'
+        return '田地已恢复为草地，可用锄头重新开垦。'
     tick=clock_elapsed(state,now)
     if action=='plant':
         spend(state,{crop['seed']:1})

@@ -100,6 +100,11 @@ def snapshot(state, **extra):
     view['market'] = market_view(view, now)
     from .farming import farm_view
     view['farming'] = farm_view(view, now)
+    from .ranching import ranch_view
+    from .construction import settle_construction, construction_view
+    settle_construction(view, now)
+    view['construction_view'] = construction_view(view, now)
+    view['ranching'] = ranch_view(view, now)
     view['npc_social'] = social_view(view, view['market']['date'])
     view['sleep_rules'] = sleep_rules()
     from .journey import quotes

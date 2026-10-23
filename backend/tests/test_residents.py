@@ -138,6 +138,7 @@ def test_shop_counter_and_noah_commissions_work_away_from_original_anchors():
     with pytest.raises(RuleError):apply(s,'market_trade',{'target':'mira','side':'buy','item':'seed'},NOW)
     s=resident_state('noah',21);key=str(uuid.uuid4())
     assert s['location']=='guild'
+    s['quests']['first_harvest']={'status':'claimed'}
     apply(s,'quest_accept',{'quest_id':'forest_path'},NOW)
     assert s['quests']['forest_path']['status']=='active'
     apply(s,'life_accept',{'target':'noah','task_id':key,'hours':1,'kind':'work'},NOW)

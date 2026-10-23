@@ -4,16 +4,9 @@ import uuid
 from collections import deque
 from .daynight import clock_view, DAY_SECONDS
 
-WEAPONS = {
-    'stone_sword': dict(name='石刃短剑', price=24, damage=8, interval=.48, reach=34, stamina=0, magic=False, style='sweep', windup=.10, knockback=15,
-                        science=1, magic_level=1, either=True, costs={'plank': 2, 'stone': 2}),
-    'reinforced_sword': dict(name='加固短剑', price=96, damage=12, interval=.48, reach=38, stamina=0, magic=False, style='sweep', windup=.10, knockback=18,
-                        science=1, magic_level=1, either=True, costs={'plank': 3, 'stone': 4, 'shell': 2, 'gold': 8}),
-    'spring_spear': dict(name='弹簧长矛', price=120, damage=13, interval=.70, reach=56, stamina=0, magic=False, style='thrust', windup=.16, knockback=22,
-                        science=1, magic_level=0, either=False, costs={'plank': 3, 'stone': 4, 'shell': 2, 'gold': 10}),
-    'glow_staff': dict(name='微光短杖', price=120, damage=10, interval=.72, reach=128, stamina=0, magic=True, style='bolt', windup=.18, knockback=6,
-                        science=0, magic_level=2, either=False, costs={'plank': 3, 'stone': 3, 'crystal': 2, 'gel': 2, 'gold': 10}),
-}
+from .equipment import WEAPONS
+from . import equipment
+
 ENEMIES = {
     'slime': dict(name='苔团', max_hp=18, armor=0, damage=5, windup=.9, interval=2.4, speed=96, loot='gel', gold=2),
     'bat': dict(name='洞穴蝠', max_hp=14, armor=0, damage=4, windup=.7, interval=2., speed=130, loot='crystal', gold=3),
@@ -23,7 +16,7 @@ ENEMIES = {
 FLOORS = {1: ['slime']*3, 2: ['slime', 'bat', 'slime', 'bat'],
           3: ['beetle', 'slime', 'beetle'], 4: ['bat', 'beetle', 'slime', 'bat', 'beetle'], 5: ['boss']}
 SPAWNS = [(240, 344), (408, 240), (512, 144), (256, 208), (480, 352)]
-MATERIAL_NAMES = {'plank':'木板','stone':'石料','shell':'硬壳','gel':'黏液胶质','crystal':'微光晶屑','gold':'金币'}
+MATERIAL_NAMES = {'plank':'木板','stone':'石料','shell':'硬壳','gel':'黏液胶质','crystal':'微光晶屑','gold':'银币'}
 ITEMS = [*WEAPONS, 'gel', 'shell', 'crystal', 'gate_stone', 'soup']
 SELL = {'gel': 1, 'shell': 2, 'crystal': 3, **{k: w['price']//4 for k,w in WEAPONS.items()}}
 
@@ -33,6 +26,7 @@ def is_cave(state):
 
 
 def ensure_combat(state):
+    legacy = 'village_combat' in state
     if 'village_combat' not in state:
         dep = state.get('departure', {})
         legacy = (state.get('location') in ['crossing', 'mountain', 'city', 'inn'] or
@@ -50,6 +44,7 @@ def ensure_combat(state):
         state['inventory'].setdefault(item, 0)
     for item in [*WEAPONS, 'gel', 'shell', 'crystal', 'soup']:
         state.get('storage', {}).setdefault(item, 0)
+    equipment.ensure_equipment(state, legacy)
     return state['village_combat']
 
 
@@ -77,24 +72,15 @@ def floor_enemies(state, now):
 
 
 def craft_reasons(state, weapon):
-    reasons = []
-    if state['skill_growth']['building'] < 1:
-        reasons.append('需要建造1级')
-    science = state['knowledge_growth']['science'] >= weapon['science'] if weapon['science'] else False
-    magic = state['knowledge_growth']['magic'] >= weapon['magic_level'] if weapon['magic_level'] else False
-    if not ((science or magic) if weapon['either'] else (science if weapon['science'] else magic)):
-        reasons.append('需要'+(f'科学{weapon["science"]}或魔法{weapon["magic_level"]}级' if weapon['either'] else
-                              f'科学{weapon["science"]}级' if weapon['science'] else f'魔法{weapon["magic_level"]}级'))
-    for item, amount in weapon['costs'].items():
-        if state['inventory'].get(item, 0) < amount:
-            reasons.append(f'{MATERIAL_NAMES.get(item,item)}还差{amount-state["inventory"].get(item, 0)}')
-    return reasons
+    return equipment.craft_reasons(state, weapon['id'])
 
 
 def combat_view(state, now):
     c = ensure_combat(state)
     enemies = floor_enemies(state, now)
-    return {'weapons': {key: {**value, 'craft_reasons': craft_reasons(state, value)} for key,value in WEAPONS.items()},
+    gear = equipment.view(state)
+    return {'weapons': {key: gear[key] for key in WEAPONS}, 'gear':gear,
+        'gear_shop':equipment.shop_view(state), 'blueprints':c['blueprints'], 'equipment':c['gear'], 'gear_stats':equipment.stats(state),
         'enemies': [{**ENEMIES[e['kind']], **e} for e in enemies],
         'floor': int(state['location'][5:]) if is_cave(state) else 0,
         'time': c['time'], 'effects': c['effects'], 'projectiles': c.get('projectiles', []), 'cast': c['cast'],
@@ -116,11 +102,7 @@ def near_service(state, target, places):
 
 
 def equip_owned(state, item):
-    from .rules import require
-    require(isinstance(item,str) and item in WEAPONS and state['inventory'].get(item, 0) > 0, '尚未持有这件武器')
-    c = state['village_combat']
-    require(not c['cast'], '动作结束后再切换武器')
-    c['equipped'] = item
+    return equipment.equip(state, item)
 
 
 def defeated(state, enemy):
@@ -140,11 +122,12 @@ def defeated(state, enemy):
         state['inventory']['crystal'] += 3 if first else 1
         if first:
             state['inventory']['gate_stone'] += 1
-        c['message'] = '石壳守卫已击败 · '+('门钥魔法石 +1 · 金币 +30 · 晶屑 +3' if first else '金币 +8 · 晶屑 +1')
+            c['blueprints'].setdefault('crystal_sword','石壳守卫首胜')
+        c['message'] = '石壳守卫已击败 · '+('门钥魔法石 +1 · 银币 +30 · 晶屑 +3 · 学会晶纹剑图纸' if first else '银币 +8 · 晶屑 +1')
     else:
         state['inventory'][definition['loot']] += 1
         state['inventory']['gold'] += definition['gold']
-        c['message'] = f'{definition["name"]}已击败 · {MATERIAL_NAMES[definition["loot"]]} +1 · 金币 +{definition["gold"]}'
+        c['message'] = f'{definition["name"]}已击败 · {MATERIAL_NAMES[definition["loot"]]} +1 · 银币 +{definition["gold"]}'
     enemies = c['floors'][state['location'][5:]]
     if all(e['hp'] <= 0 for e in enemies):
         floor = int(state['location'][5:])
@@ -175,8 +158,18 @@ def damage_enemy(state, enemy, attack):
     c = state['village_combat']; definition = ENEMIES[enemy['kind']]
     # Armored beetles expose their shell after an attack; bosses retain armor.
     exposed = enemy['kind'] == 'beetle' and enemy['phase'] == 'recover'
-    armor = 0 if attack['magic'] or exposed else definition['armor']
-    damage = max(1, attack['damage']-armor)
+    armor = 0 if attack['magic'] or exposed else max(0,definition['armor']-(2 if enemy.get('shatter_until',0)>c['time'] else 0))
+    special=attack.get('effect','')
+    if special=='pierce':armor=max(0,armor-2)
+    bonus=0
+    if special=='resonance':
+        key=attack.get('weapon_id','crystal_sword');c['weapon_hits'][key]=c['weapon_hits'].get(key,0)+1
+        if c['weapon_hits'][key]%3==0:bonus=4
+    damage = max(1, attack['damage']-armor)+bonus
+    if special=='shatter':enemy['shatter_until']=c['time']+2
+    if special=='frost':enemy['slow_until']=c['time']+1.5
+    if special=='ember':enemy['burn_at']=c['time']+.6
+
     enemy['hp'] = max(0, enemy['hp']-damage)
     enemy['hit_until'] = c['time']+.22
     effect(c, 'hit', enemy['x'], enemy['y'], f'−{damage}', enemy=enemy['id'],
@@ -196,11 +189,13 @@ def attack_hit(state, cast):
     c = state['village_combat']; p = state['position']
     if p['x'] < 166:
         return
-    if cast.get('style') == 'bolt':
+    if cast.get('style') in ['bolt','arrow','bullet','laser']:
+        speed={'bolt':220,'arrow':280,'bullet':500,'laser':700}[cast['style']]
         c['projectiles'].append(dict(x=p['x'], y=p['y'], angle=cast['angle'],
-            until=c['time']+cast['reach']/220, wave=f"player-{c['event_seq']}-{c['input_seq']}",
-            side='player', damage=cast['damage'], magic=True, knockback=cast.get('knockback', 6),
-            style='bolt'))
+            until=c['time']+cast['reach']/speed, wave=f"player-{c['event_seq']}-{c['input_seq']}",
+            side='player', damage=cast['damage'], magic=cast['magic'], knockback=cast.get('knockback', 6),
+            style=cast['style'], speed=speed,effect=cast.get('effect',''),weapon_id=cast.get('weapon_id'),
+            hit_ids=[],pierce_left=3 if cast['style']=='laser' else 1))
         return
     enemies = [e for e in c['floors'].get(state['location'][5:], []) if e['hp'] > 0]
     candidates = []
@@ -223,8 +218,10 @@ def hurt_player(state, damage):
     c = state['village_combat']; t = c['time']
     if t < c['hurt_until'] or (c.get('dash') and t < c['dash']['started']+.14):
         return False
+    gear=equipment.stats(state)
+    damage=max(1,damage-min(gear['defense'],int(damage*.65)))
     state['vitality']['current'] = max(0, state['vitality']['current']-damage)
-    c['hurt_until'] = t+.8
+    c['hurt_until'] = t+.8+gear['hurt_bonus']
     p = state['position']
     effect(c, 'hurt', p['x'], p['y'], f'−{damage}')
     return True
@@ -299,6 +296,10 @@ def step_enemies(state, dt):
                 c['projectiles'] = []
             e['phase'] = 'idle'
             continue
+        if e.get('burn_at') and t>=e['burn_at']:
+            e['burn_at']=0
+            damage_enemy(state,e,dict(damage=4,magic=True,angle=0,knockback=0,style='burn'))
+            if e['hp']<=0:continue
         if t < e.get('stagger_until', 0):
             continue
         if e['phase']=='windup':
@@ -346,7 +347,7 @@ def step_enemies(state, dt):
             e.update(phase='windup',until=t+windup,ready=t+d['interval'],tx=p['x'],ty=p['y'],style=style)
         else:
             target_point=pursuit_target(e,p,state['location'],t)
-            speed=d['speed']*dt/max(math.hypot(target_point['x']-e['x'],target_point['y']-e['y']),1)
+            speed=d['speed']*((.85 if boss else .7) if e.get('slow_until',0)>t else 1)*dt/max(math.hypot(target_point['x']-e['x'],target_point['y']-e['y']),1)
             for axis in ['x','y']:
                 target=e[axis]+(target_point[axis]-e[axis])*min(speed,1)
                 point={**e,axis:target}
@@ -380,53 +381,53 @@ def tick(state, data, now):
     recover_stamina(state,now)
     floor_enemies(state,now)
     length=max(1,math.hypot(dx,dy)); dx/=length; dy/=length
-    if data.get('dodge') is True and c['time'] >= c['dodge_at'] and dt > 0 and state['position']['x'] >= 166:
-        vx, vy = dodge_axes
-        if math.hypot(vx,vy) < .01:
-            vx, vy = state['position']['x']-ax, state['position']['y']-ay
-        length=math.hypot(vx,vy) or 1
-        c['dash']=dict(dx=vx/length,dy=vy/length,started=c['time'],until=c['time']+.18)
-        c['dodge_at']=c['time']+1.15
-        c['cast']=None
-        c['action']=None
-        effect(c,'dodge',state['position']['x'],state['position']['y'],duration=.22)
     # Substeps keep tell/impact and movement outcomes stable across polling rates.
     remaining=dt
     while remaining>1e-8 and is_cave(state):
-        step=min(.025,remaining); remaining-=step; c['time']+=step
-        p=state['position']
         dash=c.get('dash')
         if dash and c['time'] >= dash['until']:
             c['dash']=None; dash=None
+        # Land on the advertised contact/end time instead of rounding to a
+        # polling substep. Keep dash velocity for the portion ending at until.
+        step=min(.025,remaining)
+        for action in [c['cast'], dash]:
+            if action and action['until'] > c['time']:
+                step=min(step,action['until']-c['time'])
+        remaining-=step; c['time']+=step
+        p=state['position']
         for axis,value in [('x',dash['dx'] if dash else dx),('y',dash['dy'] if dash else dy)]:
             target=p[axis]+value*(360 if dash else 160)*step
             point={**p,axis:target}
             if walkable(point['x'],point['y'],state['location']): p[axis]=target
+        if dash and c['time'] >= dash['until']:
+            c['dash']=None
         cast=c['cast']
         if cast and c['time']>=cast['until']:
             if cast['kind']=='soup':
                 if c['hurt_until'] <= cast['started']+.8:
                     state['inventory']['soup']-=1
-                    state['vitality']['current']=min(state['vitality']['max'],state['vitality']['current']+20)
+                    state['vitality']['current']=min(state['vitality']['max'],state['vitality']['current']+20+equipment.stats(state)['heal_bonus'])
                     state['stamina']['current']=min(state['stamina']['max'],state['stamina']['current']+15)
                     state['stamina']['updated_at']=now
                     if state['location']=='cave_5': c['soups_used']+=1
                     c['soup_at']=c['time']+10
-                    c['message']='菜汤：生命 +20、体力 +15（不超过上限）'
+                    c['message']=f'菜汤：生命 +{20+equipment.stats(state)["heal_bonus"]}、体力 +15（不超过上限）'
             else: attack_hit(state,cast)
             c['cast']=None
         step_enemies(state,step)
         projectiles=[]
         for shot in c.get('projectiles',[]):
-            speed=220 if shot.get('side')=='player' else 90
+            speed=shot.get('speed',220) if shot.get('side')=='player' else 90
             shot['x']+=math.cos(shot['angle'])*speed*step;shot['y']+=math.sin(shot['angle'])*speed*step
             if shot['until']<c['time'] or not walkable(shot['x'],shot['y'],state['location']):continue
             if shot.get('side')=='player':
-                hit=next((e for e in c['floors'].get(state['location'][5:],[]) if e['hp']>0 and
+                hit=next((e for e in c['floors'].get(state['location'][5:],[]) if e['hp']>0 and e['id'] not in shot.get('hit_ids',[]) and
                     math.hypot(e['x']-shot['x'],e['y']-shot['y']) < (24 if e['kind']=='boss' else 13)),None)
                 if hit:
                     damage_enemy(state,hit,shot)
-                    continue
+                    shot.setdefault('hit_ids',[]).append(hit['id'])
+                    shot['pierce_left']=shot.get('pierce_left',1)-1
+                    if shot['pierce_left']<=0:continue
             elif p['x']>=166 and math.hypot(p['x']-shot['x'],p['y']-shot['y'])<15:
                 if c.get('hit_wave')!=shot['wave'] and hurt_player(state,6):
                     c['hit_wave']=shot['wave']
@@ -439,25 +440,40 @@ def tick(state, data, now):
             retreat(state,now,True)
             return c['message']
     t=c['time']; c['effects']=[e for e in c['effects'] if e['until']>t]
+    # New actions begin at the accepted time, after elapsed combat has resolved.
+    # A late dodge must not erase a sword contact (or enemy hit) already due.
+    if data.get('dodge') is True and t >= c['dodge_at'] and dt > 0 and state['position']['x'] >= 166:
+        vx, vy = dodge_axes
+        if math.hypot(vx,vy) < .01:
+            vx, vy = state['position']['x']-ax, state['position']['y']-ay
+        length=math.hypot(vx,vy) or 1
+        c['dash']=dict(dx=vx/length,dy=vy/length,started=t,until=t+.18)
+        c['dodge_at']=t+1.15-equipment.stats(state)['dodge_bonus']
+        c['cast']=None
+        c['action']=None
+        effect(c,'dodge',state['position']['x'],state['position']['y'],duration=.22)
     if not c['cast'] and not c.get('dash') and dt>0:
         angle=math.atan2(ay-state['position']['y'],ax-state['position']['x'])
         if data.get('soup') is True and state['inventory']['soup']>0 and t>=c['soup_at'] and (state['location']!='cave_5' or c['soups_used']<2):
             c['cast']=dict(kind='soup',until=t+1.2,started=t)
-        elif state['position']['x']>=166 and data.get('spark') is True and c['spark_learned'] and t>=c['attack_at'] and t>=c['spark_at'] and state['stamina']['current']>=4:
+        elif state['position']['x']>=166 and data.get('spark') is True and c['spark_learned'] and c['equipped'] in WEAPONS and state['inventory'].get(c['equipped'],0)>0 and not equipment.use_reasons(state,c['equipped']) and t>=c['attack_at'] and t>=c['spark_at'] and state['stamina']['current']>=4:
             state['stamina']['current']-=4
             state['stamina']['updated_at']=now
             c['attack_at']=t+.5; c['spark_at']=t+4
             c['cast']=dict(kind='spark',angle=angle,damage=12,magic=True,reach=96,until=t+.28,started=t,style='spark',knockback=12)
             c['action']={**c['cast'],'until':t+.5,'hit_at':t+.28,'seq':c['input_seq']}
-        elif state['position']['x']>=166 and data.get('attack') is True and c['equipped'] in WEAPONS and state['inventory'][c['equipped']]>0 and t>=c['attack_at']:
+        elif state['position']['x']>=166 and data.get('attack') is True and c['equipped'] in WEAPONS and state['inventory'][c['equipped']]>0 and not equipment.use_reasons(state,c['equipped']) and t>=c['attack_at']:
             w=WEAPONS[c['equipped']]
             if state['stamina']['current']>=w['stamina']:
                 state['stamina']['current']-=w['stamina']
                 if w['stamina']:
                     state['stamina']['updated_at']=now
                 c['attack_at']=t+w['interval']
-                c['cast']=dict(kind='weapon',angle=angle,damage=w['damage'],magic=w['magic'],reach=w['reach'],until=t+w['windup'],started=t,style=w['style'],knockback=w['knockback'])
-                c['action']={**c['cast'],'until':t+min(w['interval'],.38),'hit_at':t+w['windup'],'seq':c['input_seq']}
+                c['cast']=dict(kind='weapon',angle=angle,damage=w['damage'],magic=w['magic'],reach=w['reach'],until=t+w['windup'],started=t,style=w['style'],knockback=w['knockback'],effect=w.get('effect',''),weapon_id=c['equipped'])
+                # Sword frames include the complete recovery, so the visible
+                # return to ready agrees with the next accepted attack.
+                duration=w['interval'] if w['style']=='sweep' else min(w['interval'],.38)
+                c['action']={**c['cast'],'until':t+duration,'hit_at':t+w['windup'],'seq':c['input_seq']}
     return ''
 
 
@@ -466,29 +482,8 @@ def command(state, action, data, now):
     from .world import map_for
     c=ensure_combat(state)
     if action=='cave_tick': return tick(state,data,now)
-    if action=='gear_equip':
-        equip_owned(state,data.get('item'))
-        return '已装备'+WEAPONS[c['equipped']]['name']
-    if action in ['gear_buy','gear_craft','gear_sell']:
-        near_service(state,data.get('target'),['workshop'])
-        require(data.get('target')=='armory_counter','请到工坊武备台')
-        item=data.get('item')
-        require(isinstance(item,str),'请选择一种物品')
-        if action=='gear_buy':
-            require(item in [*WEAPONS,'soup'],'这里没有这种商品')
-            spend(state,{'gold':8 if item=='soup' else WEAPONS[item]['price']})
-            state['inventory'][item]+=1
-        elif action=='gear_craft':
-            require(item in WEAPONS,'没有这份武器配方')
-            reasons=craft_reasons(state,WEAPONS[item])
-            require(not reasons,'；'.join(reasons))
-            spend(state,WEAPONS[item]['costs']); state['inventory'][item]+=1
-        else:
-            require(item in SELL,'关键物品不可出售')
-            require(not c['cast'],'动作结束后再出售')
-            spend(state,{item:1}); state['inventory']['gold']+=SELL[item]
-            if c['equipped']==item and state['inventory'][item]==0: c['equipped']=None
-        return ('已买入' if action=='gear_buy' else '已打造' if action=='gear_craft' else '已出售')+('便携菜汤' if item=='soup' else WEAPONS[item]['name'] if item in WEAPONS else MATERIAL_NAMES.get(item,item))
+    if action in ['gear_equip','gear_unequip','gear_buy','gear_craft','gear_sell','blueprint_buy','blueprint_research','gear_material_buy']:
+        return equipment.command(state,action,data)
     if action=='spark_learn':
         near_service(state,data.get('target'),['library'])
         require(data.get('target')=='spell_desk','请到图书馆研习台')

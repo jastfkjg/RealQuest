@@ -10,12 +10,13 @@ export type PlaceCategory = 'all' | 'life' | 'resources' | 'routes';
 export interface PlaceEntry { key: string; mapId: string; object: WorldObject; category: PlaceCategory; }
 export const placeMaps = (world: World): MapData[] => [world, ...Object.values(world.interiors), ...Object.values(world.areas || {})];
 export function placeName(entry: PlaceEntry, world: World) {
+  if(entry.object.kind==='plot'&&world.cultivation){const {origin,step,bounds}=world.cultivation,firstX=origin[0]+Math.ceil((bounds[0]+21-origin[0])/step)*step,firstY=origin[1]+Math.ceil((bounds[1]+18-origin[1])/step)*step;return '家园田地 · '+(Math.round((entry.object.x-firstX)/step)+1)+'列'+(Math.round((entry.object.y-firstY)/step)+1)+'行';}
   if(entry.object.id.startsWith('farm_')){const [,col,row]=entry.object.id.split('_');return '家园田地 · '+(Number(col)+1)+'列'+(Number(row)+1)+'行';}
   const siblings = mapById(world, entry.mapId).objects.filter(o => o.kind === entry.object.kind && o.name === entry.object.name);
   return siblings.length > 1 ? entry.object.name + ' · 第' + (siblings.findIndex(o => o.id === entry.object.id) + 1) + '处' : entry.object.name;
 }
 export function placeEntries(world: World, state: GameState, now: number): PlaceEntry[] {
-  return placeMaps(world).flatMap(map => farmObjects(map.objects,state).filter(o => !['npc', 'travel_npc','soil'].includes(o.kind)).map(object => ({
+  return placeMaps(world).flatMap(map => farmObjects(map.objects,state,map.cultivation).filter(o => !['npc', 'travel_npc','soil'].includes(o.kind)).map(object => ({
     key: map.id + ':' + object.id, mapId: map.id, object,
     category: (['wood','stone','plot','landmark','chest','event'].includes(object.kind) ? 'resources'
       : ['passage','travel','exit','cave'].includes(object.kind) ? 'routes' : 'life') as PlaceCategory,

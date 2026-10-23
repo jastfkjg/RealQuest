@@ -18,7 +18,7 @@ def player():
 
 
 @pytest.mark.parametrize('tracked', ['leave_valley', 'craft_home', None])
-def test_side_accept_preserves_tracking_resources_and_reload(tracked):
+def test_main_accept_preserves_tracking_resources_and_reload(tracked):
     state = player()
     state['quests'].update(settle_in={'status': 'claimed'},
                            leave_valley={'status': 'active'}, craft_home={'status': 'active'})
@@ -37,16 +37,19 @@ def test_side_accept_preserves_tracking_resources_and_reload(tracked):
     assert state == before
 
 
-def test_main_accept_also_requires_explicit_tracking_and_keeps_briefing():
+def test_departure_accept_requires_preparation_preserves_tracking_and_does_not_fake_briefing():
     state = player()
     state['quests']['settle_in']['status'] = 'claimed'
     state['quests']['craft_home'] = {'status': 'active'}
     state['tracked_quest'] = 'craft_home'
+    with pytest.raises(RuleError):
+        apply(state, 'quest_accept', {'quest_id': 'leave_valley'}, NOW)
+    state['quests']['gate_preparation'] = {'status': 'claimed'}
     apply(state, 'quest_accept', {'quest_id': 'leave_valley'}, NOW)
     assert state['tracked_quest'] == 'craft_home'
-    assert state['village_intro']['briefed']
+    assert not state['village_intro']['briefed']
     apply(state, 'track_quest', {'quest_id': 'leave_valley'}, NOW)
     assert upgrade_state(state)['tracked_quest'] == 'leave_valley'
     kinds = {q['id']: q['kind'] for q in quest_views(state)}
-    assert {id for id, kind in kinds.items() if kind == 'main'} == {'settle_in', 'leave_valley'}
-    assert all(kind == 'side' for id, kind in kinds.items() if id not in {'settle_in', 'leave_valley'})
+    assert kinds['first_harvest'] == kinds['craft_home'] == kinds['leave_valley'] == 'main'
+    assert kinds['market_neighbor'] == 'side'

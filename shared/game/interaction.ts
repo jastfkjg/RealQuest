@@ -15,6 +15,11 @@ export function interactionFor(
   reason?: string;
 } {
   switch (obj.kind) {
+    case 'ranch_gate':return {label:'进入家园牧场',command:'ranch_enter'};
+    case 'ranch_exit':return {label:'回到向阳家园',command:'ranch_exit'};
+    case 'animal':return {label:'照料 / 查看成长',panel:'ranch'};
+    case 'shelter':return {label:'住所 / 建造与扩容',panel:'ranch'};
+    case 'ranch_ledger':return {label:'幼崽 / 饲料 / 牧场设施',panel:'ranch'};
     case "armory": return { label: "购买 / 打造武器", panel: "armory" };
     case "spellbook": return { label: "研习火花术", panel: "spellbook" };
     case "cave": return { label: obj.id === "cave_entry" ? "查看山洞 / 准备进入" : "查看洞内路标", panel: "cave" };
@@ -67,7 +72,7 @@ export function interactionFor(
               : undefined,
       };
     }
-    case "soil": return {label:'开垦这块土地',panel:'farm'};
+    case "soil": return {label:'挥锄 · 4体力',command:'till',reason:staminaNow(state,now)<4?'体力不足 · 需要4点':undefined};
     case "plot": {
       const crop=state.plots[obj.id];
       if(!crop)return {label:'选择种子 / 耕作',panel:'farm'};
@@ -81,6 +86,7 @@ export function interactionFor(
           ? "已记录在地图"
           : undefined,
       };
+    case 'carpenter': return {label:'学习木作 / 委托工程',panel:'building'};
     case "chest":
       return {
         label: "打开补给",

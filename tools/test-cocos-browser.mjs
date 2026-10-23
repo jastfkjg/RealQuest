@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {validateBrowserConfig,browserProfile,browserCommandHasProfile} from './cocos-browser-config.mjs';
 import {parseBrowserArgs} from './cocos-browser.mjs';
-import {selectSuites} from './cocos-browser-suites.mjs';
+import {browserSuites,selectSuites} from './cocos-browser-suites.mjs';
 const root=path.resolve(fileURLToPath(new URL('../',import.meta.url)));
 const runDirectory=path.join(root,'output/cocos-regression/run-fixture'),directory=path.join(runDirectory,'suites/data');
 const owner={schema_version:1,runId:'00000000-0000-0000-0000-000000000001',nonce:'1'.repeat(32),controllerPID:123};
@@ -34,7 +34,12 @@ for(const change of [
  {apiURL:'http://127.0.0.1:12346/wrong'},
 ])assert.throws(()=>validateBrowserConfig({...config,...change},owner,file));
 console.log('PASS fixture configuration rejects player/preview/outside DB paths, ownership mismatches and non-loopback/mismatched endpoints.');
-assert.equal(selectSuites('current').length,35);assert.equal(selectSuites('all').length,35);
+assert.deepEqual(selectSuites('current'),browserSuites.filter(s=>s.group==='current'));
+assert.deepEqual(selectSuites('all'),browserSuites);
+assert.equal(selectSuites('quest-chain')[0].file,'clients/cocos/tools/smoke-quest-chain.mjs');
+assert.equal(selectSuites('shop')[0].file,'clients/cocos/tools/smoke-shop.mjs');
+assert.equal(selectSuites('equipment')[0].file,'clients/cocos/tools/smoke-equipment.mjs');
+assert.equal(selectSuites('hoe')[0].file,'clients/cocos/tools/smoke-hoe.mjs');
 assert.equal(selectSuites('farming')[0].file,'clients/cocos/tools/smoke-farming.mjs');
 assert.equal(selectSuites('accounts')[0].file,'clients/cocos/tools/smoke-accounts.mjs');
 assert.equal(selectSuites('combat-experience')[0].file,'clients/cocos/tools/smoke-combat-experience.mjs');
@@ -54,4 +59,4 @@ assert.throws(()=>selectSuites('preferences,preferences'));assert.throws(()=>sel
 assert.throws(()=>parseBrowserArgs([]));assert.throws(()=>parseBrowserArgs(['--build','sample','--port','0']));
 assert.equal(parseBrowserArgs(['--list']).list,true);
 assert.equal(parseBrowserArgs(['--build','sample/web-desktop','--port','5450']).port,5450);
-console.log('PASS suite selection includes30 current with the physical quest board, chapter friction, actual combat framing, lossless terrain/fallback, keepalive pause faults, native semantics and startup recovery without legacy client gates; CLI requires an explicit build and valid configurable ports.');
+console.log('PASS registered current/all suites, named selection, explicit build and valid configurable ports.');

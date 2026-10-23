@@ -1,3 +1,5 @@
+import {formatMoney} from './currency';
+import {gearCatalog} from './gearCatalog';
 import {seedCrop,itemCrop,growingDays,farmObjects} from './farming';
 import type {GameState,World,NavigationTarget} from './protocol';
 import {itemDefinitions,itemNames} from './items';
@@ -50,7 +52,7 @@ export function itemIntent(world:World,s:GameState,now:number,item:string):ItemI
  const intent:Omit<ItemIntent,'signature'>={item,label:'查看相关委托',reason:count>0?'':'暂未持有，收集后再使用或分配。',mode:'journal'};
  const mark=(label:string,mapId:string,targetId:string)=>{intent.label=label;intent.target={mapId,targetId};delete intent.mode;};
  const action=(label:string,command:string,data:Record<string,unknown>,costs:Record<string,number>,gains:Record<string,number>)=>{intent.label=label;intent.command=command;intent.data=data;intent.costs=costs;intent.gains=gains;delete intent.mode;};
- if(['stone_sword','reinforced_sword','spring_spear','glow_staff'].includes(item)){intent.label='查看随行装备';intent.mode='equipment';}
+ if(Object.prototype.hasOwnProperty.call(gearCatalog,item)){intent.label=s.combat?.equipped===item||Object.values(s.combat?.equipment||{}).includes(item)?'已装备':'装备';intent.command='gear_equip';intent.data={item};delete intent.mode;intent.reason=count>0?(s.combat?.gear?.[item]?.use_reasons||[]).join('；'):intent.reason;}
  else if(item==='gate_stone')mark('标记东行石门','overworld','village_departure');
  else if(['gel','shell','crystal','soup'].includes(item))mark('标记工坊武备台','workshop','armory_counter');
  else if(seedCrop(item)){
@@ -65,7 +67,7 @@ export function itemIntent(world:World,s:GameState,now:number,item:string):ItemI
   else mark('标记工坊柜台','workshop','workshop_counter');
  }else if(itemCrop(item)){
   const c=itemCrop(item)!;
-  if(item==='crop'&&near('workshop_counter'))action('出售1份'+c.name,'sell',{target:'workshop_counter'},{[item]:1},{gold:7+s.buildings.workshop});
+  if(item==='crop'&&near('workshop_counter'))action('出售1份'+c.name,'sell',{target:'workshop_counter'},{[item]:1},{gold:s.market?.sell.crop??c.sell});
   else if(near('mira')||near('shop_counter')){
    const price=s.market?.sell[item];
    if(typeof price==='number')action('出售1份'+c.name,'market_trade',{target:near('mira')?'mira':'shop_counter',side:'sell',item,amount:1},{[item]:1},{gold:price});
@@ -75,4 +77,4 @@ export function itemIntent(world:World,s:GameState,now:number,item:string):ItemI
  if(!known(item)){intent.reason='未识别的物品，请重新选择。';delete intent.command;delete intent.mode;delete intent.target;}
  return {...intent,signature:JSON.stringify({location:s.location,item,command:intent.command,data:intent.data,costs:intent.costs,gains:intent.gains,reason:intent.reason,plantSeconds:intent.seconds})};
 }
-export function itemAmounts(values:Record<string,number>|undefined){return Object.entries(values||{}).map(([id,n])=>(itemNames[id]||id)+' ×'+n).join('、')||'无';}
+export function itemAmounts(values:Record<string,number>|undefined){return Object.entries(values||{}).map(([id,n])=>id==='gold'?formatMoney(n):(itemNames[id]||id)+' ×'+n).join('、')||'无';}

@@ -6,21 +6,25 @@ import { C } from "./theme";
 export class StorageView {
   private item = "seed";
   private page = 0;
+  private stack=false;
+  private name="";private context="";
   draw(h: PanelHost) {
+    const key=h.context?.id||'home_chest',chest=h.state.construction?.chests[key],storage=chest?.items||h.state.storage;
+    if(this.context!==key){this.context=key;this.name=chest?.name||'';this.page=0;}
     const w = Math.min(880, h.width - 40),
-      height = Math.min(440, h.height - 32),
+      height = Math.min(chest?480:440, h.height - 32),
       x = (h.width - w) / 2,
       y = (h.height - height) / 2,
       compact = height < 380;
-    const held = Object.keys(h.state.storage).filter(id=>(h.state.storage[id]||0)+(h.state.inventory[id]||0)>0);
+    const held = (chest?Array.from(new Set([...Object.keys(storage),...Object.keys(h.state.inventory)])):Object.keys(storage)).filter(id=>id!=='gold').filter(id=>(storage[id]||0)+(h.state.inventory[id]||0)>0);
     const all = held.length?held:[this.item],
-      pages = Math.max(1, Math.ceil(all.length / 6));
+      per=compact?3:6, pages = Math.max(1, Math.ceil(all.length / per));
     this.page = Math.min(this.page, pages - 1);
     if (!all.includes(this.item)) this.item = all[0];
-    const ids = all.slice(this.page * 6, this.page * 6 + 6);
+    const ids = all.slice(this.page * per, this.page * per + per);
     paperSurface(h,{x,y,w,h:height},true);
     h.region('storage-paper',x+20,y+12,w-40,height-24);
-    h.text("StorageTitle", "家园储物箱", x + 24, y + 12, w - 140, 40, 24);
+    h.text("StorageTitle", chest?chest.name+` · ${Object.values(storage).filter(n=>n>0).length}/${h.state.construction_view?.recipes[chest.recipe].slots}格`:"家园储物箱", x + 24, y + 12, w - 140, 40, 24);
     h.button(
       "close",
       "返回",
@@ -42,7 +46,7 @@ export class StorageView {
         left,
         y + 66,
         trayW,
-        compact ? 160 : 190,
+        compact ? 110 : 190,
         C.canvas,
         7,
       );
@@ -55,7 +59,7 @@ export class StorageView {
       );
       h.text(
         "TrayTitle-" + side,
-        side === "inventory" ? "随身背包" : "家园箱子",
+        side === "inventory" ? "随身背包" : chest?.name||"家园箱子",
         left + 52,
         y + 70,
         trayW - 64,
@@ -65,7 +69,7 @@ export class StorageView {
       ids.forEach((id, i) => {
         const bx = left + (trayW - gridW) / 2 + (i % 3) * (cell + gap),
           by = y + (compact ? 100 : 104) + Math.floor(i / 3) * (cell + 8),
-          count = h.state[side][id] || 0,
+          count = (side==="storage"?storage:h.state.inventory)[id] || 0,
           selected = id === this.item;
         h.button(
           "storage-pick-" + side + "-" + id,
@@ -131,18 +135,23 @@ export class StorageView {
     const id = this.item,
       feedback =
         h.error ||
-        `${itemNames[id] || id} · 背包 ${h.state.inventory[id] || 0} / 箱中 ${h.state.storage[id] || 0}`;
+        `${itemNames[id] || id} · 背包 ${h.state.inventory[id] || 0} / 箱中 ${storage[id] || 0}`;
     h.text(
       "StorageFeedback",
       feedback,
       x + 28,
-      y + height - (compact ? 100 : 104),
+      y + height - (chest?(compact?148:168):104),
       w - 56,
       32,
       14,
       h.error ? C.danger : C.ink,
     );
     const bottom = y + height - 60;
+    if(chest){
+      h.button('chest-move','移动木箱',x+24,bottom-48,132,44,()=>h.go('chest-placement'),h.busy);
+      h.button('chest-rename-open','修改箱名',x+164,bottom-48,128,44,()=>h.go('chest-name'),h.busy);
+      h.button('chest-stack-mode',this.stack?'数量：整组':'数量：1份',x+304,bottom-48,128,44,()=>{this.stack=!this.stack;h.redraw();},h.busy);
+    }
     if(pages>1)h.button(
       "storage-prev",
       "‹",
@@ -152,7 +161,7 @@ export class StorageView {
       44,
       () => {
         this.page--;
-        this.item = all[this.page * 6];
+        this.item = all[this.page * per];
         h.redraw();
       },
       h.busy || !this.page,
@@ -177,17 +186,17 @@ export class StorageView {
       44,
       () => {
         this.page++;
-        this.item = all[this.page * 6];
+        this.item = all[this.page * per];
         h.redraw();
       },
       h.busy || this.page + 1 >= pages,
     );
     const send = (action: string) =>
-      h.send(action, { target: "home_chest", item: id, amount: 1 });
+      chest?h.send('construction_transfer',{target:key,chest:key,expected_version:chest.version,item:id,amount:this.stack?(action==="store"?h.state.inventory[id]:storage[id])||0:1,direction:action}):h.send(action, { target: 'home_chest', item: id, amount: 1 });
     if(pages===1)h.text('StorageHint',held.length?'选中物品，再存入或取回。':'背包和箱子都空着，去村庄收集一些物品吧。',x+28,bottom,w-336,44,14,C.muted);
     h.button(
       "store-" + id,
-      h.busy ? "正在存取…" : "存入 1",
+      h.busy ? "正在存取…" : this.stack?"存入整组":"存入 1",
       x + w - 296,
       bottom,
       124,
@@ -198,13 +207,13 @@ export class StorageView {
     );
     h.button(
       "withdraw-" + id,
-      "取回 1",
+      this.stack?"取回整组":"取回 1",
       x + w - 156,
       bottom,
       128,
       44,
       () => send("withdraw"),
-      h.busy || !h.state.storage[id],
+      h.busy || !storage[id],
     );
   }
 }

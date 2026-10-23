@@ -1,5 +1,8 @@
 """Authoritative geography used by the Cocos client and offline art tools."""
 from math import hypot
+import json
+from pathlib import Path
+from .farm_land import cell_by_id
 from .journey_world import AREAS, TRAVEL_NPCS, passage
 from .combat_world import CAVE_MAPS, CAVE_ENTRY
 
@@ -99,8 +102,28 @@ for row in range(9):
         if any(x+23>rx and x-23<rx+w and y+23>ry and y-23<ry+h for rx,ry,w,h in OBSTACLES): continue
         if any(hypot(x-o['x'],y-o['y'])<42 for o in OBJECTS if o['kind']!='plot'): continue
         FARM_CELLS.append({'id':f'farm_{col}_{row}','kind':'soil','name':'可开垦土地','x':x,'y':y})
-OBJECTS.extend(FARM_CELLS)
-WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS}
+# Historical IDs only: new grass is resolved from coordinates, not this list.
+ROADS = json.loads(Path(__file__).with_name('village_terrain.json').read_text())['roads']
+HOME_LAND = {'bounds':[0,0,448,680],'origin':[88,440],'step':48,
+             'legacy':[o for o in OBJECTS if o['kind']=='plot']+FARM_CELLS,
+             'roads':ROADS,
+             'blocked':OBSTACLES + [[o['x']-24,o['y']-24,48,48] for o in OBJECTS if o['kind'] not in ['plot','building']] +
+                       [[389,211,32,24],[366,286,32,20],[64,202,32,20],[206,204,32,20],[72,270,32,20],[332,382,32,20]]}
+WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS,'roads':ROADS,'cultivation':HOME_LAND}
+
+# A connected home paddock leaves every existing field and saved crop intact.
+from .ranching import SHELTERS
+OBJECTS.append({'id':'pasture_gate','kind':'ranch_gate','name':'家园牧场入口','x':400,'y':600,'destination':'pasture'})
+# Reserve new soil around the gate while leaving all previously tilled IDs and
+# planted crops intact. HOME_LAND was built before this connected area existed.
+HOME_LAND['blocked'].append([376,576,48,48])
+AREAS['pasture'] = {'id':'pasture','name':'向阳牧场','width':896,'height':544,'tile':16,'outdoor':True,
+    'objects':[
+        {'id':'pasture_exit','kind':'ranch_exit','name':'回到家园','x':448,'y':496,'destination':'overworld'},
+        {'id':'ranch_ledger','kind':'ranch_ledger','name':'牧场采购簿 · 米拉代订','x':448,'y':440},
+        *[{'id':'shelter_'+key,'kind':'shelter','name':s['name']+' · 建造与照料','x':s['x'],'y':s['y']} for key,s in SHELTERS.items()]],
+    'trees':[[40,72],[856,72],[40,392],[856,392]],
+    'obstacles':[[s['x']-s['width']/2,s['y']-s['height'],s['width'],s['height']-24] for s in SHELTERS.values()]}
 
 def map_for(location='overworld', state=None, now=None):
     base = WORLD if location == 'overworld' else (AREAS[location] if location in AREAS else INTERIORS[location])
@@ -108,13 +131,26 @@ def map_for(location='overworld', state=None, now=None):
         return base
     from .residents import resident_objects
     tilled=set(state.get('farm',{}).get('tilled',[f'plot_{i}' for i in range(6)]))
-    objects=[{**o,'kind':'plot' if o['id'] in tilled else 'soil','name':'田地' if o['id'] in tilled else '可开垦土地'} if o['kind'] in ['plot','soil'] else o for o in base['objects'] if o['kind']!='npc']
-    return {**base, 'objects': objects + resident_objects(state, now, location)}
+    objects=[o for o in base['objects'] if o['kind'] not in ['npc','plot','soil']]
+    if location=='overworld':
+        objects += [{**cell,'kind':'plot','name':'田地'} for key in tilled if (cell:=cell_by_id(HOME_LAND,key))]
+    if location=='pasture' and 'ranch' in state:
+        from .ranching import ranch_objects
+        objects += ranch_objects(state)
+    obstacles = list(base['obstacles'])
+    from .construction import chest_objects, CARPENTER
+    if location == 'home':
+        boxes = chest_objects(state)
+        objects += boxes
+        obstacles += [o['hitbox'] for o in boxes]
+    if location == 'workshop':
+        objects.append(CARPENTER)
+    return {**base, 'objects': objects + resident_objects(state, now, location), 'obstacles': obstacles}
 
-def walkable(x,y,location='overworld'):
-    world=map_for(location)
+def walkable(x,y,location='overworld',state=None,now=None):
+    world=map_for(location,state,now)
     return 24 <= x <= world['width']-24 and 32 <= y <= world['height']-24 and not any(rx-9 < x < rx+w+9 and ry-7 < y < ry+h+7 for rx,ry,w,h in world['obstacles'])
 
-def clear_path(a,b,location='overworld'):
+def clear_path(a,b,location='overworld',state=None,now=None):
     steps=max(1,int(hypot(b['x']-a['x'],b['y']-a['y'])/4))
-    return all(walkable(a['x']+(b['x']-a['x'])*i/steps,a['y']+(b['y']-a['y'])*i/steps,location) for i in range(1,steps+1))
+    return all(walkable(a['x']+(b['x']-a['x'])*i/steps,a['y']+(b['y']-a['y'])*i/steps,location,state,now) for i in range(1,steps+1))

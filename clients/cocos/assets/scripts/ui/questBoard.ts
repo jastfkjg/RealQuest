@@ -1,3 +1,4 @@
+import {formatMoney} from '../core/currency';
 import {Label} from 'cc';
 import type {PanelHost} from './panels';
 import type {Quest} from '../core/protocol';
@@ -5,8 +6,10 @@ import {questStatuses,itemNames} from '../core/features';
 import {currentMap,questTarget} from '../core/navigation';
 import {textPages} from '../core/lifeRecords';
 import {C} from './theme';
+import {hasDepartureNotes} from '../core/nextDeparture';
+import {canExploreStory} from '../core/story';
 
-interface BoardSelection {questId:string;page:number;detailPage:number}
+interface BoardSelection {questId:string;page:number;detailPage:number;rewardPage?:number}
 const category=(q:Quest)=>q.kind==='main'?'主线':'支线';
 
 function pin(h:PanelHost,id:string,x:number,y:number){
@@ -18,21 +21,21 @@ function paper(h:PanelHost,x:number,y:number,w:number,height:number){
  h.box('PaperShadow',x+3,y+5,w,height,'#27392f55',3);
  h.image('ui/notice-paper',x+w/2,y+height/2,w,height,true);
 }
-function prepare(h:PanelHost){h.go(h.state.village_intro?.reviewed?'preparation':'expedition');}
+function prepare(h:PanelHost){h.go(hasDepartureNotes(h.state)?'preparation':'expedition');}
 
 /** One physical board, with a short notice index and one unfolded commission. */
 export function drawQuestBoard(h:PanelHost,selection:BoardSelection,giver?:string){
  const w=Math.min(1120,h.width-32),height=Math.min(688,h.height-28);
  const x=(h.width-w)/2,y=(h.height-height)/2,compact=height<540;
- const entries=h.state.quest_log.filter(q=>!giver||q.giver===giver);
- const q=entries.find(q=>q.id===selection.questId)||entries.find(q=>['ready','active','available'].includes(q.status))||entries[0];
+ const entries=h.state.quest_log.filter(q=>q.status!=='locked'&&(!giver||q.giver===giver));
+ const q=entries.find(q=>q.id===selection.questId)||entries.find(q=>q.kind==='main'&&['ready','active','available'].includes(q.status))||entries.find(q=>['ready','active','available'].includes(q.status))||entries[0];
  if(q)selection.questId=q.id;
  h.box('BoardShadow',x+5,y+64,w,height-61,'#15291d77',4);
  h.image('ui/notice-timber',x+w/2,y+(height+58)/2,w,height-58,true);
  h.box('BoardNameEdge',x+22,y+2,Math.min(320,w-310),58,C.wood,5);
  h.box('BoardName',x+25,y+4,Math.min(314,w-316),51,C.moss,4);
  h.text('FeatureTitle',h.mode==='journal'?'旅途委托':'村庄告示板',x+44,y+10,Math.min(270,w-352),38,26,C.paper);
- h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':'初探与远行',x+w-252,y+6,148,44,()=>prepare(h),h.busy,false,'game');
+ if(canExploreStory(h.state))h.button('expedition-entry',h.state.village_intro?.reviewed?'探索手记':'初探手记',x+w-252,y+6,148,44,()=>prepare(h),h.busy,false,'game');
  h.button('close','返回',x+w-92,y+6,76,44,()=>h.close(),h.busy,false,'back-light');
  const left=x+32,lw=Math.round(w*.31),top=y+100,footer=y+height-28;
  const px=left+lw+24,py=y+(compact?72:84),pw=x+w-30-px,ph=height-(compact?94:110);
@@ -91,27 +94,30 @@ export function drawQuestBoard(h:PanelHost,selection:BoardSelection,giver?:strin
  if(!compact&&(h.error||h.notice))h.text('FeatureFeedback',h.error||h.notice,dx,feedbackY,dw,36,14,h.error?C.danger:C.muted);
  h.line('RewardRule',[{x:dx,y:rewardY-4},{x:dx+dw,y:rewardY-4}],C.line,1);
  h.text('QuestRewardLabel','回礼',dx,rewardY+4,38,32,15);
- const rewards=Object.entries(q.reward).filter(([,count])=>count>0),rewardWidth=Math.min(116,(dw-110)/Math.max(1,rewards.length));
- rewards.forEach(([id,count],i)=>{
+ const rewards=Object.entries(q.reward).filter(([,count])=>count>0),perReward=Math.max(1,Math.min(3,Math.floor((dw-138)/110))),rewardPages=Math.ceil(rewards.length/perReward);
+ const rewardPage=(selection.rewardPage||0)%Math.max(1,rewardPages),visibleRewards=rewards.slice(rewardPage*perReward,(rewardPage+1)*perReward),rewardWidth=Math.min(142,(dw-138)/Math.max(1,visibleRewards.length));
+ visibleRewards.forEach(([id,count],i)=>{
   const xx=dx+46+i*rewardWidth;
   h.image('items/'+id,xx+14,rewardY+20,28,28);
-  h.text('Reward-'+id,`${count} ${itemNames[id]||id}`,xx+34,rewardY+3,rewardWidth-34,34,14);
+  h.text('Reward-'+id,id==='gold'?formatMoney(count):`${count} ${itemNames[id]||id}`,xx+34,rewardY+3,rewardWidth-34,34,14);
  });
- h.text('QuestXP',`${q.xp} EXP`,dx+46+rewards.length*rewardWidth,rewardY+3,70,34,14,C.muted);
+ if(rewardPages>1)h.button('quest-rewards',`${rewardPage+1}/${rewardPages} ›`,dx+dw-86,rewardY-2,86,44,()=>{selection.rewardPage=rewardPage+1;h.redraw();},h.busy,false,'back-light',{label:`查看下一份回礼，当前第${rewardPage+1}页，共${rewardPages}页`});
+ else h.text('QuestXP',`${q.xp} EXP`,dx+dw-78,rewardY+3,78,34,14,C.muted);
  const giverObject=currentMap(h.world,h.state,h.now).objects.find(o=>o.id===q.giver),near=!!giverObject&&Math.hypot(giverObject.x-h.state.position.x,giverObject.y-h.state.position.y)<=72;
  const action=q.status==='available'?'quest_accept':q.status==='ready'?'quest_claim':q.status==='active'?'track_quest':null;
  const bw=(dw-16)/3;
- h.button('quest-action',h.processing?'处理中…':q.status==='available'?`接取${category(q)}`:q.status==='ready'?'交付领取':q.status==='active'?(tracked?'正在追踪':'追踪委托'):questStatuses[q.status],dx,buttonY,bw,44,()=>action&&h.send(action,{quest_id:q.id}),h.busy||!action||(action==='track_quest'?tracked:!near),true,'game');
+ h.button('quest-action',h.processing?'处理中…':q.status==='available'?`接取${category(q)}`:q.status==='ready'?(q.delivery?'交付4份萝卜':'交付领取'):q.status==='active'?(tracked?'正在追踪':'追踪委托'):questStatuses[q.status],dx,buttonY,bw,44,async()=>{if(action&&await h.send(action,{quest_id:q.id})&&action==='quest_claim'){selection.questId=h.state.quest_log.find(next=>next.kind==='main'&&['available','active','ready'].includes(next.status))?.id||q.id;selection.detailPage=0;selection.rewardPage=0;h.redraw(true);}},h.busy||!action||(action==='track_quest'?tracked:!near&&!(action==='quest_accept'&&q.accept_anywhere)),true,'game');
  const target=questTarget(q,h.state);
  h.button('quest-mark',near?'标记目标':'标记委托人',dx+bw+8,buttonY,bw,44,()=>target&&h.mark(target,q.title),!target||h.busy,false,'game');
  h.button('quest-read','阅读原文',dx+(bw+8)*2,buttonY,bw,44,()=>h.go('quest-story'),h.busy,false,'game');
- if(!compact&&!h.error&&!h.notice&&!near&&action&&action!=='track_quest')h.text('QuestProximity','走近委托人后，可接取或交付。',dx,feedbackY,dw,36,14,C.muted);
+ if(!compact&&!h.error&&!h.notice&&!near&&action&&action!=='track_quest'&&!(action==='quest_accept'&&q.accept_anywhere))h.text('QuestProximity','走近委托人后，可接取或交付。',dx,feedbackY,dw,36,14,C.muted);
 }
 
 export function drawQuestStory(h:PanelHost,selection:BoardSelection){
  const q=h.state.quest_log.find(q=>q.id===selection.questId);
  const w=Math.min(800,h.width-40),columns=Math.max(12,Math.floor((w-80)/18)-2);
- const lines=q?textPages(q.description,columns,1).length:1;
+ const original=q?q.description+'\n回礼：'+Object.entries(q.reward).map(([id,n])=>id==='gold'?formatMoney(n):`${n} ${itemNames[id]||id}`).join('、')+` · ${q.xp} EXP`:'';
+ const lines=q?textPages(original,columns,1).length:1;
  const height=Math.min(Math.max(320,264+Math.min(12,lines)*27),h.height-28),x=(h.width-w)/2,y=(h.height-height)/2;
  paper(h,x,y,w,height);
  h.text('FeatureTitle','委托原文',x+34,y+20,w-160,38,22);
@@ -119,7 +125,7 @@ export function drawQuestStory(h:PanelHost,selection:BoardSelection){
  if(!q){h.text('QuestStoryMissing','这份委托暂不可用，请返回重新选择。',x+34,y+80,w-68,60);return;}
  h.text('QuestStoryName',q.title,x+34,y+76,w-68,42,24);
  h.line('StoryRule',[{x:x+34,y:y+128},{x:x+w-34,y:y+128}],C.line,1);
- const rows=Math.max(1,Math.floor((height-264)/27)),pages=textPages(q.description,columns,rows);
+ const rows=Math.max(1,Math.floor((height-264)/27)),pages=textPages(original,columns,rows);
  selection.detailPage=Math.min(selection.detailPage,pages.length-1);
  const body=h.text('QuestStoryBody',pages[selection.detailPage],x+40,y+148,w-80,rows*27,18);body.verticalAlign=Label.VerticalAlign.TOP;body.lineHeight=27;
  h.text('QuestSignature',q.giver_name+' 留',x+40,y+height-112,w-80,28,14,C.muted);

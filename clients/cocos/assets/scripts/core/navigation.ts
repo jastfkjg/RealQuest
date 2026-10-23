@@ -1,3 +1,4 @@
+import {chestObjects,carpenter} from './construction';
 import type {
   GameState,
   MapData,
@@ -7,14 +8,18 @@ import type {
 } from "./protocol";
 import { residentPositions } from "./residents";
 import { farmObjects } from "./farming";
+import {ranchObjects} from './ranching';
 import { villageIntroStep } from "./villageIntro";
 
 export const mapById = (world: World, id: string): MapData =>
   id === "overworld" ? world : world.areas?.[id] || world.interiors[id];
 export const currentMap = (world: World, state: GameState, now: number): MapData => ({
   ...mapById(world, state.location),
+  obstacles:[...mapById(world,state.location).obstacles,...(state.location==='home'?chestObjects(state).map(o=>o.hitbox!):[])],
   objects: [
-    ...farmObjects(mapById(world, state.location).objects,state).filter(
+    ...(state.location==='home'?chestObjects(state):state.location==='workshop'?[carpenter]:[]),
+    ...(state.location==='pasture'?ranchObjects(state):[]),
+    ...farmObjects(mapById(world, state.location).objects,state,mapById(world,state.location).cultivation).filter(
       (o) => !["npc", "travel_npc"].includes(o.kind),
     ),
     ...residentPositions(world, state, now).filter(
@@ -64,18 +69,19 @@ export function questTarget(
   quest: Quest,
   state: GameState,
 ): NavigationTarget | null {
-  if (quest.id === "leave_valley" && quest.status === "active") {
+  if (quest.status === 'available' && quest.accept_anywhere) return null;
+  if ((quest.id === "leave_valley" && (!state.quest_story || quest.legacy) || quest.id === 'first_expedition') && quest.status === "active") {
     const intro = villageIntroStep(state);
     if (intro) return intro.target || null;
   }
   if (quest.status === "ready" || quest.status === "available")
     return {
-      mapId:
+      mapId: quest.giver_map || (
         quest.giver === "mira"
           ? "shop"
           : quest.giver === "guild_board"
             ? "guild"
-            : "overworld",
+            : "overworld"),
       targetId: quest.giver,
     };
   const step = quest.checks.findIndex((v) => !v);
@@ -125,6 +131,24 @@ export function questTarget(
       { mapId: "overworld", targetId: "quarry" },
     ],
   };
+  if (state.quest_story && !quest.legacy) {
+    const field = {mapId: 'overworld', targetId: Object.entries(state.plots).find(([,p]) => p.crop_id === 'radish')?.[0] || state.farm?.tilled?.[0] || 'plot_0'};
+    const chicken = Object.entries(state.ranch?.animals || {}).find(([,a]) => a.species === 'chicken')?.[0];
+    Object.assign(targets, {
+      first_harvest: [field, field],
+      craft_planks: [{mapId:'workshop',targetId:'workshop_counter'}],
+      craft_home: [{mapId:'home',targetId:'home_desk'}],
+      ranch_start: [{mapId:'pasture',targetId:'shelter_coop'}, {mapId:'pasture',targetId:'ranch_ledger'}, {mapId:'pasture',targetId:chicken || 'ranch_ledger'}],
+      first_expedition: [{mapId:'workshop',targetId:'armory_counter'}, {mapId:'overworld',targetId:'cave_entry'}, {mapId:'workshop',targetId:'armory_counter'}],
+      gate_story: [{mapId:'overworld',targetId:'library'}, {mapId:'overworld',targetId:'village_departure'}],
+      gate_preparation: [{mapId:'overworld',targetId:'cave_entry'}, {mapId:'overworld',targetId:'noah'}],
+      leave_valley: [{mapId:'overworld',targetId:'village_departure'}, {mapId:'overworld',targetId:'village_departure'}],
+      crossing_path: [{mapId:'crossing',targetId:'river_bridge'}],
+      city_arrival: [{mapId:'mountain',targetId:'mountain_pass'}, {mapId:'inn',targetId:'lanya'}, {mapId:'inn',targetId:'inn_bed'}],
+      return_visit: [{mapId:'overworld',targetId:'board'}],
+      ranch_harvest: [{mapId:'pasture',targetId:chicken || 'ranch_ledger'}],
+    });
+  }
   return targets[quest.id]?.[step] || null;
 }
 export function walkable(map: MapData, x: number, y: number) {

@@ -8,6 +8,8 @@ import { imageDimensions } from '../../../tools/cocos-image-info.mjs';
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const root = path.resolve(project, '../..');
 execFileSync('python3',[path.join(root,'tools/generate_crop_catalog.py')]);
+execFileSync('python3',[path.join(root,'tools/generate_equipment_catalog.py')]);
+execFileSync('python3',[path.join(root,'tools/generate_ranch_catalog.py')]);
 const records = [];
 async function bind(source, target, transform = x => x) {
   const bytes = await fs.readFile(path.join(root, source));
@@ -37,6 +39,7 @@ async function bind(source, target, transform = x => x) {
   const previous=records.findIndex(r=>r.target===target);if(previous>=0)records.splice(previous,1);
   records.push({ source, target, sha256: crypto.createHash('sha256').update(bytes).digest('hex'), output_sha256: crypto.createHash('sha256').update(result).digest('hex') });
 }
+await bind('assets/generated/hearthwood/shop-interior-v2.png','assets/resources/ui/shop-interior.png');
 await bind('assets/generated/hearthwood/satchel-shell-v1.png','assets/resources/ui/satchel.png');
 await bind('assets/generated/hearthwood/commission-wood-v1.png','assets/resources/ui/notice-timber.png');
 await bind('assets/derived/panel-materials/notice-paper.png','assets/resources/ui/notice-paper.png');
@@ -45,10 +48,11 @@ for(const record of panelMaterials.records){const name=path.basename(record.path
 await bind('assets/runtime/hearthwood/detail/items/journal.png','assets/resources/items/journal.png');
 const inventoryArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/cocos-inventory-icons-v1.json'),'utf8'));
 for(const record of inventoryArt.records)await bind(record.path,'assets/resources/items/'+record.id+'.png');
+for(const item of ['wooden_chest','reinforced_chest'])await bind('assets/runtime/hearthwood/detail/interiors/chest-closed.png','assets/resources/items/'+item+'.png');
 await bind('shared/game/protocol.ts', 'assets/scripts/core/protocol.ts');
 await bind('assets/runtime/hearthwood/world-map-terrain-v1.png','assets/resources/atlas/terrain.png');
 for(const id of ['lia','noah','mira','adu','lanya'])await bind(`assets/runtime/hearthwood/residents/${id}-portrait.png`,`assets/resources/atlas/${id}.png`);
-for (const name of ['interaction', 'stamina', 'residents', 'villageIntro', 'navigation', 'appearances', 'client', 'clock', 'features', 'combatMotion', 'caveArt', 'caveView', 'localScene', 'sceneLayout', 'lifeJournalDates', 'lifeRecords', 'dossier', 'nextDeparture', 'guidance', 'continuation', 'places', 'atlas', 'cropCatalog', 'farming', 'items', 'inventory', 'preferences']) {
+for (const name of ['currency', 'interaction', 'stamina', 'residents', 'villageIntro', 'story', 'navigation', 'appearances', 'client', 'clock', 'features', 'swordMotion', 'combatMotion', 'caveArt', 'caveView', 'localScene', 'sceneLayout', 'lifeJournalDates', 'lifeRecords', 'dossier', 'nextDeparture', 'guidance', 'continuation', 'places', 'atlas', 'cropCatalog', 'gearCatalog', 'ranchCatalog', 'ranching', 'construction', 'farming', 'items', 'inventory', 'preferences']) {
   await bind(`shared/game/${name}.ts`, `assets/scripts/core/${name}.ts`, b => b.toString().replaceAll('"../types"', '"./protocol"').replace('"../stores/game"', '"./clock"'));
 }
 const art = ['home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0'];
@@ -71,5 +75,11 @@ if(lossless.records.length!==1||lossless.records[0].source!=='assets/derived/loc
 await bind(lossless.records[0].path,'assets/resources/scenes/terrain-web.webp');
 const farmingArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/farming-art-v1.json'),'utf8'));
 for(const record of farmingArt.records)await bind(record.path,'assets/resources/'+record.binding+'.png');
+const equipmentArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/equipment-art-v1.json'),'utf8'));
+for(const r of equipmentArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
+const swordArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/sword-motion-v1.json'),'utf8'));
+for(const r of swordArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
+const ranchArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/ranching-art-v1.json'),'utf8'));
+for(const r of [...ranchArt.records,...ranchArt.aliases])await bind(r.path,'assets/resources/'+r.binding+'.png');
 await fs.writeFile(path.join(project, 'asset-bindings.json'), JSON.stringify({schema_version:1,note:'Canonical shared/game logic and cave presentation; existing PNGs and reproducible scene derivatives, see tasks35–38.',records},null,2)+'\n');
 console.log(`Bound ${records.length} canonical sources and unchanged art files.`);

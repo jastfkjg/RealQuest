@@ -1,3 +1,4 @@
+import {formatMoney} from '../core/currency';
 import type {PanelHost} from './panels';
 import {C} from './theme';
 import {paperSurface,timberSurface} from './materials';
@@ -16,7 +17,7 @@ export class FarmingPanels {
   timberSurface(h,{x,y,w,h:height});paperSurface(h,{x:x+12,y:y+10,w:w-24,h:height-20});
   h.text('FarmTitle','向阳家园 · 耕作手记',x+24,y+12,w-150,36,short?20:24);
   h.button('close','回田边',x+w-100,y+10,76,44,()=>h.close(),h.busy,false,'back-light');
-  if(!short)h.text('FarmCapacity','种植 '+level+' 级 · 已开垦 '+(h.state.farm?.tilled.length??6)+' / '+(h.state.farming?.capacity||18)+' 块',x+24,y+52,w-48,24,15,C.muted);
+  if(!short)h.text('FarmCapacity','种植 '+level+' 级 · 已开垦 '+(h.state.farm?.tilled.length??6)+' 块 · 家园草地可用锄头开垦',x+24,y+52,w-48,24,15,C.muted);
   if(!target){h.text('FarmMissing','请回到家园，点选一块土地后再操作。',x+24,top,w-48,64);return;}
   h.line('FarmSeam',[{x:x+left,y:top},{x:x+left,y:footer-12}],C.line,1);
   const per=6,cw=(left-56)/2,rh=short?50:86;
@@ -25,7 +26,7 @@ export class FarmingPanels {
    h.button('farm-seed-'+v.id,'',xx,yy,44,44,()=>{this.seed=v.seed;this.restore=false;h.redraw(true);},h.busy,this.seed===v.seed,'game',{label:v.name+'种子目录，持有'+owned+'份，需要种植'+v.level+'级',pressed:this.seed===v.seed});
    h.image('items/'+v.seed,xx+22,yy+22,40,40);
    const lab=h.button('farm-choose-'+v.id,v.name+(short?'':'\n需'+v.level+'级'),xx+48,yy,cw-48,44,()=>{this.seed=v.seed;this.restore=false;h.redraw(true);},h.busy,this.seed===v.seed,'page');lab.fontSize=short?14:16;lab.lineHeight=20;
-   if(!short)h.text('SeedStock','持有 '+owned+' · '+v.buy+' 金币',xx,yy+48,cw,24,13,C.muted);
+   if(!short)h.text('SeedStock','持有 '+owned+' · '+formatMoney(v.buy),xx,yy+48,cw,24,13,C.muted);
   });
   h.button('farm-seeds-next',(this.page+1)+' / 2 · 换页',x+24,footer,left-48,44,()=>{this.page=1-this.page;h.redraw();},h.busy,false,'page');
   h.text('FarmPlotName',(target.kind==='soil'?'待开垦土地':p?c.name+' · '+(plotProgress(h.state,p,h.now)>=1?'可收获':'生长中'):'空田 · '+c.name),dx,top,dw,32,short?17:22);
@@ -34,8 +35,8 @@ export class FarmingPanels {
   const infoY=stagesY+size+(short?2:38),infoH=Math.max(38,footer-infoY-48);
   let text='',action='',disabled=false;
   if(target.kind==='soil'){
-   text='开垦消耗：4 金币、1 木材、1 石料\n另需 4 体力 · 家园升级可增加田地上限';action='确认开垦';
-   disabled=(h.state.farm?.tilled.length??6)>=(h.state.farming?.capacity||18)||(h.state.inventory.gold||0)<4||(h.state.inventory.wood||0)<1||(h.state.inventory.stone||0)<1||staminaNow(h.state,h.now)<4;
+   text='收起手记，在家园装备锄头直接点击草地。\n每块仅需 4 体力，可连续开垦。';action='挥锄 · 4体力';
+   disabled=staminaNow(h.state,h.now)<4;
   }else if(p){
    const ready=plotProgress(h.state,p,h.now)>=1;
    text=(ready?'成熟了，随时可以收获':'还需 '+remaining(h.state,p,h.now))+' · 本轮产量 '+c.yield+'\n'+(p.clock==='world'?'剩余 '+p.harvests_left+' 轮 · '+(p.watered?'本轮已浇水':'浇水可缩短本轮时间10%'):'旧作物保留原现实计时与一次留种');
@@ -44,7 +45,7 @@ export class FarmingPanels {
    text='需种植 '+c.level+' 级 · 当前 '+level+' 级 · 种子 '+(h.state.inventory[c.seed]||0)+'份\n'+growingDays(h.state,c.days)+' 游戏日首熟 · 每轮 '+c.yield+' 份 · 共 '+c.harvests+' 轮';
    action='确认播种 · 2体力';disabled=level<c.level||!(h.state.inventory[c.seed]>0)||staminaNow(h.state,h.now)<2;
   }
-  if(this.restore&&target.kind==='plot'&&!p)text='恢复草地消耗 2 体力；开垦材料不返还。\n确认后可以在这里重新开垦。';
+  if(this.restore&&target.kind==='plot'&&!p)text='恢复草地消耗 2 体力。\n恢复后可在合适草地用锄头重新开垦。';
   const label=h.text('FarmConditions',text,dx,infoY,dw,infoH,short?13:16,(this.restore?staminaNow(h.state,h.now)<2:disabled)?C.danger:C.ink);label.lineHeight=short?19:24;
   if(!h.error&&!h.notice)h.text('FarmClockRule',short?'游戏时间 / 睡眠生长 · 离线暂停':'游戏时间与睡眠推进生长；离线暂停，成熟不枯萎。',dx,footer-40,dw,32,short?12:14,C.muted);
   else h.text('FarmFeedback',h.error||h.notice,dx,footer-42,dw,36,13,h.error?C.danger:C.muted);

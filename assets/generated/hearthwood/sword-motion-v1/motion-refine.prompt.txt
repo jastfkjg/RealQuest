@@ -1,0 +1,10 @@
+Use case: precise-object-edit
+Edit target: Image1 (the supplemental16-pose motion sheet). Image2 is the approved sword-style reference only.
+Make ONE targeted correction to Image1: repair the SECOND COLUMN of all four rows. Preserve the other12 characters unchanged and keep the exact4x4 transparent grid.
+The second-column figures must be WALK B, the clear opposite leg stride from the first-column WALK A, with the SAME short grey sword visibly and correctly held in the SAME anatomical right hand as the first column. The sword cannot disappear.
+Row1/south: in walkA the boot on viewer-left is forward/down; in walkB extend the viewer-RIGHT boot forward/down and move viewer-left boot back/up. Sword is visible low on viewer-left, silver blade and gold guard, attached to the character's right hand.
+Row2/north: reverse the first-column feet, with viewer-RIGHT boot back/down and viewer-left boot forward/up, same green back and red hair, NO FACE. Sword is visible lowered on viewer-right, attached to the same right hand. Keep back facing.
+Row3/west: BOTH walk poses face LEFT. In walkB the nearer leg must trail to the right while the farther leg extends to the LEFT, reversing which visible boot/leg leads compared with walkA. Keep the same lowered short sword attached to the same hand, not floating.
+Row4/east: BOTH walk poses face RIGHT. In walkB the nearer leg must trail to the left while the farther leg extends RIGHT, reversing walkA. Same short sword and right-hand grip.
+Body/head scale, hair, expression, outfit and original pixel-art rendering must remain identical. Natural opposed shoulder/hip movement is enough; no new poses or action additions. Do not mirror the entire character to swap legs, because direction and weapon hand must stay fixed.
+Keep all four rows' dodge lean and dodge recovery poses exactly unchanged. Keep first-column walkA unchanged. Fully transparent alpha background; no shadows, text, outlines around cells, effects or trails. Ensure no cell overlaps.

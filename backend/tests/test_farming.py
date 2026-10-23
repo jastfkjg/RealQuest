@@ -4,7 +4,8 @@ import pytest
 from test_game import fresh,client,create,cmd
 from app.rules import apply,upgrade_state,RuleError
 from app.farming import CROPS,capacity,progress
-from app.world import WORLD,FARM_CELLS,map_for,walkable
+from app.world import WORLD,FARM_CELLS,HOME_LAND,map_for,walkable
+from app.farm_land import available_cells,cell_at,soil_reason,cell_by_id
 from app.daynight import ensure_clock,DAY_SECONDS
 from app.db import Session
 from app.models import Player
@@ -42,18 +43,43 @@ def test_clock_pause_sleep_water_and_legacy_progress():
  s.update(location='home',position={'x':336,'y':112});apply(s,'rest',{'target':'home_bed','kind':'sleep','world_day':1,'expected_day':1},100);assert progress(s,s['plots']['plot_0'],100)==1
  legacy=farm_state();legacy['plots']['plot_0']={'planted_at':100,'ready_at':160};legacy.pop('farm');s=upgrade_state(legacy);apply(s,'harvest',{'target':'plot_0'},160);assert s['inventory']['crop']==2 and s['inventory']['seed']==7
 
-def test_free_tilling_persistence_capacity_reclaim_and_geometry():
- assert len(FARM_CELLS)>=36
- for cell in FARM_CELLS:
+def test_free_tilling_persistence_reclaim_and_geometry():
+ cells=list(available_cells(HOME_LAND));assert len(cells)>42
+ assert any(c['id'].startswith('field_') for c in cells)
+ for cell in cells:
   assert walkable(cell['x'],cell['y'])
-  s=farm_state();s['position']={'x':cell['x'],'y':cell['y']};gold=s['inventory']['gold'];apply(s,'till',{'target':cell['id']},100);assert cell['id'] in s['farm']['tilled'];assert s['inventory']['gold']==gold-4
+  s=farm_state();s['position']={'x':cell['x'],'y':cell['y']};s['farm']['tilled']=[];s['inventory'].update(gold=0,wood=0,stone=0);before=copy.deepcopy(s['inventory'])
+  apply(s,'till',{'x':cell['x']+1,'y':cell['y']+1},100)
+  assert cell['id'] in s['farm']['tilled'] and s['inventory']==before and s['stamina']['current']==96
   restored=upgrade_state(s);assert next(o for o in map_for('overworld',restored,100)['objects'] if o['id']==cell['id'])['kind']=='plot'
   apply(s,'plant',{'target':cell['id']},100)
   with pytest.raises(RuleError):apply(s,'reclaim',{'target':cell['id']},100)
-  s['world_clock']['elapsed']=s['plots'][cell['id']]['ready_tick'];apply(s,'harvest',{'target':cell['id']},100);apply(s,'reclaim',{'target':cell['id']},100);assert cell['id'] not in s['farm']['tilled']
- s=farm_state();s['farm']['tilled']+=[o['id'] for o in FARM_CELLS[:12]];cell=FARM_CELLS[12];s['position']={'x':cell['x'],'y':cell['y']};before=copy.deepcopy(s)
- with pytest.raises(RuleError,match='上限'):apply(s,'till',{'target':cell['id']},100)
- assert s==before;s['buildings']['home']=2;assert capacity(s)==30;apply(s,'till',{'target':cell['id']},100)
+  s['world_clock']['elapsed']=s['plots'][cell['id']]['ready_tick'];apply(s,'harvest',{'target':cell['id']},100);apply(s,'reclaim',{'target':cell['id']},100)
+  assert cell['id'] not in s['farm']['tilled'] and not any(o['id']==cell['id'] for o in map_for('overworld',s,100)['objects'])
+
+def test_home_level_does_not_limit_hoe_and_legacy_fields_survive():
+ s=farm_state();s['farm']['tilled']=[];s['stamina'].update(current=1000,max=1000);before=copy.deepcopy(s['inventory'])
+ cells=list(available_cells(HOME_LAND))
+ for cell in cells:
+  s['position']={'x':cell['x'],'y':cell['y']};apply(s,'till',{'target':cell['id']},100)
+ assert len(s['farm']['tilled'])==len(cells) and s['inventory']==before and s['stamina']['current']==1000-len(cells)*4
+ cap=capacity(s);s['buildings']['home']=3;assert capacity(s)==cap
+ old=farm_state();old['farm']['tilled']+=[c['id'] for c in FARM_CELLS];old['plots']['farm_0_8']={'planted_at':10,'ready_at':20}
+ upgraded=upgrade_state(old);assert upgraded['farm']==old['farm'] and upgraded['plots']==old['plots']
+ assert {o['id'] for o in map_for('overworld',upgraded,100)['objects'] if o['kind']=='plot'}==set(old['farm']['tilled'])
+
+@pytest.mark.parametrize('xy',[(280,440),(136,344),(160,152),(64,304),(472,488),(88,824),(328,344)])
+def test_hoe_rejects_paths_obstacles_water_and_outside_home(xy):
+ s=farm_state();s['farm']['tilled']=[];cell=cell_at(HOME_LAND,*xy);s['position']={k:cell[k] for k in ('x','y')};before=copy.deepcopy(s)
+ assert soil_reason(HOME_LAND,cell)
+ with pytest.raises(RuleError):apply(s,'till',{'x':xy[0],'y':xy[1]},100)
+ assert s==before
+
+@pytest.mark.parametrize('data',[{'x':True,'y':440},{'x':'136','y':440},{'x':None,'y':440},{'x':float('nan'),'y':440},{'x':float('inf'),'y':440},{'x':10**400,'y':440},{'x':88},{'target':'field_0_0'},{'target':'field_00_-8'},{'target':'plot_1','x':88,'y':440}])
+def test_hoe_rejects_forged_coordinates_and_aliases(data):
+ s=farm_state();before=copy.deepcopy(s)
+ with pytest.raises(RuleError):apply(s,'till',data,100)
+ assert s==before
 
 @pytest.mark.parametrize('action,data',[('plant',{'seed':[]}),('plant',{'seed':'unknown'}),('water',{}),('harvest',{}),('till',{}),('reclaim',{})])
 def test_rejections_do_not_consume_resources(action,data):
@@ -67,7 +93,7 @@ def test_receipt_retry_harvest_and_till_are_exactly_once(client):
  create(client)
  with Session() as db:
   p=db.scalar(select(Player));s=upgrade_state(p.state);cell=FARM_CELLS[0];s['position']={'x':cell['x'],'y':cell['y']};s['inventory'].update(gold=100,wood=10,stone=10);p.state=s;db.commit()
- body={'action':'till','data':{'target':cell['id']},'request_id':str(uuid.uuid4())};a=client.post('/api/command',json=body);assert a.status_code==200;b=client.post('/api/command',json=body);assert b.json()['state']==a.json()['state'] and b.json()['replayed'];assert a.json()['state']['inventory']['gold']==96
+ body={'action':'till','data':{'target':cell['id']},'request_id':str(uuid.uuid4())};a=client.post('/api/command',json=body);assert a.status_code==200;b=client.post('/api/command',json=body);assert b.json()['state']==a.json()['state'] and b.json()['replayed'];assert a.json()['state']['inventory']['gold']==100 and a.json()['state']['stamina']['current']==96
  body={'action':'plant','data':{'target':cell['id'],'seed':'seed'},'request_id':str(uuid.uuid4())};a=client.post('/api/command',json=body);assert a.status_code==200;assert client.post('/api/command',json=body).json()['state']==a.json()['state']
  with Session() as db:
   p=db.scalar(select(Player));s=copy.deepcopy(p.state);s['world_clock']['elapsed']=s['plots'][cell['id']]['ready_tick'];s['world_clock']['running_until']=0;p.state=s;db.commit()
@@ -87,7 +113,7 @@ def test_competing_requests_cannot_till_or_harvest_twice(client):
    return connection.post('/api/command',json={'action':action,'data':{'target':cell['id']},'request_id':str(uuid.uuid4())}).status_code
  with ThreadPoolExecutor(max_workers=2) as pool:assert sorted(pool.map(request,['till','till']))==[200,422]
  with Session() as db:
-  player=db.scalar(select(Player));s=copy.deepcopy(player.state);assert s['inventory']['gold']==96;s['plots'][cell['id']]={'planted_at':1,'ready_at':2};player.state=s;db.commit()
+  player=db.scalar(select(Player));s=copy.deepcopy(player.state);assert s['inventory']['gold']==100 and s['stamina']['current']==96;s['plots'][cell['id']]={'planted_at':1,'ready_at':2};player.state=s;db.commit()
  with ThreadPoolExecutor(max_workers=2) as pool:assert sorted(pool.map(request,['harvest','harvest']))==[200,422]
  with Session() as db:
   player=db.scalar(select(Player));assert player.state['inventory']['crop']==2

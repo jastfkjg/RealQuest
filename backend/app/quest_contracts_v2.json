@@ -1,0 +1,345 @@
+[
+  {
+    "id": "settle_in",
+    "title": "给新生活一个落脚点",
+    "description": "先看看自己的小屋，再拾些木材。村民给你准备了种子，可以从家门口的田地开始。",
+    "objectives": [
+      "进入林间小屋",
+      "采集3份木材"
+    ],
+    "reward": {
+      "gold": 12,
+      "seed": 3
+    },
+    "requires": null,
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 10,
+    "attribute": "stewardship",
+    "kind": "main"
+  },
+  {
+    "id": "first_harvest",
+    "title": "土地的第一份回礼",
+    "description": "用白萝卜给邻居们添一道菜。亲手收获4份，再带4份到告示板确认交付。两块田的一轮收成就够；游戏睡眠推进生长，离线暂停。等待时可以认识小铺、收集修缮材料。已收获的进度会保留；误卖后可补种。",
+    "objectives": [
+      "亲手收获4份白萝卜",
+      "带4份白萝卜回告示板交付"
+    ],
+    "reward": {
+      "gold": 25
+    },
+    "requires": "settle_in",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 15,
+    "attribute": "stewardship",
+    "kind": "main",
+    "delivery": {
+      "crop": 4
+    }
+  },
+  {
+    "id": "craft_planks",
+    "title": "把落枝变成木板",
+    "description": "邻居请你到工坊练练手：3份木材能做1块木板。先认识材料如何变成成品；完成后工坊会备好修缮小屋的基础物资。",
+    "objectives": [
+      "在工坊制作1块木板"
+    ],
+    "reward": {
+      "wood": 6,
+      "stone": 3
+    },
+    "requires": "first_harvest",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 10,
+    "attribute": "craft",
+    "kind": "main"
+  },
+  {
+    "id": "craft_home",
+    "title": "让这里像个家",
+    "description": "带上修缮物资，在小屋手册把林间小屋升到2级，需6木材、3石料和10银币。村里的回礼包含牧场筹建补助：140银币、12木材、4石料、3饲料，另有20银币酬谢，足够建基础禽舍并安置一只小鸡。",
+    "objectives": [
+      "林间小屋升至2级"
+    ],
+    "reward": {
+      "gold": 160,
+      "wood": 12,
+      "stone": 4,
+      "animal_feed": 3
+    },
+    "requires": "craft_planks",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 20,
+    "attribute": "craft",
+    "kind": "main"
+  },
+  {
+    "id": "ranch_start",
+    "title": "院子里的新邻居",
+    "description": "从家园牧场入口到向阳牧场，用筹建补助建1级禽舍，在采购簿订一只小鸡，再亲手添一次口粮。禽舍80银币、12木材、4石料，小鸡60银币；只需完成喂养，不用等待成年或产蛋。已有住所和照料经历同样算数。",
+    "objectives": [
+      "建成1级禽舍",
+      "安置一只鸡",
+      "给鸡添一次口粮"
+    ],
+    "reward": {
+      "gold": 12
+    },
+    "requires": "craft_home",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 15,
+    "attribute": "stewardship",
+    "kind": "main"
+  },
+  {
+    "id": "first_expedition",
+    "title": "给工坊带些材料",
+    "description": "工坊需要石根山洞首层的材料。购买或打造一件武器并装备，清理首层，带胶质回武备台看看用途。不必深入第二层；随时可以撤离，通路和收获会保留。",
+    "objectives": [
+      "准备并装备武器",
+      "清理洞穴首层",
+      "带材料回工坊并记下回顾"
+    ],
+    "reward": {
+      "gold": 20
+    },
+    "requires": "ranch_start",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 15,
+    "attribute": "strength",
+    "kind": "main"
+  },
+  {
+    "id": "gate_story",
+    "title": "石头上的旧纹路",
+    "description": "工坊里的发现指向村东石门。先到图书馆看看旧记载，再到石门旁阅读并记下启门条件。条件会在深入洞穴前完整说明，调查本身不消耗物品。",
+    "objectives": [
+      "进入回响图书馆",
+      "在村东石门记下启门条件"
+    ],
+    "reward": {
+      "gold": 8
+    },
+    "requires": "first_expedition",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 10,
+    "attribute": "wisdom",
+    "kind": "main"
+  },
+  {
+    "id": "gate_preparation",
+    "title": "为山那边做准备",
+    "description": "石门需要底层守卫保底掉落的门钥魔法石，以及魔法3级。两项准备可以交错进行；从0级起，学习约定至少需3小时现实等待，结算后主动投入魔法，游戏睡眠不能加速。已有魔法与首胜记录保留。",
+    "objectives": [
+      "击败洞穴底层守卫，取得门钥魔法石",
+      "将魔法提升至3级"
+    ],
+    "reward": {
+      "gold": 10
+    },
+    "requires": "gate_story",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 15,
+    "attribute": "strength",
+    "kind": "main"
+  },
+  {
+    "id": "leave_valley",
+    "title": "山那边，灯火正亮",
+    "description": "村民把给岚姨的信托付给你。准备好后，到村东石门亲手嵌石，踏上通往苇风渡口的小路。石门开启后永久通行，随时可以回家。",
+    "objectives": [
+      "在村东石门嵌石开启通路",
+      "走到村外苇风渡口"
+    ],
+    "reward": {
+      "gold": 20
+    },
+    "requires": "gate_preparation",
+    "giver": "river_bridge",
+    "giver_name": "苇风渡口路牌",
+    "xp": 20,
+    "attribute": "strength",
+    "kind": "main",
+    "giver_map": "crossing",
+    "accept_anywhere": true
+  },
+  {
+    "id": "crossing_path",
+    "title": "河对岸的小路",
+    "description": "从渡口选择一种适合自己的办法：修桥或乘船，都可以继续旅程。先查看现场报价；到对岸的山路营地确认行程，无需折返或再走另一种方案。",
+    "objectives": [
+      "修桥或乘船渡河"
+    ],
+    "reward": {
+      "gold": 8
+    },
+    "requires": "leave_valley",
+    "giver": "mountain_camp",
+    "giver_name": "山路营地路牌",
+    "xp": 10,
+    "attribute": "strength",
+    "kind": "main",
+    "giver_map": "mountain",
+    "accept_anywhere": true
+  },
+  {
+    "id": "city_arrival",
+    "title": "把来信送到灯火下",
+    "description": "沿山路抵达苔桥城，向灯穗旅店的岚姨交信，再安排一晚住宿。留意路程体力与旅店费用，旅途中可以休息、折返。",
+    "objectives": [
+      "翻越苍脊山脉抵达苔桥城",
+      "向岚姨交信",
+      "付费住宿并在旅店睡醒"
+    ],
+    "reward": {
+      "gold": 12
+    },
+    "requires": "crossing_path",
+    "giver": "lanya",
+    "giver_name": "灯穗旅店 · 岚姨",
+    "xp": 10,
+    "attribute": "bond",
+    "kind": "main",
+    "giver_map": "inn",
+    "accept_anywhere": true
+  },
+  {
+    "id": "market_neighbor",
+    "title": "小铺的第一位熟客",
+    "description": "等作物长大的时候，去认识米拉吧。小铺也收购落枝和石料；交付主线需要4份白萝卜，出售前记得留够。",
+    "objectives": [
+      "进入风铃杂货铺",
+      "向米拉出售1份物品"
+    ],
+    "reward": {
+      "gold": 10,
+      "seed": 2
+    },
+    "requires": "settle_in",
+    "giver": "mira",
+    "giver_name": "杂货铺店主 · 米拉",
+    "xp": 10,
+    "attribute": "bond",
+    "kind": "side"
+  },
+  {
+    "id": "forest_path",
+    "title": "沿着风去森林",
+    "description": "沿村道找到微光林地，再采集6份石料。认识材料来源，以后修缮和扩建会更从容。",
+    "objectives": [
+      "发现微光林地",
+      "采集6份石料"
+    ],
+    "reward": {
+      "gold": 25,
+      "seed": 3
+    },
+    "requires": "first_harvest",
+    "giver": "noah",
+    "giver_name": "森林向导 · 诺亚",
+    "xp": 15,
+    "attribute": "strength",
+    "kind": "side"
+  },
+  {
+    "id": "village_supplier",
+    "title": "在村里扎下根",
+    "description": "想多帮邻居一些忙，可以去小铺完成三份补给订单，并把小屋修到2级。订单是可选经营，不影响主线继续。",
+    "objectives": [
+      "累计交付3份小铺订单",
+      "林间小屋升至2级"
+    ],
+    "reward": {
+      "gold": 50
+    },
+    "requires": [
+      "market_neighbor",
+      "craft_home"
+    ],
+    "giver": "mira",
+    "giver_name": "杂货铺店主 · 米拉",
+    "xp": 20,
+    "attribute": "stewardship",
+    "kind": "side"
+  },
+  {
+    "id": "ranch_harvest",
+    "title": "第一份牧场回礼",
+    "description": "慢慢照顾牧场伙伴，等成年后收集一份真实产物。缺食只暂停生长，离线不推进；这份委托可以留待日后完成。",
+    "objectives": [
+      "从动物身上收集1份产物"
+    ],
+    "reward": {
+      "gold": 20
+    },
+    "requires": "ranch_start",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 10,
+    "attribute": "stewardship",
+    "kind": "side"
+  },
+  {
+    "id": "rune_research",
+    "title": "纸页间沉睡的秘密",
+    "description": "莉亚想请你研究村中的另一处古代符文。在现实中积累25点学识经验，再探索沉睡符文；这份研究不代替启门魔法等级。",
+    "objectives": [
+      "进入回响图书馆",
+      "积累25点学识经验",
+      "唤醒沉睡的符文"
+    ],
+    "reward": {
+      "gold": 30
+    },
+    "requires": "gate_story",
+    "giver": "lia",
+    "giver_name": "图书管理员 · 莉亚",
+    "xp": 20,
+    "attribute": "wisdom",
+    "kind": "side"
+  },
+  {
+    "id": "wide_world",
+    "title": "小路之外的风景",
+    "description": "去湖畔和旧采石场看看，熟悉村庄周边的地理。可以在探洞前后顺路完成。",
+    "objectives": [
+      "发现风铃湖",
+      "发现旧采石场"
+    ],
+    "reward": {
+      "gold": 40,
+      "seed": 5
+    },
+    "requires": "ranch_start",
+    "giver": "guild_board",
+    "giver_name": "公会委托台",
+    "xp": 20,
+    "attribute": "strength",
+    "kind": "side"
+  },
+  {
+    "id": "return_visit",
+    "title": "给村里报个平安",
+    "description": "在城市安顿好之后，挑个方便的时候回村看看。家园、牧场和邻居一直在这里。",
+    "objectives": [
+      "返回回响村庄"
+    ],
+    "reward": {
+      "gold": 10
+    },
+    "requires": "city_arrival",
+    "giver": "board",
+    "giver_name": "村庄告示板",
+    "xp": 10,
+    "attribute": "bond",
+    "kind": "side"
+  }
+]

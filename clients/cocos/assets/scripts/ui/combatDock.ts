@@ -164,7 +164,7 @@ export class CombatDock {
     }
     const c = s.combat!,
       weapon = c.equipped ? c.weapons[c.equipped] : null,
-      has = !!weapon && !!s.inventory[c.equipped!],
+      has = !!weapon && !!s.inventory[c.equipped!] && !weapon.use_reasons?.length,
       stamina = s.stamina?.current || 0;
     const data: [string, string, string, boolean][] = [
       [
@@ -175,8 +175,8 @@ export class CombatDock {
             ? "出手中"
             : c.attack_at > c.time
               ? "收势"
-              : c.equipped === "spring_spear" ? "直刺" : c.equipped === "glow_staff" ? "法弹" : "挥剑",
-        compact ? "按住连击" : "空格 · 免体力",
+              : !has?'先装备武器':({thrust:'直刺',bolt:'法弹',arrow:'射击',bullet:'开火',laser:'光束',smash:'重击'} as Record<string,string>)[weapon?.style||'']||'挥剑',
+        compact ? "按住连击" : "左键 / 空格",
         locked || !has || stamina < (weapon?.stamina || 0),
       ],
       [
@@ -196,7 +196,7 @@ export class CombatDock {
               ? "4 体力"
               : "Q · 4 体力",
         locked ||
-          !c.spark_learned ||
+          !has || !c.spark_learned ||
           !!c.cast ||
           c.attack_at > c.time ||
           c.spark_at > c.time ||
@@ -218,8 +218,8 @@ export class CombatDock {
       ],
       [
         "next-target",
-        compact ? "目标" : "切换目标",
-        compact ? "点击选择" : "T · 不会攻击",
+        compact ? "锁定" : "锁定目标",
+        compact ? "点击选择" : "T / 右键",
         locked || !c.enemies.some((e) => e.hp > 0),
       ],
     ];

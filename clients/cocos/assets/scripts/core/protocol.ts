@@ -1,3 +1,4 @@
+import type {RanchState,RanchView} from './ranching';
 export type Attribute =
   "strength" | "wisdom" | "craft" | "stewardship" | "bond";
 export interface WorldObject {
@@ -15,11 +16,20 @@ export interface WorldObject {
   activity?: string;
   walking?: boolean;
 }
-export interface WeaponDefinition {
+export interface GearDefinition {
+ id:string;name:string;route:string;tier:number;slot:string;price:number;region:string;sale:boolean;
+ blueprint_source:string;blueprint_price:number;known:boolean;effect_text:string;effect?:string;
+ min_stamina:number;use_science:number;use_magic:number;building:number;science:number;magic_level:number;
+ costs:Record<string,number>;craft_reasons:string[];use_reasons:string[];research_reasons:string[];
+ defense?:number;dodge_bonus?:number;hurt_bonus?:number;heal_bonus?:number;light?:boolean;
+}
+export interface WeaponDefinition extends GearDefinition {
+ style:string;focus:boolean;
   name: string;
   price: number;
   damage: number;
   interval: number;
+  windup?: number;
   reach: number;
   stamina: number;
   magic: boolean;
@@ -65,8 +75,13 @@ export interface CombatView {
     angle: number;
     until: number;
     wave: string;
-    side?: string;
+    side?: string;style?:string;effect?:string;
   }[];
+  gear?:Record<string,GearDefinition>;
+  equipment?:Record<string,string|null>;
+  blueprints?:Record<string,string>;
+  gear_stats?:{defense:number;dodge_bonus:number;hurt_bonus:number;heal_bonus:number;light:boolean};
+  gear_shop?:{region:string;name:string;target:string;offers:string[];diagrams:string[];research:string[];craft:string[];materials:Record<string,{name:string;price:number;icon:string;summary:string}>};
   weapons: Record<string, WeaponDefinition>;
   enemies: CaveEnemy[];
   floor: number;
@@ -198,6 +213,11 @@ export interface TravelOption {
   reasons: string[];
 }
 export interface GameState {
+  construction?: import('./construction').ConstructionState;
+  construction_view?: import('./construction').ConstructionView;
+  /** Amounts under inventory.gold, costs.gold and rewards.gold are integer silver. */
+  economy_version?: number;
+  quest_story?: {version: number; legacy_departure: boolean};
   village_intro?: {
     version: number;
     dismissed: boolean;
@@ -297,6 +317,8 @@ export interface GameState {
   knowledge_shard: number;
   buildings: Record<string, number>;
   farm?: {version:number;tilled:string[]};
+  ranch?: RanchState;
+  ranching?: RanchView;
   farming?: {capacity:number;till_cost:Record<string,number>;stamina:Record<string,number>;clock:string;day_seconds:number;growth_multiplier:number;plots:Record<string,{progress:number;ready:boolean}>};
   plots: Record<string, {planted_at:number;ready_at?:number;crop_id?:string;clock?:string;planted_tick?:number;ready_tick?:number;harvests_left?:number;watered?:boolean}>;
   gathered: Record<string, number>;
@@ -346,6 +368,7 @@ export type Panel =
   | "sleep"
   | "neighbors"
   | "farm"
+  | "ranch"
   | "training"
   | "menu"
   | "map"
@@ -426,6 +449,8 @@ export interface MapData {
   furniture?: Furniture[];
   regions?: Region[];
   spawn?: { x: number; y: number };
+  roads?: [number[][],number][];
+  cultivation?: {bounds:number[];origin:number[];step:number;legacy:WorldObject[];blocked:number[][];roads:[number[][],number][]};
 }
 export interface Quest {
   id: string;
@@ -439,7 +464,11 @@ export interface Quest {
   reward: Record<string, number>;
   xp: number;
   attribute: Attribute;
-  requires: string | null;
+  requires: string | string[] | null;
+  legacy?: boolean;
+  delivery?: Record<string, number>;
+  giver_map?: string;
+  accept_anywhere?: boolean;
   status: "available" | "locked" | "active" | "ready" | "claimed";
 }
 export interface NavigationTarget {

@@ -50,6 +50,8 @@ export class ArrivalScene {
   this.image('InnFacade','village/home',352,240,'to_inn');
   this.image('SupplyHouse','village/shop',616,284);
   this.image('SupplyCounter','interiors/market-counter',608,348,'city_supplies');
+  this.image('PrecisionAnvil','interiors/anvil',520,320,'city_armory');
+  this.sign('PrecisionShopName','精密工坊',520,280,64);
   this.image('SouthGateNotice','village/board',480,440,'city_notice');
   for(const x of [312,392])this.image('InnLamp','village/lantern',x,244);
   for(const x of [272,432])this.image('InnGarden','interiors/planter',x,220);

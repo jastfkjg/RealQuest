@@ -1,0 +1,2515 @@
+{
+  "schema_version": 1,
+  "creator": "OpenAI built-in image_gen; original RealQuest Hearthwood artwork",
+  "license": "Original project-generated artwork; no third-party game sprites or fonts",
+  "processing": "Measured per-sprite rectangles; alpha >=160; largest 4-connected body; nearest-neighbor resizing; transparent canvas; source sheets unchanged. Animals share fixed per-sheet scale to retain life-stage size differences.",
+  "script": "tools/build_ranching_art.py",
+  "script_sha256": "d43d4f91f69ba1b277ef13df5bb0a893743d75b89a7ca99c69367c55458c3c54",
+  "review_status": "Generated candidate; 1:1 contact sheets inspected by implementer, owner visual approval not implied",
+  "sources": [
+    {
+      "path": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "width": 1247,
+      "height": 1261,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "prompt": "assets/generated/hearthwood/ranching-v1/small-animals.prompt.txt",
+      "prompt_sha256": "7c251beedae3aa2d79116ffd48862d736fd35b38dd13382ca305ad61d703cf4f"
+    },
+    {
+      "path": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "prompt": "assets/generated/hearthwood/ranching-v1/large-animals.prompt.txt",
+      "prompt_sha256": "5a7d7c0eeb14476208aaf8262fe735436632aeb8b061a874fc50b0023cec9bd7"
+    },
+    {
+      "path": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "prompt": "assets/generated/hearthwood/ranching-v1/buildings.prompt.txt",
+      "prompt_sha256": "03123e7a75581688fed8e8efda34e0a516c890dc02b1e96ed17cc425b538ab63"
+    },
+    {
+      "path": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "prompt": "assets/generated/hearthwood/ranching-v1/facilities.prompt.txt",
+      "prompt_sha256": "74801d3dab80bdb9929387df835c749ea56fe317dbcbc32ae2d878313597ee60"
+    },
+    {
+      "path": "assets/generated/hearthwood/ranching-v1/items.png",
+      "sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "prompt": "assets/generated/hearthwood/ranching-v1/items.prompt.txt",
+      "prompt_sha256": "680199ee5b05cd941134bc17a3995f8dc83bf14d47a95053661824a64a3189f3"
+    }
+  ],
+  "records": [
+    {
+      "id": "chicken-1",
+      "group": "animals",
+      "binding": "ranching/chicken-1",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        138,
+        191,
+        300,
+        370
+      ],
+      "crop_dimensions": [
+        162,
+        179
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        29,
+        32
+      ],
+      "offset": [
+        33,
+        58
+      ],
+      "content_bounds": [
+        33,
+        58,
+        62,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/chicken-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "78323d34b4392fb6977090f579f0a63b8c733659a78d37fd8afbe393109fcab8",
+      "species": "chicken",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "chicken-2",
+      "group": "animals",
+      "binding": "ranching/chicken-2",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        490,
+        116,
+        730,
+        378
+      ],
+      "crop_dimensions": [
+        240,
+        262
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        43,
+        47
+      ],
+      "offset": [
+        26,
+        43
+      ],
+      "content_bounds": [
+        26,
+        43,
+        69,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/chicken-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "b7388aab43d50b286da5938164e9e85eb8f8a2ce5a06a5896cffb923619299fc",
+      "species": "chicken",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "chicken-3",
+      "group": "animals",
+      "binding": "ranching/chicken-3",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        860,
+        56,
+        1153,
+        380
+      ],
+      "crop_dimensions": [
+        293,
+        324
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        53,
+        58
+      ],
+      "offset": [
+        21,
+        32
+      ],
+      "content_bounds": [
+        21,
+        32,
+        74,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/chicken-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "3c63514c8ef3c22dd9eecfb734cbfefe78dbf13ff579bb122ff42a43a6ad7f5f",
+      "species": "chicken",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "duck-1",
+      "group": "animals",
+      "binding": "ranching/duck-1",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        96,
+        538,
+        311,
+        772
+      ],
+      "crop_dimensions": [
+        215,
+        234
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        39,
+        42
+      ],
+      "offset": [
+        28,
+        48
+      ],
+      "content_bounds": [
+        28,
+        48,
+        67,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/duck-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "d6c5d3195a06193e8164a7d1db337d21756ea33b9493725b79d540ad98b35663",
+      "species": "duck",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "duck-2",
+      "group": "animals",
+      "binding": "ranching/duck-2",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        462,
+        483,
+        747,
+        773
+      ],
+      "crop_dimensions": [
+        285,
+        290
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        51,
+        52
+      ],
+      "offset": [
+        22,
+        38
+      ],
+      "content_bounds": [
+        22,
+        38,
+        73,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/duck-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "89a270a219d204a2f3ce0166c3452917e0de388f4d4afc93fa679ac9836805ee",
+      "species": "duck",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "duck-3",
+      "group": "animals",
+      "binding": "ranching/duck-3",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        845,
+        460,
+        1201,
+        786
+      ],
+      "crop_dimensions": [
+        356,
+        326
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        64,
+        59
+      ],
+      "offset": [
+        16,
+        31
+      ],
+      "content_bounds": [
+        16,
+        31,
+        80,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/duck-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "500dbd2c931f3b9fcc62f3c4c4ee2cf88a4f2abd5bef58e40dc6618baca6cb42",
+      "species": "duck",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "sheep-1",
+      "group": "animals",
+      "binding": "ranching/sheep-1",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        64,
+        913,
+        344,
+        1188
+      ],
+      "crop_dimensions": [
+        280,
+        275
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        50,
+        50
+      ],
+      "offset": [
+        23,
+        40
+      ],
+      "content_bounds": [
+        23,
+        40,
+        73,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/sheep-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "f0810d552716c06a1840af2e0b3164eb543c1114cdb66520d3d99439eb39b0d0",
+      "species": "sheep",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "sheep-2",
+      "group": "animals",
+      "binding": "ranching/sheep-2",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        443,
+        885,
+        753,
+        1195
+      ],
+      "crop_dimensions": [
+        310,
+        310
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        56,
+        56
+      ],
+      "offset": [
+        20,
+        34
+      ],
+      "content_bounds": [
+        20,
+        34,
+        76,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/sheep-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "36c9bffe53c0658e0699b20494b30c2485a8066002dd46d857a8e4fcec05f5dd",
+      "species": "sheep",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "sheep-3",
+      "group": "animals",
+      "binding": "ranching/sheep-3",
+      "source": "assets/generated/hearthwood/ranching-v1/small-animals.png",
+      "source_sha256": "5f43ce7f6cca0fe1ca6378e968478f81a48201bda1ba61d86e0a267b7d6501f9",
+      "crop": [
+        822,
+        860,
+        1211,
+        1214
+      ],
+      "crop_dimensions": [
+        389,
+        354
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.18,
+      "resized_dimensions": [
+        70,
+        64
+      ],
+      "offset": [
+        13,
+        26
+      ],
+      "content_bounds": [
+        13,
+        26,
+        83,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/sheep-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "e5e7e4024716817d8bc8332eb32a18c56c658c333a6bffb14a17817446a21b74",
+      "species": "sheep",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "cow-1",
+      "group": "animals",
+      "binding": "ranching/cow-1",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        48,
+        143,
+        281,
+        340
+      ],
+      "crop_dimensions": [
+        233,
+        197
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        47,
+        39
+      ],
+      "offset": [
+        24,
+        51
+      ],
+      "content_bounds": [
+        24,
+        51,
+        71,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/cow-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "114d0919fdd5d33c118434541c22166df77fe5374dc118dddff6aa209b6ed42f",
+      "species": "cow",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "cow-2",
+      "group": "animals",
+      "binding": "ranching/cow-2",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        342,
+        75,
+        651,
+        344
+      ],
+      "crop_dimensions": [
+        309,
+        269
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        62,
+        54
+      ],
+      "offset": [
+        17,
+        36
+      ],
+      "content_bounds": [
+        17,
+        36,
+        79,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/cow-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "92c06339a71556d3e604738511abf076c144c2f406d1a9f92ae9be7690bcec82",
+      "species": "cow",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "cow-3",
+      "group": "animals",
+      "binding": "ranching/cow-3",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        677,
+        53,
+        1067,
+        355
+      ],
+      "crop_dimensions": [
+        390,
+        302
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        78,
+        60
+      ],
+      "offset": [
+        9,
+        30
+      ],
+      "content_bounds": [
+        9,
+        30,
+        87,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/cow-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "e4e9e549e7dd52f03fcf8a036651ff63fed673fa0dd76dccaddff0aaccf9a8d9",
+      "species": "cow",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "goat-1",
+      "group": "animals",
+      "binding": "ranching/goat-1",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        57,
+        490,
+        272,
+        704
+      ],
+      "crop_dimensions": [
+        215,
+        214
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        43,
+        43
+      ],
+      "offset": [
+        26,
+        47
+      ],
+      "content_bounds": [
+        26,
+        47,
+        69,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/goat-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "7457e0ed32d16753a12288c94feda9cc7a6dcad09163f58bcf4a240faec4d221",
+      "species": "goat",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "goat-2",
+      "group": "animals",
+      "binding": "ranching/goat-2",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        354,
+        436,
+        635,
+        710
+      ],
+      "crop_dimensions": [
+        281,
+        274
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        56,
+        55
+      ],
+      "offset": [
+        20,
+        35
+      ],
+      "content_bounds": [
+        20,
+        35,
+        76,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/goat-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "018ad5bd9077b594c0a584c20a83b760ecd845e6f52694c3f9c05f36a1f31360",
+      "species": "goat",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "goat-3",
+      "group": "animals",
+      "binding": "ranching/goat-3",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        703,
+        396,
+        1065,
+        717
+      ],
+      "crop_dimensions": [
+        362,
+        321
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        72,
+        64
+      ],
+      "offset": [
+        12,
+        26
+      ],
+      "content_bounds": [
+        12,
+        26,
+        84,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/goat-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "bf5ac1661134ab62696e4405d9fb4ae72ebf733c1d165a080edeb5b37f7e2f52",
+      "species": "goat",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "pig-1",
+      "group": "animals",
+      "binding": "ranching/pig-1",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        63,
+        840,
+        264,
+        1003
+      ],
+      "crop_dimensions": [
+        201,
+        163
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        40,
+        33
+      ],
+      "offset": [
+        28,
+        57
+      ],
+      "content_bounds": [
+        28,
+        57,
+        68,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/pig-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "230045f4c71442a881aa4440b997d9efa88a6e27f4afa3188b9ac18d5e83d963",
+      "species": "pig",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "pig-2",
+      "group": "animals",
+      "binding": "ranching/pig-2",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        350,
+        790,
+        645,
+        1003
+      ],
+      "crop_dimensions": [
+        295,
+        213
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        59,
+        43
+      ],
+      "offset": [
+        18,
+        47
+      ],
+      "content_bounds": [
+        18,
+        47,
+        77,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/pig-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "9a31c69552531edf905676d301e78c43529f9f40a787cc30b6233bc0b428ea01",
+      "species": "pig",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "pig-3",
+      "group": "animals",
+      "binding": "ranching/pig-3",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        702,
+        759,
+        1063,
+        1016
+      ],
+      "crop_dimensions": [
+        361,
+        257
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        72,
+        51
+      ],
+      "offset": [
+        12,
+        39
+      ],
+      "content_bounds": [
+        12,
+        39,
+        84,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/pig-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "f0140a0c15533ab47c462cc6a835285955e18efcc6303e6cbf9901bbadf0e974",
+      "species": "pig",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "horse-1",
+      "group": "animals",
+      "binding": "ranching/horse-1",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        29,
+        1125,
+        263,
+        1404
+      ],
+      "crop_dimensions": [
+        234,
+        279
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        47,
+        56
+      ],
+      "offset": [
+        24,
+        34
+      ],
+      "content_bounds": [
+        24,
+        34,
+        71,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/horse-1.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "94fa4081164e09e3dfbaa1ef38720b56b09051f5614fa96784cde82e9e35301d",
+      "species": "horse",
+      "stage": 1,
+      "stage_name": "young"
+    },
+    {
+      "id": "horse-2",
+      "group": "animals",
+      "binding": "ranching/horse-2",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        311,
+        1061,
+        629,
+        1413
+      ],
+      "crop_dimensions": [
+        318,
+        352
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        64,
+        70
+      ],
+      "offset": [
+        16,
+        20
+      ],
+      "content_bounds": [
+        16,
+        20,
+        80,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/horse-2.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "7c6ba599dba15de4693ae3aa1a9c9daac43ef0487688d145db6d271fbe1812b8",
+      "species": "horse",
+      "stage": 2,
+      "stage_name": "growing"
+    },
+    {
+      "id": "horse-3",
+      "group": "animals",
+      "binding": "ranching/horse-3",
+      "source": "assets/generated/hearthwood/ranching-v1/large-animals.png",
+      "source_sha256": "e795e985daaf68b584af5d51bd77f7ffd64a03760ae80692f6aabbad630238e5",
+      "crop": [
+        659,
+        1016,
+        1073,
+        1430
+      ],
+      "crop_dimensions": [
+        414,
+        414
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.2,
+      "resized_dimensions": [
+        83,
+        83
+      ],
+      "offset": [
+        6,
+        7
+      ],
+      "content_bounds": [
+        6,
+        7,
+        89,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/animals/horse-3.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "db28bb269e141d384a5981dc774be4ed4e06d9193d6c67e46341ec0318e334c7",
+      "species": "horse",
+      "stage": 3,
+      "stage_name": "adult"
+    },
+    {
+      "id": "coop-1",
+      "group": "buildings",
+      "binding": "ranching/coop-1",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        158,
+        76,
+        352,
+        331
+      ],
+      "crop_dimensions": [
+        194,
+        255
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        93,
+        122
+      ],
+      "offset": [
+        81,
+        64
+      ],
+      "content_bounds": [
+        81,
+        64,
+        174,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/coop-1.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "7b39c1871ee0dcadfefa7e7c077d10b7c5d5a827548e724a600effb88e02bac8"
+    },
+    {
+      "id": "coop-2",
+      "group": "buildings",
+      "binding": "ranching/coop-2",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        573,
+        37,
+        870,
+        331
+      ],
+      "crop_dimensions": [
+        297,
+        294
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        143,
+        141
+      ],
+      "offset": [
+        56,
+        45
+      ],
+      "content_bounds": [
+        56,
+        45,
+        199,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/coop-2.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "45e04662b973b9c9c56d12e33e5bcd08d07a57ada53cf3cc540d1d62ae7515f6"
+    },
+    {
+      "id": "coop-3",
+      "group": "buildings",
+      "binding": "ranching/coop-3",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        1061,
+        11,
+        1442,
+        331
+      ],
+      "crop_dimensions": [
+        381,
+        320
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        183,
+        154
+      ],
+      "offset": [
+        36,
+        32
+      ],
+      "content_bounds": [
+        36,
+        32,
+        219,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/coop-3.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "45c3d620f1d8cad2994186e57a8dff52756a83096377f667ff8bac8e37602580"
+    },
+    {
+      "id": "barn-1",
+      "group": "buildings",
+      "binding": "ranching/barn-1",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        127,
+        398,
+        383,
+        680
+      ],
+      "crop_dimensions": [
+        256,
+        282
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        123,
+        135
+      ],
+      "offset": [
+        66,
+        51
+      ],
+      "content_bounds": [
+        66,
+        51,
+        189,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/barn-1.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "7d3d7963c8aa9aae4d07c52fff7ede47724eb210187c56ba5eef3a5bbbb36681"
+    },
+    {
+      "id": "barn-2",
+      "group": "buildings",
+      "binding": "ranching/barn-2",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        557,
+        370,
+        884,
+        678
+      ],
+      "crop_dimensions": [
+        327,
+        308
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        157,
+        148
+      ],
+      "offset": [
+        49,
+        38
+      ],
+      "content_bounds": [
+        49,
+        38,
+        206,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/barn-2.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "9ef244f65a8aafea68d870cfa68abaa7c75ead2a7ace70412f216923533b0df8"
+    },
+    {
+      "id": "barn-3",
+      "group": "buildings",
+      "binding": "ranching/barn-3",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        1013,
+        349,
+        1488,
+        679
+      ],
+      "crop_dimensions": [
+        475,
+        330
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        228,
+        158
+      ],
+      "offset": [
+        14,
+        28
+      ],
+      "content_bounds": [
+        14,
+        28,
+        242,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/barn-3.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "3047a0019be5e3d11dffb1a4f899cd872903a755e2f9b406cf2985c627a48f95"
+    },
+    {
+      "id": "stable-1",
+      "group": "buildings",
+      "binding": "ranching/stable-1",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        149,
+        728,
+        362,
+        982
+      ],
+      "crop_dimensions": [
+        213,
+        254
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        102,
+        122
+      ],
+      "offset": [
+        77,
+        64
+      ],
+      "content_bounds": [
+        77,
+        64,
+        179,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/stable-1.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "9f106f56ff07bbcd2c96650cd20b8f1bbe52907ee2ec043e7677665750d5334e"
+    },
+    {
+      "id": "stable-2",
+      "group": "buildings",
+      "binding": "ranching/stable-2",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        551,
+        750,
+        891,
+        985
+      ],
+      "crop_dimensions": [
+        340,
+        235
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        163,
+        113
+      ],
+      "offset": [
+        46,
+        73
+      ],
+      "content_bounds": [
+        46,
+        73,
+        209,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/stable-2.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "989fb5ec5d3c3572c7a2c6e330b9f274adfe87da77e5a31bd30b12657633f498"
+    },
+    {
+      "id": "stable-3",
+      "group": "buildings",
+      "binding": "ranching/stable-3",
+      "source": "assets/generated/hearthwood/ranching-v1/buildings.png",
+      "source_sha256": "0b1cb678c43a59fa73bd7dd15be8e4720b707c7e400213c8cf54ec26d233d862",
+      "crop": [
+        1005,
+        697,
+        1496,
+        984
+      ],
+      "crop_dimensions": [
+        491,
+        287
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": 0.48,
+      "resized_dimensions": [
+        236,
+        138
+      ],
+      "offset": [
+        10,
+        48
+      ],
+      "content_bounds": [
+        10,
+        48,
+        246,
+        186
+      ],
+      "path": "assets/derived/ranching-v1/buildings/stable-3.png",
+      "width": 256,
+      "height": 192,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "0a011df9506677e35906148ea439e6c8b7f61fa42b1eb49c6e2d6928114bbf44"
+    },
+    {
+      "id": "water",
+      "group": "facilities",
+      "binding": "ranching/water",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        24,
+        132,
+        507,
+        416
+      ],
+      "crop_dimensions": [
+        483,
+        284
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        116,
+        68
+      ],
+      "offset": [
+        6,
+        54
+      ],
+      "content_bounds": [
+        6,
+        54,
+        122,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/water.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "4f0e84ee0a194a00932d0d6e29d999812f464487bb27f03634e12c3500dd5b12"
+    },
+    {
+      "id": "rooting",
+      "group": "facilities",
+      "binding": "ranching/rooting",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        568,
+        93,
+        1030,
+        427
+      ],
+      "crop_dimensions": [
+        462,
+        334
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        116,
+        84
+      ],
+      "offset": [
+        6,
+        38
+      ],
+      "content_bounds": [
+        6,
+        38,
+        122,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/rooting.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "3ca371c8aae38d815b3429f9315a399dc43a46d445705186c366d8cf42e3ea93"
+    },
+    {
+      "id": "mayo",
+      "group": "facilities",
+      "binding": "ranching/mayo",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        1134,
+        77,
+        1515,
+        421
+      ],
+      "crop_dimensions": [
+        381,
+        344
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        116,
+        105
+      ],
+      "offset": [
+        6,
+        17
+      ],
+      "content_bounds": [
+        6,
+        17,
+        122,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/mayo.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+    },
+    {
+      "id": "cheese",
+      "group": "facilities",
+      "binding": "ranching/cheese",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        75,
+        521,
+        492,
+        924
+      ],
+      "crop_dimensions": [
+        417,
+        403
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        116,
+        112
+      ],
+      "offset": [
+        6,
+        10
+      ],
+      "content_bounds": [
+        6,
+        10,
+        122,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/cheese.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+    },
+    {
+      "id": "loom",
+      "group": "facilities",
+      "binding": "ranching/loom",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        581,
+        536,
+        1042,
+        917
+      ],
+      "crop_dimensions": [
+        461,
+        381
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        116,
+        96
+      ],
+      "offset": [
+        6,
+        26
+      ],
+      "content_bounds": [
+        6,
+        26,
+        122,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/loom.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+    },
+    {
+      "id": "oil",
+      "group": "facilities",
+      "binding": "ranching/oil",
+      "source": "assets/generated/hearthwood/ranching-v1/facilities.png",
+      "source_sha256": "4cff21f8a7392c4710830c93536905ec1635841c9d84d2dd49492dba56426679",
+      "crop": [
+        1137,
+        512,
+        1497,
+        931
+      ],
+      "crop_dimensions": [
+        360,
+        419
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        100,
+        116
+      ],
+      "offset": [
+        14,
+        6
+      ],
+      "content_bounds": [
+        14,
+        6,
+        114,
+        122
+      ],
+      "path": "assets/derived/ranching-v1/facilities/oil.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+    },
+    {
+      "id": "egg",
+      "group": "items",
+      "binding": "items/egg",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        73,
+        100,
+        232,
+        310
+      ],
+      "crop_dimensions": [
+        159,
+        210
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        42,
+        56
+      ],
+      "offset": [
+        11,
+        4
+      ],
+      "content_bounds": [
+        11,
+        4,
+        53,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/egg.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743"
+    },
+    {
+      "id": "duck_egg",
+      "group": "items",
+      "binding": "items/duck_egg",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        368,
+        45,
+        570,
+        321
+      ],
+      "crop_dimensions": [
+        202,
+        276
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        41,
+        56
+      ],
+      "offset": [
+        11,
+        4
+      ],
+      "content_bounds": [
+        11,
+        4,
+        52,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/duck_egg.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f"
+    },
+    {
+      "id": "wool",
+      "group": "items",
+      "binding": "items/wool",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        643,
+        69,
+        939,
+        314
+      ],
+      "crop_dimensions": [
+        296,
+        245
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        56,
+        46
+      ],
+      "offset": [
+        4,
+        9
+      ],
+      "content_bounds": [
+        4,
+        9,
+        60,
+        55
+      ],
+      "path": "assets/derived/ranching-v1/items/wool.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf"
+    },
+    {
+      "id": "milk",
+      "group": "items",
+      "binding": "items/milk",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        1022,
+        54,
+        1202,
+        321
+      ],
+      "crop_dimensions": [
+        180,
+        267
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        38,
+        56
+      ],
+      "offset": [
+        13,
+        4
+      ],
+      "content_bounds": [
+        13,
+        4,
+        51,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/milk.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf"
+    },
+    {
+      "id": "goat_milk",
+      "group": "items",
+      "binding": "items/goat_milk",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        69,
+        350,
+        248,
+        617
+      ],
+      "crop_dimensions": [
+        179,
+        267
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        38,
+        56
+      ],
+      "offset": [
+        13,
+        4
+      ],
+      "content_bounds": [
+        13,
+        4,
+        51,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/goat_milk.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae"
+    },
+    {
+      "id": "truffle",
+      "group": "items",
+      "binding": "items/truffle",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        354,
+        383,
+        599,
+        605
+      ],
+      "crop_dimensions": [
+        245,
+        222
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        56,
+        51
+      ],
+      "offset": [
+        4,
+        6
+      ],
+      "content_bounds": [
+        4,
+        6,
+        60,
+        57
+      ],
+      "path": "assets/derived/ranching-v1/items/truffle.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29"
+    },
+    {
+      "id": "mayonnaise",
+      "group": "items",
+      "binding": "items/mayonnaise",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        685,
+        366,
+        902,
+        612
+      ],
+      "crop_dimensions": [
+        217,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        49,
+        56
+      ],
+      "offset": [
+        7,
+        4
+      ],
+      "content_bounds": [
+        7,
+        4,
+        56,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/mayonnaise.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d"
+    },
+    {
+      "id": "duck_mayo",
+      "group": "items",
+      "binding": "items/duck_mayo",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        1003,
+        366,
+        1212,
+        612
+      ],
+      "crop_dimensions": [
+        209,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        48,
+        56
+      ],
+      "offset": [
+        8,
+        4
+      ],
+      "content_bounds": [
+        8,
+        4,
+        56,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/duck_mayo.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75"
+    },
+    {
+      "id": "cheese",
+      "group": "items",
+      "binding": "items/cheese",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        46,
+        660,
+        291,
+        880
+      ],
+      "crop_dimensions": [
+        245,
+        220
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        56,
+        50
+      ],
+      "offset": [
+        4,
+        7
+      ],
+      "content_bounds": [
+        4,
+        7,
+        60,
+        57
+      ],
+      "path": "assets/derived/ranching-v1/items/cheese.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c"
+    },
+    {
+      "id": "goat_cheese",
+      "group": "items",
+      "binding": "items/goat_cheese",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        337,
+        664,
+        628,
+        890
+      ],
+      "crop_dimensions": [
+        291,
+        226
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        56,
+        43
+      ],
+      "offset": [
+        4,
+        10
+      ],
+      "content_bounds": [
+        4,
+        10,
+        60,
+        53
+      ],
+      "path": "assets/derived/ranching-v1/items/goat_cheese.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e"
+    },
+    {
+      "id": "cloth",
+      "group": "items",
+      "binding": "items/cloth",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        654,
+        669,
+        975,
+        900
+      ],
+      "crop_dimensions": [
+        321,
+        231
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        56,
+        40
+      ],
+      "offset": [
+        4,
+        12
+      ],
+      "content_bounds": [
+        4,
+        12,
+        60,
+        52
+      ],
+      "path": "assets/derived/ranching-v1/items/cloth.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613"
+    },
+    {
+      "id": "truffle_oil",
+      "group": "items",
+      "binding": "items/truffle_oil",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        1050,
+        636,
+        1193,
+        900
+      ],
+      "crop_dimensions": [
+        143,
+        264
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        30,
+        56
+      ],
+      "offset": [
+        17,
+        4
+      ],
+      "content_bounds": [
+        17,
+        4,
+        47,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/truffle_oil.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28"
+    },
+    {
+      "id": "animal_feed",
+      "group": "items",
+      "binding": "items/animal_feed",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        16,
+        915,
+        293,
+        1199
+      ],
+      "crop_dimensions": [
+        277,
+        284
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        55,
+        56
+      ],
+      "offset": [
+        4,
+        4
+      ],
+      "content_bounds": [
+        4,
+        4,
+        59,
+        60
+      ],
+      "path": "assets/derived/ranching-v1/items/animal_feed.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "d249e43044d8834a3b235ab0ec8b2b6d94daf0c3ebefa634be7d41d627bd0d1f"
+    },
+    {
+      "id": "trough",
+      "group": "props",
+      "binding": "ranching/trough",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        307,
+        968,
+        669,
+        1202
+      ],
+      "crop_dimensions": [
+        362,
+        234
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        84,
+        54
+      ],
+      "offset": [
+        6,
+        36
+      ],
+      "content_bounds": [
+        6,
+        36,
+        90,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/props/trough.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "6127427805d72383033a2a1f042c2a0c52cdfe5c3722d54a7530692817a6e685"
+    },
+    {
+      "id": "nest",
+      "group": "props",
+      "binding": "ranching/nest",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        664,
+        965,
+        965,
+        1203
+      ],
+      "crop_dimensions": [
+        301,
+        238
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        84,
+        66
+      ],
+      "offset": [
+        6,
+        24
+      ],
+      "content_bounds": [
+        6,
+        24,
+        90,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/props/nest.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "6188ab2ff8a4bfabdfcd676b1ce27f8027e514d8c2bff3d6442787f2889f38cb"
+    },
+    {
+      "id": "ledger",
+      "group": "props",
+      "binding": "ranching/ledger",
+      "source": "assets/generated/hearthwood/ranching-v1/items.png",
+      "source_sha256": "b288abe61e0ac17028f94181c6bad9f46359ee239e1cf96f1b44a2822a0f795e",
+      "crop": [
+        967,
+        915,
+        1222,
+        1197
+      ],
+      "crop_dimensions": [
+        255,
+        282
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest 4-connected silhouette; exclude detached alpha specks and neighbouring sprites",
+      "resampling": "NEAREST",
+      "fixed_source_scale": null,
+      "resized_dimensions": [
+        76,
+        84
+      ],
+      "offset": [
+        10,
+        6
+      ],
+      "content_bounds": [
+        10,
+        6,
+        86,
+        90
+      ],
+      "path": "assets/derived/ranching-v1/props/ledger.png",
+      "width": 96,
+      "height": 96,
+      "mode": "RGBA",
+      "output_alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "c56cc942d9692c033a49fbfcca5d118b740ac3f4a7bc75f06d9dc0a545e0b069"
+    }
+  ],
+  "aliases": [
+    {
+      "binding": "items/fine_egg",
+      "alias_of": "items/egg",
+      "path": "assets/derived/ranching-v1/items/egg.png",
+      "sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_duck_egg",
+      "alias_of": "items/duck_egg",
+      "path": "assets/derived/ranching-v1/items/duck_egg.png",
+      "sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_wool",
+      "alias_of": "items/wool",
+      "path": "assets/derived/ranching-v1/items/wool.png",
+      "sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_milk",
+      "alias_of": "items/milk",
+      "path": "assets/derived/ranching-v1/items/milk.png",
+      "sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_goat_milk",
+      "alias_of": "items/goat_milk",
+      "path": "assets/derived/ranching-v1/items/goat_milk.png",
+      "sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_truffle",
+      "alias_of": "items/truffle",
+      "path": "assets/derived/ranching-v1/items/truffle.png",
+      "sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_mayonnaise",
+      "alias_of": "items/mayonnaise",
+      "path": "assets/derived/ranching-v1/items/mayonnaise.png",
+      "sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_duck_mayo",
+      "alias_of": "items/duck_mayo",
+      "path": "assets/derived/ranching-v1/items/duck_mayo.png",
+      "sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_cheese",
+      "alias_of": "items/cheese",
+      "path": "assets/derived/ranching-v1/items/cheese.png",
+      "sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_goat_cheese",
+      "alias_of": "items/goat_cheese",
+      "path": "assets/derived/ranching-v1/items/goat_cheese.png",
+      "sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_cloth",
+      "alias_of": "items/cloth",
+      "path": "assets/derived/ranching-v1/items/cloth.png",
+      "sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613",
+      "reason": "same product silhouette; quality is a localized item label"
+    },
+    {
+      "binding": "items/fine_truffle_oil",
+      "alias_of": "items/truffle_oil",
+      "path": "assets/derived/ranching-v1/items/truffle_oil.png",
+      "sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28",
+      "reason": "same product silhouette; quality is a localized item label"
+    }
+  ]
+}

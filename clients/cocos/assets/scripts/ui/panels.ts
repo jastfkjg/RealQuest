@@ -1,5 +1,11 @@
+import {ConstructionPanels} from './construction';
+import {formatMoney} from '../core/currency';
+import {canExploreStory,canReadGate} from '../core/story';
+import {hasDepartureNotes} from '../core/nextDeparture';
+import {RanchPanels} from './ranching';
 import {FarmingPanels} from './farming';
-import {seedCrop,growingDays} from '../core/farming';
+import {ShopPanels} from './shop';
+import type {InventoryPreferences} from '../core/inventory';
 import type { Label } from 'cc';
 import type {GameState,World,WorldObject,NavigationTarget,GrowthTarget,Quest} from '../core/protocol';
 import {C} from './theme';
@@ -19,7 +25,7 @@ import {questTarget,currentMap} from '../core/navigation';
 import {residentPositions} from '../core/residents';
 import {textPages} from '../core/lifeRecords';
 
-export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud'|'satchel-slot'|'satchel-pocket'|'satchel-close';
+export type ControlSkin='game'|'reply'|'portrait'|'answer'|'pocket'|'notice'|'entry'|'tab'|'back'|'back-light'|'page'|'hud'|'satchel-slot'|'satchel-pocket'|'satchel-close'|'shop-item'|'shop-tab'|'shop-action';
 export interface PanelHost {
  readonly state:GameState; readonly saveId:string; readonly world:World; readonly context:WorldObject|null;
  readonly reducedMotion:boolean;readonly mode:string;readonly width:number;readonly height:number;readonly processing:boolean;readonly connection:string;readonly busy:boolean;readonly error:string;readonly notice:string;readonly now:number;
@@ -29,12 +35,12 @@ export interface PanelHost {
  region(id:string,x:number,y:number,w:number,h:number):void;
  drag(id:string,spec:DragSpec):void;
  line(id:string,points:{x:number;y:number}[],color:string,width?:number):void;
- itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number,hint?:string):void;
+ itemSlot(id:string,item:string|null,x:number,y:number,w:number,h:number,count:number,selected:boolean,action:()=>unknown,reference?:boolean,number?:number,hint?:string,muted?:boolean):void;
  image(path:string,x:number,y:number,w:number,h:number,sliced?:boolean):void;
  hasArt(path:string):boolean;
  routeArt(gate:boolean,x:number,y:number,w:number,h:number):void;
  person(name:string,x:number,y:number,w:number,h:number):void;
- field(id:string,label:string,value:string,x:number,y:number,w:number,change:(value:string)=>void,numeric?:boolean,maxLength?:number):void;
+ field(id:string,label:string,value:string,x:number,y:number,w:number,change:(value:string)=>void,numeric?:boolean,maxLength?:number,inline?:boolean):void;
  send(action:string,data?:Record<string,unknown>):Promise<boolean>;
  follow(action:GuidanceAction):void; go(mode:string,replace?:boolean):void; close():void; redraw(clearFeedback?:boolean):void; mark(target:NavigationTarget,label:string):void; uuid():string;
  meet(id:string):void; focus(id:string):void; reconnect():void;
@@ -42,7 +48,11 @@ export interface PanelHost {
 type Frame={x:number;y:number;w:number;h:number;compact:boolean;top:number;bottom:number};
 const lifeNames={study:'学习',exercise:'运动',work:'工作'};
 export class FeaturePanels {
+ private shopPanels:ShopPanels;
+ constructor(inventory:InventoryPreferences){this.shopPanels=new ShopPanels(inventory);}
+ private construction=new ConstructionPanels();
  private lifePanels=new LifePanels();
+ private ranching=new RanchPanels();
  private farming=new FarmingPanels(()=>{this.growth='planting';});
  private dossier=new DossierPanels();
  private guidance=new GuidancePanels();
@@ -63,16 +73,19 @@ export class FeaturePanels {
  npcTab='talk'; page=0; detailPage=0;
  questId=''; weaponId='stone_sword'; taskId='';
  private questListPer=0;
- amount='1'; orderId=''; tradeItem='seed'; tradeSide='buy';
- lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';shopTab='trade';gearTab='obtain';
+
+ lifeKind:'study'|'exercise'|'work'='study';hours=1; confirm='';gearTab='obtain';gearFilter='all';
  private modes=['menu','journal','quests','quest-story','shop','building','dialogue','life','growth','equipment','armory','spellbook','cave','gate','map','study-new','study-edit','plan-new','plan-edit'];
- handles(mode:string){return mode==='farm'||mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
+ handles(mode:string){return this.construction.handles(mode)|| this.shopPanels.handles(mode)||mode==='ranch'||mode==='farm'||mode==='gear-recipe'||mode==='preferences'||this.places.handles(mode)||this.guidance.handles(mode)||this.dossier.handles(mode)||this.lifePanels.handles(mode)||this.modes.includes(mode);}
  guideMode(mode:string){return this.guidance.handles(mode);}
  lifeMode(mode:string){return this.lifePanels.handles(mode);}
- reset(){this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
- snapshot(){return {npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
+ reset(){this.ranching.reset();this.page=0;this.detailPage=0;this.confirm='';this.lifePanels.reset();this.dossier.reset();}
+ snapshot(){return {...this.ranching.snapshot(),...this.shopPanels.snapshot(),npcTab:this.npcTab,questId:this.questId,weaponId:this.weaponId,gearTab:this.gearTab,gearFilter:this.gearFilter,mapResidentId:this.taskId,page:this.page,detailPage:this.detailPage,...this.lifePanels.snapshot(),...this.dossier.snapshot(),...this.guidance.snapshot(),...this.places.snapshot(),...this.preferences.snapshot()};}
  draw(original:PanelHost){
   const h=gameControls(original);
+  if(this.construction.handles(h.mode)){this.construction.draw(h);return;}
+  if(this.shopPanels.handles(h.mode)){this.shopPanels.draw(h);return;}
+  if(h.mode==='ranch'){this.ranching.draw(h);return;}
   if(h.mode==='farm'){this.farming.draw(h);return;}
   if(['armory','equipment','gear-recipe'].includes(h.mode)){drawExpeditionGear(h,this);return;}
   if(h.mode==='menu'){drawJourneyMenu(h,this);return;}
@@ -93,10 +106,10 @@ export class FeaturePanels {
    h.box('ExpeditionCloth',f.x+18,f.y+68,left-18,height-86,C.moss,4);
    h.routeArt(h.mode==='gate',f.x+30,f.y+(f.compact?78:112),left-48,f.compact?132:210);
    h.text('ExpeditionPlace',h.mode==='gate'?'村东石门':'石根山洞',f.x+30,f.y+height-(f.compact?106:192),left-48,40,f.compact?20:26,C.paper,true);
-   if(!f.compact)h.text('ExpeditionCaption',h.mode==='gate'?'石门之外\n苇风渡口与远行之路':'旧采石场旁\n由你决定何时进入',f.x+34,f.y+height-144,left-56,60,16,C.paper,true);
+   if(!f.compact)h.text('ExpeditionCaption',h.mode==='gate'?(canReadGate(h.state)?'石门之外\n通向山那边的小路':'古老的石门\n纹路间藏着旧日故事'):'旧采石场旁\n由你决定何时进入',f.x+34,f.y+height-144,left-56,60,16,C.paper,true);
    const decision={...f,x:f.x+left+12,w:w-left-30,y:f.y+68,h:height-86};paperSurface(h,decision);
    h.text('FeatureTitle',titles[h.mode],f.x+24,f.y+12,w-360,42,24,C.paper);
-   h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
+   if(canExploreStory(h.state))h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'探索手记',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(hasDepartureNotes(h.state)?'preparation':'expedition');},h.busy);
    h.button('close','返回',f.x+w-100,f.y+12,76,44,()=>h.close(),h.busy,false,'back-light');
    const inner={...decision,top:decision.y+24,bottom:decision.y+decision.h-114,compact:decision.h<430};this.cave(h,inner);
    if(h.error||h.notice)h.text('FeatureFeedback',h.error||h.notice,decision.x+24,decision.y+decision.h-108,decision.w-48,42,14,h.error?C.danger:C.muted);return;
@@ -106,13 +119,12 @@ export class FeaturePanels {
   const expedition=['armory','cave','gate'].includes(h.mode)||(h.mode==='quests'&&h.context?.id==='board');
   const hasBalance=['shop','building','spellbook'].includes(h.mode);
   h.text('FeatureTitle',titles[h.mode]||'旅程',f.x+24,f.y+12,expedition?(h.mode==='armory'?w-512:w-360):w-(hasBalance?312:160),42,f.compact?21:24);
-  if(expedition)h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'初探与远行',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(h.state.village_intro?.reviewed?'preparation':'expedition');},h.busy);
+  if(expedition&&canExploreStory(h.state))h.button('expedition-entry',h.state.village_intro?.reviewed?'再出发手记':h.state.village_intro?.returned?'初探材料回顾':'探索手记',f.x+w-264,f.y+12,152,44,()=>{this.prepare();h.go(hasDepartureNotes(h.state)?'preparation':'expedition');},h.busy);
   h.button('close','返回',f.x+w-100,f.y+12,76,44,()=>h.close(),h.busy);
-  const money=`金币 ${h.state.inventory.gold||0}`;
+  const money=`钱袋 ${formatMoney(h.state.inventory.gold||0)}`;
   if(['shop','building','armory','equipment','spellbook'].includes(h.mode))h.text('FeatureBalance',money,f.x+w-(expedition?464:280),f.y+20,160,28,16,C.muted);
   if(h.mode==='menu')this.menu(h,f);
   else if(h.mode==='journal'||h.mode==='quests')this.quests(h,f,h.mode==='quests'?h.context?.id:undefined);
-  else if(h.mode==='shop')this.shop(h,f);
   else if(h.mode==='building')this.building(h,f);
   else if(h.mode==='quest-story')this.questStory(h,f);
   else if(h.mode==='dialogue')this.npc(h,f);
@@ -176,49 +188,17 @@ export class FeaturePanels {
   h.button('quest-story-back',`${this.detailPage+1}/${pages.length} · 返回委托`,f.x+32+buttonWidth,y,buttonWidth,44,()=>h.close(),h.busy);
   h.button('quest-story-next','下一页',f.x+40+buttonWidth*2,y,buttonWidth,44,()=>{this.detailPage++;h.redraw();},h.busy||this.detailPage>=pages.length-1);
  }
- private shop(h:PanelHost,f:Frame){
-  this.tabs(h,f,[['trade','柜台交易'],['orders','今日订单']],this.shopTab,id=>this.shopTab=id);
-  const market=h.state.market;if(!market)return;const target=h.context?.id==='mira'?'mira':'shop_counter';
-  if(this.shopTab==='orders'){
-   const order=market.orders.find(o=>o.id===this.orderId)||market.orders[0];if(!order)return;this.orderId=order.id;
-   const lw=Math.floor(f.w*.36),dx=f.x+lw+48,dw=f.w-lw-72;
-   this.list(h,f,market.orders.map(o=>({id:o.id,label:`${o.completed?'已交付':'待交付'} · ${o.title}`})),order.id,id=>this.orderId=id,lw);
-   h.text('OrderTitle',order.title,dx,f.top,dw,36,22);h.text('OrderCosts',`需要 ${costText({[order.item]:order.amount})} · 持有 ${h.state.inventory[order.item]||0}
-回礼 金币 ${order.gold}`,dx,f.top+42,dw,66,17);
-   if(!f.compact)h.text('OrderNote',`${order.note}
-日期 ${market.date} · ${market.timezone}`,dx,f.top+122,dw,78,16,C.muted);
-   h.button('deliver-order',order.completed?'今天已交付':'确认交付订单',dx,f.y+f.h-62,dw,44,()=>h.send('market_deliver',{target,date:market.date,order_id:order.id}),h.busy||order.completed||(h.state.inventory[order.item]||0)<order.amount,true);return;
-  }
-  const lw=Math.floor(f.w*.32),dx=f.x+lw+48,dw=f.w-lw-72;
-  const entries=[...Object.keys(market.buy).map(id=>({id:'buy:'+id,label:'买入 · '+(itemNames[id]||id)})),...Object.keys(market.sell).map(id=>({id:'sell:'+id,label:'卖出 · '+(itemNames[id]||id)}))];
-  if(!entries.some(e=>e.id===this.tradeSide+':'+this.tradeItem)){this.tradeSide='buy';this.tradeItem=Object.keys(market.buy)[0];}
-  this.list(h,f,entries,this.tradeSide+':'+this.tradeItem,id=>{[this.tradeSide,this.tradeItem]=id.split(':');this.amount='1';},lw);
-  const price=(this.tradeSide==='buy'?market.buy:market.sell)[this.tradeItem],amount=Number(this.amount),cost=price*amount;
-  if(h.hasArt('items/'+this.tradeItem))h.image('items/'+this.tradeItem,dx+(f.compact?20:32),f.top+(f.compact?20:46),f.compact?40:64,f.compact?40:64);
-  h.text('TradeItem',f.compact?`${itemNames[this.tradeItem]} · ${price}金币${seedCrop(this.tradeItem)?' · 需'+seedCrop(this.tradeItem)!.level+'级 / 当前'+(h.state.skill_growth?.planting||0)+'级':' · 持有'+(h.state.inventory[this.tradeItem]||0)}`:itemNames[this.tradeItem]||this.tradeItem,dx+(f.compact?52:88),f.top,dw-(f.compact?52:88),34,f.compact?16:24);
-  if(!f.compact)h.text('TradePrice',`单价 ${price} 金币 · 持有 ${h.state.inventory[this.tradeItem]||0}`,dx+88,f.top+40,dw-88,28,16,C.muted);
-  const crop=seedCrop(this.tradeItem);
-  if(crop&&!f.compact)h.text('SeedRequirement','需种植 '+crop.level+' 级 · 当前 '+(h.state.skill_growth?.planting||0)+' 级 · 可先购买'+(f.compact?'':'\n'+growingDays(h.state,crop.days)+'游戏日首熟 · 每轮'+crop.yield+'份 · 共'+crop.harvests+'轮'),dx,f.top+(f.compact?35:76),dw,f.compact?24:46,f.compact?12:14,(h.state.skill_growth?.planting||0)<crop.level?C.danger:C.muted);
-  const quantityY=f.top+(f.compact?36:128),step=(delta:number)=>{this.amount=String(Math.min(99,Math.max(1,(Number.isInteger(amount)?amount:1)+delta)));h.redraw();};
-  h.field('trade-amount','数量 1–99',this.amount,dx+52,quantityY,88,v=>this.amount=v,true,2);
-  h.button('trade-minus','−',dx,quantityY+22,44,44,()=>step(-1),h.busy||amount<=1,false,'game',{label:'减少购买或出售数量'});
-  h.button('trade-plus','+',dx+148,quantityY+22,44,44,()=>step(1),h.busy||amount>=99,false,'game',{label:'增加购买或出售数量'});
-  const valid=Number.isInteger(amount)&&amount>=1&&amount<=99,balance=this.tradeSide==='buy'?h.state.inventory.gold||0:h.state.inventory[this.tradeItem]||0,required=this.tradeSide==='buy'?cost:amount,missing=valid?Math.max(0,required-balance):0;
-  h.text('TradeTotal',`${this.tradeSide==='buy'?'支付':'获得'} ${valid?cost:'—'} 金币`,dx+208,f.top+(f.compact?58:150),dw-208,44,18);
-  if(!h.error&&!h.notice)h.text('TradeReadiness',!valid?'请输入 1–99 的整数数量':missing?`还差 ${missing} ${this.tradeSide==='buy'?'金币':itemNames[this.tradeItem]}`:`交易后${this.tradeSide==='buy'?'金币':'持有'} ${balance-required}`,dx,f.y+f.h-108,dw,36,15,missing||!valid?C.danger:C.muted);
-  h.button('trade-confirm',`确认${this.tradeSide==='buy'?'买入':'卖出'}`,dx,f.y+f.h-62,dw,44,()=>h.send('market_trade',{target,side:this.tradeSide,item:this.tradeItem,amount:Number(this.amount)}),h.busy||!valid||!!missing,true);
- }
  private building(h:PanelHost,f:Frame){
   const obj=h.context;if(!obj)return;const key=obj.building||'workshop',level=h.state.buildings[key]||1,costs=upgradeCosts(level),dx=f.x+f.w*.44,dw=f.w*.56-24;
   h.image('interiors/workbench',f.x+f.w*.22,f.top+46,208,61);
   h.text('BlueprintName',`${({home:'家园',workshop:'工坊',library:'图书馆'} as Record<string,string>)[key]} · 等级 ${level}`,f.x+24,f.top+94,f.w*.40,40,22);
-  h.text('UpgradeCosts',level>=3?'已达当前最高等级':`扩建至 ${level+1} 级\n`+Object.entries(costs).map(([id,n])=>`${itemNames[id]||id} ${h.state.inventory[id]||0}/${n}`).join(' · '),dx,f.top,dw,74,f.compact?16:18);
+  h.text('UpgradeCosts',level>=3?'已达当前最高等级':`扩建至 ${level+1} 级\n`+Object.entries(costs).map(([id,n])=>id==='gold'?`钱袋 ${formatMoney(h.state.inventory[id]||0)} / 需要 ${formatMoney(n)}`:`${itemNames[id]||id} ${h.state.inventory[id]||0}/${n}`).join(' · '),dx,f.top,dw,74,f.compact?16:18);
   h.button('upgrade-building','确认升级',dx,f.top+84,dw,44,()=>h.send('upgrade',{target:obj.id}),h.busy||level>=3||shortages(h.state,costs).length>0,true);
   if(obj.id==='workshop_counter'){
    if(!f.compact){h.image('items/plank',f.x+56,f.top+206,48,48);h.text('PlankRecipe','木板蓝图',f.x+96,f.top+172,f.w-120,34,22);h.text('PlankMaterials',`3 份木材 → 1 块木板\n手边有 ${h.state.inventory.wood||0} 份木材${(h.state.inventory.wood||0)<3?'，还需收集 '+(3-(h.state.inventory.wood||0))+' 份':'，可以开工'}`,f.x+96,f.top+210,f.w-120,56,16,C.muted);}
    h.button('craft-plank',`制作木板 · 木材 ${h.state.inventory.wood||0}/3`,f.x+24,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('craft',{target:obj.id}),h.busy||shortages(h.state,plankRecipe).length>0,true);
-   h.button('counter-sell',`卖萝卜 · +${8+level-1} 金币`,f.x+32+(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('sell',{target:obj.id}),h.busy||!h.state.inventory.crop);
-   h.button('counter-seed','买种子 · 金币 2',f.x+40+2*(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('buy_seed',{target:obj.id}),h.busy||(h.state.inventory.gold||0)<2);
+   h.button('counter-sell',`卖萝卜 · +${formatMoney(h.state.market?.sell.crop??4)}`,f.x+32+(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('sell',{target:obj.id}),h.busy||!h.state.inventory.crop);
+   h.button('counter-seed','买种子 · 银币 2',f.x+40+2*(f.w-64)/3,f.y+f.h-62,(f.w-64)/3,44,()=>h.send('buy_seed',{target:obj.id}),h.busy||(h.state.inventory.gold||0)<2);
   }
  }
  private npc(h:PanelHost,f:Frame){
@@ -234,8 +214,8 @@ export class FeaturePanels {
   const dx=f.x+f.w*.34,dw=f.w*.66-24;
   h.text('SpellName','火花术',dx,f.top,dw,38,26);
   h.text('SpellDescription','12 魔法伤害 · 4 体力 · 冷却 4 秒'+(f.compact?'':'\n进入洞穴后，选择目标并按 Q 施放。'),dx,f.top+48,dw,f.compact?28:72,f.compact?16:18);
-  h.text('SpellRequirements',learned?'✓ 已掌握 · 洞内选中目标，按 Q 施放':`研习需要 · 魔法 ${magic}/1 级 · 金币 ${h.state.inventory.gold||0}/8`,dx,f.top+(f.compact?84:140),dw,f.compact?52:72,16,learned?C.moss:C.muted);
-  h.button('learn-spark',learned?'已经学会':'研习 · 金币 8',dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send('spark_learn',{target:'spell_desk'}),h.busy||learned||magic<1||(h.state.inventory.gold||0)<8,true);
+  h.text('SpellRequirements',learned?'✓ 已掌握 · 洞内选中目标，按 Q 施放':`研习需要 · 魔法 ${magic}/1 级 · 持有 ${formatMoney(h.state.inventory.gold||0)} / 需要8银`,dx,f.top+(f.compact?84:140),dw,f.compact?52:72,16,learned?C.moss:C.muted);
+  h.button('learn-spark',learned?'已经学会':'研习 · 银币 8',dx,f.y+f.h-62,(dw-12)/2,44,()=>h.send('spark_learn',{target:'spell_desk'}),h.busy||learned||magic<1||(h.state.inventory.gold||0)<8,true);
   h.button('spell-growth','查看魔法培养',dx+(dw+12)/2,f.y+f.h-62,(dw-12)/2,44,()=>{this.growth='magic';h.go('growth');},h.busy);
  }
  private cave(h:PanelHost,f:Frame){
@@ -257,6 +237,11 @@ export class FeaturePanels {
    const recover=c.boss_first&&!c.gate_open&&!(h.state.inventory.gate_stone||0);
    h.button(recover?'stone-recover':ready&&low?'cave-rest':'cave-equipment',recover?'核实并补领门钥石':ready&&low?'标记床铺休整':ready?'查看装备':'先装备武器',dx+bw+12,footer,bw,44,()=>recover?h.send('stone_recover'):ready&&low?h.mark({mapId:'home',targetId:'home_bed'},'家中床铺'):h.go('equipment'),h.busy,!ready||low);
    return;
+  }
+  if(gate&&!canReadGate(h.state)&&!c.gate_open){
+   h.text('GateQuietTitle','古老的石门',dx,f.top,dw,38,24);
+   h.text('GateQuietNote','门上的纹路已经模糊。先在村里安顿下来，也许以后会有人认得它们。',dx,f.top+48,dw,100,18);
+   h.button('gate-current-quest','查看当前委托',dx,f.y+f.h-62,Math.min(280,dw),44,()=>h.go('journal'),h.busy);return;
   }
   const body=gate?(c.gate_open?'石门已永久开启，无需再次提交魔法石。\n东行的路已经通了，查看安排后再出发吧。':`门钥魔法石 ${h.state.inventory.gate_stone||0} / 1 · 魔法 ${h.state.knowledge_growth?.magic||0} / 3\n击败底层守卫并培养魔法后，走近此处嵌石。`):inCave?`第 ${c.floor} 层 · ${c.cleared?'本层已清理':'本层仍有怪物'} · 已探索至 ${c.unlocked} 层\n安全区位于左侧；可随时撤离，已有战利品保留。`:`共 5 层 · 已开放至 ${c.unlocked} 层\n当前装备：${c.equipped?itemNames[c.equipped]:'尚未装备'} · 生命 ${h.state.vitality?.current}/${h.state.vitality?.max}`;
   h.text('CaveSummary',gate?'通往苇风渡口':inCave?obj.name:'主动进入战斗区域',dx,f.top,dw,38,24);

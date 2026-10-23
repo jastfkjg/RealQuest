@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-23",
+  "status": "preview_only_pending_owner_style_review",
+  "generator": "built-in image_gen",
+  "rights": "Original project-generated artwork; inputs are project-owned image_gen derivatives documented in village-art-v2.json and equipment-art-v1.json. No third-party imagery uploaded.",
+  "selected": "preview.png",
+  "draft": "draft.png",
+  "rows": [
+    "south/front",
+    "north/back",
+    "west/left",
+    "east/right"
+  ],
+  "columns": [
+    "ready",
+    "anticipation",
+    "start_swing",
+    "active_cut",
+    "follow_through",
+    "recovery"
+  ],
+  "nominal_layout": {
+    "columns": 6,
+    "rows": 4,
+    "cell": [
+      256,
+      256
+    ]
+  },
+  "verification": [
+    "Viewed both generated sheets; revised wrong-facing west action poses.",
+    "Selected PNG verified 1536x1024 RGBA with real transparent pixels; bytes copied without image processing."
+  ],
+  "limits": [
+    "Concept key poses only; not an approved production atlas or continuous animation.",
+    "Pixel grid, grip/handedness, foot anchors and occlusion require frame-level production cleanup after owner style approval.",
+    "No Cocos integration, animation timing, hit detection or dodge behavior changed or tested."
+  ],
+  "records": [
+    {
+      "path": "assets/runtime/hearthwood/village/actor-0.png",
+      "sha256": "b1f41e5d33de73c02ad9eb2a182f51d666b3ef88a4561f0c797ab8235fed3eb0",
+      "bytes": 53476,
+      "dimensions": [
+        192,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "assets/derived/equipment-v1/stone_sword.png",
+      "sha256": "bf360cff0dd5eb3e7a61bbb2783442c83e4d33c74a66e14ace853ea31a625ed4",
+      "bytes": 6786,
+      "dimensions": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/draft.png",
+      "sha256": "c7058f06853da83856fabeba9a9a0247be4e8295675809b46f1e638cf341485b",
+      "bytes": 2120667,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/preview.png",
+      "sha256": "98b844237e599b6dee8b04a1acf46ff9229c21ecf59aa81339ea839e29acdc8e",
+      "bytes": 2162764,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/generate.prompt.txt",
+      "sha256": "2084e76da28f38ace567e62252c70160e701d70c3155df4a4245a5ecf329cfdf",
+      "bytes": 3704
+    },
+    {
+      "path": "docs/art/references/sword-motion-preview-v1/refine.prompt.txt",
+      "sha256": "97bee67c88e32501ca34d6de96378396853a4e674c29fe6fb33bfff22f4be579",
+      "bytes": 2307
+    }
+  ]
+}
