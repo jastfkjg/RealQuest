@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url)),parent=path.join(root,'output/cocos-toolchain');
 await fs.mkdir(parent,{recursive:true});const destination=await fs.mkdtemp(path.join(parent,'clean-source-'));
 const allowed=['assets/','backend/app/','backend/migrations/','backend/tests/','clients/cocos/','docs/art/','docs/design/','docs/migration/','shared/','tools/','deploy/','tests/'];
-const exact=['.github/workflows/ci.yml','.nvmrc','.npmrc','package.json','package-lock.json','README.md','AGENTS.md','DESIGN.md','start.command','start-cocos.command','docker-compose.yml','.dockerignore','backend/requirements.txt','backend/requirements.lock.txt','backend/alembic.ini','backend/pytest.ini'];
+const exact=['.github/workflows/ci.yml','.nvmrc','.npmrc','package.json','package-lock.json','README.md','AGENTS.md','DESIGN.md','start.command','docker-compose.yml','.dockerignore','backend/requirements.txt','backend/requirements.lock.txt','backend/alembic.ini','backend/pytest.ini'];
 const all=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{cwd:root,encoding:'utf8'}).split('\0').filter(Boolean),records=[];
 for(const relative of [...new Set(all)].sort()){
  if(!exact.includes(relative)&&!allowed.some(p=>relative.startsWith(p)))continue;

@@ -29,12 +29,14 @@ npm run build
 ```sh
 ./start.command --check
 ./start.command
-# 等价入口：npm start 或 ./start-cocos.command
+# 等价入口：npm start
 ```
 
-打开 <http://127.0.0.1:5443/>；API 为 8143。本地库为 `output/cocos-local/local-preview.db`，首次启动自动迁移，Ctrl+C 同时停止本次前后端。此预览服务没有源码热更新，不是生产服务器。
+打开 <http://127.0.0.1:5443/>；API 为 8143。本地库为 `output/cocos-local/local-preview.db`，首次启动自动迁移，Ctrl+C 同时停止本次前后端。此预览服务没有源码热更新，不是生产服务器。启动时会核验当前 Cocos 源码和构建包哈希；包缺少来源回执、已过期或损坏时，会在打开／迁移玩家库前停止，并提示重新构建。
 
-可用 `--build`、`--database`、`--port`、`--api-port` 指定独立配置；`--check` 只读检查，不创建数据库。旧试玩库和旧玩家数据已按用户授权清理，不再提供旧版入口。
+**所有功能交付统一使用5443。** 每次功能或修复完成后，必须把验证通过的最新功能同步到默认 `web-current/web-desktop`，并核对5443实际返回的构建与功能界面；保留默认存档、cookie和浏览器凭证，不用独立新档代替更新。流程见 [默认入口交付约定](docs/cocos-local.md#默认入口交付约定)。
+
+内部隔离QA可用 `--build`、`--database`、`--port`、`--api-port` 指定配置；独立包不能作为唯一交付。`--check` 只读检查，不创建数据库。历史清理授权不代表今后可以删除玩家新记录。
 
 ## 测试
 

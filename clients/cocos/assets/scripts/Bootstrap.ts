@@ -1,6 +1,7 @@
 import {isTool,toolIds,toolName,toolSpec,toolLevel,toolCost,toolTarget,toolReason,toolCells,toolArtPaths,type ToolId} from './core/tools';
 import {toolCatalog} from './core/toolCatalog';
 import {ToolRenderer,type WorkMotion} from './toolView';
+import {toolActorArtPaths,toolActorPresentation,type ToolActorPresentation} from './toolActor';
 import {chestObjects} from './core/construction';
 import {formatMoney} from './core/currency';
 import {RanchRenderer} from './ranchView';
@@ -68,6 +69,7 @@ export class RealQuestSpike extends Component {
   private objects = new Map<string, Node>();
   private get farmingTool(){return this.mode==='world'&&this.client.state?.tools?.held==='hoe';}
   private workMotion:WorkMotion|null=null;
+  private toolPose:ToolActorPresentation|null=null;
   private toolRange=1;private toolDirection:number|null=null;
   private handTool():ToolId|null{const id=this.client.state?.tools?.held;return isTool(id)?id:null;}
   private async holdItem(item:string|null){if(this.busy||!this.canPlay())return;this.clearInput();this.focusId='';this.toolRange=1;await this.sendFeature('tool_hold',{item});}
@@ -277,7 +279,7 @@ export class RealQuestSpike extends Component {
   private async loadArt() {
     const names = ['actor-1','actor-2','actor-3','actor-4','actor-5','shop','home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0','lia-actor','noah-actor','mira-actor'];
     try {
-      await Promise.all(Array.from(new Set([...toolArtPaths,...sceneArtPaths,...cropArtPaths,...ranchArtPaths,...swordArtPaths,'ui/arrival','ui/register','ui/satchel','ui/notice-timber','ui/notice-paper','ui/shop-interior','ui/blacksmith-interior','ui/weapon-stand','atlas/blacksmith','village/blacksmith-figure',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...Object.keys(gearCatalog).map(n=>`items/${n}`),...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold','journal'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
+      await Promise.all(Array.from(new Set([...toolArtPaths,...toolActorArtPaths,...sceneArtPaths,...cropArtPaths,...ranchArtPaths,...swordArtPaths,'ui/arrival','ui/register','ui/satchel','ui/notice-timber','ui/notice-paper','ui/shop-interior','ui/blacksmith-interior','ui/weapon-stand','atlas/blacksmith','village/blacksmith-figure',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...Object.keys(gearCatalog).map(n=>`items/${n}`),...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold','journal'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
         // Keep one presentation key and the original PNG for unsupported platforms.
         const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path==='scenes/terrain'?'scenes/terrain-web':webMaterialPaths.has(path)?path+'-web':path:path;
         resources.load(asset + '/spriteFrame', SpriteFrame, (error, frame) => {
@@ -574,6 +576,15 @@ export class RealQuestSpike extends Component {
     let f=this.actorFrames.get(key);
     if(!f){f = new SpriteFrame(); f.texture=sf.texture; f.rect=new Rect((frame%4)*48,Math.floor(frame/4)*64,48,64); f.originalSize=new Size(48,64);this.actorFrames.set(key,f);}
     n.getComponent(Sprite)!.spriteFrame=f;if(n===this.actor){this.actorFrame=frame;n.getComponent(UITransform)!.setContentSize(32,128/3);n.getComponent(UITransform)!.setAnchorPoint(.5,0);}
+  }
+  private setToolActor(pose:ToolActorPresentation){
+    if(!pose.active)return false;
+    const sf=this.frames.get(pose.sheet);if(!sf)return false;
+    const key=pose.sheet+':'+pose.sourceDirection+':'+pose.frame;let f=this.actorFrames.get(key);
+    if(!f){f=new SpriteFrame();f.texture=sf.texture;f.rect=new Rect(pose.frame*112,pose.sourceDirection*112,112,112);f.originalSize=new Size(112,112);this.actorFrames.set(key,f);}
+    this.actor.getComponent(Sprite)!.spriteFrame=f;this.actor.setScale(pose.flipX?-1:1,1);
+    this.actor.getComponent(UITransform)!.setContentSize(224/3,224/3);this.actor.getComponent(UITransform)!.setAnchorPoint(.5,1/7);
+    this.actorFrame=pose.direction*6+pose.frame;return true;
   }
   private setSwordActor(pose:SwordPresentation){
     if(!pose.active)return false;
@@ -916,8 +927,9 @@ export class RealQuestSpike extends Component {
       const opacity=this.actor.getComponent(UIOpacity)||this.actor.addComponent(UIOpacity);opacity.opacity=cave&&hurt?175:255;
       if(cave&&action&&!integratedSword)this.setActor(this.actor,this.actorArt(),sourceActorFrame(this.actorDirection,false,this.elapsed,reducedMotion()));
       this.toolRenderer.updateResources(this.map(),this.p,this.elapsed,reducedMotion());
-      this.toolRenderer.updateHeld(this.client.state,this.p,this.actorDirection,this.elapsed,reducedMotion(),this.workMotion);
-      if(this.workMotion&&this.elapsed-this.workMotion.started<.48&&!reducedMotion())this.actor.angle=Math.sin((this.elapsed-this.workMotion.started)/.48*Math.PI)*(this.actorDirection===2?4:-4);
+      this.toolPose=toolActorPresentation(this.client.state,this.actorDirection,this.elapsed,travelled>.05,reducedMotion(),this.workMotion);
+      this.toolPose.active=this.setToolActor(this.toolPose);
+      this.toolRenderer.updateHeld(this.client.state,this.p,this.elapsed,reducedMotion(),this.workMotion,this.toolPose);
       this.combatRenderer.draw(this.client.state,this.targetId,reducedMotion(),{x:this.world.position.x,y:this.world.position.y,zoom:this.zoom,width:this.width,height:this.height},{position:this.p,action,time:visualTime,facing:facingAngles[this.actorDirection],integratedSword,aim});
       for(const [id,node] of this.objects)if(['lia','noah','mira'].includes(id))node.active=false;
       for(const o of this.map().objects.filter(o=>o.kind==='soil')){const n=this.objects.get(o.id);if(n)n.active=this.farmingTool;}
@@ -1635,7 +1647,7 @@ export class RealQuestSpike extends Component {
       feedback,hudRegions,uiRegions:this.uiRegions,
       actorFrame:this.actorFrame,combatAim:this.aim(),swordPresentation:this.swordPose,npcPresentation:Object.fromEntries(this.npcMotion),combatTarget:this.targetId,sessionPage:this.sessionPage,account:this.client.account,accountForm:this.accountForm,accountPreview:this.accountPreview?{username:this.accountPreview.account!.username,saveId:this.accountPreview.save_id}:null,logoutPending:this.client.logoutPending,deletionPending:this.client.deletionPending,recoverySource:this.recoveryPreview?this.recoverySource:null,coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
       construction:s?.construction,constructionView:s?.construction_view,player:this.p, savedPosition:s?.position, saveId:this.client.saveId, revision:s?.revision, vitality:s?.vitality, combat:s?.combat, questLog:s?.quest_log, lifeJournal:s?.life_journal,villageIntro:s?.village_intro,trackedQuest:s?.tracked_quest, timer:s?.timer, studyTasks:s?.study_task_log, plans:s?.study_plan_log, growth:s?.character_growth_options, storage:s?.storage, features:this.features.snapshot(),guidance:this.client.state?{...this.continuation.inspect(),entry:currentGuidance(this.client.state,serverNow()),ownedMarker:this.guideMarker}:null,marker:this.marker,connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, character:s?.character,xp:s?.xp,attributes:s?.attributes,points:s?{knowledge:s.knowledge_points,health:s.health_points,skill:s.skill_points}:null, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
-      tools:s?.tools,toolRules:s?.tool_rules,toolPresentation:this.toolRenderer.presentation,toolRange:this.toolRange,
+      tools:s?.tools,toolRules:s?.tool_rules,toolPresentation:this.toolRenderer.presentation,toolActor:this.toolPose,toolRange:this.toolRange,
       ranch:s?.ranch,ranching:s?.ranching,farm:s?.farm,farming:s?.farming,farmingTool:this.farmingTool,hoe:{aim:this.hoeTargetSafe(),queue:this.hoeQueue.map(o=>o.id),pointer:this.hoePointer,swing:this.hoeSwing},plots:s?.plots, activities:s?.activities.slice(-10), camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.conversationZoom||this.zoom,width:this.width,height:this.height},
       plotPresentation:Object.fromEntries(this.plotVisuals),
       interactables:this.supportedObjects(),

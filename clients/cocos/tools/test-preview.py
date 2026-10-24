@@ -39,8 +39,11 @@ class PreflightTests(unittest.TestCase):
         self.args = preview.arguments(['--build', str(self.build), '--database', str(self.database)])
         self.ports = patch.object(preview, 'check_port')
         self.ports.start()
+        self.build_guard = patch.object(preview, 'verify_build')
+        self.build_guard.start()
 
     def tearDown(self):
+        self.build_guard.stop()
         self.ports.stop()
         shutil.rmtree(self.build)
         self.temp.cleanup()
@@ -76,6 +79,30 @@ class PreflightTests(unittest.TestCase):
         with self.assertRaises(preview.PreviewError):
             preview.preflight(self.args)
         self.assertFalse(self.database.parent.exists())
+
+    def test_missing_receipt_blocks_start_before_save_is_created(self):
+        self.build_guard.stop()
+        with self.assertRaisesRegex(preview.PreviewError, 'no current-source receipt'):
+            preview.preflight(self.args)
+        self.assertFalse(self.database.parent.exists())
+
+    def test_stale_build_blocks_start_and_preserves_existing_save(self):
+        self.build_guard.stop()
+        (self.build / 'realquest-build.json').write_text(json.dumps({
+            'schema_version': 1,
+            'source': {'identity': {'platform': 'web-desktop', 'debug': False,
+                                    'sourceMaps': False}, 'sha256': 'outdated-client'},
+        }))
+        self.database.parent.mkdir()
+        with closing(sqlite3.connect(self.database)) as db:
+            db.execute('create table retained(value text)')
+            db.execute("insert into retained values ('player-progress')")
+            db.commit()
+        before = self.database.read_bytes()
+        with self.assertRaisesRegex(preview.PreviewError, 'stale relative to current Cocos'):
+            preview.preflight(self.args)
+        self.assertEqual(self.database.read_bytes(), before)
+        self.assertFalse(preview.lease_path(self.database).exists())
 
     def test_existing_non_sqlite_and_symlink_preserved(self):
         self.database.parent.mkdir()
@@ -218,7 +245,7 @@ def integration(build):
     clean_env['PYTHONDONTWRITEBYTECODE'] = '1'
 
     def command(database, ports, ready=None, extra=()):
-        args = [str(ROOT / 'start-cocos.command'), '--build', str(build), '--database', str(database), '--port', str(ports[0]), '--api-port', str(ports[1]), '--cookie-name', cookie]
+        args = [str(ROOT / 'start.command'), '--build', str(build), '--database', str(database), '--port', str(ports[0]), '--api-port', str(ports[1]), '--cookie-name', cookie]
         if ready:
             args += ['--ready-file', str(ready)]
         return args + list(extra)

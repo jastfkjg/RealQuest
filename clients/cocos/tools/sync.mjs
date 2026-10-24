@@ -86,6 +86,8 @@ const toolArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/tool-art-v1.
 for(const r of toolArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
 const equipmentArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/equipment-art-v1.json'),'utf8'));
 for(const r of equipmentArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
+const toolActorArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/tool-actor-art-v1.json'),'utf8'));
+for(const r of toolActorArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
 const swordArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/sword-motion-v1.json'),'utf8'));
 for(const r of swordArt.records)await bind(r.path,'assets/resources/'+r.binding+'.png');
 const ranchArt=JSON.parse(await fs.readFile(path.join(root,'docs/art/ranching-art-v1.json'),'utf8'));

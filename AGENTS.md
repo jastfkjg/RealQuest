@@ -23,6 +23,13 @@ Find the real development and test commands and record them in the task report. 
 
 Preserve unrelated working-tree changes. Never reset or delete player data to make a visual test pass. Do not commit, push, deploy, purchase assets, migrate engines, or change account settings without authorization.
 
+## Default local delivery
+
+- The user's single local entry is `http://127.0.0.1:5443/`, serving `clients/cocos/web-current/web-desktop` with API8143. Every completed feature and fix must reach this default entry; an independent preview alone is not delivery.
+- Isolated candidate builds, ports and disposable saves are for internal QA. After validation, integrate the feature into the default build and preserve the existing default database, cookie name and browser credentials. Never switch the user to a fresh save to expose an update.
+- Before reporting completion, verify the default build's current-source receipt and payload, confirm5443 actually serves that build, and check the changed flow there. If an update needs a service restart, preserve its save configuration; retain a rollback build and avoid partially overwriting a served package.
+- If the default entry cannot be updated or verified, report that remaining gap explicitly. Do not describe a candidate-only feature as delivered or substitute another port in the handoff.
+
 ## Implement one coherent slice
 
 Unless the task explicitly changes scope, implement one screen or one end-to-end interaction chain. The initial slice is defined in `docs/tasks/01-inventory-slice.md`. Do not expand it into new maps, combat, currencies, social features, or unrelated AI work.

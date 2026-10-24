@@ -1,5 +1,7 @@
 # Cocos 主客户端与原 Web 退役检查清单
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 > 2026-10-20：旧 React/Phaser 客户端已按用户授权退役，历史本地存档和QA数据已清理。旧版保护/兼容门槛和本文历史路径不再适用于新任务。当前入口与验证见 [任务109](109-cocos-only-client.md)；共享后端、备份能力和服务器部署规则仍保留。
 
 2026-10-19 **用户已收口：基础迁移完成即可停止。** M1–M9核心功能、数据管理/旧档接续/现实成长与学习记录及本地启动/基础CI已经完成，本轮结束。以下22项完整退役清单仍按原证据保持16项完成，V2/V4/V5/V6/V7/T2继续未验证；它们不再是本轮基础迁移的阻塞或继续执行指令。任务106 SDK CI专项授权无需继续处理；不注册运行器、不发布或删除原Web，后续扩展须另行启动。
@@ -196,7 +198,7 @@ V6本机新增证据：task61通过已安装真实Chrome155.0.8059.80代表流�
 
 | 当前依赖 | 实际位置 | 必须完成的处理 |
 | --- | --- | --- |
-| 默认启动仍是原Web（正式切换待门槛） | `start.command`→`scripts/start.py`（默认5175/API8027）；Cocos使用`start-cocos.command`→`run-preview.py`（默认5431/API8130） | T1本地链已完成：见task53和docs/cocos-local.md，Cocos主人工入口明确选包/库/端口，预检/租约/真实就绪/退出已验证；只服务已有构建，不是生产服务，默认Web切换待其余门槛 |
+| 默认启动仍是原Web（正式切换待门槛） | `start.command`→`scripts/start.py`（默认5175/API8027）；Cocos当时使用独立入口（现统一为`start.command`）→`run-preview.py`（默认5431/API8130） | T1本地链已完成：见task53和docs/cocos-local.md，Cocos主人工入口明确选包/库/端口，预检/租约/真实就绪/退出已验证；只服务已有构建，不是生产服务，默认Web切换待其余门槛 |
 | 发布只构建原Web | `frontend/Dockerfile`、`frontend/nginx.conf`、`docker-compose.yml`、`.github/workflows/ci.yml`、`deploy/compose.prod.yaml`及部署检查 | T2本地静态路径见task54：显式release关闭debug/sourceMaps、开启MD5，内容版本/缓存/404/双真实引擎接续和切回通过真实Nginx；候选CI/容器配置已准备，实际提交CI/容器与部署验证仍待完成；不能把本地Python代理当生产服务 |
 | Cocos检查/测试依赖归属 | task50根`package.json/package-lock`与Node22守卫，36个Cocos脚本/2导出器使用根依赖；15单元模块统一入口 | T3本机部分已验证：无原Web安装/构建的849文件候选源副本通过有锁安装/真实类型/Creator构建/11组浏览器；CI检出归T2，仍有冻结Web源码/素材依赖归T4 |
 | 冻结Web素材/离线绘制输入 | task51的`docs/migration/cocos-source-{policy,inventory}.json`列出91个冻结输入及354文件/106绑定；场景完整79读取项；真实PNG整理器和规范shared/game均有归属 | T4当前过渡阶段完成；保留冻结目录独立于Web发布，显式`cocos:sources`/`cocos:check`验证。真正归档/删除前仍需迁出、验证字节/来源与兼容并获授权；共享行为仍仅在shared/game编辑后同步 |

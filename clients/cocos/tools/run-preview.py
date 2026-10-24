@@ -7,6 +7,7 @@ import math
 import os
 from pathlib import Path
 import signal
+import shutil
 import socket
 import subprocess
 import sys
@@ -81,12 +82,33 @@ def database_lease(database, check_only=False):
     # Retain the inert inode: unlinking it could permit concurrent locks on two files.
 
 
+def verify_build(build):
+    """Reject stale client packages before opening or migrating a player save."""
+    node = shutil.which('node')
+    if not node:
+        raise PreviewError('Node22 is required to verify the Cocos build; run nvm use first.')
+    script = (
+        "import {verifyBuild} from './tools/cocos-build-info.mjs';"
+        "try { await verifyBuild(process.argv[1]); }"
+        "catch(error) { console.error(error.message); process.exitCode=1; }"
+    )
+    try:
+        result = subprocess.run([node, '--input-type=module', '-e', script, str(build)],
+                                cwd=ROOT, capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise PreviewError('Could not verify the Cocos build; player saves were preserved.') from error
+    if result.returncode:
+        raise PreviewError('Cocos build verification failed. Run npm run build before starting; '
+                           'player saves were preserved. ' + result.stderr.strip())
+
+
 def preflight(args):
     if not BACKEND_PYTHON.is_file():
         raise PreviewError('Prepare backend/.venv with Python3.14 and requirements.lock.txt; see README.')
     build = (ROOT / 'clients/cocos' / args.build).resolve()
     if not build.is_relative_to(ROOT / 'clients/cocos') or not (build / 'index.html').is_file():
         raise PreviewError('Build must be an existing Cocos Web package inside clients/cocos; run cocos:build first.')
+    verify_build(build)
     ports = [args.port, args.api_port]
     if len(set(ports)) != len(ports):
         raise PreviewError('Preview ports must be distinct.')

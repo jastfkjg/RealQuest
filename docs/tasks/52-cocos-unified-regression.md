@@ -1,5 +1,7 @@
 # 当前 Cocos 统一回归与隔离生命周期
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 2026-10-17，task39 **T5 本地技术验证完成**。最终冻结执行 `run-ojHM8V` 的21套当前Cocos回归和1套独立原Web界面兼容全部通过，共147组、638张PNG。单元、后端、生命周期和源码副本验证分别报告，不计入147组。整体退役目标继续；T1/T2/T3实际CI/T6和V项仍开放。
 
 玩家确认task49偏好页、操作、音量与音色“这轮可以保留”；此批准仅覆盖该轮偏好。聊天、行囊等画面、实机与发布仍按task39验收。原Web代码、默认启动和部署保留；没有提交、推送或部署。
@@ -113,7 +115,7 @@ npm run cocos:test:browser -- --build web-regression-navigation/web-desktop --su
 保留launcher84208、API84210、proxy84211，终端session41807，供人工试玩；root/health均200，`manual-ready.json`记录身份。旧preferences候选仍保留作本地回退。自行重新启动时使用：
 
 ```sh
-./start-cocos.command --build web-regression-navigation/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
+./start.command --build web-regression-navigation/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
 ```
 
 [cleanup.json](../../output/cocos-regression/cleanup.json)核对51份运行记录、浏览器唯一标记/profile和专属Creator目录，并核对300个控制器/测试/服务/单元PID及启动时间：没有匹配的已结束任务进程遗留。共享/无法确认归属的Node/MCP宿主、用户浏览器和其他任务资源保留。仅上述人工服务因试玩继续保留。

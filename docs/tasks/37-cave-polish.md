@@ -1,5 +1,7 @@
 # Web/Cocos cave presentation and feel
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 User authorization (2026-10-17): gradually refine the local Web/Cocos UI, art and controls. Prior migration changes are uncommitted and preserved; starting hashes/status are in ignored `output/cave-polish/starting-state.json`.
 
 ## Slice and plan
@@ -75,7 +77,7 @@ Launcher lifecycle check on5432/5433/API8133 passes: all three HTTP checks200, l
 ## Final handoff and cleanup — 2026-10-17 11:56 CST
 
 - Verified test API99229/8130, Web proxy99242/5430 and Cocos proxy909/5431 by PID/start/parent/cwd/args/listeners, then stopped normally through owned sessions93183/37174/31148. All exited0; PIDs and listeners were confirmed gone before handoff. The test database is preserved only as evidence.
-- Manual dual preview retained via `./start-cocos.command --web-port 5430`: launcher3689, API3691/8130, Cocos3692/5431, Web3693/5430, exec session22218. It uses **only `output/cave-polish/local-preview.db`**. Both roots, both proxied health checks and direct API health return200. Ctrl+C in the owned launcher stops its three children. Normal owner data and old preview databases remain intact; old5426/8126 listeners/PIDs were already absent when this task started.
+- Manual dual preview retained via `./start.command --web-port 5430`: launcher3689, API3691/8130, Cocos3692/5431, Web3693/5430, exec session22218. It uses **only `output/cave-polish/local-preview.db`**. Both roots, both proxied health checks and direct API health return200. Ctrl+C in the owned launcher stops its three children. Normal owner data and old preview databases remain intact; old5426/8126 listeners/PIDs were already absent when this task started.
 - All owned automation browsers/contexts, video encoders, frame/probe/test/Creator/Node runners exited; final process inspection found no owned browser/build/test runner. Temporary wrappers, stale failure snapshots and redundant raw recordings were removed. Canonical6MB Web/12MB Cocos recordings,42 final captures, six before captures, four frame captures, results/logs and provenance remain ignored. `handoff.json` and `launcher-result.json` record exact runtime evidence.
 - Shared/unattributable Oct16 Node/node_repl/Playwright MCP/artifact hosts and the user's editor were preserved; they are not safely attributable to this completed task. No broad process-name kill was used. A representative Cocos guardian render was queued in this chat's file panel for visual review; no automated browser was retained.
 - Final formatting, Python launcher syntax, asset audit and Git diff checks pass. No commit, push, deploy or original-player save write.

@@ -2498,6 +2498,77 @@
     "processing": "tools/build_tool_art.py; cell slicing, connected-component alpha cleanup, nearest neighbor; originals unchanged",
     "native_motion": "clients/cocos/assets/scripts/toolView.ts",
     "native_motion_note": "Four-direction articulated grip/arms and tool raise/contact/recover, resource shake/fall, water/wood/stone particles; original character sheets reused, no claim of independently redrawn full-body frames",
-    "scope": "Tools and labor resources; no copied commercial artwork or fonts"
+    "scope": "Tools and labor resources; no copied commercial artwork or fonts",
+    "held_pose_revision": {
+      "task": "docs/tasks/131-held-tool-polish.md",
+      "date": "2026-10-24",
+      "artwork": "Existing16 tool and6 actor PNGs unchanged",
+      "world_sizes": {
+        "hoe": 24,
+        "axe": 22,
+        "pickaxe": 24,
+        "watering_can": 18
+      },
+      "grip_source_pixels": {
+        "hoe": [
+          30,
+          60
+        ],
+        "axe": [
+          32,
+          62
+        ],
+        "pickaxe": [
+          32,
+          62
+        ],
+        "watering_can": [
+          40,
+          30
+        ]
+      },
+      "presentation": "Relaxed downward carry; shaft occluded by body, glove above grip;4 directions;7Hz actor walk cycle; foot-pivot-coherent lean and swing; reduced motion retained",
+      "review": "Cocos pose and work flows checked; owner visual acceptance pending",
+      "superseded_by": "tool_actor_art_v1 (task132); player rejected the attachment-like look on2026-10-24"
+    }
+  },
+  "tool_actor_art_v1": {
+    "task": "docs/tasks/132-tool-actor-art.md",
+    "status": "cocos_integrated_browser_verified_default5443_owner_runtime_review_pending",
+    "creator": "OpenAI built-in image_gen; original RealQuest artwork",
+    "manifest": "docs/art/tool-actor-art-v1.json",
+    "processor": "tools/build_tool_actor_art.py",
+    "sources": "assets/generated/hearthwood/tool-poses-v1",
+    "runtime_directory": "assets/derived/tool-poses-v1",
+    "bindings": [
+      "tool-actors/hoe-0",
+      "tool-actors/axe-0",
+      "tool-actors/pickaxe-0",
+      "tool-actors/watering_can-0",
+      "tool-actors/hoe-1",
+      "tool-actors/axe-1",
+      "tool-actors/pickaxe-1",
+      "tool-actors/watering_can-1",
+      "tool-actors/hoe-2",
+      "tool-actors/axe-2",
+      "tool-actors/pickaxe-2",
+      "tool-actors/watering_can-2",
+      "tool-actors/hoe-3",
+      "tool-actors/axe-3",
+      "tool-actors/pickaxe-3",
+      "tool-actors/watering_can-3",
+      "tool-actors/hoe-4",
+      "tool-actors/axe-4",
+      "tool-actors/pickaxe-4",
+      "tool-actors/watering_can-4",
+      "tool-actors/hoe-5",
+      "tool-actors/axe-5",
+      "tool-actors/pickaxe-5",
+      "tool-actors/watering_can-5"
+    ],
+    "presentation": "Integrated whole-body poses with painted shoulders/elbows/grips/tool and common foot anchor; replaces task131 prop/arm overlays. Limited key animation; upgrade tiers share body/tool geometry while saved identity and inventory art remain intact.",
+    "approval": "Existing sword approval is style reference only; tool actor/runtime owner review pending.",
+    "third_party_downloads": false,
+    "source_modifications": false
   }
 }

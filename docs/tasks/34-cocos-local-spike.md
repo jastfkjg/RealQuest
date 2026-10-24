@@ -1,5 +1,7 @@
 # Cocos migration — phases 0–1
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 User authorized on 2026-10-16: establish a migration baseline and independent Cocos prototype, preserve the existing Web client, and improve UI/design within this slice. User subsequently confirmed that no platform AppIDs/devices are available yet: local prototype first. This authorization does not include platform publication, account changes or a full migration.
 
 ## Plan and design checkpoint
@@ -52,7 +54,7 @@ Local implementation is complete for this scoped prototype. Phase1's platform/pa
 - `backend/tests/test_client_session.py`: new transport isolation, credential rejection, replay, origin and save-ID regression.
 - `clients/cocos/assets/scenes/Bootstrap.scene`, `assets/scripts/Bootstrap.ts`: genuine Cocos scene and scoped UI/world controller, source-world collision/navigation, server-synchronized actions, explicit input ownership, lifecycle and seedling presentation.
 - `clients/cocos/assets/scripts/platform.ts`, `core/client.ts`, `core/clock.ts`: host transport/viewport/focus boundary, serial commands with same-ID network retry, state identity/version handling and real server clock anchor. Seven original source modules are reproducibly copied rather than manually maintained forks.
-- `clients/cocos/tools/`, `build-templates/web-desktop/`, project settings/meta files and `start-cocos.command`: real editor build/type checks, source checks, clean preview lifecycle, full-window Web shell and actual-browser evidence. Original `frontend/` source/build/entry and `start.command` unchanged.
+- `clients/cocos/tools/`, `build-templates/web-desktop/`, project settings/meta files and `start.command`: real editor build/type checks, source checks, clean preview lifecycle, full-window Web shell and actual-browser evidence. At that stage, the original `frontend/` source/build/entry and default launcher were unchanged; the separate Cocos launcher is now consolidated into `start.command`.
 - Root README/DESIGN, art manifest/plan/checklist, progress, this task and `docs/migration/cocos-baseline.json`: scoped authorization, immutable baseline, provenance and acceptance limits.
 
 ### Commands and outcomes
@@ -71,7 +73,7 @@ Commands below were run from repository root unless stated otherwise:
 | Chinese input and recording | `node clients/cocos/tools/record.mjs` — Chinese name reaches actual create command; real movement/gather/inventory/Life flow recorded in `output/cocos-migration/interaction.webm` |
 | Supplied game frame client | Skill's original action loop with local integration/cleanup/compositor wrapper —2iterations, state output and inspected compositor captures, no unexpected errors |
 | Existing art audit | Bundled workspace Python ran `tools/audit_inventory_assets.py` —156 images and original/generated-source equality pass. System Python lacked Pillow; no global package was installed |
-| Script/shell/patch checks | Python `py_compile`, `zsh -n start-cocos.command`, `git diff --check` — pass |
+| Script/shell/patch checks | Python `py_compile`, `zsh -n start.command`, `git diff --check` — pass |
 
 The official editor was downloaded from `https://download.cocos.com/CocosCreator/v3.8.8/CocosCreator-v3.8.8-mac-121518.zip`. It refuses execution from `/private/tmp`; the portable tool was moved to Git-ignored `output/cocos-tools/CocosCreator.app`. The downloaded1.1GB archive was removed after extraction. The4.1GB editor is retained locally for reproducible builds, outside runtime and version control.
 
@@ -97,6 +99,6 @@ Owner render/feel review; full terrain/depth/art parity; full interiors/combat/q
 
 The tested standalone preview is deliberately retained at `http://127.0.0.1:5420` with API8120, using isolated `output/cocos-migration/preview.db`; its processes are Python proxy45078 and API44912. Both are this task's original test services, now handed over for manual preview. The original Web services/source/player databases are not those services and remain untouched.
 
-Automatic approval review rejected a normal stop of proxy5420 because it might be a preview the user wanted retained. No alternative termination or indirect workaround was attempted; both preview services remain running. Therefore the planned switch to the unified launcher/local-preview.db was not performed. The new `start-cocos.command` / `tools/run-preview.py` is syntax-checked and designed to own future sessions and stop its own children in finally; its complete start/stop lifecycle is still unverified. It refuses occupied5420/8120, so it must not be launched over the retained preview.
+Automatic approval review rejected a normal stop of proxy5420 because it might be a preview the user wanted retained. No alternative termination or indirect workaround was attempted; both preview services remain running. Therefore the planned switch to the unified launcher/local-preview.db was not performed. The new `start.command` / `tools/run-preview.py` is syntax-checked and designed to own future sessions and stop its own children in finally; its complete start/stop lifecycle is still unverified. It refuses occupied5420/8120, so it must not be launched over the retained preview.
 
 All automated browser contexts/runners and Cocos build/help processes exited after their last use. The official editor tool is retained in the ignored tools directory, and the1.1GB download archive was removed. No shared/unrelated process was stopped. Owner preview is intentionally retained rather than claiming complete background-service cleanup. No commit, push, deployment or user-save reset.

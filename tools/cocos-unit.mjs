@@ -7,6 +7,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 if(Number(process.versions.node.split('.')[0])!==22)throw Error('Cocos unit tools require Node22; run nvm use (see .nvmrc).');
 const modules=[
  ['tools','clients/cocos/tools/test-tools.mjs'],
+ ['tool-poses','clients/cocos/tools/test-tool-poses.mjs'],
  ['currency','clients/cocos/tools/test-currency.mjs'],
  ['sword-motion','clients/cocos/tools/test-sword-motion.mjs'],
  ['quest-chain','clients/cocos/tools/test-quest-chain.mjs'],

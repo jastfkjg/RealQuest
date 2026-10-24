@@ -31,6 +31,7 @@ sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture
 p,key,config=sys.argv[1:];assert_fixture(p);options=json.loads(config)
 sys.path.insert(0,'backend');from app.combat import ensure_combat,floor_enemies
 con=sqlite3.connect(p);s=json.loads(con.execute('select state from players where id=?',(key,)).fetchone()[0]);s['location']='cave_1';s['position']={'x':220,'y':240};s['revision']+=1
+s['tools']['held']=options['weapon'] # Match real cave entry, which draws the equipped weapon.
 s['character']={'name':'持剑验收旅人','appearance':options['appearance']};s['inventory'].update(stone_sword=1,spring_spear=1,soup=3,gold=20,gel=0);s['knowledge_growth'].update(science=3,magic=3)
 s['vitality'].update(current=100,max=100);s['stamina'].update(current=100,max=100,updated_at=time.time());s['world_clock'].update(elapsed=187.5,updated_at=time.time(),running_until=0)
 c=ensure_combat(s);c.update(equipped=options['weapon'],spark_learned=True,encounter=str(uuid.uuid4()),input_seq=0,last_tick=0,time=0,cast=None,action=None,dash=None,dodge_at=0,attack_at=0,spark_at=0,soup_at=0,hurt_until=0,effects=[],projectiles=[],floors={},soups_used=0)

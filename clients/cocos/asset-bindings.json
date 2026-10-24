@@ -1629,6 +1629,150 @@
       "output_sha256": "b9254ab4eccde632c58fcd30926fe09b5a8c5a8202355a70bbea886d0d5ca5ec"
     },
     {
+      "source": "assets/derived/tool-poses-v1/hoe-0.png",
+      "target": "assets/resources/tool-actors/hoe-0.png",
+      "sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8",
+      "output_sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-0.png",
+      "target": "assets/resources/tool-actors/axe-0.png",
+      "sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43",
+      "output_sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-0.png",
+      "target": "assets/resources/tool-actors/pickaxe-0.png",
+      "sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a",
+      "output_sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-0.png",
+      "target": "assets/resources/tool-actors/watering_can-0.png",
+      "sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099",
+      "output_sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-1.png",
+      "target": "assets/resources/tool-actors/hoe-1.png",
+      "sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69",
+      "output_sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-1.png",
+      "target": "assets/resources/tool-actors/axe-1.png",
+      "sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f",
+      "output_sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-1.png",
+      "target": "assets/resources/tool-actors/pickaxe-1.png",
+      "sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08",
+      "output_sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-1.png",
+      "target": "assets/resources/tool-actors/watering_can-1.png",
+      "sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903",
+      "output_sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-2.png",
+      "target": "assets/resources/tool-actors/hoe-2.png",
+      "sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166",
+      "output_sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-2.png",
+      "target": "assets/resources/tool-actors/axe-2.png",
+      "sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007",
+      "output_sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-2.png",
+      "target": "assets/resources/tool-actors/pickaxe-2.png",
+      "sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f",
+      "output_sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-2.png",
+      "target": "assets/resources/tool-actors/watering_can-2.png",
+      "sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f",
+      "output_sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-3.png",
+      "target": "assets/resources/tool-actors/hoe-3.png",
+      "sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2",
+      "output_sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-3.png",
+      "target": "assets/resources/tool-actors/axe-3.png",
+      "sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514",
+      "output_sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-3.png",
+      "target": "assets/resources/tool-actors/pickaxe-3.png",
+      "sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1",
+      "output_sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-3.png",
+      "target": "assets/resources/tool-actors/watering_can-3.png",
+      "sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7",
+      "output_sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-4.png",
+      "target": "assets/resources/tool-actors/hoe-4.png",
+      "sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126",
+      "output_sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-4.png",
+      "target": "assets/resources/tool-actors/axe-4.png",
+      "sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312",
+      "output_sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-4.png",
+      "target": "assets/resources/tool-actors/pickaxe-4.png",
+      "sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0",
+      "output_sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-4.png",
+      "target": "assets/resources/tool-actors/watering_can-4.png",
+      "sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583",
+      "output_sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-5.png",
+      "target": "assets/resources/tool-actors/hoe-5.png",
+      "sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a",
+      "output_sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-5.png",
+      "target": "assets/resources/tool-actors/axe-5.png",
+      "sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11",
+      "output_sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-5.png",
+      "target": "assets/resources/tool-actors/pickaxe-5.png",
+      "sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656",
+      "output_sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-5.png",
+      "target": "assets/resources/tool-actors/watering_can-5.png",
+      "sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771",
+      "output_sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771"
+    },
+    {
       "source": "assets/derived/sword-motion-v1/actor-0.png",
       "target": "assets/resources/combat/sword-actor-0.png",
       "sha256": "3b0975e2b0c9350a35630ed3e0bf5709cd07efc40a7f352a4387ac6e06ea159e",

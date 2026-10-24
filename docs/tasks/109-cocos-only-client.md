@@ -23,7 +23,7 @@
 - `docs/design/realquest-tokens.css` 保留设计token源；不再作为旧DOM应用的一部分。
 - `tools/cocos-sources.mjs` 与来源policy改为当前Cocos/共享/美术归属，移除旧客户端完整性与Git基线门槛。历史旧渲染器来源仍在资产manifest的 `retired_client_provenance`，不再要求旧代码存在。
 - 删除旧transition/baseline检查、双客户端浏览器套件及依赖旧Web包的恢复专项。共享后端Cookie/Bearer会话、恢复、幂等和备份测试保留。
-- `start.command`、`start-cocos.command`、`npm start` 都进入Cocos预览；默认5443/API8143、`web-current/web-desktop`、`output/cocos-local/local-preview.db`。
+- `start.command`、`npm start` 都进入Cocos预览；默认5443/API8143、`web-current/web-desktop`、`output/cocos-local/local-preview.db`。
 - 根 `package.json` 提供 `build`、`check`、`test`、`test:browser`。默认构建使用真实Creator3.8.8 release配置。
 - `.github/workflows/ci.yml` 是唯一CI入口；源码/单元/后端使用根依赖。SDK候选显式手动使用预置runner；推镜像还需main上的单独勾选。Docker默认前端直接使用 `output/cocos-delivery` 的Cocos静态包，原生产镜像摘要/数据库/网络与手动部署合同保留。
 

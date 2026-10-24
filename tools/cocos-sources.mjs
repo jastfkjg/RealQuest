@@ -12,7 +12,7 @@ const digest=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const compare=(a,b)=>a<b?-1:a>b?1:0;
 const policyFile='docs/migration/cocos-source-policy.json';
 const inventoryFile='docs/migration/cocos-source-inventory.json';
-const provenanceFiles=['docs/art/tool-art-v1.json','docs/art/blacksmith-art-v1.json','docs/art/sword-motion-v1.json','docs/art/ranching-art-v1.json','docs/art/equipment-art-v1.json','docs/art/farming-art-v1.json','docs/art/asset-manifest.json','docs/art/village-art-v2.json','docs/art/detail-art-v3.json','docs/art/resident-art-v1.json','docs/art/market-art-v1.json','docs/art/departure-art-v1.json','docs/art/local-scene-art-v1.json','docs/art/cocos-inventory-icons-v1.json','docs/art/cocos-lossless-textures-v1.json','docs/art/cocos-panel-materials-v1.json'];
+const provenanceFiles=['docs/art/tool-actor-art-v1.json','docs/art/tool-art-v1.json','docs/art/blacksmith-art-v1.json','docs/art/sword-motion-v1.json','docs/art/ranching-art-v1.json','docs/art/equipment-art-v1.json','docs/art/farming-art-v1.json','docs/art/asset-manifest.json','docs/art/village-art-v2.json','docs/art/detail-art-v3.json','docs/art/resident-art-v1.json','docs/art/market-art-v1.json','docs/art/departure-art-v1.json','docs/art/local-scene-art-v1.json','docs/art/cocos-inventory-icons-v1.json','docs/art/cocos-lossless-textures-v1.json','docs/art/cocos-panel-materials-v1.json'];
 const isFilePath=value=>typeof value==='string'&&/^(?:assets|docs|clients|shared|tools|backend)\/[\w./-]+\.[\w-]+$/.test(value);
 
 export function sourceOwner(file,policy){

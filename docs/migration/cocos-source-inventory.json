@@ -3,12 +3,12 @@
   "policy": "docs/migration/cocos-source-policy.json",
   "note": "Generated inventory from actual byte-checked bindings, complete scene read set, existing provenance and scoped static Web references. Cocos is the only client; retired locations are provenance only.",
   "counts": {
-    "bindings": 337,
-    "runtimePNGs": 293,
+    "bindings": 361,
+    "runtimePNGs": 317,
     "runtimeWebPs": 7,
     "sharedModules": 37,
     "sceneInputs": 81,
-    "files": 962,
+    "files": 1065,
     "references": 31
   },
   "bindings": [
@@ -4169,6 +4169,414 @@
         "dimensions": [
           96,
           96
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-0.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-0.png",
+      "sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8",
+      "importer": {
+        "uuid": "aad20e03-451d-0ef7-3443-a4a48e3d691a",
+        "frame": "aad20e03-451d-0ef7-3443-a4a48e3d691a@f9941",
+        "texture": "aad20e03-451d-0ef7-3443-a4a48e3d691a@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-0.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-0.png",
+      "sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43",
+      "importer": {
+        "uuid": "85878d90-23cb-4d00-52d7-119316a55362",
+        "frame": "85878d90-23cb-4d00-52d7-119316a55362@f9941",
+        "texture": "85878d90-23cb-4d00-52d7-119316a55362@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-0.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-0.png",
+      "sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a",
+      "importer": {
+        "uuid": "c18ec106-50a6-d306-79f2-7ed9a23582b1",
+        "frame": "c18ec106-50a6-d306-79f2-7ed9a23582b1@f9941",
+        "texture": "c18ec106-50a6-d306-79f2-7ed9a23582b1@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-0.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-0.png",
+      "sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099",
+      "importer": {
+        "uuid": "cc92492a-c486-3819-ea80-e5ca88a6a1fb",
+        "frame": "cc92492a-c486-3819-ea80-e5ca88a6a1fb@f9941",
+        "texture": "cc92492a-c486-3819-ea80-e5ca88a6a1fb@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-1.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-1.png",
+      "sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69",
+      "importer": {
+        "uuid": "ccf409e1-d2ce-d16d-1f7c-9df8f86c9468",
+        "frame": "ccf409e1-d2ce-d16d-1f7c-9df8f86c9468@f9941",
+        "texture": "ccf409e1-d2ce-d16d-1f7c-9df8f86c9468@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-1.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-1.png",
+      "sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f",
+      "importer": {
+        "uuid": "7ca8efa0-dd88-7ce1-8534-329119ad6c47",
+        "frame": "7ca8efa0-dd88-7ce1-8534-329119ad6c47@f9941",
+        "texture": "7ca8efa0-dd88-7ce1-8534-329119ad6c47@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-1.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-1.png",
+      "sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08",
+      "importer": {
+        "uuid": "560fee25-1e4a-3f90-d8e1-49f14f2e1596",
+        "frame": "560fee25-1e4a-3f90-d8e1-49f14f2e1596@f9941",
+        "texture": "560fee25-1e4a-3f90-d8e1-49f14f2e1596@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-1.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-1.png",
+      "sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903",
+      "importer": {
+        "uuid": "b74536b5-9616-d878-93d7-31c2346a7f3d",
+        "frame": "b74536b5-9616-d878-93d7-31c2346a7f3d@f9941",
+        "texture": "b74536b5-9616-d878-93d7-31c2346a7f3d@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-2.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-2.png",
+      "sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166",
+      "importer": {
+        "uuid": "6a4e2efb-2352-b6e9-e2de-897db8bb03ba",
+        "frame": "6a4e2efb-2352-b6e9-e2de-897db8bb03ba@f9941",
+        "texture": "6a4e2efb-2352-b6e9-e2de-897db8bb03ba@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-2.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-2.png",
+      "sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007",
+      "importer": {
+        "uuid": "9f84df47-bf3c-1f45-4b31-f20989893d2b",
+        "frame": "9f84df47-bf3c-1f45-4b31-f20989893d2b@f9941",
+        "texture": "9f84df47-bf3c-1f45-4b31-f20989893d2b@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-2.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-2.png",
+      "sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f",
+      "importer": {
+        "uuid": "d61104b5-d7d2-ff19-7fb7-70f0185f7cfc",
+        "frame": "d61104b5-d7d2-ff19-7fb7-70f0185f7cfc@f9941",
+        "texture": "d61104b5-d7d2-ff19-7fb7-70f0185f7cfc@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-2.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-2.png",
+      "sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f",
+      "importer": {
+        "uuid": "f9391900-8772-5a9a-2b65-630ca922a718",
+        "frame": "f9391900-8772-5a9a-2b65-630ca922a718@f9941",
+        "texture": "f9391900-8772-5a9a-2b65-630ca922a718@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-3.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-3.png",
+      "sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2",
+      "importer": {
+        "uuid": "eeccc22e-2d2f-1209-7f44-25d2538fe1b3",
+        "frame": "eeccc22e-2d2f-1209-7f44-25d2538fe1b3@f9941",
+        "texture": "eeccc22e-2d2f-1209-7f44-25d2538fe1b3@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-3.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-3.png",
+      "sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514",
+      "importer": {
+        "uuid": "4e3d8a68-254b-a908-4c9c-0cc273fed5b3",
+        "frame": "4e3d8a68-254b-a908-4c9c-0cc273fed5b3@f9941",
+        "texture": "4e3d8a68-254b-a908-4c9c-0cc273fed5b3@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-3.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-3.png",
+      "sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1",
+      "importer": {
+        "uuid": "4313cfc6-5377-9e15-4e8e-ad0ec6bdb989",
+        "frame": "4313cfc6-5377-9e15-4e8e-ad0ec6bdb989@f9941",
+        "texture": "4313cfc6-5377-9e15-4e8e-ad0ec6bdb989@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-3.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-3.png",
+      "sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7",
+      "importer": {
+        "uuid": "8ad37f0a-4871-dadc-5921-6107966441c6",
+        "frame": "8ad37f0a-4871-dadc-5921-6107966441c6@f9941",
+        "texture": "8ad37f0a-4871-dadc-5921-6107966441c6@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-4.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-4.png",
+      "sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126",
+      "importer": {
+        "uuid": "4d65eee6-8aab-09b0-e0d8-322899b80e6d",
+        "frame": "4d65eee6-8aab-09b0-e0d8-322899b80e6d@f9941",
+        "texture": "4d65eee6-8aab-09b0-e0d8-322899b80e6d@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-4.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-4.png",
+      "sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312",
+      "importer": {
+        "uuid": "42d75b0e-7155-12cd-006f-ef83e34912f9",
+        "frame": "42d75b0e-7155-12cd-006f-ef83e34912f9@f9941",
+        "texture": "42d75b0e-7155-12cd-006f-ef83e34912f9@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-4.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-4.png",
+      "sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0",
+      "importer": {
+        "uuid": "2b9df48e-1adc-d5bb-55d9-e294eb8f7e07",
+        "frame": "2b9df48e-1adc-d5bb-55d9-e294eb8f7e07@f9941",
+        "texture": "2b9df48e-1adc-d5bb-55d9-e294eb8f7e07@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-4.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-4.png",
+      "sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583",
+      "importer": {
+        "uuid": "d8303b9c-3a33-71e2-fcc6-f5143002c710",
+        "frame": "d8303b9c-3a33-71e2-fcc6-f5143002c710@f9941",
+        "texture": "d8303b9c-3a33-71e2-fcc6-f5143002c710@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-5.png",
+      "target": "clients/cocos/assets/resources/tool-actors/hoe-5.png",
+      "sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a",
+      "importer": {
+        "uuid": "761430e5-7e68-23f9-0d7b-d9b65b14e7c2",
+        "frame": "761430e5-7e68-23f9-0d7b-d9b65b14e7c2@f9941",
+        "texture": "761430e5-7e68-23f9-0d7b-d9b65b14e7c2@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-5.png",
+      "target": "clients/cocos/assets/resources/tool-actors/axe-5.png",
+      "sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11",
+      "importer": {
+        "uuid": "bcdbc860-f553-5544-3230-3842722106d5",
+        "frame": "bcdbc860-f553-5544-3230-3842722106d5@f9941",
+        "texture": "bcdbc860-f553-5544-3230-3842722106d5@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-5.png",
+      "target": "clients/cocos/assets/resources/tool-actors/pickaxe-5.png",
+      "sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656",
+      "importer": {
+        "uuid": "9f0088c9-ec3f-d28c-5711-6efb7d9c511c",
+        "frame": "9f0088c9-ec3f-d28c-5711-6efb7d9c511c@f9941",
+        "texture": "9f0088c9-ec3f-d28c-5711-6efb7d9c511c@6c48a",
+        "dimensions": [
+          672,
+          448
+        ],
+        "filter": "nearest",
+        "trim": "none",
+        "packable": false
+      }
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-5.png",
+      "target": "clients/cocos/assets/resources/tool-actors/watering_can-5.png",
+      "sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771",
+      "importer": {
+        "uuid": "cd23d7dd-d498-dd19-ae15-7f359fbe440a",
+        "frame": "cd23d7dd-d498-dd19-ae15-7f359fbe440a@f9941",
+        "texture": "cd23d7dd-d498-dd19-ae15-7f359fbe440a@6c48a",
+        "dimensions": [
+          672,
+          448
         ],
         "filter": "nearest",
         "trim": "none",
@@ -9439,6 +9847,582 @@
       ]
     },
     {
+      "path": "assets/derived/tool-poses-v1/axe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43",
+      "bytes": 106256,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/axe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f",
+      "bytes": 105568,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/axe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007",
+      "bytes": 116135,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/9"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/axe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514",
+      "bytes": 108716,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/13"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/axe-4.png",
+      "owner": "derived-project-art",
+      "sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312",
+      "bytes": 104758,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-4.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/17"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/axe-5.png",
+      "owner": "derived-project-art",
+      "sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11",
+      "bytes": 113967,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/axe-5.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/21"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8",
+      "bytes": 104250,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/0"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69",
+      "bytes": 110432,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166",
+      "bytes": 106249,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/8"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2",
+      "bytes": 99410,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/12"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-4.png",
+      "owner": "derived-project-art",
+      "sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126",
+      "bytes": 102924,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-4.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/16"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/hoe-5.png",
+      "owner": "derived-project-art",
+      "sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a",
+      "bytes": 112210,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/hoe-5.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/20"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-0.png",
+      "owner": "derived-project-art",
+      "sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a",
+      "bytes": 103660,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-1.png",
+      "owner": "derived-project-art",
+      "sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08",
+      "bytes": 109799,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/6"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-2.png",
+      "owner": "derived-project-art",
+      "sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f",
+      "bytes": 111511,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/10"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-3.png",
+      "owner": "derived-project-art",
+      "sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1",
+      "bytes": 102602,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/14"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-4.png",
+      "owner": "derived-project-art",
+      "sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0",
+      "bytes": 105205,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-4.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/18"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/pickaxe-5.png",
+      "owner": "derived-project-art",
+      "sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656",
+      "bytes": 113690,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/pickaxe-5.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/22"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-0.png",
+      "owner": "derived-project-art",
+      "sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099",
+      "bytes": 89023,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-0.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-1.png",
+      "owner": "derived-project-art",
+      "sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903",
+      "bytes": 94084,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-1.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/7"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-2.png",
+      "owner": "derived-project-art",
+      "sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f",
+      "bytes": 94665,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-2.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/11"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-3.png",
+      "owner": "derived-project-art",
+      "sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7",
+      "bytes": 86804,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-3.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/15"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-4.png",
+      "owner": "derived-project-art",
+      "sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583",
+      "bytes": 85739,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-4.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/19"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "assets/derived/tool-poses-v1/watering_can-5.png",
+      "owner": "derived-project-art",
+      "sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771",
+      "bytes": 92997,
+      "roles": [
+        "canonical-binding-source"
+      ],
+      "consumers": [
+        "assets/resources/tool-actors/watering_can-5.png"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/23"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
       "path": "assets/derived/tools-v1/items/copper_ore.png",
       "owner": "derived-project-art",
       "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
@@ -9887,10 +10871,12 @@
         "assets/resources/tools/axe-0.png"
       ],
       "provenance": [
+        "docs/art/tool-actor-art-v1.json#/references/7",
         "docs/art/tool-art-v1.json#/records/1"
       ],
       "inputs": [
         "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_actor_art.py",
         "tools/build_tool_art.py"
       ],
       "dimensions": [
@@ -9979,10 +10965,12 @@
         "assets/resources/tools/hoe-0.png"
       ],
       "provenance": [
+        "docs/art/tool-actor-art-v1.json#/references/6",
         "docs/art/tool-art-v1.json#/records/0"
       ],
       "inputs": [
         "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_actor_art.py",
         "tools/build_tool_art.py"
       ],
       "dimensions": [
@@ -10071,10 +11059,12 @@
         "assets/resources/tools/pickaxe-0.png"
       ],
       "provenance": [
+        "docs/art/tool-actor-art-v1.json#/references/8",
         "docs/art/tool-art-v1.json#/records/2"
       ],
       "inputs": [
         "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_actor_art.py",
         "tools/build_tool_art.py"
       ],
       "dimensions": [
@@ -10163,10 +11153,12 @@
         "assets/resources/tools/watering_can-0.png"
       ],
       "provenance": [
+        "docs/art/tool-actor-art-v1.json#/references/9",
         "docs/art/tool-art-v1.json#/records/3"
       ],
       "inputs": [
         "assets/generated/hearthwood/tools-v1/tools.png",
+        "tools/build_tool_actor_art.py",
         "tools/build_tool_art.py"
       ],
       "dimensions": [
@@ -11543,6 +12535,990 @@
       "inputs": []
     },
     {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-0.png",
+      "owner": "original-project-art",
+      "sha256": "bd8ac5ac429a5aad8b05918afca7d58a09625f6cb6e0f08ddb8aa3570e94d3df",
+      "bytes": 2275252,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-0.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/1",
+        "docs/art/tool-actor-art-v1.json#/sources/1"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-0.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "68ba9818b2cfde031552ae2e9bf66aec407f5471bbb8f3e62de2a0f05472cdc8",
+      "bytes": 3469,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-0.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-1.png",
+      "owner": "original-project-art",
+      "sha256": "13911a89c89e3c54115ff85e5bb619c2fce6d4c357e38a4d4d7f0a81070d9afa",
+      "bytes": 2210344,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-1.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/5",
+        "docs/art/tool-actor-art-v1.json#/sources/5"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "cfe8b4b4d45ff086ff6faff9656451df4f702f2650f1244fc95298d562712aa5",
+      "bytes": 3476,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-1.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-2.png",
+      "owner": "original-project-art",
+      "sha256": "437bfadf8357cda8612723f23f802863345480ee2d468ed115a4a4b530104e24",
+      "bytes": 2134714,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-2.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/9",
+        "docs/art/tool-actor-art-v1.json#/sources/9"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-2.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "c690d502f90042397b24ebb224817b64317d70184122d4fac4ecf4271f4ff423",
+      "bytes": 3473,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-2.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-3.png",
+      "owner": "original-project-art",
+      "sha256": "af987bd60cc23e7fdc9a7c9e0df72d5be174c5782beb1e892cbac0635147fa63",
+      "bytes": 2263628,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-3.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/13",
+        "docs/art/tool-actor-art-v1.json#/sources/13"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-3.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "ac53149be17b317f3859b634a2850bcd9dac89a45b7dd6986f06759d624af032",
+      "bytes": 3476,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-3.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-4.png",
+      "owner": "original-project-art",
+      "sha256": "373dd43c79018e59316191d80a132a55b9d383c611014ca4a89d2a58f7a5d9e9",
+      "bytes": 2217222,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-4.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/17",
+        "docs/art/tool-actor-art-v1.json#/sources/17"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-4.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "9694944a931331958bda28356aaa94337d8fb2ccbcc2b26834043919156aa1e9",
+      "bytes": 3472,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-4.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-5.png",
+      "owner": "original-project-art",
+      "sha256": "5d7df73137009b76001285631514505bb45e891efe59eeb855f8eb881d20eed6",
+      "bytes": 2245448,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-5.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/21",
+        "docs/art/tool-actor-art-v1.json#/sources/21"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/axe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/axe-5.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "14c5443561f0290eaf5b8490487fee3ab3ba00fc94d217bcf23598a1209f03cd",
+      "bytes": 3485,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/axe-5.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-0.png",
+      "owner": "original-project-art",
+      "sha256": "a201652d586dcb6481b2e98acea1053e78be25745b2c270541ae6a7e7568122a",
+      "bytes": 2232594,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-0.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/0",
+        "docs/art/tool-actor-art-v1.json#/sources/0"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-0.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "0ecdb2950c4b9aee2a7a7b60242b716c627aae55ef5b7df14943bf4f8c45badc",
+      "bytes": 3447,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-0.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-1.png",
+      "owner": "original-project-art",
+      "sha256": "307d6fb5efd2bff9704c55726118792fb1293e9331ffb6bedbee1e0563013533",
+      "bytes": 2261583,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-1.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/4",
+        "docs/art/tool-actor-art-v1.json#/sources/4"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "5dade6aec0c06b49ad3dc81da59150033c1c3ac3d90400784f7c0c2a38a50c25",
+      "bytes": 3454,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-1.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-2.png",
+      "owner": "original-project-art",
+      "sha256": "0cf1aa2e8fdca90b1685306665c7b5c73376514b553591ca814aed1b0068578d",
+      "bytes": 2090448,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-2.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/8",
+        "docs/art/tool-actor-art-v1.json#/sources/8"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-2.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "ba37321a14bc6925657894d1e4718ac3c60f2dd4292b76744b9d1bffac67110b",
+      "bytes": 3451,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-2.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-3.png",
+      "owner": "original-project-art",
+      "sha256": "2ae837699afb93beb102b24232ce3be1c5ce69ff2ac72c9e8c501ebffaaed099",
+      "bytes": 2256355,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-3.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/12",
+        "docs/art/tool-actor-art-v1.json#/sources/12"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-3.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "02259af57cc456858cc52bb3afaec7e2f73a48a2c9329daf800f0212d9f567a9",
+      "bytes": 3454,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-3.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-4.png",
+      "owner": "original-project-art",
+      "sha256": "fdfcc93c6e3f73803687d67e8b6422680c388797f97148ff666d0445b5c32fe6",
+      "bytes": 2246330,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-4.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/16",
+        "docs/art/tool-actor-art-v1.json#/sources/16"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-4.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "872d0235c62d4ae9231b4e8347f4dc8b7e0fcbf14cf4226ebfaa95a48b2dff4a",
+      "bytes": 3450,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-4.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-5.png",
+      "owner": "original-project-art",
+      "sha256": "1ba57dc9a91ddeb6cd2ab007fec40df62169fe66a291d4a9fba39729bd29b9b5",
+      "bytes": 2300593,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-5.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/20",
+        "docs/art/tool-actor-art-v1.json#/sources/20"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/hoe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/hoe-5.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "6c3009d45f57c76d673fbc7eaa5505236b7d5261ed3315662f96910002eac7c5",
+      "bytes": 3463,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/hoe-5.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.png",
+      "owner": "original-project-art",
+      "sha256": "e5a3066cc1f9b7a3942c9fb95eaec007be05765861af7e13c6fea028d2f165c6",
+      "bytes": 2218507,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-0.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/2",
+        "docs/art/tool-actor-art-v1.json#/sources/2"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "7cf54f746bbf49d6266b266cbcdbf843fc29a079b18b211749147825aa6a3be8",
+      "bytes": 3432,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-0.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.png",
+      "owner": "original-project-art",
+      "sha256": "0ed6ba27634cf792a32aa4185f09b96b8ffa82e1aff74079d6aefe25f47ef0c4",
+      "bytes": 2265197,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-1.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/6",
+        "docs/art/tool-actor-art-v1.json#/sources/6"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "29e65127c15810875cd2e7d1c7ddebe11364a0bd092a36f1bbdc374356a0c98a",
+      "bytes": 3439,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-1.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.png",
+      "owner": "original-project-art",
+      "sha256": "416b7d616a532ae04bbe500cda6a5e5a358f746e9a338a1cba1c99ee2c5ef12a",
+      "bytes": 2122013,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-2.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/10",
+        "docs/art/tool-actor-art-v1.json#/sources/10"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "afc425dda97d5808ab069fff9fa0bb326946552942b508fab8112833ad45159c",
+      "bytes": 3436,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-2.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.png",
+      "owner": "original-project-art",
+      "sha256": "90c664b5c1479dad65edb9e6f22b5a5b4ac01b54e393c7c49f823e7e3ee78eaa",
+      "bytes": 2202336,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-3.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/14",
+        "docs/art/tool-actor-art-v1.json#/sources/14"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "5d7d89ff79406fffa509ec933a1d9e18e7ed0e888e2f741b9999c39a6e571560",
+      "bytes": 3439,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-3.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.png",
+      "owner": "original-project-art",
+      "sha256": "6e9b25d12ac2580e87318a1dc54c4363e49ab8a7f1fece5bc61278a155a15491",
+      "bytes": 2188193,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-4.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/18",
+        "docs/art/tool-actor-art-v1.json#/sources/18"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "29c547964c68525165d3bd9724dfd64c448d21235c9d4b165bc0b1a7e5882f86",
+      "bytes": 3435,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-4.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.png",
+      "owner": "original-project-art",
+      "sha256": "1a10a7de9f4d82dc131c60999ba6d137cfc6771da979810f18d91836011c3171",
+      "bytes": 2311250,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-5.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/22",
+        "docs/art/tool-actor-art-v1.json#/sources/22"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "f2dc65abaa0f95ebe483640b7d2d2e9505b7f9636f5ca5ad766e5ff781350678",
+      "bytes": 3448,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/pickaxe-5.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-0.png",
+      "owner": "original-project-art",
+      "sha256": "d7ee6c90bd5b75c22a4e8d6eaebea09784990d1fe3aebf86639232d72c0d5a0d",
+      "bytes": 2261272,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-0.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/3",
+        "docs/art/tool-actor-art-v1.json#/sources/3"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-0.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-0.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "8a9678195d94d1f005ef8e61f891c437dfdded6cb816c0d381c9283af7bee3ab",
+      "bytes": 3460,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-0.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-0.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-1.png",
+      "owner": "original-project-art",
+      "sha256": "e30e5947330a4821221cefa41c0525dfbeb078360e1de33f07f54d6ff574bdb2",
+      "bytes": 2209926,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-1.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/7",
+        "docs/art/tool-actor-art-v1.json#/sources/7"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-1.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-1.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "a71ee18711e206fe4839ee39e6355e5264fcebe87eb8214a8bada1577391ccc8",
+      "bytes": 3467,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-1.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-1.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-2.png",
+      "owner": "original-project-art",
+      "sha256": "d4aa61890301ddfee7b23219387bf49fca5c0ca926bbf84728d109b247b673c9",
+      "bytes": 2246701,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-2.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/11",
+        "docs/art/tool-actor-art-v1.json#/sources/11"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-2.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-2.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "7f2e83303fd0f68c66de74d65182b47b7775467120a0ea8749b37201f4bfa772",
+      "bytes": 3464,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-2.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-2.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-3.png",
+      "owner": "original-project-art",
+      "sha256": "1f8574543e3cdfba017ae99f90062092dbd59237b1b8f03a5ae0fd2a97a07485",
+      "bytes": 2293037,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-3.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/15",
+        "docs/art/tool-actor-art-v1.json#/sources/15"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-3.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-3.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "af08b70ebd0b3e056e944b7e32140b651fe9773eabcb1e64d0a00944dd768bd6",
+      "bytes": 3467,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-3.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-3.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-4.png",
+      "owner": "original-project-art",
+      "sha256": "0105952de8ebef08ccab3022b975eb6fbf87c8c0a34fc541e69e4e66dd8c758e",
+      "bytes": 2251280,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-4.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/19",
+        "docs/art/tool-actor-art-v1.json#/sources/19"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-4.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-4.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "5bddc17974f75224669c33a95a3bdce3edd8121951507b01fc2c0aa89c6b24f8",
+      "bytes": 3463,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-4.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-4.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-5.png",
+      "owner": "original-project-art",
+      "sha256": "ad2bd5d0fe8edd05b391e3f912d35de63c8b1a3a73a7fb72f2fba04fa58af09a",
+      "bytes": 2255906,
+      "roles": [
+        "archived-art-source",
+        "original-producer-input"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-5.png",
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/records/23",
+        "docs/art/tool-actor-art-v1.json#/sources/23"
+      ],
+      "inputs": [
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-5.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/hearthwood/tool-poses-v1/watering_can-5.prompt.txt",
+      "owner": "original-project-art",
+      "sha256": "166ab3376740d242578f9ee93262c7cd3057bd52d003ca892861ff29ff27a6e7",
+      "bytes": 3476,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-5.png",
+        "assets/generated/hearthwood/tool-poses-v1/watering_can-5.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "assets/generated/hearthwood/tools-v1/resources.png",
       "owner": "original-project-art",
       "sha256": "a372df659972fe6a3b696110a1fc8d15f80357f54502228115929ffd8b2990c6",
@@ -12891,11 +14867,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/2",
+        "docs/art/tool-actor-art-v1.json#/references/0",
         "docs/art/village-art-v2.json#/records/24"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -12918,11 +14896,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/3",
+        "docs/art/tool-actor-art-v1.json#/references/1",
         "docs/art/village-art-v2.json#/records/27"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -12945,11 +14925,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/5",
+        "docs/art/tool-actor-art-v1.json#/references/2",
         "docs/art/village-art-v2.json#/records/30"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -12972,11 +14954,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/4",
+        "docs/art/tool-actor-art-v1.json#/references/3",
         "docs/art/village-art-v2.json#/records/33"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -12999,11 +14983,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/1",
+        "docs/art/tool-actor-art-v1.json#/references/4",
         "docs/art/village-art-v2.json#/records/36"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -13026,11 +15012,13 @@
       ],
       "provenance": [
         "docs/art/resident-art-v1.json#/player_assets_preserved/0",
+        "docs/art/tool-actor-art-v1.json#/references/5",
         "docs/art/village-art-v2.json#/records/39"
       ],
       "inputs": [
         "assets/generated/hearthwood/village-actors-v2.png",
         "tools/build_resident_art.py",
+        "tools/build_tool_actor_art.py",
         "tools/build_village_art.py"
       ],
       "dimensions": [
@@ -14288,8 +16276,8 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "ebd824a030b8f02df6c3952387db882481bdbc604785f6cacf2915d5cdeee025",
-      "bytes": 103583,
+      "sha256": "6db8047ea3b23f04b0af28504a89f497fbde0c86555000dc8e1698f63f87523d",
+      "bytes": 111011,
       "roles": [
         "binding-contract"
       ],
@@ -18458,6 +20446,438 @@
       ]
     },
     {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43",
+      "bytes": 106256,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f",
+      "bytes": 105568,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007",
+      "bytes": 116135,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514",
+      "bytes": 108716,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312",
+      "bytes": 104758,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/axe-5.png",
+      "owner": "cocos-adapter",
+      "sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11",
+      "bytes": 113967,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/axe-5.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8",
+      "bytes": 104250,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69",
+      "bytes": 110432,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166",
+      "bytes": 106249,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2",
+      "bytes": 99410,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126",
+      "bytes": 102924,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/hoe-5.png",
+      "owner": "cocos-adapter",
+      "sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a",
+      "bytes": 112210,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/hoe-5.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a",
+      "bytes": 103660,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08",
+      "bytes": 109799,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f",
+      "bytes": 111511,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1",
+      "bytes": 102602,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0",
+      "bytes": 105205,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/pickaxe-5.png",
+      "owner": "cocos-adapter",
+      "sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656",
+      "bytes": 113690,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/pickaxe-5.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-0.png",
+      "owner": "cocos-adapter",
+      "sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099",
+      "bytes": 89023,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-0.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-1.png",
+      "owner": "cocos-adapter",
+      "sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903",
+      "bytes": 94084,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-1.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-2.png",
+      "owner": "cocos-adapter",
+      "sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f",
+      "bytes": 94665,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-2.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-3.png",
+      "owner": "cocos-adapter",
+      "sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7",
+      "bytes": 86804,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-3.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-4.png",
+      "owner": "cocos-adapter",
+      "sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583",
+      "bytes": 85739,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-4.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
+      "path": "clients/cocos/assets/resources/tool-actors/watering_can-5.png",
+      "owner": "cocos-adapter",
+      "sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771",
+      "bytes": 92997,
+      "roles": [
+        "generated-copy"
+      ],
+      "consumers": [
+        "assets/derived/tool-poses-v1/watering_can-5.png"
+      ],
+      "provenance": [],
+      "inputs": [],
+      "dimensions": [
+        672,
+        448
+      ]
+    },
+    {
       "path": "clients/cocos/assets/resources/tools/axe-0.png",
       "owner": "cocos-adapter",
       "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
@@ -19702,8 +22122,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "c8220c37b3f49f9d16df3972a9e0bb5cf3043fc9ab283e0762592b4412b495c1",
-      "bytes": 158732,
+      "sha256": "4292958e5da440082943ecef9974a374eba3fed3966c55ba301bd78961610641",
+      "bytes": 159640,
       "roles": [
         "inspected-source"
       ],
@@ -20432,10 +22852,24 @@
       "inputs": []
     },
     {
+      "path": "clients/cocos/assets/scripts/toolActor.ts",
+      "owner": "cocos-adapter",
+      "sha256": "0cfc075da7ed2cd3f3206ec5e88ee510f13465b59c69e21f7f2e69386c9c13cc",
+      "bytes": 2169,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "clients/cocos/assets/scripts/toolView.ts",
       "owner": "cocos-adapter",
-      "sha256": "a91ea46854e9db2c6e085a0f36fe3788be5996bd5a146b5677c1fd1d542e0ef5",
-      "bytes": 6667,
+      "sha256": "dfef3fa91e09e5af0c978c5234b2b018e80bd7c21a6c524dfc09257a7ce2e9dd",
+      "bytes": 5393,
       "roles": [
         "inspected-source"
       ],
@@ -20868,8 +23302,8 @@
     {
       "path": "clients/cocos/tools/run-preview.py",
       "owner": "cocos-adapter",
-      "sha256": "f6bfdfdd0a4bd247f258d2210906936863ad4b1759ee6260e958dcf7233aecd4",
-      "bytes": 12691,
+      "sha256": "c1e5f21c7d5d99a72b0761e6e12a2a482f7d3efce90bbcc55db1bde30e0109b4",
+      "bytes": 13756,
       "roles": [
         "inspected-source"
       ],
@@ -21484,8 +23918,8 @@
     {
       "path": "clients/cocos/tools/smoke-sword-motion.mjs",
       "owner": "cocos-adapter",
-      "sha256": "16503dda171c149845bd31b02f8cbc0dbd285bcb873b0cec52212422f782b535",
-      "bytes": 22534,
+      "sha256": "7e2a59d95bb55e5ba867e970d42820bc8ae01e2944ba10bbc43187bf0d334f04",
+      "bytes": 22629,
       "roles": [
         "inspected-source"
       ],
@@ -21500,6 +23934,20 @@
       "owner": "cocos-adapter",
       "sha256": "772c17bd6e37f3b4f4abe8f8b762c625fbcdfa0d4f2422fcbc7629db2cf117c8",
       "bytes": 9693,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/smoke-tool-art.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "883da893717a1dbdb015ada80a0e28ed19ffe20d1bc5ec07042e768d7101055f",
+      "bytes": 8021,
       "roles": [
         "inspected-source"
       ],
@@ -21554,8 +24002,8 @@
     {
       "path": "clients/cocos/tools/sync.mjs",
       "owner": "cocos-adapter",
-      "sha256": "ac149801fdfb808e95dd766209f2981fdec89105496fe52a715cf64746d6d19f",
-      "bytes": 10501,
+      "sha256": "b67fb40ecf4a55d6d62d1c87ef28c1555d892f8a48a89ba9aea2a318092ac1c5",
+      "bytes": 10702,
       "roles": [
         "inspected-source"
       ],
@@ -21806,8 +24254,8 @@
     {
       "path": "clients/cocos/tools/test-preview.py",
       "owner": "cocos-adapter",
-      "sha256": "45ebbd3f5aa48f6d6ed154ec28c1957b3ec2d3edd35342265b6dd859f33766c8",
-      "bytes": 19365,
+      "sha256": "11e1f3c3eafdb1fe6b8b8382813c8ae556c98fb8ca03e252500276199ccf89bc",
+      "bytes": 20731,
       "roles": [
         "inspected-source"
       ],
@@ -21878,6 +24326,20 @@
       "owner": "cocos-adapter",
       "sha256": "a62e7a95285c16657455e4b776b1b13d96bcb84c694d0a4688a071ece975aa19",
       "bytes": 9509,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/test-tool-poses.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "3ba73b4d97942737b821e3482a5577ed67e376de8ce9b43d5a451ca1c29459a6",
+      "bytes": 2861,
       "roles": [
         "inspected-source"
       ],
@@ -21988,8 +24450,8 @@
     {
       "path": "docs/art/asset-manifest.json",
       "owner": "art-provenance",
-      "sha256": "e854c2da639c32e4a35dceac5ed2ce100aa983674789ecc4bb6aae11fc64d210",
-      "bytes": 112034,
+      "sha256": "8a5dc4b1370579d1bcbfad12ebb89fe71d796c01d5cb51b6e9858497ba1b2727",
+      "bytes": 114638,
       "roles": [
         "provenance"
       ],
@@ -22303,11 +24765,13 @@
       "provenance": [
         "docs/art/sword-motion-v1.json#/records/0",
         "docs/art/sword-motion-v1.json#/records/0/processing_sources/0",
-        "docs/art/sword-motion-v1.json#/source"
+        "docs/art/sword-motion-v1.json#/source",
+        "docs/art/tool-actor-art-v1.json#/references/10"
       ],
       "inputs": [
         "docs/art/references/sword-motion-preview-v1/refine.prompt.txt",
-        "tools/build_sword_art.py"
+        "tools/build_sword_art.py",
+        "tools/build_tool_actor_art.py"
       ],
       "dimensions": [
         1536,
@@ -22331,6 +24795,43 @@
       "inputs": []
     },
     {
+      "path": "docs/art/references/tool-poses-v1/axe4-repair-draft.png",
+      "owner": "art-provenance",
+      "sha256": "48fe8a096f62e77b1f3bd47bec889b8e7deffe75cb2bfdc3fdac3baf26719a3a",
+      "bytes": 941266,
+      "roles": [
+        "original-producer-input"
+      ],
+      "consumers": [
+        "docs/art/tool-actor-art-v1.json"
+      ],
+      "provenance": [
+        "docs/art/tool-actor-art-v1.json#/sources/24"
+      ],
+      "inputs": [
+        "docs/art/references/tool-poses-v1/axe4-repair-draft.prompt.txt",
+        "tools/build_tool_actor_art.py"
+      ],
+      "dimensions": [
+        2172,
+        724
+      ]
+    },
+    {
+      "path": "docs/art/references/tool-poses-v1/axe4-repair-draft.prompt.txt",
+      "owner": "art-provenance",
+      "sha256": "a22e0565236aa2660038de95ae061a512830bc3323a8da6873ceaf33ee92fd23",
+      "bytes": 1644,
+      "roles": [
+        "art-prompt"
+      ],
+      "consumers": [
+        "docs/art/references/tool-poses-v1/axe4-repair-draft.png"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "docs/art/resident-art-v1.json",
       "owner": "art-provenance",
       "sha256": "329394a8e9f99d83e09d7e74afd4f97b5a41d7ece6e0547df74e16110ffa9b69",
@@ -22349,6 +24850,20 @@
       "owner": "art-provenance",
       "sha256": "b4cf1d8b9979b84d030e3ebef50e63cbe1ed325f5f2f3c03d1b008fba5c9b73e",
       "bytes": 33308,
+      "roles": [
+        "provenance"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "docs/art/tool-actor-art-v1.json",
+      "owner": "art-provenance",
+      "sha256": "0f37ab8b6dfbc564e2d599957c6a5938d03792e2af777cfdea81e4a4a497b140",
+      "bytes": 383191,
       "roles": [
         "provenance"
       ],
@@ -23243,6 +25758,22 @@
       "inputs": []
     },
     {
+      "path": "tools/build_tool_actor_art.py",
+      "owner": "root-tooling",
+      "sha256": "b430603c3c823495952a46d576636d7d24d79750e6a66f8c44d906c2e9100dfb",
+      "bytes": 11065,
+      "roles": [
+        "art-producer",
+        "inspected-source"
+      ],
+      "consumers": [
+        "docs/art/tool-actor-art-v1.json",
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
       "path": "tools/build_tool_art.py",
       "owner": "root-tooling",
       "sha256": "d00db2376edf60e6b429ef95a07c309d34ef7f0000f6bb3ea7e1149c40d19b95",
@@ -23319,8 +25850,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "b29de5db4a2f906520f849e99143bf4f727620ed1592e1a192c3836fcba57908",
-      "bytes": 4478,
+      "sha256": "31b0c965f346311c62211b1fac418ee460a29528563963ea70cb8f6c60f6cfda",
+      "bytes": 4569,
       "roles": [
         "inspected-source"
       ],
@@ -23375,8 +25906,8 @@
     {
       "path": "tools/cocos-clean-source.mjs",
       "owner": "root-tooling",
-      "sha256": "b7eb13c3a3e69d60d9dced421d3b74431bfee30d56b8525e943ac27931483647",
-      "bytes": 3204,
+      "sha256": "48cf247e50973539b40a25fa8e2e81cacd3bd70818809e7497feafa5573be3c5",
+      "bytes": 3182,
       "roles": [
         "inspected-source"
       ],
@@ -23459,8 +25990,8 @@
     {
       "path": "tools/cocos-sources.mjs",
       "owner": "root-tooling",
-      "sha256": "f533d5a2279bc9aa82cf10ef642a84c20f4428536d5c2adca59faf8e80e17f29",
-      "bytes": 16120,
+      "sha256": "753bb83e860f8d5698786d35b4aedaf2f2748df087781f8440a56d5ddcbc8308",
+      "bytes": 16154,
       "roles": [
         "inspected-source"
       ],
@@ -23487,8 +26018,8 @@
     {
       "path": "tools/cocos-unit.mjs",
       "owner": "root-tooling",
-      "sha256": "dd72150d074e02c77a571a9b0a08bc009936eb1e7c595bbace78dda96087cf69",
-      "bytes": 4246,
+      "sha256": "cfbdb5b4314256de60fce9f3219f85312851c072d06ac4580a5e859601e9d47d",
+      "bytes": 4305,
       "roles": [
         "inspected-source"
       ],

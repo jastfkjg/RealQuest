@@ -97,3 +97,12 @@ backend/.venv/bin/python clients/cocos/tools/run-preview.py --build web-tools-13
 本任务浏览器均finally关闭，所有QA API/proxy均由控制器停止。额外帧脚本的三次QA服务器也逐PID停止并验证。收尾审计134个已知测试/浏览器/服务/单元进程均已退出，浏览器临时profile均已消失；仅保留人工试玩PID50503及子进程50506/50507。已删除本任务独立Creator克隆、缓存和profile；原SDK、源码/截图/录像证据和其他任务预览保持。共享node_repl宿主不能可靠归属本任务，未擅自关闭。最终清理与保留项随聚合JSON记录。
 
 工程/实机检查完成；未部署、未提交代码；用户视觉与手感验收仍待试玩，未声明用户已批准。
+
+
+## 2026-10-24 默认入口修复
+
+用户在5443截图仍见4格且无工具。实查默认web-current为2026-10-23 02:36 UTC旧包，源码回执未包含toolView/core/tools；web-tools-130与当前Cocos源码完全相符。原用户数据库已经有四件工具各1，只是旧客户端不识别；未补发、未改物品，也未清空或换库。
+
+已用验证过的真实工具release替换默认web-current；旧包保留在output/tools-130-default-fix/previous-web-current，SQLite在线备份为同目录player-backup.db。5443/API8143/cookie/数据库和原服务PID6506/6538/6539均保持。通过用户原Chrome标签刷新并继续原旅程，实际背包显示四工具，木材9/石料9/种子6不变；旧快捷排列保留，工具在5–8格。前后比对全部现存角色库存一致，截图original-save-tools-visible.png。
+
+新增run-preview.py只读构建校验：启动已过期／无来源回执／损坏包，在打开或迁移玩家库前拒绝，并指向npm run build；不自动重置存档。test-preview.py增实际无回执/旧回执拒绝和玩家文件字节保持测试，保留其他聊天将start-cocos改为start.command的调整。启动单元13项、真实进程9组启动/重启/端口/租约/异常退出/超时清理通过，实际进程报告output/cocos-startup/run-h4zjx0oq/result.json；来源和默认包完整性校验通过。测试未使用玩家库，所有测试launcher/子进程已退出。没有新增Chrome标签或测试浏览器，保留用户原标签和原人工服务。证据与详细核对在output/tools-130-default-fix。
