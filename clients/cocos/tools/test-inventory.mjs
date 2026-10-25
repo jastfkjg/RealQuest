@@ -13,6 +13,16 @@ assert.deepEqual(cleanQuick(['wood','wood','gold','missing']),['wood',null,null,
 entries.set(inventoryPreferenceKey('wrong'),JSON.stringify({version:2,saveId:'another',selected:'gold',quick:['gold']}));assert.deepEqual(p.enter('wrong').quick,['hoe','axe','pickaxe','watering_can','seed',null,null,null]);
 const blocked=new InventoryPreferences({getItem(){throw Error('blocked');},setItem(){throw Error('blocked');},removeItem(){throw Error('blocked');}});blocked.enter('a');blocked.bind(3,'wood',{wood:1});assert(blocked.warning);const ram=JSON.stringify(blocked.value);blocked.enter('b');blocked.enter('a');assert.equal(JSON.stringify(blocked.value),ram);
 console.log('PASS eight-pocket swap/clear, per-save persistence/isolation, explicit legacy import, stale/unknown sanitization, scoped deletion and storage-failure RAM continuity.');
+const gains=new InventoryPreferences(storage);gains.enter('gains');
+const initial={hoe:1,axe:1,pickaxe:1,watering_can:1,seed:6,gold:20,wood:0,stone:0,tree_seed:0};
+const earned={...initial,wood:6,tree_seed:1};assert(gains.receive(initial,earned));assert.deepEqual(gains.value.quick,['hoe','axe','pickaxe','watering_can','seed','wood','tree_seed',null]);
+assert(!gains.receive(earned,earned),'refresh/replayed receipt does not rearrange');
+gains.swapQuick(5,7);const order=[...gains.value.quick];assert(!gains.receive(earned,{...earned,wood:8}));assert.deepEqual(gains.value.quick,order,'stack gains stay in their arranged pocket');
+gains.receive(earned,{...earned,stone:4});const full=[...gains.value.quick];assert(!gains.receive({...earned,stone:4},{...earned,stone:4,copper_ore:3,gold:30}));assert.deepEqual(gains.value.quick,full,'full pockets never evict an existing item');
+gains.clear(7);assert(!gains.receive(earned,earned),'manual removal stays removed on unchanged snapshots');assert(gains.receive(earned,{...earned,wood:9}),'the next confirmed gain can return a removed type to an empty pocket');
+assert.deepEqual(new InventoryPreferences(storage).enter('gains').quick,gains.value.quick);assert.deepEqual(initial,{hoe:1,axe:1,pickaxe:1,watering_can:1,seed:6,gold:20,wood:0,stone:0,tree_seed:0});
+gains.enter('other-save');assert(!gains.value.quick.includes('wood'),'preferences remain scoped to a journey');
+console.log('PASS confirmed acquisitions prefer empty pockets, stack/order preservation, full-pocket overflow, manual removal, retry/reload and per-save isolation without mutating quantities.');
 const arranged=new InventoryPreferences(storage);arranged.enter('drag-a');
 const owned=['wood','seed','stone'],possessions={wood:3,seed:6,stone:2},original=JSON.stringify(possessions);
 assert.deepEqual(arranged.items(owned),owned);assert(arranged.place('seed',8,owned));assert.equal(arranged.items(owned)[8],'seed');

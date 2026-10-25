@@ -437,8 +437,8 @@
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201",
-      "output_sha256": "6825185ab032fc19ceca405cf5a65cd75b058016251e97b90f29291ad698b201"
+      "sha256": "5d4d5b464fa2e75d3dbb293b66d1022d0d6eff5d1d783edc6a32f069f522fc0f",
+      "output_sha256": "5d4d5b464fa2e75d3dbb293b66d1022d0d6eff5d1d783edc6a32f069f522fc0f"
     },
     {
       "source": "shared/game/preferences.ts",

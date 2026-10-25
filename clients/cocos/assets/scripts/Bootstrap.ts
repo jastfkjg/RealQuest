@@ -640,6 +640,20 @@ export class RealQuestSpike extends Component {
     return this.map().objects.filter(o=>o.kind!=='soil'||this.farmingTool);
   }
   private nearest() { return this.supportedObjects().filter(o=>Math.hypot(o.x-this.p.x,o.y-this.p.y)<65).sort((a,b)=>Math.hypot(a.x-this.p.x,a.y-this.p.y)-Math.hypot(b.x-this.p.x,b.y-this.p.y)||Number(b.kind==='npc')-Number(a.kind==='npc'))[0]; }
+  private interactionTarget(){
+    if(!this.hoeActive())return this.nearest();
+    // E and the action button share one target. People/services take precedence
+    // over the tool's ground aim; direct resource clicks still work normally.
+    const nearby=this.supportedObjects().filter(o=>!['resource','plot','soil'].includes(o.kind)&&Math.hypot(o.x-this.p.x,o.y-this.p.y)<65).sort((a,b)=>Math.hypot(a.x-this.p.x,a.y-this.p.y)-Math.hypot(b.x-this.p.x,b.y-this.p.y));
+    return nearby[0]||this.hoeTarget()||this.nearest();
+  }
+  private primaryInteraction(){
+    const obj=this.interactionTarget();
+    if(this.hoeActive()&&(!obj||['resource','plot','soil'].includes(obj.kind))){
+      if(this.handTool()==='watering_can'&&this.canRefill())void this.sendFeature('tool_refill');
+      else if(obj)this.queueHoe(obj.x,obj.y);
+    }else void this.interact(obj);
+  }
   // Creator's Web keyboard source listens on the canvas only. Native semantic
   // buttons use the same handler explicitly, keeping its mode and input guards.
   private semanticKey(code:string,down:boolean,repeat:boolean){
@@ -649,6 +663,7 @@ export class RealQuestSpike extends Component {
   }
   private keyDown(e: EventKeyboard) {
     if(textOwnsInput() || (e as any).isComposing)return;
+    if(this.inventoryDrag.holding){if(e.keyCode===KeyCode.ESCAPE){this.clearInput();this.dirty=true;}return;}
     if(e.keyCode===KeyCode.SHIFT_LEFT||e.keyCode===KeyCode.SHIFT_RIGHT){if(!this.focusId&&!this.keys.has(e.keyCode)&&this.mode==='world'&&this.client.state?.location.startsWith('cave_')&&[KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].some(key=>this.keys.has(key)))this.queueCombat('dodge');this.keys.add(e.keyCode);return;}
     if(e.keyCode===KeyCode.TAB){const ids=this.controls.filter(c=>!c.disabled&&this.actions.has(c.id)).map(c=>c.id);const i=ids.indexOf(this.focusId);const reverse=this.keys.has(KeyCode.SHIFT_LEFT)||this.keys.has(KeyCode.SHIFT_RIGHT);this.focusId=ids[i<0?(reverse?ids.length-1:0):(i+(reverse?-1:1)+ids.length)%ids.length]||'';this.dirty=true;return;}
     if((e.keyCode===KeyCode.KEY_E||e.keyCode===KeyCode.SPACE)&&this.mode==='dialogue'&&(!this.focusId||['dialogue-read','dialogue-next'].includes(this.focusId))){if(this.keys.has(e.keyCode))return;this.features.advanceDialogue(this.panelHost());this.keys.add(e.keyCode);return;}
@@ -665,13 +680,12 @@ export class RealQuestSpike extends Component {
     if(this.mode!=='world') return;
     if(e.keyCode===KeyCode.KEY_H&&this.client.state?.location==='overworld'){if(!this.keys.has(e.keyCode))this.toggleHoe();this.keys.add(e.keyCode);return;}
     if(e.keyCode===KeyCode.KEY_G&&this.hoeActive()){if(this.keys.has(e.keyCode))return;const key=this.handTool()!;this.clearInput();this.keys.add(e.keyCode);if(['hoe','watering_can'].includes(key)){const max=toolCatalog.tiers[toolLevel(this.client.state!,key)].area;this.toolRange=this.toolRange===1?max:1;this.dirty=true;}return;}
-    if(this.hoeActive()&&e.keyCode===KeyCode.KEY_E){if(!this.keys.has(e.keyCode)){if(this.handTool()==='watering_can'&&this.canRefill())void this.sendFeature('tool_refill');else{const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);}}this.keys.add(e.keyCode);return;}
     if(this.hoeActive()&&e.keyCode===KeyCode.SPACE){this.keys.add(e.keyCode);return;}
     if(!this.keys.has(e.keyCode)&&e.keyCode===KeyCode.KEY_V)this.queueCombat('dodge');
     if(!this.keys.has(e.keyCode)){if(e.keyCode===KeyCode.SPACE)this.queueCombat('attack');if(e.keyCode===KeyCode.KEY_Q)this.queueCombat('spark');if(e.keyCode===KeyCode.KEY_R)this.queueCombat('soup');}
     if(e.keyCode>=KeyCode.DIGIT_1&&e.keyCode<=KeyCode.DIGIT_8){void this.useQuick(e.keyCode-KeyCode.DIGIT_1);return;}
     if(e.keyCode===KeyCode.KEY_T&&this.client.state?.location.startsWith('cave_')){this.targetId=nextTarget(this.client.state,this.targetId);this.dirty=true;return;}
-    if(e.keyCode===KeyCode.KEY_E) { if(this.keys.has(e.keyCode))return;void this.interact();this.keys.add(e.keyCode); return; }
+    if(e.keyCode===KeyCode.KEY_E) { if(this.keys.has(e.keyCode))return;this.primaryInteraction();this.keys.add(e.keyCode); return; }
     if([KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].includes(e.keyCode)){this.route=[];this.approach=null;this.hoeAim=null;this.hoeQueue=[];this.hoePointer=null;this.toolDirection=null;this.toolGestureUntil=this.elapsed+.12;this.inputEpoch++;this.dirty=true;} this.keys.add(e.keyCode);
   }
   private touchRelease(event:EventTouch){this.touches.delete((event.getID()??0));this.hoeEnd(event);}
@@ -759,7 +773,7 @@ export class RealQuestSpike extends Component {
   private hoeStart(e:EventTouch){
     if(!this.hoeActive()||!this.canPlay()||this.busy)return;
     const p=this.hoePoint(e);if(!p)return;
-    if(this.supportedObjects().some(o=>!['resource','plot','soil'].includes(o.kind)&&this.localScene.hit(o,p.x,p.y)))return;
+    if(this.supportedObjects().some(o=>!['resource','plot','soil'].includes(o.kind)&&(this.ranchRenderer.hit(o,p.x,p.y)||this.arrivalScene.hit(this.map(),o,p.x,p.y)||this.localScene.hit(o,p.x,p.y))))return;
     const key=this.handTool()!,target=toolTarget(this.map(),this.client.state!,serverNow(),key,p.x,p.y);
     if(!target||key!=='hoe'&&!['resource','plot'].includes(target.kind))return;
     this.clearInput();this.focusId='';this.hoePointer=e.getID()??0;this.toolDirection=this.actorDirection;this.toolGestureHits=0;this.toolGestureUntil=Infinity;this.hoeLastPoint=p;this.queueHoe(p.x,p.y);
@@ -1048,7 +1062,18 @@ export class RealQuestSpike extends Component {
     if(held)this.image(button,'items/'+held,0,short?7:-3,short?30:38,short?30:38);
     this.text(button,'HandLabel','手持',-hand/2+2,short?22:14,hand-4,20,12,held?C.paper:C.ink,true);
     if(held)this.text(button,'HandName',isTool(held)?toolSpec(held).name:seedCrop(held)?'种子':held==='tree_seed'?'树种':'武器',-hand/2+2,short?-42:-27,hand-4,20,12,held?C.paper:C.ink,true);
-    this.inventoryView.quick.forEach((id,i)=>this.itemSlot(this.hud,'world-quick-'+i,id,x+hand+12+(i%cols)*(cell+gap),y+Math.floor(i/cols)*(cell+gap),cell,cell,id?s.inventory[id]||0:0,!!id&&held===id,()=>void this.useQuick(i),true,i+1));
+    const targets=this.inventoryView.quick.map((_id,i)=>({id:String(i),x:x+hand+12+(i%cols)*(cell+gap),y:y+Math.floor(i/cols)*(cell+gap),w:cell,h:cell}));
+    this.inventoryView.quick.forEach((id,i)=>{
+      const t=targets[i];this.itemSlot(this.hud,'world-quick-'+i,id,t.x,t.y,cell,cell,id?s.inventory[id]||0:0,!!id&&held===id,()=>void this.useQuick(i),true,i+1);
+      const node=this.hud.getChildByName('world-quick-'+i);
+      if(node&&id&&(s.inventory[id]||0)>0&&!this.busy&&this.canPlay()){
+        node.on(Node.EventType.TOUCH_START,()=>this.clearInput());
+        this.inventoryDrag.bind(node,{item:id,targets,drop:(px,py)=>{
+        const target=targets.find(t=>px>=t.x&&px<=t.x+t.w&&py>=t.y&&py<=t.y+t.h);if(!target||this.busy||!this.canPlay())return;
+        this.inventoryView.preferences.swapQuick(i,Number(target.id));this.dirty=true;
+        }});
+      }
+    });
   }
   private conversationScene(){return this.context?.kind==='npc'&&((this.mode==='dialogue'&&this.features.npcTab==='talk')||['neighbor-topics','neighbor-gift'].includes(this.mode));}
   private updateConversationCamera(dt:number){
@@ -1112,8 +1137,9 @@ export class RealQuestSpike extends Component {
       const vital=(id:string,label:string,value:number,max:number,xx:number)=>{
         this.text(this.hud,id+'Label',label,xx,y+36,28,20,12,C.paper);
         this.box(this.hud,id+'Track',xx+32,y+43,54,5,'#182d24',1);
-        this.box(this.hud,id+'Fill',xx+32,y+43,54*Math.max(0,Math.min(1,value/Math.max(1,max))),5,id==='Health'?'#c9aa74':'#98b17d',1);
-        this.text(this.hud,id+'Value',String(Math.floor(value)),xx+92,y+36,34,20,13,C.paper);
+        const low=value<=max*.2;
+        this.box(this.hud,id+'Fill',xx+32,y+43,54*Math.max(0,Math.min(1,value/Math.max(1,max))),5,low?C.amber:id==='Health'?'#c9aa74':'#98b17d',1);
+        this.text(this.hud,id+'Value',String(Math.floor(value))+(low?'!':''),xx+92,y+36,34,20,13,low?C.amber:C.paper);
       };
       vital('Health','生命',s.vitality?.current??100,s.vitality?.max??100,x+14);
       vital('Stamina','体力',s.stamina?.current??100,s.stamina?.max??100,x+146);
@@ -1136,11 +1162,19 @@ export class RealQuestSpike extends Component {
       this.text(l.node.parent!,'NavigationKey',key,-38,7,76,16,12,'#d2c5a4',true);
       if(i<entries.length-1)this.box(this.hud,'NavigationDivider',xx+85,35,1,30,'#71806480',0);
     });
-    const key=this.hoeActive()?this.handTool():null,n=key?this.hoeTarget()||this.nearest():this.nearest(),action=n?key&&['resource','plot','soil'].includes(n.kind)?{label:toolSpec(key).verb+' · '+toolCost(s,key)+'体力',reason:toolReason(this.map(),s,key,n)||(staminaNow(s,serverNow())<toolCost(s,key)?'体力不足':undefined)}:interactionFor(n,s,serverNow()):null;
+    const key=this.hoeActive()?this.handTool():null,n=this.interactionTarget(),refill=key==='watering_can'&&this.canRefill()&&(!n||['resource','plot','soil'].includes(n.kind)),action=refill?{label:'补满水壶',reason:undefined}:n?key&&['resource','plot','soil'].includes(n.kind)?{label:toolSpec(key).verb+' · '+toolCost(s,key)+'体力',reason:toolReason(this.map(),s,key,n)||(staminaNow(s,serverNow())<toolCost(s,key)?'体力不足':undefined)}:interactionFor(n,s,serverNow()):null;
     const local=!!sceneLayouts[s.location],walking=!!this.route.length&&local;
     const caption=this.busy?'正在回应…':walking?`${this.approach?this.supportedObjects().find(o=>o.id===this.approach!.id)?.name||'目的地':'选定位置'}
-停止行走 · Esc`:n?local?`${n.name===action!.label?'':n.name+'\n'}${action!.reason||action!.label}  E`:action!.reason||`${action!.label}  E`:s.location.startsWith('cave_')?'走近阶梯或休息平台':'点击门口或家具 · 可自动走近';
-    if(n||walking||this.busy)this.button(this.hud,walking?'stop-walk':'interact',caption,this.width-(local?288:272),this.height-(local?80:76),local?268:252,local?60:56,()=>{if(walking){this.clearInput();this.dirty=true;}else if(this.hoeActive()&&n&&['resource','plot','soil'].includes(n.kind))this.queueHoe(n.x,n.y);else void this.interact();},!walking&&(!n||this.busy||!this.canPlay()||!!action?.reason),true);
+停止行走 · Esc`:action?.reason?`${n!.name} · 查看条件\n${action.reason}`:refill?'河边 · 免费补水\n补满水壶  E':n?local?`${n.name===action!.label?'':n.name+'\n'}${action!.label}  E`:`${action!.label}  E`:s.location.startsWith('cave_')?'走近阶梯或休息平台':'点击门口或家具 · 可自动走近';
+    if(n||refill||walking||this.busy){
+      const label=this.button(this.hud,walking?'stop-walk':'interact',caption,this.width-(local?288:272),this.height-(local?80:76),local?268:252,local?60:56,()=>{
+        if(walking){this.clearInput();this.dirty=true;}
+        else if(action?.reason)this.showWorldFeedback(action.reason+(/需要.*十字镐/.test(action.reason)?'，可到工坊找阿焰升级。':action.reason==='体力不足'?'，回家睡觉可以补满。':''),'error');
+        else this.primaryInteraction();
+      },!walking&&((!n&&!refill)||this.busy||!this.canPlay()),true,'game');
+      label.fontSize=16;label.lineHeight=22;
+      if(action?.reason){const node=label.node.parent!;this.box(node,'ActionWarning',-((local?268:252)/2)+3,-(local?60:56)/2+5,3,(local?60:56)-10,C.amber,0);}
+    }
     if(!this.movementLearned&&!s.location.startsWith('cave_')&&this.width>=1000){this.box(this.hud,'MovementHintGround',20,this.height-42,378,30,'#233d31',4);this.text(this.hud,'MovementHint','WASD 移动 · 点击走近交互 · Esc 停步',28,this.height-40,362,26,14,C.paper);}
     this.drawTouchPad();
     if(!this.canPlay()&&!this.busy){
@@ -1163,7 +1197,7 @@ export class RealQuestSpike extends Component {
     if(kind==='hint'&&last!==undefined&&this.elapsed-last<2.5)return;
     this.feedbackHistory.set(key,this.elapsed);
     if(this.feedbackHistory.size>32)this.feedbackHistory.delete(this.feedbackHistory.keys().next().value!);
-    this.worldFeedback={key,text,kind,until:this.elapsed+(kind==='hint'?1.6:kind==='error'?4:2.6),target:target?{x:target.x,y:target.y}:undefined};
+    this.worldFeedback={key,text,kind,until:this.elapsed+(kind==='hint'?1.6:kind==='error'?6:3.5),target:target?{x:target.x,y:target.y}:undefined};
     this.dirty=true;
   }
   private toolError(message:string,target:WorldObject){
@@ -1175,7 +1209,8 @@ export class RealQuestSpike extends Component {
   private drawWorldFeedback(){
     const f=this.worldFeedback;
     if(!f||this.elapsed>=f.until||this.mode!=='world'||this.client.state?.location.startsWith('cave_'))return;
-    const units=Array.from(f.text).reduce((n,c)=>n+(c.charCodeAt(0)>255?1:.55),0),w=Math.min(this.width<1000?260:340,Math.max(88,Math.ceil(units*14)+24)),h=Math.ceil(units*14/(w-24))*20+12;
+    const important=f.kind!=='hint',font=important?16:14,padding=important?44:24,line=important?24:20;
+    const units=Array.from(f.text).reduce((n,c)=>n+(c.charCodeAt(0)>255?1:.55),0),w=Math.min(this.width<1000?280:340,Math.max(important?180:88,Math.ceil(units*font)+padding)),h=Math.max(important?52:32,Math.ceil(units*font/(w-padding))*line+16);
     const px=this.width/2+this.world.position.x+this.p.x*this.zoom,py=this.height/2-this.world.position.y+this.p.y*this.zoom;
     const occupied=this.controls.map(c=>({x:c.x-c.w/2,y:c.y-c.h/2,w:c.w,h:c.h}));
     occupied.push({x:px-22*this.zoom,y:py-52*this.zoom,w:44*this.zoom,h:58*this.zoom});
@@ -1184,19 +1219,23 @@ export class RealQuestSpike extends Component {
       if(n?.active&&size)occupied.push({x:n.position.x-size.width/2,y:-n.position.y-size.height/2,w:size.width,h:size.height});
     }
     const candidates:{x:number;y:number}[]=[];
+    if(important)candidates.push({x:px-w/2,y:py-64*this.zoom-h-12});
     if(f.target){
       const tx=this.width/2+this.world.position.x+f.target.x*this.zoom,ty=this.height/2-this.world.position.y+f.target.y*this.zoom;
       const gap=Math.max(28,30*this.zoom);
       candidates.push({x:tx+gap,y:ty-h-24},{x:tx-w-gap,y:ty-h-24},{x:tx-w/2,y:ty-h-72*this.zoom},{x:tx-w/2,y:ty+gap});
     }
     for(let y=148;y<=this.height-h-88;y+=h+8)candidates.push({x:20,y},{x:this.width-w-20,y});
+    // Dense landscape HUDs leave narrow gaps between surfaces. Also try their
+    // actual edges instead of letting a coarse vertical grid miss a free gap.
+    for(const o of occupied)for(const y of [o.y-h-8,o.y+o.h+8])candidates.push({x:20,y},{x:this.width-w-20,y},{x:px-w/2,y});
     if(!candidates.length)candidates.push({x:20,y:148});
     const bounded=candidates.map(c=>({x:Math.max(12,Math.min(this.width-w-12,c.x)),y:Math.max(12,Math.min(this.height-h-12,c.y))}));
     const score=(c:{x:number;y:number})=>occupied.reduce((n,o)=>n+Math.max(0,Math.min(c.x+w+6,o.x+o.w)-Math.max(c.x-6,o.x))*Math.max(0,Math.min(c.y+h+6,o.y+o.h)-Math.max(c.y-6,o.y)),0);
     const chosen=bounded.find(c=>score(c)===0)||bounded.reduce((a,b)=>score(a)<=score(b)?a:b);
     this.box(this.hud,'FeedbackTag',chosen.x,chosen.y,w,h,'#233d31ec',4);
-    if(f.kind==='error')this.box(this.hud,'FeedbackAccent',chosen.x,chosen.y+6,2,h-12,C.amber,0);
-    const label=this.text(this.hud,'Feedback',f.text,chosen.x+12,chosen.y+5,w-24,h-10,14,C.paper,true);label.lineHeight=20;
+    if(important){this.box(this.hud,'FeedbackAccent',chosen.x,chosen.y+6,3,h-12,C.amber,0);this.text(this.hud,'FeedbackIcon',f.kind==='error'?'!':'+',chosen.x+8,chosen.y+6,20,h-12,20,C.amber,true);}
+    const label=this.text(this.hud,'Feedback',f.text,chosen.x+(important?32:12),chosen.y+7,w-padding,h-14,font,C.paper,true);label.lineHeight=line;
   }
   private drawTouchPad(){
     this.touchPad.active=this.mode==='world'&&this.width<1000;if(!this.touchPad.active)return;
@@ -1673,6 +1712,10 @@ export class RealQuestSpike extends Component {
 
   private clientChanged(){
     this.dirty=true;const s=this.client?.state,save=this.client?.saveId,action=this.client?.pending?.body.action;
+    if(s?.character&&save&&this.client.world){
+      this.inventoryView.init(this.panelHost());
+      if(this.audibleState&&save===this.audibleSave&&s!==this.audibleState)this.inventoryView.preferences.receive(this.audibleState.inventory,s.inventory);
+    }
     if(s&&this.audibleState&&s!==this.audibleState&&save===this.audibleSave&&action&&!['move','world_resume','world_pause'].includes(action)){const cue=confirmedCue(this.audibleState,s);if(cue)soundEffects.play(cue);
       if(action==='cave_tick'&&s.combat?.encounter===this.audibleState.combat?.encounter){
         const old=new Set(this.audibleState.combat?.effects.map(e=>e.id??[e.kind,e.until,e.x,e.y].join(':')));
@@ -1689,7 +1732,13 @@ export class RealQuestSpike extends Component {
   private drawTravelNotice(){
     const s=this.client.state;if(this.mode!=='world'||!s||!this.canPlay())return;const notes=travelNotices(s,serverNow());if(!notes.length)return;
     const desktop=this.width>=1000,cave=s.location.startsWith('cave_'),left=cave?330:sceneLayouts[s.location]?304:290,right=this.width-392,w=desktop?Math.min(284,right-left-16):284,x=desktop?left+(right-left-w)/2:cave?this.width-304:20,y=desktop?20:cave?78:118;
-    const label=this.button(this.hud,'travel-notice',notes[0].title+'\n查看'+notes.length+'条提醒',x,y,w,desktop?48:44,()=>{this.features.openNotices();this.navigate('preferences');},this.busy,false,'game');label.fontSize=14;label.lineHeight=20;
+    const note=notes[0],detail=note.id==='stamina'?'体力 '+Math.floor(staminaNow(s,serverNow()))+'/'+s.stamina!.max+' · 建议回家休息':note.id.startsWith('night:')?'找床睡到明早，恢复体力':'查看约定与结算条件';
+    const height=desktop?60:56,label=this.button(this.hud,'travel-notice',note.title+'。'+detail+'。查看'+notes.length+'条提醒',x,y,w,height,()=>{this.features.openNotices();this.navigate('preferences');},this.busy,true,'game');label.string='';
+    const node=label.node.parent!;
+    this.box(node,'NoticeAccent',-w/2+3,-height/2+5,3,height-10,C.amber,0);
+    this.text(node,'NoticeIcon','!',-w/2+10,-height/2+8,22,height-16,24,C.amber,true);
+    this.text(node,'NoticeTitle',note.title,-w/2+40,-height/2+5,w-52,25,18,C.paper);
+    this.text(node,'NoticeDetail',detail+' ›',-w/2+40,-height/2+31,w-52,20,13,C.paper);
   }
 
   private snapshot() {

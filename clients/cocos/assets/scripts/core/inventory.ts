@@ -34,6 +34,15 @@ export class InventoryPreferences {
   const quick=[...this.value.quick],old=quick.indexOf(id);if(old>=0)quick[old]=quick[slot];quick[slot]=id;this.write({...this.value,quick});return true;
  }
  clear(slot:number){if(!Number.isInteger(slot)||slot<0||slot>7)return;const quick=[...this.value.quick];quick[slot]=null;this.write({...this.value,quick});}
+ /** Confirmed gains fill empty pockets in order; existing stacks/order stay put. */
+ receive(before:Record<string,number>,inventory:Record<string,number>){
+  const quick=[...this.value.quick];let changed=false;
+  for(const [id,count] of Object.entries(inventory)){
+   if(!known(id)||count<=(before[id]||0)||quick.includes(id))continue;
+   const slot=quick.indexOf(null);if(slot<0)break;quick[slot]=id;changed=true;
+  }
+  if(changed)this.write({...this.value,quick});return changed;
+ }
  items(ids:string[]){const available=new Set(ids.filter(known)),tray=this.value.tray.map(id=>id&&available.has(id)?id:null);for(const id of available){if(tray.includes(id))continue;const empty=tray.indexOf(null);if(empty<0)tray.push(id);else tray[empty]=id;}return tray;}
  place(id:string,index:number,ids:string[]){if(!known(id)||!ids.includes(id)||!Number.isInteger(index)||index<0||index>=128)return false;const tray=this.items(ids);while(tray.length<=index)tray.push(null);const old=tray.indexOf(id);if(old<0)return false;[tray[old],tray[index]]=[tray[index],id];this.write({...this.value,tray});return true;}
  swapQuick(from:number,to:number){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>7||to>7)return false;const quick=[...this.value.quick];[quick[from],quick[to]]=[quick[to],quick[from]];this.write({...this.value,quick});return true;}
