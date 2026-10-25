@@ -419,8 +419,8 @@
     {
       "source": "shared/game/tools.ts",
       "target": "assets/scripts/core/tools.ts",
-      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
-      "output_sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8"
+      "sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259",
+      "output_sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259"
     },
     {
       "source": "shared/game/farming.ts",

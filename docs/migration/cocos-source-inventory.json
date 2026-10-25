@@ -8,7 +8,7 @@
     "runtimeWebPs": 7,
     "sharedModules": 37,
     "sceneInputs": 81,
-    "files": 1065,
+    "files": 1066,
     "references": 31
   },
   "bindings": [
@@ -804,7 +804,7 @@
     {
       "source": "shared/game/tools.ts",
       "target": "clients/cocos/assets/scripts/core/tools.ts",
-      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8"
+      "sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259"
     },
     {
       "source": "shared/game/farming.ts",
@@ -16276,7 +16276,7 @@
     {
       "path": "clients/cocos/asset-bindings.json",
       "owner": "cocos-adapter",
-      "sha256": "6db8047ea3b23f04b0af28504a89f497fbde0c86555000dc8e1698f63f87523d",
+      "sha256": "79543cc813e1edd1081ca8f6cf597ed931f0e8f3ff95b30d34b620cd04a1815a",
       "bytes": 111011,
       "roles": [
         "binding-contract"
@@ -22122,8 +22122,8 @@
     {
       "path": "clients/cocos/assets/scripts/Bootstrap.ts",
       "owner": "cocos-adapter",
-      "sha256": "4292958e5da440082943ecef9974a374eba3fed3966c55ba301bd78961610641",
-      "bytes": 159640,
+      "sha256": "d85db359159275cb8411b0de1c83c8b388f04b2928141ee932efd81b5f6ff5ff",
+      "bytes": 163486,
       "roles": [
         "inspected-source"
       ],
@@ -22752,8 +22752,8 @@
     {
       "path": "clients/cocos/assets/scripts/core/tools.ts",
       "owner": "cocos-adapter",
-      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
-      "bytes": 6013,
+      "sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259",
+      "bytes": 6044,
       "roles": [
         "generated-copy",
         "inspected-source"
@@ -22812,8 +22812,8 @@
     {
       "path": "clients/cocos/assets/scripts/localSceneView.ts",
       "owner": "cocos-adapter",
-      "sha256": "78f81b913d1856cd926753f0cde8cd8ffbc56ba34dfa5fc4363041147c648d6d",
-      "bytes": 5180,
+      "sha256": "8c810b81d0084c6c2e336fc1f457a78d2ce141f7638fe96e164e838851ff8697",
+      "bytes": 5373,
       "roles": [
         "inspected-source"
       ],
@@ -23976,6 +23976,20 @@
       "owner": "cocos-adapter",
       "sha256": "d908e7f1191fb7b47b40064ea6b5666fbccff9409ee2c67320ba64a6b28d4cf0",
       "bytes": 13545,
+      "roles": [
+        "inspected-source"
+      ],
+      "consumers": [
+        "source-inventory"
+      ],
+      "provenance": [],
+      "inputs": []
+    },
+    {
+      "path": "clients/cocos/tools/smoke-world-feedback.mjs",
+      "owner": "cocos-adapter",
+      "sha256": "e33aeff3de0cfa85df972b8ed0597ec6a8941d81c265a468fc7c26010515159d",
+      "bytes": 8505,
       "roles": [
         "inspected-source"
       ],
@@ -25534,8 +25548,8 @@
     {
       "path": "shared/game/tools.ts",
       "owner": "shared-game",
-      "sha256": "d4151299cc32d7f247b5b11c704073b93d8fde11ab519d02a33d27194f9985b8",
-      "bytes": 6013,
+      "sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259",
+      "bytes": 6044,
       "roles": [
         "canonical-binding-source",
         "inspected-source"
@@ -25850,8 +25864,8 @@
     {
       "path": "tools/cocos-browser-suites.mjs",
       "owner": "root-tooling",
-      "sha256": "31b0c965f346311c62211b1fac418ee460a29528563963ea70cb8f6c60f6cfda",
-      "bytes": 4569,
+      "sha256": "65ff408baee609123e5b8d38f18b9d81a010c94fd9fb49f65439bc54f531749c",
+      "bytes": 4643,
       "roles": [
         "inspected-source"
       ],

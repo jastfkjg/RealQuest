@@ -58,7 +58,8 @@ export function toolReason(map:MapData,s:GameState,key:ToolId,target:WorldObject
  if(target.kind==='resource'){
   const spec=resourceSpec(target.resource!);
   if(spec.tool!==key)return '请选择'+toolSpec(spec.tool as ToolId).name;
-  if(['depleted','sapling'].includes(target.resource_state!.stage))return '资源已耗尽或尚在生长';
+  if(target.resource_state!.stage==='sapling')return '幼树生长中';
+  if(target.resource_state!.stage==='depleted')return '已采完';
   if(toolLevel(s,key)<spec.level)return '需要'+toolCatalog.tiers[spec.level].name+toolSpec(key).name;
   return '';
  }

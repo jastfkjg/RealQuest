@@ -112,9 +112,23 @@ export class RealQuestSpike extends Component {
   private itemPreviewCamera=false;
   private caveCameraCache:{key:string;frame:{x:number;y:number;zoom:number}}|null=null;
   private busy = false;
-  private error = '';
-  private notice = '';
-  private lastWorldNotice='';private worldNoticeUntil=0;
+  private errorValue = '';
+  private noticeValue = '';
+  private worldFeedback:{key:string;text:string;kind:'hint'|'error'|'notice';until:number;target?:{x:number;y:number}}|null=null;
+  private feedbackHistory=new Map<string,number>();
+  private blockedClick:{x:number;y:number;until:number}|null=null;
+  private toolPreviewCells:WorldObject[]=[];
+  private get error(){return this.errorValue;}
+  private set error(value:string){
+    this.errorValue=value;
+    if(value)this.showWorldFeedback(value,'error');
+  }
+  private get notice(){return this.noticeValue;}
+  private set notice(value:string){
+    this.noticeValue=value;
+    if(value&&!this.error)this.showWorldFeedback(value,'notice');
+    else if(!value&&this.worldFeedback?.kind==='notice')this.worldFeedback=null;
+  }
   private npc: WorldObject | null = null;
   private registrationName='';private registrationAppearance=0;
   private dirty = true;
@@ -700,7 +714,8 @@ export class RealQuestSpike extends Component {
     if(mode==='world'){this.panelHistory=[];const lease=this.client.state?.npc_encounter;if(lease&&this.canPlay())void this.client.command('npc_release',{token:lease.token}).catch(()=>{});}
     if(this.features.lifeMode(mode)||this.features.guideMode(mode)||['character','growth','armory','forge','equipment','gear-recipe','cave','shop','building','spellbook','storage','sleep','travel','map','neighbors'].includes(mode))this.notice='';
     if(mode==='world'&&this.client.state?.character&&this.client.world)this.buildWorld();
-    this.features.reset();this.mode=mode; this.page=0;this.focusId=''; this.clearInput(); this.error=''; this.dirty=true;
+    this.features.reset();this.mode=mode; this.page=0;this.focusId=''; this.clearInput(); this.error='';this.worldFeedback=null;this.blockedClick=null; this.dirty=true;
+    if(mode==='world'&&this.notice)this.showWorldFeedback(this.notice,'notice');
     if(mode==='session'&&!this.client.state&&!this.busy)void this.work(async()=>{
       if(!transport.getSession())return;
       await this.client.boot();
@@ -726,7 +741,10 @@ export class RealQuestSpike extends Component {
     this.clearInput();
     this.route=obj?approachRoute(this.map(),this.p,obj):pathfind(this.map(),this.p,{x,y});
     this.approach=obj&&this.route.length?{id:obj.id,map:this.sceneId}:null;
-    if(!this.route.length)this.error='这里无法通行，试试门前或小路。';
+    if(!this.route.length){
+      if(obj)this.error='无法到达，请从门口或小路靠近。';
+      else this.blockedClick={x,y,until:this.elapsed+.35};
+    }
     this.dirty=true;
   }
 
@@ -778,13 +796,14 @@ export class RealQuestSpike extends Component {
     const cells=['hoe','watering_can'].includes(key)?toolCells(map,target.x,target.y,this.toolDirection??this.actorDirection,this.toolRange):[target];
     let added=false;
     for(const raw of cells){const cell=map.objects.find(o=>o.id===raw.id)||raw,reason=toolReason(map,s,key,cell);
-      if(reason){if(cells.length===1)this.error=reason;continue;}
+      if(reason){if(cells.length===1)this.toolError(reason,cell);continue;}
       if(this.hoeQueue.some(o=>o.id===cell.id)||this.hoeQueue.length>=16)continue;
       this.hoeQueue.push(cell);added=true;
     }
     if(added)this.error='';
   }
   private updateHoe(){
+    this.toolPreviewCells=[];
     if(!this.hoeActive()){if(this.hoeOverlay)this.hoeOverlay.active=false;return;}
     if(!this.focusId&&this.elapsed>=this.hoeHoldNext){
       if(this.keys.has(KeyCode.SPACE)){const cell=this.hoeTarget();if(cell)this.queueHoe(cell.x,cell.y);}
@@ -799,9 +818,11 @@ export class RealQuestSpike extends Component {
     }
     if(!this.hoeOverlay){this.hoeOverlay=this.make(this.world,'HoeOverlay',0,0,0,0);this.hoeOverlay.addComponent(Graphics);this.depths.set(this.hoeOverlay,10000);}
     this.hoeOverlay.active=true;const g=this.hoeOverlay.getComponent(Graphics)!;g.clear();const cell=this.hoeQueue[0]||this.hoeTarget(),key=this.handTool()!;
-    if(cell){const reason=toolReason(this.map(),this.client.state!,key,cell);g.strokeColor=new Color(reason?C.danger:C.paper);g.lineWidth=1.5;
+    if(cell&&['hoe','watering_can'].includes(key)){
       const cells=this.hoeQueue.length?this.hoeQueue:['hoe','watering_can'].includes(key)?toolCells(this.map(),cell.x,cell.y,this.toolDirection??this.actorDirection,this.toolRange):[cell];
-      for(const c of cells){g.rect(c.x-21,-c.y-18,42,36);g.stroke();}
+      this.toolPreviewCells=cells.filter(c=>!toolReason(this.map(),this.client.state!,key,this.map().objects.find(o=>o.id===c.id)||c,serverNow()));
+      g.fillColor=new Color('#f1dda43d');
+      for(const c of this.toolPreviewCells){g.rect(c.x-21,-c.y-18,42,36);g.fill();}
     }
   }
   private async swingHoe(cell:WorldObject){
@@ -820,7 +841,7 @@ export class RealQuestSpike extends Component {
       const action=live.kind==='resource'?'tool_strike':key==='hoe'?'till':key==='watering_can'?'water':'reclaim';
       const data=action==='tool_strike'?{target:cell.id,expected_version:live.resource_state!.version}:{target:cell.id,x:cell.x,y:cell.y};
       const r=await this.client.command(action,data);if(this.hoePointer!==null)this.toolGestureHits++;this.notice=r.message||'';soundEffects.play(key==='watering_can'?'swing':'hit');
-    }catch(e){this.error=(e as Error).message;this.hoeQueue=[];this.hoePointer=null;this.keys.delete(KeyCode.SPACE);}
+    }catch(e){this.toolError((e as Error).message,cell);this.hoeQueue=[];this.hoePointer=null;this.keys.delete(KeyCode.SPACE);}
     finally{this.hoeQueue=this.hoeQueue.filter(o=>o.id!==cell.id);this.busy=false;this.hoeNext=this.elapsed+.36;this.dirty=true;}
   }
 
@@ -868,8 +889,8 @@ export class RealQuestSpike extends Component {
   update(dt: number) {
     this.elapsed+=dt;
     if(this.client.state&&this.client.world)this.updateHoe();
-    if(this.notice!==this.lastWorldNotice){this.lastWorldNotice=this.notice;this.worldNoticeUntil=this.elapsed+3.2;this.dirty=true;}
-    if(this.worldNoticeUntil&&this.elapsed>=this.worldNoticeUntil){this.worldNoticeUntil=0;this.dirty=true;}
+    if(this.worldFeedback&&this.elapsed>=this.worldFeedback.until){this.worldFeedback=null;this.dirty=true;}
+    if(this.blockedClick&&this.elapsed>=this.blockedClick.until){this.blockedClick=null;this.dirty=true;}
     if(this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
     if(this.client.state&&this.mode==='world'&&this.shown&&this.canPlay()) {
       // Creator's array-spread transform assumes arrays, not Map iterators.
@@ -957,7 +978,7 @@ export class RealQuestSpike extends Component {
     if(this.client.state&&this.features.lifeMode(this.mode)&&this.shown&&this.canPlay()&&!this.busy&&!textOwnsInput()&&this.elapsed-this.lastRefresh>15){
       this.lastRefresh=this.elapsed;void this.refreshJourney();
     }
-    if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.mode==='world'&&!this.hoeActive()?this.nearest():undefined,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,this.busy,reducedMotion(),this.elapsed);
+    if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,reducedMotion(),this.elapsed,this.mode==='world'?this.blockedClick:null);
     if(this.client.state)this.ranchRenderer.update(this.client.state,this.p,this.elapsed,reducedMotion());
     this.updateConversationCamera(dt);
     this.updateItemPreviewCamera();
@@ -1131,14 +1152,51 @@ export class RealQuestSpike extends Component {
     this.drawTravelNotice();
     this.drawGuidanceHud();
     if(this.mode==='world'&&!s.location.startsWith('cave_'))this.drawQuickBar();
-    if((this.error||this.notice&&(!sceneLayouts[s.location]||this.elapsed<this.worldNoticeUntil))&&this.mode==='world'&&!s.location.startsWith('cave_')){
-      // Keep transient feedback above world bearings. Its layout leaves the
-      // accepted pockets, touch controls and current interaction unobscured.
-      const compact=this.width<1000,w=compact?284:Math.min(480,this.width-40),x=compact?20:(this.width-w)/2,yy=compact?164:this.height-154,h=compact?44:52;
-      this.box(this.hud,'FeedbackPaper',x,yy,w,h,C.paper,8);
-      const label=this.text(this.hud,'Feedback',this.error||this.notice,x+12,yy+(compact?2:4),w-24,compact?40:44,compact?14:15,this.error?C.danger:C.ink,true);label.lineHeight=compact?20:22;
-    }
+    this.drawWorldFeedback();
     if(this.mode!=='world')this.drawPanel();
+  }
+  private showWorldFeedback(text:string,kind:'hint'|'error'|'notice',target?:{id:string;x:number;y:number}){
+    if(!text||this.mode!=='world'||this.client.state?.location.startsWith('cave_'))return;
+    const key=(this.client.state?.location||'')+':'+text+':'+(target?.id||''),last=this.feedbackHistory.get(key);
+    // Held/repeated input neither stacks messages nor extends their lifetime.
+    if(this.worldFeedback?.key===key&&this.elapsed<this.worldFeedback.until)return;
+    if(kind==='hint'&&last!==undefined&&this.elapsed-last<2.5)return;
+    this.feedbackHistory.set(key,this.elapsed);
+    if(this.feedbackHistory.size>32)this.feedbackHistory.delete(this.feedbackHistory.keys().next().value!);
+    this.worldFeedback={key,text,kind,until:this.elapsed+(kind==='hint'?1.6:kind==='error'?4:2.6),target:target?{x:target.x,y:target.y}:undefined};
+    this.dirty=true;
+  }
+  private toolError(message:string,target:WorldObject){
+    const quiet=['幼树生长中','已采完','这里已经开垦','本轮已经浇水','作物已成熟，可以收获'].includes(message);
+    this.errorValue=message;
+    this.showWorldFeedback(message,quiet?'hint':'error',quiet?target:undefined);
+    this.dirty=true;
+  }
+  private drawWorldFeedback(){
+    const f=this.worldFeedback;
+    if(!f||this.elapsed>=f.until||this.mode!=='world'||this.client.state?.location.startsWith('cave_'))return;
+    const units=Array.from(f.text).reduce((n,c)=>n+(c.charCodeAt(0)>255?1:.55),0),w=Math.min(this.width<1000?260:340,Math.max(88,Math.ceil(units*14)+24)),h=Math.ceil(units*14/(w-24))*20+12;
+    const px=this.width/2+this.world.position.x+this.p.x*this.zoom,py=this.height/2-this.world.position.y+this.p.y*this.zoom;
+    const occupied=this.controls.map(c=>({x:c.x-c.w/2,y:c.y-c.h/2,w:c.w,h:c.h}));
+    occupied.push({x:px-22*this.zoom,y:py-52*this.zoom,w:44*this.zoom,h:58*this.zoom});
+    for(const id of ['VitalsPaper','LocalStatus','WorldNavigation','JourneyGoalPaper','HoeHintGround','QuickCloth','QuickHintPaper','MovementHintGround','NeighborBearing','TargetLabelBacking']){
+      const n=this.hud.getChildByName(id),size=n?.getComponent(UITransform)?.contentSize;
+      if(n?.active&&size)occupied.push({x:n.position.x-size.width/2,y:-n.position.y-size.height/2,w:size.width,h:size.height});
+    }
+    const candidates:{x:number;y:number}[]=[];
+    if(f.target){
+      const tx=this.width/2+this.world.position.x+f.target.x*this.zoom,ty=this.height/2-this.world.position.y+f.target.y*this.zoom;
+      const gap=Math.max(28,30*this.zoom);
+      candidates.push({x:tx+gap,y:ty-h-24},{x:tx-w-gap,y:ty-h-24},{x:tx-w/2,y:ty-h-72*this.zoom},{x:tx-w/2,y:ty+gap});
+    }
+    for(let y=148;y<=this.height-h-88;y+=h+8)candidates.push({x:20,y},{x:this.width-w-20,y});
+    if(!candidates.length)candidates.push({x:20,y:148});
+    const bounded=candidates.map(c=>({x:Math.max(12,Math.min(this.width-w-12,c.x)),y:Math.max(12,Math.min(this.height-h-12,c.y))}));
+    const score=(c:{x:number;y:number})=>occupied.reduce((n,o)=>n+Math.max(0,Math.min(c.x+w+6,o.x+o.w)-Math.max(c.x-6,o.x))*Math.max(0,Math.min(c.y+h+6,o.y+o.h)-Math.max(c.y-6,o.y)),0);
+    const chosen=bounded.find(c=>score(c)===0)||bounded.reduce((a,b)=>score(a)<=score(b)?a:b);
+    this.box(this.hud,'FeedbackTag',chosen.x,chosen.y,w,h,'#233d31ec',4);
+    if(f.kind==='error')this.box(this.hud,'FeedbackAccent',chosen.x,chosen.y+6,2,h-12,C.amber,0);
+    const label=this.text(this.hud,'Feedback',f.text,chosen.x+12,chosen.y+5,w-24,h-10,14,C.paper,true);label.lineHeight=20;
   }
   private drawTouchPad(){
     this.touchPad.active=this.mode==='world'&&this.width<1000;if(!this.touchPad.active)return;
@@ -1439,7 +1497,7 @@ export class RealQuestSpike extends Component {
       // next heartbeat must not enqueue a fresh save just after recovery ends.
       if(this.client.state.character)await this.client.command(this.mode==='world'?'world_resume':'world_pause',{owner:this.owner});
       this.lastHeartbeat=this.lastRefresh=this.elapsed;
-      this.confirmJourneySnapshot(serverNow(),true);this.notice='已重新确认服务器存档';this.worldNoticeUntil=this.elapsed+3.2;
+      this.confirmJourneySnapshot(serverNow(),true);this.notice='已重新确认服务器存档';
     });
   }
   private exportCredential() {return this.work(async()=>{downloadRecovery(await this.client.recoveryFile());this.backupDownloadedSaveId=this.client.saveId;this.notice='凭证已下载，请妥善保存。';});}
@@ -1585,7 +1643,7 @@ export class RealQuestSpike extends Component {
       const reply=await this.client.command(action,{target:obj.id,...data});this.notice=reply.message||'';
       this.p={...this.client.state!.position};
       if(this.sceneId!==this.client.state!.location){this.buildWorld();this.open('world');}
-      else if(action==='rest'||action==='short_rest'){this.open('world');this.worldNoticeUntil=this.elapsed+4;}
+      else if(action==='rest'||action==='short_rest'){this.open('world');}
     });
     if(this.mode==='sleep'){
       const art=this.frames.get('interiors/bed');if(art){const scale=Math.min(w*.30/art.width,(h-160)/art.height);this.image(this.panel,'interiors/bed',x+w*.20,y+h*.49,art.width*scale,art.height*scale);}
@@ -1636,8 +1694,8 @@ export class RealQuestSpike extends Component {
 
   private snapshot() {
     const s=this.client.state;
-    const feedbackNode=this.hud.getChildByName('FeedbackPaper'),feedbackSize=feedbackNode?.getComponent(UITransform)?.contentSize;
-    const feedback=feedbackNode?.active&&feedbackSize?{text:this.hud.getChildByName('Feedback')?.getComponent(Label)?.string||'',x:feedbackNode.position.x,y:-feedbackNode.position.y,w:feedbackSize.width,h:feedbackSize.height}:null;
+    const feedbackNode=this.hud.getChildByName('FeedbackTag'),feedbackSize=feedbackNode?.getComponent(UITransform)?.contentSize;
+    const feedback=feedbackNode?.active&&feedbackSize?{text:this.hud.getChildByName('Feedback')?.getComponent(Label)?.string||'',kind:this.worldFeedback?.kind,until:this.worldFeedback?.until,x:feedbackNode.position.x,y:-feedbackNode.position.y,w:feedbackSize.width,h:feedbackSize.height}:null;
     const hudRegions:{id:string;x:number;y:number;w:number;h:number}[]=[];
     for(const id of ['QuickHintPaper','QuickCloth','LocalStatus','NeighborCloth','NeighborBearing','Brand','VitalsPaper','CaveStatus','CaveHintPaper','MovementHintGround']){
       const node=this.hud.getChildByName(id),size=node?.getComponent(UITransform)?.contentSize;
@@ -1648,7 +1706,7 @@ export class RealQuestSpike extends Component {
       actorFrame:this.actorFrame,combatAim:this.aim(),swordPresentation:this.swordPose,npcPresentation:Object.fromEntries(this.npcMotion),combatTarget:this.targetId,sessionPage:this.sessionPage,account:this.client.account,accountForm:this.accountForm,accountPreview:this.accountPreview?{username:this.accountPreview.account!.username,saveId:this.accountPreview.save_id}:null,logoutPending:this.client.logoutPending,deletionPending:this.client.deletionPending,recoverySource:this.recoveryPreview?this.recoverySource:null,coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
       construction:s?.construction,constructionView:s?.construction_view,player:this.p, savedPosition:s?.position, saveId:this.client.saveId, revision:s?.revision, vitality:s?.vitality, combat:s?.combat, questLog:s?.quest_log, lifeJournal:s?.life_journal,villageIntro:s?.village_intro,trackedQuest:s?.tracked_quest, timer:s?.timer, studyTasks:s?.study_task_log, plans:s?.study_plan_log, growth:s?.character_growth_options, storage:s?.storage, features:this.features.snapshot(),guidance:this.client.state?{...this.continuation.inspect(),entry:currentGuidance(this.client.state,serverNow()),ownedMarker:this.guideMarker}:null,marker:this.marker,connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, character:s?.character,xp:s?.xp,attributes:s?.attributes,points:s?{knowledge:s.knowledge_points,health:s.health_points,skill:s.skill_points}:null, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
       tools:s?.tools,toolRules:s?.tool_rules,toolPresentation:this.toolRenderer.presentation,toolActor:this.toolPose,toolRange:this.toolRange,
-      ranch:s?.ranch,ranching:s?.ranching,farm:s?.farm,farming:s?.farming,farmingTool:this.farmingTool,hoe:{aim:this.hoeTargetSafe(),queue:this.hoeQueue.map(o=>o.id),pointer:this.hoePointer,swing:this.hoeSwing},plots:s?.plots, activities:s?.activities.slice(-10), camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.conversationZoom||this.zoom,width:this.width,height:this.height},
+      ranch:s?.ranch,ranching:s?.ranching,farm:s?.farm,farming:s?.farming,farmingTool:this.farmingTool,hoe:{aim:this.hoeTargetSafe(),queue:this.hoeQueue.map(o=>o.id),previewCells:this.toolPreviewCells.map(o=>o.id),pointer:this.hoePointer,swing:this.hoeSwing},plots:s?.plots, activities:s?.activities.slice(-10), camera:{x:this.world.position.x,y:this.world.position.y,zoom:this.conversationZoom||this.zoom,width:this.width,height:this.height},
       plotPresentation:Object.fromEntries(this.plotVisuals),
       interactables:this.supportedObjects(),
       selected:this.inventoryView.selected, quick:this.inventoryView.quick, inventoryUi:{...this.inventoryView.snapshot(),target:this.mode==='item-confirm'?this.inventoryView.target(this.panelHost()):null}, nearby:this.nearest()||null, navigationBearing:this.marker&&s&&this.client.world?accessibleTarget(this.marker,this.client.world,s,serverNow()):null, controls:this.controls,
