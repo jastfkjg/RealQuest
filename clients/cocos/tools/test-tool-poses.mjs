@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+const root=new URL('../../../',import.meta.url).pathname;
+const result=await build({stdin:{contents:"export * from './clients/cocos/assets/scripts/toolActor';",resolveDir:root},bundle:true,write:false,format:'esm',platform:'node'});
+const {toolActorPresentation:pose,toolActorArtPaths:art}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
+const state={inventory:{hoe:1,axe:1,pickaxe:1,watering_can:1},character:{appearance:0},location:'overworld',tools:{held:'axe',levels:{axe:2}},ranch:{mounted:null}};
+assert.equal(art.length,24);assert.equal(new Set(art).size,24);
+for(let appearance=0;appearance<6;appearance++)for(const tool of ['hoe','axe','pickaxe','watering_can']){state.character.appearance=appearance;state.tools.held=tool;assert.equal(pose(state,3,10,false,false,null).sheet,`tool-actors/${tool}-${appearance}`);}
+state.character.appearance=4;state.tools.held='axe';assert.equal(pose(state,2,10,false,false,null).sourceDirection,3);assert.equal(pose(state,2,10,false,false,null).flipX,true);
+state.character.appearance=0;state.tools.held='axe';
+const motion={kind:'axe',started:10,direction:2};
+assert.equal(pose(state,3,10.1,false,false,motion).direction,2,'work keeps target-facing direction');
+assert.equal(pose(state,3,10.2,false,false,motion).phase,'contact');
+assert.equal(pose(state,3,10.5,false,false,motion).phase,'ready','expired work must not leave the actor bent');
+state.tools.held='pickaxe';assert.equal(pose(state,3,10.1,false,false,motion).frame,0,'switching tools ignores the previous tool work');
+for(const location of ['cave_1','cave_5']){state.location=location;assert.equal(pose(state,0,10,false,false,null).active,false);}state.location='overworld';
+state.ranch.mounted='animal';assert.equal(pose(state,0,10,false,false,null).active,false);state.ranch.mounted=null;
+state.inventory.pickaxe=0;assert.equal(pose(state,0,10,false,false,null).active,false);state.inventory.pickaxe=1;
+assert.equal(pose(state,0,10,false,false,null).frame,0,'stop always restores held-ready whole-body art');
+assert.deepEqual(new Set([0,1,2,3].map(i=>pose(state,0,i/7+.001,true,false,null).frame)),new Set([4,0,5]));
+assert.equal(pose(state,0,10,true,true,null).frame,0,'reduced motion disables walking cycle');
+state.tools.held='axe';assert.equal(pose(state,0,10.05,false,true,motion).frame,2,'reduced motion uses a stable informative work pose');
+assert.equal(pose(state,0,10,false,false,null).tier,2,'tool upgrade identity survives visual replacement');
+state.tools.held='seed';assert.equal(pose(state,0,10,false,false,null).active,false,'seeds retain their own presentation');
+console.log('PASS painted tool actor identity, work lifecycle, switching, ownership, cave/mount, walking, reduced motion and upgrade state');

@@ -1,3 +1,5 @@
+import {resourceSpec,toolReason,toolCost,type ToolId} from './tools';
+import {plotProgress,plotCrop,remaining} from './farming';
 import type { GameState, Panel, WorldObject } from "./protocol";
 import { staminaNow } from "./stamina";
 
@@ -14,7 +16,14 @@ export function interactionFor(
   reason?: string;
 } {
   switch (obj.kind) {
-    case "armory": return { label: "购买 / 打造武器", panel: "armory" };
+    case 'resource': {const key=resourceSpec(obj.resource!).tool as ToolId;return {label:(key==='axe'?'砍伐':'开采')+' · '+toolCost(state,key)+'体力',command:'tool_strike',reason:state.tools?.held!==key?'先从快捷栏拿起'+(key==='axe'?'斧头':'十字镐'):toolReason({} as any,state,key,obj)||undefined};}
+    case 'ranch_gate':return {label:'进入家园牧场',command:'ranch_enter'};
+    case 'ranch_exit':return {label:'回到向阳家园',command:'ranch_exit'};
+    case 'animal':return {label:'照料 / 查看成长',panel:'ranch'};
+    case 'shelter':return {label:'住所 / 建造与扩容',panel:'ranch'};
+    case 'ranch_ledger':return {label:'幼崽 / 饲料 / 牧场设施',panel:'ranch'};
+    case "armory": return obj.id==='armory_counter'?{label:'按图纸打造装备',panel:'forge'}:{label:'查看城市武备与研究',panel:'armory'};
+    case "blacksmith": return {label:'找阿焰购买武器 / 图纸',panel:'armory'};
     case "spellbook": return { label: "研习火花术", panel: "spellbook" };
     case "cave": return { label: obj.id === "cave_entry" ? "查看山洞 / 准备进入" : "查看洞内路标", panel: "cave" };
     case "passage":
@@ -66,19 +75,11 @@ export function interactionFor(
               : undefined,
       };
     }
+    case "soil": return {label:'挥锄 · 4体力',command:'till',reason:staminaNow(state,now)<4?'体力不足 · 需要4点':undefined};
     case "plot": {
-      const crop = state.plots[obj.id];
-      const seconds = crop ? Math.ceil(crop.ready_at - now) : 0;
-      return {
-        label: crop ? "收获" : "播种",
-        command: crop ? "harvest" : "plant",
-        reason:
-          seconds > 0
-            ? `${seconds} 秒后成熟`
-            : !crop && state.inventory.seed < 1
-              ? "需要种子 · 杂货铺或工坊可购买"
-              : undefined,
-      };
+      const crop=state.plots[obj.id];
+      if(!crop)return {label:'选择种子 / 耕作',panel:'farm'};
+      return plotProgress(state,crop,now)>=1?{label:'收获'+plotCrop(crop).name+' · 1体力',command:'harvest'}:{label:plotCrop(crop).name+' · '+remaining(state,crop,now),panel:'farm'};
     }
     case "landmark":
       return {
@@ -88,6 +89,8 @@ export function interactionFor(
           ? "已记录在地图"
           : undefined,
       };
+    case 'production': return {label:'投料 / 收取成品',panel:'ranch'};
+    case 'carpenter': return {label:'学习木作 / 委托工程',panel:'building'};
     case "chest":
       return {
         label: "打开补给",

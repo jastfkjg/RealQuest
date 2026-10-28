@@ -19,7 +19,7 @@ def ready():
     s=initial_state();apply(s,'create',{'name':'远行旅人'},NOW)
     s['world_clock']['running_until']=0
     s['quests']['settle_in']['status']='claimed'
-    s['quests']['leave_valley']={'status':'active','accepted_at':NOW}
+    s['quests']['leave_valley']={'status':'active','accepted_at':NOW,'definition_version':1}
     # This suite exercises the independent travel segment after its new prerequisite.
     s['village_combat']['gate_open']=True
     return s

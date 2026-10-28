@@ -2,7 +2,7 @@ import type {PanelHost} from './panels';
 import {bookSurface,bookLeaves,gameControls,paperSurface,inkRule} from './materials';
 import {C} from './theme';
 import {mapById} from '../core/navigation';
-const entries=[['character','旅人档案','C'],['growth','培养能力',''],['equipment','随行装备',''],['journal','旅途委托','J'],['map','地点与邻里','M'],['life','现实成长','L'],['preferences','旅途偏好',''],['session','旅程凭证',''],['guide','旅人指南',''],['preparation','再出发手记','']];
+const entries=[['character','旅人档案','C'],['growth','培养能力',''],['equipment','随行装备',''],['journal','旅途委托','J'],['map','地点与邻里','M'],['life','现实成长','L'],['preferences','旅途偏好',''],['session','存档与备份',''],['guide','旅人指南',''],['preparation','再出发手记','']];
 export function drawJourneyMenu(original:PanelHost,view:{page:number;prepare():void}){
  const h=gameControls(original),compact=h.height<600||h.width<980;
  const w=compact?Math.min(800,h.width-32):Math.min(1160,h.width-32,(h.height-28)*1.5),height=compact?Math.min(390,h.height-24):w/1.5;
@@ -23,8 +23,8 @@ export function drawJourneyMenu(original:PanelHost,view:{page:number;prepare():v
  h.region('menu-left-leaf',left.x,left.y,left.w,left.h);h.region('menu-right-leaf',right.x,right.y,right.w,right.h);
  h.text('FeatureTitle','旅程随身页',left.x,left.y,left.w,38,26);
  h.person('actor-'+h.state.character?.appearance,left.x+22,left.y+86,42,56);
- h.text('MenuTraveler',h.state.character?.name||'旅人',left.x+58,left.y+58,left.w-58,30,20);
- h.text('MenuPlace',mapById(h.world,h.state.location)?.name||h.state.location,left.x+58,left.y+88,left.w-58,24,14,C.muted);
+ h.text('MenuTraveler',h.state.character?.name||'旅人',left.x+58,left.y+52,left.w-58,44,18).lineHeight=22;
+ h.text('MenuPlace',mapById(h.world,h.state.location)?.name||h.state.location,left.x+58,left.y+100,left.w-58,24,14,C.muted);
  h.text('MenuRightTitle','手记与旅程',right.x,right.y,right.w-110,38,23);
  h.button('close','合上',right.x+right.w-80,right.y,80,44,()=>h.close(),h.busy,false,'back');
  h.image('items/journal',right.x+22,right.y+84,44,44);

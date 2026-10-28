@@ -53,6 +53,31 @@ def fresh():
     s['world_clock'].update(elapsed=187.5, running_until=0)
     return s
 
+def chop_tree(state, target, now):
+    """Earn a full tree's output through the public tool work rule."""
+    from app.world import map_for
+    node=next(o for o in map_for('overworld',state,now)['objects'] if o['id']==target)
+    state.update(location='overworld',position={'x':node['x'],'y':node['y']+44})
+    apply(state,'tool_hold',{'item':'axe'},now)
+    tick=max(now,state['tools']['next_at'])
+    for _ in range(6):
+        node=next(o for o in map_for('overworld',state,tick)['objects'] if o['id']==target)
+        if node['resource_state']['stage']!='tree':break
+        apply(state,'tool_strike',{'target':target,'expected_version':node['resource_state']['version']},tick)
+        tick+=.5
+
+
+def api_finish_tree(client,target='wood_1'):
+    # Quest-ledger tests start from five already saved, unrewarded hits. The
+    # final hit is a real API command; the full multi-hit loop has its own suite.
+    with Session.begin() as db:
+        p=db.scalar(select(Player));s=copy.deepcopy(p.state)
+        s['tools']['held']='axe';s['tools']['resources'][target]={'stage':'tree','work':5,'version':5};p.state=s
+    response=cmd(client,'tool_strike',{'target':target,'expected_version':5})
+    assert response.status_code==200
+    return response
+
+
 def study_create(state, now, minutes=25, title='读一章植物笔记'):
     key = str(uuid.uuid4())
     apply(state, 'study_create', {'task_id': key, 'title': title, 'target_minutes': minutes}, now)
@@ -224,16 +249,17 @@ def test_parallel_duplicate_awards_once(client):
     assert all(r.status_code==200 for r in results)
     assert client.get('/api/state').json()['state']['xp']==20
 
-def test_gather_cooldown_proximity_and_receipt(client):
+def test_tool_proximity_work_and_receipt(client):
     create(client)
-    assert cmd(client,'gather',{'target':'wood_2'}).status_code==422
+    assert cmd(client,'tool_hold',{'item':'axe'}).status_code==200
+    assert cmd(client,'tool_strike',{'target':'wood_2','expected_version':0}).status_code==422
     assert cmd(client,'move',{'x':320,'y':330}).status_code==200
-    result=cmd(client,'gather',{'target':'wood_1'})
-    assert result.json()['state']['inventory']['wood']==3
-    assert cmd(client,'gather',{'target':'wood_1'}).status_code==422
+    result=api_finish_tree(client)
+    assert result.json()['state']['inventory']['wood']==6
+    assert cmd(client,'tool_strike',{'target':'wood_1','expected_version':5}).status_code==422
     with Session() as db:
-        receipt=db.scalar(select(Receipt).where(Receipt.action=='gather'))
-        assert receipt.changes['inventory']=={'wood':3}
+        receipt=db.scalar(select(Receipt).where(Receipt.action=='tool_strike'))
+        assert receipt.changes['inventory']=={'wood':6,'tree_seed':1}
 
 def test_bounds_and_collision(client):
     create(client)
@@ -271,28 +297,32 @@ def test_timer_pause_restore_and_completion():
     assert s['activities'][0]['source']=='timer' and s['activities'][0]['amount']==2
     with pytest.raises(RuleError):apply(s,'timer_finish',{},now+700)
 
-def test_farm_offline_growth_trade_and_upgrade():
-    s=fresh();s['position']={'x':136,'y':440}
+def test_farm_world_growth_trade_and_upgrade():
+    s=fresh();s['inventory']['gold']=40;s['position']={'x':136,'y':440}
     apply(s,'plant',{'target':'plot_0'},100)
     assert s['inventory']['seed']==5
     with pytest.raises(RuleError):apply(s,'harvest',{'target':'plot_0'},159)
+    # Offline elapsed real time does not grow new world-clock crops.
+    with pytest.raises(RuleError):apply(s,'harvest',{'target':'plot_0'},100000)
+    s['world_clock']['elapsed']=s['plots']['plot_0']['ready_tick']
+    s['world_clock']['running_until']=0
     apply(s,'harvest',{'target':'plot_0'},100000)
-    assert s['inventory']['crop']==2 and s['inventory']['seed']==6
+    assert s['inventory']['crop']==2 and s['inventory']['seed']==5
     s['position']={'x':352,'y':232}
     if s['location']=='overworld':
         apply(s,'enter',{'target':'workshop'},100000)
         s['position']={'x':240,'y':196}
     apply(s,'sell',{'target':'workshop_counter'},100000)
-    assert s['inventory']['gold']==28 and s['inventory']['crop']==1
+    assert s['inventory']['gold']==44 and s['inventory']['crop']==1
     s['inventory'].update(wood=6,stone=3)
     apply(s,'upgrade',{'target':'workshop_counter'},100000)
     assert s['buildings']['workshop']==2
-    assert s['inventory']['wood']==0 and s['inventory']['stone']==0 and s['inventory']['gold']==18
+    assert s['inventory']['wood']==0 and s['inventory']['stone']==0 and s['inventory']['gold']==14
     if s['location']=='overworld':
         apply(s,'enter',{'target':'workshop'},100000)
         s['position']={'x':240,'y':196}
     apply(s,'sell',{'target':'workshop_counter'},100000)
-    assert s['inventory']['gold']==27
+    assert s['inventory']['gold']==18
 
 def test_npc_once_daily_and_conditional_event():
     s=fresh();s['position']={'x':624,'y':272};now=1791522000
@@ -347,7 +377,7 @@ def test_quest_lifecycle_locked_and_claim_once(client):
     cmd(client,'enter',{'target':'home'})
     cmd(client,'exit',{'target':'home_exit'})
     cmd(client,'move',{'x':288,'y':320})
-    cmd(client,'gather',{'target':'wood_1'})
+    api_finish_tree(client)
     cmd(client,'move',{'x':256,'y':300})
     before=client.get('/api/state').json()['state']
     assert next(q for q in before['quest_log'] if q['id']=='settle_in')['status']=='ready'
@@ -356,7 +386,7 @@ def test_quest_lifecycle_locked_and_claim_once(client):
         response=cmd(client,'quest_claim',{'quest_id':'settle_in'},key)
         assert response.status_code==200
     after=response.json()['state']
-    assert after['inventory']['gold']==before['inventory']['gold']+12
+    assert after['inventory']['gold']==before['inventory']['gold']+10
     assert after['inventory']['seed']==before['inventory']['seed']+3
     assert cmd(client,'quest_claim',{'quest_id':'settle_in'}).status_code==422
     assert cmd(client,'quest_accept',{'quest_id':'first_harvest'}).status_code==200
@@ -416,6 +446,9 @@ def test_every_map_interaction_has_reachable_approach():
 def test_side_quest_progress_survives_spending_and_rewards_once(quest_id,giver,location,position):
     from app.quests import quest_views, QUESTS
     s=fresh();s['location']=location;s['position']=position
+    # Public side quests now follow their teaching milestone.
+    prerequisite={'forest_path':'first_harvest','rune_research':'gate_story','wide_world':'ranch_start'}[quest_id]
+    s['quests'][prerequisite]={'status':'claimed'}
     apply(s,'quest_accept',{'quest_id':quest_id},100)
     with pytest.raises(RuleError): apply(s,'quest_claim',{'quest_id':quest_id},101)
     s['events'] += ['discovered_grove','visited_library','rune_awakened','discovered_lake','discovered_quarry']

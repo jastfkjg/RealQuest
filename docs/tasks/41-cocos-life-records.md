@@ -1,5 +1,7 @@
 # Cocos 现实成长历史与学习记录整理
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 2026-10-17。按任务39继续实施 M3。保留原 Web 源码、服务端规则与存档格式；不切换默认启动或发布，不迁移玩家数据库。沿用 Hearthwood 纸面、苔绿控件与系统中文字体，没有新增图片、字体、音频、依赖或奖励。
 
 ## 实现的记录链
@@ -82,7 +84,7 @@ npm run test:life-browser
 5442现有标签页刷新即可体验；启动器保留给用户手工测试：
 
 ```sh
-./start-cocos.command --build web-life-records/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
+./start.command --build web-life-records/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
 ```
 
 本次先备份原手工库到`output/cocos-life/preview-before-life.db`，再将旧预览正常退出并换用新构建。数据库路径与浏览器origin不变；重启后逐行状态快照哈希完全一致（当时手工库0个游客，没有为改善画面伪造角色/记录）。不将隔离测试夹具带入手工库。启动器54485/API54488/代理54489（会话42337）保留，5442与API8142健康检查200。原Web5430/Cocos5431/API8130预览继续保留，全部根页/健康检查200。

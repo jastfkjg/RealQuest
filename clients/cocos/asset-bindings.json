@@ -3,6 +3,36 @@
   "note": "Canonical shared/game logic and cave presentation; existing PNGs and reproducible scene derivatives, see tasks35–38.",
   "records": [
     {
+      "source": "assets/generated/hearthwood/shop-interior-v2.png",
+      "target": "assets/resources/ui/shop-interior.png",
+      "sha256": "d0e0f8751c79cccbcce8e8d7f87b91901572eabf4a5d94b1e33c569a5eac624e",
+      "output_sha256": "d0e0f8751c79cccbcce8e8d7f87b91901572eabf4a5d94b1e33c569a5eac624e"
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/portrait.png",
+      "target": "assets/resources/atlas/blacksmith.png",
+      "sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883",
+      "output_sha256": "85f77d6926cd1fe64168d9b253a1b88e41d1cad3909af67a82150278375fe883"
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/figure.png",
+      "target": "assets/resources/village/blacksmith-figure.png",
+      "sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e",
+      "output_sha256": "3450338b5fecfc6019602fcc6a9240e11140e6289214532455eec31542b6ff1e"
+    },
+    {
+      "source": "assets/derived/blacksmith-v1/stand.png",
+      "target": "assets/resources/ui/weapon-stand.png",
+      "sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d",
+      "output_sha256": "7b9b53e3680837dff55839dd6d3fe962c232b503e8c0e4274afdcd47a5d2638d"
+    },
+    {
+      "source": "assets/generated/hearthwood/blacksmith-v1/interior.png",
+      "target": "assets/resources/ui/blacksmith-interior.png",
+      "sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82",
+      "output_sha256": "d654bbad26603b679b48982218b5aad5964a82ba79160fba9edca3a486ca1f82"
+    },
+    {
       "source": "assets/generated/hearthwood/satchel-shell-v1.png",
       "target": "assets/resources/ui/satchel.png",
       "sha256": "3be454c5d2ff4cf490eafafd6a7940d4363f401e6f4cda661ac6ae06e4154d63",
@@ -93,30 +123,6 @@
       "output_sha256": "7c8327037ad5de3d1c33e058ac24ae57a8a73f06ad881bb496e6e071942077ab"
     },
     {
-      "source": "assets/derived/inventory-icons/stone_sword.png",
-      "target": "assets/resources/items/stone_sword.png",
-      "sha256": "e31c0d1d40fa77c26320ef43ee33f5af05fbd2df8ad075c7fea4f92d2ce38105",
-      "output_sha256": "e31c0d1d40fa77c26320ef43ee33f5af05fbd2df8ad075c7fea4f92d2ce38105"
-    },
-    {
-      "source": "assets/derived/inventory-icons/reinforced_sword.png",
-      "target": "assets/resources/items/reinforced_sword.png",
-      "sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d",
-      "output_sha256": "bb339280e5d43608bf0bd0d999b5415d07e41b7e06fd198130f5f816ec6fe35d"
-    },
-    {
-      "source": "assets/derived/inventory-icons/spring_spear.png",
-      "target": "assets/resources/items/spring_spear.png",
-      "sha256": "ef5751ed4e7d5a62a7fc087bf2f557447184f05a899306b357e40065bf6a35a5",
-      "output_sha256": "ef5751ed4e7d5a62a7fc087bf2f557447184f05a899306b357e40065bf6a35a5"
-    },
-    {
-      "source": "assets/derived/inventory-icons/glow_staff.png",
-      "target": "assets/resources/items/glow_staff.png",
-      "sha256": "9d7712e4a846ad74fa4e5bd6c3a376f09632cfb7e27eb700af1b8ae29782985a",
-      "output_sha256": "9d7712e4a846ad74fa4e5bd6c3a376f09632cfb7e27eb700af1b8ae29782985a"
-    },
-    {
       "source": "assets/derived/inventory-icons/gel.png",
       "target": "assets/resources/items/gel.png",
       "sha256": "fd27cdec84500ca8d45eec631d60c98bb979f741f220b85002e4530f8e6439e6",
@@ -147,10 +153,46 @@
       "output_sha256": "14760f4ae03d4a5479f745a17a569551550c7a4aa0a426b0f022d51dc796b612"
     },
     {
+      "source": "assets/runtime/hearthwood/detail/interiors/chest-closed.png",
+      "target": "assets/resources/items/wooden_chest.png",
+      "sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51",
+      "output_sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51"
+    },
+    {
+      "source": "assets/runtime/hearthwood/detail/interiors/chest-closed.png",
+      "target": "assets/resources/items/reinforced_chest.png",
+      "sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51",
+      "output_sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/mayo.png",
+      "target": "assets/resources/items/mayo_machine.png",
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92",
+      "output_sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/loom.png",
+      "target": "assets/resources/items/loom_machine.png",
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3",
+      "output_sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/cheese.png",
+      "target": "assets/resources/items/cheese_press.png",
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a",
+      "output_sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/oil.png",
+      "target": "assets/resources/items/oil_press.png",
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9",
+      "output_sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+    },
+    {
       "source": "shared/game/protocol.ts",
       "target": "assets/scripts/core/protocol.ts",
-      "sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c",
-      "output_sha256": "f57f9cd5429ff3800c81a105b89ce6d96def884b009301d4d6a26f011626601c"
+      "sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1",
+      "output_sha256": "b9d9bc7427ff9b61ba68995eccf41c922b8654c0b3c126ffba625af8b641f4c1"
     },
     {
       "source": "assets/runtime/hearthwood/world-map-terrain-v1.png",
@@ -189,10 +231,16 @@
       "output_sha256": "fa32e86fa7307d72903195359aab3252d2c9f60e0617ee69a79d8744ca140877"
     },
     {
+      "source": "shared/game/currency.ts",
+      "target": "assets/scripts/core/currency.ts",
+      "sha256": "99bd4b05a7075a826dca05160140c6af8d242896b19c7d028094594132a0575c",
+      "output_sha256": "99bd4b05a7075a826dca05160140c6af8d242896b19c7d028094594132a0575c"
+    },
+    {
       "source": "shared/game/interaction.ts",
       "target": "assets/scripts/core/interaction.ts",
-      "sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1",
-      "output_sha256": "0ddad383ae093b53d790cbcb7069b6de342c179f604b4f0c6da019de3061c3a1"
+      "sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531",
+      "output_sha256": "3e8f8456640653e434383bc26ab9ea2029dba5a1ff44cc86f7cddb912af8e531"
     },
     {
       "source": "shared/game/stamina.ts",
@@ -209,26 +257,32 @@
     {
       "source": "shared/game/villageIntro.ts",
       "target": "assets/scripts/core/villageIntro.ts",
-      "sha256": "035ed32e3ad40c54aa047d4e188aac338b4f35989b6ce49c7edd7067722519f2",
-      "output_sha256": "035ed32e3ad40c54aa047d4e188aac338b4f35989b6ce49c7edd7067722519f2"
+      "sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87",
+      "output_sha256": "cab7ae6dfc44145a3f03e2107042450ed6185fa8f1701ddb8bfb9524127dea87"
+    },
+    {
+      "source": "shared/game/story.ts",
+      "target": "assets/scripts/core/story.ts",
+      "sha256": "2a4b1bc0b58e082cbd409fb24dd84c15578731c4433f5cb40ab07aba36c4dc3b",
+      "output_sha256": "2a4b1bc0b58e082cbd409fb24dd84c15578731c4433f5cb40ab07aba36c4dc3b"
     },
     {
       "source": "shared/game/navigation.ts",
       "target": "assets/scripts/core/navigation.ts",
-      "sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562",
-      "output_sha256": "68aa3d273d624214e29a96a12e5825b865e5fcd3a052643e3387d921af384562"
+      "sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c",
+      "output_sha256": "142e0166bb1d88ebd07e6c45eae8a768522433583b17dc8ea26b9c51a3102a6c"
     },
     {
       "source": "shared/game/appearances.ts",
       "target": "assets/scripts/core/appearances.ts",
-      "sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c",
-      "output_sha256": "9237058ca3e1bb9297feeeccd8a7b77bb48c1eaa4725df3023c9999d7d67293c"
+      "sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080",
+      "output_sha256": "c952a6c4dc67527b41ea5bc340e475b5123561eacf6c05279f9af7864f16d080"
     },
     {
       "source": "shared/game/client.ts",
       "target": "assets/scripts/core/client.ts",
-      "sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20",
-      "output_sha256": "dbeb6f5b2986dcc17d6cb71f6bd6ba291192a6f913e1436837a777bdc43c4d20"
+      "sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f",
+      "output_sha256": "5e6f79d399be00111c9007d666d4fed5d4b68dba6c4176bcdd991bbd942f709f"
     },
     {
       "source": "shared/game/clock.ts",
@@ -239,20 +293,32 @@
     {
       "source": "shared/game/features.ts",
       "target": "assets/scripts/core/features.ts",
-      "sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0",
-      "output_sha256": "fff48b32f69646ae5c851bdc85b32f7f6ce2d738dcf0f6b536f6c18dad02d8e0"
+      "sha256": "626107841ec995d2e6bea3e9aa5184673f75530726edc3f2c1b2fde268e085a4",
+      "output_sha256": "626107841ec995d2e6bea3e9aa5184673f75530726edc3f2c1b2fde268e085a4"
+    },
+    {
+      "source": "shared/game/swordMotion.ts",
+      "target": "assets/scripts/core/swordMotion.ts",
+      "sha256": "a8a2a588811d388231f3a9468ed1b3ab47d4f50a868cd53ad11684834c64cbab",
+      "output_sha256": "a8a2a588811d388231f3a9468ed1b3ab47d4f50a868cd53ad11684834c64cbab"
+    },
+    {
+      "source": "shared/game/combatMotion.ts",
+      "target": "assets/scripts/core/combatMotion.ts",
+      "sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b",
+      "output_sha256": "3b78eb9294f8055e972119d7ae1073d40bbf5881cb9a5ccc07dc20bc6e07108b"
     },
     {
       "source": "shared/game/caveArt.ts",
       "target": "assets/scripts/core/caveArt.ts",
-      "sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c",
-      "output_sha256": "7027e418e31fec9751f167631dd6856c249509a6ff832d231391f0bb54672c3c"
+      "sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e",
+      "output_sha256": "26d9f4a3f6651c6a5fef9589f0b5a7a045ff7a96c89463766ec53bcf8235222e"
     },
     {
       "source": "shared/game/caveView.ts",
       "target": "assets/scripts/core/caveView.ts",
-      "sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e",
-      "output_sha256": "7fe83af69a3b53e572717a70b34e9709d15f067e9ae01328bd6bd3d27b0f065e"
+      "sha256": "652a87fa1edd2173fd71088d5a78b7899b9cca3b8b166e115c932c9823726fa8",
+      "output_sha256": "652a87fa1edd2173fd71088d5a78b7899b9cca3b8b166e115c932c9823726fa8"
     },
     {
       "source": "shared/game/localScene.ts",
@@ -263,8 +329,8 @@
     {
       "source": "shared/game/sceneLayout.ts",
       "target": "assets/scripts/core/sceneLayout.ts",
-      "sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8",
-      "output_sha256": "97ebb0a792b1dd959a445aaa5a82f4062ea663adc897d85272a70a1be59263b8"
+      "sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a",
+      "output_sha256": "b0e644fe4bfe9778d1dfb48a5d6b6f49341e6c1b462bb14750fe25f0c9a50e8a"
     },
     {
       "source": "shared/game/lifeJournalDates.ts",
@@ -281,20 +347,20 @@
     {
       "source": "shared/game/dossier.ts",
       "target": "assets/scripts/core/dossier.ts",
-      "sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729",
-      "output_sha256": "67358c2ba0c8cdcc827bd1796d15556bf2efd3e8c53e5777f8d447dd7b0a5729"
+      "sha256": "8a123a03bd112d120608f68dfc90d15917ab0944c7dc308f4a97c65159509510",
+      "output_sha256": "8a123a03bd112d120608f68dfc90d15917ab0944c7dc308f4a97c65159509510"
     },
     {
       "source": "shared/game/nextDeparture.ts",
       "target": "assets/scripts/core/nextDeparture.ts",
-      "sha256": "b5d79b60da45f4f067e89ef69e3a2245cc34b56c259f6432927aea1f70d9d133",
-      "output_sha256": "b5d79b60da45f4f067e89ef69e3a2245cc34b56c259f6432927aea1f70d9d133"
+      "sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29",
+      "output_sha256": "5d235a14306c3acad92c96b95907f0b7f94b7e7d480db31070aa805659873a29"
     },
     {
       "source": "shared/game/guidance.ts",
       "target": "assets/scripts/core/guidance.ts",
-      "sha256": "bb1f4c9f18f95205068e025a2460c400c2712da5b1004b48cdf470f683d3901c",
-      "output_sha256": "bb1f4c9f18f95205068e025a2460c400c2712da5b1004b48cdf470f683d3901c"
+      "sha256": "549ae8c95b068043ca9e03c74a3b008d31638b14d9605b79705d28d6990c5cb1",
+      "output_sha256": "549ae8c95b068043ca9e03c74a3b008d31638b14d9605b79705d28d6990c5cb1"
     },
     {
       "source": "shared/game/continuation.ts",
@@ -305,8 +371,8 @@
     {
       "source": "shared/game/places.ts",
       "target": "assets/scripts/core/places.ts",
-      "sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c",
-      "output_sha256": "c9574d248da0442932ecbddc280999aa38846d60ac5b88e97ed612fa81913f3c"
+      "sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353",
+      "output_sha256": "a3236844064c604585affdb1780fe12d831b873db44b1616a484242960f60353"
     },
     {
       "source": "shared/game/atlas.ts",
@@ -315,16 +381,64 @@
       "output_sha256": "a10d69534768f38d25042b56f5309393158bac02978f919686df1c8484509afd"
     },
     {
+      "source": "shared/game/cropCatalog.ts",
+      "target": "assets/scripts/core/cropCatalog.ts",
+      "sha256": "6e63d0c4f66fc370eae2423f263cacfc9e79e264301f90b3e89b811f2d2de8d8",
+      "output_sha256": "6e63d0c4f66fc370eae2423f263cacfc9e79e264301f90b3e89b811f2d2de8d8"
+    },
+    {
+      "source": "shared/game/gearCatalog.ts",
+      "target": "assets/scripts/core/gearCatalog.ts",
+      "sha256": "56d5f2f7ae5975aebce65c69e91112c746cdc32d17816bf3ed57c4b82cf40fe8",
+      "output_sha256": "56d5f2f7ae5975aebce65c69e91112c746cdc32d17816bf3ed57c4b82cf40fe8"
+    },
+    {
+      "source": "shared/game/ranchCatalog.ts",
+      "target": "assets/scripts/core/ranchCatalog.ts",
+      "sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555",
+      "output_sha256": "917bb10208f0a4d14239649e10581f3288f1a074a2739da13bab7bc894bad555"
+    },
+    {
+      "source": "shared/game/ranching.ts",
+      "target": "assets/scripts/core/ranching.ts",
+      "sha256": "35166d81667bc8dd92087f94fb151d29303cde809158a75dc465a33ec48e0c5b",
+      "output_sha256": "35166d81667bc8dd92087f94fb151d29303cde809158a75dc465a33ec48e0c5b"
+    },
+    {
+      "source": "shared/game/construction.ts",
+      "target": "assets/scripts/core/construction.ts",
+      "sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289",
+      "output_sha256": "07e254ef696a5937986ca287d3ae671874ada3098854a71582482f05a8a5f289"
+    },
+    {
+      "source": "shared/game/toolCatalog.ts",
+      "target": "assets/scripts/core/toolCatalog.ts",
+      "sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af",
+      "output_sha256": "7e2fc6b86894241ab8db490617487e0efc620c95cdd186749e23dfec3a6e58af"
+    },
+    {
+      "source": "shared/game/tools.ts",
+      "target": "assets/scripts/core/tools.ts",
+      "sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259",
+      "output_sha256": "ca16b0f2e8bcf013baf64595751c4a6bf41c4e02e5276982de5941dafa742259"
+    },
+    {
+      "source": "shared/game/farming.ts",
+      "target": "assets/scripts/core/farming.ts",
+      "sha256": "ba601d8e84c5e62aff1d97b2832c4cf3fb0569ba146b68aa497086e2207e0d5a",
+      "output_sha256": "ba601d8e84c5e62aff1d97b2832c4cf3fb0569ba146b68aa497086e2207e0d5a"
+    },
+    {
       "source": "shared/game/items.ts",
       "target": "assets/scripts/core/items.ts",
-      "sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a",
-      "output_sha256": "55b7416efea6743215d2574a5a35cee8afb7cd0421ae74e133054b8196582d4a"
+      "sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225",
+      "output_sha256": "747a0514e5753cb3c626625823a9389c31dcd828a33df80a18db65e0d8b6d225"
     },
     {
       "source": "shared/game/inventory.ts",
       "target": "assets/scripts/core/inventory.ts",
-      "sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f",
-      "output_sha256": "a6f6161a8ba179c8abc8aba207d92dbba0dff7a957b44bac6cf9cd5f07a4188f"
+      "sha256": "5d4d5b464fa2e75d3dbb293b66d1022d0d6eff5d1d783edc6a32f069f522fc0f",
+      "output_sha256": "5d4d5b464fa2e75d3dbb293b66d1022d0d6eff5d1d783edc6a32f069f522fc0f"
     },
     {
       "source": "shared/game/preferences.ts",
@@ -505,18 +619,6 @@
       "target": "assets/resources/items/stone.png",
       "sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249",
       "output_sha256": "8dfbe0c519a9bccedd0a0a443a0f5aed050a8e37fdadac3c6fb75bb4fd03f249"
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/seed.png",
-      "target": "assets/resources/items/seed.png",
-      "sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b",
-      "output_sha256": "910dba94182f078c3e3be2716a975f51f2bef9cc37078a71d8b510fbf08c262b"
-    },
-    {
-      "source": "assets/runtime/hearthwood/detail/items/crop.png",
-      "target": "assets/resources/items/crop.png",
-      "sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466",
-      "output_sha256": "56b7b9b774a3cb026e72dfbe225ae3f3ae21810216a687ced016b19d7c4df466"
     },
     {
       "source": "assets/runtime/hearthwood/detail/items/plank.png",
@@ -739,6 +841,1332 @@
       "target": "assets/resources/scenes/terrain-web.webp",
       "sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e",
       "output_sha256": "4bc58822a469b44ae4fb7cf893ef6face396db49fdba1778227e32b3018a713e"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed.png",
+      "target": "assets/resources/items/seed.png",
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737",
+      "output_sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-1.png",
+      "target": "assets/resources/farming/radish-1.png",
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966",
+      "output_sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-2.png",
+      "target": "assets/resources/farming/radish-2.png",
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe",
+      "output_sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-3.png",
+      "target": "assets/resources/farming/radish-3.png",
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f",
+      "output_sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/radish-4.png",
+      "target": "assets/resources/farming/radish-4.png",
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520",
+      "output_sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/crop.png",
+      "target": "assets/resources/items/crop.png",
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0",
+      "output_sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_wheat.png",
+      "target": "assets/resources/items/seed_wheat.png",
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0",
+      "output_sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-1.png",
+      "target": "assets/resources/farming/wheat-1.png",
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe",
+      "output_sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-2.png",
+      "target": "assets/resources/farming/wheat-2.png",
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6",
+      "output_sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-3.png",
+      "target": "assets/resources/farming/wheat-3.png",
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d",
+      "output_sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/wheat-4.png",
+      "target": "assets/resources/farming/wheat-4.png",
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe",
+      "output_sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/wheat.png",
+      "target": "assets/resources/items/wheat.png",
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f",
+      "output_sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_carrot.png",
+      "target": "assets/resources/items/seed_carrot.png",
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef",
+      "output_sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-1.png",
+      "target": "assets/resources/farming/carrot-1.png",
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7",
+      "output_sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-2.png",
+      "target": "assets/resources/farming/carrot-2.png",
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e",
+      "output_sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-3.png",
+      "target": "assets/resources/farming/carrot-3.png",
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1",
+      "output_sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/carrot-4.png",
+      "target": "assets/resources/farming/carrot-4.png",
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda",
+      "output_sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/carrot.png",
+      "target": "assets/resources/items/carrot.png",
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f",
+      "output_sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_potato.png",
+      "target": "assets/resources/items/seed_potato.png",
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453",
+      "output_sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-1.png",
+      "target": "assets/resources/farming/potato-1.png",
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee",
+      "output_sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-2.png",
+      "target": "assets/resources/farming/potato-2.png",
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80",
+      "output_sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-3.png",
+      "target": "assets/resources/farming/potato-3.png",
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806",
+      "output_sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/potato-4.png",
+      "target": "assets/resources/farming/potato-4.png",
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006",
+      "output_sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/potato.png",
+      "target": "assets/resources/items/potato.png",
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb",
+      "output_sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_tomato.png",
+      "target": "assets/resources/items/seed_tomato.png",
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f",
+      "output_sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-1.png",
+      "target": "assets/resources/farming/tomato-1.png",
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1",
+      "output_sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-2.png",
+      "target": "assets/resources/farming/tomato-2.png",
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701",
+      "output_sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-3.png",
+      "target": "assets/resources/farming/tomato-3.png",
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44",
+      "output_sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/tomato-4.png",
+      "target": "assets/resources/farming/tomato-4.png",
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4",
+      "output_sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/tomato.png",
+      "target": "assets/resources/items/tomato.png",
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807",
+      "output_sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_strawberry.png",
+      "target": "assets/resources/items/seed_strawberry.png",
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe",
+      "output_sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-1.png",
+      "target": "assets/resources/farming/strawberry-1.png",
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26",
+      "output_sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-2.png",
+      "target": "assets/resources/farming/strawberry-2.png",
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65",
+      "output_sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-3.png",
+      "target": "assets/resources/farming/strawberry-3.png",
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde",
+      "output_sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/strawberry-4.png",
+      "target": "assets/resources/farming/strawberry-4.png",
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615",
+      "output_sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/strawberry.png",
+      "target": "assets/resources/items/strawberry.png",
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d",
+      "output_sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_corn.png",
+      "target": "assets/resources/items/seed_corn.png",
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829",
+      "output_sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-1.png",
+      "target": "assets/resources/farming/corn-1.png",
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d",
+      "output_sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-2.png",
+      "target": "assets/resources/farming/corn-2.png",
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f",
+      "output_sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-3.png",
+      "target": "assets/resources/farming/corn-3.png",
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812",
+      "output_sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/corn-4.png",
+      "target": "assets/resources/farming/corn-4.png",
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06",
+      "output_sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/corn.png",
+      "target": "assets/resources/items/corn.png",
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717",
+      "output_sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_eggplant.png",
+      "target": "assets/resources/items/seed_eggplant.png",
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d",
+      "output_sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-1.png",
+      "target": "assets/resources/farming/eggplant-1.png",
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f",
+      "output_sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-2.png",
+      "target": "assets/resources/farming/eggplant-2.png",
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b",
+      "output_sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-3.png",
+      "target": "assets/resources/farming/eggplant-3.png",
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1",
+      "output_sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/eggplant-4.png",
+      "target": "assets/resources/farming/eggplant-4.png",
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a",
+      "output_sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/eggplant.png",
+      "target": "assets/resources/items/eggplant.png",
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9",
+      "output_sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_pumpkin.png",
+      "target": "assets/resources/items/seed_pumpkin.png",
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d",
+      "output_sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-1.png",
+      "target": "assets/resources/farming/pumpkin-1.png",
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e",
+      "output_sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-2.png",
+      "target": "assets/resources/farming/pumpkin-2.png",
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce",
+      "output_sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-3.png",
+      "target": "assets/resources/farming/pumpkin-3.png",
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5",
+      "output_sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/pumpkin-4.png",
+      "target": "assets/resources/farming/pumpkin-4.png",
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff",
+      "output_sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/pumpkin.png",
+      "target": "assets/resources/items/pumpkin.png",
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe",
+      "output_sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_cabbage.png",
+      "target": "assets/resources/items/seed_cabbage.png",
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682",
+      "output_sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-1.png",
+      "target": "assets/resources/farming/cabbage-1.png",
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21",
+      "output_sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-2.png",
+      "target": "assets/resources/farming/cabbage-2.png",
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554",
+      "output_sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-3.png",
+      "target": "assets/resources/farming/cabbage-3.png",
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399",
+      "output_sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/cabbage-4.png",
+      "target": "assets/resources/farming/cabbage-4.png",
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572",
+      "output_sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/cabbage.png",
+      "target": "assets/resources/items/cabbage.png",
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8",
+      "output_sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_sunflower.png",
+      "target": "assets/resources/items/seed_sunflower.png",
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46",
+      "output_sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-1.png",
+      "target": "assets/resources/farming/sunflower-1.png",
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a",
+      "output_sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-2.png",
+      "target": "assets/resources/farming/sunflower-2.png",
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f",
+      "output_sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-3.png",
+      "target": "assets/resources/farming/sunflower-3.png",
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f",
+      "output_sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/sunflower-4.png",
+      "target": "assets/resources/farming/sunflower-4.png",
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c",
+      "output_sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/sunflower.png",
+      "target": "assets/resources/items/sunflower.png",
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639",
+      "output_sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/seed_blueberry.png",
+      "target": "assets/resources/items/seed_blueberry.png",
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545",
+      "output_sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-1.png",
+      "target": "assets/resources/farming/blueberry-1.png",
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5",
+      "output_sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-2.png",
+      "target": "assets/resources/farming/blueberry-2.png",
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096",
+      "output_sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-3.png",
+      "target": "assets/resources/farming/blueberry-3.png",
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e",
+      "output_sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e"
+    },
+    {
+      "source": "assets/derived/farming-v1/plants/blueberry-4.png",
+      "target": "assets/resources/farming/blueberry-4.png",
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306",
+      "output_sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306"
+    },
+    {
+      "source": "assets/derived/farming-v1/items/blueberry.png",
+      "target": "assets/resources/items/blueberry.png",
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11",
+      "output_sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-0.png",
+      "target": "assets/resources/tools/hoe-0.png",
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0",
+      "output_sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-0.png",
+      "target": "assets/resources/tools/axe-0.png",
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f",
+      "output_sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-0.png",
+      "target": "assets/resources/tools/pickaxe-0.png",
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82",
+      "output_sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-0.png",
+      "target": "assets/resources/tools/watering_can-0.png",
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9",
+      "output_sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-1.png",
+      "target": "assets/resources/tools/hoe-1.png",
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5",
+      "output_sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-1.png",
+      "target": "assets/resources/tools/axe-1.png",
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521",
+      "output_sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-1.png",
+      "target": "assets/resources/tools/pickaxe-1.png",
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2",
+      "output_sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-1.png",
+      "target": "assets/resources/tools/watering_can-1.png",
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4",
+      "output_sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-2.png",
+      "target": "assets/resources/tools/hoe-2.png",
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac",
+      "output_sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-2.png",
+      "target": "assets/resources/tools/axe-2.png",
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d",
+      "output_sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-2.png",
+      "target": "assets/resources/tools/pickaxe-2.png",
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561",
+      "output_sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-2.png",
+      "target": "assets/resources/tools/watering_can-2.png",
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236",
+      "output_sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/hoe-3.png",
+      "target": "assets/resources/tools/hoe-3.png",
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275",
+      "output_sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/axe-3.png",
+      "target": "assets/resources/tools/axe-3.png",
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da",
+      "output_sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/pickaxe-3.png",
+      "target": "assets/resources/tools/pickaxe-3.png",
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448",
+      "output_sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448"
+    },
+    {
+      "source": "assets/derived/tools-v1/tools/watering_can-3.png",
+      "target": "assets/resources/tools/watering_can-3.png",
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413",
+      "output_sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-whole.png",
+      "target": "assets/resources/gathering/stone-whole.png",
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835",
+      "output_sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-whole.png",
+      "target": "assets/resources/gathering/copper-whole.png",
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46",
+      "output_sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/copper_ore.png",
+      "target": "assets/resources/items/copper_ore.png",
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9",
+      "output_sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-whole.png",
+      "target": "assets/resources/gathering/iron-whole.png",
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f",
+      "output_sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/iron_ore.png",
+      "target": "assets/resources/items/iron_ore.png",
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc",
+      "output_sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-whole.png",
+      "target": "assets/resources/gathering/gold-whole.png",
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa",
+      "output_sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/gold_ore.png",
+      "target": "assets/resources/items/gold_ore.png",
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d",
+      "output_sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-cracked.png",
+      "target": "assets/resources/gathering/stone-cracked.png",
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e",
+      "output_sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-cracked.png",
+      "target": "assets/resources/gathering/copper-cracked.png",
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa",
+      "output_sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-cracked.png",
+      "target": "assets/resources/gathering/iron-cracked.png",
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab",
+      "output_sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-cracked.png",
+      "target": "assets/resources/gathering/gold-cracked.png",
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e",
+      "output_sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stone-depleted.png",
+      "target": "assets/resources/gathering/stone-depleted.png",
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e",
+      "output_sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/copper-depleted.png",
+      "target": "assets/resources/gathering/copper-depleted.png",
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082",
+      "output_sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/iron-depleted.png",
+      "target": "assets/resources/gathering/iron-depleted.png",
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7",
+      "output_sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/gold-depleted.png",
+      "target": "assets/resources/gathering/gold-depleted.png",
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4",
+      "output_sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump.png",
+      "target": "assets/resources/gathering/stump.png",
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348",
+      "output_sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/stump-cracked.png",
+      "target": "assets/resources/gathering/stump-cracked.png",
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0",
+      "output_sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0"
+    },
+    {
+      "source": "assets/derived/tools-v1/resources/sapling.png",
+      "target": "assets/resources/gathering/sapling.png",
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da",
+      "output_sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da"
+    },
+    {
+      "source": "assets/derived/tools-v1/items/tree_seed.png",
+      "target": "assets/resources/items/tree_seed.png",
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd",
+      "output_sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd"
+    },
+    {
+      "source": "assets/derived/equipment-v1/stone_sword.png",
+      "target": "assets/resources/items/stone_sword.png",
+      "sha256": "bf360cff0dd5eb3e7a61bbb2783442c83e4d33c74a66e14ace853ea31a625ed4",
+      "output_sha256": "bf360cff0dd5eb3e7a61bbb2783442c83e4d33c74a66e14ace853ea31a625ed4"
+    },
+    {
+      "source": "assets/derived/equipment-v1/reinforced_sword.png",
+      "target": "assets/resources/items/reinforced_sword.png",
+      "sha256": "ef8dec468c42ac74e088b489c633c6e4f4730515f284e133d5a3f9e0f5f08ad7",
+      "output_sha256": "ef8dec468c42ac74e088b489c633c6e4f4730515f284e133d5a3f9e0f5f08ad7"
+    },
+    {
+      "source": "assets/derived/equipment-v1/hunting_spear.png",
+      "target": "assets/resources/items/hunting_spear.png",
+      "sha256": "d4ab8b058bdeccf09903c96bdd1d38447915c4b8194e3de825aaf38fa007a0e0",
+      "output_sha256": "d4ab8b058bdeccf09903c96bdd1d38447915c4b8194e3de825aaf38fa007a0e0"
+    },
+    {
+      "source": "assets/derived/equipment-v1/wooden_bow.png",
+      "target": "assets/resources/items/wooden_bow.png",
+      "sha256": "9d466a262906a3e6bfa75a397973f7bc18f3b585524fb027a072b7ede8cae992",
+      "output_sha256": "9d466a262906a3e6bfa75a397973f7bc18f3b585524fb027a072b7ede8cae992"
+    },
+    {
+      "source": "assets/derived/equipment-v1/stone_hammer.png",
+      "target": "assets/resources/items/stone_hammer.png",
+      "sha256": "33237df8db0fb0be0a1d40e90312b0a84e9633c90944ad5960980a597ebfd621",
+      "output_sha256": "33237df8db0fb0be0a1d40e90312b0a84e9633c90944ad5960980a597ebfd621"
+    },
+    {
+      "source": "assets/derived/equipment-v1/iron_hammer.png",
+      "target": "assets/resources/items/iron_hammer.png",
+      "sha256": "4e69a001d2bb11b07abd900ac7d197251b3d94b5e67d6bd471b4ce8ab37891ae",
+      "output_sha256": "4e69a001d2bb11b07abd900ac7d197251b3d94b5e67d6bd471b4ce8ab37891ae"
+    },
+    {
+      "source": "assets/derived/equipment-v1/spring_spear.png",
+      "target": "assets/resources/items/spring_spear.png",
+      "sha256": "ba6dbf6b902a563dc5f6849f08814cac977c2231155cfc3b39d0a5b4b491b7ba",
+      "output_sha256": "ba6dbf6b902a563dc5f6849f08814cac977c2231155cfc3b39d0a5b4b491b7ba"
+    },
+    {
+      "source": "assets/derived/equipment-v1/repeating_crossbow.png",
+      "target": "assets/resources/items/repeating_crossbow.png",
+      "sha256": "53124c5bc614fecde35aeffeed01c474503ac216e18717b5800bc6d1fb463bf9",
+      "output_sha256": "53124c5bc614fecde35aeffeed01c474503ac216e18717b5800bc6d1fb463bf9"
+    },
+    {
+      "source": "assets/derived/equipment-v1/flintlock.png",
+      "target": "assets/resources/items/flintlock.png",
+      "sha256": "6eaddd99e2669f4cbcff89e575fe7769db9017804774b64f2f30eec0c0f42763",
+      "output_sha256": "6eaddd99e2669f4cbcff89e575fe7769db9017804774b64f2f30eec0c0f42763"
+    },
+    {
+      "source": "assets/derived/equipment-v1/clockwork_pistol.png",
+      "target": "assets/resources/items/clockwork_pistol.png",
+      "sha256": "62fca5dc4ad8e7a57ce29876f5f3f4fa10e4a56d57ede59a1acd278552b5b613",
+      "output_sha256": "62fca5dc4ad8e7a57ce29876f5f3f4fa10e4a56d57ede59a1acd278552b5b613"
+    },
+    {
+      "source": "assets/derived/equipment-v1/repeater_smg.png",
+      "target": "assets/resources/items/repeater_smg.png",
+      "sha256": "34c17716d0a52f397fddf81c07aabde1f8425e29dd5f8b116fd98284a051acd2",
+      "output_sha256": "34c17716d0a52f397fddf81c07aabde1f8425e29dd5f8b116fd98284a051acd2"
+    },
+    {
+      "source": "assets/derived/equipment-v1/prism_rifle.png",
+      "target": "assets/resources/items/prism_rifle.png",
+      "sha256": "ce2e77cb62ab3010e46c6a48e957743fa37e33e5d88f411c02af8fe770de9ef1",
+      "output_sha256": "ce2e77cb62ab3010e46c6a48e957743fa37e33e5d88f411c02af8fe770de9ef1"
+    },
+    {
+      "source": "assets/derived/equipment-v1/crystal_sword.png",
+      "target": "assets/resources/items/crystal_sword.png",
+      "sha256": "5959be35f24e93254434e768421799e0b85a1323b1d531f19c281a3fae43d15d",
+      "output_sha256": "5959be35f24e93254434e768421799e0b85a1323b1d531f19c281a3fae43d15d"
+    },
+    {
+      "source": "assets/derived/equipment-v1/glow_staff.png",
+      "target": "assets/resources/items/glow_staff.png",
+      "sha256": "d5a82a45eb15d6d73747e49b4c984c61797007c15c95cba33c12abc4b5995ad6",
+      "output_sha256": "d5a82a45eb15d6d73747e49b4c984c61797007c15c95cba33c12abc4b5995ad6"
+    },
+    {
+      "source": "assets/derived/equipment-v1/frost_staff.png",
+      "target": "assets/resources/items/frost_staff.png",
+      "sha256": "8bd30478416528fb590077d6a439e3725066bb1b04d632eaf3b84ed2a1aaf830",
+      "output_sha256": "8bd30478416528fb590077d6a439e3725066bb1b04d632eaf3b84ed2a1aaf830"
+    },
+    {
+      "source": "assets/derived/equipment-v1/ember_staff.png",
+      "target": "assets/resources/items/ember_staff.png",
+      "sha256": "4aebcd1ae6d5d237e49549e1219fae18504c959ab4ba745a66ef0e7834f2c900",
+      "output_sha256": "4aebcd1ae6d5d237e49549e1219fae18504c959ab4ba745a66ef0e7834f2c900"
+    },
+    {
+      "source": "assets/derived/equipment-v1/rune_spear.png",
+      "target": "assets/resources/items/rune_spear.png",
+      "sha256": "9c331ac0e854e5e8e00e5698b5e4846d958d84b8da09efe1c93db386f681d1fb",
+      "output_sha256": "9c331ac0e854e5e8e00e5698b5e4846d958d84b8da09efe1c93db386f681d1fb"
+    },
+    {
+      "source": "assets/derived/equipment-v1/archmage_staff.png",
+      "target": "assets/resources/items/archmage_staff.png",
+      "sha256": "62e4ee6cf253107ec851361c123e03459264eb7d390edeba81c91838ad643521",
+      "output_sha256": "62e4ee6cf253107ec851361c123e03459264eb7d390edeba81c91838ad643521"
+    },
+    {
+      "source": "assets/derived/equipment-v1/travel_coat.png",
+      "target": "assets/resources/items/travel_coat.png",
+      "sha256": "2867c66778578f3b810081b027451840abdb3eb326a2f15e0c1cd24e7e4cba58",
+      "output_sha256": "2867c66778578f3b810081b027451840abdb3eb326a2f15e0c1cd24e7e4cba58"
+    },
+    {
+      "source": "assets/derived/equipment-v1/shell_armor.png",
+      "target": "assets/resources/items/shell_armor.png",
+      "sha256": "7a42aaa027a51a0428443adcf16b55ab347a2bf3dc342acf60e1b5c74a5eacf3",
+      "output_sha256": "7a42aaa027a51a0428443adcf16b55ab347a2bf3dc342acf60e1b5c74a5eacf3"
+    },
+    {
+      "source": "assets/derived/equipment-v1/scout_boots.png",
+      "target": "assets/resources/items/scout_boots.png",
+      "sha256": "dc6f0416a8d687a86d94867199853657dbdf9ce7677f37752f79b2c75e16c31d",
+      "output_sha256": "dc6f0416a8d687a86d94867199853657dbdf9ce7677f37752f79b2c75e16c31d"
+    },
+    {
+      "source": "assets/derived/equipment-v1/ward_boots.png",
+      "target": "assets/resources/items/ward_boots.png",
+      "sha256": "abc72e9967dd846e0a25d407adbd332541c51e8b227236d0ef844c32ffddff9e",
+      "output_sha256": "abc72e9967dd846e0a25d407adbd332541c51e8b227236d0ef844c32ffddff9e"
+    },
+    {
+      "source": "assets/derived/equipment-v1/lantern_charm.png",
+      "target": "assets/resources/items/lantern_charm.png",
+      "sha256": "fadb0ddec10bb2c7ede68ed57113a80849ba94267f12a74e8ea207e013768c6b",
+      "output_sha256": "fadb0ddec10bb2c7ede68ed57113a80849ba94267f12a74e8ea207e013768c6b"
+    },
+    {
+      "source": "assets/derived/equipment-v1/exo_armor.png",
+      "target": "assets/resources/items/exo_armor.png",
+      "sha256": "b9254ab4eccde632c58fcd30926fe09b5a8c5a8202355a70bbea886d0d5ca5ec",
+      "output_sha256": "b9254ab4eccde632c58fcd30926fe09b5a8c5a8202355a70bbea886d0d5ca5ec"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-0.png",
+      "target": "assets/resources/tool-actors/hoe-0.png",
+      "sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8",
+      "output_sha256": "f984637a3271b48fc90ad736f5fc9dc3753add4334faffb2a7d5999417d199e8"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-0.png",
+      "target": "assets/resources/tool-actors/axe-0.png",
+      "sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43",
+      "output_sha256": "2ccc0d0012f0e1055b5af2aca6d0eaa808cd6e38c79c5508e367a2f68c7b2a43"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-0.png",
+      "target": "assets/resources/tool-actors/pickaxe-0.png",
+      "sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a",
+      "output_sha256": "9c65c01a952efc77d5caf13b6a533ab50d31cd11edf03420ca4a0b2254e7686a"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-0.png",
+      "target": "assets/resources/tool-actors/watering_can-0.png",
+      "sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099",
+      "output_sha256": "87f9ad95ba2312cd0b92b59623ff66c231bf0913f65a5d92e795a44db13e9099"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-1.png",
+      "target": "assets/resources/tool-actors/hoe-1.png",
+      "sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69",
+      "output_sha256": "5ba1417de5de70e186a9a9f73605fd93753a76c96f2d094446ae61ed1dce8e69"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-1.png",
+      "target": "assets/resources/tool-actors/axe-1.png",
+      "sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f",
+      "output_sha256": "0f798bbcac619591fc6ac95e903d0112ffd59ad68a72cb0de02fedea7755647f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-1.png",
+      "target": "assets/resources/tool-actors/pickaxe-1.png",
+      "sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08",
+      "output_sha256": "63781ed315cb1ad6ae5cfb748256ff7bf6611b5b872564a926f3656608ba8c08"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-1.png",
+      "target": "assets/resources/tool-actors/watering_can-1.png",
+      "sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903",
+      "output_sha256": "a6fa671c2192f8a07594af2f2f12d66ec36ba1f205be8831fb49a11134222903"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-2.png",
+      "target": "assets/resources/tool-actors/hoe-2.png",
+      "sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166",
+      "output_sha256": "d0cc7628c03dd72cc0569bf6d02e27cfc89cd7af1a1548a0acb84b16254f0166"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-2.png",
+      "target": "assets/resources/tool-actors/axe-2.png",
+      "sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007",
+      "output_sha256": "8319ea7bf76707fec32288d08069d378a02959e52701c261d9a67ca13fdc4007"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-2.png",
+      "target": "assets/resources/tool-actors/pickaxe-2.png",
+      "sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f",
+      "output_sha256": "168fc4a42befdb8fc92c4e93fe87abba784b77a6dbc1ce92ba3f583ed432e70f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-2.png",
+      "target": "assets/resources/tool-actors/watering_can-2.png",
+      "sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f",
+      "output_sha256": "1db60a4d33bb1f99b24124dce7f21070361e8aef7af9e67f23563244d0fa788f"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-3.png",
+      "target": "assets/resources/tool-actors/hoe-3.png",
+      "sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2",
+      "output_sha256": "8c893b883bed2a663d92bdf590466a858db216a8456501326e0e1a98b87acbd2"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-3.png",
+      "target": "assets/resources/tool-actors/axe-3.png",
+      "sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514",
+      "output_sha256": "bcba551be2f39b9d4b65bea52a090b9203f661085839fc9ea7fa4ba602ca5514"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-3.png",
+      "target": "assets/resources/tool-actors/pickaxe-3.png",
+      "sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1",
+      "output_sha256": "08d070e536a2a4f1acda49a07d088db527cf983a36cb509245def4f8d2de3ec1"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-3.png",
+      "target": "assets/resources/tool-actors/watering_can-3.png",
+      "sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7",
+      "output_sha256": "3865ecc59712c307b9db5313b2ec755ae7420c0eddf72b3ba2e3baa61f3501a7"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-4.png",
+      "target": "assets/resources/tool-actors/hoe-4.png",
+      "sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126",
+      "output_sha256": "8e3864ff9ce948bf4a56de7c108219470c465998c6a468f50ad6d71087d51126"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-4.png",
+      "target": "assets/resources/tool-actors/axe-4.png",
+      "sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312",
+      "output_sha256": "3ff0e4de7acbbeefc4d8e654bbc2cd241a51aa281065edc9688c1a881fcd8312"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-4.png",
+      "target": "assets/resources/tool-actors/pickaxe-4.png",
+      "sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0",
+      "output_sha256": "db7dbbb993f0aaba3b81d608f6d3fcfb633ca47b2971491b773dadc14fd953c0"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-4.png",
+      "target": "assets/resources/tool-actors/watering_can-4.png",
+      "sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583",
+      "output_sha256": "63e929edae77cc4a9555a23831f29fce37089b7449788bb273286ac4da08a583"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/hoe-5.png",
+      "target": "assets/resources/tool-actors/hoe-5.png",
+      "sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a",
+      "output_sha256": "6dd746e84ef48bc87afd2a4131d45ba2884871c43426248befcfd99d82992d5a"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/axe-5.png",
+      "target": "assets/resources/tool-actors/axe-5.png",
+      "sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11",
+      "output_sha256": "954b0281599e8b3923d7f82176dfd14ad0adeda9fd0f06925f2c4b5982ddec11"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/pickaxe-5.png",
+      "target": "assets/resources/tool-actors/pickaxe-5.png",
+      "sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656",
+      "output_sha256": "a8cb04f3644cccd0bc4f342c5653fe512445b12e37d3beef90750e56cd920656"
+    },
+    {
+      "source": "assets/derived/tool-poses-v1/watering_can-5.png",
+      "target": "assets/resources/tool-actors/watering_can-5.png",
+      "sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771",
+      "output_sha256": "abef8c90a9833277e3016011dfd1df0a3f72b73066448ed0d4aebe1b9ace4771"
+    },
+    {
+      "source": "assets/derived/sword-motion-v1/actor-0.png",
+      "target": "assets/resources/combat/sword-actor-0.png",
+      "sha256": "3b0975e2b0c9350a35630ed3e0bf5709cd07efc40a7f352a4387ac6e06ea159e",
+      "output_sha256": "3b0975e2b0c9350a35630ed3e0bf5709cd07efc40a7f352a4387ac6e06ea159e"
+    },
+    {
+      "source": "assets/derived/sword-motion-v1/motion-0.png",
+      "target": "assets/resources/combat/sword-motion-0.png",
+      "sha256": "0da86900aa6d80c351344b43e43c37848d8cbdeef3f78f6d2ba1f9491e3769cd",
+      "output_sha256": "0da86900aa6d80c351344b43e43c37848d8cbdeef3f78f6d2ba1f9491e3769cd"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/chicken-1.png",
+      "target": "assets/resources/ranching/chicken-1.png",
+      "sha256": "78323d34b4392fb6977090f579f0a63b8c733659a78d37fd8afbe393109fcab8",
+      "output_sha256": "78323d34b4392fb6977090f579f0a63b8c733659a78d37fd8afbe393109fcab8"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/chicken-2.png",
+      "target": "assets/resources/ranching/chicken-2.png",
+      "sha256": "b7388aab43d50b286da5938164e9e85eb8f8a2ce5a06a5896cffb923619299fc",
+      "output_sha256": "b7388aab43d50b286da5938164e9e85eb8f8a2ce5a06a5896cffb923619299fc"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/chicken-3.png",
+      "target": "assets/resources/ranching/chicken-3.png",
+      "sha256": "3c63514c8ef3c22dd9eecfb734cbfefe78dbf13ff579bb122ff42a43a6ad7f5f",
+      "output_sha256": "3c63514c8ef3c22dd9eecfb734cbfefe78dbf13ff579bb122ff42a43a6ad7f5f"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/duck-1.png",
+      "target": "assets/resources/ranching/duck-1.png",
+      "sha256": "d6c5d3195a06193e8164a7d1db337d21756ea33b9493725b79d540ad98b35663",
+      "output_sha256": "d6c5d3195a06193e8164a7d1db337d21756ea33b9493725b79d540ad98b35663"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/duck-2.png",
+      "target": "assets/resources/ranching/duck-2.png",
+      "sha256": "89a270a219d204a2f3ce0166c3452917e0de388f4d4afc93fa679ac9836805ee",
+      "output_sha256": "89a270a219d204a2f3ce0166c3452917e0de388f4d4afc93fa679ac9836805ee"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/duck-3.png",
+      "target": "assets/resources/ranching/duck-3.png",
+      "sha256": "500dbd2c931f3b9fcc62f3c4c4ee2cf88a4f2abd5bef58e40dc6618baca6cb42",
+      "output_sha256": "500dbd2c931f3b9fcc62f3c4c4ee2cf88a4f2abd5bef58e40dc6618baca6cb42"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/sheep-1.png",
+      "target": "assets/resources/ranching/sheep-1.png",
+      "sha256": "f0810d552716c06a1840af2e0b3164eb543c1114cdb66520d3d99439eb39b0d0",
+      "output_sha256": "f0810d552716c06a1840af2e0b3164eb543c1114cdb66520d3d99439eb39b0d0"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/sheep-2.png",
+      "target": "assets/resources/ranching/sheep-2.png",
+      "sha256": "36c9bffe53c0658e0699b20494b30c2485a8066002dd46d857a8e4fcec05f5dd",
+      "output_sha256": "36c9bffe53c0658e0699b20494b30c2485a8066002dd46d857a8e4fcec05f5dd"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/sheep-3.png",
+      "target": "assets/resources/ranching/sheep-3.png",
+      "sha256": "e5e7e4024716817d8bc8332eb32a18c56c658c333a6bffb14a17817446a21b74",
+      "output_sha256": "e5e7e4024716817d8bc8332eb32a18c56c658c333a6bffb14a17817446a21b74"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/cow-1.png",
+      "target": "assets/resources/ranching/cow-1.png",
+      "sha256": "114d0919fdd5d33c118434541c22166df77fe5374dc118dddff6aa209b6ed42f",
+      "output_sha256": "114d0919fdd5d33c118434541c22166df77fe5374dc118dddff6aa209b6ed42f"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/cow-2.png",
+      "target": "assets/resources/ranching/cow-2.png",
+      "sha256": "92c06339a71556d3e604738511abf076c144c2f406d1a9f92ae9be7690bcec82",
+      "output_sha256": "92c06339a71556d3e604738511abf076c144c2f406d1a9f92ae9be7690bcec82"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/cow-3.png",
+      "target": "assets/resources/ranching/cow-3.png",
+      "sha256": "e4e9e549e7dd52f03fcf8a036651ff63fed673fa0dd76dccaddff0aaccf9a8d9",
+      "output_sha256": "e4e9e549e7dd52f03fcf8a036651ff63fed673fa0dd76dccaddff0aaccf9a8d9"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/goat-1.png",
+      "target": "assets/resources/ranching/goat-1.png",
+      "sha256": "7457e0ed32d16753a12288c94feda9cc7a6dcad09163f58bcf4a240faec4d221",
+      "output_sha256": "7457e0ed32d16753a12288c94feda9cc7a6dcad09163f58bcf4a240faec4d221"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/goat-2.png",
+      "target": "assets/resources/ranching/goat-2.png",
+      "sha256": "018ad5bd9077b594c0a584c20a83b760ecd845e6f52694c3f9c05f36a1f31360",
+      "output_sha256": "018ad5bd9077b594c0a584c20a83b760ecd845e6f52694c3f9c05f36a1f31360"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/goat-3.png",
+      "target": "assets/resources/ranching/goat-3.png",
+      "sha256": "bf5ac1661134ab62696e4405d9fb4ae72ebf733c1d165a080edeb5b37f7e2f52",
+      "output_sha256": "bf5ac1661134ab62696e4405d9fb4ae72ebf733c1d165a080edeb5b37f7e2f52"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/pig-1.png",
+      "target": "assets/resources/ranching/pig-1.png",
+      "sha256": "230045f4c71442a881aa4440b997d9efa88a6e27f4afa3188b9ac18d5e83d963",
+      "output_sha256": "230045f4c71442a881aa4440b997d9efa88a6e27f4afa3188b9ac18d5e83d963"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/pig-2.png",
+      "target": "assets/resources/ranching/pig-2.png",
+      "sha256": "9a31c69552531edf905676d301e78c43529f9f40a787cc30b6233bc0b428ea01",
+      "output_sha256": "9a31c69552531edf905676d301e78c43529f9f40a787cc30b6233bc0b428ea01"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/pig-3.png",
+      "target": "assets/resources/ranching/pig-3.png",
+      "sha256": "f0140a0c15533ab47c462cc6a835285955e18efcc6303e6cbf9901bbadf0e974",
+      "output_sha256": "f0140a0c15533ab47c462cc6a835285955e18efcc6303e6cbf9901bbadf0e974"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/horse-1.png",
+      "target": "assets/resources/ranching/horse-1.png",
+      "sha256": "94fa4081164e09e3dfbaa1ef38720b56b09051f5614fa96784cde82e9e35301d",
+      "output_sha256": "94fa4081164e09e3dfbaa1ef38720b56b09051f5614fa96784cde82e9e35301d"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/horse-2.png",
+      "target": "assets/resources/ranching/horse-2.png",
+      "sha256": "7c6ba599dba15de4693ae3aa1a9c9daac43ef0487688d145db6d271fbe1812b8",
+      "output_sha256": "7c6ba599dba15de4693ae3aa1a9c9daac43ef0487688d145db6d271fbe1812b8"
+    },
+    {
+      "source": "assets/derived/ranching-v1/animals/horse-3.png",
+      "target": "assets/resources/ranching/horse-3.png",
+      "sha256": "db28bb269e141d384a5981dc774be4ed4e06d9193d6c67e46341ec0318e334c7",
+      "output_sha256": "db28bb269e141d384a5981dc774be4ed4e06d9193d6c67e46341ec0318e334c7"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/coop-1.png",
+      "target": "assets/resources/ranching/coop-1.png",
+      "sha256": "7b39c1871ee0dcadfefa7e7c077d10b7c5d5a827548e724a600effb88e02bac8",
+      "output_sha256": "7b39c1871ee0dcadfefa7e7c077d10b7c5d5a827548e724a600effb88e02bac8"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/coop-2.png",
+      "target": "assets/resources/ranching/coop-2.png",
+      "sha256": "45e04662b973b9c9c56d12e33e5bcd08d07a57ada53cf3cc540d1d62ae7515f6",
+      "output_sha256": "45e04662b973b9c9c56d12e33e5bcd08d07a57ada53cf3cc540d1d62ae7515f6"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/coop-3.png",
+      "target": "assets/resources/ranching/coop-3.png",
+      "sha256": "45c3d620f1d8cad2994186e57a8dff52756a83096377f667ff8bac8e37602580",
+      "output_sha256": "45c3d620f1d8cad2994186e57a8dff52756a83096377f667ff8bac8e37602580"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/barn-1.png",
+      "target": "assets/resources/ranching/barn-1.png",
+      "sha256": "7d3d7963c8aa9aae4d07c52fff7ede47724eb210187c56ba5eef3a5bbbb36681",
+      "output_sha256": "7d3d7963c8aa9aae4d07c52fff7ede47724eb210187c56ba5eef3a5bbbb36681"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/barn-2.png",
+      "target": "assets/resources/ranching/barn-2.png",
+      "sha256": "9ef244f65a8aafea68d870cfa68abaa7c75ead2a7ace70412f216923533b0df8",
+      "output_sha256": "9ef244f65a8aafea68d870cfa68abaa7c75ead2a7ace70412f216923533b0df8"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/barn-3.png",
+      "target": "assets/resources/ranching/barn-3.png",
+      "sha256": "3047a0019be5e3d11dffb1a4f899cd872903a755e2f9b406cf2985c627a48f95",
+      "output_sha256": "3047a0019be5e3d11dffb1a4f899cd872903a755e2f9b406cf2985c627a48f95"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/stable-1.png",
+      "target": "assets/resources/ranching/stable-1.png",
+      "sha256": "9f106f56ff07bbcd2c96650cd20b8f1bbe52907ee2ec043e7677665750d5334e",
+      "output_sha256": "9f106f56ff07bbcd2c96650cd20b8f1bbe52907ee2ec043e7677665750d5334e"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/stable-2.png",
+      "target": "assets/resources/ranching/stable-2.png",
+      "sha256": "989fb5ec5d3c3572c7a2c6e330b9f274adfe87da77e5a31bd30b12657633f498",
+      "output_sha256": "989fb5ec5d3c3572c7a2c6e330b9f274adfe87da77e5a31bd30b12657633f498"
+    },
+    {
+      "source": "assets/derived/ranching-v1/buildings/stable-3.png",
+      "target": "assets/resources/ranching/stable-3.png",
+      "sha256": "0a011df9506677e35906148ea439e6c8b7f61fa42b1eb49c6e2d6928114bbf44",
+      "output_sha256": "0a011df9506677e35906148ea439e6c8b7f61fa42b1eb49c6e2d6928114bbf44"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/water.png",
+      "target": "assets/resources/ranching/water.png",
+      "sha256": "4f0e84ee0a194a00932d0d6e29d999812f464487bb27f03634e12c3500dd5b12",
+      "output_sha256": "4f0e84ee0a194a00932d0d6e29d999812f464487bb27f03634e12c3500dd5b12"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/rooting.png",
+      "target": "assets/resources/ranching/rooting.png",
+      "sha256": "3ca371c8aae38d815b3429f9315a399dc43a46d445705186c366d8cf42e3ea93",
+      "output_sha256": "3ca371c8aae38d815b3429f9315a399dc43a46d445705186c366d8cf42e3ea93"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/mayo.png",
+      "target": "assets/resources/ranching/mayo.png",
+      "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92",
+      "output_sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/cheese.png",
+      "target": "assets/resources/ranching/cheese.png",
+      "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a",
+      "output_sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/loom.png",
+      "target": "assets/resources/ranching/loom.png",
+      "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3",
+      "output_sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+    },
+    {
+      "source": "assets/derived/ranching-v1/facilities/oil.png",
+      "target": "assets/resources/ranching/oil.png",
+      "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9",
+      "output_sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/egg.png",
+      "target": "assets/resources/items/egg.png",
+      "sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743",
+      "output_sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/duck_egg.png",
+      "target": "assets/resources/items/duck_egg.png",
+      "sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f",
+      "output_sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/wool.png",
+      "target": "assets/resources/items/wool.png",
+      "sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf",
+      "output_sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/milk.png",
+      "target": "assets/resources/items/milk.png",
+      "sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf",
+      "output_sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/goat_milk.png",
+      "target": "assets/resources/items/goat_milk.png",
+      "sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae",
+      "output_sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/truffle.png",
+      "target": "assets/resources/items/truffle.png",
+      "sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29",
+      "output_sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/mayonnaise.png",
+      "target": "assets/resources/items/mayonnaise.png",
+      "sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d",
+      "output_sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/duck_mayo.png",
+      "target": "assets/resources/items/duck_mayo.png",
+      "sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75",
+      "output_sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/cheese.png",
+      "target": "assets/resources/items/cheese.png",
+      "sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c",
+      "output_sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/goat_cheese.png",
+      "target": "assets/resources/items/goat_cheese.png",
+      "sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e",
+      "output_sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/cloth.png",
+      "target": "assets/resources/items/cloth.png",
+      "sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613",
+      "output_sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/truffle_oil.png",
+      "target": "assets/resources/items/truffle_oil.png",
+      "sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28",
+      "output_sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/animal_feed.png",
+      "target": "assets/resources/items/animal_feed.png",
+      "sha256": "d249e43044d8834a3b235ab0ec8b2b6d94daf0c3ebefa634be7d41d627bd0d1f",
+      "output_sha256": "d249e43044d8834a3b235ab0ec8b2b6d94daf0c3ebefa634be7d41d627bd0d1f"
+    },
+    {
+      "source": "assets/derived/ranching-v1/props/trough.png",
+      "target": "assets/resources/ranching/trough.png",
+      "sha256": "6127427805d72383033a2a1f042c2a0c52cdfe5c3722d54a7530692817a6e685",
+      "output_sha256": "6127427805d72383033a2a1f042c2a0c52cdfe5c3722d54a7530692817a6e685"
+    },
+    {
+      "source": "assets/derived/ranching-v1/props/nest.png",
+      "target": "assets/resources/ranching/nest.png",
+      "sha256": "6188ab2ff8a4bfabdfcd676b1ce27f8027e514d8c2bff3d6442787f2889f38cb",
+      "output_sha256": "6188ab2ff8a4bfabdfcd676b1ce27f8027e514d8c2bff3d6442787f2889f38cb"
+    },
+    {
+      "source": "assets/derived/ranching-v1/props/ledger.png",
+      "target": "assets/resources/ranching/ledger.png",
+      "sha256": "c56cc942d9692c033a49fbfcca5d118b740ac3f4a7bc75f06d9dc0a545e0b069",
+      "output_sha256": "c56cc942d9692c033a49fbfcca5d118b740ac3f4a7bc75f06d9dc0a545e0b069"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/egg.png",
+      "target": "assets/resources/items/fine_egg.png",
+      "sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743",
+      "output_sha256": "69f9ad77aa1d219dd40b1f575b7d4d5812e6c760a7009e059b0f794d156d2743"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/duck_egg.png",
+      "target": "assets/resources/items/fine_duck_egg.png",
+      "sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f",
+      "output_sha256": "25f01bd8f204011ec6c4a582f5e713a06aca139222246e7db0f232ae44fa0b2f"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/wool.png",
+      "target": "assets/resources/items/fine_wool.png",
+      "sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf",
+      "output_sha256": "b7960f0f3406073a8c65be61cdb2c2671f921060ddce7ca79a8dddb1964c4ecf"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/milk.png",
+      "target": "assets/resources/items/fine_milk.png",
+      "sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf",
+      "output_sha256": "bd2a29db4282605555be7a22840d10d44409c9f38fc11fd6b8104166d86622bf"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/goat_milk.png",
+      "target": "assets/resources/items/fine_goat_milk.png",
+      "sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae",
+      "output_sha256": "7fcf5a7b2f386e76a96a0de74d074b28fa3635a98faa916076ce3b3f779c8bae"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/truffle.png",
+      "target": "assets/resources/items/fine_truffle.png",
+      "sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29",
+      "output_sha256": "1a88ea95454d156884fe648e501675921c3b81901b124b380e5ba782fe83dd29"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/mayonnaise.png",
+      "target": "assets/resources/items/fine_mayonnaise.png",
+      "sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d",
+      "output_sha256": "cca65785b41a1e1273e38b281a94a2ac5ffdd03a9f7b3f7fdd8f180ffa87544d"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/duck_mayo.png",
+      "target": "assets/resources/items/fine_duck_mayo.png",
+      "sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75",
+      "output_sha256": "6239a2f7365e9d1f9b8df5f8172cb32089b26334c790b9a022694520913f3c75"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/cheese.png",
+      "target": "assets/resources/items/fine_cheese.png",
+      "sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c",
+      "output_sha256": "3ed9a3b2e58947ec73f0d53246d0a4c684207e48d4f733bc7b6d642335adbe2c"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/goat_cheese.png",
+      "target": "assets/resources/items/fine_goat_cheese.png",
+      "sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e",
+      "output_sha256": "33463d9d1698378a43744e1cc6d7011db8474ecb9bda185082b4ad57296a620e"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/cloth.png",
+      "target": "assets/resources/items/fine_cloth.png",
+      "sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613",
+      "output_sha256": "0c3c54aa176de5e5e98c99337dca681c33c889a3248fc5d3a7a7c6db9bf15613"
+    },
+    {
+      "source": "assets/derived/ranching-v1/items/truffle_oil.png",
+      "target": "assets/resources/items/fine_truffle_oil.png",
+      "sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28",
+      "output_sha256": "62c50122cfca9397f1465c35884b8ea3226cad407f116b216cec8a3043083a28"
     }
   ]
 }

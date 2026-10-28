@@ -183,11 +183,12 @@ def test_simultaneous_legacy_boots_and_inventory_mutation_preserve_both(client,m
     api_journey(client,monkeypatch)
     with Session.begin() as db:
         player=db.scalar(select(Player));state=copy.deepcopy(player.state)
-        state.pop('world_clock');state.update(location='overworld',position={'x':328,'y':352})
+        state.pop('world_clock');state.update(location='overworld',position={'x':328,'y':396})
+        state['tools']['held']='axe';state['tools']['resources']['wood_1']={'stage':'tree','work':5,'version':5}
         player.state=state
     def request(index):
-        return client.post('/api/session') if index==0 else cmd(client,'gather',{'target':'wood_1'})
+        return client.post('/api/session') if index==0 else cmd(client,'tool_strike',{'target':'wood_1','expected_version':5})
     with ThreadPoolExecutor(2) as pool: replies=list(pool.map(request,range(2)))
     assert [r.status_code for r in replies]==[200,200]
     state=client.get('/api/state').json()['state']
-    assert state['inventory']['wood']==3 and state['world_clock']['version']==2
+    assert state['inventory']['wood']==6 and state['world_clock']['version']==2

@@ -1,14 +1,20 @@
+import {isTool,toolName} from './tools';
+import {formatMoney} from './currency';
+import {gearCatalog} from './gearCatalog';
+import {seedCrop,itemCrop,growingDays,farmObjects} from './farming';
 import type {GameState,World,NavigationTarget} from './protocol';
 import {itemDefinitions,itemNames} from './items';
 import {currentMap} from './navigation';
 export interface PreferenceStorage {getItem(key:string):string|null;setItem(key:string,value:string):void;removeItem(key:string):void;}
-export type InventoryPreference={version:2;saveId:string;selected:string;quick:(string|null)[]};
+export type InventoryPreference={version:2;saveId:string;selected:string;quick:(string|null)[];tray:(string|null)[];offset:{x:number;y:number}};
 const known=(id:unknown):id is string=>typeof id==='string'&&Object.prototype.hasOwnProperty.call(itemDefinitions,id);
 export const inventoryPreferenceKey=(id:string)=>'realquest-cocos-inventory-v2:'+id;
 export function cleanQuick(value:unknown):(string|null)[]{
- const seen=new Set<string>();return Array.from({length:4},(_,i)=>{const id=Array.isArray(value)?value[i]:null;if(!known(id)||seen.has(id))return null;seen.add(id);return id;});
+ const seen=new Set<string>();return Array.from({length:8},(_,i)=>{const id=Array.isArray(value)?value[i]:null;if(!known(id)||seen.has(id))return null;seen.add(id);return id;});
 }
-function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'seed',quick:['seed','wood','stone','crop']};}
+function cleanTray(value:unknown):(string|null)[]{const seen=new Set<string>();return (Array.isArray(value)?value.slice(0,128):[]).map(id=>{if(!known(id)||seen.has(id))return null;seen.add(id);return id;});}
+function cleanOffset(value:any){return {x:Number.isFinite(value?.x)?Math.max(-4096,Math.min(4096,value.x)):0,y:Number.isFinite(value?.y)?Math.max(-4096,Math.min(4096,value.y)):0};}
+function defaults(saveId:string):InventoryPreference{return {version:2,saveId,selected:'hoe',quick:['hoe','axe','pickaxe','watering_can','seed',null,null,null],tray:[],offset:{x:0,y:0}};}
 /** Optional presentation preferences; never authoritative possessions. */
 export class InventoryPreferences {
  private memory=new Map<string,InventoryPreference>(); private active=''; warning='';
@@ -17,16 +23,30 @@ export class InventoryPreferences {
  get value(){return this.memory.get(this.active)||defaults(this.active);}
  enter(saveId:string){
   this.active=saveId;if(this.memory.has(saveId))return this.value;
-  let value=defaults(saveId);if(saveId)try{const raw=this.storage.getItem(inventoryPreferenceKey(saveId));if(raw){const p=JSON.parse(raw);if(p?.version===2&&p.saveId===saveId){value={version:2,saveId,selected:known(p.selected)?p.selected:'seed',quick:cleanQuick(p.quick)};}}}catch{this.warning='本机偏好暂时无法读取，本次整理仍可继续。';}
+  let value=defaults(saveId);if(saveId)try{const raw=this.storage.getItem(inventoryPreferenceKey(saveId));if(raw){const p=JSON.parse(raw);if(p?.version===2&&p.saveId===saveId){value={version:2,saveId,selected:known(p.selected)?p.selected:'seed',quick:cleanQuick(p.quick),tray:cleanTray(p.tray),offset:cleanOffset(p.offset)};}}}catch{this.warning='本机偏好暂时无法读取，本次整理仍可继续。';}
+  if(value.quick.length===8){try{const old=JSON.parse(this.storage.getItem(inventoryPreferenceKey(saveId))||'null');if(Array.isArray(old?.quick)&&old.quick.length===4){for(const id of ['hoe','axe','pickaxe','watering_can'])if(!value.quick.includes(id)){const index=value.quick.findIndex((v,i)=>i>=4&&!v);if(index>=0)value.quick[index]=id;}}}catch{/* Optional layout migration; ownership remains server-side. */}}
   this.memory.set(saveId,value);return value;
  }
  private write(value:InventoryPreference){if(!this.active)return;this.memory.set(this.active,value);try{this.storage.setItem(inventoryPreferenceKey(this.active),JSON.stringify(value));this.warning='';}catch{this.warning='本次整理已保留在当前窗口，关闭后可能需要重新安排。';}}
  select(id:string){if(known(id))this.write({...this.value,selected:id});}
  bind(slot:number,id:string,inventory:Record<string,number>){
-  if(!Number.isInteger(slot)||slot<0||slot>3||!known(id)||!(inventory[id]>0))return false;
+  if(!Number.isInteger(slot)||slot<0||slot>7||!known(id)||!(inventory[id]>0))return false;
   const quick=[...this.value.quick],old=quick.indexOf(id);if(old>=0)quick[old]=quick[slot];quick[slot]=id;this.write({...this.value,quick});return true;
  }
- clear(slot:number){if(!Number.isInteger(slot)||slot<0||slot>3)return;const quick=[...this.value.quick];quick[slot]=null;this.write({...this.value,quick});}
+ clear(slot:number){if(!Number.isInteger(slot)||slot<0||slot>7)return;const quick=[...this.value.quick];quick[slot]=null;this.write({...this.value,quick});}
+ /** Confirmed gains fill empty pockets in order; existing stacks/order stay put. */
+ receive(before:Record<string,number>,inventory:Record<string,number>){
+  const quick=[...this.value.quick];let changed=false;
+  for(const [id,count] of Object.entries(inventory)){
+   if(!known(id)||count<=(before[id]||0)||quick.includes(id))continue;
+   const slot=quick.indexOf(null);if(slot<0)break;quick[slot]=id;changed=true;
+  }
+  if(changed)this.write({...this.value,quick});return changed;
+ }
+ items(ids:string[]){const available=new Set(ids.filter(known)),tray=this.value.tray.map(id=>id&&available.has(id)?id:null);for(const id of available){if(tray.includes(id))continue;const empty=tray.indexOf(null);if(empty<0)tray.push(id);else tray[empty]=id;}return tray;}
+ place(id:string,index:number,ids:string[]){if(!known(id)||!ids.includes(id)||!Number.isInteger(index)||index<0||index>=128)return false;const tray=this.items(ids);while(tray.length<=index)tray.push(null);const old=tray.indexOf(id);if(old<0)return false;[tray[old],tray[index]]=[tray[index],id];this.write({...this.value,tray});return true;}
+ swapQuick(from:number,to:number){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>7||to>7)return false;const quick=[...this.value.quick];[quick[from],quick[to]]=[quick[to],quick[from]];this.write({...this.value,quick});return true;}
+ position(x:number,y:number){this.write({...this.value,offset:cleanOffset({x,y})});}
  legacy(){
   const candidates:{key:string;label:string;quick:(string|null)[]}[]=[];
   for(const [key,label] of [['realquest-cocos-quick-v1','旧Cocos快捷栏'],['realquest-quick-items','原Web快捷栏']])try{const raw=this.storage.getItem(key);if(!raw)continue;const value=JSON.parse(raw);if(!Array.isArray(value))continue;const quick=cleanQuick(value);if(quick.some(Boolean))candidates.push({key,label,quick});}catch{/* Optional legacy data cannot authenticate or choose a journey. */}
@@ -43,26 +63,31 @@ export function itemIntent(world:World,s:GameState,now:number,item:string):ItemI
  const intent:Omit<ItemIntent,'signature'>={item,label:'查看相关委托',reason:count>0?'':'暂未持有，收集后再使用或分配。',mode:'journal'};
  const mark=(label:string,mapId:string,targetId:string)=>{intent.label=label;intent.target={mapId,targetId};delete intent.mode;};
  const action=(label:string,command:string,data:Record<string,unknown>,costs:Record<string,number>,gains:Record<string,number>)=>{intent.label=label;intent.command=command;intent.data=data;intent.costs=costs;intent.gains=gains;delete intent.mode;};
- if(['stone_sword','reinforced_sword','spring_spear','glow_staff'].includes(item)){intent.label='查看随行装备';intent.mode='equipment';}
+ if(isTool(item)){intent.label=s.tools?.held===item?'正在手持':'拿起'+toolName(s,item);intent.command='tool_hold';intent.data={item};delete intent.mode;}
+ else if(Object.prototype.hasOwnProperty.call(gearCatalog,item)){intent.label=s.combat?.equipped===item||Object.values(s.combat?.equipment||{}).includes(item)?'已装备':'装备';intent.command='gear_equip';intent.data={item};delete intent.mode;intent.reason=count>0?(s.combat?.gear?.[item]?.use_reasons||[]).join('；'):intent.reason;}
  else if(item==='gate_stone')mark('标记东行石门','overworld','village_departure');
- else if(['gel','shell','crystal','soup'].includes(item))mark('标记工坊武备台','workshop','armory_counter');
- else if(item==='seed'){
-  const plot=world.objects.filter(o=>o.kind==='plot'&&!s.plots[o.id]).sort((a,b)=>Math.hypot(a.x-s.position.x,a.y-s.position.y)-Math.hypot(b.x-s.position.x,b.y-s.position.y)||a.id.localeCompare(b.id))[0];
-  if(!plot){intent.reason='农田已种满，成熟后再收获。';delete intent.mode;intent.label='没有空农田';}
-  else if(near(plot.id)){action('预览播种','plant',{target:plot.id},{seed:1},{});intent.seconds=s.buildings.home>=2?45:60;}
+ else if(item==='soup')mark('标记工坊铁匠','workshop','blacksmith');
+ else if(['gel','shell','crystal'].includes(item))mark('标记锻造工作台','workshop','armory_counter');
+ else if(seedCrop(item)){
+  const c=seedCrop(item)!;
+  const plot=farmObjects(world.objects,s).filter(o=>o.kind==='plot'&&!s.plots[o.id]).sort((a,b)=>Math.hypot(a.x-s.position.x,a.y-s.position.y)-Math.hypot(b.x-s.position.x,b.y-s.position.y)||a.id.localeCompare(b.id))[0];
+  if((s.skill_growth?.planting||0)<c.level){intent.reason='需要种植 '+c.level+' 级，当前 '+(s.skill_growth?.planting||0)+' 级';intent.label='培养种植技能';intent.mode='growth';}
+  else if(!plot){intent.reason='农田已种满，可收获后再播种，或在家园开垦。';delete intent.mode;intent.label='没有空农田';}
+  else if(near(plot.id)){action('预览播种','plant',{target:plot.id,seed:item},{[item]:1},{});intent.seconds=growingDays(s,c.days)*(s.world_clock?.day_seconds||1800);}
   else mark('标记家园农田','overworld',plot.id);
  }else if(item==='wood'){
   if(near('workshop_counter')){action('制作1块木板','craft',{target:'workshop_counter'},{wood:3},{plank:1});if(count>0&&count<3)intent.reason='还需要'+(3-count)+'份木材。';}
   else mark('标记工坊柜台','workshop','workshop_counter');
- }else if(item==='crop'){
-  if(near('workshop_counter'))action('出售1份萝卜','sell',{target:'workshop_counter'},{crop:1},{gold:7+s.buildings.workshop});
+ }else if(itemCrop(item)){
+  const c=itemCrop(item)!;
+  if(item==='crop'&&near('workshop_counter'))action('出售1份'+c.name,'sell',{target:'workshop_counter'},{[item]:1},{gold:s.market?.sell.crop??c.sell});
   else if(near('mira')||near('shop_counter')){
-   const price=s.market?.sell.crop;
-   if(typeof price==='number')action('出售1份萝卜','market_trade',{target:near('mira')?'mira':'shop_counter',side:'sell',item:'crop',amount:1},{crop:1},{gold:price});
+   const price=s.market?.sell[item];
+   if(typeof price==='number')action('出售1份'+c.name,'market_trade',{target:near('mira')?'mira':'shop_counter',side:'sell',item,amount:1},{[item]:1},{gold:price});
    else {intent.reason='杂货铺报价尚未同步。';mark('标记杂货铺柜台','shop','shop_counter');}
   }else mark('标记风铃杂货铺','shop','shop_counter');
  }else if(item==='stone')mark('标记小屋工作台','home','home_desk');
  if(!known(item)){intent.reason='未识别的物品，请重新选择。';delete intent.command;delete intent.mode;delete intent.target;}
  return {...intent,signature:JSON.stringify({location:s.location,item,command:intent.command,data:intent.data,costs:intent.costs,gains:intent.gains,reason:intent.reason,plantSeconds:intent.seconds})};
 }
-export function itemAmounts(values:Record<string,number>|undefined){return Object.entries(values||{}).map(([id,n])=>(itemNames[id]||id)+' ×'+n).join('、')||'无';}
+export function itemAmounts(values:Record<string,number>|undefined){return Object.entries(values||{}).map(([id,n])=>id==='gold'?formatMoney(n):(itemNames[id]||id)+' ×'+n).join('、')||'无';}

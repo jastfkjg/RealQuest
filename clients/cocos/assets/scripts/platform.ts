@@ -54,10 +54,11 @@ export const transport: Transport = {
     sys.localStorage.setItem('realquest-session-v2', JSON.stringify(session));
     if(sys.localStorage.getItem(key)===session.token)sys.localStorage.removeItem(key);
   },
-  clearSession: (saveId,token) => {
+  clearSession: (saveId,token,preserveData=false) => {
     const raw=sys.localStorage.getItem('realquest-session-v2'),session=raw?localRecord(raw,sessionRecordError):null;
     // Another tab may already have selected a different journey.
     if(session?.saveId!==saveId||session?.token!==token)return;
+    if(preserveData){sys.localStorage.removeItem('realquest-session-v2');return;}
     const keys:string[]=[];
     for(let i=0;i<sys.localStorage.length;i++){const k=sys.localStorage.key(i);if(k?.startsWith('realquest-outbox-v2:'+saveId+':')||k==='realquest-pending-v1:'+saveId)keys.push(k);}
     for(const k of keys)sys.localStorage.removeItem(k);

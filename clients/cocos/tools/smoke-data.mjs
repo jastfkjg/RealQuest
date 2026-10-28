@@ -1,3 +1,4 @@
+import {openSession} from './ui-navigation.mjs';
 import {browserConfig,launchBrowser,closeBrowser} from '../../../tools/cocos-browser-config.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -14,7 +15,7 @@ async function until(p,predicate,label='condition'){
  for(let i=0;i<180;i++){const s=await read(p);if(predicate(s))return s;await p.waitForTimeout(80);}
  throw Error(label+': '+JSON.stringify(await read(p)));
 }
-async function click(p,id){const s=await until(p,s=>s.controls.some(c=>c.id===id&&!c.disabled),'click '+id),c=s.controls.find(c=>c.id===id);await p.mouse.click(c.x,c.y);await p.waitForTimeout(100);}
+async function click(p,id){if(id==='session'&&(await read(p)).mode==='world')return openSession(p);const s=await until(p,s=>s.controls.some(c=>c.id===id&&!c.disabled),'click '+id),c=s.controls.find(c=>c.id===id);await p.mouse.click(c.x,c.y);await p.waitForTimeout(100);}
 async function load(p){await p.goto(base);await p.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded);}
 async function context(options={}){
  const c=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true,...options});contexts.push(c);

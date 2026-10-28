@@ -70,6 +70,10 @@ def finish_day(state, now, kind, destination='home'):
     state['location'], state['position'] = (destination if kind == 'sleep' else 'home'), {'x': 288, 'y': 152}
     state['npc_encounter'] = None
     state['last_rest'] = now
+    from .construction import settle_construction
+    settle_construction(state, now)
+    from .ranching import settle_ranch
+    settle_ranch(state, now)
     if kind == 'sleep':
         if destination == 'home' and 'rested_home' not in state['events']:
             state['events'].append('rested_home')

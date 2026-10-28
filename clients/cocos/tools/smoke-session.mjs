@@ -1,3 +1,4 @@
+import {openSession} from './ui-navigation.mjs';
 import {browserConfig,launchBrowser,closeBrowser} from '../../../tools/cocos-browser-config.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -7,7 +8,7 @@ const test=await browserConfig('session');const base=test.baseURL,out=test.direc
 const browser=await launchBrowser(chromium,{headless:true});let p;
 const read=p=>p.evaluate(()=>JSON.parse(window.render_game_to_text()));
 async function until(p,fn,label='condition'){for(let i=0;i<200;i++){const s=await read(p);if(fn(s))return s;await p.waitForTimeout(60);}throw Error(label+JSON.stringify(await read(p)));}
-async function click(p,id){const s=await until(p,s=>s.controls.some(c=>c.id===id&&!c.disabled),id),c=s.controls.find(c=>c.id===id);await p.mouse.click(c.x,c.y);}
+async function click(p,id){if(id==='session'&&(await read(p)).mode==='world')return openSession(p);const s=await until(p,s=>s.controls.some(c=>c.id===id&&!c.disabled),id),c=s.controls.find(c=>c.id===id);await p.mouse.click(c.x,c.y);}
 async function load(p){await p.goto(base);await p.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded&&JSON.parse(window.render_game_to_text()).controls.some(c=>c.id==='start'&&!c.disabled));}
 async function loadWithPendingArt(p){
  let release;const gate=new Promise(resolve=>release=resolve),pattern=/\/assets\/resources\/native\/.*\.png(?:\?|$)/;

@@ -1,13 +1,9 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import ts from "typescript";
-const source = await fs.readFile(
-  new URL("../shared/game/nextDeparture.ts", import.meta.url),
-  "utf8",
-);
-const js = ts.transpileModule(source, {
-  compilerOptions: { module: ts.ModuleKind.ES2022 },
-}).outputText;
+import {build} from 'esbuild';
+const bundle=await build({entryPoints:[new URL('../shared/game/nextDeparture.ts',import.meta.url).pathname],bundle:true,write:false,platform:'node',format:'esm'});
+const js=bundle.outputFiles[0].text;
 const {
   nextDeparture: next,
   growthStep: growth,
@@ -97,7 +93,7 @@ assert.equal(next(s, now + 200).target.targetId, "noah");
 s.combat.equipped = null;
 assert.equal(next(s, now).panel, "equipment");
 s.inventory.stone_sword = 0;
-assert.equal(next(s, now).target.targetId, "armory_counter");
+assert.equal(next(s, now).target.targetId, "blacksmith");
 s = fresh();
 s.stamina.current = 0;
 assert.equal(next(s, now).target.targetId, "home_bed");

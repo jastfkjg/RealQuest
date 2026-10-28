@@ -1,0 +1,13 @@
+Use case: style-transfer
+Asset type: RealQuest four-direction held-sword walking passing poses.
+Image1 is the APPROVED character proportions and style. Image2 supplies exact front/back walking poses and correct sword hand. Image3 supplies exact LEFT and RIGHT profile walking poses in its third/fourth cells; ignore its first two cells.
+Make a single sheet of FOUR characters in ONE ROW, with actual alpha transparency:
+column1 = front pose from Image2 left character.
+column2 = back pose from Image2 right character.
+column3 = left-facing pose from Image3 third character.
+column4 = right-facing pose from Image3 fourth character.
+Preserve each of these correct passing poses and sword grip, but FIX THE BODY PROPORTIONS to match Image1 exactly. These characters must be compact, stocky, big-headed, short-legged like Image1, not the slimmer taller versions in Images2/3.
+PROPORTION TARGET: the hair-plus-head occupies approximately the TOP HALF (50-54%) of the entire standing body height. Head width is about 55% of total head-to-boot body height. Torso and legs together occupy only the bottom half. The stocky torso is broad enough to match the approved character. SHORT legs, chunky brown boots. Retain the same accepted red hair and face shape. Do not simply resize the whole existing slim character; redraw its proportions to the approved compact design while preserving the pose.
+In each pose one boot is planted below the pelvis and the other boot lifted beside the calf, clear narrow passing step. FRONT and BACK: the boot on viewer-RIGHT is planted lower and viewer-LEFT boot is raised. Sword stays in anatomical RIGHT hand: viewer-LEFT for FRONT, viewer-RIGHT for BACK. LEFT and RIGHT profiles face exactly those directions, same anatomical hand/grip as their source. No sword disappears.
+Same red hair, blue eyes, white sleeves, dark-teal green vest, brown chest strap/belt/pouch, olive trousers and compact grey sword with brass hilt. Remove the new decorative chest buckle from Image2 to match Image1's plain diagonal strap.
+Crisp cozy pixel-RPG outlines and shading matching Image1, same pixel-detail density. Equal transparent cells, same full-body height and boot baseline. No text, shadows, UI, background, blurry edges, effects, trails, attacks or wide combat stances. These are only four passing walk keys for the same accepted character.

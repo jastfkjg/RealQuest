@@ -1,4 +1,5 @@
 import type { GameState, NavigationTarget, Panel } from "./protocol";
+import {canReadGate, legacyJourney, isMainTracked} from './story';
 
 export type PreparationTopic = "gear" | "trail" | "growth";
 export interface PreparationAction {
@@ -15,11 +16,11 @@ export interface PreparationStep extends PreparationAction {
 }
 const cave = { mapId: "overworld", targetId: "cave_entry" };
 const noah = { mapId: "overworld", targetId: "noah" };
-const armory = { mapId: "workshop", targetId: "armory_counter" };
+const armory = { mapId: "workshop", targetId: "blacksmith" };
 export const bed = { mapId: "home", targetId: "home_bed" };
 
 export function hasDepartureNotes(state: GameState) {
-  return !!state.combat && !!state.village_intro?.reviewed;
+  return canReadGate(state) && !!state.combat && !!state.village_intro?.reviewed && (legacyJourney(state) || !!state.village_intro?.briefed);
 }
 export function activePromise(state: GameState) {
   return state.life_journal?.tasks.find((task) => task.status === "active");
@@ -192,7 +193,7 @@ export function nextDeparture(
       note: owned.length
         ? "武器已经在背包，主动装备后才能使用。整理装备不消耗物品。"
         : "购买武器不要求制造等级；已有洞穴通路会保留。",
-      label: owned.length ? "打开随身装备" : "标记工坊武备台",
+      label: owned.length ? "打开随身装备" : "标记工坊铁匠",
       ...(owned.length ? { panel: "equipment" as Panel } : { target: armory }),
     };
   if (
@@ -207,10 +208,10 @@ export function nextDeparture(
 }
 export function trackedDeparture(state: GameState, now: number) {
   if (
+    (!legacyJourney(state) && state.quests.gate_preparation?.status !== 'active') ||
     state.village_intro?.dismissed ||
     state.combat?.gate_open ||
-    (state.tracked_quest &&
-      !["settle_in", "leave_valley"].includes(state.tracked_quest))
+    !isMainTracked(state)
   )
     return null;
   return nextDeparture(state, now);
@@ -239,8 +240,7 @@ export function returnNote(
     !hasDepartureNotes(state) ||
     state.village_intro?.dismissed ||
     state.combat?.gate_open ||
-    (state.tracked_quest &&
-      !["settle_in", "leave_valley"].includes(state.tracked_quest))
+    !isMainTracked(state) || (!legacyJourney(state) && state.quests.gate_preparation?.status !== 'active')
   )
     return null;
   const step = nextDeparture(state, now);

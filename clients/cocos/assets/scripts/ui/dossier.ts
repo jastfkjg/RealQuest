@@ -1,3 +1,5 @@
+import {formatMoney} from '../core/currency';
+import {crops} from '../core/farming';
 import {paperSurface,inkRule,meter} from './materials';
 import type { PanelHost } from './panels';
 import type { GrowthTarget } from '../core/protocol';
@@ -58,8 +60,8 @@ export class DossierPanels {
     } else {
       const portrait=f.x+28, pw=244, detail=f.x+310, dw=f.w-346;
       h.person('actor-'+c.appearance,portrait+pw/2,f.y+236,84,112);
-      h.text('DossierName',c.name,portrait,f.y+302,pw,44,24,C.ink,true);
-      h.text('DossierOutfit',outfit.name,portrait,f.y+348,pw,28,15,C.muted,true);
+      h.text('DossierName',c.name,portrait,f.y+302,pw,56,20,C.ink,true).lineHeight=26;
+      h.text('DossierOutfit',outfit.name,portrait,f.y+362,pw,28,15,C.muted,true);
       h.text('DossierLevel','旅人 · 等级 '+summary.level,portrait,f.y+390,pw,32,18,C.wood,true);
       inkRule(h,'DossierIdentityRule',portrait+32,f.y+438,pw-64);
       const gap=28,mw=(dw-gap)/2;
@@ -76,9 +78,9 @@ export class DossierPanels {
     if(f.compact){const width=(f.w-72)/3;entries.forEach((e,i)=>h.text('Attribute-'+e.id,e.label+'  '+e.value,f.x+24+i%3*(width+12),f.y+128+Math.floor(i/3)*32,width,28,16));return;}
     const x=f.x+36,left=(f.w-108)*.53,right=x+left+48,rw=f.w-84-left-48;
     h.text('AttributeHeading','旅途留下的积累',x,f.y+132,left,32,20);
-    entries.slice(0,5).forEach((e,i)=>{const yy=f.y+182+i*48;h.text('Attribute-'+e.id,e.label,x,yy,left-64,32,18);h.text('AttributeValue-'+e.id,String(e.value),x+left-64,yy,64,32,22,C.ink,true);inkRule(h,'AttributeRule'+i,x,yy+38,left);});
+    entries.slice(0,5).forEach((e,i)=>{const yy=f.y+182+i*48;h.text('Attribute-'+e.id,e.label,x,yy,left-64,32,18);h.text('AttributeValue-'+e.id,e.id==='gold'?formatMoney(e.value):String(e.value),x+left-64,yy,64,32,22,C.ink,true);inkRule(h,'AttributeRule'+i,x,yy+38,left);});
     h.text('ResourceHeading','随身物资',right,f.y+132,rw,32,20);
-    entries.slice(5).forEach((e,i)=>{const yy=f.y+188+i*76;if(e.id==='gold')h.image('items/gold',right+20,yy+14,36,36);h.text('Attribute-'+e.id,e.label,right+52,yy-4,rw-52,26,15,C.muted);h.text('AttributeValue-'+e.id,String(e.value),right+52,yy+22,rw-52,32,24);});
+    entries.slice(5).forEach((e,i)=>{const yy=f.y+188+i*76;if(e.id==='gold')h.image('items/gold',right+20,yy+14,36,36);h.text('Attribute-'+e.id,e.label,right+52,yy-4,rw-52,26,15,C.muted);h.text('AttributeValue-'+e.id,e.id==='gold'?formatMoney(e.value):String(e.value),right+52,yy+22,rw-52,32,24);});
     h.text('AttributeRules','旅途积累与知识、健康、技能点分别留存。',x,f.y+468,f.w-72,32,15,C.muted);
   }
 
@@ -100,11 +102,12 @@ export class DossierPanels {
     h.text('GrowthName', growthNames[this.growth], f.x + 132, f.y + 68, f.w - 264, 44, 22, C.ink, true);
     h.button('growth-next', '下一项', f.x + f.w - 120, f.y + 68, 96, 44, () => change(1), h.busy);
     if (!q) { h.text('GrowthMissing', '报价尚未就绪，请返回并重连服务器。', f.x + 24, f.y + 132, f.w - 48, 50, 18); return; }
+    const unlocked=this.growth==='planting'?(crops.filter(c=>c.level===q.next).map(c=>c.name).join('、')||'已全部解锁；继续培养仅提高等级'):'';
     const command = growthCommand(h.state, this.growth), balance = h.state[q.currency] || 0, currency = currencyLabels[q.currency];
     if(f.compact){
       h.text('GrowthLevels',q.current+' → '+q.next,f.x+24,f.y+124,f.w-48,36,26,C.ink,true);
       h.text('GrowthCost','持有 '+balance+' '+currency+' · 消耗 '+q.cost+(command.shortfall?' · 还差 '+command.shortfall:' · 剩余 '+(balance-q.cost)),f.x+24,f.y+164,f.w-48,28,16,C.muted,true);
-      h.text('GrowthConsent','确认才会投入点数；由诺亚现实委托结算。',f.x+24,f.y+196,f.w-48,28,15,C.muted,true);
+      h.text('GrowthConsent',unlocked?'下级：'+unlocked:'确认才会投入点数；由诺亚现实委托结算。',f.x+24,f.y+196,f.w-48,28,15,C.muted,true);
     }else{
       const lx=f.x+48,lw=Math.floor(f.w*.39),rx=lx+lw+40,rw=f.w-lw-136;
       h.image('items/journal',lx+lw/2,f.y+190,64,64);
@@ -115,7 +118,7 @@ export class DossierPanels {
       h.text('GrowthPrice',q.cost+' '+currency,rx,f.y+198,rw,42,26);
       h.text('GrowthWallet','随身持有 '+balance+' '+currency,rx,f.y+250,rw,30,17);
       h.text('GrowthRemainder',command.shortfall?'还需积攒 '+command.shortfall+' 点':'投入后剩余 '+(balance-q.cost)+' 点',rx,f.y+286,rw,30,17,command.shortfall?C.danger:C.moss);
-      h.text('GrowthConsent','点数来自诺亚的现实约定。\n由你确认后才投入培养。',rx,f.y+332,rw,54,15,C.muted);
+      h.text('GrowthConsent',unlocked?'下级：'+unlocked+'\n技能点来自诺亚的现实约定。':'点数来自诺亚的现实约定。\n由你确认后才投入培养。',rx,f.y+332,rw,54,15,C.muted);
     }
     this.footer(h, f, [{ id: 'growth-spend', label: command.shortfall ? '还差 ' + command.shortfall + ' ' + currency : '确认培养', primary: true, disabled: command.shortfall > 0,
       action: async () => {

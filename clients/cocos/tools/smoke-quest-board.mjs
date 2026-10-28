@@ -22,14 +22,14 @@ try{
  const before=(await read()).savedPosition;
  for(const size of [{width:1440,height:900},{width:1920,height:1080},{width:1056,height:627},{width:1024,height:768},{width:844,height:390},{width:740,height:360}]){
   await page.setViewportSize(size);await until(s=>s.camera.width===size.width&&s.camera.height===size.height);await audit();await shot('board-'+size.width);
-  if(size.width===740){await native('objectives-next');await click('list-next');await audit();await shot('board-740-next-group');await click('list-prev');await click('select-settle_in');}
+  if(size.width===740){await native('objectives-next');await audit();await shot('board-740-objective-page');await click('select-settle_in');}
  }
  checks.push('actual ready quest with truthful inventory at desktop 1440/1920/1056/1024 and short landscape 844/740; controls fit with no overlap; compact objectives/index paginate');
  await page.setViewportSize({width:1440,height:900});await until(s=>s.camera.width===1440);await native('quest-read');await until(s=>s.mode==='quest-story');await shot('original-reading');await native('quest-story-back');await until(s=>s.mode==='quests');assert.equal(await page.evaluate(()=>document.activeElement?.dataset.realquestControl),'quest-read');
  await page.keyboard.down('d');try{await page.waitForTimeout(250);}finally{await page.keyboard.up('d');}assert.deepEqual((await read()).savedPosition,before);
  checks.push('native keyboard reading/return restores focus and overlay owns movement input');
  const c=(await read()).controls.find(c=>c.id==='select-settle_in');await page.mouse.move(c.x,c.y);await shot('notice-hover');await page.getByRole('button',{name:c.accessibleName,exact:true}).focus();await shot('notice-keyboard-focus');
- await page.emulateMedia({reducedMotion:'reduce'});await native('select-leave_valley');await until(s=>s.features.questId==='leave_valley');await shot('locked-reduced-motion');await native('select-settle_in');
+ await page.emulateMedia({reducedMotion:'reduce'});assert(!(await read()).controls.some(c=>c.id==='select-leave_valley'));await shot('future-hidden-reduced-motion');await native('select-settle_in');
  let attempts=[],lose=true;await page.route('**/api/command',async route=>{const body=route.request().postDataJSON();if(body.action==='quest_claim'){attempts.push(body);if(lose){lose=false;await route.fetch();return route.abort('failed');}}return route.continue();});
  await native('quest-action');await until(s=>s.questLog.find(q=>q.id==='settle_in').status==='claimed'&&!s.busy);let s=await read();assert.equal(s.inventory.gold,32);assert.equal(s.inventory.seed,9);assert.equal(attempts.length,2);assert.equal(attempts[0].request_id,attempts[1].request_id);await shot('claimed');
  await page.reload();await page.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded);await click('start');await until(s=>s.mode==='world'&&!s.busy);await page.keyboard.press('j');await until(s=>s.mode==='journal');await click('select-settle_in');s=await read();assert.equal(s.inventory.gold,32);assert.equal(s.inventory.seed,9);assert.equal(s.questLog.find(q=>q.id==='settle_in').status,'claimed');

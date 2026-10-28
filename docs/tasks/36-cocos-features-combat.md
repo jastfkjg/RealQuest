@@ -1,5 +1,7 @@
 # Cocos migration — phases 4–5
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 User authorization: continue later migration stages, preserving the existing Web and allowing scoped UI improvements. Start: clean38bf6dd (prior phases committed by owner). No platform AppIDs/devices are available.
 
 ## Plan
@@ -81,7 +83,7 @@ Cleanup/handoff identities are recorded below.
 ## Final handoff and cleanup — 2026-10-17 00:54 CST
 
 - Test proxy76520 and API76119 were verified by start time, parent, command, cwd and listening ports, then stopped normally through their owned exec sessions92886/19443. Both exited0; PIDs and ports were verified gone before manual startup. Test DB is preserved as evidence and is not the handoff database.
-- Final manual preview uses `./start-cocos.command`: launcher86631, API86634/8126, proxy86635/5426, exec session20162. It serves `web-phase45/web-desktop` and **only `output/cocos-phase45/local-preview.db`**. Root, proxied health and direct API health all return200. Retained deliberately for owner testing; Ctrl+C in the launcher stops its own two children. A Codex browser preview tab was queued for this chat and is retained for manual review.
+- Final manual preview uses `./start.command`: launcher86631, API86634/8126, proxy86635/5426, exec session20162. It serves `web-phase45/web-desktop` and **only `output/cocos-phase45/local-preview.db`**. Root, proxied health and direct API health all return200. Retained deliberately for owner testing; Ctrl+C in the launcher stops its own two children. A Codex browser preview tab was queued for this chat and is retained for manual review.
 - All task automation browsers/contexts and Node/Cocos build/test/frame/probe runners exited through finally/normal completion; no owned automation session remains. Temporary frame/probe wrappers and redundant raw recordings were removed; canonical18MB `interaction.webm`, screenshots/results/logs remain ignored.
 - Earlier5420/8120 and5422/8122 previews were not stopped by this task. At final inspection their old PIDs44912/45078/71828/71830/71831 and listeners were already absent; no restart, termination workaround or ownership claim was made. Shared `node_repl` hosts started onOct16 are not attributable to this completed task and were preserved, as was the active tool host.
 - The original Web launcher/source and owner player databases remain intact. No commit/push/deploy, platform account change or external publishing.

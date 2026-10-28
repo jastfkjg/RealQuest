@@ -39,10 +39,10 @@ def test_additive_migration_relocates_only_obstructed_legacy_position():
 def test_prices_quantities_and_crop_story_progress():
     s = shop_state(); s['buildings']['workshop'] = 3
     apply(s,'market_trade',{'target':'mira','side':'sell','item':'crop','amount':5,'price':999},NOW)
-    assert s['inventory']['gold'] == 70 and s['inventory']['crop'] == 3
+    assert s['inventory']['gold'] == 40 and s['inventory']['crop'] == 3
     assert s['stats']['sold'] == 5 and s['stats']['market_sold'] == 5
     apply(s,'market_trade',{'target':'mira','side':'buy','item':'seed','amount':5},NOW)
-    assert s['inventory']['gold'] == 60 and s['inventory']['seed'] == 11
+    assert s['inventory']['gold'] == 30 and s['inventory']['seed'] == 11
 
 @pytest.mark.parametrize('data', [
     {'side':'sell','item':'gold','amount':1}, {'side':'buy','item':'wood','amount':1},
@@ -84,6 +84,8 @@ def test_insufficient_delivery_and_invalid_order_do_not_consume():
 
 def test_story_chain_requires_home_goal_and_rewards_once():
     s=shop_state(); s['events'].append('visited_shop')
+    s['quests']['settle_in']['status']='claimed'
+    s['quests']['craft_home']={'status':'claimed'}
     apply(s,'quest_accept',{'quest_id':'market_neighbor'},NOW)
     apply(s,'market_trade',{'target':'mira','side':'sell','item':'plank'},NOW)
     apply(s,'quest_claim',{'quest_id':'market_neighbor'},NOW)

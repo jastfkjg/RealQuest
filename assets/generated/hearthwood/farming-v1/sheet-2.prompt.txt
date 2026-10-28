@@ -1,0 +1,17 @@
+Use case: stylized-concept
+Asset type: original production sprite sheet for RealQuest Hearthwood cozy top-down pixel RPG farming. TRUE TRANSPARENT RGBA background.
+Create a precise landscape 1536x1024 sheet, 6 equal columns and 4 equal rows, each cell 256x256, clean separated cells with at least 24px transparent gutters. EXACTLY 24 standalone sprites, one per cell. No text, letters, numbers, labels, borders, grid lines, watermark or scenery. Original designs, no copied Stardew assets.
+Four rows top to bottom:
+Row 1: pumpkin, spreading vine with broad lobed leaves orange pumpkin
+Row 2: cabbage, layered round pale-green leaf head
+Row 3: sunflower, tall stalk large golden flower dark center
+Row 4: blueberry, compact woody shrub with blue berry clusters
+Six columns left to right for EACH crop row:
+1) A distinct kraft seed packet with that crop's colored pictogram and a few species-specific seeds beside it, no writing.
+2) First sprout: tiny species-specific seedling rooted at ground baseline, two or three small leaves. No packet, no soil tile.
+3) Young growing plant: species-specific recognizable leaf silhouette, visibly larger than sprout, not mature.
+4) Late growing plant: appropriate buds, flowers, or immature fruit/head/ears, distinct from young and mature.
+5) Fully mature plant still ROOTED and UNHARVESTED, with obvious harvestable produce. For radish/carrot show leafy plant and exposed top of root at ground, for potato mature bush and small exposed tubers. Never replace this with the harvested icon.
+6) Harvested inventory produce only, removed from plant: radish/root, bundle wheat, carrot, potatoes, tomatoes, berries, corn cobs, eggplants, pumpkin, cabbage head, sunflower head/seeds, blueberry bunch matching row. No packet and no potted plant.
+Style: detailed crisp pixel clusters, warm colored dark outlines, moss and sage greens, warm natural produce colors, soft top-left lighting, orthographic top-down three-quarter RPG view. Hearthwood fine sprite density, not chunky 16px icons, not photorealistic, not smooth vector. Cohesive style throughout all crops.
+Each sprite centered within its cell, plants share consistent bottom baseline 220px within their cells. Sprout height ~55px, young ~110px, late ~155px, mature ~175px; seed packets and produce ~170px. Preserve this relative growth scale! All sprites entirely inside cells, no shadows extending into adjacent cells. Transparent background throughout.

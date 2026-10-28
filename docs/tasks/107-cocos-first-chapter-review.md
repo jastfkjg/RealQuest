@@ -1,5 +1,7 @@
 # Cocos 第一章试玩复盘与改进优先级
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 日期：2026-10-20。范围：当前 Cocos J3 候选，从新旅人安家，经经营、装备、五层洞穴、成长、开门、渡河、翻山、抵城交信住宿，再返乡交付。后续实现、试玩和验收只以 Cocos 为准，已写入根 AGENTS.md。
 
 本轮交付为体验复盘与可执行改进队列，没有修改游戏代码、数值、素材、数据库结构或发布入口。使用 Playwright 与 UI/UX 检查方法；没有把历史测试数量当成本轮结果。
@@ -121,7 +123,7 @@
 | 命令/方式 | 结果与范围 |
 | --- | --- |
 | `verifyBuild('clients/cocos/web-release-framing-j3/web-desktop')`，试玩前与文档修改后各一次 | 两次通过，源/产物指纹保持；无新构建 |
-| `./start-cocos.command --build web-release-framing-j3/web-desktop --port 5456 --api-port 8156 --database output/playwright/chapter1-review-20261020/test.db --cookie-name realquest_chapter1_review` | 全新原始QA预览就绪；本轮使用专属ready文件登记归属 |
+| `./start.command --build web-release-framing-j3/web-desktop --port 5456 --api-port 8156 --database output/playwright/chapter1-review-20261020/test.db --cookie-name realquest_chapter1_review` | 全新原始QA预览就绪；本轮使用专属ready文件登记归属 |
 | 同一入口，数据库改为本轮 `continuation.db` | 原预览正常停止后启动，仅服务已披露的续测副本；结束后退出 |
 | 已缓存 `playwright-cli -s=rq-ch1-20261020 open … --browser chrome --idle-timeout=300000`，再执行 `node output/playwright/chapter1-review-20261020/drive.mjs <阶段>` | 实际浏览器操作与截图；阶段和失败完整留档，不是重跑规范27套 |
 | `python3 output/playwright/chapter1-review-20261020/verify-data.py` | 两库完整性、9任务、唯一结算/培养/开门与真实计时关联通过 |

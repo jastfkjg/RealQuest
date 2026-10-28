@@ -1,5 +1,31 @@
 Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发提示词》实现空仓库中的可玩版本；后续待完成部分写入 TODO.md 中。
 
+## 2026-10-23 task129 — 玩家制作生产设备（本机切片完成）
+
+- 蛋黄酱机/织布机/压酪机/榨油机接入建造1/2/3/4级、阿榆永久图纸与工坊制作；牧场加工地带14格、设备独立ID/版本/任务、近身投料收取、空闲搬动与装包。
+- 旧设备/未完加工保留品质与ready_tick、库存/箱内物品。最终专项62、合并全量445后端和33组单元通过；真实Cocos类型300绑定/877来源通过，包含并行铁匠的增量。
+- 独立真实Creator快照生产9组/32图、同运行源码木箱9组/20图分轮通过，代表桌面/844/740截图及2次提供的帧客户端截图已查看。实际UI生成机器/任务/成品，QA仅材料/等级/接近位置；完整长养殖和物理设备未重跑，见docs/tasks/129-player-made-production.md。
+- 97个测试PID退出、6个profile不存在，专用SDK与快照编译缓存已删；保留5482/API8182独立新档预览（快照源码，不随另一聊天工坊改版变化），原5481/5478及玩家库保留，未覆盖默认包/提交/推送/部署。证据output/production-129/verification.json、cleanup.json。
+
+
+## 2026-10-23 task126 — 渐进任务链（本机工程完成）
+
+- 安家→4份白萝卜交付→制作→小屋修缮→建禽舍/买鸡/首次喂养→首层初探与工坊回顾→石门调查→启门准备→离村，支线按阶段开放；渡河与抵城另分短任务。
+- 未开放任务不下发；原子交付和回执重试、实际筹建补助、手动追踪和旧契约保留。修复了已装备武器盖住初探回顾入口的问题。
+- 当前29单元/392后端、288绑定/840来源/真实Cocos类型；独立Creator v4任务链8组与引导8组通过。结合未受修正影响的公告板4组、旧档17组，共六项37组分轮证据，详见docs/tasks/126-progressive-quest-chain.md和output/quest-chain-126/verification.json。
+- 最终25张新链和79张引导截图及录像保留，已人工看图。后段Boss/石头/魔法3级明确采用UI夹具；未声称自然全五层或实等3小时。实际截图数以任务文档与报告为准。
+- 115个本任务PID无存活，独立SDK副本删除、指定profile路径确认不存在；原SDK和测试候选/证据保留。未改玩家库、未覆盖默认预览、未提交推送部署。原常见预览端口当前未连通，未操作其他聊天的服务；整个并行组合包和玩家观感待后续整体验看。
+
+## 2026-10-22 task123 — 三路线武器与装备
+
+用户要求完整实现基础/科学/魔法路线、分地区成品与永久图纸打造、装备门槛、快捷换装、固定效果、护具与精细美术。实现与证据见docs/tasks/123-cocos-equipment-system.md。18武器/6护具/24原创图、永久图纸/分地区商店/门槛/效果/快捷装备已接通；最终333后端、25单元、武器6组与相关44组、最后15战斗/3触控补验通过。默认与独立包一致，原5452地址/库/Cookie沿用，备份后所有表哈希保持；79已记录PID退出、SDK副本和冻结缓存清理，保留5452/原5453与共享宿主。原种植改动保留，无提交/推送/部署，玩家实际观感待反馈。
+
+## 2026-10-22 task116 — optional username accounts
+
+用户要求保留游客体验并实现用户名密码注册登录。新增账号绑定/登录预览/明确接续/退出保留数据，保留存档ID和历史；账号绑定撤销游客凭证。无邮箱验证码或自助找回密码。专项计划与验证记录见docs/tasks/116-cocos-username-accounts.md。保留同工作区任务115的HUD/行囊编辑，独立构建和QA，不操作原玩家库。
+
+task116收尾：真实Creator3.8.8独立release、124绑定/459来源/真实类型、23组工具与共享单元（core21）、最终260后端通过。修正原生密码框preload、焦点重绘和字符串展开计数的Creator编译差异。最终同来源/后端的账号6、存档与会话13、语义11、成长8、技能动作循环1共39组浏览器检查通过，代表截图已检查，流程录像已保存。18次运行123个已知自有PID和浏览器进程组退出、独立SDK副本清理。保留5449/API8149独立新库人工预览，原5443/5448和原玩家库保持；无默认包覆盖/提交/推送/部署。完整证据及中间失败不冒算通过见任务116和output/cocos-accounts-116/verification.json。
+
 - Task109 complete: Cocos-only release rebuilt; 146 art files relocated with original bytes,109 bindings/403 sources/real types verified;23 unit modules/236 backend/19 deployment tests/9 startup/8 Nginx checks and one full28-suite/185-check browser run passed. Final npm options/default empty start passed with identical runtime/payload; exact133 QA/empty-save files and finished caches removed,166 PIDs exited. Original signed SDK and current package/evidence retained; no preview/commit/push/deploy. See docs/tasks/109-cocos-only-client.md and output/cocos-retirement/verification.json.
 
 - Current task109 (2026-10-20): owner authorized Cocos-only source/runtime/tooling, removal of React/Phaser and all local historical player/QA data. Art146 exact-byte moves and109 bindings verified; offline Canvas sources/4 tests relocated, legacy gates retired, default build/start/CI/Docker switched. Current validation and cleanup are tracked in docs/tasks/109-cocos-only-client.md; older output evidence was intentionally cleaned and old compatibility/approval waits below are historical.
@@ -903,3 +929,104 @@ Original prompt: 按用户提供的《RealQuest｜现实副本 — 项目开发�
 - User explicitly changed the finish line: “差不多就行了；基础迁移完就可以停了”. Basic migration is complete; stop work here. M1–M9 and existing local startup, save continuity, data/growth/study features plus actual hosted base CI meet this revised scope. Full22-item Web-retirement acceptance remains16/22; V2/V4/V5/V6/V7/T2 are unverified future work, not falsely passed or active blockers for this closed basic scope.
 - Task106 SDK CI permission request is superseded and no response is needed. No new commit/push/token/runner/dispatch/deploy or originalWeb deletion. Frozen task106 patch remains an immutable historical draft; subsequent local scope/progress notes are separate and must not be silently included under the earlier sealed authorization. Existing uncommitted documents/workflow draft remain local; future SDK/system/physical/production work needs a new request.
 - Preserve signed Creator input, current J3 and existing original5442/overall5443 previews for optional use. Native Safari/probe and all owned automated test processes already ended; shared/unrelated hosts are not task cleanup targets. Final scoped verification is output/cocos-basic-completion/verification.json.
+
+## 2026-10-21 task112 — expedition preparation chain
+
+- User authorized world goal → armory preparation → explicit equip → cave entry, with actual Cocos preview. Scope preserves existing economy, server mutations, saves and art. Implementing compact actionable goal, grouped purchase/craft quotes, explicit equip/departure and cave readiness. Validation uses owned QA databases and a separate Creator release before handoff.
+2026-10-21 task112收尾：最终出发准备专项run-YIJc2J完整通过5组/33截图/连续录像，方向键实际从工坊走到洞口并入洞/撤离。相关章节3/引导8/界面5/横屏3/语义11组通过；真实引擎类型、两份相同release、23工具单元与236后端通过。新版5443/API8143保留人工试玩，原库已备份且全表一致；测试服务/浏览器退出及临时SDK移除已核验。实际画面待用户确认，证据与失败迭代见docs/tasks/112-cocos-expedition-chain.md。
+
+
+## 2026-10-21 task113 — world and panel usability
+
+按用户两条批注继续收敛世界HUD和快捷栏，并排查各页/弹窗。保留task112改动；新快捷偏好只预填种子，旧偏好保留，空位可整理，耗尽语义明确。动态行囊/实际储物、数量加减/缺额、真实打造研习条件、长名字及多行文本修复；短横屏整体镜头避免角色被快捷栏遮挡。中间失败与最终证据集中在docs/tasks/113-cocos-world-and-panel-usability.md，原库备份且切换后全表一致。界面5/行囊12、相关横屏3/语义11/对话3/播种4/记录8/档案8/存档6/出发5组分别通过；最终run-vvMEFw两套17组/161图通过，最后翻页底签已检查，121个自有测试/旧试玩PID退出；新版5443/API8143保留，整体观感等待用户检查。
+
+## 2026-10-22 task114 — complete combat experience
+
+用户要求“完整优化下战斗体验”。已核对当前 Cocos3.8.8、npm10/Node22、Python3.14、三份迁移、素材来源与既有洞穴实现；初始Git干净。计划覆盖权威战斗规则/武器差异/闪避/资源、本地响应、动作与声音、桌面横屏及完整安全回归。详细验收清单见docs/tasks/114-cocos-combat-experience.md。使用隔离release/QA，不改变玩家库或其他任务服务。
+
+2026-10-22 task114收尾：完整五层战斗链实现，本地预测/首次发送后输入缓冲/方向锁存、免费普攻和三种攻击形状、闪避/击退/破绽、动作/声音/焦点/近身显身及零距离命中边界均完成。23组工具/共享单元与248后端通过；FjzeIl最终战斗四套35组、同一客户端GIqrPb镜头/存档/语义/偏好四套36组，71组/194图，分轮差异和中间失败明确保留。原玩家库逐表相同且已备份，自动化精确PID退出与人工试玩最终状态见docs/tasks/114-cocos-combat-experience.md及output/cocos-combat-114。无新图片/字体/音频文件，无提交/推送/部署；观感和物理设备继续由用户验收。
+
+## 2026-10-22 task120 — complete Cocos farming
+
+用户授权完整种植体系，至少10种，所有种子可买/种植等级限制播种、每种全套原创美术、家园自由开垦、买种到收获出售。正在实现12种/72sprites、统一游戏生长时钟与旧作物保留、18/30/42块田上限、Cocos耕作UI；任务119并行行囊修改保留。详见docs/tasks/120-cocos-farming-system.md。无提交/推送/部署/玩家库修改。
+
+Task120收尾：12作物/72独立原创PNG、全等级可购/播种等级校验、43新可耕位置与18/30/42上限、游戏时钟/浇水/有限再生/收获出售及旧作物兼容完成。24单元/272后端，最终四套21组+未变背包成长20组通过，严格类型/613来源/196绑定与美术重建通过。默认包已核对替换，旧包回退保留；96记录PID退出，自己的SDK/cache清理。仅留5452/API8152正常新档人工试玩，PID49889/49893/49894，session90307。原5448最终已不监听，本任务未操作/重启它；原玩家库未读写。完整证据verification.json及任务120报告，未提交/推送/部署。
+
+## 2026-10-22 task122 — coordinate-based home hoe
+
+用户要求星露谷式锄头：家园适合草地直接开垦，仅体力、连续操作、无逐块弹窗。取消原位置白名单与18/30/42配额；新坐标生成稳定土地ID，原田地/作物保留。道路提取与原场景共用，前后端3300点一致；30专项/290完整后端与24工具单元通过。Cocos真实release已构建，正在实机验证拖动/按住/触控、取消和重试。保留task121未提交土壤美术与其5453试玩，不操作原玩家库。详见任务122。
+
+Task122收尾：家园坐标锄头仅4体力、点/拖/空格随移动连锄、输入取消/触屏接管、旧土地和作物保留完成。因并行task123装备使来源漂移，最终以output/hoe-122/frozen固定task121/122；真实Creator、196绑定/617来源、24单元/290后端、最终四套30组同源回归通过。5452沿用原库/Cookie，九表完整哈希相同，PID77581/77599/77600保留。197已记录自有PID退出、自己的SDK和缓存清理，主默认未覆盖、装备源码和5453保留。详细证据见任务122和verification.json；未提交/推送/部署。
+
+## 2026-10-23 task124 — shop counter
+
+用户批准分类/翻页商品浏览与背包出售两张概念图并要求实现。新增独立ShopPanels与纯报价/选择模型，复用原木框/布袋/纸页/米拉和物品图，保留任务121/122/123的未提交改动；43商品仅参考示例。真实在售分类、查找、各自分页、购买/出售确认、不可收购说明与独立委托入口接入。217绑定/673来源/真实Creator类型首轮通过，正在独立构建与隔离QA。详细证据见docs/tasks/124-cocos-shop-counter.md。
+
+- CURRENT task125：用户授权完整七动物养殖体系。计划在docs/tasks/125-cocos-ranching-system.md；尚未验收，原玩家数据/其他工作树改动保持。
+
+Task124收尾：商店货架/分类查找/独立翻页、同时行囊与确认出售、独立收购委托实现。固定快照clean-source-1syykW真实release、类型/来源、商店单元、16市场后端、shop+interface-refresh+semantics通过，五尺寸截图已实看；43件只读目录验证扩容。完整单元places计数及landscape洞穴移动有并行任务失败，未宣称全量通过。截图output/shop-124，详细边界与记录见任务124。
+
+### task125 验收进行中（2026-10-23）
+
+52张原创养殖图＋12品质别名与完整7动物服务端/Cocos流程已接入。真实截图修复了关闭按钮2px重叠、窄屏分页换行、建筑4:3比例、打开动物时自动定位列表。时钟接管/操作结算/室内解除骑乘已补回归，户外骑乘包含渡口/山道/城市。工作区任务126持续修改公共文件，因此冻结副本output/ranching-125/acceptance用于正式验收；后端全量392通过，正式Creator3.8.8构建50ef1d685通过。当前全链浏览器run-RezSu1仍运行（七幼崽/建造/首夜缺食暂停/四尺寸布局已过；成长产出加工出售尚未完成）。28模块单元中已通过27，places仅旧地图数15→16断言需更新后补跑；其他places检查内存修正后通过。不得标记完成。帧循环实际进入牧场并截图，原任务帧浏览器与5468/8168两轮独立服务均已关闭验证；原5452/5453用户预览未动。
+
+## 2026-10-23 — 持剑动作切片
+
+用户以“合适”确认四向六阶段源图，已接入角色0＋石刃短剑的40姿势、手动瞄准与明确锁定、权威命中时间和闪避取消时序。392后端、29组客户端/工具、287绑定真实Creator类型通过。固定快照 clean-source-Z88Dff 发布包 source5e4ce5bd 已生成；正在实际浏览器回归，不能视为完成。保留所有并行任务源码与人工预览，未改玩家库。详见 docs/tasks/sword-motion-preview.md。
+
+Task124第二轮：用户反馈与概念图差距大。增加原创无字店内背景，店招/米拉移至上方环境，放大货架图与贴近价签、厚柜板，行囊最多5×3及大图/数字，缝线确认按钮。clean-source-9In5jO真实release、288绑定/840来源/类型、模型与shop专项8组通过，五尺寸/43目录截图实看；semantics通过。interface-refresh在旧open-gate断言停止，非商店，完整回归不冒称通过。新截图output/shop-124-v2；并行战斗Bootstrap段保留，详见任务124。
+
+持剑切片收尾：角色0＋石刃短剑的40姿势接入，鼠标/键盘/明确锁定、权威命中与延迟闪避完成。最终独立包c57962b981；392后端、29单元组、真实Creator类型通过。四向/挥空/锁定与rAF行走分批验证；后8专项、2原始帧客户端、6装备（全18武器）、15战斗与7取景模块通过。总控制器因仅其他测试脚本变更未标current的情况保留原凭据并审计运行/后端/所选模块哈希一致；未称同一次默认专项全量通过。实机6.32秒短片及verification.json在output/cocos-sword-motion，详细记录docs/tasks/sword-motion-preview.md。所属浏览器/API/代理/Creator退出验证完成，无本任务保留服务；未启停其他人工预览或修改玩家库。运行手感待用户反馈，未提交/推送/部署。
+
+## task125 完成交付（2026-10-23）
+
+七种动物21阶段、住所/设施、购买/喂养/成长/收集/六配方加工/12种出售与骑乘落地。冻结版392后端、28单元、284绑定真实引擎类型通过；主工作区292绑定类型通过。实机组合证据：run-zXvBiX完成真实16次睡眠/21不同帧/6产出/6加工/Life/离线/骑乘；run-OXvXcr以精确已赚取状态副本接续12笔销售，库存落库完全相符、金币14390→15639；run-tZ1wOn最终四尺寸触控/长名/马说明/远程下马通过。没有将早期失败的默认全轮写为通过。最终source2234bad4；图片/状态/来源和复测细节见任务125。独立新档试玩5478/API8178保留，原库未改；测试资源与SDK副本收尾见cleanup-final.json。玩家观感/系统IME/读屏/物理设备未代验，无提交推送部署。
+
+Task125边界补记：主工作区后续另有币制/木匠/援助改动，涉及养殖规则与界面，均保留；本轮报告/试玩固定于已验证养殖版本，不把并行变化记作已实机验收。
+
+## 2026-10-23 task128 — 木箱与木匠工程
+
+用户批准先做木箱制作/摆放/存取/移动再接NPC工程。已实现图纸/0与2级配方、独立箱体库存、同源碰撞和平面预览、改名/带内容移动、单份/整组存取，以及小屋/三住所的木匠报价、次晨完工与援助兼容。417后端、现有30单元及新增建造单元通过；实际Creator与木箱/行囊浏览器通过。跨到洞穴的主线脚本死亡、旧世界脚本奖励期待仍为32而当前30，原失败保留，不冒称全世界回归通过。最终专项复核与清理记录见 docs/tasks/128-construction-and-carpenter.md。
+
+task128最终：官方3.8.8候选与默认同源；417后端/31单元分轮通过，run-Pie0oA建造9组20图通过（含整组存取、改名焦点、实际箱体/施工标记），run-OWV3f5行囊12组通过。两条更广回归失败如任务记录，未冒称全世界通过。99记录PID退出/profile清空/独立SDK和Creator目录删除；5481/8181独立新档人工试玩保留，5478其他任务预览健康保留。
+
+## 2026-10-23 铁匠柜台
+
+用户批准workshop-counter-preview-v1，授权真实Cocos实现和专门铁匠NPC，工作台仅打造。计划、验证与范围见docs/tasks/blacksmith-counter.md；开始时的建造/加工改动保留，基线在output/blacksmith-counter/baseline/。视觉依据为物理武器架、铁匠身份、短详情签与统一交易确认，所有文字/控件原生。
+
+## 2026-10-23 task130 — 工具与资源劳动闭环
+
+用户批准背包工具、当前手持、8快捷栏、锄/斧/镐/水壶、砍树采矿与体力连续操作、完整动作/资源变化、升级和存档，无耐久。计划在docs/tasks/130-tools-and-resources.md，起点源码快照output/tools-130/baseline.json。保留正在工作的铁匠/生产/木匠改动和原玩家库，使用独立构建和QA。
+
+铁匠柜台最终：原生柜台匹配批准预览，新增阿焰买卖/图纸入口，原铁砧仅打造；原创背景/人物/托架与来源处理已记录。固定来源三套浏览器16组99图、445后端和分轮33单元通过，81测试PID退出；5486独立新档人工试玩保留，原5478保留。主工作区并行task130后端变动导致的500/来源漂移已独立记录，未回滚其他任务，也未冒充其集成通过。报告：docs/tasks/blacksmith-counter.md。
+
+
+task130完成：真实四工具入包、独立手持+8快捷、按住连续砍树/开矿/开垦/浇水、逐击体力/资源与动态碰撞、树种补植、四档升级、旧档一次补发与幂等保存。原创35图和原生四向工具动作；不做耐久。官方Creator3.8.8 release、469后端、34模块、同包分轮7浏览器专项56组206图通过，完整聚合output/tools-130/final-verification.json。旧库存SVG衍生校验缺历史alloy.png的失败如实记录，不影响当前337正式绑定。审计134测试PID/profile退出，独立Creator克隆/缓存清理；5491/8191独立新库人工试玩保留，其他预览与玩家数据未动。详见docs/tasks/130-tools-and-resources.md；未部署/提交，也未冒称用户视觉批准。
+
+
+2026-10-24 task130默认入口修正：实际用户5443仍指向未含工具的旧web-current；现有玩家已持四工具，仅旧UI不展示。将已校验工具包提升默认，保留原端口/cookie/SQLite和现存角色库存，用户原Chrome背包实见4工具与8格（工具5–8）。新增启动前来源/包校验和拒绝旧包的保存测试，避免静默复现；13启动单元和9真实生命周期组通过，QA子进程退出，原5443服务与用户标签保留。详见docs/tasks/130-tools-and-resources.md及output/tools-130-default-fix。
+
+
+2026-10-24 默认入口长期约定：用户明确要求今后全部功能交付统一5443。已写入根AGENTS.md、README和docs/cocos-local.md：功能完成必须同步web-current，核对5443实际构建/功能，保留原库和凭证；候选端口仅内部QA，不能替代默认入口交付。当前默认源码/包指纹与5443实际响应一致，API健康，证据output/default-entry-policy/verification.json；本轮仅更新流程文档，未重启服务、未改玩家数据、未新建后台或浏览器。
+
+
+2026-10-24 task131工具握持优化：用户拒绝斧/镐横向伸出的待机效果。本轮只修四工具握点/比例/朝向/手套分层、同步行走与挥动，既有位图和劳动规则保持；实际Creator构建与姿态/工具闭环回归后发布默认5443。证据output/tool-hold-polish，详细记录docs/tasks/131-held-tool-polish.md。
+
+task131完成：四工具贴身垂握，按源图真实握柄点和四向深度绘制，走路/作业与身体共享轴，减少动态静止反馈。官方3.8.8 release和类型、3相关单元、同包两套浏览器15组105图/0错误通过，提供帧脚本另验。当前源码/默认包/5443实际响应一致，原Chrome原存档实看斧/镐，两玩家库存相同、原快捷栏和手持恢复。16记录测试PID及profile退出、QA端口停止、专用SDK/缓存清理，仅保留原5443/8143与用户浏览器供体验；原图复用且无后端规则变化。完整证据output/tool-hold-polish/final-verification.json；玩家主观认可、物理设备/系统输入未冒称通过。
+
+2026-10-24 task132：用户再次拒绝task131挂件式握持，要求参考武器专用人物动作。转为人物/手掌/工具一体的新绘动作帧，四工具四向待机行走使用，兼容原外观和升级；生成源与处理记录、实际Cocos和劳动回归后发布默认5443。详见docs/tasks/132-tool-actor-art.md，起点output/tool-poses-132/baseline.json。
+
+
+task132完成：四工具×六外观使用新绘人物/手臂/握柄/工具一体关键帧，四向和行走/工作分明，替换旧叠层；24运行图集（576槽），25原创源含1未采用修正稿，完整取舍/镜像/脚底归一化可重建。升级功能与图标保留，四档共享动作金属几何，材质未分别重绘。官方Creator3.8.8 release/真实类型、5单元、同包三套28组171图通过；早期导入meta漂移和跨帧断言误报独立保留。新包发布默认5443，原服务已退出后按原SQLite/cookie恢复，原Chrome凭证继续原小屋斧头实看，两玩家库存/快捷保持。33测试PID/4profile和专用SDK缓存清理，QA5508/8208停止，自建预览标签关闭，仅保留5443/8143。额外裁切截图自动审批超时，未绕过。完整报告docs/tasks/132-tool-actor-art.md，聚合output/tool-poses-132/final-verification.json；玩家主观认可/物理设备未冒称通过。
+
+## 2026-10-25 task133 — 世界反馈减法（进行中）
+
+用户要求按已评审建议去掉常驻矩形/四角框与普通失败大横幅，保留轻量反馈并更新默认5443。实际实现与检查记录见 docs/tasks/133-world-feedback-reduction.md；使用 ui-ux-pro-max、Playwright 及 develop-web-game 的实际截图/文本/输入验证流程。没有新增美术或变更玩家存档规则。
+
+### task133 最终交付
+
+常驻物件/工具框移除；资源局部短提示、有效耕作落点、必要失败/确认与重连保留。最终3单元及同包三套浏览器24组通过，逐项核对默认5443的995资源；原Chrome同凭证接续小屋，阻挡点击无横幅，两玩家库存/工具/田地/位置不变。保留原5443/8143、原库/cookie及回退包，自有QA和标签清理见任务133与output/world-feedback-133/cleanup.json。无新增素材/后端规则、提交或外部发布。玩家主观反馈另行验收。
+
+## 2026-10-25 task134 — 手持交互与口袋优先分配
+
+已更新默认5443：四工具E/点击NPC、持锄进屋；确认获得物品优先空袋、满袋进原行囊总览；世界口袋拖动/交换及取消；重要提醒和工具门槛可见且可查看。4单元、同包三套25组/62图通过，995资源逐项HTTP核验，原Chrome拖放/提醒详情实测。两玩家库存/工具/田地/位置不变，原口袋排列恢复；68测试PID、11profile、自有标签和SDK清理，默认服务保留。无新美术、后端规则或外部发布；命令、截图、分轮与边界见 docs/tasks/134-held-interaction-and-pockets.md。

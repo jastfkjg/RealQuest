@@ -1,5 +1,8 @@
 """Authoritative geography used by the Cocos client and offline art tools."""
 from math import hypot
+import json
+from pathlib import Path
+from .farm_land import cell_by_id
 from .journey_world import AREAS, TRAVEL_NPCS, passage
 from .combat_world import CAVE_MAPS, CAVE_ENTRY
 
@@ -87,21 +90,109 @@ INTERIORS['inn'] = interior('inn','灯穗旅店',[
 INTERIORS['inn']['objects'][0] = passage('inn_exit','返回南门街',240,328,'city')
 OBJECTS.append(passage('village_departure','东行路牌 · 苇风渡口',1816,352,'crossing'))
 OBJECTS.append(CAVE_ENTRY)
-INTERIORS['workshop']['objects'].append({'id':'armory_counter','kind':'armory','name':'武备台 · 购买与打造','x':376,'y':280,'hitbox':[352,224,48,32]})
+INTERIORS['workshop']['objects'].append({'id':'armory_counter','kind':'armory','name':'锻造工作台 · 按图纸打造','x':376,'y':280,'hitbox':[352,224,48,32]})
+INTERIORS['workshop']['objects'].append({'id':'blacksmith','kind':'blacksmith','name':'阿焰 · 铁匠','x':376,'y':184,'hitbox':[360,142,32,46]})
 INTERIORS['library']['objects'].append({'id':'spell_desk','kind':'spellbook','name':'术式研习 · 火花术','x':112,'y':232})
-WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS}
+# Farmable home lawn; the original six plot IDs and all landmarks stay stable.
+FARM_CELLS = []
+for row in range(9):
+    for col in range(7):
+        x,y=88+col*48,440+row*48
+        if col in (1,2,3) and row in (0,1): continue
+        if 116 <= x <= 160 and y <= 600: continue
+        if any(x+23>rx and x-23<rx+w and y+23>ry and y-23<ry+h for rx,ry,w,h in OBSTACLES): continue
+        if any(hypot(x-o['x'],y-o['y'])<42 for o in OBJECTS if o['kind']!='plot'): continue
+        FARM_CELLS.append({'id':f'farm_{col}_{row}','kind':'soil','name':'可开垦土地','x':x,'y':y})
+# Historical IDs only: new grass is resolved from coordinates, not this list.
+ROADS = json.loads(Path(__file__).with_name('village_terrain.json').read_text())['roads']
+HOME_LAND = {'bounds':[0,0,448,680],'origin':[88,440],'step':48,
+             'legacy':[o for o in OBJECTS if o['kind']=='plot']+FARM_CELLS,
+             'roads':ROADS,
+             'blocked':OBSTACLES + [[o['x']-24,o['y']-24,48,48] for o in OBJECTS if o['kind'] not in ['plot','building']] +
+                       [[389,211,32,24],[366,286,32,20],[64,202,32,20],[206,204,32,20],[72,270,32,20],[332,382,32,20]]}
+WORLD = {'id':'overworld','name':'回响大陆','width':1920,'height':1280,'tile':16,'objects':OBJECTS,'trees':TREES,'obstacles':OBSTACLES,'regions':REGIONS,'interiors':INTERIORS,'areas':AREAS,'travel_npcs':TRAVEL_NPCS,'roads':ROADS,'cultivation':HOME_LAND,'water_sources':RIVER+LAKE}
+
+# A connected home paddock leaves every existing field and saved crop intact.
+from .ranching import SHELTERS
+OBJECTS.append({'id':'pasture_gate','kind':'ranch_gate','name':'家园牧场入口','x':400,'y':600,'destination':'pasture'})
+# Reserve new soil around the gate while leaving all previously tilled IDs and
+# planted crops intact. HOME_LAND was built before this connected area existed.
+HOME_LAND['blocked'].append([376,576,48,48])
+# Trees and the historical wood/stone anchors are now actual work targets.
+# Old marker IDs stay stable for quests; no material pile respawns on a timer.
+RESOURCE_NODES = []
+for i,(x,y) in enumerate(TREES):
+    RESOURCE_NODES.append({'id':f'tree_{i}','kind':'resource','name':'橡树' if x<=1232 else '林地松树',
+        'x':x,'y':y,'resource':'tree','home':x<448 and y<680,
+        'art':'fir' if x>1232 else 'birch' if i%7==0 else 'oak-alt' if i%2 else 'oak',
+        'hitbox':[x-26,y-64,52,80],'collider':[x-10,y-8,20,24]})
+for obj in OBJECTS:
+    if obj['kind'] not in ['wood','stone']:continue
+    x,y=obj['x'],obj['y'];tree=obj['kind']=='wood'
+    ore={'stone_3':'copper','stone_4':'copper','stone_5':'iron','stone_6':'iron','stone_7':'gold'}.get(obj['id'],'stone')
+    obj.update(kind='resource',resource='tree' if tree else ore,
+        name='橡树' if tree else {'stone':'岩石','copper':'铜矿脉','iron':'铁矿脉','gold':'金矿脉'}[ore],
+        home=x<448 and y<680,art='oak',hitbox=[x-26,y-64 if tree else y-30,52,80 if tree else 46],
+        collider=[x-10,y-8,20,24] if tree else [x-16,y-12,32,24])
+    RESOURCE_NODES.append(obj)
+for i,(kind,x,y) in enumerate([('copper',112,816),('copper',272,864),('copper',384,928),
+        ('iron',112,1008),('iron',368,1056),('gold',112,1152),('gold',288,1184)]):
+    RESOURCE_NODES.append({'id':f'vein_{kind}_{i}','kind':'resource','resource':kind,
+        'name':{'copper':'铜矿脉','iron':'铁矿脉','gold':'金矿脉'}[kind],
+        'x':x,'y':y,'home':False,'hitbox':[x-26,y-30,52,46],'collider':[x-16,y-12,32,24]})
+WORLD['resource_nodes']=RESOURCE_NODES
+# Resource colliders move out of the static array, so saved depletion can clear
+# navigation and cultivation together without changing terrain or landmark IDs.
+WORLD['permanent_obstacles']=[o['rect'] for o in OBJECTS if 'rect' in o]+RIVER+LAKE
+HOME_LAND['permanent_blocked']=WORLD['permanent_obstacles']+[
+    [o['x']-24,o['y']-24,48,48] for o in OBJECTS if o['kind'] not in ['plot','soil','building','resource']]+[
+    [389,211,32,24],[366,286,32,20],[64,202,32,20],[206,204,32,20],[72,270,32,20],[332,382,32,20]]
+AREAS['pasture'] = {'id':'pasture','name':'向阳牧场','width':896,'height':544,'tile':16,'outdoor':True,
+    'objects':[
+        {'id':'pasture_exit','kind':'ranch_exit','name':'回到家园','x':448,'y':496,'destination':'overworld'},
+        {'id':'ranch_ledger','kind':'ranch_ledger','name':'牧场采购簿 · 米拉代订','x':448,'y':440},
+        *[{'id':'shelter_'+key,'kind':'shelter','name':s['name']+' · 建造与照料','x':s['x'],'y':s['y']} for key,s in SHELTERS.items()]],
+    'trees':[[40,72],[856,72],[40,392],[856,392]],
+    'obstacles':[[s['x']-s['width']/2,s['y']-s['height'],s['width'],s['height']-24] for s in SHELTERS.values()]}
 
 def map_for(location='overworld', state=None, now=None):
     base = WORLD if location == 'overworld' else (AREAS[location] if location in AREAS else INTERIORS[location])
     if state is None or now is None:
         return base
     from .residents import resident_objects
-    return {**base, 'objects': [o for o in base['objects'] if o['kind'] != 'npc'] + resident_objects(state, now, location)}
+    tilled=set(state.get('farm',{}).get('tilled',[f'plot_{i}' for i in range(6)]))
+    objects=[o for o in base['objects'] if o['kind'] not in ['npc','plot','soil','resource']]
+    if location=='overworld':
+        objects += [{**cell,'kind':'plot','name':'田地'} for key in tilled if (cell:=cell_by_id(HOME_LAND,key))]
+    if location=='pasture' and 'ranch' in state:
+        from .ranching import ranch_objects
+        objects += ranch_objects(state)
+    obstacles = list(base.get('permanent_obstacles',base['obstacles']))
+    cultivation=base.get('cultivation')
+    if location=='overworld':
+        from .tools import resource_objects,land_for
+        nodes=resource_objects(state,base,now)
+        objects+=nodes
+        obstacles+=[n['collider'] for n in nodes if n['resource_state']['solid']]
+        cultivation=land_for(state,now)
+    from .construction import chest_objects, CARPENTER
+    if location == 'home':
+        boxes = chest_objects(state)
+        objects += boxes
+        obstacles += [o['hitbox'] for o in boxes]
+    if location == 'pasture':
+        from .production import machine_objects
+        machines = machine_objects(state)
+        objects += machines
+        obstacles += [o['hitbox'] for o in machines]
+    if location == 'workshop':
+        objects.append(CARPENTER)
+    return {**base, 'objects': objects + resident_objects(state, now, location), 'obstacles': obstacles,**({'cultivation':cultivation} if cultivation else {})}
 
-def walkable(x,y,location='overworld'):
-    world=map_for(location)
+def walkable(x,y,location='overworld',state=None,now=None):
+    world=map_for(location,state,now)
     return 24 <= x <= world['width']-24 and 32 <= y <= world['height']-24 and not any(rx-9 < x < rx+w+9 and ry-7 < y < ry+h+7 for rx,ry,w,h in world['obstacles'])
 
-def clear_path(a,b,location='overworld'):
+def clear_path(a,b,location='overworld',state=None,now=None):
     steps=max(1,int(hypot(b['x']-a['x'],b['y']-a['y'])/4))
-    return all(walkable(a['x']+(b['x']-a['x'])*i/steps,a['y']+(b['y']-a['y'])*i/steps,location) for i in range(1,steps+1))
+    return all(walkable(a['x']+(b['x']-a['x'])*i/steps,a['y']+(b['y']-a['y'])*i/steps,location,state,now) for i in range(1,steps+1))

@@ -1,0 +1,1764 @@
+{
+  "schema_version": 1,
+  "creator": "OpenAI built-in image_gen; original RealQuest art",
+  "license": "Original project-generated artwork; no third-party sprites",
+  "processing": "six columns by four rows; alpha>=160; nearest-neighbor; source-pixel cell alignment retained for plant scale",
+  "sources": [
+    {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "sha256": "621e3c6163686fc98e2ddde6c5711caaae0d6f8a577a07a3fa47753c1cdeae7b",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "assets/generated/hearthwood/farming-v1/sheet-0.prompt.txt",
+      "prompt_sha256": "fb6531aca47385321b4751d5589610977ed7013898b73bf175ed96b8ac59dcde"
+    },
+    {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "sha256": "15941bd0a449ddf99344c546c165c7c3d217a4378a7c9ff47b10ff79052e6397",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "assets/generated/hearthwood/farming-v1/sheet-1.prompt.txt",
+      "prompt_sha256": "3d154aea4c513ef6b1fe7f714b8e97972b1bdda423620b2f24b835c78b2a852d"
+    },
+    {
+      "path": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "sha256": "c33863ed44df5de2d4f4cad18018694d553e94ddcc3378a9f1735a7fdc89c77c",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "assets/generated/hearthwood/farming-v1/sheet-2.prompt.txt",
+      "prompt_sha256": "0c2b0b1f5f0bfd9570566717aca7175168e8a1781febad0a77760c8e85f957b2"
+    }
+  ],
+  "script": "tools/build_farming_art.py",
+  "script_sha256": "06a1d2e3eba5429675f7bdf67f48df676319628a58fc336c6255c9905cb85aad",
+  "records": [
+    {
+      "crop_id": "radish",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        0,
+        0,
+        288,
+        256
+      ],
+      "alpha_bounds": [
+        52,
+        62,
+        251,
+        249
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed.png",
+      "binding": "items/seed",
+      "width": 64,
+      "height": 64,
+      "sha256": "442fbaa8d72f9e467a67fbc8efc3e3975bf0a0a9898cff65c44717514ebd1737"
+    },
+    {
+      "crop_id": "radish",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        288,
+        0,
+        512,
+        256
+      ],
+      "alpha_bounds": [
+        58,
+        167,
+        162,
+        244
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/radish-1.png",
+      "binding": "farming/radish-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "96a50ebe8daee78b01e278290efbd5a92f3e557f4b4c81973fb51ef7282b7966"
+    },
+    {
+      "crop_id": "radish",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        512,
+        0,
+        784,
+        256
+      ],
+      "alpha_bounds": [
+        34,
+        117,
+        216,
+        245
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/radish-2.png",
+      "binding": "farming/radish-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "e15d4eba53265a89a38a419820e8a92bf9dbcedefac34973b2393bbb87729cfe"
+    },
+    {
+      "crop_id": "radish",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        784,
+        0,
+        1024,
+        256
+      ],
+      "alpha_bounds": [
+        5,
+        33,
+        210,
+        245
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/radish-3.png",
+      "binding": "farming/radish-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "42ac917da0b021eb782fd1077c55568872351136db37a35aa7ad49e2d39e6f1f"
+    },
+    {
+      "crop_id": "radish",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1024,
+        0,
+        1308,
+        256
+      ],
+      "alpha_bounds": [
+        5,
+        23,
+        256,
+        245
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/radish-4.png",
+      "binding": "farming/radish-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "9ba657804ff69192a8183be3cda2d24c6c99bc3817e7f8833437b6af4b8be520"
+    },
+    {
+      "crop_id": "radish",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1308,
+        0,
+        1536,
+        256
+      ],
+      "alpha_bounds": [
+        0,
+        38,
+        203,
+        248
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/crop.png",
+      "binding": "items/crop",
+      "width": 64,
+      "height": 64,
+      "sha256": "c139af45986138e59a73e7505c4b0ab807fb785efb1a70e9d22abbd0e6109ab0"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        0,
+        256,
+        288,
+        512
+      ],
+      "alpha_bounds": [
+        48,
+        51,
+        263,
+        240
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_wheat.png",
+      "binding": "items/seed_wheat",
+      "width": 64,
+      "height": 64,
+      "sha256": "e01a5903f4d1af378ece5aa95d32bf71f255d81b111852262be34bb4f9b503f0"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        288,
+        256,
+        512,
+        512
+      ],
+      "alpha_bounds": [
+        65,
+        135,
+        158,
+        230
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/wheat-1.png",
+      "binding": "farming/wheat-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "c89863e6473d2d969a8176bbe871b697126d738869c5755eb7b77101c83428fe"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        512,
+        256,
+        784,
+        512
+      ],
+      "alpha_bounds": [
+        28,
+        71,
+        220,
+        230
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/wheat-2.png",
+      "binding": "farming/wheat-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "0c591102f3d92efcdbbdaa20ba2f75d9f960b780e290ddbe67767b3d520b84f6"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        784,
+        256,
+        1024,
+        512
+      ],
+      "alpha_bounds": [
+        4,
+        17,
+        217,
+        232
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/wheat-3.png",
+      "binding": "farming/wheat-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "14fb4609b354244106ea465c55063655f5f189cbd90ce5a335fd94dc26dbcc3d"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1024,
+        256,
+        1308,
+        512
+      ],
+      "alpha_bounds": [
+        5,
+        15,
+        257,
+        233
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/wheat-4.png",
+      "binding": "farming/wheat-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "007247ec5128fc7787fa2be0f21b7945ab4fee17e0bd952318a3cd6d9fec3afe"
+    },
+    {
+      "crop_id": "wheat",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1308,
+        256,
+        1536,
+        512
+      ],
+      "alpha_bounds": [
+        12,
+        17,
+        207,
+        241
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/wheat.png",
+      "binding": "items/wheat",
+      "width": 64,
+      "height": 64,
+      "sha256": "e6fe577b616077e7969738bed20a9c82f3dc75457165833f32132fb45f67661f"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        0,
+        512,
+        288,
+        768
+      ],
+      "alpha_bounds": [
+        50,
+        42,
+        261,
+        225
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_carrot.png",
+      "binding": "items/seed_carrot",
+      "width": 64,
+      "height": 64,
+      "sha256": "be1a4b56f4fe82c7285981b003d62f5b0cbc829d60b645129b2787bdd3d511ef"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        288,
+        512,
+        512,
+        768
+      ],
+      "alpha_bounds": [
+        51,
+        121,
+        167,
+        219
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/carrot-1.png",
+      "binding": "farming/carrot-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "56bb8511f6f0ef38bd90387a4fdcafc23d994cf2cdad18327272109b710970a7"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        512,
+        512,
+        784,
+        768
+      ],
+      "alpha_bounds": [
+        31,
+        62,
+        221,
+        221
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/carrot-2.png",
+      "binding": "farming/carrot-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "ad9ad55b4d0d944309af75678af4c66b39e33cd2f0ac77057109362c2ccb753e"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        784,
+        512,
+        1024,
+        768
+      ],
+      "alpha_bounds": [
+        0,
+        11,
+        217,
+        221
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/carrot-3.png",
+      "binding": "farming/carrot-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "ce77641bc5c91fe35a856d77d4945af74a5b0a4947052c9b4c85537cc20380d1"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1024,
+        512,
+        1308,
+        768
+      ],
+      "alpha_bounds": [
+        6,
+        2,
+        259,
+        221
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/carrot-4.png",
+      "binding": "farming/carrot-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "b4b0eb59ea70db4b1252494e7f25b5de780143edfdd95396c5751fa0f853fdda"
+    },
+    {
+      "crop_id": "carrot",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1308,
+        512,
+        1536,
+        768
+      ],
+      "alpha_bounds": [
+        0,
+        5,
+        208,
+        229
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/carrot.png",
+      "binding": "items/carrot",
+      "width": 64,
+      "height": 64,
+      "sha256": "bd5cf3c1e66a35e3aa7937bf2cbe76a21bebaf29f2814dd2f05c280de77d832f"
+    },
+    {
+      "crop_id": "potato",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        0,
+        768,
+        288,
+        1024
+      ],
+      "alpha_bounds": [
+        48,
+        26,
+        256,
+        213
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_potato.png",
+      "binding": "items/seed_potato",
+      "width": 64,
+      "height": 64,
+      "sha256": "72378f646ffee952431c6bb920c98ecb35b4f37b09c5c32c2ab5f18267911453"
+    },
+    {
+      "crop_id": "potato",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        288,
+        768,
+        512,
+        1024
+      ],
+      "alpha_bounds": [
+        41,
+        108,
+        184,
+        205
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/potato-1.png",
+      "binding": "farming/potato-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "acd20b606d18f1809b943cd426289923d1661803e6b62cb5d0323070f2e6d8ee"
+    },
+    {
+      "crop_id": "potato",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        512,
+        768,
+        784,
+        1024
+      ],
+      "alpha_bounds": [
+        16,
+        12,
+        225,
+        208
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/potato-2.png",
+      "binding": "farming/potato-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "207e0350f25136171b2a95041564c78a22f6a31cc2f725d6a57616109e428b80"
+    },
+    {
+      "crop_id": "potato",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        784,
+        768,
+        1024,
+        1024
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        225,
+        210
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/potato-3.png",
+      "binding": "farming/potato-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "f8e942f4f11f2c135e8f3b029d054e812b453ab985f8c4b710d37abf4f267806"
+    },
+    {
+      "crop_id": "potato",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1024,
+        768,
+        1308,
+        1024
+      ],
+      "alpha_bounds": [
+        6,
+        0,
+        271,
+        221
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/potato-4.png",
+      "binding": "farming/potato-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "fa226cbeb782bdf9456f8262ad7e8c0a40d8f7183d4a3b51fa440c8432890006"
+    },
+    {
+      "crop_id": "potato",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-0.png",
+      "crop": [
+        1308,
+        768,
+        1536,
+        1024
+      ],
+      "alpha_bounds": [
+        7,
+        50,
+        201,
+        203
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/potato.png",
+      "binding": "items/potato",
+      "width": 64,
+      "height": 64,
+      "sha256": "4136beaf332d01585e2db10538f4ea8d060b2850fd42819bb132f2f56c56e6eb"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        0,
+        0,
+        288,
+        280
+      ],
+      "alpha_bounds": [
+        46,
+        69,
+        217,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_tomato.png",
+      "binding": "items/seed_tomato",
+      "width": 64,
+      "height": 64,
+      "sha256": "63cd4466614ff74cdce6cec56f487e937f6a238a17368aa44254857a2f79f79f"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        288,
+        0,
+        512,
+        280
+      ],
+      "alpha_bounds": [
+        47,
+        157,
+        151,
+        250
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/tomato-1.png",
+      "binding": "farming/tomato-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "bdfe2794d590225fec38eb1a00bd354ce456ac893196740a0aea50e914cb2fc1"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        512,
+        0,
+        784,
+        280
+      ],
+      "alpha_bounds": [
+        41,
+        97,
+        216,
+        252
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/tomato-2.png",
+      "binding": "farming/tomato-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "c60fca4a49015ac99fc429b7b5b3ad78db777475b4d930f0b62827dcfa931701"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        784,
+        0,
+        1024,
+        280
+      ],
+      "alpha_bounds": [
+        4,
+        60,
+        187,
+        255
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/tomato-3.png",
+      "binding": "farming/tomato-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "e544075c068ec53a6497e7d917019509bf1dc156bc86f44764145cdec94eea44"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1024,
+        0,
+        1308,
+        280
+      ],
+      "alpha_bounds": [
+        15,
+        17,
+        210,
+        256
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/tomato-4.png",
+      "binding": "farming/tomato-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "35303b48a9389e9cba58b7a8c297da20c7a491fdc6326a4f5adfff1be906f8a4"
+    },
+    {
+      "crop_id": "tomato",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1308,
+        0,
+        1536,
+        280
+      ],
+      "alpha_bounds": [
+        8,
+        119,
+        186,
+        260
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/tomato.png",
+      "binding": "items/tomato",
+      "width": 64,
+      "height": 64,
+      "sha256": "a86a70c7c2f1c2e925040845a6e3f0a399322a89364b330f2ffaff306b051807"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        0,
+        280,
+        288,
+        492
+      ],
+      "alpha_bounds": [
+        43,
+        22,
+        218,
+        199
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_strawberry.png",
+      "binding": "items/seed_strawberry",
+      "width": 64,
+      "height": 64,
+      "sha256": "184c245f8ac9ddb05037d4bab87bf26d1900b4b0886fab60fe69acd8d70a6cfe"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        288,
+        280,
+        512,
+        492
+      ],
+      "alpha_bounds": [
+        48,
+        103,
+        159,
+        193
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/strawberry-1.png",
+      "binding": "farming/strawberry-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "d80154ffec767d226d72c1f458b700443798d3b94937b2b7ca3ebdf3942b3e26"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        512,
+        280,
+        784,
+        492
+      ],
+      "alpha_bounds": [
+        35,
+        66,
+        218,
+        193
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/strawberry-2.png",
+      "binding": "farming/strawberry-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "6f0293fa18cbc3eb86729d96d7649ad5862f312d5e76aaab9c55c2034efbce65"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        784,
+        280,
+        1024,
+        492
+      ],
+      "alpha_bounds": [
+        0,
+        27,
+        197,
+        199
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/strawberry-3.png",
+      "binding": "farming/strawberry-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "8cfe9d273903ed36f26b1d10a72db5b73d450099fa087486c031f19aca88bcde"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1024,
+        280,
+        1308,
+        492
+      ],
+      "alpha_bounds": [
+        3,
+        12,
+        234,
+        200
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/strawberry-4.png",
+      "binding": "farming/strawberry-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "3dfb9d54de402f60bd55009872b327e74083dabc3e0b31447eb4511b697a1615"
+    },
+    {
+      "crop_id": "strawberry",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1308,
+        280,
+        1536,
+        492
+      ],
+      "alpha_bounds": [
+        8,
+        56,
+        189,
+        197
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/strawberry.png",
+      "binding": "items/strawberry",
+      "width": 64,
+      "height": 64,
+      "sha256": "f630fbf0e611e4c83a1bc386e17923503a900b79d194c51c1a43b99e88444e1d"
+    },
+    {
+      "crop_id": "corn",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        0,
+        492,
+        288,
+        750
+      ],
+      "alpha_bounds": [
+        38,
+        66,
+        219,
+        243
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_corn.png",
+      "binding": "items/seed_corn",
+      "width": 64,
+      "height": 64,
+      "sha256": "0208dd8d912d87d761cd98594fbb887b330d74285ab932beb68ef95b91cdb829"
+    },
+    {
+      "crop_id": "corn",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        288,
+        492,
+        512,
+        750
+      ],
+      "alpha_bounds": [
+        35,
+        128,
+        166,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/corn-1.png",
+      "binding": "farming/corn-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "0f157c816f864dae6975a4571123a6f6029d2a8f9af56499d03960f61219d88d"
+    },
+    {
+      "crop_id": "corn",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        512,
+        492,
+        784,
+        750
+      ],
+      "alpha_bounds": [
+        49,
+        40,
+        210,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/corn-2.png",
+      "binding": "farming/corn-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "23c94033eeaaee1f49f90c3d62bb3658c9647a6b690008204b0d34b92cf7313f"
+    },
+    {
+      "crop_id": "corn",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        784,
+        492,
+        1024,
+        750
+      ],
+      "alpha_bounds": [
+        3,
+        13,
+        187,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/corn-3.png",
+      "binding": "farming/corn-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "1c244b42aa9326ac4165b0959b79b2a15c4389cc901beda0dd6c5831617b0812"
+    },
+    {
+      "crop_id": "corn",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1024,
+        492,
+        1308,
+        750
+      ],
+      "alpha_bounds": [
+        3,
+        0,
+        228,
+        248
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/corn-4.png",
+      "binding": "farming/corn-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "b14c7892d24db1a49f2e9d19d87f3295b4730708c44005919e2162440a0e8c06"
+    },
+    {
+      "crop_id": "corn",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1308,
+        492,
+        1536,
+        750
+      ],
+      "alpha_bounds": [
+        13,
+        51,
+        200,
+        245
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/corn.png",
+      "binding": "items/corn",
+      "width": 64,
+      "height": 64,
+      "sha256": "3feb1fc76c28f99c230808a1cfbc78560118a6b6ea438e83fa50331f07931717"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        0,
+        750,
+        288,
+        1024
+      ],
+      "alpha_bounds": [
+        46,
+        44,
+        219,
+        228
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_eggplant.png",
+      "binding": "items/seed_eggplant",
+      "width": 64,
+      "height": 64,
+      "sha256": "012c04daf5d660d2365cfdc3c1c06bacfc3a2a4d5de2a7dd95c019e550312d6d"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        288,
+        750,
+        512,
+        1024
+      ],
+      "alpha_bounds": [
+        54,
+        101,
+        175,
+        219
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/eggplant-1.png",
+      "binding": "farming/eggplant-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "1d22e5d0a4cfdbe0a8b5ee3b1402a620e71f815d75ac005f67e671df35915f7f"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        512,
+        750,
+        784,
+        1024
+      ],
+      "alpha_bounds": [
+        31,
+        39,
+        214,
+        218
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/eggplant-2.png",
+      "binding": "farming/eggplant-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "e46385de05ce67ba2a298bac89cb4260e3317701edf07f80b0b342f4cb9feb3b"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        784,
+        750,
+        1024,
+        1024
+      ],
+      "alpha_bounds": [
+        0,
+        21,
+        200,
+        222
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/eggplant-3.png",
+      "binding": "farming/eggplant-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "09108bbe046d7f07416be24ceee65076fe094386dce33d3cc3da57ec5562c5d1"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1024,
+        750,
+        1308,
+        1024
+      ],
+      "alpha_bounds": [
+        3,
+        0,
+        232,
+        237
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/eggplant-4.png",
+      "binding": "farming/eggplant-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "1f3a417ca719604c571867560e0b5407223c11d70d662aee4fcd5771207f309a"
+    },
+    {
+      "crop_id": "eggplant",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-1.png",
+      "crop": [
+        1308,
+        750,
+        1536,
+        1024
+      ],
+      "alpha_bounds": [
+        4,
+        50,
+        193,
+        233
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/eggplant.png",
+      "binding": "items/eggplant",
+      "width": 64,
+      "height": 64,
+      "sha256": "682ff65bc49be3ef24355fe122bbad28fdc616ce5590a491a768003b7aac59a9"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        0,
+        0,
+        288,
+        272
+      ],
+      "alpha_bounds": [
+        50,
+        52,
+        271,
+        257
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_pumpkin.png",
+      "binding": "items/seed_pumpkin",
+      "width": 64,
+      "height": 64,
+      "sha256": "05cf2767e0f1e186395bbb21719971138fbd08605d9adcba0fcbeb8af105f59d"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        288,
+        0,
+        512,
+        272
+      ],
+      "alpha_bounds": [
+        66,
+        169,
+        191,
+        240
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/pumpkin-1.png",
+      "binding": "farming/pumpkin-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "33da47cc4f51401087243724add3dde23dd12facd1cfbf9e4ceb633e09af7f0e"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        512,
+        0,
+        784,
+        272
+      ],
+      "alpha_bounds": [
+        24,
+        97,
+        235,
+        246
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/pumpkin-2.png",
+      "binding": "farming/pumpkin-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "e611b7f0d38cdf6a190a5c2147465a63ae508e512bb7cc86ea6d5a1d5e3262ce"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        784,
+        0,
+        1024,
+        272
+      ],
+      "alpha_bounds": [
+        0,
+        56,
+        218,
+        249
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/pumpkin-3.png",
+      "binding": "farming/pumpkin-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "ac940640c99a7f99e76f5e52d752bafe0e4e5e6e69756c8e93bb74e2a7bc7cd5"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1024,
+        0,
+        1308,
+        272
+      ],
+      "alpha_bounds": [
+        0,
+        38,
+        258,
+        259
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/pumpkin-4.png",
+      "binding": "farming/pumpkin-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "b6cecf390de1e5e1180fdafd4c6044ca07563ca43d6dc059832a8586bd1d0aff"
+    },
+    {
+      "crop_id": "pumpkin",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1308,
+        0,
+        1536,
+        272
+      ],
+      "alpha_bounds": [
+        13,
+        90,
+        195,
+        251
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/pumpkin.png",
+      "binding": "items/pumpkin",
+      "width": 64,
+      "height": 64,
+      "sha256": "3f8e1603c657ce2887144f1eb7b1cc1171d8e8167167984cd55e90b3124a9bfe"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        0,
+        272,
+        288,
+        512
+      ],
+      "alpha_bounds": [
+        50,
+        11,
+        278,
+        218
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_cabbage.png",
+      "binding": "items/seed_cabbage",
+      "width": 64,
+      "height": 64,
+      "sha256": "afb47893331cdb3764c47b373309535a1a789159275b59b8701975737e16d682"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        288,
+        272,
+        512,
+        512
+      ],
+      "alpha_bounds": [
+        53,
+        117,
+        193,
+        201
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/cabbage-1.png",
+      "binding": "farming/cabbage-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "37a6ad80a6a6a940659a5a81e5584721b136c3bc03a570ae0efa02d3f9770b21"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        512,
+        272,
+        784,
+        512
+      ],
+      "alpha_bounds": [
+        24,
+        62,
+        228,
+        207
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/cabbage-2.png",
+      "binding": "farming/cabbage-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "b3c4e881233f1fe1742805d1c2cc278dc85cfc30b8d0f96839ee73ca8a321554"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        784,
+        272,
+        1024,
+        512
+      ],
+      "alpha_bounds": [
+        0,
+        28,
+        214,
+        217
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/cabbage-3.png",
+      "binding": "farming/cabbage-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "22defb4dd2160f08307685baff9945d0e756f6436275935f4aa37a180b803399"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1024,
+        272,
+        1308,
+        512
+      ],
+      "alpha_bounds": [
+        1,
+        16,
+        258,
+        213
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/cabbage-4.png",
+      "binding": "farming/cabbage-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "7132ed918e692012ef1be2ef797d26241e302de3ce1c0959bb434fccca2af572"
+    },
+    {
+      "crop_id": "cabbage",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1308,
+        272,
+        1536,
+        512
+      ],
+      "alpha_bounds": [
+        11,
+        51,
+        195,
+        213
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/cabbage.png",
+      "binding": "items/cabbage",
+      "width": 64,
+      "height": 64,
+      "sha256": "239b9080cd746df104d990e9b62e0ffde1872b1c2ed2411d70526ad0fb3344e8"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        0,
+        512,
+        288,
+        768
+      ],
+      "alpha_bounds": [
+        49,
+        11,
+        276,
+        241
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_sunflower.png",
+      "binding": "items/seed_sunflower",
+      "width": 64,
+      "height": 64,
+      "sha256": "02eb3f9f03bd83a57e52f8404c7f709fef6a02d09cec51e79545e70a0115fc46"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        288,
+        512,
+        512,
+        768
+      ],
+      "alpha_bounds": [
+        54,
+        135,
+        205,
+        221
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/sunflower-1.png",
+      "binding": "farming/sunflower-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "ae3ef08f283bab4104e3b4f9e35c589b327087b4b831902ef89f655655cb261a"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        512,
+        512,
+        784,
+        768
+      ],
+      "alpha_bounds": [
+        47,
+        48,
+        205,
+        223
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/sunflower-2.png",
+      "binding": "farming/sunflower-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "f3973cffc801e0c9aa63c62937f333b28845edef396839aedf07db1c8f443f4f"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        784,
+        512,
+        1024,
+        768
+      ],
+      "alpha_bounds": [
+        14,
+        12,
+        194,
+        232
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/sunflower-3.png",
+      "binding": "farming/sunflower-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "476f733d04004406813ab106b2072490803f3a48b19f90605a9ce13f1338027f"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1024,
+        512,
+        1308,
+        768
+      ],
+      "alpha_bounds": [
+        14,
+        0,
+        242,
+        232
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/sunflower-4.png",
+      "binding": "farming/sunflower-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "e37e8a72af9c37d6688a70473738c1d817e5ed2d34615abf72bedd44ef42b17c"
+    },
+    {
+      "crop_id": "sunflower",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1308,
+        512,
+        1536,
+        768
+      ],
+      "alpha_bounds": [
+        0,
+        56,
+        200,
+        236
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/sunflower.png",
+      "binding": "items/sunflower",
+      "width": 64,
+      "height": 64,
+      "sha256": "34841eb3e3759d9458fcade1fd4f77b2d1f3d775d2779d0d5d4e05f0faf4f639"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "seed",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        0,
+        768,
+        288,
+        1024
+      ],
+      "alpha_bounds": [
+        53,
+        4,
+        276,
+        217
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/seed_blueberry.png",
+      "binding": "items/seed_blueberry",
+      "width": 64,
+      "height": 64,
+      "sha256": "36b418e21bbaec4795ef880b7a168772e71f0f3e763db7f465245407f906c545"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "sprout",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        288,
+        768,
+        512,
+        1024
+      ],
+      "alpha_bounds": [
+        65,
+        83,
+        187,
+        200
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/blueberry-1.png",
+      "binding": "farming/blueberry-1",
+      "width": 96,
+      "height": 96,
+      "sha256": "652bb036f2d50c79a2fe3f5ee738dd7437f0882911fb7e121579b2bb0df073c5"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "young",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        512,
+        768,
+        784,
+        1024
+      ],
+      "alpha_bounds": [
+        44,
+        38,
+        216,
+        201
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/blueberry-2.png",
+      "binding": "farming/blueberry-2",
+      "width": 96,
+      "height": 96,
+      "sha256": "ee900c7ca17aa57e8ff71df539dff274232bb91dc5cd86218d9a76eb1a52b096"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "growing",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        784,
+        768,
+        1024,
+        1024
+      ],
+      "alpha_bounds": [
+        0,
+        5,
+        205,
+        202
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/blueberry-3.png",
+      "binding": "farming/blueberry-3",
+      "width": 96,
+      "height": 96,
+      "sha256": "1392a9146279c7bf436c94eb95c5f050557fd0dece0702ab527dc11732f7253e"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "mature",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1024,
+        768,
+        1308,
+        1024
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        253,
+        211
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "largest-connected-plant",
+      "path": "assets/derived/farming-v1/plants/blueberry-4.png",
+      "binding": "farming/blueberry-4",
+      "width": 96,
+      "height": 96,
+      "sha256": "f1140d25a8e312df2127af78a5b36e09f4c60688967029a6f83dcdc5fedc4306"
+    },
+    {
+      "crop_id": "blueberry",
+      "role": "produce",
+      "source": "assets/generated/hearthwood/farming-v1/sheet-2.png",
+      "crop": [
+        1308,
+        768,
+        1536,
+        1024
+      ],
+      "alpha_bounds": [
+        7,
+        63,
+        186,
+        203
+      ],
+      "alpha_threshold": 160,
+      "component_rule": "all-icon-components",
+      "path": "assets/derived/farming-v1/items/blueberry.png",
+      "binding": "items/blueberry",
+      "width": 64,
+      "height": 64,
+      "sha256": "5c7d6004fe6795b80257e2ab825e894d0af073da1b120335c30eefa9f1562b11"
+    }
+  ]
+}

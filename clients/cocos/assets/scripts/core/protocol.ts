@@ -1,3 +1,5 @@
+import type {RanchState,RanchView} from './ranching';
+import type {ToolState,ToolRules,ResourceState} from './tools';
 export type Attribute =
   "strength" | "wisdom" | "craft" | "stewardship" | "bond";
 export interface WorldObject {
@@ -14,12 +16,22 @@ export interface WorldObject {
   location?: string;
   activity?: string;
   walking?: boolean;
+  resource?:string;home?:boolean;art?:string;collider?:number[];resource_state?:ResourceState;planted?:boolean;ready_tick?:number;
 }
-export interface WeaponDefinition {
+export interface GearDefinition {
+ id:string;name:string;route:string;tier:number;slot:string;price:number;region:string;sale:boolean;
+ blueprint_source:string;blueprint_price:number;known:boolean;effect_text:string;effect?:string;
+ min_stamina:number;use_science:number;use_magic:number;building:number;science:number;magic_level:number;
+ costs:Record<string,number>;craft_reasons:string[];use_reasons:string[];research_reasons:string[];
+ defense?:number;dodge_bonus?:number;hurt_bonus?:number;heal_bonus?:number;light?:boolean;
+}
+export interface WeaponDefinition extends GearDefinition {
+ style:string;focus:boolean;
   name: string;
   price: number;
   damage: number;
   interval: number;
+  windup?: number;
   reach: number;
   stamina: number;
   magic: boolean;
@@ -42,6 +54,19 @@ export interface CaveEnemy {
   tx: number;
   ty: number;
   style?: string;
+  hit_until?: number;
+  stagger_until?: number;
+  dead_at?: number;
+}
+export interface CombatAction {
+  kind: string;
+  style?: string;
+  angle?: number;
+  reach?: number;
+  until: number;
+  started: number;
+  hit_at?: number;
+  seq?: number;
 }
 export interface CombatView {
   encounter: string;
@@ -52,7 +77,13 @@ export interface CombatView {
     angle: number;
     until: number;
     wave: string;
+    side?: string;style?:string;effect?:string;
   }[];
+  gear?:Record<string,GearDefinition>;
+  equipment?:Record<string,string|null>;
+  blueprints?:Record<string,string>;
+  gear_stats?:{defense:number;dodge_bonus:number;hurt_bonus:number;heal_bonus:number;light:boolean};
+  gear_shop?:{region:string;name:string;target:string;craft_target:string;offers:string[];diagrams:string[];research:string[];craft:string[];materials:Record<string,{name:string;price:number;icon:string;summary:string}>};
   weapons: Record<string, WeaponDefinition>;
   enemies: CaveEnemy[];
   floor: number;
@@ -63,14 +94,16 @@ export interface CombatView {
     text: string;
     until: number;
     kind: string;
+    id?: number;
+    enemy?: string;
+    heavy?: boolean;
+    exposed?: boolean;
   }[];
-  cast: {
-    kind: string;
-    angle?: number;
-    reach?: number;
-    until: number;
-    started: number;
-  } | null;
+  cast: CombatAction | null;
+  action?: CombatAction | null;
+  dash?: { dx: number; dy: number; started: number; until: number } | null;
+  dodge_at?: number;
+  hurt_until?: number;
   message: string;
   cleared: boolean;
   unlocked: number;
@@ -182,6 +215,11 @@ export interface TravelOption {
   reasons: string[];
 }
 export interface GameState {
+  construction?: import('./construction').ConstructionState;
+  construction_view?: import('./construction').ConstructionView;
+  /** Amounts under inventory.gold, costs.gold and rewards.gold are integer silver. */
+  economy_version?: number;
+  quest_story?: {version: number; legacy_departure: boolean};
   village_intro?: {
     version: number;
     dismissed: boolean;
@@ -280,7 +318,13 @@ export interface GameState {
   energy: number;
   knowledge_shard: number;
   buildings: Record<string, number>;
-  plots: Record<string, { planted_at: number; ready_at: number }>;
+  farm?: {version:number;tilled:string[]};
+  tools?:ToolState;
+  tool_rules?:ToolRules;
+  ranch?: RanchState;
+  ranching?: RanchView;
+  farming?: {capacity:number;till_cost:Record<string,number>;stamina:Record<string,number>;clock:string;day_seconds:number;growth_multiplier:number;plots:Record<string,{progress:number;ready:boolean}>};
+  plots: Record<string, {planted_at:number;ready_at?:number;crop_id?:string;clock?:string;planted_tick?:number;ready_tick?:number;harvests_left?:number;watered?:boolean}>;
   gathered: Record<string, number>;
   relationships: Record<string, number>;
   events: string[];
@@ -309,6 +353,8 @@ export interface GameState {
   revision: number;
 }
 export interface Reply {
+  account?: { username: string } | null;
+  session_token?: string;
   save_id?: string;
   state: GameState;
   world?: World;
@@ -318,6 +364,7 @@ export interface Reply {
 export type Panel =
   | "preparation"
   | "armory"
+  | "forge"
   | "equipment"
   | "spellbook"
   | "cave"
@@ -325,6 +372,8 @@ export type Panel =
   | "travel"
   | "sleep"
   | "neighbors"
+  | "farm"
+  | "ranch"
   | "training"
   | "menu"
   | "map"
@@ -401,10 +450,15 @@ export interface MapData {
   outdoor?: boolean;
   objects: WorldObject[];
   trees: number[][];
+  resource_nodes?:WorldObject[];
+  water_sources?:number[][];
   obstacles: number[][];
+  permanent_obstacles?:number[][];
   furniture?: Furniture[];
   regions?: Region[];
   spawn?: { x: number; y: number };
+  roads?: [number[][],number][];
+  cultivation?: {bounds:number[];origin:number[];step:number;legacy:WorldObject[];blocked:number[][];permanent_blocked?:number[][];roads:[number[][],number][]};
 }
 export interface Quest {
   id: string;
@@ -418,7 +472,11 @@ export interface Quest {
   reward: Record<string, number>;
   xp: number;
   attribute: Attribute;
-  requires: string | null;
+  requires: string | string[] | null;
+  legacy?: boolean;
+  delivery?: Record<string, number>;
+  giver_map?: string;
+  accept_anywhere?: boolean;
   status: "available" | "locked" | "active" | "ready" | "claimed";
 }
 export interface NavigationTarget {

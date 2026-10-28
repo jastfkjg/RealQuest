@@ -67,12 +67,11 @@ try{
  }
  await page.setViewportSize({width:740,height:360});await seed({x:320,y:300},{x:400,y:224});
  const selected=await read(page),enemy=selected.combat.enemies[0];
- await page.mouse.click(370+selected.camera.x+enemy.x*selected.camera.zoom,180-selected.camera.y+(enemy.y-10)*selected.camera.zoom);await page.waitForTimeout(300);
+ await page.mouse.click(370+selected.camera.x+enemy.x*selected.camera.zoom,180-selected.camera.y+(enemy.y-10)*selected.camera.zoom,{button:'right'});await page.waitForTimeout(300);
  let observed=await capture('mouse-selected');assert.deepEqual(observed.g.issues,[]);assert.equal(observed.s.combatTarget,enemy.id);assert.equal(observed.s.route.length,0);assert.deepEqual(observed.s.player,selected.player);assert.equal(observed.s.combat.enemies[0].hp,100);
- report.checks.push('Native mouse selection after actual camera fit hits the original guardian, creates no walk route or attack and preserves world position');
- const beforeMove=await read(page);await page.keyboard.down('a');
- try{for(let i=0;i<3;i++){await page.waitForTimeout(100);observed=await capture('native-moving-'+i);assert.deepEqual(observed.g.issues,[]);}}
- finally{await page.keyboard.up('a');}
+ report.checks.push('Native right-click lock after actual camera fit selects the original guardian, creates no walk route or attack and preserves world position');
+ const beforeMove=await read(page);
+ for(let i=0;i<3;i++){await page.keyboard.down('a');try{await page.waitForTimeout(50);}finally{await page.keyboard.up('a');}observed=await capture('native-moving-'+i);assert.deepEqual(observed.g.issues,[]);}
  await page.waitForTimeout(400);const stopped=await read(page);assert(stopped.player.x<beforeMove.player.x-5);await page.waitForTimeout(200);assert(Math.abs((await read(page)).player.x-stopped.player.x)<.5);
  await action('life');await until(s=>s.mode==='life'&&!s.pendingAction&&!s.busy,'Life owns input');const paused=await read(page);
  await page.keyboard.down('d');try{await page.waitForTimeout(200);}finally{await page.keyboard.up('d');}assert.deepEqual((await read(page)).player,paused.player);
@@ -88,12 +87,21 @@ try{
   assert(start>=0&&end>start&&navigation>end&&canvas>navigation&&tail>canvas);
   let adapted=source.slice(0,start)+'  const {browser,page}=globalThis.__rqFrameClient;\n'+source.slice(end,navigation)+source.slice(canvas,tail)+'export {main};\n';
   assert.equal(adapted.split('  await browser.close();').length,2);adapted=adapted.replace('  await browser.close();','  // The owning regression finally closes the browser.');
+  const captureStart=adapted.indexOf('async function captureScreenshot('),captureEnd=adapted.indexOf('class ConsoleErrorTracker',captureStart);
+  assert(captureStart>=0&&captureEnd>captureStart);
+  // WebGL can return opaque black via toDataURL despite a correct compositor.
+  adapted=adapted.slice(0,captureStart)+`async function captureScreenshot(page,canvas,outPath){
+    const clip=canvas?await canvas.boundingBox():null;
+    fs.writeFileSync(outPath,await page.screenshot({type:'png',omitBackground:false,...(clip?{clip}:{})}));
+  }
+
+`+adapted.slice(captureEnd);
   const directory=path.join(test.directory,'frame-client');await fs.mkdir(directory);const worker=path.join(directory,'supplied-client.mjs');await fs.writeFile(worker,adapted);
   const args=process.argv;globalThis.__rqFrameClient={browser,page};
   try{process.argv=[process.execPath,worker,'--url',test.baseURL,'--iterations','2','--pause-ms','250','--screenshot-dir',directory,'--actions-json',JSON.stringify({steps:[{buttons:['left'],frames:6},{buttons:[],frames:4}]})];await (await import(pathToFileURL(worker))).main();}
   finally{process.argv=args;delete globalThis.__rqFrameClient;}
   assert.equal(digest(await fs.readFile(process.env.REALQUEST_FRAME_CLIENT,'utf8')),digest(source));assert(!(await fs.readdir(directory)).some(n=>n.startsWith('errors-')));
-  report.frameClient={sourceSHA256:digest(source),adaptedSHA256:digest(adapted),adaptations:'Reuse owned browser/page; keep current seeded world; outer finally owns cleanup. Supplied choreography/capture/text/error logic unchanged; existing real-time advanceTime used.'};
+  report.frameClient={sourceSHA256:digest(source),adaptedSHA256:digest(adapted),adaptations:'Reuse owned browser/page; keep current seeded world; outer finally owns cleanup. Supplied choreography/text/error logic unchanged; native compositor screenshots replace opaque-black WebGL canvas readback; existing real-time advanceTime used.'};
   assert((await read(page)).player.x<observed.s.player.x-2);report.checks.push('Optional supplied web-game client executes two actual keyboard bursts and retains screenshots/text without unexpected errors on the owned isolated page');
  }
  const credential=await page.evaluate(()=>localStorage.getItem('realquest-session-v2'));await context.close();

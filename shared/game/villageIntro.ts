@@ -1,4 +1,6 @@
+import {formatMoney} from './currency';
 import type { GameState, NavigationTarget, Panel } from "./protocol";
+import {canExploreStory, legacyJourney, isMainTracked} from './story';
 
 export interface IntroStep {
   id: string;
@@ -14,7 +16,7 @@ export function villageIntroStep(state: GameState): IntroStep | null {
   const intro = state.village_intro;
   const combat = state.combat;
   if (
-    !intro ||
+    !canExploreStory(state) || !intro ||
     intro.dismissed ||
     intro.reviewed ||
     !combat ||
@@ -30,9 +32,9 @@ export function villageIntroStep(state: GameState): IntroStep | null {
     action: string,
     target?: NavigationTarget,
     panel?: Panel,
-  ): IntroStep => ({ id, index, title, note, action, target, panel });
+  ): IntroStep => ({ id, index: legacyJourney(state) ? index : Math.max(0, index - 1), title, note, action, target, panel });
   const armory = { mapId: "workshop", targetId: "armory_counter" };
-  if (!intro.briefed)
+  if (!intro.briefed && legacyJourney(state))
     return step(
       "brief",
       0,
@@ -94,7 +96,7 @@ export function villageIntroStep(state: GameState): IntroStep | null {
       return step(
         "income",
         1,
-        `首把短剑还差 ${price - state.inventory.gold} 金币`,
+        `首把短剑还差 ${formatMoney(price - state.inventory.gold)}`,
         sellable
           ? "小铺收购木材、石料和收获；出售前可查看价格。也可继续种植或完成村庄委托。"
           : "先采集落枝，再到小铺出售；也可以种植、出售收获。购买基础武器不要求成长等级。",
@@ -108,9 +110,9 @@ export function villageIntroStep(state: GameState): IntroStep | null {
       "weapon",
       1,
       "到工坊准备第一件武器",
-      `石刃短剑 ${price} 金币，购买后即可装备。打造则需要图纸所列的建造、知识等级与材料。`,
-      "标记工坊武备台",
-      armory,
+      `石刃短剑 ${formatMoney(price)}，购买后即可装备。打造则需要图纸所列的建造、知识等级与材料。`,
+      "标记工坊铁匠",
+      {mapId:"workshop",targetId:"blacksmith"},
     );
   }
   if (!combat.equipped || !state.inventory[combat.equipped])
@@ -151,8 +153,7 @@ export function villageIntroStep(state: GameState): IntroStep | null {
 // Respect an explicitly tracked side quest and preserve independent map markers.
 export function trackedIntroStep(state: GameState): IntroStep | null {
   if (
-    state.tracked_quest &&
-    !["settle_in", "leave_valley"].includes(state.tracked_quest)
+    !isMainTracked(state) || (!legacyJourney(state) && state.quests.first_expedition?.status !== 'active')
   )
     return null;
   return villageIntroStep(state);

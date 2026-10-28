@@ -86,7 +86,7 @@ async function actualFlow() {
     return feedback.getSiblingIndex() > canvas.getChildByName("World").getSiblingIndex() && feedback.getSiblingIndex() < canvas.getChildByName("HUD").getSiblingIndex();
   }), "confirmed text must render above the world and below HUD"), await shot(engine + "-confirmed-hit"), await page.waitForTimeout(Math.max(0, 1400 - (Date.now() - start))), await page.mouse.up(), await until((s) => s.inventory.gel === 1, "first loot"), assert.equal((await read()).inventory.gold, 22), assert.equal(attempts[0].request_id, attempts[1].request_id), assert.equal(attempts[0].data.seq, attempts[1].data.seq), await page.unroute("**/api/command"), await page.waitForTimeout(900);
   const stopped = await read();
-  assert.equal(stopped.stamina.current, 96), assert.equal(stopped.combat.enemies[1].hp, 18), check("held attack survives receipts/lost reply, exact two hits/one loot; release adds no attack"), await walk(368, 240);
+  assert.equal(stopped.stamina.current, 100), assert.equal(stopped.combat.enemies[1].hp, 18), check("held attack survives receipts/lost reply, exact two hits/one loot; release adds no attack"), await walk(368, 240);
   {
     const tell = await until((s) => s.combat.enemies[1].phase === "windup" && s.combat.enemies[1].until - s.combat.time >= 0.6, "fresh slime telegraph before aimed spell"), enemy = tell.combat.enemies[1], player = tell.savedPosition || tell.player, dx = player.x - enemy.x, dy = player.y - enemy.y, away = Math.abs(dx) >= Math.abs(dy) ? dx > 0 ? "d" : "a" : dy > 0 ? "s" : "w";
     await page.keyboard.down(away), await page.waitForTimeout(220), await page.keyboard.up(away);

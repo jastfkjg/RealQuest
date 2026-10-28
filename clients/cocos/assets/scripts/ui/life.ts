@@ -67,12 +67,14 @@ export class LifePanels {
       h.region('life-index-leaf',lx,by+bh*.08,lw,bh*.80);
       h.region('life-content-leaf',right.x,by+bh*.09,right.w,bh*.79);
       h.text('LifeTitle','现实成长',lx,by+bh*.08,lw,36,26);
-      h.person('actor-'+h.state.character?.appearance,lx+24,by+bh*.19,48,64);
-      h.text('LifeTraveler',h.state.character?.name||'旅人',lx+58,by+bh*.13,lw-58,28,18);
-      h.text('LifeBalances','知识 '+(h.state.knowledge_points||0)+' · 健康 '+(h.state.health_points||0)+'\n技能 '+(h.state.skill_points||0),lx+58,by+bh*.17,lw-58,48,14,C.muted);
+      const identityY=by+bh*.08+44;
+      h.person('actor-'+h.state.character?.appearance,lx+24,identityY+34,48,64);
+      h.text('LifeTraveler',h.state.character?.name||'旅人',lx+58,identityY,lw-58,40,16).lineHeight=20;
+      h.text('LifeBalances','知识 '+(h.state.knowledge_points||0)+' · 健康 '+(h.state.health_points||0)+'\n技能 '+(h.state.skill_points||0),lx+58,identityY+44,lw-58,42,14,C.muted);
       const tabs:[Tab,string][]=[['study','研习书页'],['plans','长期计划'],['record','手动记录'],['contracts','现实约定'],['history','活动历史']];
       const step=Math.min(58,(bh*.52)/5);
-      tabs.forEach(([id,label],i)=>h.button('tab-'+id,label,lx,by+bh*.28+i*step,lw,Math.max(44,step-8),()=>{this.lifeTab=id;this.cancelId='';h.redraw(true);},h.busy,this.lifeTab===id,'entry',{label,pressed:this.lifeTab===id}));
+      const tabsY=Math.max(by+bh*.28,identityY+94);
+      tabs.forEach(([id,label],i)=>h.button('tab-'+id,label,lx,tabsY+i*step,lw,Math.max(44,step-8),()=>{this.lifeTab=id;this.cancelId='';h.redraw(true);},h.busy,this.lifeTab===id,'entry',{label,pressed:this.lifeTab===id}));
       h.text('LifeIndexDate',lifeDate(h.now),lx,by+bh*.86,lw,28,14,C.muted);
       h.text('LifePageHeading',tabs.find(t=>t[0]===this.lifeTab)![1],f.x+24,f.y+12,f.w-140,42,24);
     }else{
@@ -120,7 +122,7 @@ export class LifePanels {
     const page = slicePage(items, this.pages.get(key) || 0, per); this.pages.set(key, page.index);
     if (!items.length){
       if(!f.compact&&f.h-top>=310){h.image('items/journal',f.x+f.w/2,f.y+top+50,64,64);h.text('LifeEmpty',textPages(empty,Math.min(28,Math.floor((f.w-64)/17)),3)[0],f.x+32,f.y+top+96,f.w-64,80,17,C.muted,true);}
-      else h.text('LifeEmpty',textPages(empty,Math.floor((f.w-48)/17),2)[0],f.x+24,f.y+top,f.w-48,48,17,C.muted);
+      else h.text('LifeEmpty',textPages(empty,Math.floor((f.w-48)/17),2)[0],f.x+24,f.y+top,f.w-48,48,17,C.muted).lineHeight=24;
       if(primary){const centered=!f.compact&&f.h-top>=400,by=centered?f.y+top+196:f.y+f.h-62,total=centered?Math.min(400,f.w-64):f.w-48,bx=f.x+(f.w-total)/2,bw=primary.secondary?(total-8)/2:total;
         h.button(primary.id,primary.label,bx,by,bw,44,primary.action,h.busy||!!primary.disabled,true);
         if(primary.secondary){const next=primary.secondary;h.button(next.id,next.label,bx+bw+8,by,bw,44,next.action,h.busy||!!next.disabled);}

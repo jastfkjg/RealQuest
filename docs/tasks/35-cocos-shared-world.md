@@ -1,5 +1,7 @@
 # Cocos migration — phases 2–3
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 Authorized: continue shared logic, network sessions and save compatibility, preserve the existing Web client; UI improvements within this flow. No platform AppIDs or devices yet.
 
 ## Plan
@@ -28,7 +30,7 @@ Pending implementation and verification. Owner actual-render approval remains op
 - `platform.ts`: bearer transport, typed HTTP failures, phase1 credential migration, atomic token/save-ID record, per-request durable outbox keys and explicit host storage/file/viewport/focus boundaries. No provider credentials or platform-auth claims.
 - `Bootstrap.ts`: existing village, five interiors, crossing/mountain/city/inn selected by authoritative `location`; same saved coordinates/collisions/door anchors, source-scale furniture and all six appearances. Real storage/rest, quoted travel and locked departure, scheduled villagers, cave-save safe retreat, direct read-only Life summary, held-input cleanup, modal keyboard ownership/Tab selection and pressed feedback. Session leaf supports v1 credential preview/cancel/explicit confirmation/export, backs up the current journey before switching and restores an expired credential to its original save. Network uncertainty disables new play mutations until reconnect/replay. Error text has a solid linen background.
 - `backend/app/main.py`: additive `client-recover` exchanges the existing credential for a bearer GuestSession; recovery preview adds save_id. It never changes Web cookies, imports balances or merges players. Existing recovery-file/recover and every command/state/reward rule stay authoritative. `backend/tests/test_client_session.py` now has5 API tests, including original-Web→client→Web identity/resource/timer preservation and forged/origin rejection.
-- Tooling: independent Creator buildPath, configurable static/API proxy, root `start-cocos.command` and launcher owning its children, test/core/scene/session/resize scripts. `serve.py` defaults still support the earlier prototype; current arguments are explicit. Launcher probe uses SO_REUSEADDR so TIME_WAIT after a closed test listener is not mistaken for a running service; an actual occupied listener is preserved.
+- Tooling: independent Creator buildPath, configurable static/API proxy, root `start.command` and launcher owning its children, test/core/scene/session/resize scripts. `serve.py` defaults still support the earlier prototype; current arguments are explicit. Launcher probe uses SO_REUSEADDR so TIME_WAIT after a closed test listener is not mistaken for a running service; an actual occupied listener is preserved.
 - Documentation: root README/DESIGN, Cocos/shared READMEs, asset plan/manifest/review checklist and progress.md. No commits, pushes or deployments.
 
 ## Actual validation
@@ -46,7 +48,7 @@ Pending implementation and verification. Owner actual-render approval remains op
 | `node clients/cocos/tools/probe-resize.mjs` |1440→844×390→740×360→1920×1080 controls fit; screenshots visually inspected |
 | Supplied develop-web-game frame client, repository-adapted wrapper |Final2 iterations of10 right/6 idle frames pass, compositor screenshots/state inspected, no error files; finally closes browser. Server time remains real |
 | Bundled Python `tools/audit_inventory_assets.py` |156 original images/hashes/source pixels verified |
-| `python3 -m py_compile ...`, `zsh -n start-cocos.command`, `git diff --check` |Passed |
+| `python3 -m py_compile ...`, `zsh -n start.command`, `git diff --check` |Passed |
 | Launcher on5424/8124, then normal parent SIGTERM |API health +HTTP200; parent and both children exited, ports free. Final default launch5422/8122 succeeds after TIME_WAIT probe fix |
 
 The12-group scene suite ran after the render-window fix. The final small change adds a solid feedback background and marks cross-tab credential changes unauthorized; the4-group session suite, core/type checks and supplied frame client ran on that final build. No extra gameplay rule changed after the12-group suite.

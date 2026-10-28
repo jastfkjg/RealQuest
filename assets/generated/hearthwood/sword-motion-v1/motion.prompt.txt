@@ -1,0 +1,18 @@
+Use case: identity-preserve
+Asset type: original RealQuest production pixel-RPG character motion sprite sheet, 4 columns by 4 rows, transparent background.
+Reference image: the attached approved four-direction sword poses. It is the exact actor, outfit, short sword, proportions, outlines and pixel-painting style to continue.
+Primary request: create a supplemental 16-pose motion sheet for THIS SAME red-haired, green-clothed adventurer holding THIS SAME short grey sword in the same anatomical right hand. These are actual new held walking and short dodge poses, not attacks.
+Grid: exactly 4 columns and 4 rows, equal cells, generous fully transparent margins between every figure so no weapon or limb crosses into another cell. No lines or text. Full body including both boots in every cell.
+Rows from top to bottom:
+1. SOUTH / front: face visible, chest facing the viewer, travel toward the bottom edge.
+2. NORTH / back: back of red hair and green tunic visible, NO face, travel toward the top edge.
+3. WEST / left: nose, chest and knees consistently face the LEFT edge in ALL FOUR cells; travel left. Never turn right.
+4. EAST / right: nose, chest and knees consistently face the RIGHT edge in ALL FOUR cells; travel right. Never turn left.
+Columns from left to right:
+1. held walk A: left leg stepping forward and opposite foot back, sword safely lowered in the right hand, natural opposing shoulders, visibly distinct leg stride.
+2. held walk B: right leg stepping forward and opposite foot back, matching opposite stride, sword still lowered in the SAME hand. Keep head/body proportions, stance height and weapon scale consistent with walk A.
+3. dodge lean: a compact low quick sidestep/dash in the facing direction, clearly bent knees and lowered body, leading foot reaching and back foot pushing. Sword tucked safely close to the outside body, not swinging or hitting. Keep the body fully upright enough to read orientation, no somersault.
+4. dodge recover: landing into a low stable stance after that same directional sidestep, knees absorbing weight, sword still held naturally, torso beginning to rise; visibly different from dodge lean.
+Character invariants: spiky warm red hair, blue eyes when visible, white sleeves, dark teal green vest, brown diagonal chest strap and belt/back pouch, olive green trousers, brown boots, the accepted compact proportions and readable cozy RPG style. One character per cell, one short sword per character. Correct right-hand grip and arm attachment, believable limbs, existing head size and body shape, no redesign. Short grey blade and small brass crossguard identical to reference; no giant weapons or shield.
+Rendering: match the reference's crisp outlined pixel-art character rendering and restrained warm shading; sharp readable contours, no blur. Source body around 190-205 pixels high in walk poses if output is1024x1024; common boot baseline within each row and same body scale throughout. Let dodge crouch shorten height naturally without resizing body parts.
+Background: actual alpha transparency, no colored backdrop, no floor, no cast shadow, no UI, no words, no frame outlines, no motion trails, no attack slash arcs, no sparkles. Do not include any of the six attack poses from the reference.

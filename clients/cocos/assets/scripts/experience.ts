@@ -1,9 +1,9 @@
-export type Cue='step'|'interact'|'item'|'reward';
+export type Cue='step'|'interact'|'item'|'reward'|'swing'|'spell'|'hit'|'hurt'|'defeat';
 /** Original RealQuest Web chime frequencies/envelopes, with explicit lifecycle. */
 export class SoundEffects {
  private context:any=null;private pending:Promise<void>|null=null;private hidden=false;
  private voices=new Set<{osc:any;gain:any}>();private last:Partial<Record<Cue,number>>={};
- private counts:Record<Cue,number>={step:0,interact:0,item:0,reward:0};error='';
+ private counts:Record<Cue,number>={step:0,interact:0,item:0,reward:0,swing:0,spell:0,hit:0,hurt:0,defeat:0};error='';
  constructor(private host:Record<string,any>,private enabled:()=>boolean,private changed:()=>void){}
  get supported(){return !!(this.host.AudioContext||this.host.webkitAudioContext);}
  get state(){return !this.enabled()?'off':!this.supported?'unavailable':this.pending?'enabling':this.context?.state==='running'&&!this.hidden?'running':this.error?'blocked':this.hidden?'paused':'waiting';}
@@ -26,11 +26,12 @@ export class SoundEffects {
   const c=this.context;if(!this.enabled()||this.hidden||!c||c.state!=='running')return;
   if(c.currentTime-(this.last[kind]??-Infinity)<(kind==='step'?.29:.08))return;
   this.last[kind]=c.currentTime;
-  const notes=kind==='reward'?[523,659,784]:kind==='item'?[659,880]:kind==='step'?[110]:[440,554];
+  const combat=['swing','spell','hit','hurt','defeat'].includes(kind);
+  const notes=kind==='reward'?[523,659,784]:kind==='item'?[659,880]:kind==='step'?[110]:kind==='swing'?[220]:kind==='spell'?[440,660]:kind==='hit'?[180]:kind==='hurt'?[130,95]:kind==='defeat'?[330,495]:[440,554];
   this.counts[kind]++;
   for(const [i,frequency] of notes.entries()){
    let voice:{osc:any;gain:any}|null=null;
-   try{const osc=c.createOscillator(),gain=c.createGain(),at=c.currentTime+i*.07;voice={osc,gain};this.voices.add(voice);osc.type=kind==='step'?'triangle':'sine';osc.frequency.setValueAtTime(frequency,at);gain.gain.setValueAtTime(kind==='step'?.009:.035,at);gain.gain.exponentialRampToValueAtTime(.001,at+.13);osc.connect(gain);gain.connect(c.destination);const own=voice;osc.onended=()=>{if(this.voices.delete(own)){osc.disconnect();gain.disconnect();}};osc.start(at);osc.stop(at+.15);}
+   try{const osc=c.createOscillator(),gain=c.createGain(),at=c.currentTime+i*.07;voice={osc,gain};this.voices.add(voice);osc.type=kind==='step'||combat?'triangle':'sine';osc.frequency.setValueAtTime(frequency,at);if(combat)osc.frequency.exponentialRampToValueAtTime(Math.max(40,frequency*(kind==='spell'?1.7:.45)),at+.10);gain.gain.setValueAtTime(kind==='step'?.009:combat?.022:.035,at);gain.gain.exponentialRampToValueAtTime(.001,at+.13);osc.connect(gain);gain.connect(c.destination);const own=voice;osc.onended=()=>{if(this.voices.delete(own)){osc.disconnect();gain.disconnect();}};osc.start(at);osc.stop(at+.15);}
    catch{if(voice){this.voices.delete(voice);this.retire(voice);}this.error='声音暂不可播放，游戏仍可继续。';}
   }
  }

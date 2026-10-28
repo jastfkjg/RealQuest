@@ -1,5 +1,7 @@
 # Cocos 登记、旅人档案与主动培养
 
+> 启动入口现统一为 `start.command`，本文中的入口名称已更新；其余历史参数、端口和验证记录保留当时状态，当前用法见 [本地说明](../cocos-local.md)。
+
 2026-10-17。对应任务39的M1/M8，是“继续推进所有后续项”目标中的登记→档案→主动培养切片。完整目标仍包括M4–M7/M9、T1–T6、V1–V7，不因本切片完成缩小范围。原Web、已有未提交修改、玩家库、正式默认入口和发布均保留；没有提交、推送或部署。
 
 ## 实现
@@ -74,7 +76,7 @@ M1/M8按已实现功能与本地Chromium证据记录候选；物理设备、完�
 - 手工预览现在为`http://127.0.0.1:5442/`，API8142，构建`web-dossier/web-desktop`。沿用同一个`output/cocos-data/local-preview.db`与浏览器origin，切换前备份为`output/cocos-dossier/preview-before-dossier.db`，切换后原始player行快照哈希完全一致（当时0个游客，未为截图造数据）。只换本地预览构建，不改正式入口或部署。
 
 ```sh
-./start-cocos.command --build web-dossier/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
+./start.command --build web-dossier/web-desktop --port 5442 --api-port 8142 --database output/cocos-data/local-preview.db
 ```
 
 - 当前保留启动器63424/API63426/静态代理63427，会话80551，供用户刷新已有标签页体验。原Web5430/Cocos5431/API8130继续保留；六个根页/健康检查均200。

@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import fs from 'node:fs/promises';
+const require=createRequire(new URL('../../../package.json',import.meta.url));
+const {build}=require('esbuild');
+const result=await build({entryPoints:[new URL('../assets/scripts/ui/shopModel.ts',import.meta.url).pathname],bundle:true,platform:'node',format:'esm',write:false});
+const {ShopModel,stockIds,pageOf,shopCategory}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
+const market={buy:{seed:2,seed_potato:8,wood:4,soup:8},sell:{crop:8,wood:2},orders:[]};
+const inventory={gold:20,crop:4,wood:6,seed:6},m=new ShopModel();
+m.enter('a',market,inventory,['wood',null,'crop','seed']);
+const original=JSON.stringify({market,inventory});
+m.select('sell','crop',market);m.amount='2';let q=m.quote(market,inventory);
+assert.equal(q.total,16);assert.equal(q.afterGold,36);assert.equal(q.remaining,2);assert.equal(q.max,4);assert.equal(q.reason,'');
+m.amount='5';assert(m.quote(market,inventory).reason.includes('超过'));
+for(const amount of ['0','-1','1.5','abc','100']){m.amount=amount;assert(m.quote(market,inventory).reason);}
+m.select('sell','seed',market);assert.equal(m.quote(market,inventory).max,0);assert(m.quote(market,inventory).reason.includes('不收购'));
+m.select('buy','seed_potato',market);assert.equal(m.quote(market,inventory).max,2);m.amount='3';assert.equal(m.quote(market,inventory).reason,'还差 4银');
+m.amount='1';const changed={...market,buy:{...market.buy,seed_potato:9}};assert(m.quote(changed,inventory).reason.includes('报价已变化'));m.select('buy','seed_potato',changed);assert.equal(m.quote(changed,inventory).reason,'');
+assert.deepEqual(stockIds(market,'seed','土豆'),['seed_potato']);assert.deepEqual(stockIds(market,'all','  POTATO  '),['seed_potato']);assert.deepEqual(stockIds(market,'material',''),['wood']);assert.deepEqual(stockIds(market,'all','不存在'),[]);assert.equal(shopCategory('soup'),'food');
+const ids=Array.from({length:43},(_,i)=>'item'+i);assert.equal(pageOf(ids,0,12).pages,4);assert.equal(pageOf(ids,3,12).ids.length,7);assert.equal(pageOf(ids,99,12).index,3);assert.deepEqual(pageOf([],3,12).ids,[]);
+m.category='seed';m.page=2;m.category='material';m.page=1;m.category='seed';assert.equal(m.page,2);m.find('萝卜');assert.equal(m.page,0);assert.equal(m.selected,null);
+m.select('sell','crop',market);m.visible('buy',['seed']);assert.equal(m.selected.item,'crop');m.visible('sell',['wood']);assert.equal(m.selected,null);
+m.select('sell','wood',market);m.enter('a',market,{...inventory,wood:0},['crop','seed']);assert.equal(m.selected,null);assert.deepEqual(m.bag,[null,null,'crop','seed'],'depleted item does not shift adjacent possessions');
+m.enter('b',market,inventory,['seed']);assert.equal(m.query,'');assert.equal(m.bagPage,0);assert.deepEqual(m.bag,['seed']);assert.equal(m.selected.side,'buy');
+assert.equal(JSON.stringify({market,inventory}),original,'UI quotes never modify authoritative state');
+m.select('sell','crop',market);assert.equal(m.quote(market,{...inventory,crop:150}).max,99,'current server single-trade limit is truthful');
+console.log('PASS shop ownership/quote arithmetic, invalid and over-limit quantities, rejected stock, stale quote, search/category/page boundaries, depleted selection, stable bag slots, save isolation and read-only derivation.');

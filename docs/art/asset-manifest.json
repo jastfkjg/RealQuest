@@ -421,12 +421,12 @@
     },
     {
       "semantic_id": "farm.plot",
-      "status": "unmapped",
-      "local_path": null,
+      "status": "code_native_candidate_pending_owner_review",
+      "local_path": "clients/cocos/assets/scripts/farmPaint.ts",
       "frame_rect": null,
       "pivot": null,
       "animation": null,
-      "note": "Proposed presentation role. Resolve against actual project files and rules; do not invent an asset path."
+      "note": "Cocos soil is original deterministic Graphics artwork; dry/watered states, task121. Crop stages use cocos_farming_v1. No atlas frame or animation claimed."
     },
     {
       "semantic_id": "fx.plant",
@@ -2261,5 +2261,314 @@
       "related native popup surfaces"
     ],
     "lazy_loading": "Book and credential artwork is loaded on demand. Browsers supporting WebP reuse the original lossless materials; other platforms retain pixel-identical PNG fallbacks. Native text/actions remain separate."
+  },
+  "cocos_combat_experience": {
+    "date": "2026-10-22",
+    "task": "docs/tasks/114-cocos-combat-experience.md",
+    "status": "implemented_and_locally_verified_pending_owner_feel_review",
+    "source": "Original RealQuest native geometry, existing authorized actor sprites and original WebAudio oscillator code",
+    "canonical_geometry": "shared/game/caveView.ts",
+    "native_animation": "clients/cocos/assets/scripts/combatView.ts",
+    "original_synthesized_audio": "clients/cocos/assets/scripts/experience.ts",
+    "new_raster_font_audio_files": [],
+    "source_images_modified": false,
+    "processing": "Weapon silhouettes and arcs rendered from deterministic world-coordinate marks. Sprite transforms animate windup/hit/recovery/death. Sound envelopes are synthesized at runtime; no third-party recordings, downloads or generation services."
+  },
+  "cocos_farming_v1": {
+    "status": "implemented_candidate_pending_owner_review",
+    "manifest": "docs/art/farming-art-v1.json",
+    "script": "tools/build_farming_art.py",
+    "source_directory": "assets/generated/hearthwood/farming-v1",
+    "crop_count": 12,
+    "runtime_sprites": 72,
+    "source_sheets": 3,
+    "creator": "OpenAI built-in image_gen",
+    "third_party_assets": false,
+    "font_additions": false,
+    "note": "Original seed packets, four rooted growth stages and harvested produce for each species. Source sheets and prompts archived; independent images bound through Cocos sync. Legacy seed/crop game IDs retained; old source art preserved."
+  },
+  "cocos_farm_soil_v1": {
+    "status": "implemented_candidate_pending_owner_review",
+    "semantic_id": "farm.plot",
+    "source_path": "clients/cocos/assets/scripts/farmPaint.ts",
+    "source_sha256": "8ae017efe6bfa1cc4e7cea08e4073a1778151a7327ef620de2009177d6da3926",
+    "source": "Original project-authored Cocos Graphics soil, no external asset",
+    "license": "Project-authored code artwork",
+    "world_bounds": [
+      -21,
+      -18,
+      42,
+      36
+    ],
+    "source_pixel_world_units": 0.5,
+    "states": [
+      "dry",
+      "watered"
+    ],
+    "processing": "Deterministic per-plot pixel marks: stepped earth edge, four raised ridges, recessed channels and soil crumbs. Reuses existing paintGraphics; generated only when the plot state changes. No raster or font additions. Crop bindings, saved IDs and hit targets unchanged."
+  },
+  "cocos_free_hoe": {
+    "task": "docs/tasks/122-cocos-free-hoe.md",
+    "status": "implemented_candidate_pending_owner_feedback",
+    "original_code_art": "clients/cocos/assets/scripts/Bootstrap.ts",
+    "reused_soil_code": "clients/cocos/assets/scripts/farmPaint.ts",
+    "reused_crop_manifest": "docs/art/farming-art-v1.json",
+    "terrain_source": "backend/app/village_terrain.json",
+    "processing": "Exact road polylines extracted from original villageGround.ts; shared by authoritative soil validation and unchanged scene baking. Native Graphics target, wood/metal hoe and dust. No new raster/font/external assets."
+  },
+  "cocos_equipment_system": {
+    "task": "123",
+    "status": "candidate_pending_owner_render_review",
+    "catalog": "backend/app/equipment_catalog.json",
+    "catalog_sha256": "9ce7164370fc0cc973d387009ede1323d68c5e5647a8c0c87934046f0d9c02b9",
+    "provenance": "docs/art/equipment-art-v1.json",
+    "source": "assets/generated/hearthwood/equipment-v1/atlas.png",
+    "source_sha256": "136ab8820e9f6bc741cfac8bf053965af1536fc648ad334d2863c65525e14394",
+    "prompt": "assets/generated/hearthwood/equipment-v1/atlas.prompt.txt",
+    "processor": "tools/build_equipment_art.py",
+    "runtime_icons": 24,
+    "runtime_dimensions": [
+      96,
+      96
+    ],
+    "rights": "Original project-generated artwork, built-in image_gen; no third-party sprites, purchased packs or fonts",
+    "material_aliases": {
+      "alloy": "shell",
+      "mechanism": "plank",
+      "focus_core": "crystal",
+      "energy_cell": "gate_stone"
+    },
+    "world_presentation": "Same authored weapon sprite, explicit directional pose and native attack/projectile marks; small armor shoulder details preserve actor identity",
+    "owner_approved": false
+  },
+  "cocos_ranching_v1": {
+    "task": "docs/tasks/125-cocos-ranching-system.md",
+    "status": "art_packaged_candidate_browser_and_owner_review_pending",
+    "provenance": "docs/art/ranching-art-v1.json",
+    "processor": "tools/build_ranching_art.py",
+    "source_directory": "assets/generated/hearthwood/ranching-v1",
+    "runtime_directory": "assets/derived/ranching-v1",
+    "source_sheets": 5,
+    "runtime_sprites": 52,
+    "animal_stages": 21,
+    "shelter_upgrades": 9,
+    "facilities": 6,
+    "props": 3,
+    "items": 13,
+    "quality_aliases": 12,
+    "rights": "Original project-generated artwork, OpenAI built-in image_gen; no third-party game sprites, purchased packs or fonts",
+    "processing": "Measured rectangles, alpha >=160, largest connected silhouette, nearest-neighbor resizing and transparent canvases; fixed per-sheet animal scale preserves three life-stage sizes. Sources remain unmodified and outside runtime bundles.",
+    "quality_presentation": "All twelve fine products reuse their corresponding ordinary product art; quality remains localized native text.",
+    "review": "Four actual-size contact sheets inspected; reproducible --check passes. Actual browser rendering and owner visual acceptance remain separate.",
+    "owner_approved": false
+  },
+  "cocos_shop_counter": {
+    "task": "124",
+    "runtime_art": "existing wood/paper/satchel/Mira/item bindings plus original generated shop-interior-v2 environment; all controls and labels native",
+    "approval": "User approved concept layout direction and requested implementation; runtime review separate",
+    "references": [
+      {
+        "path": "docs/art/references/shop-sell-concept-v2.png",
+        "sha256": "bc867b6da412d88d9d3d8aaf54f76783b6f59c65894fb5cefb1dfb1bb2e40e3c",
+        "purpose": "design-only generated concept; illustrative stock/quantities"
+      },
+      {
+        "path": "docs/art/references/shop-browse-concept-v2.png",
+        "sha256": "ad9e11372602978796dd1af785980511aff6149a99899cfadbd9ef40ae03b457",
+        "purpose": "design-only generated concept; illustrative stock/quantities"
+      }
+    ],
+    "background": {
+      "path": "assets/generated/hearthwood/shop-interior-v2.png",
+      "sha256": "d0e0f8751c79cccbcce8e8d7f87b91901572eabf4a5d94b1e33c569a5eac624e",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "source": "OpenAI image_gen; generated original environment, 2026-10-23",
+      "license": "project original AI-generated art",
+      "purpose": "decorative shop environment only, no text or UI controls",
+      "binding": "assets/resources/ui/shop-interior.png",
+      "prompt_sha256": "a548207eeb619a45a3554ffe9d312b7959507131dea10d44b0434e6b1a1ce2c0",
+      "prompt_path": "assets/generated/hearthwood/shop-interior-v2.prompt.txt"
+    }
+  },
+  "cocos_sword_motion_v1": {
+    "task": "docs/tasks/sword-motion-preview.md",
+    "status": "cocos_integrated_browser_verified_owner_runtime_review_pending",
+    "provenance": "docs/art/sword-motion-v1.json",
+    "processor": "tools/build_sword_art.py",
+    "source_preview": "docs/art/references/sword-motion-preview-v1/preview.png",
+    "runtime_directory": "assets/derived/sword-motion-v1",
+    "bindings": [
+      "combat/sword-actor-0",
+      "combat/sword-motion-0"
+    ],
+    "scope": {
+      "appearance": 0,
+      "weapon": "stone_sword",
+      "directions": [
+        "south",
+        "north",
+        "west",
+        "east"
+      ]
+    },
+    "frame_size": [
+      96,
+      96
+    ],
+    "foot_anchor": [
+      48,
+      80
+    ],
+    "world_scale": 0.6666666666666666,
+    "rights": "Original project-generated artwork, OpenAI built-in image_gen; no third-party sprites or fonts added",
+    "approval": "Owner replied 合适 on 2026-10-23 to four-direction sword source preview; supplementary walk/dodge and runtime feel are review candidates."
+  },
+  "construction_128_reuse": {
+    "source_path": "assets/runtime/hearthwood/detail/interiors/chest-closed.png",
+    "source_sha256": "71d556ba610cfe580469fec3d97c37724af84ad72033efab98d36aa6d3fa2f51",
+    "runtime_aliases": [
+      "items/wooden_chest",
+      "items/reinforced_chest"
+    ],
+    "binding_hashes": "clients/cocos/asset-bindings.json",
+    "note": "Existing original Hearthwood art, unchanged bytes; both box tiers share the chest illustration. Carpenter temporarily reuses noah-actor; no new external art or independent character approval."
+  },
+  "production_129_reuse": {
+    "task": "docs/tasks/129-player-made-production.md",
+    "source_provenance": "docs/art/ranching-art-v1.json",
+    "source_modifications": false,
+    "new_art": false,
+    "records": [
+      {
+        "item": "mayo_machine",
+        "source": "assets/derived/ranching-v1/facilities/mayo.png",
+        "runtime_alias": "items/mayo_machine",
+        "sha256": "99e75617435be8a57f7dda02b693a5ed7b2f49b32b5b4257de82761b5a2b6f92"
+      },
+      {
+        "item": "loom_machine",
+        "source": "assets/derived/ranching-v1/facilities/loom.png",
+        "runtime_alias": "items/loom_machine",
+        "sha256": "8cf64cb5a96b786b73ae2fb1add5d56902166a5ed750e99a281f8840c41566f3"
+      },
+      {
+        "item": "cheese_press",
+        "source": "assets/derived/ranching-v1/facilities/cheese.png",
+        "runtime_alias": "items/cheese_press",
+        "sha256": "c912b8bddb2dad3ea73c5ee49bf8031a8b38649dbc9743a63c737f87cd5b5f7a"
+      },
+      {
+        "item": "oil_press",
+        "source": "assets/derived/ranching-v1/facilities/oil.png",
+        "runtime_alias": "items/oil_press",
+        "sha256": "291bbd6162c4e503cbd35f06158347d8fd1b28ff0ddb697436ce21244dc221b9"
+      }
+    ],
+    "approval": "Reused existing artwork; gameplay screenshots reviewed by developer, owner acceptance not claimed"
+  },
+  "cocos_blacksmith_counter": {
+    "task": "docs/tasks/blacksmith-counter.md",
+    "concept": "docs/art/references/workshop-counter-preview-v1/preview.png",
+    "approval": "Concept approved by user 2026-10-23; actual runtime awaits user review",
+    "provenance": "docs/art/blacksmith-art-v1.json",
+    "processor": "tools/build_blacksmith_art.py",
+    "original_sources": "assets/generated/hearthwood/blacksmith-v1",
+    "bindings": [
+      "atlas/blacksmith",
+      "village/blacksmith-figure",
+      "ui/weapon-stand",
+      "ui/blacksmith-interior"
+    ],
+    "text_and_controls": "Native Cocos; no baked UI text",
+    "third_party_downloads": false,
+    "source_modifications": false
+  },
+  "tools_and_resources_v1": {
+    "status": "implemented_browser_verified_owner_visual_review_pending",
+    "manifest": "docs/art/tool-art-v1.json",
+    "creator": "OpenAI built-in image_gen; original RealQuest artwork",
+    "license": "Original project-generated artwork; no third-party source uploaded",
+    "runtime_sprites": 35,
+    "tool_icons": 16,
+    "resource_states": 15,
+    "collected_icons": 4,
+    "processing": "tools/build_tool_art.py; cell slicing, connected-component alpha cleanup, nearest neighbor; originals unchanged",
+    "native_motion": "clients/cocos/assets/scripts/toolView.ts",
+    "native_motion_note": "Four-direction articulated grip/arms and tool raise/contact/recover, resource shake/fall, water/wood/stone particles; original character sheets reused, no claim of independently redrawn full-body frames",
+    "scope": "Tools and labor resources; no copied commercial artwork or fonts",
+    "held_pose_revision": {
+      "task": "docs/tasks/131-held-tool-polish.md",
+      "date": "2026-10-24",
+      "artwork": "Existing16 tool and6 actor PNGs unchanged",
+      "world_sizes": {
+        "hoe": 24,
+        "axe": 22,
+        "pickaxe": 24,
+        "watering_can": 18
+      },
+      "grip_source_pixels": {
+        "hoe": [
+          30,
+          60
+        ],
+        "axe": [
+          32,
+          62
+        ],
+        "pickaxe": [
+          32,
+          62
+        ],
+        "watering_can": [
+          40,
+          30
+        ]
+      },
+      "presentation": "Relaxed downward carry; shaft occluded by body, glove above grip;4 directions;7Hz actor walk cycle; foot-pivot-coherent lean and swing; reduced motion retained",
+      "review": "Cocos pose and work flows checked; owner visual acceptance pending",
+      "superseded_by": "tool_actor_art_v1 (task132); player rejected the attachment-like look on2026-10-24"
+    }
+  },
+  "tool_actor_art_v1": {
+    "task": "docs/tasks/132-tool-actor-art.md",
+    "status": "cocos_integrated_browser_verified_default5443_owner_runtime_review_pending",
+    "creator": "OpenAI built-in image_gen; original RealQuest artwork",
+    "manifest": "docs/art/tool-actor-art-v1.json",
+    "processor": "tools/build_tool_actor_art.py",
+    "sources": "assets/generated/hearthwood/tool-poses-v1",
+    "runtime_directory": "assets/derived/tool-poses-v1",
+    "bindings": [
+      "tool-actors/hoe-0",
+      "tool-actors/axe-0",
+      "tool-actors/pickaxe-0",
+      "tool-actors/watering_can-0",
+      "tool-actors/hoe-1",
+      "tool-actors/axe-1",
+      "tool-actors/pickaxe-1",
+      "tool-actors/watering_can-1",
+      "tool-actors/hoe-2",
+      "tool-actors/axe-2",
+      "tool-actors/pickaxe-2",
+      "tool-actors/watering_can-2",
+      "tool-actors/hoe-3",
+      "tool-actors/axe-3",
+      "tool-actors/pickaxe-3",
+      "tool-actors/watering_can-3",
+      "tool-actors/hoe-4",
+      "tool-actors/axe-4",
+      "tool-actors/pickaxe-4",
+      "tool-actors/watering_can-4",
+      "tool-actors/hoe-5",
+      "tool-actors/axe-5",
+      "tool-actors/pickaxe-5",
+      "tool-actors/watering_can-5"
+    ],
+    "presentation": "Integrated whole-body poses with painted shoulders/elbows/grips/tool and common foot anchor; replaces task131 prop/arm overlays. Limited key animation; upgrade tiers share body/tool geometry while saved identity and inventory art remain intact.",
+    "approval": "Existing sword approval is style reference only; tool actor/runtime owner review pending.",
+    "third_party_downloads": false,
+    "source_modifications": false
   }
 }

@@ -30,6 +30,26 @@ class GuestSession(Base):
     token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
     player_id: Mapped[str] = mapped_column(ForeignKey('players.id', ondelete='CASCADE'), index=True)
 
+class Account(Base):
+    __tablename__ = 'accounts'
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    username: Mapped[str] = mapped_column(String(24), unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String(256))
+    player_id: Mapped[str | None] = mapped_column(ForeignKey('players.id', ondelete='SET NULL'), unique=True)
+    created_at: Mapped[float] = mapped_column(Float)
+
+class AccountSession(Base):
+    __tablename__ = 'account_sessions'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    account_id: Mapped[str] = mapped_column(ForeignKey('accounts.id', ondelete='CASCADE'), index=True)
+    expires_at: Mapped[float] = mapped_column(Float)
+
+class AuthThrottle(Base):
+    __tablename__ = 'auth_throttles'
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    attempts: Mapped[int]
+    reset_at: Mapped[float] = mapped_column(Float)
+
 class ClientDeletion(Base):
     """Minimal receipt for confirming a committed deletion after a lost reply.
 

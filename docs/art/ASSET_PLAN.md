@@ -1,5 +1,33 @@
 # RealQuest Asset Plan and Provenance
 
+## 四向持剑 — 角色0与石刃短剑
+
+用户确认四向六阶段源图风格后，内置image_gen补充持剑行走与闪避关键帧。`tools/build_sword_art.py`以实际主体边界归一化为2张透明图集，四向共40姿势，96×96帧、脚底锚点 `[48,80]`、世界缩放 `2/3`，nearest显示。人物、握剑手、剑和短弧在同一帧，运行中隐藏旧独立武器节点。仅角色0装备石刃短剑时适用；其他外观/武器保留原绑定，未扩展为全武器动画体系。
+
+源图、所有提示词、中间稿、裁切/脚底测量/处理与SHA256见[sword-motion-v1.json](sword-motion-v1.json)；原图不进运行包，没有第三方素材上传或字体添加。`--check`可逐字节重建。补帧为两关键帧行走/闪避，没有专用受击造型；用户批准源图风格，实际动作和手感仍需游戏内验收，见[持剑任务](../tasks/sword-motion-preview.md)。
+
+## 完整养殖美术 — task125
+
+内置image_gen生成5张原创透明源表，原图与完整提示词保存在`assets/generated/hearthwood/ranching-v1/`。`tools/build_ranching_art.py`按实际测量边界裁切，alpha≥160并保留最大连通主体以清除邻格碎片，以最近邻输出52张运行图：七种动物的21个幼年/成长期/成年形态、9张住所升级、6个设施、3个牧场道具、12种产物与1种饲料。动物采用同组固定源像素比例，保留各阶段的体型和特征差异；12个优质产物明确复用对应普通产物原画，由本地化文字表示品质。
+
+源图不进运行包，未复制星露谷或其他第三方美术、购买素材或添加字体。所有来源、提示词/脚本哈希、裁切、透明处理、尺寸和绑定见[ranching-art-v1.json](ranching-art-v1.json)，`--check`验证运行图、manifest及4张实际像素尺寸联系表可复现。联系表已检查，实际Cocos浏览器呈现及玩家视觉反馈仍待验收；不以生成稿或联系表推定用户批准。
+
+## 三路线武器与护具 — task123
+
+内置image_gen生成原创1536×1024透明24格源表，保留原图与完整提示词；tools/build_equipment_art.py按256px格裁切、alpha≥160、最近邻缩放到96×96，输出18把武器与6件护具。图标与角色持握共用同一原画；朝向、起手和收势由原生节点变换，轨迹仍为原创Graphics。源表不进运行包，未下载/上传第三方资产或字体。4种精密材料暂用原有材料图的明确别名。来源、尺寸、哈希和处理见equipment-art-v1.json；实际截图与验收见任务123，玩家视觉批准尚待反馈。
+
+## 锄头交互 — task122
+
+复用task121土壤代码美术和task120作物72图。目标框、金属锄头/木柄与少量土屑为Bootstrap内原创Cocos Graphics，减少动态时不位移动效；无新位图、字体、下载或生成服务。道路从原场景代码逐点提取到权威`backend/app/village_terrain.json`，美术与可耕判定共用，7张原场景PNG逐像素核对保持相同。
+
+## 田地土壤代码美术 — task121
+
+`clients/cocos/assets/scripts/farmPaint.ts`为项目原创Cocos Graphics表现，复用`paintGraphics`，以半世界单位像素绘制土边/四道土垄/凹沟/碎土；相同地块ID固定纹理，干湿共享几何。无外部素材、图片处理、字体、新下载或生成服务。`asset-manifest.json`记录源码哈希与42×36世界单位范围，作物仍用task120现有绑定。候选效果待玩家视觉反馈。
+
+## 原创种植美术 — task120
+
+内置image_gen生成3张1536×1024透明RGBA源表，12作物×6角色=72运行时PNG，含每种种子包、4个田间阶段、背包收获物。源图和完整提示词保存在assets/generated/hearthwood/farming-v1/，不进入运行包。tools/build_farming_art.py按记录的列/行边界切片、alpha>=160、田间仅保留最大连接植物区域以排除邻格碎片、最近邻缩放；物品64×64、植物96×96，植物按一致源像素比例与根部基线布局。全部尺寸/裁切/处理/原始与衍生哈希在farming-art-v1.json，Cocos绑定保留nearest/不裁切。没有复制星露谷或第三方素材、字体、付费包。旧seed/crop源图保留，运行时绑定改为本套原创素材。素材和实际渲染仍待玩家视觉确认。
+
 ## Cocos 构图与控件层级修正 — 2026-10-20 任务111
 
 没有新增或改写美术、派生编码、字体或授权来源。重新查看原双页书本与成长手记后，以实际纸页内缘设定内容安全区；墨迹目录、布签、切角确认牌、返回箭头与状态条由原生Graphics/Label绘制。角色、已绑定武器/手记/金币图标仅表示真实对应状态；不为丰富画面补造持有物。既有材质、源尺寸、哈希与PNG/WebP处理记录保持任务110的逐文件来源，新的几何/交互证据见任务111。
@@ -368,3 +396,55 @@ Task50将两个离线导出器的TypeScript/esbuild/Playwright归属改为根有
 Task51按当前106绑定（81PNG/25共享模块）登记长期归属、逐文件哈希/PNG尺寸、既有来源和消费者。策略在docs/migration/cocos-source-policy.json，生成记录在cocos-source-inventory.json；旧frontend/public/assets/hearthwood中的素材仍是共享/Cocos美术工具的冻结输入，停止发布原Web不能删除它们。5个旧Web绘制/数据模块、2个原共享行为测试均单独归属，不将前端应用构建视为其依赖。真正归档/删除前必须迁出并验证原字节/来源与双端行为。
 
 场景导出器以实际esbuild模块输入和Python app模块读取补齐传递导入，全部实际读入图片也进入清单；输入从47扩至79项。--refresh-manifest只允许在7PNG/7布局/43绑定逐字节一致时补来源记录，不重写PNG/布局。Pillow12.3.0是现有原PNG整理工具运行时，单独固定在tools/requirements-art.lock.txt，未安装或升级后端依赖。无新素材、外部下载、字体、声音或视觉批准。
+
+## Cocos 出发准备链 — 2026-10-21
+
+Task112复用现有Hearthwood木框、纸张、武器/洞口图像与共享按钮状态。没有新增/替换PNG、字体或音效，没有外部生成或下载；现有asset-manifest与派生物品/面板素材来源哈希保持不变。目录中的未持有武器明确标记为商品，中文与所有数值由原生文字绘制。布局只覆盖世界目标、武备台、装备与洞口；新版实际渲染等待用户检查，不声称已获视觉批准。
+
+
+## 世界、行囊与页面可用性 — 2026-10-21
+
+Task113不新增、生成、下载或替换任何图片、字体、音效。沿用已登记的布袋、书本、纸张、木框、物品与场景；新增的翻页底签和空快捷位弱化为原生几何。asset-bindings中的改变仅来自共享快捷栏源码同步，不是素材字节变化。画面与交互检查待用户认可，未扩大历史视觉批准。
+
+## Cocos 洞穴战斗动作 — 2026-10-22 任务114
+
+复用已授权角色帧、原有洞穴和四类怪物几何。武器轮廓、挥击弧线、矛尖、杖晶、确认命中与石壳虫破绽由原生Graphics按世界坐标绘制；现有角色/怪物节点作短暂姿态变换，未伪称新增精灵帧。新增挥击、施法、命中、受击和击败声音由原生WebAudio振荡器/包络合成，沿用用户声音开关与暂停/静音/释放生命周期。无新图片、字体、音频文件、外部下载或生成服务；源素材未改。`asset-manifest.json` 的 `cocos_combat_experience` 记录源码与处理方式，生成副本哈希由Cocos绑定清单保存。画面候选和实测证据见任务114，不扩大此前视觉批准。
+
+## Task124 商店
+
+复用现有notice-timber、notice-paper、satchel、mira和语义物品图；货架横梁由Cocos绘制，无新增运行时图包。两张shop-*-concept-v2.png是用户批准方向的设计参考，不进入资源绑定，不代表实际库存。所有文案继续使用原生文字。
+
+Task124第二轮：增加原创AI生成`shop-interior-v2.png`店内环境，所有控件/文案原生叠加。只作商店背景，复用现有店招木框、纸页、米拉和物品；源图和提示词、哈希见asset-manifest的cocos_shop_counter.background。
+
+## 建造切片 task128：现有资源复用
+
+木箱与加固箱的两项物品图绑定复用原始原创 `detail/interiors/chest-closed.png` 字节；未修改源图、未引入外部资源。哈希及运行绑定见 asset-manifest.json 的 construction_128_reuse 与 clients/cocos/asset-bindings.json。平面图使用既有床、desk-96、hearth、planter，网格/文字原生绘制。阿榆暂复用 noah-actor；独立木匠造型与作息仍是明确缺口，未记为用户已批准。
+
+
+### Production devices reuse — task129
+
+Four inventory aliases (`mayo_machine`, `loom_machine`, `cheese_press`, `oil_press`) reuse the existing original `assets/derived/ranching-v1/facilities/{mayo,loom,cheese,oil}.png` unchanged. Runtime machines and placement previews use their original ranching bindings; backpack aliases resolve to the same preloaded SpriteFrames. No generated/downloaded art, fonts or source modifications. Rights, dimensions and original hashes remain in `ranching-art-v1.json`; copied bytes are verified in `clients/cocos/asset-bindings.json`. This is an interaction extension to the approved Hearthwood primitives, with actual gameplay/landscape evidence in task129; no owner visual approval is inferred.
+
+
+## 独立铁匠柜台 — 2026-10-23
+
+按用户批准工坊概念生成原创无字室内背景、透明铁匠头像/驻店全身形象及木/绿布武器托架。原始图片与准确提示词保存在 `assets/generated/hearthwood/blacksmith-v1/`；`tools/build_blacksmith_art.py` 以明确裁切、alpha阈值、等比最近邻缩小派生3张PNG，`--check` 逐字节复现，未改写源图。4个运行绑定与源/结果哈希、尺寸、处理方式见 `blacksmith-art-v1.json`。NPC头像和世界形象来自同张原创源，不复用别人的人物；世界形象仅静态站姿，无虚构动画帧。已有装备、木框、纸张、苔绿布与按钮状态复用授权资源。无新增字体、音效、第三方下载或付费素材；中文与交易数字保持原生。
+
+
+## 工具与资源劳动美术 — task130
+
+内置imagegen生成两张原创1536×1024透明源表，归档于assets/generated/hearthwood/tools-v1/，完整提示词同目录。确定性切片输出35张PNG：四工具×四档16图、四矿种×三状态12图、树桩/破损树桩/幼苗3图、矿石/树种背包图4图。alpha阈值160，清除邻格碎片，最近邻缩放，资源脚底基线112；源图不修改，不进入运行包。tools/build_tool_art.py --check核验图像与manifest可重建。
+
+现有原创树木与六人物源图复用；toolView.ts提供四向原生手臂/握点/工具起手、命中、收势，树木倒下、资源受击与水滴/木屑/石屑。它是分层关节动画，不宣称所有人物新增独立全身绘制序列。来源/哈希/切片见tool-art-v1.json；地形七张PNG保持原字节，动态资源由原生节点表示。实际实机截图和玩家视觉反馈另见任务130，不把源图通过当成最终批准。
+
+
+## 人物工具握持优化 — task131
+
+复用既有16张工具与6张人物PNG，未改写位图或生成新素材。原生Cocos将物品图世界尺寸收敛为22–24（壶18），用源像素实测握点、身体前后遮挡及独立手套层表达握柄；7Hz步态、脚底共享倾斜和分段挥动弧线保持连接。源握点与尺寸登记在asset-manifest.json的held_pose_revision，完整原图哈希仍见tool-art-v1.json；人物原图与字体不变。实际Creator截图/录屏和默认5443验证见docs/tasks/131-held-tool-polish.md；没有宣称新绘全身动画或用户已批准。
+
+
+## 人物与工具一体动作 — task132
+
+用户再次指出task131仍像挂件，改用内置imagegen独立绘制四工具×六外观的24张透明全身关键帧源图。参照现有项目原创人物/工具，以及已接受的剑姿态风格，保留身份、服装和像素密度，不使用第三方人物或字体。完整源与准确提示词保存在assets/generated/hearthwood/tool-poses-v1；tools/build_tool_actor_art.py按实际连通轮廓、透明阈值、脚底锚点和最近邻归一化输出24张672×448图集，源不改写、不进入运行包，Python不画新动作或拼手臂。
+
+每图集4方向×6槽（握持、起手、接触、随挥、两步态/握持过渡）。源图的高举水壶起手被排除，使用直立回收姿态；少数漏工具步态用有效握持过渡替代，精确映射见provenance，未将每槽虚称独立新姿态。工作时切换实际全身关键帧，移除此前手套/工具叠层。工具升级共享动作几何，材质身份/等级与原独立背包图标保留。原资源阶段/矿石图与武器源均不变；运行与验收见任务132，不继承武器源的用户批准。

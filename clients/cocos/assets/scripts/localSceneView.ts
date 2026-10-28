@@ -10,7 +10,7 @@ import {
 import type { MapData, GameState, WorldObject } from "./core/protocol";
 import { sceneLayouts, type SceneImage } from "./core/sceneLayout";
 import { hitObject } from "./core/interaction";
-import { routeMarks, focusMarks } from "./core/localScene";
+import { routeMarks } from "./core/localScene";
 import { paintGraphics } from "./cavePaint";
 import { serverNow } from "./core/clock";
 export class LocalSceneRenderer {
@@ -28,6 +28,10 @@ export class LocalSceneRenderer {
     const layout = sceneLayouts[map.id];
     if (!layout) return false;
     for (const record of layout) {
+      if(map.resource_nodes){
+        if(record.data.canopy||typeof record.data.worldObject==='string'&&map.resource_nodes.some(n=>n.id===record.data.worldObject))continue;
+        if(record.kind!=='image'&&map.trees.some(([x,y])=>record.x===x+5&&record.y===y+5))continue;
+      }
       const n = new Node(record.art || "SceneShadow");
       n.layer = this.parent.layer;
       this.parent.addChild(n);
@@ -89,12 +93,11 @@ export class LocalSceneRenderer {
   update(
     s: GameState,
     p: { x: number; y: number },
-    near: WorldObject | undefined,
     route: { x: number; y: number }[],
     active: string | undefined,
-    pending: boolean,
     reduced: boolean,
     time: number,
+    blocked: {x:number;y:number}|null = null,
   ) {
     for (const { node: n, record: r } of this.images) {
       if (r.data.canopy) {
@@ -136,10 +139,12 @@ export class LocalSceneRenderer {
     }
     if (this.cues) {
       this.cues.clear();
-      paintGraphics(this.cues, [
-        ...routeMarks(route, reduced, time),
-        ...(near ? focusMarks(near, pending ? "pending" : "ready") : []),
-      ]);
+      paintGraphics(this.cues, routeMarks(route, reduced, time));
+      if(blocked){
+        this.cues.strokeColor=new Color('#ead9a4b8');this.cues.lineWidth=1;
+        this.cues.moveTo(blocked.x-3,-blocked.y-3);this.cues.lineTo(blocked.x+3,-blocked.y+3);
+        this.cues.moveTo(blocked.x-3,-blocked.y+3);this.cues.lineTo(blocked.x+3,-blocked.y-3);this.cues.stroke();
+      }
     }
   }
 }

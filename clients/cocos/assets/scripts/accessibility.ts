@@ -1,6 +1,6 @@
 /** Browser semantics for the controls that the Cocos view actually rendered. */
 export type SemanticControl={id:string;label:string;x:number;y:number;w:number;h:number;disabled:boolean;pressed?:boolean};
-export type SemanticField={label:string;value:string};
+export type SemanticField={label:string;value:string;secret?:boolean;autocomplete?:string};
 export type SemanticText={id:string;text:string};
 type Frame={mode:string;title:string;controls:SemanticControl[];fields:Map<string,SemanticField>;texts:SemanticText[];focusId:string;busy:boolean;message:string};
 type Actions={activate:(id:string)=>void;focus:(id:string,clearInput?:boolean)=>void;escape:()=>void;key:(code:string,down:boolean,repeat:boolean)=>boolean};
@@ -12,6 +12,7 @@ export class WebSemantics {
  private frame:Frame|null=null;private keyboard=false;private stack:{mode:string;focus:string}[]=[];
  private editor:{id:string;label:string}|null=null;private editorReturn='';private editorTask:any;
  private namedInputs=new Map<any,string|null>();private disposed=false;
+ private paddedInputs=new Map<any,{padding:string;boxSizing:string;left:string}>();
  constructor(enabled:boolean,private actions:Actions){
   const host=globalThis as unknown as Record<string,any>;if(!enabled||!host.document?.body)return;
   this.doc=host.document;this.root=this.doc.createElement('div');this.root.id='realquest-accessibility';this.root.tabIndex=-1;this.root.style.cssText='position:fixed;inset:0;pointer-events:none;';
@@ -28,7 +29,8 @@ export class WebSemantics {
  private focusCanvas(){this.actions.focus('');this.canvas()?.focus({preventScroll:true});}
  private pointer=()=>{this.keyboard=false;this.editorReturn='';};
  private focusIn=(event:any)=>{if(event.target===this.canvas()){this.actions.focus('',this.keyboard);return;}if(this.editor&&['INPUT','TEXTAREA'].includes(event.target?.tagName)&&event.target.type!=='file')this.attachEditor();};
- private focusOut=(event:any)=>{if(['INPUT','TEXTAREA'].includes(event.target?.tagName))this.root?.removeAttribute('aria-owns');};
+ private restoreEditorStyle(element:any){const style=this.paddedInputs.get(element);if(style){Object.assign(element.style,style);this.paddedInputs.delete(element);}}
+ private focusOut=(event:any)=>{if(['INPUT','TEXTAREA'].includes(event.target?.tagName)){this.root?.removeAttribute('aria-owns');this.restoreEditorStyle(event.target);}};
  private keyDown=(event:any)=>{
   if(!this.frame||event.defaultPrevented||event.isComposing)return;
   const id=this.currentId(),target=event.target,editing=this.editor&&['INPUT','TEXTAREA'].includes(target?.tagName)&&target.type!=='file',canvas=target===this.canvas()||target===this.doc.body;
@@ -51,11 +53,21 @@ export class WebSemantics {
   const element=this.doc?.activeElement;if(!this.editor||!['INPUT','TEXTAREA'].includes(element?.tagName)||element.type==='file')return;
   if(!this.namedInputs.has(element))this.namedInputs.set(element,element.getAttribute('aria-label'));
   element.setAttribute('aria-label',this.editor.label);if(element.id)this.root.setAttribute('aria-owns',element.id);
+  const field=this.frame?.fields.get(this.editor.id);
+  // Creator positions the native editor against the whole control, ignoring
+  // the label inset. Match the registration label so entering edit never jumps.
+  if(this.editor.id==='traveler-name'){
+   if(!this.paddedInputs.has(element))this.paddedInputs.set(element,{padding:element.style.padding,boxSizing:element.style.boxSizing,left:element.style.left});
+   Object.assign(element.style,{padding:'0 14px',boxSizing:'border-box',left:'0px'});
+  }
+  if(field?.autocomplete)element.setAttribute('autocomplete',field.autocomplete);else element.removeAttribute('autocomplete');
+  if(field?.secret){element.setAttribute('autocapitalize','none');element.spellcheck=false;}
  }
  returnFromEditing(){if(this.keyboard&&this.editorReturn){const id=this.editorReturn;this.editorReturn='';return this.focusControl(id);}return false;}
  update(frame:Frame){
   if(!this.root||this.disposed)return;const previous=this.frame,focused=this.currentId(),wasOwned=!!focused||this.doc.activeElement===this.root;let restore='';
   for(const element of Array.from(this.namedInputs.keys()))if(!element.isConnected)this.namedInputs.delete(element);
+  for(const element of Array.from(this.paddedInputs.keys()))if(!element.isConnected)this.paddedInputs.delete(element);
   if(previous&&previous.mode!==frame.mode){
    const returning=this.stack.findIndex(p=>p.mode===frame.mode);
    if(returning>=0){restore=frame.focusId||this.stack[returning].focus;this.stack=this.stack.slice(0,returning);}
@@ -83,6 +95,7 @@ export class WebSemantics {
  }
  dispose(){
   if(!this.doc||this.disposed)return;this.disposed=true;clearTimeout(this.editorTask);this.doc.removeEventListener('keydown',this.keyDown,true);this.doc.removeEventListener('keyup',this.keyUp,true);this.doc.removeEventListener('pointerdown',this.pointer,true);this.doc.removeEventListener('focusin',this.focusIn,true);this.doc.removeEventListener('focusout',this.focusOut,true);
+  for(const element of Array.from(this.paddedInputs.keys()))this.restoreEditorStyle(element);
   for(const [element,label] of Array.from(this.namedInputs))if(element.isConnected){if(label===null)element.removeAttribute('aria-label');else element.setAttribute('aria-label',label);}this.namedInputs.clear();if(this.root.contains(this.doc.activeElement))this.canvas()?.focus({preventScroll:true});this.root.remove();this.buttons.clear();
  }
 }

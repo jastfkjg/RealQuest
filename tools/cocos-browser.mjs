@@ -13,7 +13,7 @@ const alive=pid=>{try{process.kill(pid,0);return true;}catch(error){if(error.cod
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 async function backendSources(){
  const records=[];
- async function visit(directory){for(const entry of (await fs.readdir(path.join(root,directory),{withFileTypes:true})).sort((a,b)=>a.name<b.name?-1:1)){const file=directory+'/'+entry.name;if(entry.isSymbolicLink())throw Error('Backend source symlinks are not supported by the test receipt.');if(entry.isDirectory()&&!entry.name.startsWith('__'))await visit(file);else if(entry.isFile()&&file.endsWith('.py'))records.push({path:file,sha256:hash(await fs.readFile(path.join(root,file)))});}}
+ async function visit(directory){for(const entry of (await fs.readdir(path.join(root,directory),{withFileTypes:true})).sort((a,b)=>a.name<b.name?-1:1)){const file=directory+'/'+entry.name;if(entry.isSymbolicLink())throw Error('Backend source symlinks are not supported by the test receipt.');if(entry.isDirectory()&&!entry.name.startsWith('__'))await visit(file);else if(entry.isFile()&&(file.endsWith('.py')||file.endsWith('.json')))records.push({path:file,sha256:hash(await fs.readFile(path.join(root,file)))});}}
  await visit('backend/app');await visit('backend/migrations');records.push({path:'backend/requirements.lock.txt',sha256:hash(await fs.readFile(path.join(root,'backend/requirements.lock.txt')))});return {sha256:hash(JSON.stringify(records)),records};
 }
 async function freePort(){const server=net.createServer();await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});const port=server.address().port;await new Promise(resolve=>server.close(resolve));return port;}

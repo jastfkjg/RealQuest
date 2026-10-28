@@ -11,23 +11,31 @@ export function objectiveText(state: GameState, quest: Quest, index: number) {
   const counters: Record<string, Record<number, [number, number]>> = {
     settle_in: { 1: [state.stats.wood || 0, 3] }, forest_path: { 1: [state.stats.stone || 0, 6] },
     first_harvest: { 0: [state.stats.harvest || 0, 2], 1: [state.stats.sold || 0, 1] },
+    craft_planks: {0: [state.stats.crafted || 0, 1]},
     village_supplier: { 0: [state.stats.deliveries || 0, 3], 1: [state.buildings.home || 1, 2] },
     market_neighbor: { 1: [state.stats.market_sold || 0, 1] }, rune_research: { 1: [state.attributes.wisdom || 0, 25] },
     craft_home: { 0: [state.stats.crafted || 0, 1], 1: [Math.max(1, ...Object.values(state.buildings)), 2] },
     leave_valley: { 1: [state.knowledge_growth?.magic || 0, 3] },
   };
+  if (!quest.legacy && state.quest_story) {
+    counters.first_harvest = {0: [state.stats.harvest_radish || 0, 4], 1: [state.inventory.crop || 0, 4]};
+    counters.craft_home = {0: [state.buildings.home || 1, 2]};
+    counters.gate_preparation = {1: [state.knowledge_growth?.magic || 0, 3]};
+    delete counters.leave_valley;
+  }
   const count = counters[quest.id]?.[index];
   return count ? text + '（' + count[0] + '/' + count[1] + '）' : text;
 }
 export function trackedQuest(state: GameState) {
   return state.quest_log.find(q => q.id === state.tracked_quest && ['active', 'ready'].includes(q.status))
+    || state.quest_log.find(q => q.kind === 'main' && ['ready', 'active', 'available'].includes(q.status))
     || state.quest_log.find(q => ['ready', 'active'].includes(q.status)) || state.quest_log.find(q => q.status === 'available');
 }
 export function currentGuidance(state: GameState, now: number): GuidanceEntry {
   const intro = trackedIntroStep(state);
   if (intro) {
     const key = 'intro:' + intro.id;
-    return { key, kind: 'intro', title: intro.title, note: intro.note, progress: '初探步骤 ' + String(intro.index + 1) + '/4',
+    return { key, kind: 'intro', title: intro.title, note: intro.note, progress: '初探步骤 ' + String(intro.index + 1) + (state.quest_story && !state.quest_story.legacy_departure ? '/3' : '/4'),
       action: { label: intro.action, ...(intro.target ? { target: intro.target } : { panel: intro.panel }), owner: key } };
   }
   const preparation = trackedDeparture(state, now);
@@ -44,9 +52,10 @@ export function currentGuidance(state: GameState, now: number): GuidanceEntry {
     const studying = quest.id === 'rune_research' && quest.checks[0] && !quest.checks[1] && quest.status === 'active';
     return { key, kind: 'quest', questId: quest.id, title: quest.title,
       note: quest.status === 'ready' ? '回到' + quest.giver_name + '交付；只在确认后领取原有奖励。'
-        : quest.status === 'available' ? '到' + quest.giver_name + '接取这份委托。' : objectiveText(state, quest, next),
+        : quest.status === 'available' ? quest.accept_anywhere ? '在旅途委托里阅读并接取，按自己的节奏继续。' : '到' + quest.giver_name + '接取这份委托。' : objectiveText(state, quest, next),
       progress: done + '/' + quest.checks.length + ' 目标',
-      action: studying ? { label: '打开研习书页', panel: 'activity', lifeView: 'study', owner: key }
+      action: quest.status === 'available' && quest.accept_anywhere ? {label: '阅读旅途委托', panel: 'journal', owner: key}
+        : studying ? { label: '打开研习书页', panel: 'activity', lifeView: 'study', owner: key }
         : target ? { label: quest.status === 'ready' ? '标记交付地点' : '标记下一目标', target, owner: key } : undefined };
   }
   return { key: 'free', kind: 'free', title: '照顾家园，或随心探索', note: '已登记的委托可以从旅途委托查看。现实成长也能直接进入。', progress: '自由旅程' };

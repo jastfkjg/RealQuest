@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-23",
+  "status": "concept_layout_approved_by_owner_2026-10-23",
+  "tool": "built-in image_gen",
+  "purpose": "Dedicated blacksmith NPC counter; finished equipment and permanent blueprints sold by NPC, crafting reserved for workshop workbench. Preview only; no runtime integration.",
+  "image": "preview.png",
+  "dimensions": [
+    1586,
+    992
+  ],
+  "sha256": "a4b9e48cbbd09d035f4616309c47bab83812353e269d11c5f8c57bd8654418da",
+  "prompt": "generate.prompt.txt",
+  "prompt_sha256": "cf3e41f3196f692b64195d9690888af125594801d8b2cfc6e43680bf1439753e",
+  "references": [
+    {
+      "path": "docs/art/references/shop-browse-concept-v2.png",
+      "sha256": "ad9e11372602978796dd1af785980511aff6149a99899cfadbd9ef40ae03b457"
+    },
+    {
+      "path": "assets/generated/hearthwood/equipment-v1/atlas.png",
+      "sha256": "136ab8820e9f6bc741cfac8bf053965af1536fc648ad334d2863c65525e14394"
+    }
+  ],
+  "data": "20 silver and 0 selected swords follow user screenshot; prices and 16 village-sale items checked against current equipment_catalog.json. Shop inventory is not player inventory.",
+  "limitations": [
+    "New blacksmith NPC appearance is a proposal, not an existing implemented resident.",
+    "Generated Chinese text and controls are mockup-only, not runtime assets.",
+    "No game build or interaction test applies to this static concept."
+  ],
+  "cleanup": "No browsers, preview servers, Node launchers, node_repl sessions or other background tools were started for this preview.",
+  "approval_scope": "User approved this concept for blacksmith counter implementation; actual Cocos screenshots remain a separate visual review."
+}

@@ -1,3 +1,5 @@
+import {auditPanelText} from './ui-layout-audit.mjs';
+import {openSession} from './ui-navigation.mjs';
 import {browserConfig,launchBrowser,closeBrowser} from '../../../tools/cocos-browser-config.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -8,7 +10,7 @@ const test=await browserConfig('interface-refresh'),checks=[],shots=[],errors=[]
 const browser=await launchBrowser(chromium,{headless:true});let context,page;
 const read=()=>page.evaluate(()=>JSON.parse(window.render_game_to_text()));
 async function until(predicate,label='state'){for(let i=0;i<360;i++){const s=await read();if(predicate(s))return s;await page.waitForTimeout(70);}throw Error(label+': '+JSON.stringify(await read()));}
-async function click(id){const c=(await until(s=>s.controls.some(c=>c.id===id&&!c.disabled),id)).controls.find(c=>c.id===id);await page.mouse.click(c.x,c.y);await page.waitForTimeout(120);}
+async function click(id){if(id==='session'&&(await read()).mode==='world')return openSession(page);const c=(await until(s=>s.controls.some(c=>c.id===id&&!c.disabled),id)).controls.find(c=>c.id===id);await page.mouse.click(c.x,c.y);await page.waitForTimeout(120);}
 async function field(id,value){await click(id);await page.keyboard.press('ControlOrMeta+A');await page.keyboard.insertText(value);await page.keyboard.press('Tab');await page.waitForTimeout(120);}
 async function size(width,height){await page.setViewportSize({width,height});await until(s=>s.camera.width===width&&s.camera.height===height,'resize');await page.waitForTimeout(100);}
 async function world(){for(let i=0;i<12&&(await read()).mode!=='world';i++){await page.keyboard.press('Escape');await page.waitForTimeout(100);}await until(s=>s.mode==='world'&&!s.busy);}
@@ -20,15 +22,15 @@ async function shot(name){await until(s=>!s.uiArt.loading.length,'materials');aw
   assert(!s.controls.some(c=>['menu','session','inventory','life','interact','up','down','left','right','tracker-open'].includes(c.id)),name+' no world navigation/input controls');
  }
  const inside=(c,r)=>c.x-c.w/2>=r.x-1&&c.x+c.w/2<=r.x+r.w+1&&c.y-c.h/2>=r.y-1&&c.y+c.h/2<=r.y+r.h+1;
- if(s.mode==='menu'&&s.uiRegions.length){
+ if(s.mode==='menu'&&s.uiRegions.some(r=>r.id==='menu-left-leaf')){
   const left=s.uiRegions.find(r=>r.id==='menu-left-leaf'),right=s.uiRegions.find(r=>r.id==='menu-right-leaf');
   for(const c of s.controls){const r=['menu-character','menu-growth','menu-equipment','menu-journal','menu-map'].includes(c.id)?left:right;assert(inside(c,r),name+' actual illustrated leaf bounds '+c.id);}
  }
- if(s.mode==='life'&&s.uiRegions.length){
+ if(s.mode==='life'&&s.uiRegions.some(r=>r.id==='life-index-leaf')){
   const left=s.uiRegions.find(r=>r.id==='life-index-leaf'),right=s.uiRegions.find(r=>r.id==='life-content-leaf');
   for(const c of s.controls)assert(inside(c,c.id.startsWith('tab-')?left:right),name+' Life leaf bounds '+c.id);
  }
- await page.screenshot({path:test.directory+'/'+name+'.png'});shots.push(name+'.png');states.push({name,mode:s.mode,viewport:s.camera,controls:s.controls,uiRegions:s.uiRegions,hudRegions:s.hudRegions,uiArt:s.uiArt});}
+ await page.screenshot({path:test.directory+'/'+name+'.png'});shots.push(name+'.png');states.push({name,mode:s.mode,viewport:s.camera,controls:s.controls,uiRegions:s.uiRegions,hudRegions:s.hudRegions,uiArt:s.uiArt,textIssues:await auditPanelText(page)});assert.deepEqual(states.at(-1).textIssues,[],name+' full text fits');}
 async function load(){await page.goto(test.baseURL);await page.waitForFunction(()=>window.render_game_to_text&&JSON.parse(window.render_game_to_text()).loaded);}
 async function fixture(location,position){const save=(await read()).saveId;await page.goto('about:blank');execFileSync('backend/.venv/bin/python',['-c',`import sqlite3,json,sys,time
 p,key,location,position=sys.argv[1:];sys.path.insert(0,'clients/cocos/tools');from test_guard import assert_fixture;assert_fixture(p)
@@ -37,7 +39,7 @@ const sizes=[[1440,900],[1920,1080],[1056,627],[1024,768],[844,390],[740,360]];
 try{
  context=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:test.directory+'/video',size:{width:1440,height:900}}});page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await load();for(const [w,h] of [...sizes,[1056,515]]){await size(w,h);await shot('registration-'+w+'x'+h);}
- await size(1440,900);await field('traveler-name','林间来客');await click('appearance-2');assert.equal((await read()).registrationAppearance,2);await shot('registration-selected');await click('start');await until(s=>s.mode==='world'&&!s.busy);assert.equal((await read()).character.appearance,2);assert.equal((await read()).character.name,'林间来客');
+ await size(1440,900);await field('traveler-name','山野之间慢慢前行的林间旅人');await click('appearance-2');assert.equal((await read()).registrationAppearance,2);await shot('registration-selected');await click('start');await until(s=>s.mode==='world'&&!s.busy);assert.equal((await read()).character.appearance,2);assert.equal((await read()).character.name,'山野之间慢慢前行的林间旅人');
  checks.push('native Chinese registration and real appearance selection at seven desktop/landscape sizes; saved actor identity matches selected outfit');
  const position=(await read()).savedPosition;
  for(const [w,h] of sizes){
@@ -67,9 +69,16 @@ try{
    await click('tab-shop');
   }
   await until(s=>s.mode===mode,name);
-  for(const [w,height] of [[1440,900],[740,360]]){await size(w,height);await shot(name+'-'+w);}
+  for(const [w,height] of [[1440,900],[1024,600],[740,360]]){await size(w,height);await shot(name+'-'+w);}
+  if(mode==='shop'){
+   await field('trade-amount','99');assert((await read()).controls.find(c=>c.id==='trade-confirm').disabled);await shot('shop-shortfall-740');await field('trade-amount','1');assert((await read()).controls.find(c=>c.id==='trade-minus').disabled);await click('trade-plus');const before=(await read()).inventory;await shot('shop-quantity-740');await click('trade-confirm');await until(s=>!s.busy&&s.inventory.seed===before.seed+2);assert.equal((await read()).inventory.gold,before.gold-4);await shot('shop-purchase-confirmed-740');
+  }
  }
  await world();await size(1440,900);await click('menu');await click('menu-preferences');await shot('preferences-1440');await size(740,360);await shot('preferences-740');
+ for(const mode of ['character','growth','journal','map','guide','preparation','preferences']){
+  for(const [w,h] of [[1440,900],[1024,600],[740,360]]){await world();await size(w,h);await click('menu');for(let i=0;i<3&&!(await read()).controls.some(c=>c.id==='menu-'+mode);i++)await click('menu-next');await click('menu-'+mode);await shot('audit-'+mode+'-'+w);}
+ }
+ await world();await size(1440,900);await click('find-neighbor');await shot('neighbor-finder-1440');await size(740,360);await shot('neighbor-finder-740');
  checks.push('actual market, armory, workbench, spellbook, home storage/rest and preferences at desktop/short landscape retain 44px controls and focused input without world HUD');
  assert.deepEqual(errors,[]);
 }catch(error){if(page&&!page.isClosed())try{await page.screenshot({path:test.directory+'/failure.png'});await fs.writeFile(test.directory+'/failure-state.json',JSON.stringify(await read(),null,2));}catch{}throw error;}

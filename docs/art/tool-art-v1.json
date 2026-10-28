@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "creator": "OpenAI built-in image_gen; original RealQuest art",
+  "license": "Original project-generated artwork; no third-party sprites",
+  "sources": [
+    {
+      "path": "assets/generated/hearthwood/tools-v1/tools.png",
+      "sha256": "078d5caf3c822f88005e0ff8887c99e27ee15d9cf42815a33f6346bbe360ff79",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "assets/generated/hearthwood/tools-v1/tools.prompt.txt",
+      "prompt_sha256": "81fe92b270aa4d695c8762d8c180f59d79c1d85943cee8a61069dd90a67ec7ad"
+    },
+    {
+      "path": "assets/generated/hearthwood/tools-v1/resources.png",
+      "sha256": "a372df659972fe6a3b696110a1fc8d15f80357f54502228115929ffd8b2990c6",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "assets/generated/hearthwood/tools-v1/resources.prompt.txt",
+      "prompt_sha256": "bb6776fa839e80bca89d7228185f8aff96bb523c6b7700f8b5b4620b516e7181"
+    }
+  ],
+  "processing": "4x4 cells; alpha>=160; tools largest connected component; resources components>=2% largest and no edge slivers; nearest-neighbor; fixed.32 resource scale, sapling.25; 96px tool icons and128px resource frames, foot baseline112",
+  "script": "tools/build_tool_art.py",
+  "script_sha256": "d00db2376edf60e6b429ef95a07c309d34ef7f0000f6bb3ea7e1149c40d19b95",
+  "records": [
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-0.png",
+      "binding": "tools/hoe-0",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "4bc26febfaadf20dfb375e00be158d39f9427ef4dcbfc6a2f492316e74f433c0"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-0.png",
+      "binding": "tools/axe-0",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        384,
+        0,
+        768,
+        256
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "31c614457b9d5078c9faa760069770b26b33713764f686c8b71ffd10afc6879f"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-0.png",
+      "binding": "tools/pickaxe-0",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        768,
+        0,
+        1152,
+        256
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "26be317d4fb3b06afbcb858afbebb482249f6d55476bdc2e0e6dde188a199b82"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-0.png",
+      "binding": "tools/watering_can-0",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        1152,
+        0,
+        1536,
+        256
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "51f5945d894e49379f532a2d8e2185616b4bb45313b87a2aff297571f3e8cfe9"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-1.png",
+      "binding": "tools/hoe-1",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        0,
+        256,
+        384,
+        512
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "e06025f1dffac00e69756685f0c81cd4da9b8145bfa88b2ee6021ada4039c8d5"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-1.png",
+      "binding": "tools/axe-1",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        384,
+        256,
+        768,
+        512
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "52f7bb46aa428e59cd02b19622d0c27f2ea019fe8d2eca6fd5ffa39fd9a88521"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-1.png",
+      "binding": "tools/pickaxe-1",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        768,
+        256,
+        1152,
+        512
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "f4d4401529369bc878544888ba181fb77af4b82058790112494d89b20d3a11c2"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-1.png",
+      "binding": "tools/watering_can-1",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        1152,
+        256,
+        1536,
+        512
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "1a76c9bc61e26dfc2ee36f18f8246011bf4652f5745c96ddd3df534c846a80e4"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-2.png",
+      "binding": "tools/hoe-2",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        0,
+        512,
+        384,
+        768
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "9b1d8a12c107cfd81fce013c348606f613d386c98e9e8e22fbba4e52aabf66ac"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-2.png",
+      "binding": "tools/axe-2",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        384,
+        512,
+        768,
+        768
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "6fd7009f43905e6709efe90a1ce268e955e8b6b29cd9a8cea0bbe51dce2a5e4d"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-2.png",
+      "binding": "tools/pickaxe-2",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        768,
+        512,
+        1152,
+        768
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "5965e8a17f5193bcfeb1c1259d32fcff88da912c4676d5819dfd7d26b6aaa561"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-2.png",
+      "binding": "tools/watering_can-2",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        1152,
+        512,
+        1536,
+        768
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "dec87edbc6405d66abd15c0d944422aff6a631828bb53a4bf14b70d84a6d0236"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/hoe-3.png",
+      "binding": "tools/hoe-3",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        0,
+        768,
+        384,
+        1024
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "1231776ab2f93fda2041425fe8ab24154f08823beed6a15eda9bfb0c00425275"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/axe-3.png",
+      "binding": "tools/axe-3",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        384,
+        768,
+        768,
+        1024
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "66832ca666b6b776b7dcaca711d0745ff3b0224e4bf94a7c3d6562d0620e98da"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/pickaxe-3.png",
+      "binding": "tools/pickaxe-3",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        768,
+        768,
+        1152,
+        1024
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "3504d20ddca4aea12efdabd89b0a0f4cabf075bc2df05917fb65e1da581f5448"
+    },
+    {
+      "path": "assets/derived/tools-v1/tools/watering_can-3.png",
+      "binding": "tools/watering_can-3",
+      "source": "assets/generated/hearthwood/tools-v1/tools.png",
+      "crop": [
+        1152,
+        768,
+        1536,
+        1024
+      ],
+      "role": "tool-tier-icon",
+      "width": 96,
+      "height": 96,
+      "sha256": "0d36098c67136e7fde881e98123c8163b90f244b97462823b91471ff804be413"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-whole.png",
+      "binding": "gathering/stone-whole",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "d8d7cdae8a5806ecd1f16e18decfea8a588440055a9db4da19ff9e67d6dcf835"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-whole.png",
+      "binding": "gathering/copper-whole",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        384,
+        0,
+        768,
+        256
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "e1a0fb052c635c9599ac91aff8e3091e80ad47b10d59e7bc40702341a3f34c46"
+    },
+    {
+      "path": "assets/derived/tools-v1/items/copper_ore.png",
+      "binding": "items/copper_ore",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        384,
+        0,
+        768,
+        256
+      ],
+      "role": "collected-material-icon",
+      "width": 64,
+      "height": 64,
+      "sha256": "9c631fef54f27bc1ad43fe5ae67558b8e44381ee56c8830215af5f16f63405d9"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-whole.png",
+      "binding": "gathering/iron-whole",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        768,
+        0,
+        1152,
+        256
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "0c89dcc984ffff375bbc15010a6ad4becd9a377cc742b3c0c0c9e7b4a291623f"
+    },
+    {
+      "path": "assets/derived/tools-v1/items/iron_ore.png",
+      "binding": "items/iron_ore",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        768,
+        0,
+        1152,
+        256
+      ],
+      "role": "collected-material-icon",
+      "width": 64,
+      "height": 64,
+      "sha256": "280440e1534bd80f4713a7ed379b95920559bd106c9e60ce88a62b2649fbd9bc"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-whole.png",
+      "binding": "gathering/gold-whole",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        1152,
+        0,
+        1536,
+        256
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "ff47c78e8328919e025b03cd6571df731e60164ec8686e0d39f865c7cf140eaa"
+    },
+    {
+      "path": "assets/derived/tools-v1/items/gold_ore.png",
+      "binding": "items/gold_ore",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        1152,
+        0,
+        1536,
+        256
+      ],
+      "role": "collected-material-icon",
+      "width": 64,
+      "height": 64,
+      "sha256": "ce3195273fb39d5e9b369ced353b8773ab1c6930e10d420127fc3a089ada363d"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-cracked.png",
+      "binding": "gathering/stone-cracked",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        0,
+        256,
+        384,
+        512
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "eb2128b4685e985fc33f1d061fc75e621fee8390314a490b97c9d2a0f9d2210e"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-cracked.png",
+      "binding": "gathering/copper-cracked",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        384,
+        256,
+        768,
+        512
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "bc4a40e422008891b3d3489ecc0bc6ab82e4e8b9908eae1f4f194759488cdbaa"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-cracked.png",
+      "binding": "gathering/iron-cracked",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        768,
+        256,
+        1152,
+        512
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "eb011a9fe732b9edd34dd58c40af2396c0b883288b5299229465354d6ecdf3ab"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-cracked.png",
+      "binding": "gathering/gold-cracked",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        1152,
+        256,
+        1536,
+        512
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "4e279fadea813d5459da41a262595fd48feac15838b967c5ddc5d12aa18a638e"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stone-depleted.png",
+      "binding": "gathering/stone-depleted",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        0,
+        512,
+        384,
+        768
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "094c1e596f8553577fdb0310a60eb6db692dfbb5b5ac2b01d540919778e5be7e"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/copper-depleted.png",
+      "binding": "gathering/copper-depleted",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        384,
+        512,
+        768,
+        768
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "436d3560587984d6a1796e49d7b276a44f1b5d1fe5d9c82bd4c89865578fe082"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/iron-depleted.png",
+      "binding": "gathering/iron-depleted",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        768,
+        512,
+        1152,
+        768
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "2599e29141e0b0cd4f44bede92fc0083bc328996f5389baf4eeb36990855e4a7"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/gold-depleted.png",
+      "binding": "gathering/gold-depleted",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        1152,
+        512,
+        1536,
+        768
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "1de4a786fd42029f0ceee2326bf4d21a21b437c214d2338caad259b59c2c5fb4"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stump.png",
+      "binding": "gathering/stump",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        0,
+        768,
+        384,
+        1024
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "5db5174c867f5621b18c404b35fb80529d2ff58159460faaf8aeb7f56231a348"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/stump-cracked.png",
+      "binding": "gathering/stump-cracked",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        384,
+        768,
+        768,
+        1024
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "94a08736be619fe1fadd3668036426a8ba2c8f9c7866807dfbf81c29ada657f0"
+    },
+    {
+      "path": "assets/derived/tools-v1/resources/sapling.png",
+      "binding": "gathering/sapling",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        768,
+        768,
+        1152,
+        1024
+      ],
+      "role": "resource-state",
+      "width": 128,
+      "height": 128,
+      "sha256": "7997717e5cbfae61a1f000c43cc4d63b3f279e74a1ffce202732e7d4eb2fa2da"
+    },
+    {
+      "path": "assets/derived/tools-v1/items/tree_seed.png",
+      "binding": "items/tree_seed",
+      "source": "assets/generated/hearthwood/tools-v1/resources.png",
+      "crop": [
+        1152,
+        768,
+        1536,
+        1024
+      ],
+      "role": "collected-material-icon",
+      "width": 64,
+      "height": 64,
+      "sha256": "5d5f0842e539c8bbfb6b451ad5282aaace61e74c67eba4768a87b2f0d69b4bfd"
+    }
+  ]
+}

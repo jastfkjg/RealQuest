@@ -119,3 +119,31 @@ assert.equal(v.liveTarget(s, null), undefined);
 console.log(
   "Cave presentation behavior passes: live/cyclic targeting, cover/range, server cast timing, confirmed-only feedback, reduced motion, immutable deterministic art and route availability.",
 );
+
+const {CombatMotion}=await import(new URL('combatMotion.js',dest));
+const motion=new CombatMotion(),free={...map,obstacles:[]};
+motion.reset({x:208,y:240},0);
+assert(motion.step(free,{x:208,y:240},1,0,1/60,1/60).x>208,'movement starts before receipt');
+motion.checkpoint(1);motion.step(free,{x:208,y:240},1,0,.05,.07);
+motion.acknowledge(1,{x:212,y:240},.08);
+const previous=motion.position.x;
+assert(motion.step(free,{x:212,y:240},1,0,1/60,.09).x>=previous,'matching receipt does not snap backwards');
+for(let t=.1;t<1;t+=.05)motion.step(free,{x:212,y:240},1,0,.05,t);
+const frozen=motion.position.x;
+assert.equal(motion.step(free,{x:212,y:240},1,0,.05,2).x,frozen,'stale network stops prediction');
+motion.reset({x:270,y:120},3);
+for(let i=0;i<10;i++)motion.step(map,{x:270,y:120},1,0,.01,3+i*.01,360);
+assert(motion.position.x<288,'dash prediction cannot cross pillar');
+const base={x:208,y:344},action={kind:'weapon',style:'sweep',angle:0,reach:34,started:1,until:1.38};
+assert(v.weaponMarks('stone_sword',true,base,action,1.2).length>v.weaponMarks('stone_sword',true,base,null,1).length);
+assert.equal(v.weaponMarks('stone_sword',false,base,action,1.2).length,0);
+assert.notDeepEqual(v.weaponMarks('spring_spear',true,base,{...action,style:'thrust'},1.2),v.weaponMarks('stone_sword',true,base,action,1.2));
+console.log('Combat response passes: immediate movement, acknowledged correction, weak-network bound, collision-safe prediction, owned/differentiated weapon action.');
+const {CombatInputBuffer}=await import(new URL('combatMotion.js',dest));
+const buffered=new CombatInputBuffer();buffered.queue('dodge');const firstPress=buffered.snapshot();
+assert.deepEqual(buffered.expired(.7),[],'press is retained while previous transport request is pending');
+buffered.markSent(firstPress,.7);assert.deepEqual(buffered.expired(.8),[]);
+assert.deepEqual(buffered.expired(1),['dodge'],'unaccepted gameplay buffer is bounded after first send');
+buffered.queue('dodge');assert(!buffered.consume('dodge',firstPress.dodge),'late receipt cannot consume a newer press');
+const newer=buffered.snapshot();assert(buffered.consume('dodge',newer.dodge));buffered.queue('attack');buffered.clear();assert.deepEqual(buffered.snapshot(),{});
+console.log('Input buffer retains unsent presses, bounds recovery buffering, protects newer presses from late receipts and clears on mode/blur.');

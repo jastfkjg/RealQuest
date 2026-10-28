@@ -5,8 +5,10 @@ import uuid
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from .world import OBJECTS, INTERIORS, map_for, walkable, clear_path
-from .quests import QUESTS, progress, quest_views
+from .quests import QUESTS, progress, quest_views, definition_for, ensure_story, record_ranch_action
 from .market import market_view
+from . import farming, ranching, construction
+from .economy import ensure_economy, money, upgrade_costs
 from .residents import RESIDENTS, ensure_clock, resident_position, near_resident, greeting, release_encounter, LEASE_SECONDS, settle_clock
 from .daynight import clock_view, night_due, finish_day, SHORT_REST_MINUTES, DAY_SECONDS
 
@@ -29,7 +31,7 @@ def require(condition, message):
         raise RuleError(message)
 
 def initial_state():
-    return {'character': None, 'position': {'x': 240, 'y': 320}, 'inventory': {'gold': 20, 'wood': 0, 'stone': 0, 'seed': 6, 'crop': 0, 'plank': 0}, 'xp': 0, 'attributes': {key: 0 for key in ATTRIBUTES}, 'energy': 0, 'knowledge_shard': 0, 'buildings': {'home': 1, 'workshop': 1, 'library': 1}, 'plots': {}, 'gathered': {}, 'relationships': {'lia': 0, 'noah': 0}, 'npc_days': {}, 'events': [], 'activities': [], 'daily': {}, 'timer': None, 'revision': 0}
+    return {'economy_version': 1, 'character': None, 'position': {'x': 240, 'y': 320}, 'inventory': {'gold': 20, 'wood': 0, 'stone': 0, 'seed': 6, 'crop': 0, 'plank': 0}, 'xp': 0, 'attributes': {key: 0 for key in ATTRIBUTES}, 'energy': 0, 'knowledge_shard': 0, 'buildings': {'home': 1, 'workshop': 1, 'library': 1}, 'plots': {}, 'gathered': {}, 'relationships': {'lia': 0, 'noah': 0}, 'npc_days': {}, 'events': [], 'activities': [], 'daily': {}, 'timer': None, 'revision': 0}
 
 def upgrade_state(original):
     state = copy.deepcopy(original)
@@ -80,6 +82,13 @@ def upgrade_state(original):
     ensure_combat(state)
     from .village_intro import ensure_intro
     ensure_intro(state)
+    farming.ensure_farm(state)
+    ranching.ensure_ranch(state)
+    construction.ensure_construction(state)
+    ensure_story(state)
+    ensure_economy(state)
+    from .tools import ensure_tools
+    ensure_tools(state)
     return state
 
 
@@ -283,6 +292,15 @@ def activity(state, data, now, source='manual'):
     return f'记录已保存，获得 {earned} 点成长经验' if earned else '记录已保存，今日该属性奖励已达上限'
 
 def apply(state, action, data, now):
+    message = _apply(state, action, data, now)
+    # Settle after clock ownership changes and location transitions as well as
+    # before mutations. This also persists indoor/cave automatic dismounts.
+    construction.settle_construction(state, now)
+    ranching.settle_ranch(state, now)
+    return message
+
+
+def _apply(state, action, data, now):
     migrated = upgrade_state(state)
     state.clear()
     state.update(migrated)
@@ -299,6 +317,7 @@ def apply(state, action, data, now):
         return '新任务：给新生活一个落脚点。走近小屋门口按 E 进入，再收集 3 份木材。'
     require(state['character'] is not None, '请先创建角色')
     ensure_clock(state, now)
+    ranching.settle_ranch(state, now)
     if action in ["world_resume", "world_pause"]:
         owner = data.get('owner')
         require(isinstance(owner,str) and len(owner) <= 64 and len(owner) >= 8, '世界视图标识无效')
@@ -319,9 +338,21 @@ def apply(state, action, data, now):
     location = state['location']
     if 'world_day' in data and data['world_day'] != clock_view(state, now)['day']:
         return '已经是新的一天，请重新选择操作。'
+    if action.startswith('construction_'):
+        return construction.command(state, action, data, now, require, spend)
+    if action.startswith('tool_') or action=='tree_plant':
+        from .tools import command
+        return command(state,action,data,now)
+    if action == 'ranch_build':
+        require(False, '住所工程请到工坊找木匠阿榆委托')
+    if action.startswith('ranch_'):
+        collected = sum(state['ranch']['animals'].get(data.get('target'), {}).get('products', {}).values()) if action == 'ranch_collect' else 0
+        message = ranching.command(state, action, data, now, require, spend)
+        record_ranch_action(state, action, data, collected)
+        return message
     if state['npc_encounter'] and state['npc_encounter']['until'] <= now:
         release_encounter(state, now)
-    if action in ['cave_tick','gear_equip','gear_buy','gear_craft','gear_sell','spark_learn','gate_open','stone_recover','cave_retreat','cave_interact']:
+    if action in ['cave_tick','gear_equip','gear_buy','gear_craft','gear_sell','gear_unequip','blueprint_buy','blueprint_research','gear_material_buy','spark_learn','gate_open','stone_recover','cave_retreat','cave_interact']:
         from .combat import command
         return command(state, action, data, now)
     if action in ['intro_toggle', 'intro_brief', 'intro_review']:
@@ -345,7 +376,7 @@ def apply(state, action, data, now):
         require(all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in [x,y]), '坐标无效')
         target = {'x': round(x, 2), 'y': round(y, 2)}
         require(data.get('location', location) == location, '场景已经切换，请等待位置同步')
-        require(walkable(x,y,location) and clear_path(state['position'], target,location), '此处无法通行')
+        require(walkable(x,y,location,state,now) and clear_path(state['position'], target,location,state,now), '此处无法通行')
         require(math.hypot(x-state['position']['x'], y-state['position']['y']) <= 220, '移动距离过远，请重试')
         state['position'] = target
         return ''
@@ -540,27 +571,40 @@ def apply(state, action, data, now):
         state['tracked_quest'] = quest_id
         return '已追踪任务，目标会显示在地图上'
     if action in ['quest_accept', 'quest_claim']:
-        quest = next((q for q in QUESTS if q['id'] == data.get('quest_id')), None)
+        quest = definition_for(state, data.get('quest_id'))
         require(quest is not None, '任务不存在')
         giver = next((o for o in map_for(location, state, now)['objects'] if o['id'] == quest['giver']), None)
-        require(giver is not None and math.hypot(state['position']['x']-giver['x'],state['position']['y']-giver['y']) <= 72, '请到发布任务的 NPC 或告示板旁接取、交付')
-        view = next(q for q in quest_views(state) if q['id'] == quest['id'])
+        require((action == 'quest_accept' and quest.get('accept_anywhere')) or (giver is not None and math.hypot(state['position']['x']-giver['x'],state['position']['y']-giver['y']) <= 72), '请到发布任务的 NPC 或告示板旁接取、交付')
+        view = next((q for q in quest_views(state) if q['id'] == quest['id']), None)
+        require(view is not None, '这份任务尚未开放，请先继续当前主线')
         if action == 'quest_accept':
             require(view['status'] == 'available', '任务尚未开放或已经接取')
             state['quests'][quest['id']]={'status':'active','accepted_at':now}
-            if quest['id'] == 'leave_valley':
+            if quest['id'] == 'leave_valley' and quest.get('legacy'):
                 state['village_intro']['briefed'] = True
             return f'已接取：{quest["title"]}。当前追踪保持不变，可在委托页选择追踪'
         require(view['status'] == 'ready', '请先完成任务目标，奖励只能领取一次')
+        spend(state, quest.get('delivery', {}))
         for item, amount in quest['reward'].items():
-            state['inventory'][item] += amount
+            state['inventory'][item] = state['inventory'].get(item,0) + amount
+        if quest.get('ranch_aid'):
+            ranching.grant_intro_aid(state)
         grant_xp(state,quest['attribute'],quest['xp'])
         state['quests'][quest['id']]['status']='claimed'
         state['quests'][quest['id']]['claimed_at']=now
         if state['tracked_quest']==quest['id']:
-            state['tracked_quest']=next((q['id'] for q in quest_views(state) if q['status'] in ['active','ready']),None)
+            state['tracked_quest']=next((q['id'] for q in quest_views(state) if q['kind'] == 'main' and q['status'] in ['active','ready']),None)
         return f'任务完成：{quest["title"]}。奖励已放入背包'
     obj = next((o for o in map_for(location, state, now)['objects'] if o['id'] == data.get('target')), None)
+    if action=='till':
+        from .tools import land_for
+        from .farm_land import cell_at, cell_by_id
+        HOME_LAND=land_for(state,now)
+        require(location=='overworld', '只能在家园草地使用锄头')
+        obj=cell_at(HOME_LAND,data.get('x'),data.get('y')) if 'x' in data or 'y' in data else cell_by_id(HOME_LAND,data.get('target'))
+        require(obj is not None, '请选择有效草地坐标')
+        require(not data.get('target') or data['target']==obj['id'], '土地坐标与目标不一致')
+        if obj['id'] in state['farm']['tilled']:obj={**obj,'kind':'plot'}
     require(obj is not None, '交互对象不存在')
     require(math.hypot(state['position']['x']-obj['x'], state['position']['y']-obj['y']) <= 72, '请先走近这个对象')
     target = obj['id']
@@ -578,14 +622,14 @@ def apply(state, action, data, now):
             total = market[side][item] * amount
             spend(state, {'gold': total} if side == 'buy' else {item: amount})
             if side == 'buy':
-                state['inventory'][item] += amount
-                return f'买入 {amount} 份种子，花费 {total} 金币。'
+                state['inventory'][item] = state['inventory'].get(item,0) + amount
+                return f'买入 {amount} 份物品，花费 {money(total)}。'
             state['inventory']['gold'] += total
             bump(state, 'market_sold', amount)
             bump(state, 'trade_income', total)
-            if item == 'crop':
+            if item in farming.BY_ITEM:
                 bump(state, 'sold', amount)
-            return f'出售 {amount} 份物品，获得 {total} 金币。'
+            return f'出售 {amount} 份物品，获得 {money(total)}。'
         require(data.get('date') == market['date'], '小铺已换上今天的新订单，请刷新后重新查看')
         order = next((o for o in market['orders'] if o['id'] == data.get('order_id')), None)
         require(order is not None, '这份订单不存在')
@@ -595,7 +639,7 @@ def apply(state, action, data, now):
         state['inventory']['gold'] += order['gold']
         bump(state, 'deliveries')
         bump(state, 'trade_income', order['gold'])
-        return f'订单完成：{order["title"]}，获得 {order["gold"]} 金币。'
+        return f'订单完成：{order["title"]}，获得 {money(order["gold"])}。'
     if action == 'enter':
         require(location == 'overworld' and obj['kind'] == 'building' and target in INTERIORS, '这里没有可以进入的建筑')
         state['location']=target
@@ -616,7 +660,7 @@ def apply(state, action, data, now):
         require(day == clock_view(state, now)['day'], '日期已经变化，请重新打开床边面板。')
         if target == 'inn_bed':
             require(action == 'rest', '旅店客房只提供整夜住宿')
-            require(state['departure']['booking_day'] == day, '今晚还没有订房，请先找岚姨支付 8 金币')
+            require(state['departure']['booking_day'] == day, '今晚还没有订房，请先找岚姨支付 8 银币')
             settle_clock(state, now, False)
             remember(state, 'slept_inn')
             return finish_day(state, now, 'sleep', destination='inn')
@@ -630,7 +674,7 @@ def apply(state, action, data, now):
         state['stamina']['current'] = min(state['stamina']['max'], state['stamina']['current'] + 20)
         state['stamina']['updated_at'] = now
         state['vitality']['current'] = min(state['vitality']['max'], state['vitality']['current'] + 10)
-        return '小憩了 30 游戏分钟，体力 +20、生命 +10（不超过上限）；作物仍按现实时间生长。'
+        return '小憩了 30 游戏分钟，体力 +20、生命 +10（不超过上限）；新作物随游戏时间生长，旧作物保留原计时。'
     if action in ['store', 'withdraw']:
         require(target == 'home_chest', '请先走近家园储物箱')
         item=data.get('item')
@@ -638,8 +682,12 @@ def apply(state, action, data, now):
         amount=integer(data.get('amount',1),1,9999)
         source, dest=(state['inventory'],state['storage']) if action=='store' else (state['storage'],state['inventory'])
         require(source[item]>=amount,'物品数量不足')
+        from .equipment import remove_missing
+        c=state['village_combat']
+        require(not c['cast'],'动作结束后再存取装备')
         source[item]-=amount
         dest[item]+=amount
+        remove_missing(state)
         return '物品已存入储物箱' if action=='store' else '物品已取回背包'
     if action == 'discover':
         require(obj['kind'] == 'landmark', '这里不是探索地点')
@@ -654,21 +702,9 @@ def apply(state, action, data, now):
         remember(state,event)
         state['inventory']['gold']+=15
         state['inventory']['seed']+=2
-        return '找到旅人的补给：15 金币、2 份种子'
+        return '找到旅人的补给：15 银币、2 份种子'
     if action == 'gather':
-        require(obj['kind'] in ['wood', 'stone'], '这里不能采集')
-        require(state['gathered'].get(target, 0) <= now, '资源正在恢复，稍后再来吧')
-        recover_stamina(state, now)
-        cost = GATHER_COSTS[obj['kind']]
-        require(state['stamina']['current'] >= cost, f'体力不足，需要 {cost} 点。回家睡觉可补满，也会随时间自然恢复。')
-        state['stamina']['current'] -= cost
-        quantity = 3 + int(state['attributes']['strength'] >= 50)
-        state['inventory'][obj['kind']] += quantity
-        bump(state,obj['kind'],quantity)
-        if 'first_gather' not in state['events']:
-            state['events'].append('first_gather')
-        state['gathered'][target] = now + 30
-        return f'采集成功，获得 {quantity} 份' + ('木材' if obj['kind'] == 'wood' else '石料') + f' · 体力 −{cost}'
+        require(False,'请从背包拿起斧头或十字镐，直接砍树或开采；地面不再刷新木石采集物')
     if action == 'talk':
         require(obj['kind'] == 'npc', '这不是可交谈的角色')
         if state['npc_days'].get(target) != today:
@@ -711,27 +747,15 @@ def apply(state, action, data, now):
         state['npc_helped'][target] = today
         state['relationships'][target] = state['relationships'].get(target,0)+1
         return f'{resident["name"]}：{resident["help_reply"]} 体力 −4，熟悉度 +1。'
-    if action in ['plant', 'harvest']:
-        require(obj['kind'] == 'plot', '这里不是农田')
-        if action == 'plant':
-            require(target not in state['plots'], '这里已经种了作物')
-            spend(state, {'seed': 1})
-            if 'first_plant' not in state['events']:
-                state['events'].append('first_plant')
-            state['plots'][target] = {'planted_at': now, 'ready_at': now + (45 if state['buildings']['home'] >= 2 else 60)}
-            return '种下了萝卜。离线时也会继续生长'
-        require(target in state['plots'] and state['plots'][target]['ready_at'] <= now, '作物还没有成熟')
-        del state['plots'][target]
-        state['inventory']['crop'] += 2
-        bump(state,'harvest',2)
-        state['inventory']['seed'] += 1
-        return '收获了 2 份萝卜，并留下 1 份种子'
+    if action in ['till','plant','water','harvest','reclaim']:
+        return farming.command(state, action, data, now, obj, require, spend, recover_stamina, bump)
     if action == 'upgrade':
         require(obj['kind'] == 'station' and obj.get('building') in state['buildings'], '请进入建筑，在工作台或手册处升级')
         target=obj['building']
+        require(target != 'home', '小屋工程请到工坊找木匠阿榆委托')
         level = state['buildings'][target]
         require(level < 3, '建筑已达到当前最高等级')
-        spend(state, {'wood': level*6, 'stone': level*3, 'gold': level*10})
+        spend(state, upgrade_costs(level))
         state['buildings'][target] += 1
         return f'{obj["name"]}已升级至 {level+1} 级'
     if action in ['sell', 'buy_seed', 'craft']:
@@ -739,7 +763,7 @@ def apply(state, action, data, now):
         if action == 'sell':
             spend(state, {'crop': 1})
             bump(state,'sold')
-            state['inventory']['gold'] += 8 + state['buildings']['workshop']-1
+            state['inventory']['gold'] += market_view(state, now)['sell']['crop']
             return '出售了 1 份萝卜'
         if action == 'buy_seed':
             spend(state, {'gold': 2})
@@ -754,7 +778,8 @@ def apply(state, action, data, now):
         require(state['attributes']['wisdom'] >= 25, '需要积累 25 点学识经验才能解读符文')
         require('rune_awakened' not in state['events'], '你已经唤醒了这处符文')
         state['events'].append('rune_awakened')
+        state['village_combat']['blueprints'].setdefault('rune_spear','沉睡符文手稿')
         state['knowledge_shard'] += 3 * state['buildings']['library']
         grant_xp(state, 'wisdom', 15)
-        return '符文亮起，古代手稿重见天日！获得知识碎片与 15 点学识经验'
+        return '符文亮起，古代手稿重见天日，学会古纹长枪图纸！获得知识碎片与 15 点学识经验'
     raise RuleError('未知操作')

@@ -34,6 +34,7 @@ const inputs = [
   "tools/scene-art/villageGround.ts",
   "tools/scene-art/interiors.ts",
   "backend/app/world.py",
+  "backend/app/village_terrain.json",
 ];
 for (const [prefix, folder] of directories)
   for (const name of await fs.readdir(root + folder)) {

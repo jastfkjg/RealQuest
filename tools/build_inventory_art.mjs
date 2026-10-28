@@ -5,8 +5,9 @@ import crypto from 'node:crypto';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url)),require=createRequire(new URL('../package.json',import.meta.url)),ts=require('typescript'),{chromium}=require('playwright');
-const source='shared/game/items.ts',code=ts.transpileModule(await fs.readFile(path.join(root,source),'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
-const {itemDefinitions}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const source='shared/game/items.ts',esbuild=require('esbuild');
+const bundled=await esbuild.build({entryPoints:[path.join(root,source)],bundle:true,write:false,format:'esm',platform:'node'});
+const {itemDefinitions}=await import('data:text/javascript;base64,'+Buffer.from(bundled.outputFiles[0].text).toString('base64'));
 const check=process.argv.includes('--check'),browser=await chromium.launch({headless:true}),records=[];
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 try{
