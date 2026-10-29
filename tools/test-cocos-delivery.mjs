@@ -127,7 +127,11 @@ try{
  const fixedClock=state=>{const copy=structuredClone(state.world_clock);for(const key of ['elapsed','owner','running_until','updated_at'])delete copy[key];return copy;};
  assert.deepEqual(fixedClock(continued.state),fixedClock(before.state));
  assert.deepEqual(continued.ledger.slice(0,before.ledger.length),before.ledger);
- const resumed=continued.ledger.slice(before.ledger.length);assert(resumed.length>0&&resumed.every(r=>r.action==='world_resume'&&Object.keys(r.changes.inventory).length===0&&r.changes.xp===0));
+ // Account entry and deferred artwork may pause the world before it is ready.
+ // Continuation must finish resumed and must never replay a resource mutation.
+ const resumed=continued.ledger.slice(before.ledger.length);
+ assert(resumed.length>0&&resumed.at(-1).action==='world_resume');
+ assert(resumed.every(r=>['world_pause','world_resume'].includes(r.action)&&Object.keys(r.changes.inventory).length===0&&r.changes.xp===0));
  assert.equal(continued.state.revision,before.state.revision+resumed.length);
 
  const initial=(await read()).player;await page.keyboard.down('d');await page.waitForTimeout(300);await page.keyboard.up('d');await page.waitForTimeout(600);await until(s=>!s.busy&&!s.pendingAction&&s.connection==='ready');assert((await read()).player.x>initial.x);const savedMove=await(await context.request.get(baseURL+'/api/state',{headers:{Authorization:'Bearer '+auth.token}})).json();assert(savedMove.state.position.x>before.state.position.x);

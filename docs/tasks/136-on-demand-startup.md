@@ -6,7 +6,7 @@
 
 实现：`artLoading.ts`集中管理真实素材绑定、请求去重、别名和可重试错误。入口仅阻塞纸张与三个登记人物共四张图片；首页插画在后台补齐，不阻塞登记、登录和接续。进入世界才请求当前地图、已种作物、手持工具动作等；行囊、商店、锻造、牧场与地图页面分别首次加载。下载完成后在当前实例复用缓存，不改变物品、存档或账号格式，没有增加或替换美术资产。
 
-`Bootstrap.ts`加入当前视图的资源计划、加载进度、返回与资源重试。等待时清理按键、触控、寻路与战斗输入并暂停世界；离开后的旧请求只缓存资源，不把用户拉回旧页面。图片重试不会重放创建角色、消耗或奖励命令。保留已有首页和游戏视觉，启动模板说明先准备首页与账号入口。默认入口与线上交付尚待最终发布验证。
+`Bootstrap.ts`加入当前视图的资源计划、加载进度、返回与资源重试。等待时清理按键、触控、寻路与战斗输入并暂停世界；离开后的旧请求只缓存资源，不把用户拉回旧页面。图片重试不会重放创建角色、消耗或奖励命令。保留已有首页和游戏视觉，启动模板说明先准备首页与账号入口。默认入口已交付；线上交付见后续实际记录。
 
 真实Creator3.8.8 release构建通过：`COCOS_CREATOR=<独立官方SDK副本> REALQUEST_COCOS_BUILD=web-on-demand-136 npm run cocos:build:release`；候选为`clients/cocos/web-on-demand-136/web-desktop`，源码`66dc4a8cbde755ffda09be2df97e7de750e877df18e6ea4a6d909bc48856be5b`，payload `77e309f746d4f64bf741834269cc25de39373bfdf687d7be32ecca74ef16b6c7`。最初校验发现构建后额外加入的两份`.DS_Store`，已移至本任务metadata-quarantine；原收据未重写，全部实际运行文件逐字节核验通过。官方SDK档案SHA256和系统签名已核验，原件只用于克隆，执行工作副本。
 
@@ -21,5 +21,9 @@
 独立慢网对照：`node output/on-demand-startup-136/measure-entry.mjs`通过，固定80ms延迟、375000bytes/s下载（约3Mbps），相同Nginx缓存/压缩规则与浏览器，每版本一轮冷/热启动。旧包冷启动首页可操作75296ms、HTTP25480155bytes、944请求；新包9115ms、1955279bytes、34请求，完整首页插画16816ms补齐。热启动3841ms→2207ms。首屏等待约减少88%，首屏HTTP字节约减少92%。`performance/result.json`记录进行中的背景请求字节、实际网络规则命中、全部请求与收尾；`budget.json`预先设定冷启动12s/3MiB、热启动5s上限，均通过。这里测量可操作入口，未声称全游戏已下载，也不是生产SLA或物理设备p95。
 
 默认`http://127.0.0.1:5443/`已交付：完整候选先复制、逐文件核验，以macOS目录原子交换替换默认构建，原包保留于本任务`rollback-default`。原API未重启；SQLite备份`default-before.db`，两名玩家全部state行的SHA256前后相同；原路径与`realquest_cocos` cookie不变。`default-entry-check.json`实际浏览器通过首页→登录，冷启动2240ms、登录3067ms，零API写操作/页面错误；首页与主JS实发字节以及源码/payload收据一致。桌面和740×360横屏截图已生成并检查。
+
+PR5已检查并合入main，运行代码提交`dfb6653ffde9c2f4cc8fabe90a7fb493f69dd255`，正式CI `40810958043`的源码/单元/后端/部署契约和Creator构建通过。临时runner构建产物经校验保存为`ci-candidate`，发行ID `3c91c6fedbd3687c83af63b2e43b6e64c1ee7d5771de532dbca5d5359992313f`、artifactSHA256 `b934193640c5d787b6f677a55f7aa5681053ac6da9cd0dcdad9ab8d84209fe27`，与本地已验收包逐字节一致。CI浏览器全轮选项关闭，针对性浏览器验收及Nginx验收独立执行，未将跳过的旧套件算为通过。
+
+`npm run cocos:test:delivery -- --artifact output/on-demand-startup-136/ci-candidate`在`run-CSN63d`八组通过：995个运行文件HEAD/MIME/缓存、真实gzip、404、同源cookie与跨源拒绝、实际旧cookie接续后移动/Life/横屏、旧版本标签刷新以及入口回滚后的相同角色。最初`run-RY9wIf`在旧账本断言处停止：旧断言只允许world_resume；新入口会在资源未就绪时world_pause。测试契约已更新为仅允许无库存/XP变化的暂停/恢复且最后必须恢复，继续核验全部稳定状态、账本前缀与revision增量。该修正仅涉及验收脚本和来源清单，不改变生产运行包；原失败记录保留。
 
 测试使用独立QA数据库。浏览器、后台服务通过finally和所属进程组清理；原5443/API8143、原数据库和浏览器凭证保留。腾讯云发布结果将在实际完成后补充。系统IME/读屏与实体设备未代验。

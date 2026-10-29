@@ -26346,8 +26346,8 @@
     {
       "path": "tools/test-cocos-delivery.mjs",
       "owner": "root-tooling",
-      "sha256": "9acbc83f7f72a44efe7c46a9e2b56c805c4df7988b68799ee1480cf5a7ee9457",
-      "bytes": 19803,
+      "sha256": "52745e42e34e04ba333d40642f01ee49a0fb2d95e5df2063b97a91365f44a8a3",
+      "bytes": 20037,
       "roles": [
         "inspected-source"
       ],
