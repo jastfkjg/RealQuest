@@ -6,6 +6,7 @@ import {runOwned} from './cocos-child.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 if(Number(process.versions.node.split('.')[0])!==22)throw Error('Cocos unit tools require Node22; run nvm use (see .nvmrc).');
 const modules=[
+ ['art-loading','clients/cocos/tools/test-art-loading.mjs'],
  ['tools','clients/cocos/tools/test-tools.mjs'],
  ['tool-poses','clients/cocos/tools/test-tool-poses.mjs'],
  ['currency','clients/cocos/tools/test-currency.mjs'],

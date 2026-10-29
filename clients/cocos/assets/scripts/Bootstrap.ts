@@ -1,13 +1,12 @@
-import {isTool,toolIds,toolName,toolSpec,toolLevel,toolCost,toolTarget,toolReason,toolCells,toolArtPaths,type ToolId} from './core/tools';
+import {isTool,toolIds,toolName,toolSpec,toolLevel,toolCost,toolTarget,toolReason,toolCells,type ToolId} from './core/tools';
 import {toolCatalog} from './core/toolCatalog';
 import {ToolRenderer,type WorkMotion} from './toolView';
-import {toolActorArtPaths,toolActorPresentation,type ToolActorPresentation} from './toolActor';
+import {toolActorPresentation,type ToolActorPresentation} from './toolActor';
 import {chestObjects} from './core/construction';
 import {formatMoney} from './core/currency';
 import {RanchRenderer} from './ranchView';
-import {ranchArtPaths} from './core/ranching';
 import {gearCatalog,gearMaterials} from './core/gearCatalog';
-import {seedCrop,plotCrop,plotStage,cropArtPaths,farmCell,hoeReason} from './core/farming';
+import {seedCrop,plotCrop,plotStage,farmCell,hoeReason} from './core/farming';
 import {staminaNow} from './core/stamina';
 import {
   _decorator, Component, Node, UITransform, Graphics, Color, Label, Sprite,
@@ -24,12 +23,12 @@ import { residentPositions, residentPlace, villageClock, clockLabel } from './co
 import type { WorldObject, NavigationTarget, GameState, Reply } from './core/protocol';
 const { ccclass } = _decorator;
 import {C} from './ui/theme';
-import {controlSkin,gameControls,paperSurface,timberSurface,webMaterialPaths,lazyMaterialPaths} from './ui/materials';
+import {controlSkin,gameControls,paperSurface,timberSurface,webMaterialPaths} from './ui/materials';
 import {travelNotices,confirmedCue} from './core/preferences';
 import {FeaturePanels,type PanelHost,type ControlSkin} from './ui/panels';
 import {CombatRenderer} from './combatView';
 import {CombatMotion,CombatInputBuffer} from './core/combatMotion';
-import {swordArtPaths,swordPresentation,resolveCombatAim,facingDirection,facingAngles,type SwordPresentation} from './core/swordMotion';
+import {swordPresentation,resolveCombatAim,facingDirection,facingAngles,type SwordPresentation} from './core/swordMotion';
 import type {CombatAction} from './core/protocol';
 import {combatIntention,itemNames} from './core/features';
 import {caveGround,caveRouteArt} from './core/caveArt';
@@ -44,15 +43,17 @@ import {InventoryView} from './ui/inventory';
 import {InventoryDrag,type DragSpec} from './ui/drag';
 import {itemIntent} from './core/inventory';
 import {registrationAppearances} from './core/appearances';
+import {DemandArt,viewArtPaths,entryArtPaths,canonicalArt,knownArtPaths} from './artLoading';
 import {registration} from './core/dossier';
 import {currentGuidance,guidanceMode,type GuidanceAction} from './core/guidance';
 import {JourneyContinuation} from './core/continuation';
 import {shortText} from './core/lifeRecords';
-import {sceneArtPaths,sceneLayouts} from './core/sceneLayout';
+import {sceneLayouts} from './core/sceneLayout';
 import {approachRoute,localCamera,sourceActorFrame,pendingSafeMove,unobscuredCamera} from './core/localScene';
 import {WebSemantics,type SemanticText,type SemanticField} from './accessibility';
 
 type Control = { id: string; label: string; x: number; y: number; w: number; h: number; disabled: boolean; skin?:ControlSkin;accessibleName?:string;pressed?:boolean };
+type ArtPlan={key:string;mode:string;save:string;location:string;paths:string[]};
 
 @ccclass('RealQuestSpike')
 export class RealQuestSpike extends Component {
@@ -88,6 +89,17 @@ export class RealQuestSpike extends Component {
   private actorDirection=0;private actorFrame=0;
   private npcMotion=new Map<string,{x:number;y:number;direction:number;frame:number}>();
   private frames = new Map<string, SpriteFrame>();
+  private disposed=false;
+  private art=new DemandArt(this.frames,path=>new Promise<SpriteFrame>((resolve,reject)=>{
+    const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path==='scenes/terrain'?'scenes/terrain-web':webMaterialPaths.has(path)?path+'-web':path:path;
+    resources.load(asset+'/spriteFrame',SpriteFrame,(error,frame)=>error?reject(error):resolve(frame));
+  }),()=>{this.dirty=true;});
+  private artBlocked=false;
+  private artPlanDirty=true;
+  private artPlan:ArtPlan|null=null;
+  private artGate:{plan:ArtPlan;failed:boolean}|null=null;
+  private artPause:Promise<unknown>=Promise.resolve();
+  private resumeAfterArt=false;
   private loadingUIArt=new Set<string>();private failedUIArt=new Set<string>();
   private actorFrames = new Map<string, SpriteFrame>();
   private keys = new Set<number>();
@@ -205,7 +217,7 @@ export class RealQuestSpike extends Component {
   });
   private actorArt() { return 'actor-' + (this.client.state?.character?.appearance || 0); }
   private map() { return currentMap(this.client.world!, this.client.state!, serverNow()); }
-  private canPlay() { return ['ready','saving'].includes(this.client.status); }
+  private canPlay() { return !this.artBlocked&&['ready','saving'].includes(this.client.status); }
 
 
   onLoad() {
@@ -247,6 +259,7 @@ export class RealQuestSpike extends Component {
     void this.loadArt();
   }
   onDestroy() {
+    this.disposed=true;this.art.dispose();this.artGate=null;
     input.off(Input.EventType.MOUSE_MOVE,this.combatMouseMove,this);
     input.off(Input.EventType.MOUSE_DOWN,this.combatMouseDown,this);
     input.off(Input.EventType.MOUSE_UP,this.combatMouseUp,this);
@@ -291,22 +304,63 @@ export class RealQuestSpike extends Component {
     this.dirty=true;
   }
   private async loadArt() {
-    const names = ['actor-1','actor-2','actor-3','actor-4','actor-5','shop','home','workshop','library','guild','oak','oak-alt','fir','birch','shrub','board','wood','stone','bridge','grass','grass-patch','bank-stones','fence','bench','lantern','actor-0','lia-actor','noah-actor','mira-actor'];
     try {
-      await Promise.all(Array.from(new Set([...toolArtPaths,...toolActorArtPaths,...sceneArtPaths,...cropArtPaths,...ranchArtPaths,...swordArtPaths,'ui/arrival','ui/register','ui/satchel','ui/notice-timber','ui/notice-paper','ui/shop-interior','ui/blacksmith-interior','ui/weapon-stand','atlas/blacksmith','village/blacksmith-figure',...['adu','lanya'].map(n=>`village/${n}-actor`),...['terrain','lia','noah','mira','adu','lanya'].map(n=>`atlas/${n}`),...names.map(n => `village/${n}`), ...Object.keys(gearCatalog).map(n=>`items/${n}`),...['wood','stone','seed','crop','plank','backpack','stone_sword','reinforced_sword','spring_spear','glow_staff','gel','shell','crystal','gate_stone','soup','gold','journal'].map(n => `items/${n}`), ...['market-counter','notice','bookcase','workbench','desk-88','desk-96','bed','hearth','planter','barrel','anvil','rug','window','chest-open','book','lantern','wall','chest-closed'].map(n=>`interiors/${n}`)])).map(path => new Promise<void>((resolve, reject) => {
-        // Keep one presentation key and the original PNG for unsupported platforms.
-        const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path==='scenes/terrain'?'scenes/terrain-web':webMaterialPaths.has(path)?path+'-web':path:path;
-        resources.load(asset + '/spriteFrame', SpriteFrame, (error, frame) => {
-          if (error) { reject(error); return; }
-          this.frames.set(path, frame); resolve();
-        });
-      })));
-      for(const [id,m] of Object.entries(gearMaterials)){const frame=this.frames.get('items/'+m.icon);if(frame)this.frames.set('items/'+id,frame);}
-      for(const [id,art] of Object.entries({wooden_chest:'interiors/chest-closed',reinforced_chest:'interiors/chest-open',mayo_machine:'ranching/mayo',loom_machine:'ranching/loom',cheese_press:'ranching/cheese',oil_press:'ranching/oil'})){const frame=this.frames.get(art);if(frame)this.frames.set('items/'+id,frame);}
-      for(const id of toolIds)this.frames.set('items/'+id,this.frames.get('tools/'+id+'-0')!);
-      this.loaded = true;
-    } catch { this.error = '画面资源未能载入，请刷新后重试。'; (globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.fail('files'); }
+      await this.art.ensure(entryArtPaths);
+      if(!this.disposed)this.loaded = true;
+    } catch { if(!this.disposed){this.error = '画面资源未能载入，请刷新后重试。'; (globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.fail('files');} }
     this.dirty = true;
+  }
+  private requireViewArt(mode=this.mode){
+    if(!this.loaded)return false;
+    if(this.artPlanDirty||this.artPlan?.mode!==mode){
+      const s=this.client.state,paths=viewArtPaths(mode,s,s&&this.client.world?this.map():undefined),save=this.client.saveId,location=s?.location||'';
+      this.artPlan={key:mode+':'+save+':'+location+':'+paths.join('|'),mode,save,location,paths};this.artPlanDirty=false;
+    }
+    const plan=this.artPlan!;
+    if(plan.paths.every(p=>this.art.has(p))){this.artBlocked=false;if(this.artGate?.plan.key===plan.key)this.artGate=null;return true;}
+    this.artBlocked=true;
+    if(this.artGate?.plan.key!==plan.key)this.beginArtLoad(plan);
+    return false;
+  }
+  private beginArtLoad(plan:ArtPlan){
+    const gate={plan,failed:false};this.artGate=gate;this.artBlocked=true;this.clearInput();this.focusId='';this.dirty=true;
+    if(plan.mode==='world'){
+      this.world.active=false;this.resumeAfterArt=true;
+      if(this.client.state?.character&&this.client.status==='ready'&&(this.client.state.world_clock?.running_until||0)>serverNow()){
+        this.artPause=this.client.command('world_pause',{owner:this.owner}).catch(e=>{if(!this.disposed&&this.artGate===gate){this.error=e.message;this.dirty=true;}});
+      }
+    }
+    void this.art.ensure(plan.paths).then(()=>{
+      if(this.disposed||this.artGate!==gate)return;
+      this.artBlocked=false;this.artGate=null;this.clearInput();this.dirty=true;
+      if(plan.mode==='world'&&this.mode==='world'&&plan.save===this.client.saveId&&plan.location===this.client.state?.location)this.sceneId='';
+    }).catch(()=>{
+      if(this.disposed||this.artGate!==gate)return;
+      gate.failed=true;this.clearInput();this.dirty=true;
+    });
+  }
+  private leaveArtLoading(){
+    if(this.busy)return;
+    this.artGate=null;this.artBlocked=false;this.resumeAfterArt=false;this.world.active=false;
+    if(this.mode==='world'){this.open('welcome');this.focusId='start';}else this.closePanel();
+  }
+  private drawArtLoading(){
+    const gate=this.artGate;if(!gate)return;
+    this.touchPad.active=false;this.combatDock?.hide();this.combatRenderer.hide();
+    this.box(this.panel,'LoadingShade',0,0,this.width,this.height,'#233d31f2',0);
+    const w=Math.min(600,this.width-32),h=Math.min(280,this.height-32),x=(this.width-w)/2,y=(this.height-h)/2,ui=gameControls(this.panelHost());
+    paperSurface(ui,{x,y,w,h},true);
+    this.text(this.panel,'ArtLoadingTitle',gate.failed?'画面资源未能载入':this.mode==='world'?'正在准备当前地点':'正在准备这个页面',x+28,y+20,w-56,38,24);
+    const count=gate.plan.paths.filter(p=>this.art.has(p)).length;
+    this.text(this.panel,'ArtLoadingStatus',gate.failed?'旅程已保留。可以重试画面，或先返回。':`画面准备 ${count} / ${gate.plan.paths.length}\n准备期间暂停世界操作。`,x+28,y+70,w-56,64,17,gate.failed?C.danger:C.muted);
+    if(gate.failed)ui.button('asset-retry','重试画面',x+28,y+h-70,(w-68)/2,44,()=>this.beginArtLoad(gate.plan),this.busy,true);
+    ui.button('asset-back',this.mode==='world'?'返回首页':'返回',gate.failed?x+w/2+6:x+28,y+h-70,gate.failed?(w-68)/2:w-56,44,()=>this.leaveArtLoading(),this.busy);
+  }
+  private requestArt(path:string){
+    const canonical=canonicalArt(path);
+    if(!this.loaded||!knownArtPaths.has(canonical)||this.art.has(canonical)||this.art.pending.has(canonical)||this.art.failed.has(canonical))return;
+    this.loadingUIArt.add(path);
+    void this.art.one(path).catch(()=>{if(!this.disposed){this.failedUIArt.add(path);this.notice='部分画面未能载入，返回后重新打开可重试；记录与操作仍可继续。';}}).finally(()=>{this.loadingUIArt.delete(path);if(!this.disposed)this.dirty=true;});
   }
   private make(parent: Node, name: string, x: number, y: number, w: number, h: number) {
     const n = new Node(name); n.layer = this.node.layer; parent.addChild(n);
@@ -472,7 +526,7 @@ export class RealQuestSpike extends Component {
   }
   private image(parent: Node, path: string, x: number, y: number, w: number, h: number,sliced=false) {
     const item=path.startsWith('items/')?path.slice(6):'';if(isTool(item)&&this.client.state)path='tools/'+item+'-'+toolLevel(this.client.state,item);
-    const sf = this.frames.get(path); if (!sf) {if(lazyMaterialPaths.has(path)&&!this.loadingUIArt.has(path)&&!this.failedUIArt.has(path)){this.loadingUIArt.add(path);const asset=platformName==='web'&&sys.hasFeature(sys.Feature.WEBP)?path+'-web':path;resources.load(asset+'/spriteFrame',SpriteFrame,(error,frame)=>{this.loadingUIArt.delete(path);if(error){this.failedUIArt.add(path);this.notice='书页材质暂未载入，记录与操作仍可继续。';}else this.frames.set(path,frame);this.dirty=true;});}return null;}
+    const sf = this.frames.get(path); if (!sf) {this.requestArt(path);return null;}
     const n = this.make(parent, path, x, -y, w, h);
     const sprite = n.addComponent(Sprite); sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.spriteFrame = sf;
     if(sliced){const material=path==='ui/notice-paper'?{scale:18/80,top:80,right:80,bottom:80,left:80}:path==='ui/notice-timber'?{scale:24/105,top:105,right:105,bottom:105,left:105}:{scale:.18,top:220,right:180,bottom:200,left:180};const scale=material.scale;let f=this.slicedFrames.get(path);if(!f){f=sf.clone();f.insetTop=material.top;f.insetRight=material.right;f.insetBottom=material.bottom;f.insetLeft=material.left;this.slicedFrames.set(path,f);}sprite.spriteFrame=f;sprite.type=Sprite.Type.SLICED;n.setScale(scale,scale,1);n.getComponent(UITransform)!.setContentSize(w/scale,h/scale);}else n.getComponent(UITransform)!.setContentSize(w,h);
@@ -490,13 +544,14 @@ export class RealQuestSpike extends Component {
       if(!mapById(this.client.world!,this.client.state!.location))throw new Error('服务器返回了未知地点，已保留原存档');
       this.inventoryView.init(this.panelHost());
       try{this.movementLearned=sys.localStorage.getItem('realquest-movement-learned:'+this.client.saveId)==='1';}catch{this.movementLearned=false;}this.movementDistance=0;
-      this.mode = 'world'; this.buildWorld();
-      await this.client.command('world_resume', { owner: this.owner });
+      this.mode = 'world'; this.artPlanDirty=true;this.buildWorld();
+      if(this.canPlay()){this.resumeAfterArt=false;await this.client.command('world_resume', { owner: this.owner });}
       this.confirmJourneySnapshot(serverNow(),true);
     } catch (error) { this.error = (error as Error).message; }
     finally { this.busy = false; this.dirty = true; }
   }
   private buildWorld() {
+    if(!this.requireViewArt('world'))return;
     this.world.active=true;
     this.combatRenderer.reset();this.targetId=null;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.localAction=null;this.localDodgeUntil=0;this.localActionReady=this.localDodgeReady=0;
     this.caveCameraCache=null;
@@ -585,7 +640,7 @@ export class RealQuestSpike extends Component {
     this.setActor(this.actor,this.actorArt(),0);this.depths.set(this.actor,this.p.y);
   }
   private setActor(n: Node, name: string, frame: number) {
-    const sf = this.frames.get('village/'+name); if(!sf) return;
+    const sf = this.frames.get('village/'+name); if(!sf){this.requestArt('village/'+name);return;}
     const key=name+':'+frame;
     let f=this.actorFrames.get(key);
     if(!f){f = new SpriteFrame(); f.texture=sf.texture; f.rect=new Rect((frame%4)*48,Math.floor(frame/4)*64,48,64); f.originalSize=new Size(48,64);this.actorFrames.set(key,f);}
@@ -663,6 +718,11 @@ export class RealQuestSpike extends Component {
   }
   private keyDown(e: EventKeyboard) {
     if(textOwnsInput() || (e as any).isComposing)return;
+    if(this.artBlocked){
+      if(e.keyCode===KeyCode.ESCAPE){this.dismissContext();return;}
+      if(![KeyCode.TAB,KeyCode.SHIFT_LEFT,KeyCode.SHIFT_RIGHT,KeyCode.ENTER,KeyCode.SPACE].includes(e.keyCode))return;
+      if([KeyCode.ENTER,KeyCode.SPACE].includes(e.keyCode)&&!this.focusId)return;
+    }
     if(this.inventoryDrag.holding){if(e.keyCode===KeyCode.ESCAPE){this.clearInput();this.dirty=true;}return;}
     if(e.keyCode===KeyCode.SHIFT_LEFT||e.keyCode===KeyCode.SHIFT_RIGHT){if(!this.focusId&&!this.keys.has(e.keyCode)&&this.mode==='world'&&this.client.state?.location.startsWith('cave_')&&[KeyCode.KEY_W,KeyCode.KEY_A,KeyCode.KEY_S,KeyCode.KEY_D,KeyCode.ARROW_UP,KeyCode.ARROW_DOWN,KeyCode.ARROW_LEFT,KeyCode.ARROW_RIGHT].some(key=>this.keys.has(key)))this.queueCombat('dodge');this.keys.add(e.keyCode);return;}
     if(e.keyCode===KeyCode.TAB){const ids=this.controls.filter(c=>!c.disabled&&this.actions.has(c.id)).map(c=>c.id);const i=ids.indexOf(this.focusId);const reverse=this.keys.has(KeyCode.SHIFT_LEFT)||this.keys.has(KeyCode.SHIFT_RIGHT);this.focusId=ids[i<0?(reverse?ids.length-1:0):(i+(reverse?-1:1)+ids.length)%ids.length]||'';this.dirty=true;return;}
@@ -691,11 +751,11 @@ export class RealQuestSpike extends Component {
   private touchRelease(event:EventTouch){this.touches.delete((event.getID()??0));this.hoeEnd(event);}
   private keyUp(e: EventKeyboard) { this.keys.delete(e.keyCode);if(e.keyCode===KeyCode.SPACE&&this.handTool()!=='hoe')this.hoeQueue=[]; }
   private clearInput() { this.toolDirection=null;this.toolGestureUntil=this.elapsed+.12;this.hoeQueue=[];this.hoePointer=null;this.hoeLastPoint=null;this.hoeAim=null;this.inventoryDrag.cancel();this.inputEpoch++;this.approach=null;this.keys.clear();this.touches.clear();this.pressedButtons.clear(); this.route=[];this.attackPulse=this.sparkPulse=this.soupPulse=this.dodgePulse=false;this.mouseAttack=false;this.combatPointer=null;this.combatPointerScreen=null;this.localAction=null;this.combatQueued.clear();this.localDodgeUntil=0;if(this.client.state)this.combatMotion.reset(this.client.state.position,this.elapsed);this.combatDock?.release(); }
-  private dismissContext(){this.clearInput();this.dirty=true;if(this.mode==='welcome')return;if(this.mode==='world'){this.targetId=null;if(this.client.state?.tools?.held&&!this.client.state.location.startsWith('cave_'))void this.holdItem(null);this.continuation.dismiss();return;}if(!this.busy){if(this.inventoryView.dismiss(this.panelHost()))return;this.recovery=null;this.recoveryPreview=null;this.closePanel();}}
+  private dismissContext(){this.clearInput();this.dirty=true;if(this.artBlocked){this.leaveArtLoading();return;}if(this.mode==='welcome')return;if(this.mode==='world'){this.targetId=null;if(this.client.state?.tools?.held&&!this.client.state.location.startsWith('cave_'))void this.holdItem(null);this.continuation.dismiss();return;}if(!this.busy){if(this.inventoryView.dismiss(this.panelHost()))return;this.recovery=null;this.recoveryPreview=null;this.closePanel();}}
   private syncSemantics(){
     const controls=this.controls.filter(c=>!['left','right','up','down'].includes(c.id)&&(this.actions.has(c.id)||c.disabled)).map(c=>({...c,label:c.accessibleName||c.label}));
     const texts=this.semanticTexts,title=texts.find(t=>t.id.endsWith('Title')||t.id==='Title')?.text||this.context?.name||'RealQuest';
-    this.semantics.update({mode:this.mode,title,controls,fields:new Map(this.semanticFields),texts,focusId:this.focusId,busy:this.busy,message:this.error||this.notice});
+    this.semantics.update({mode:this.artBlocked?'asset-loading':this.mode,title,controls,fields:new Map(this.semanticFields),texts,focusId:this.focusId,busy:this.busy||!!this.artGate&&!this.artGate.failed,message:this.error||this.notice});
     if(this.loaded)(globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.ready();
   }
   private hide() {
@@ -720,6 +780,9 @@ export class RealQuestSpike extends Component {
     return this.journeyRefresh;
   }
   private open(mode: string) {
+    this.artPlanDirty=true;
+    if(this.artGate?.plan.mode!==mode){this.artGate=null;this.artBlocked=false;}
+    for(const path of this.failedUIArt)this.art.failed.delete(canonicalArt(path));this.failedUIArt.clear();
     if(mode!=='session')this.clearAccountDraft();
     this.confirmDelete=false;
     if(mode==='inventory'&&this.mode!=='item-confirm')this.inventoryView.opened();
@@ -734,10 +797,10 @@ export class RealQuestSpike extends Component {
       if(!transport.getSession())return;
       await this.client.boot();
       if(!this.client.state){this.deletedJourney();return;}
-      this.p={...this.client.state.position};this.buildWorld();
+      this.p={...this.client.state.position};
       await this.client.command('world_pause',{owner:this.owner});
     });
-    if(this.client.state?.character&&this.canPlay()) void this.client.command(mode==='world'?'world_resume':'world_pause',{owner:this.owner}).catch(e=>{this.error=e.message;this.dirty=true;});
+    if(this.client.state?.character&&this.canPlay()){if(mode==='world')this.resumeAfterArt=false;void this.client.command(mode==='world'?'world_resume':'world_pause',{owner:this.owner}).catch(e=>{this.error=e.message;this.dirty=true;});}
   }
   private worldTouch(e: EventTouch) {
     if(this.hoeActive()&&(this.hoePointer!==null||this.elapsed<this.toolGestureUntil))return;
@@ -902,10 +965,18 @@ export class RealQuestSpike extends Component {
   }
   update(dt: number) {
     this.elapsed+=dt;
+    if(this.loaded&&!this.requireViewArt()){
+      if(this.dirty&&!this.pressedButtons.size){this.dirty=false;this.drawUI();this.syncSemantics();}
+      return;
+    }
+    if(this.resumeAfterArt&&this.mode==='world'&&this.client.state?.character&&this.canPlay()&&!this.busy){
+      this.resumeAfterArt=false;this.lastHeartbeat=this.elapsed;const id=this.client.saveId;
+      void this.artPause.then(()=>{if(!this.disposed&&this.mode==='world'&&id===this.client.saveId&&this.canPlay())return this.client.command('world_resume',{owner:this.owner});}).catch(e=>{this.error=e.message;this.dirty=true;});
+    }
     if(this.client.state&&this.client.world)this.updateHoe();
     if(this.worldFeedback&&this.elapsed>=this.worldFeedback.until){this.worldFeedback=null;this.dirty=true;}
     if(this.blockedClick&&this.elapsed>=this.blockedClick.until){this.blockedClick=null;this.dirty=true;}
-    if(this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
+    if(this.mode==='world'&&this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
     if(this.client.state&&this.mode==='world'&&this.shown&&this.canPlay()) {
       // Creator's array-spread transform assumes arrays, not Map iterators.
       const touchKeys=Array.from(this.touches.values());
@@ -988,12 +1059,12 @@ export class RealQuestSpike extends Component {
         }
       }
     }
-    if(this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
+    if(this.mode==='world'&&this.client.state?.character&&this.client.world&&this.sceneId!==this.client.state.location){this.p={...this.client.state.position};this.buildWorld();this.dirty=true;}
     if(this.client.state&&this.features.lifeMode(this.mode)&&this.shown&&this.canPlay()&&!this.busy&&!textOwnsInput()&&this.elapsed-this.lastRefresh>15){
       this.lastRefresh=this.elapsed;void this.refreshJourney();
     }
-    if(this.client.state&&this.client.world)this.localScene.update(this.client.state,this.p,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,reducedMotion(),this.elapsed,this.mode==='world'?this.blockedClick:null);
-    if(this.client.state)this.ranchRenderer.update(this.client.state,this.p,this.elapsed,reducedMotion());
+    if(this.client.state&&this.client.world&&this.sceneId===this.client.state.location)this.localScene.update(this.client.state,this.p,this.route,this.mode!=='world'?this.context?.id:this.elapsed<this.responseUntil?this.responseObject:undefined,reducedMotion(),this.elapsed,this.mode==='world'?this.blockedClick:null);
+    if(this.client.state&&this.sceneId===this.client.state.location)this.ranchRenderer.update(this.client.state,this.p,this.elapsed,reducedMotion());
     this.updateConversationCamera(dt);
     this.updateItemPreviewCamera();
     this.depths.set(this.actor,this.client.state?.location.startsWith('cave_')?Math.max(this.p.y,this.combatRenderer.playerDepth):this.p.y);
@@ -1101,6 +1172,7 @@ export class RealQuestSpike extends Component {
   private drawUI() {
     this.clear(this.hud); this.clear(this.panel); this.controls=[];this.actions.clear();this.semanticTexts=[];this.semanticFields.clear();this.uiRegions=[];
     this.hud.setPosition(-this.width/2,this.height/2); this.panel.setPosition(-this.width/2,this.height/2);
+    if(this.loaded&&this.artBlocked){this.drawArtLoading();return;}
     this.touchPad.active=this.mode==='world'&&this.width<1000;
     if(this.mode!=='world')this.combatRenderer.hide();
     if(this.mode!=='world'||!this.client.state?.location.startsWith('cave_'))this.combatDock?.hide();
@@ -1264,7 +1336,7 @@ export class RealQuestSpike extends Component {
     this.text(this.panel,'Title','RealQuest',compact?24:72,compact?32:74,compact?left-40:310,56,compact?28:44,C.paper);
     this.text(this.panel,'ArrivalPlace',compact?'回响村庄\n旅程的起点':'回响村庄 · 旅程的起点',compact?24:74,compact?94:140,compact?left-40:308,48,16,C.paper);
     const w=compact?this.width-left-20:536,height=compact?Math.min(376,this.height-32):680,x=compact?left:this.width-w-56,y=(this.height-height)/2;
-    if(compact)paperSurface(ui,{x,y,w,h:height},true);else ui.image('ui/register',x+w/2,y+height/2,w,height);
+    if(compact||!this.art.has('ui/register')){paperSurface(ui,{x,y,w,h:height},true);if(!compact)this.requestArt('ui/register');}else ui.image('ui/register',x+w/2,y+height/2,w,height);
     const px=x+(compact?24:70),pw=w-(compact?48:140),top=compact?12:120;
     ui.region('registration-paper',px,y+top,pw,compact?height-top-16:516);
     this.text(this.panel,'Subtitle',pendingDeletion?'旅程结果待确认':'旅人登记',px,y+top,pw,36,compact?24:28);
@@ -1282,7 +1354,7 @@ export class RealQuestSpike extends Component {
       const sprite=this.make(n,'Traveler',0,compact?2:4,48,64);sprite.addComponent(Sprite).sizeMode=Sprite.SizeMode.CUSTOM;this.setActor(sprite,'actor-'+a.id,0);
       if(selected)this.text(n,'Selected','✓',ww/2-28,-cardH/2+4,24,24,18,C.paper,true);
     });
-    const message=this.error||this.notice||(pendingDeletion?'上次删除结果待确认，请先确认。':hasSession?'接续时保留原角色与记录。':compact?'姓名可留空 · 旅程自动保存':'旅程与成长记录会自动保存。');
+    const message=this.error||this.notice||(pendingDeletion?'上次删除结果待确认，请先确认。':!this.art.has('ui/arrival')?'背景载入中，登记和账号入口已可使用。':hasSession?'接续时保留原角色与记录。':compact?'姓名可留空 · 旅程自动保存':'旅程与成长记录会自动保存。');
     this.text(this.panel,'WelcomeNote',compact?message.replace(/\n/g,' '):message,px,y+(compact?234:480),pw,compact?28:44,14,this.error?C.danger:C.muted);
     const half=(pw-12)/2,by=y+(compact?height-60:532);
     ui.button('start',this.busy?'正在连接…':pendingDeletion?'确认删除结果':hasSession?'继续旅程':'开始旅程',px,by,compact?half:pw,compact?44:50,()=>this.startJourney(),this.busy||!this.loaded,true);
@@ -1616,7 +1688,7 @@ export class RealQuestSpike extends Component {
   private drawSession() {
     const ui=gameControls(this.panelHost()),wide=this.width>=980&&this.height>=560;
     const outerW=Math.min(1100,this.width-32),h=Math.min(560,this.height-24),outerX=(this.width-outerW)/2,y=(this.height-h)/2;
-    if(!this.client.state?.character){const scale=Math.max(this.width/1586,this.height/992);ui.image('ui/arrival',this.width/2,this.height/2,1586*scale,992*scale);}
+    if(!this.client.state?.character||!this.world.active||this.sceneId!==this.client.state.location){const scale=Math.max(this.width/1586,this.height/992);ui.image('ui/arrival',this.width/2,this.height/2,1586*scale,992*scale);}
     this.box(this.panel,'SessionShade',0,0,this.width,this.height,'#233d3188',0);
     const left=wide?Math.round(outerW*.29):0,x=wide?outerX+left+16:outerX,w=wide?outerW-left-16:outerW;
     if(wide){
@@ -1711,7 +1783,7 @@ export class RealQuestSpike extends Component {
   }
 
   private clientChanged(){
-    this.dirty=true;const s=this.client?.state,save=this.client?.saveId,action=this.client?.pending?.body.action;
+    this.dirty=true;this.artPlanDirty=true;const s=this.client?.state,save=this.client?.saveId,action=this.client?.pending?.body.action;
     if(s?.character&&save&&this.client.world){
       this.inventoryView.init(this.panelHost());
       if(this.audibleState&&save===this.audibleSave&&s!==this.audibleState)this.inventoryView.preferences.receive(this.audibleState.inventory,s.inventory);
@@ -1750,7 +1822,8 @@ export class RealQuestSpike extends Component {
       const node=this.hud.getChildByName(id),size=node?.getComponent(UITransform)?.contentSize;
       if(node?.active&&size)hudRegions.push({id,x:node.position.x,y:-node.position.y,w:size.width,h:size.height});
     }
-    return { engine:'Cocos Creator 3.8.8', platform:platformName, mode:this.mode, focusId:this.focusId, registrationAppearance:this.registrationAppearance, loaded:this.loaded&&!(globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.pending, busy:this.busy, error:this.error, notice:this.notice,
+    return { engine:'Cocos Creator 3.8.8', platform:platformName, mode:this.mode, focusId:this.focusId, registrationAppearance:this.registrationAppearance, loaded:this.loaded&&!(globalThis as unknown as Record<string,any>).REALQUEST_BOOT?.pending, busy:this.busy||this.artBlocked&&!!this.artGate&&!this.artGate.failed, error:this.error, notice:this.notice,
+      assets:{blocked:this.artBlocked,failed:!!this.artGate?.failed,view:this.artPlan?.mode||'welcome',required:this.artPlan?.paths||entryArtPaths,loaded:Array.from(this.frames.keys()),pending:Array.from(this.art.pending.keys()),failures:Array.from(this.art.failed)},
       feedback,hudRegions,uiRegions:this.uiRegions,
       actorFrame:this.actorFrame,combatAim:this.aim(),swordPresentation:this.swordPose,npcPresentation:Object.fromEntries(this.npcMotion),combatTarget:this.targetId,sessionPage:this.sessionPage,account:this.client.account,accountForm:this.accountForm,accountPreview:this.accountPreview?{username:this.accountPreview.account!.username,saveId:this.accountPreview.save_id}:null,logoutPending:this.client.logoutPending,deletionPending:this.client.deletionPending,recoverySource:this.recoveryPreview?this.recoverySource:null,coordinateSystem:'world: origin top-left, +x right, +y down; controls: CSS pixels from top-left',
       construction:s?.construction,constructionView:s?.construction_view,player:this.p, savedPosition:s?.position, saveId:this.client.saveId, revision:s?.revision, vitality:s?.vitality, combat:s?.combat, questLog:s?.quest_log, lifeJournal:s?.life_journal,villageIntro:s?.village_intro,trackedQuest:s?.tracked_quest, timer:s?.timer, studyTasks:s?.study_task_log, plans:s?.study_plan_log, growth:s?.character_growth_options, storage:s?.storage, features:this.features.snapshot(),guidance:this.client.state?{...this.continuation.inspect(),entry:currentGuidance(this.client.state,serverNow()),ownedMarker:this.guideMarker}:null,marker:this.marker,connection:this.client.status, pendingAction:this.client.pending?.body.action||null, location:s?.location, appearance:s?.character?.appearance, character:s?.character,xp:s?.xp,attributes:s?.attributes,points:s?{knowledge:s.knowledge_points,health:s.health_points,skill:s.skill_points}:null, sceneId:this.sceneId, map:this.client.state?{id:this.map().id,width:this.map().width,height:this.map().height,obstacles:this.map().obstacles}:null, inventory:s?.inventory, stamina:s?.stamina,
